@@ -91,7 +91,7 @@ public class RichAction
                     : null);
         addChildFieldFor(this.params = new RichActionParams(this, context));
 
-        buildObjectTypeAndField(ObjectFeatureUtils.asciiIdFor(objectAction), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
+        buildObjectTypeAndField(objectAction.asciiId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
     private boolean isInvokeAllowed(ObjectAction objectAction) {
@@ -132,7 +132,7 @@ public class RichAction
         return parameters
                 .map(oap -> {
                     final ObjectSpecification elementType = oap.getElementType();
-                    Object argumentValue = argumentPojos.get(ObjectFeatureUtils.asciiIdFor(oap));
+                    Object argumentValue = argumentPojos.get(oap.asciiId());
                     Object pojoOrPojoList;
 
                     switch (elementType.getBeanSort()) {
@@ -273,14 +273,14 @@ public class RichAction
             final OneToOneActionParameter oap,
             final TypeMapper.InputContext inputContext) {
         return GraphQLArgument.newArgument()
-                .name(ObjectFeatureUtils.asciiIdFor(oap))
+                .name(oap.asciiId())
                 .type(context.typeMapper.inputTypeFor(oap, inputContext, getSchemaType()))
                 .build();
     }
 
     GraphQLArgument gqlArgumentFor(final OneToManyActionParameter otmp) {
         return GraphQLArgument.newArgument()
-                .name(ObjectFeatureUtils.asciiIdFor(otmp))
+                .name(otmp.asciiId())
                 .type(context.typeMapper.inputTypeFor(otmp, getSchemaType()))
                 .build();
     }

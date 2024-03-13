@@ -170,4 +170,5 @@ public interface ObjectFeature extends Specification {
         return !MandatoryFacet.isMandatory(this);
     }
 
+    String asciiId();
 }

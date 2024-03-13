@@ -82,7 +82,7 @@ public class SimpleMutationForProperty extends Element {
     private static String fieldName(
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation otoa) {
-        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + ObjectFeatureUtils.asciiIdFor(otoa);
+        return TypeNames.objectTypeFieldNameFor(objectSpecification) + "__" + otoa.asciiId();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class SimpleMutationForProperty extends Element {
         val managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
-        Object argumentValue = arguments.get(ObjectFeatureUtils.asciiIdFor(oneToOneAssociation));
+        Object argumentValue = arguments.get(oneToOneAssociation.asciiId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
 
         val visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
@@ -160,7 +160,7 @@ public class SimpleMutationForProperty extends Element {
 
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
-                        .name(ObjectFeatureUtils.asciiIdFor(oneToOneAssociation))
+                        .name(oneToOneAssociation.asciiId())
                         .type(context.typeMapper.inputTypeFor(oneToOneAssociation, TypeMapper.InputContext.INVOKE, SchemaType.RICH))
                         .build());
     }

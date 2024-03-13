@@ -7,7 +7,6 @@ import jakarta.inject.Named;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
@@ -19,12 +18,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class I18nCalculator {
 
-    @Action(semantics = SemanticsOf.SAFE, asciiId = "concat")
+    @Action(semantics = SemanticsOf.SAFE)
     public String concät(
-            @Parameter(asciiId = "a1")
-            String ä1,
-            @Parameter(asciiId = "a2")
-            String ä2) {
+            final String ä1,
+            final String ä2) {
         return ä1 + ä2;
     }
 

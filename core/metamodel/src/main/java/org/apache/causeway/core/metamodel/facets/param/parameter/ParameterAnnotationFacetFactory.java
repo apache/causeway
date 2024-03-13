@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.param.ascii.AsciiFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.fileaccept.FileAcceptFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.mandatory.MandatoryFacetInvertedByNullableAnnotationOnParameter;
@@ -53,7 +52,6 @@ extends FacetFactoryAbstract {
         processParamsRegEx(processParameterContext);
         processParamsOptional(processParameterContext);
         processParamsFileAccept(processParameterContext);
-        processParamsAsciiId(processParameterContext);
     }
 
     // check for @Parameter(precedingParamsPolicy=...)
@@ -132,17 +130,6 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
                 FileAcceptFacetForParameterAnnotation
                 .create(parameterIfAny, holder));
-    }
-
-    void processParamsAsciiId(final ProcessParameterContext processParameterContext) {
-
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
-
-        // check for @Parameter(asciiId=...)
-        addFacetIfPresent(
-                AsciiFacetForParameterAnnotation
-                        .create(parameterIfAny, holder));
     }
 
 

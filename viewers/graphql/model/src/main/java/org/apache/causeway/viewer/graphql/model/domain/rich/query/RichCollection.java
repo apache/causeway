@@ -25,7 +25,6 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
-import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
 
 public class RichCollection
         extends RichAssociation<OneToManyAssociation, ObjectInteractor>
@@ -55,7 +54,7 @@ public class RichCollection
         addChildFieldFor(this.get = new RichCollectionGet(this, context));
         addChildFieldFor(this.datatype = new RichCollectionDatatype(this, context));
 
-        buildObjectTypeAndField(ObjectFeatureUtils.asciiIdFor(otma), otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()));
+        buildObjectTypeAndField(otma.asciiId(), otma.getCanonicalDescription().orElse(otma.getCanonicalFriendlyName()));
     }
 
     @Override

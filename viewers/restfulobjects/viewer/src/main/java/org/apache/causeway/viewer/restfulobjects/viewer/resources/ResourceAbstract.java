@@ -31,14 +31,12 @@ import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Providers;
 
-import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -46,6 +44,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -151,8 +150,8 @@ implements HasMetaModelContext {
         final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
 
         val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
-        return metaModelContext.getObjectManager().loadObject(bookmark)
-                .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))    // might return ManagedObject.EMPTY
+        return metaModelContext.getObjectManager().loadObject(bookmark) // might return ManagedObject.EMPTY
+                .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                 .orElseThrow(()->onRoException.apply(
                         RestfulObjectsApplicationException
                                 .createWithMessage(HttpStatusCode.NOT_FOUND,

@@ -104,6 +104,11 @@ implements
     }
 
     @Override
+    public String asciiId() {
+        return getMetaModelContext().getAsciiIdentifierService().asciiIdFor(getId());
+    }
+
+    @Override
     public final String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
         //as we don't support imperative naming for parameters yet ..
         return staticFriendlyName();
@@ -382,11 +387,13 @@ implements
         return validResult.createConsent();
     }
 
+
     // -- CONTRACT
 
     @Override
     public String toString() {
         return String.format("ObjectActionParameter[id=%s]", getFeatureIdentifier());
     }
+
 
 }

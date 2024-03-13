@@ -142,17 +142,4 @@ public @interface Parameter {
     PrecedingParamsPolicy precedingParamsPolicy()
             default PrecedingParamsPolicy.AS_CONFIGURED;
 
-    /**
-     * Returns an alternative id for the parameter, using only ASCII characters.
-     *
-     * <p>
-     *     Although Java itself allows the full UTF character set for identifiers, some integrations (such as GraphQL)
-     *     have restrictions to only allow a more limited set of characters, in essence ASCII.
-     *     This attribute allows a version of the parameter's Id using only the ASCII character set to be provided.
-     * </p>
-     *
-     * @return an alternative id for the parameter, using only ASCII characters.
-     */
-    String asciiId() default "";
-
 }

@@ -150,5 +150,6 @@ module org.apache.causeway.applib {
     opens org.apache.causeway.applib.layout.links;
     opens org.apache.causeway.applib.layout.menubars.bootstrap;
     opens org.apache.causeway.applib.layout.menubars;
+    exports org.apache.causeway.applib.services.ascii;
 
 }

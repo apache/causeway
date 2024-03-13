@@ -184,6 +184,10 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
                         String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
                         if (bookmarkOptions == BookmarkOptions.SCRUB) {
                             prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
+                            prettyJson = prettyJson.replaceAll(":\\d+\"", ":NNN\"");    // "oid" : "university.dept.Department:33" ; "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:33",
+                            prettyJson = prettyJson.replaceAll("/\\d+/", "/NNN/");
+                            prettyJson = prettyJson.replaceAll("/\\d+\"", "/NNN\"");
+                            prettyJson = prettyJson.replaceAll(": \"\\d+\"", ": \"NNN\""); // "instanceId" : "33",
                         }
                         return prettyJson;
                     } catch (JsonProcessingException e) {

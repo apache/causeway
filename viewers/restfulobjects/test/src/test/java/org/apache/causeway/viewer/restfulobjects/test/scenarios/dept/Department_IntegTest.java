@@ -65,6 +65,54 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
+    public void collection_with_staff_members() {
+
+        // given
+        Bookmark bookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+            Department classics = departmentRepository.findByName("Classics");
+            return bookmarkService.bookmarkFor(classics).orElseThrow();
+        }).valueAsNonNullElseFail();
+
+        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
+
+        // when
+        val response = request.get();
+
+        // then
+        val entity = response.readEntity(String.class);
+
+        assertThat(response)
+                .extracting(Response::getStatus)
+                .isEqualTo(Response.Status.OK.getStatusCode());
+        Approvals.verify(entity, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
+    public void collection_with_no_staff_members() {
+
+        // given
+        Bookmark bookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+            Department classics = departmentRepository.findByName("Textiles");
+            return bookmarkService.bookmarkFor(classics).orElseThrow();
+        }).valueAsNonNullElseFail();
+
+        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
+
+        // when
+        val response = request.get();
+
+        // then
+        val entity = response.readEntity(String.class);
+
+        assertThat(response)
+                .extracting(Response::getStatus)
+                .isEqualTo(Response.Status.OK.getStatusCode());
+        Approvals.verify(entity, jsonOptions());
+    }
+
+    @Test
+    @UseReporter(DiffReporter.class)
     public void does_not_exist() {
 
         // given

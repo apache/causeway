@@ -1,0 +1,37 @@
+{
+  "id" : "staffMembers",
+  "memberType" : "collection",
+  "links" : [ {
+    "rel" : "self",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN/collections/staffMembers",
+    "method" : "GET",
+    "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object-collection\""
+  }, {
+    "rel" : "up",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department/NNN",
+    "method" : "GET",
+    "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+    "title" : "Untitled Department"
+  }, {
+    "rel" : "describedby",
+    "href" : "http://0.0.0.0:NNN/restful/domain-types/university.dept.Department/collections/staffMembers",
+    "method" : "GET",
+    "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/collection-description\""
+  } ],
+  "extensions" : {
+    "collectionSemantics" : "list"
+  },
+  "value" : [ {
+    "rel" : "urn:org.restfulobjects:rels/value",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.StaffMember/NNN",
+    "method" : "GET",
+    "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+    "title" : "Untitled Staff Member"
+  }, {
+    "rel" : "urn:org.restfulobjects:rels/value",
+    "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.StaffMember/NNN",
+    "method" : "GET",
+    "type" : "application/json;profile=\"urn:org.restfulobjects:repr-types/object\"",
+    "title" : "Untitled Staff Member"
+  } ]
+}

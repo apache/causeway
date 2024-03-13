@@ -90,6 +90,11 @@ implements ObjectAction {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true, false);
     }
 
+    @Override
+    public String asciiId() {
+        return getMetaModelContext().getAsciiIdentifierService().asciiIdFor(getId());
+    }
+
     /**
      * JUnit Support
      */

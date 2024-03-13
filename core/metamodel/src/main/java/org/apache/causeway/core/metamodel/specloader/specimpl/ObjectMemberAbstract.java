@@ -326,4 +326,9 @@ implements
         return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
     }
 
+    @Override
+    public String asciiId() {
+        return getMetaModelContext().getAsciiIdentifierService().asciiIdFor(getId());
+    }
+
 }
