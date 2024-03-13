@@ -20,7 +20,7 @@ For example:
 
 [source,java]
 ----
-@DomainService( nature=NatureOfService.VIEW )
+@DomainService( nature=NatureOfService.BOTH )
 @RequiredArgsConstructor(onConstructor_ = {@Inject} )
 public class Loans {                                   // <.>
 

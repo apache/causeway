@@ -38,7 +38,7 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Cate
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named("libExcelFixture.BulkUpdateMenuForDemoToDoItem")
 @DomainServiceLayout(

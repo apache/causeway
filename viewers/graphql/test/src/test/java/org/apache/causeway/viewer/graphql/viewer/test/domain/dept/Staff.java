@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.Staff")
 @DomainService(
-        nature=NatureOfService.VIEW)
+        nature=NatureOfService.BOTH)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Staff {

@@ -44,7 +44,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
  * @since 2.x  {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @DomainServiceLayout(
         named = "Prototyping",

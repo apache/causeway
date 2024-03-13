@@ -51,7 +51,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Named(ExecutionLogMenu.LOGICAL_TYPE_NAME)
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService(nature = NatureOfService.BOTH)
 @DomainServiceLayout(
     menuBar = DomainServiceLayout.MenuBar.SECONDARY,
     named = "Activity"

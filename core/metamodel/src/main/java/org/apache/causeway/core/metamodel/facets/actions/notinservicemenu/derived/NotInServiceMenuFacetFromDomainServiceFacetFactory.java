@@ -53,11 +53,11 @@ extends FacetFactoryAbstract {
         spec.lookupNonFallbackFacet(DomainServiceFacet.class)
         .ifPresent(domainServiceFacet->{
             final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-            if(natureOfService.isView()) {
+            if(natureOfService.isWebUi()) {
                 return;
             }
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
-            FacetUtil.addFacet(new NotInServiceMenuFacetFromDomainServiceFacet(natureOfService, facetHolder));
+            FacetUtil.addFacet(new WebApiOnlyActionFacetFromDomainServiceFacet(natureOfService, facetHolder));
         });
 
     }

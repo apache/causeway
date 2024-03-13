@@ -49,7 +49,7 @@ with:
 [source,java]
 .Customers.java
 ----
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService(nature = NatureOfService.BOTH)
 public class Customers {
     @Action(semantics=SemanticsOf.SAFE)
     public List<Customer> findByReferenceOrName(@MinLength(3) String refOrName) {

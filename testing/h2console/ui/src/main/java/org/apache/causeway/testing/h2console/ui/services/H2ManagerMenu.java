@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named(CausewayModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu")
 @DomainServiceLayout(

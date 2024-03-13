@@ -46,7 +46,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
  */
 @Named(ApplicationPermissionMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,

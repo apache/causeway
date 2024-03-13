@@ -59,7 +59,7 @@ where in this case `findByName` might be an existing action already defined:
 
 [source,java]
 ----
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService(nature = NatureOfService.BOTH)
 public class Customers {
 
     @Action(semantics=SemanticsOf.SAFE)
@@ -77,7 +77,7 @@ That is, it does not need to be part of the metamodel:
 +
 [source,java]
 ----
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService(nature = NatureOfService.BOTH)
 public class Customers {
     @Programmatic
     public List<Customer> findByName(

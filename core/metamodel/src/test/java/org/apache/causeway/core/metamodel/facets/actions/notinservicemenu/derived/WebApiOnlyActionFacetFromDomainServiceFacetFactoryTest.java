@@ -31,9 +31,9 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.WebApiOnlyActionFacet;
 
-class NotInServiceMenuFacetFromDomainServiceFacetFactoryTest
+class WebApiOnlyActionFacetFromDomainServiceFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     private NotInServiceMenuFacetFromDomainServiceFacetFactory facetFactory;
@@ -47,7 +47,7 @@ extends FacetFactoryTestAbstract {
     public void whenRest() throws Exception {
 
         // given
-        @DomainService(nature = NatureOfService.REST)
+        @DomainService(nature = NatureOfService.WEB_API)
         class CustomerService {
             @SuppressWarnings("unused")
             public String name() { return "Joe"; }
@@ -57,11 +57,11 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(WebApiOnlyActionFacet.class).orElse(null);
             assertNotNull(facet);
-            assertThat(facet instanceof NotInServiceMenuFacetFromDomainServiceFacet, is(true));
-            final NotInServiceMenuFacetFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (NotInServiceMenuFacetFromDomainServiceFacet) facet;
-            assertEquals(NatureOfService.REST, facetDerivedFromDomainServiceFacet.getNatureOfService());
+            assertThat(facet instanceof WebApiOnlyActionFacetFromDomainServiceFacet, is(true));
+            final WebApiOnlyActionFacetFromDomainServiceFacet facetDerivedFromDomainServiceFacet = (WebApiOnlyActionFacetFromDomainServiceFacet) facet;
+            assertEquals(NatureOfService.WEB_API, facetDerivedFromDomainServiceFacet.getNatureOfService());
             assertNoMethodsRemoved();
         });
 
@@ -81,7 +81,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(WebApiOnlyActionFacet.class).orElse(null);
             assertThat(facet, is(nullValue()));
             assertNoMethodsRemoved();
         });
@@ -101,7 +101,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(WebApiOnlyActionFacet.class).orElse(null);
             assertThat(facet, is(nullValue()));
             assertNoMethodsRemoved();
         });
@@ -120,7 +120,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.lookupNonFallbackFacet(NotInServiceMenuFacet.class).orElse(null);
+            final Facet facet = facetedMethod.lookupNonFallbackFacet(WebApiOnlyActionFacet.class).orElse(null);
             assertThat(facet, is(nullValue()));
             assertNoMethodsRemoved();
         });

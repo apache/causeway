@@ -23,16 +23,16 @@ import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.WebApiOnlyActionFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 
 
-public class NotInServiceMenuFacetFromDomainServiceFacet
-extends NotInServiceMenuFacetAbstract {
+public class WebApiOnlyActionFacetFromDomainServiceFacet
+extends WebApiOnlyActionFacetAbstract {
 
     private final NatureOfService natureOfService;
 
-    public NotInServiceMenuFacetFromDomainServiceFacet(
+    public WebApiOnlyActionFacetFromDomainServiceFacet(
             final NatureOfService natureOfService, final FacetHolder holder) {
         super(holder, Precedence.HIGH); // facet has final say, don't override
         this.natureOfService = natureOfService;
