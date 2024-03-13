@@ -31,8 +31,6 @@ import graphql.schema.GraphQLEnumType;
 import static graphql.schema.GraphQLEnumType.newEnum;
 import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.HasLogicalType;
