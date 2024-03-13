@@ -53,6 +53,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
@@ -195,12 +196,6 @@ public class FixtureScripts {
     // -- constructors
 
     // -- constructor, init
-
-    /**
-     * The package prefix to search for fixture scripts.  This default value will result in
-     * no fixture scripts being found.  However, normally it will be overridden.
-     */
-    public static final String PACKAGE_PREFIX = FixtureScripts.class.getPackage().getName();
 
 
     /**
@@ -422,6 +417,33 @@ public class FixtureScripts {
 
     // -- programmatic API
 
+    /**
+     * Runs the provided {@link FixtureScript}s, using {@link InteractionService#runAnonymous(ThrowingRunnable)} and
+     * {@link TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)}.
+     *
+     * <p>
+     *     This means that if there is an existing
+     *     {@link org.apache.causeway.applib.services.iactn.Interaction interaction (session)} and transaction, then
+     *     they will be re-used, but otherwise (all of) the provided fixtures will be installed in a single transaction.
+     * </p>
+     *
+     * <p>
+     *     <b>Be aware</b>  that (unlike {@link #runPersonas(PersonaWithBuilderScript[])}), the scripts are
+     *     <i>not</i> called in a hierarchy; all provided fixture scripts will be executed in their own
+     *     {@link org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext}
+     *     and therefore run irrespective of configured {@link #getMultipleExecutionStrategy()}.
+     * </p>
+     *
+     * <p>
+     *     Also note that <i>unlike</i> {@link #runFixtureScript(FixtureScript, String)}, then {@link FixturesInstallingEvent}
+     *     and {@link FixturesInstalledEvent}s are <i>not</i> fired.
+     * </p>
+     *
+     * @param fixtureScriptList
+     *
+     * @see #runFixtureScript(FixtureScript, String)
+     * @see #runPersonas(PersonaWithBuilderScript[])
+     */
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
 
@@ -436,6 +458,34 @@ public class FixtureScripts {
 
     }
 
+    /**
+     * Runs the provided {@link PersonaWithBuilderScript persona fixture script}s, using
+     * {@link InteractionService#runAnonymous(ThrowingRunnable)} and
+     * {@link TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)}.
+     *
+     * <p>
+     *     This means that if there is an existing
+     *     {@link org.apache.causeway.applib.services.iactn.Interaction interaction (session)} and transaction, then
+     *     they will be re-used, but otherwise (all of) the provided persona fixtures will be installed in a single
+     *     transaction.
+     * </p>
+     *
+     * <p>
+     *     Also, the persona scripts <i>are</i> called within a single hierarchy, in other words through a single
+     *     {@link org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext}; they
+     *     therefore honour the configured {@link #getMultipleExecutionStrategy()}.
+     * </p>
+     *
+     * <p>
+     *     But note that <i>unlike</i> {@link #runFixtureScript(String, String)}, then {@link FixturesInstallingEvent}
+     *     and {@link FixturesInstalledEvent}s are <i>not</i> fired.
+     * </p>
+     *
+     * @param personas
+     *
+     * @see #run(FixtureScript...)
+     * @see #runPersona(PersonaWithBuilderScript)
+     */
     @SafeVarargs
     @Programmatic
     public final void runPersonas(final PersonaWithBuilderScript<?,? extends BuilderScriptAbstract<?>> ... personas) {
@@ -455,6 +505,28 @@ public class FixtureScripts {
         .ifFailureFail();
     }
 
+
+    /**
+     * Runs the provided {@link PersonaWithBuilderScript persona fixture script}, using
+     * {@link InteractionService#runAnonymous(ThrowingRunnable)} and
+     * {@link TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)}.
+     *
+     * <p>
+     *     This means that if there is an existing
+     *     {@link org.apache.causeway.applib.services.iactn.Interaction interaction (session)} and transaction, then
+     *     they will be re-used, but otherwise the provided persona fixture will be installed in a single transaction.
+     * </p>
+     *
+     * <p>
+     *     Also note that <i>unlike</i> {@link #runFixtureScript(String, String)}, then {@link FixturesInstallingEvent}
+     *     and {@link FixturesInstalledEvent}s are <i>not</i> fired.
+     * </p>
+     *
+     * @param persona
+     *
+     * @see #runBuilder(BuilderScriptAbstract)
+     * @see #runPersonas(PersonaWithBuilderScript[])
+     */
     @Programmatic
     public <T> T runPersona(final PersonaWithBuilderScript<T,? extends BuilderScriptAbstract<? extends T>> persona) {
         val fixtureScript = persona.builder();
@@ -462,9 +534,26 @@ public class FixtureScripts {
     }
 
     /**
-     * Runs the builderScript within its own transactional boundary.
+     * Runs the provided {@link BuilderScriptAbstract builder script}, using
+     * {@link InteractionService#runAnonymous(ThrowingRunnable)} and
+     * {@link TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable)}.
+     *
      * @param <T>
      * @param builderScript
+     *
+     * <p>
+     *     This means that if there is an existing
+     *     {@link org.apache.causeway.applib.services.iactn.Interaction interaction (session)} and transaction, then
+     *     they will be re-used, but otherwise the provided persona fixture will be installed in a single transaction.
+     * </p>
+     *
+     * <p>
+     *     Also note that <i>unlike</i> {@link #runFixtureScript(String, String)}, then {@link FixturesInstallingEvent}
+     *     and {@link FixturesInstalledEvent}s are <i>not</i> fired.
+     * </p>
+     *
+     * @see #runPersona(PersonaWithBuilderScript)
+     * @see #runBuilderScriptNonTransactional(BuilderScriptAbstract)
      */
     @Programmatic
     public <T> T runBuilder(final BuilderScriptAbstract<T> builderScript) {
@@ -479,8 +568,15 @@ public class FixtureScripts {
     }
 
     /**
-     * Runs the builderScript without its own transactional boundary.<br>
-     * The caller is responsible to provide a transactional context/boundary.
+     * Runs the {@link BuilderScriptAbstract builder script} without its own transactional boundary.
+     *
+     * <p>
+     *  This means that the caller is responsible for ensuring that an
+     *  {@link org.apache.causeway.applib.services.iactn.Interaction interaction} and
+     *  {@link TransactionService#runWithinCurrentTransactionElseCreateNew(ThrowingRunnable) transaction} are in
+     *  place.
+     * </p>
+     *
      * @param <T>
      * @param builderScript
      */
@@ -495,7 +591,7 @@ public class FixtureScripts {
     }
 
     @Programmatic
-    public String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass) {
+    protected String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass) {
         val fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
         for (final Map.Entry<String,FixtureScript> fs : fixtureScripts) {
             if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass())) {
@@ -505,32 +601,24 @@ public class FixtureScripts {
         return null;
     }
 
+    /**
+     * Converts the provided set of parameters into an
+     * {@link org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext ExecutionContext}
+     * through which a hierarchy of fixtures scripts (eg using
+     * {@link org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript.ExecutionContext#executeChildren(FixtureScript, Class)})
+     * can be installed in a single go.
+     *
+     * @param parameters
+     * @return
+     */
     @Programmatic
-    public FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
+    protected FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
         val executionParameters = executionParametersService.newExecutionParameters(parameters);
         return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 
 
 
-    // -- memento support for FixtureScript
-
-    @XmlRootElement(name = "fixtureScriptMemento")
-    public static class FixtureScriptMemento {
-        @Getter @Setter
-        private String path;
-    }
-
-    String mementoFor(final FixtureScript fs) {
-        final FixtureScriptMemento memento = new FixtureScriptMemento();
-        memento.setPath(fs.getParentPath());
-        return jaxbService.toXml(memento);
-    }
-
-    void initOf(final String xml, final FixtureScript fs) {
-        final FixtureScriptMemento memento = jaxbService.fromXml(FixtureScriptMemento.class, xml);
-        fs.setParentPath(memento.getPath());
-    }
 
     // -- helpers (package level)
 
