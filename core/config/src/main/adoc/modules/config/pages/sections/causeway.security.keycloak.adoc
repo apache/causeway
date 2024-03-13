@@ -42,7 +42,7 @@ client-role-prefix
 causeway.security.keycloak. +
 extract-client-roles
 
-| 
+|  true
 | Whether to (attempt to) extract client roles and copy into the ``DefaultOidcUser``.
 
 By default, client roles are extracted using the "User Client Role" mapping type, into a token claim name "resource_access.$\{client_id}.roles"
@@ -55,7 +55,7 @@ This has been made a configuration option because some versions of Keycloak seem
 causeway.security.keycloak. +
 extract-realm-roles
 
-| 
+|  true
 | Whether to (attempt to) extract realm roles and copy into the ``DefaultOidcUser``.
 
 By default, realm roles are obtained from the token claims using the "User Realm Role" mapping type, into a token claim name "realm_access.roles"
@@ -81,7 +81,7 @@ This has been made a configuration option so that the workaround described in ht
 causeway.security.keycloak. +
 login-success-url
 
-| 
+|  /wicket
 | Specifies where users will be redirected after authenticating successfully if they have not visited a secured page prior to authenticating or \{@code alwaysUse} is true.
 
 

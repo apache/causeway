@@ -16,7 +16,10 @@ include::../section-hooks/causeway.viewer.restfulobjects~pre.adoc[]
 causeway.viewer.restfulobjects. +
 authentication.strategy-class-name
 
-| 
+|  org.apache.causeway.viewer. +
+restfulobjects.viewer.webmodule. +
+auth. +
+AuthenticationStrategyBasicAuth
 | Defaults to ``AuthenticationStrategyBasicAuth``.
 
 

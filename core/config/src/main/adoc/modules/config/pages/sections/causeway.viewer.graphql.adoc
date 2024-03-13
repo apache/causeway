@@ -43,7 +43,7 @@ authentication.fallback.username
 causeway.viewer.graphql.lookup. +
 arg-name
 
-| 
+|  object
 | This is the name of the synthetic first argument used to locate the object to be looked up.
 
 
@@ -70,7 +70,7 @@ field-name-suffix
 causeway.viewer.graphql.meta-data. +
 field-name
 
-| 
+|  _meta
 | Note that field names _cannot_ being with "__", as that is reserved by the underlying GraphQL implementation.
 
 
@@ -79,7 +79,7 @@ field-name
 causeway.viewer.graphql.mutation. +
 target-arg-name
 
-| 
+|  _target
 | The name of the synthetic argument of mutators representing the target domain object.
 
 
@@ -100,7 +100,7 @@ causeway.viewer.graphql. +
 scalar-marshaller. +
 local-date-format
 
-| 
+|  yyyy-MM-dd
 | For both JDK8's ``LocalDate`` and JodaTime's ``LocalDate``
 
 
@@ -110,7 +110,7 @@ causeway.viewer.graphql. +
 scalar-marshaller. +
 local-time-format
 
-| 
+|  HH:mm:ss
 | For both JDK8's ``LocalTime`` and JodaTime's ``LocalTime``
 
 
@@ -120,7 +120,7 @@ causeway.viewer.graphql. +
 scalar-marshaller. +
 zoned-date-time-format
 
-| 
+|  yyyy-MM-dd'T'HH:mm:ssXXX
 | for JDK8's ``ZonedDateTime`` and JodaTime's ``DateTime``
 
 
@@ -149,7 +149,7 @@ Ignored if the ``#getSchemaStyle()`` is ``SchemaStyle#SIMPLE_ONLY``.
 causeway.viewer.graphql.schema. +
 rich.top-level-field-name
 
-| 
+|  rich
 | If the ``#getSchemaStyle()`` is set to ``SchemaStyle#SIMPLE_AND_RICH``, defines the name of the top-level field under which the "rich" schema resides.
 
 Ignored for any other ``#getSchemaStyle()``.
@@ -160,7 +160,7 @@ Ignored for any other ``#getSchemaStyle()``.
 causeway.viewer.graphql.schema. +
 simple.top-level-field-name
 
-| 
+|  simple
 | If the ``#getSchemaStyle()`` is set to ``SchemaStyle#SIMPLE_AND_RICH``, defines the name of the top-level field under which the "simple" schema resides.
 
 Ignored for any other ``#getSchemaStyle()``.
