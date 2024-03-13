@@ -113,6 +113,10 @@ public interface InteractionService extends InteractionLayerTracker {
      *
      * @param interactionContext - the context to run under (non-null)
      * @param callable - the piece of code to run (non-null)
+     *
+     * @see #callAnonymous(Callable)
+     * @see #callAnonymousAndCatch(Callable)
+     * @see #run(InteractionContext, ThrowingRunnable)
      */
     <R> R call(@NonNull InteractionContext interactionContext, @NonNull Callable<R> callable);
 
@@ -121,22 +125,41 @@ public interface InteractionService extends InteractionLayerTracker {
      *
      * @param interactionContext - the user details to run under (non-null)
      * @param runnable (non-null)
+     *
+     * @see #call(InteractionContext, Callable)
+     * @see #runAnonymous(ThrowingRunnable)
      */
     void run(@NonNull InteractionContext interactionContext, @NonNull ThrowingRunnable runnable);
 
     /**
-     * As per {@link #call(InteractionContext, Callable)}, but using an
+     * As per {@link #call(InteractionContext, Callable)}, but (normally) using an
      * anonymous {@link InteractionContext}.
+     *
+     * <p>
+     *     However, if an {@link #isInInteraction() interaction (session)} already exists (with possibly some other
+     *     non-anonymous {@link InteractionContext}), then this is used instead.
+     * </p>
      *
      * @param <R>
      * @param callable (non-null)
+     *
+     * @see #call(InteractionContext, Callable)
+     * @see #runAnonymous(ThrowingRunnable)
      */
     <R> R callAnonymous(@NonNull Callable<R> callable);
 
     /**
-     * As per {@link #callAnonymous(Callable)}, but for a runnable.
+     * As per {@link #run(InteractionContext, ThrowingRunnable)}, but (normally) using an anonymous {@link InteractionContext}.
+     *
+     * <p>
+     *     However, if an {@link #isInInteraction() interaction (session)} already exists (with possibly some other
+     *     non-anonymous {@link InteractionContext}), then this is used instead.
+     * </p>
      *
      * @param runnable (non-null)
+     *
+     * @see #run(InteractionContext, ThrowingRunnable)
+     * @see #callAnonymous(Callable)
      */
     void runAnonymous(@NonNull ThrowingRunnable runnable);
 
