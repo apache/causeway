@@ -360,9 +360,9 @@ extends
      */
     default List<ZoneId> getAvailableZoneIds() {
         return ZoneId.getAvailableZoneIds().stream()
-                .sorted()
-                .map(ZoneId::of)
-                .collect(Collectors.toList());
+            .sorted()
+            .map(ZoneId::of)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -370,12 +370,12 @@ extends
      */
     default List<ZoneOffset> getAvailableOffsets() {
         val now = LocalDateTime.now();
-        return ZoneId.getAvailableZoneIds().stream()
-                .map(ZoneId::of)
-                .map(ZoneId::getRules)
-                .flatMap(zoneIdRules->zoneIdRules.getValidOffsets(now).stream())
-                .sorted()
-                .collect(Collectors.toList());
+        return getAvailableZoneIds().stream()
+            .map(ZoneId::getRules)
+            .flatMap(zoneIdRules->zoneIdRules.getValidOffsets(now).stream())
+            .sorted()
+            .distinct()
+            .collect(Collectors.toList());
     }
 
 }
