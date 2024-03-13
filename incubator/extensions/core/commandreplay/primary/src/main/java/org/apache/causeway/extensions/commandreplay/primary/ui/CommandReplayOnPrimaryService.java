@@ -54,9 +54,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
-@DomainService(
-    nature = NatureOfService.VIEW
-)
+@DomainService
 @DomainServiceLayout(
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY

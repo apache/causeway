@@ -30,9 +30,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 @Named("testdomain.RoSpecSampler")
-@DomainService(
-        nature = NatureOfService.REST
-)
+@DomainService(nature = NatureOfService.WEB_API)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class RoSpecSampler {
 

@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 
 @Named("testdomain.InvalidServiceWithAlias")
-@DomainService(nature = NatureOfService.VIEW,
+@DomainService(
         aliased = {
             "testdomain.v0.InvalidServiceWithAlias",
             "testdomain.v0.InvalidObjectWithAlias", // <-- expected collision (validation error)

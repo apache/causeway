@@ -20,6 +20,8 @@ package org.causewayaddons.wicket.pdfjs.fixture.demoapp.demomodule.dom;
 
 import java.util.List;
 
+import javax.inject.Named;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
@@ -31,10 +33,8 @@ import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
-@DomainService(
-        nature = NatureOfService.VIEW_MENU_ONLY,
-        logicalTypeName = "wktPdfJsFixture.PdfJsDemoObjectWithBlobMenu"
-)
+@Named("wktPdfJsFixture.PdfJsDemoObjectWithBlobMenu")
+@DomainService
 @DomainServiceLayout(
         named = "Demo",
         menuOrder = "10.4"

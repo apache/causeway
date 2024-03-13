@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 
 @Named("testdomain.ProperServiceWithAlias")
-@DomainService(nature = NatureOfService.VIEW,
+@DomainService(
         aliased = {
             "testdomain.v1.ProperServiceWithAlias",
             "testdomain.v2.ProperServiceWithAlias",
