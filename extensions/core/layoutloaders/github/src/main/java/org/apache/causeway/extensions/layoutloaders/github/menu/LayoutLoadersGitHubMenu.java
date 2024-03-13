@@ -45,7 +45,7 @@ import lombok.val;
  * @since 2.x {@index}
  */
 @Named(CausewayModuleExtLayoutLoadersGithub.NAMESPACE + ".LayoutLoadersGitHubMenu")
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService(nature = NatureOfService.BOTH)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )

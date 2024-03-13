@@ -34,7 +34,7 @@ My REST domain service would be someting like
 ----
 
 @DomainService(
-    nature = NatureOfService.VIEW_REST_ONLY,
+    nature = NatureOfService.WEB_API,
     logicalTypeName = "OfferRestService"
 )
 public class OfferRestService {

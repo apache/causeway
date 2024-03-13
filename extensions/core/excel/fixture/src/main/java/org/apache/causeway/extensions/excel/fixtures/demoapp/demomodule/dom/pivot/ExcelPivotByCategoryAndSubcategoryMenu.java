@@ -36,7 +36,7 @@ import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named("libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu")
 @DomainServiceLayout(

@@ -46,9 +46,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 /**
  * @since 2.0 {@index}
  */
-@DomainService(
-    nature = NatureOfService.REST
-)
+@DomainService(nature = NatureOfService.WEB_API)
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalOnPrimaryService")
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")

@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import lombok.val;
 
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named("libFakeDataFixture.FakeDataDemoObjectWithAllMenu")
 @DomainServiceLayout(

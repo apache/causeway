@@ -160,7 +160,7 @@ class _OpenApiModelFactory {
 
         for (val spec : specificationLoader.snapshotSpecifications()) {
 
-            if(!DomainServiceFacet.isContributing(spec)) {
+            if(! DomainServiceFacet.isContributingToWebApi(spec)) {
                 continue;
             }
 

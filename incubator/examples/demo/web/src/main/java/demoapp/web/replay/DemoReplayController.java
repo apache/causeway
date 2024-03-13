@@ -31,9 +31,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
 
 @Named("demo.web.DemoReplayController")
-@DomainService(
-        nature = NatureOfService.VIEW
-)
+@DomainService
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-secondary")
 public class DemoReplayController implements ReplayCommandExecutionController {

@@ -70,6 +70,6 @@ public @interface DomainService {
      * @see DomainObject#nature()
      */
     NatureOfService nature()
-            default NatureOfService.VIEW;
+            default NatureOfService.BOTH;
 
 }

@@ -11,7 +11,7 @@ For example:
 [source,java]
 ----
 @DomainService(
-        nature = NatureOfService.VIEW,                              // <.>
+        nature = NatureOfService.BOTH,                              // <.>
         objectType = "simple.SimpleObjects"
         )
 public class SimpleObjects {
@@ -43,7 +43,7 @@ For example:
 [source,java]
 ----
 @DomainService(
-        nature = NatureOfService.VIEW,                              // <.>
+        nature = NatureOfService.BOTH,                              // <.>
         objectType = "simple.SimpleObjects"
         )
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.PRIMARY) // <.>

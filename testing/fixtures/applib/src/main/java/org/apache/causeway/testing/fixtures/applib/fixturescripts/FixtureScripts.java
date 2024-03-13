@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.Action;
@@ -63,7 +62,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstrac
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 
@@ -74,7 +72,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named(FixtureScripts.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(

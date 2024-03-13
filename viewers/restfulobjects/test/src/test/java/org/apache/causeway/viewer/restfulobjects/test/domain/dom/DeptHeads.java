@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.DeptHeads")
-@DomainService(nature=NatureOfService.VIEW)
+@DomainService(nature=NatureOfService.BOTH)
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeptHeads {

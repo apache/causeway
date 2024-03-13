@@ -47,9 +47,7 @@ import lombok.val;
 /**
  * @since 2.0 {@index}
  */
-@DomainService(
-    nature = NatureOfService.VIEW
-)
+@DomainService
 @Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayOnSecondaryService")
 @DomainServiceLayout(
     named = "Activity",

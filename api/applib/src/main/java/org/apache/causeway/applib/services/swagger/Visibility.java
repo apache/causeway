@@ -47,7 +47,7 @@ public enum Visibility {
      * view models ({@link DomainObject#nature()} of
      * {@link org.apache.causeway.applib.annotation.Nature#VIEW_MODEL})
      * and to REST domain services ({@link DomainService#nature()} of
-     * {@link NatureOfService#REST}). Exposing entities also would couple the
+     * {@link NatureOfService#WEB_API}). Exposing entities also would couple the
      * REST client too deeply to the backend implementation.
      * </p>
      */

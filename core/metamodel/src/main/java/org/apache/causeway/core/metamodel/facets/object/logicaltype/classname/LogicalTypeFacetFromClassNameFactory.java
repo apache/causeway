@@ -122,13 +122,13 @@ implements
             return false; //skip validation
         }
         if (objectSpec.isInjectable()) {
-            // only check if domain service is contributing to the public API (UI/REST)
-            if(!DomainServiceFacet.getNatureOfService(objectSpec).isPresent()) {
+            // only check if domain service is contributing visible somehow (Web UI or Web APIREST)
+            if(DomainServiceFacet.getNatureOfService(objectSpec).isEmpty()) {
                 return false; //skip validation
             }
 
             // don't check if domain service has only programmatic methods
-            return objectSpec.streamAnyActions(MixedIn.INCLUDED).count()>0L;
+            return objectSpec.streamAnyActions(MixedIn.INCLUDED).findAny().isPresent();
 
         }
         return false; //skip validation

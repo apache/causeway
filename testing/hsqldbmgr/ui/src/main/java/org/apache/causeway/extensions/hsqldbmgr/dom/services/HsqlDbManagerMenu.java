@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named(CausewayModuleExtHsqldbMgr.NAMESPACE + ".HsqlDbManagerMenu")
 @DomainServiceLayout(
