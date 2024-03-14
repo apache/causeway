@@ -54,7 +54,7 @@ public class DomainServicesListReprRenderer extends ListReprRenderer {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(resourceContext.streamServicesContributingToWebApi());
+            renderer.with(resourceContext.streamServiceAdapters());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);

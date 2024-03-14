@@ -46,7 +46,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
     exports org.apache.causeway.core.metamodel.facets.object.callbacks;
     exports org.apache.causeway.core.metamodel.facets.object.domainobject;
-    exports org.apache.causeway.core.metamodel.facets.object.domainservice;
     exports org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
     exports org.apache.causeway.core.metamodel.facets.object.entity;
     exports org.apache.causeway.core.metamodel.facets.object.grid;

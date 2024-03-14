@@ -79,7 +79,7 @@ implements MenuUiService {
     // -- HELPER
 
     private List<String> select(final DomainServiceLayout.MenuBar menuBarSelect) {
-        return metaModelContext.streamServicesContributingToUi()
+        return metaModelContext.streamServiceAdapters()
                 .filter(with(menuBarSelect))
                 .map(ManagedObject::getSpecification)
                 .map(ObjectSpecification::getLogicalTypeName)

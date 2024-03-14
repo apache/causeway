@@ -78,7 +78,7 @@ implements DomainServiceResource {
         val resourceContext = createResourceContext(
                 RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Stream<ManagedObject> serviceAdapters = resourceContext.streamServicesContributingToWebApi();
+        final Stream<ManagedObject> serviceAdapters = resourceContext.streamServiceAdapters();
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(
                 resourceContext, null, JsonRepresentation.newMap());

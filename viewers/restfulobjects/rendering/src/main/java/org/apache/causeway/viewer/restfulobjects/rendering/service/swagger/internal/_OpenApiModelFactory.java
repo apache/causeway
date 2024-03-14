@@ -36,7 +36,6 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -160,10 +159,6 @@ class _OpenApiModelFactory {
 
         for (val spec : specificationLoader.snapshotSpecifications()) {
 
-            if(!DomainServiceFacet.contributingToWebApi().test(spec)) {
-                continue;
-            }
-
             val serviceActions = _Util.actionsOf(spec, visibility, classExcluder);
             if(serviceActions.isEmpty()) {
                 continue;
@@ -193,7 +188,7 @@ class _OpenApiModelFactory {
         // but this is now done by SpecificationLoader itself)
         for (final ObjectSpecification objectSpec : specificationLoader.snapshotSpecifications()) {
 
-            if(Facets.domainServiceIsPresent(objectSpec)
+            if(objectSpec.isDomainService()
                     || Facets.mixinIsPresent(objectSpec)) {
                 continue;
             }

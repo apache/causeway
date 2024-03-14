@@ -263,7 +263,7 @@ implements MenuBarsService {
     private BSMenuBars menuBarsFromAnnotationsOnly() {
         final BSMenuBars menuBars = new BSMenuBars();
 
-        val visibleServiceAdapters = metaModelContext.streamServicesContributingToUi()
+        val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(this::isVisibleAdapterForMenu)
                 .collect(Can.toCan());
 
