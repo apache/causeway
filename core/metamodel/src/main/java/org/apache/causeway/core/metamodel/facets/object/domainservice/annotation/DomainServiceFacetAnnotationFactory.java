@@ -20,14 +20,11 @@ package org.apache.causeway.core.metamodel.facets.object.domainservice.annotatio
 
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -39,7 +36,6 @@ public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject
     public DomainServiceFacetAnnotationFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
     }
@@ -51,10 +47,6 @@ implements MetaModelRefiner {
             return;
         }
         val facetHolder = processClassContext.getFacetHolder();
-        addFacet(
-                new DomainServiceFacetForAnnotation(
-                        facetHolder,
-                        domainServiceIfAny.get().nature()));
 
         addFacetIfPresent(
                 AliasedFacetForDomainServiceAnnotation
@@ -66,7 +58,7 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
-            if(!spec.containsFacet(DomainServiceFacet.class)) {
+            if(!spec.isDomainService()) {
                 return;
             }
 

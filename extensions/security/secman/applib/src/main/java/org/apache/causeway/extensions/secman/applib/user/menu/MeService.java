@@ -33,7 +33,6 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
@@ -52,9 +51,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Named(MeService.LOGICAL_TYPE_NAME)
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )

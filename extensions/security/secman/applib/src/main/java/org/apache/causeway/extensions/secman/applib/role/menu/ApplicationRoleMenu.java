@@ -28,7 +28,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
@@ -48,9 +47,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Named(ApplicationRoleMenu.LOGICAL_TYPE_NAME)
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @DomainServiceLayout(
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

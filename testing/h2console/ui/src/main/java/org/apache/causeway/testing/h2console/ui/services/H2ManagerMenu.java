@@ -30,7 +30,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -44,9 +43,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * @since 2.0 {@index}
  */
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named(CausewayModuleTestingH2ConsoleUi.NAMESPACE + ".H2ManagerMenu")
 @DomainServiceLayout(
         named = "Prototyping",

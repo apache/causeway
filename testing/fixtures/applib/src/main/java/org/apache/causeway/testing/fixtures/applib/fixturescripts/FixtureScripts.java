@@ -39,7 +39,6 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
@@ -73,9 +72,7 @@ import lombok.val;
  *
  * @since 1.x {@index}
  */
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named(FixtureScripts.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named="Prototyping",

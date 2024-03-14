@@ -30,7 +30,6 @@ import org.springframework.context.annotation.Profile;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
@@ -46,7 +45,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 /**
  * @since 2.0 {@index}
  */
-@DomainService(nature = NatureOfService.WEB_API)
+@DomainService
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalOnPrimaryService")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")

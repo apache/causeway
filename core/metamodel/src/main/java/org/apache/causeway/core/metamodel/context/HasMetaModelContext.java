@@ -22,11 +22,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.locale.UserLocale;
+import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;

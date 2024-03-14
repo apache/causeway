@@ -26,7 +26,6 @@ import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -47,7 +46,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)
-@DomainService(nature = NatureOfService.WEB_API)
+@DomainService
 @RequiredArgsConstructor
 public class OutboxRestApi  {
 

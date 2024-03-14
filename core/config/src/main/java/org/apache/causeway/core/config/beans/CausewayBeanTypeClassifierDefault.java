@@ -51,7 +51,7 @@ implements CausewayBeanTypeClassifier {
     private final Can<CausewayBeanTypeClassifier> classifierPlugins = CausewayBeanTypeClassifier.get();
 
     private final _ClassCache classCache = _ClassCache.getInstance();
-    
+
     // handle arbitrary types ...
     @Override
     public CausewayBeanMetaData classify(
@@ -109,6 +109,7 @@ implements CausewayBeanTypeClassifier {
         val aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
             val logicalType = LogicalType.infer(type);
+            Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.set(classCache, type, "true");
             return CausewayBeanMetaData
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
@@ -139,7 +140,7 @@ implements CausewayBeanTypeClassifier {
                         .indifferent(BeanSort.MANAGED_BEAN_CONTRIBUTING, type);
             case MIXIN:
                 // memoize mixin main name
-                classCache.setAttribute(type, "mixin-main-method-name", aDomainObject.mixinMethod());
+                Attributes.MIXIN_MAIN_METHOD_NAME.set(classCache, type, aDomainObject.mixinMethod());
                 return CausewayBeanMetaData.causewayManaged(BeanSort.MIXIN, type);
             case ENTITY:
                 return CausewayBeanMetaData.entity(PersistenceStack.UNSPECIFIED, LogicalType.infer(type));

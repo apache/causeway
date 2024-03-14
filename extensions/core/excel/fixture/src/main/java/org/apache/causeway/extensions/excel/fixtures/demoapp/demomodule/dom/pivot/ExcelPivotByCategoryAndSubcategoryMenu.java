@@ -27,7 +27,6 @@ import jakarta.inject.Named;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -35,9 +34,7 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named("libExcelFixture.ExcelPivotByCategoryAndSubcategoryMenu")
 @DomainServiceLayout(
         named = "Excel"

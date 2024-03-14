@@ -31,7 +31,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -48,7 +47,6 @@ import lombok.val;
 
 @Named("testdomain.jdo.InventoryResource")
 @DomainService(
-        nature = NatureOfService.WEB_API,
         aliased = "testdomain.jdo.InventoryResourceAlias" // <-- as tested with RestEndpointService
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)

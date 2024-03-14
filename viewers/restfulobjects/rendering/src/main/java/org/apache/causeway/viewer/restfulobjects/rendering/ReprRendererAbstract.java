@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import jakarta.ws.rs.core.MediaType;
 
@@ -201,11 +200,6 @@ implements ReprRenderer<T> {
         for (val adapter : adapters) {
             adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.VALUE, adapter).build());
         }
-    }
-
-    protected Stream<ManagedObject> streamServiceAdapters() {
-        val metaModelContext = resourceContext.getMetaModelContext();
-        return metaModelContext.streamServiceAdapters();
     }
 
 }

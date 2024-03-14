@@ -34,7 +34,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
@@ -59,9 +58,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Named(MetaModelServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

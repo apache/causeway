@@ -27,21 +27,14 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.Departments")
-@DomainService(
-<<<<<<< HEAD
-        nature=NatureOfService.VIEW)
+@DomainService
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-=======
-        nature=NatureOfService.BOTH)
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
->>>>>>> refs/remotes/origin/master
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Departments {
 

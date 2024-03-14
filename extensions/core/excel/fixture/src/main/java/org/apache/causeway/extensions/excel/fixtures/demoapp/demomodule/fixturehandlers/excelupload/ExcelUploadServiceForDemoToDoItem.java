@@ -25,7 +25,6 @@ import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
@@ -37,9 +36,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named("libExcelFixture.ExcelUploadServiceForDemoToDoItem")
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,

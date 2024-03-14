@@ -33,7 +33,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.MinLength;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -46,9 +45,7 @@ import org.apache.causeway.applib.services.user.UserService;
 
 import lombok.RequiredArgsConstructor;
 
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named("libExcelFixture.ExcelDemoToDoItemMenu")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})

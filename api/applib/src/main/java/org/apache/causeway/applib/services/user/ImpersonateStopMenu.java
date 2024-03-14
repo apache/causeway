@@ -27,7 +27,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.Redirect;
@@ -51,9 +50,7 @@ import lombok.RequiredArgsConstructor;
  *
  * @since 2.0 {@index}
  */
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named(ImpersonateStopMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(
         named = "Security",

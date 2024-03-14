@@ -36,7 +36,6 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 
 import lombok.val;
 
-
 public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test

@@ -18,11 +18,16 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import java.util.Optional;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.NonNull;
 
@@ -31,6 +36,27 @@ import lombok.NonNull;
  * @since 2.0
  */
 public interface CausewayBeanTypeClassifier {
+
+    public enum Attributes {
+        /**
+         * Corresponds to presence of a {@link DomainService} annotation.
+         * @see _ClassCache#lookupAttribute(Class, String)
+         */
+        HAS_DOMAIN_SERVICE_SEMANTICS,
+
+        /**
+         * Corresponds to {@link DomainObject#mixinMethod()}.
+         * @see _ClassCache#lookupAttribute(Class, String)
+         */
+        MIXIN_MAIN_METHOD_NAME;
+
+        public void set(final _ClassCache classCache, final Class<?> type, final String attributeValue) {
+            classCache.setAttribute(type, this.name(), attributeValue);
+        }
+        public Optional<String> lookup(final _ClassCache classCache, final Class<?> type) {
+            return classCache.lookupAttribute(type, this.name());
+        }
+    }
 
     // -- INTERFACE
 

@@ -54,7 +54,6 @@ import org.apache.causeway.core.metamodel.facets.collections.collection.defaultv
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -181,10 +180,6 @@ public final class Facets {
         return parameter.lookupFacet(PrecedingParametersPolicyFacet.class)
             .map(PrecedingParametersPolicyFacet::value)
             .orElseGet(ParameterConfigOptions.PrecedingParametersPolicy::defaultsIfNotSpecifiedOtherwise);
-    }
-
-    public boolean domainServiceIsPresent(final ObjectSpecification objectSpec) {
-        return objectSpec.containsFacet(DomainServiceFacet.class);
     }
 
     public Optional<MenuBar> domainServiceLayoutMenuBar(final ObjectSpecification objectSpec) {
