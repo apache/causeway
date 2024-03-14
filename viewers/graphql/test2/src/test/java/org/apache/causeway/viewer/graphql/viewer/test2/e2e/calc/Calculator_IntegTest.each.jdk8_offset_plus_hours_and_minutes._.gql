@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      jdk8OffsetPlusHoursAndMinutes {
+        invoke(time: "04:05:20-01:00", numHours: 2, numMinutes: 15) {
+          results
+        }
+      }
+    }
+  }
+}

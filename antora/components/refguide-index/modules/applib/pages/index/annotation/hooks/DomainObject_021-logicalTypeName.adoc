@@ -21,9 +21,8 @@ For example:
 
 [source,java]
 ----
-@DomainObject(
-    logicalTypeName="orders.Order"
-)
+@Named("orders.Order")
+@DomainObject
 public class Order {
     ...
 }

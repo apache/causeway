@@ -51,15 +51,17 @@ public class SimpleTopLevelMutation
         }
         val objectSpecifications = context.objectSpecifications();
 
-        objectSpecifications.forEach(objectSpec -> {
+        objectSpecifications
+                .forEach(objectSpec -> {
             objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                    .filter(this::inApiScope)
                     .filter(x -> ! x.getSemantics().isSafeInNature())
                     .forEach(objectAction -> addAction(objectSpec, objectAction));
             objectSpec.streamProperties(MixedIn.INCLUDED)
                     .filter(property -> ! property.isAlwaysHidden())
+                    .filter(this::inApiScope)
                     .filter(property -> property.containsFacet(PropertySetterFacet.class))
                     .forEach(property -> addProperty(objectSpec, property));
-
         });
 
         buildObjectType();

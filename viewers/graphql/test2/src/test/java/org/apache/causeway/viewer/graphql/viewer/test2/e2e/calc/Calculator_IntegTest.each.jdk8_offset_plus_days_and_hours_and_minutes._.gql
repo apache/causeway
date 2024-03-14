@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      jdk8OffsetPlusDaysAndHoursAndMinutes {
+        invoke(dateTime: "2024-08-12T04:05:20-01:00", numDays: 3, numHours: 2, numMinutes: 15) {
+          results
+        }
+      }
+    }
+  }
+}

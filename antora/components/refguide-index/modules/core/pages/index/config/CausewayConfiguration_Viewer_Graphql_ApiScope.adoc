@@ -1,0 +1,42 @@
+= CausewayConfiguration.Viewer.Graphql.ApiScope _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Specifies which elements of the metamodel are included within the generated GraphQL spec.
+
+== API
+
+[source,java]
+.CausewayConfiguration_Viewer_Graphql_ApiScope.java
+----
+enum ApiScope {
+  VIEW_MODELS     // <.>
+  ALL     // <.>
+}
+----
+
+<.> xref:#VIEW_MODELS[VIEW_MODELS]
++
+--
+The generated GraphQL spec is restricted only to include only _org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model_ s.
+--
+<.> xref:#ALL[ALL]
++
+--
+The generated GraphQL spec is not restricted, includes both _org.apache.causeway.applib.annotation.Nature#ENTITY domain entities_ as well as _org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model_ s.
+--
+
+== Members
+
+[#VIEW_MODELS]
+=== VIEW_MODELS
+
+The generated GraphQL spec is restricted only to include only _org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model_ s.
+
+Applicable when the GraphQL API is in use by third-party clients, ie public use and not under the control of the authors of the backend Apache Causeway application. Exposing entities also would couple the GraphQL client too deeply to the backend implementation.
+
+[#ALL]
+=== ALL
+
+The generated GraphQL spec is not restricted, includes both _org.apache.causeway.applib.annotation.Nature#ENTITY domain entities_ as well as _org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model_ s.
+
+This is perfectly acceptable where the team developing the GraphQL client is the same as the team developing the backend service ... the use of the Web API between the client and server is a private implementation detail of the application.

@@ -90,10 +90,16 @@ public class Context {
     }
 
     public List<ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
+        val includeEntities = causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
         return specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
-                .filter(x -> x.isEntityOrViewModelOrAbstract() || x.getBeanSort().isManagedBeanContributing())
+                .filter(x ->
+                           x.isViewModel()
+                        || (includeEntities && x.isEntity())
+                        || (includeEntities && x.isAbstract()) // this is a little bit inaccurate; Person.class was not being picked up, not sure that MappedSuperclass is enough to install the EntityFacet though.
+                        || x.getBeanSort().isManagedBeanContributing()
+                )
                 .filter(predicate)
                 .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
                 .toList();

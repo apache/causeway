@@ -129,7 +129,7 @@ public enum BeanSort {
         return this == UNKNOWN;
     }
 
-    // -- HIGER LEVEL PREDICATES
+    // -- HIGHER LEVEL PREDICATES
 
     public boolean isToBeIntrospected() {
 
@@ -148,6 +148,7 @@ public enum BeanSort {
     public boolean isWrappingSupported() {
         return isMixin() || isViewModel() || isEntity() || isManagedBeanAny();
     }
+
 
 
     // ...

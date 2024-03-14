@@ -65,7 +65,7 @@ For example:
 .Calculator.java
 ----
 @Named("calculator.Calculator")
-@DomainService(nature= NatureOfService.BOTH)
+@DomainService
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Calculator {
 

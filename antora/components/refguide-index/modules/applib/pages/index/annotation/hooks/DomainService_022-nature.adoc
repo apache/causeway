@@ -20,11 +20,11 @@ For example:
 
 [source,java]
 ----
-@DomainService( nature=NatureOfService.BOTH )
+@DomainService
 @RequiredArgsConstructor(onConstructor_ = {@Inject} )
-public class Loans {                                   // <.>
+public class Loans {                                    // <.>
 
-    private final LoanRepository loanRepository;       // <.>
+    private final LoanRepository loanRepository;        // <.>
 
     @Action(semantics=SemanticsOf.SAFE)
     public List<Loan> findOverdueLoans() {

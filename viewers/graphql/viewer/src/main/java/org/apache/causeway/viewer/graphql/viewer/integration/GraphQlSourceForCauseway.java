@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.graphql.model.toplevel.BothTopLevelQuery;
 import lombok.val;
 
 @Service()
-//@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class GraphQlSourceForCauseway implements GraphQlSource {
 
     private final CausewayConfiguration causewayConfiguration;

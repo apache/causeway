@@ -36,10 +36,8 @@ This will provide additional finders "for free".
 +
 [source,java]
 ----
-@DomainObject(
-        nature = Nature.VIEW_MODEL,                             // <.>
-        logicalTypeName = "petclinic.HomePageViewModel"
-        )
+@Named("petclinic.HomePageViewModel")
+@DomainObject( nature = Nature.VIEW_MODEL )                     // <.>
 @HomePage                                                       // <.>
 @DomainObjectLayout()
 public class HomePageViewModel {
@@ -238,7 +236,8 @@ mvn -pl spring-boot:run
 [source,java]
 .VisitPlusPetOwner.java
 ----
-@DomainObject(nature=Nature.VIEW_MODEL, logicalTypeName = "petclinic.VisitPlusPetOwner")
+@Named("petclinic.VisitPlusPetOwner")
+@DomainObject(nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(named = "Visit")
 @XmlRootElement                                                     // <.>
 @XmlType                                                            // <1>

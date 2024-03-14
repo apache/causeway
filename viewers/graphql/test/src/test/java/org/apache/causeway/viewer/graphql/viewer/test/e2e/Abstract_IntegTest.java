@@ -51,6 +51,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
 
     @DynamicPropertySource
     static void apiVariant(final DynamicPropertyRegistry registry) {
+        registry.add("causeway.viewer.graphql.api-scope", CausewayConfiguration.Viewer.Graphql.ApiScope.ALL::name);
         registry.add("causeway.viewer.graphql.api-variant", CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT::name);
         registry.add("causeway.viewer.graphql.schema.rich.enable-scenario-testing", () -> Boolean.TRUE);
         registry.add("causeway.viewer.graphql.resources.response-type", CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT::name);

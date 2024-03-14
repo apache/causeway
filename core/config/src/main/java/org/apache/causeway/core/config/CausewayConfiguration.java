@@ -2346,6 +2346,11 @@ public class CausewayConfiguration {
         @Data
         public static class Graphql {
 
+            /**
+             * Which style of schema to expose: &quot;simple&quot;, &quot;rich&quot; or some combination of both.
+             *
+             * @since 2.0 {@index}
+             */
             public enum SchemaStyle {
                 /**
                  * Expose only the &quot;simple&quot; schema, defining only fields that return the state of the domain
@@ -2364,7 +2369,7 @@ public class CausewayConfiguration {
                  *
                  * <p>
                  *     Optionally, fields for Scenario (given/when/then) testing may also be added if the
-                 *     {@link #isEnableScenarioTestingForRich()} config property is set.
+                 *     {@link Schema.Rich#isEnableScenarioTesting()} config property is set.
                  * </p>
                  * <p>
                  *     Suitable for clients where the application logic and state remains in the backend, within the
@@ -2374,8 +2379,8 @@ public class CausewayConfiguration {
                 RICH_ONLY,
                 /**
                  * Exposes both the simple and rich schemas, for the query have each under a field as defined by
-                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
-                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 * {@link Schema.Simple#getTopLevelFieldName()} (by default &quot;simple&quot;) and
+                 * {@link Schema.Rich#getTopLevelFieldName()} (by default &quot;rich&quot;).
                  *
                  * <p>
                  *     For mutations, use the <i>simple</i> schema types.
@@ -2384,8 +2389,8 @@ public class CausewayConfiguration {
                 SIMPLE_AND_RICH,
                 /**
                  * Exposes both the simple and rich schemas, for the query have each under a field as defined by
-                 * {@link #getTopLevelFieldNameForSimple()} (by default &quot;simple&quot;) and
-                 * {@link #getTopLevelFieldNameForRich()} (by default &quot;rich&quot;).
+                 * {@link Schema.Simple#getTopLevelFieldName()} (by default &quot;simple&quot;) and
+                 * {@link Schema.Rich#getTopLevelFieldName()} (by default &quot;rich&quot;).
                  *
                  * <p>
                  *     For mutations, use the <i>rich</i> schema types.
@@ -2403,7 +2408,11 @@ public class CausewayConfiguration {
             }
 
             /**
-             * Which {@link SchemaStyle} to expose.
+             * Which {@link SchemaStyle} to expose, &quot;simple&quot; or &quot;rich&quot;.  By default both are
+             * exposed under top-level field names.
+             *
+             * @see Schema.Rich#getTopLevelFieldName()
+             * @see Schema.Simple#getTopLevelFieldName()
              */
             private SchemaStyle schemaStyle = SchemaStyle.RICH_AND_SIMPLE;
 
@@ -2489,6 +2498,47 @@ public class CausewayConfiguration {
              * by exposing actions that mutate the system; it is therefore not compliant with the GraphQL spec),
              */
             private ApiVariant apiVariant = ApiVariant.QUERY_AND_MUTATIONS;
+
+            /**
+             * Specifies which elements of the metamodel are included within the generated
+             * GraphQL spec.
+             *
+             * @since 2.x {@index}
+             */
+            public enum ApiScope {
+
+                /**
+                 * The generated GraphQL spec is restricted only to include only
+                 * {@link org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model}s.
+                 *
+                 * <p>
+                 * Applicable when the GraphQL API is in use by third-party clients, ie public use and not
+                 * under the control of the authors of the backend Apache Causeway application.
+                 * Exposing entities also would couple the GraphQL client too deeply to the backend implementation.
+                 * </p>
+                 */
+                VIEW_MODELS,
+                /**
+                 * The generated GraphQL spec is not restricted, includes both
+                 * {@link org.apache.causeway.applib.annotation.Nature#ENTITY domain entities} as well as
+                 * {@link org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model}s.
+                 *
+                 * <p>
+                 * This is perfectly acceptable where the team developing the GraphQL client is the
+                 * same as the team developing the backend service ... the use of the Web
+                 * API between the client and server is a private implementation detail of
+                 * the application.
+                 * </p>
+                 */
+                ALL,
+                ;
+            }
+
+            /**
+             * Which domain objects to include the GraphQL schema.  By default, all domain objects are exposed
+             * (entities and view models).
+             */
+            private ApiScope apiScope = ApiScope.ALL;
 
             private final MetaData metaData = new MetaData();
             @Data

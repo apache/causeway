@@ -25,6 +25,11 @@ import graphql.schema.GraphQLObjectType;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -151,5 +156,22 @@ public abstract class ElementCustom
         }
         return FieldCoordinates.coordinates(gqlObjectType, fieldName);
     }
+
+    protected boolean inApiScope(ObjectAction act) {
+        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
+            return true;
+        }
+        val returnType = act.getElementType();
+        return returnType.isViewModelOrValueOrVoid() &&
+                act.getParameterTypes().stream().allMatch(ObjectSpecification::isViewModelOrValue);
+    }
+
+    protected boolean inApiScope(final ObjectAssociation objAssoc) {
+        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
+            return true;
+        }
+        return objAssoc.getElementType().isViewModelOrValue();
+    }
+
 
 }

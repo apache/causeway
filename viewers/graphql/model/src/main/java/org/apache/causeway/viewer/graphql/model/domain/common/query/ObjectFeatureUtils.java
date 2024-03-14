@@ -39,7 +39,7 @@ import lombok.val;
 @UtilityClass
 public class ObjectFeatureUtils {
 
-    public static Optional<Object> asPojo(
+    static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
             final Environment environment,

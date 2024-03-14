@@ -41,6 +41,11 @@ The most important configuration properties are:
 +
 Whether to support relaxed (but non-spec compliant) queries with mutations, or instead to expose an API that is query only.
 
+* xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.api-scope[api-scope]
++
+Whether to include all domain classes in the GraphQL schema (entities and view models), or whether only to include view models.
+Which to use depends upon whether the GraphQL client is owned by the same team the owns the backend application.
+
 * xref:refguide:config:sections/causeway.viewer.graphql.adoc#causeway.viewer.graphql.schema-style[schema-style]
 +
 Whether to use the "simple" schema style (data only, client-driven), the "rich" schema style (includes supporting facets, server-driven) or both schema styles.

@@ -52,13 +52,13 @@ public abstract class CommonTopLevelQueryAbstract
             switch (objectSpec.getBeanSort()) {
 
                 case ABSTRACT:
-                case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
-                case ENTITY:     // @DomainObject(nature=ENTITY)
-
+                case VIEW_MODEL:
+                case ENTITY:
                     val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
                     addChildField(gqlvDomainObject.newField());
                     domainObjects.add(gqlvDomainObject);
                     break;
+
             }
         });
 
@@ -73,7 +73,6 @@ public abstract class CommonTopLevelQueryAbstract
                     break;
             }
         });
-
     }
 
     public static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {

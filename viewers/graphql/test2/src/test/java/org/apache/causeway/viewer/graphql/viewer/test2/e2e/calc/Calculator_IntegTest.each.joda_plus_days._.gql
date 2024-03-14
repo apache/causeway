@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      jodaLocalPlusDays {
+        invoke(date: "2024-01-26", numDays: 2) {
+          results
+        }
+      }
+    }
+  }
+}

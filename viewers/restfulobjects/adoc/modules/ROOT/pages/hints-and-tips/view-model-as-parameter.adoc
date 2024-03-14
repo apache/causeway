@@ -15,10 +15,8 @@ My view model parameter would look like
 
 [source,java]
 ----
-@DomainObject(
-    nature = Nature.VIEW_MODEL,
-    logicalTypeName = "OfferTemplateFilter"
-)
+@Named("OfferTemplateFilter")
+@DomainObject( nature = Nature.VIEW_MODEL )
 @XmlRootElement(name = "OfferTemplateFilter")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter @Setter
@@ -28,15 +26,12 @@ public class OfferTemplateFilter {
 }
 ----
 
-My REST domain service would be someting like
+My REST domain service would be something like
 
 [source,java]
 ----
-
-@DomainService(
-    nature = NatureOfService.WEB_API,
-    logicalTypeName = "OfferRestService"
-)
+@Named("OfferRestService")
+@DomainService
 public class OfferRestService {
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

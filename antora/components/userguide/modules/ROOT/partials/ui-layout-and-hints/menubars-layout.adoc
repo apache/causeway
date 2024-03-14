@@ -10,10 +10,8 @@ For example:
 
 [source,java]
 ----
-@DomainService(
-        nature = NatureOfService.BOTH,                              // <.>
-        objectType = "simple.SimpleObjects"
-        )
+@Named("simple.SimpleObjects")
+@DomainService                      // <.>
 public class SimpleObjects {
     // ...
 }
@@ -42,10 +40,8 @@ For example:
 
 [source,java]
 ----
-@DomainService(
-        nature = NatureOfService.BOTH,                              // <.>
-        objectType = "simple.SimpleObjects"
-        )
+@Named("simple.SimpleObjects")
+@DomainService                                                      // <.>
 @DomainServiceLayout(menuBar = DomainServiceLayout.MenuBar.PRIMARY) // <.>
 public class SimpleObjects {
     // ...

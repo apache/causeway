@@ -1,0 +1,13 @@
+{
+  "data" : {
+    "rich" : {
+      "university_calc_Calculator" : {
+        "addDoubleWrappers" : {
+          "invoke" : {
+            "results" : 3.3000000000000003
+          }
+        }
+      }
+    }
+  }
+}

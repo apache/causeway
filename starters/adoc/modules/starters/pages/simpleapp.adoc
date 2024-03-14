@@ -99,10 +99,8 @@ This is a view model annotated with xref:refguide:applib:index/annotation/HomePa
 [source,java]
 .HomePageViewModel.java
 ----
-@DomainObject(
-        nature = Nature.VIEW_MODEL,
-        logicalTypeName = "domainapp.HomePageViewModel"
-        )
+@Named("domainapp.HomePageViewModel")
+@DomainObject( nature = Nature.VIEW_MODE )
 @HomePage
 public class HomePageViewModel {
 

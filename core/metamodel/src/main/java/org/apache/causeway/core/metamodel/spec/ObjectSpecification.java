@@ -479,11 +479,34 @@ extends
     /**
      * Includes abstract types that have
      * {@link ViewModelFacet} or {@link EntityFacet}.
+     *
+     * @see #isViewModel()
+     * @see #isEntity()
      */
     default boolean isEntityOrViewModel() {
         return isViewModel() || isEntity();
     }
 
+    /**
+     * @see #isViewModel()
+     * @see #isValue()
+     */
+    default boolean isViewModelOrValue() {
+        return isViewModel() || isValue();
+    }
+
+    /**
+     * @see #isViewModel()
+     * @see #isValue()
+     * @see #isVoid()
+     */
+    default boolean isViewModelOrValueOrVoid() {
+        return isViewModel() || isValue() || isVoid();
+    }
+
+    /**
+     * @see #getBeanSort()
+     */
     default boolean isEntityOrViewModelOrAbstract() {
         // optimized, no need to check facets
         return getBeanSort().isViewModel()

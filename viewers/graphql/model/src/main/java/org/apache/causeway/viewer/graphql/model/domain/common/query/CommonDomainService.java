@@ -89,7 +89,9 @@ public class CommonDomainService
     private void addActions() {
 
         val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        val apiScope = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                .filter(this::inApiScope)
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||
                         apiVariant != CausewayConfiguration.Viewer.Graphql.ApiVariant.QUERY_ONLY    // the other variants have an entry for all actions.
                 )
