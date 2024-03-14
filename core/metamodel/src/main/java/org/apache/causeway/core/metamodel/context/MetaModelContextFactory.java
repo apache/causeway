@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.context;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

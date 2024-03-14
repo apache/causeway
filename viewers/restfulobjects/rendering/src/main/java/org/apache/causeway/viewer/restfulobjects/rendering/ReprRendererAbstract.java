@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;

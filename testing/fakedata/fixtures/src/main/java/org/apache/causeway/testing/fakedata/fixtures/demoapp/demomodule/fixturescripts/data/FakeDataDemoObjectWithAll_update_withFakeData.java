@@ -25,7 +25,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

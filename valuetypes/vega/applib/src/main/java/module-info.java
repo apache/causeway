@@ -25,8 +25,8 @@ module org.apache.causeway.valuetypes.vega.applib {
         org.apache.causeway.valuetypes.vega.persistence.jdo,
         org.apache.causeway.valuetypes.vega.persistence.jpa;
 
-    requires java.inject;
-    requires java.xml.bind;
+    requires jakarta.inject;
+    requires jakarta.xml.bind;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

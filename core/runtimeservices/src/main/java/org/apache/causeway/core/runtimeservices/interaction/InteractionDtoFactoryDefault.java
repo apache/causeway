@@ -20,9 +20,9 @@ package org.apache.causeway.core.runtimeservices.interaction;
 
 import java.util.List;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Inject private CommandDtoFactory commandDtoServiceInternal;
     @Inject private SchemaValueMarshaller valueMarshaller;
-    @Inject private javax.inject.Provider<InteractionProvider> interactionProviderProvider;
+    @Inject private jakarta.inject.Provider<InteractionProvider> interactionProviderProvider;
     @Inject private UserService userService;
 
     @Override

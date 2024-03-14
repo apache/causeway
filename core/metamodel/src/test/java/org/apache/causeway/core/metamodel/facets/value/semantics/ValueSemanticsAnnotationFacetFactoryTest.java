@@ -212,7 +212,7 @@ extends FacetFactoryTestAbstract {
     void digitsAnnotationPickedUpOnProperty() {
         // given
         class Order {
-            @javax.validation.constraints.Digits(integer=14, fraction=4)
+            @jakarta.validation.constraints.Digits(integer=14, fraction=4)
             public BigDecimal getCost() { return null; }
         }
         propertyScenario(Order.class, "cost", (processMethodContext, facetHolder, facetedMethod) -> {
@@ -229,7 +229,7 @@ extends FacetFactoryTestAbstract {
         @SuppressWarnings("unused")
         class Order {
             public void updateCost(
-                    @javax.validation.constraints.Digits(integer=14, fraction=4)
+                    @jakarta.validation.constraints.Digits(integer=14, fraction=4)
                     final BigDecimal cost) { }
         }
         parameterScenario(Order.class, "updateCost", 0, (processParameterContext, facetHolder, facetedMethod, facetedMethodParameter) -> {
@@ -247,19 +247,19 @@ extends FacetFactoryTestAbstract {
         // given
         class Order {
 
-            @javax.validation.constraints.Digits(integer=14, fraction=4)
+            @jakarta.validation.constraints.Digits(integer=14, fraction=4)
             @ValueSemantics(maxTotalDigits = 19)
             public BigDecimal maxTotalA() { return null; }
 
-            @javax.validation.constraints.Digits(integer=14, fraction=5)
+            @jakarta.validation.constraints.Digits(integer=14, fraction=5)
             @ValueSemantics(maxTotalDigits = 17)
             public BigDecimal maxTotalB() { return null; }
 
-            @javax.validation.constraints.Digits(integer=14, fraction=4)
+            @jakarta.validation.constraints.Digits(integer=14, fraction=4)
             @ValueSemantics(maxFractionalDigits = 5)
             public BigDecimal maxFracA() { return null; }
 
-            @javax.validation.constraints.Digits(integer=14, fraction=5)
+            @jakarta.validation.constraints.Digits(integer=14, fraction=5)
             @ValueSemantics(maxFractionalDigits = 4)
             public BigDecimal maxFracB() { return null; }
 

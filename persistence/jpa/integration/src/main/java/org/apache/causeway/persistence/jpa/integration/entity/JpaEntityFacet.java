@@ -21,9 +21,9 @@ package org.apache.causeway.persistence.jpa.integration.entity;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceUnitUtil;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceUnitUtil;
 
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;

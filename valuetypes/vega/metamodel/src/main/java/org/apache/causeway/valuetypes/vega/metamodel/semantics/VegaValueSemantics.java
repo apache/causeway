@@ -20,7 +20,7 @@ package org.apache.causeway.valuetypes.vega.metamodel.semantics;
 
 import java.util.UUID;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

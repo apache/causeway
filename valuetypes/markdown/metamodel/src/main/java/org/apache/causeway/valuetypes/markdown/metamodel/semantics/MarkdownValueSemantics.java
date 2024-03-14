@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.valuetypes.markdown.metamodel.semantics;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

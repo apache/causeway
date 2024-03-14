@@ -21,9 +21,9 @@ package org.apache.causeway.applib.layout.menubars.bootstrap;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;

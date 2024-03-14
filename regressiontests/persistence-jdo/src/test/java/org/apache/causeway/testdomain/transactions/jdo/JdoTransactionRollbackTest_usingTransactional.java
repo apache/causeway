@@ -18,18 +18,19 @@
  */
 package org.apache.causeway.testdomain.transactions.jdo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;

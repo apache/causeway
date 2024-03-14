@@ -25,12 +25,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import jakarta.xml.bind.SchemaOutputResolver;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;

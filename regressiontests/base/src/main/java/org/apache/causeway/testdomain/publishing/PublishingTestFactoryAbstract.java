@@ -25,14 +25,15 @@ import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.DynamicTest;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.support.TransactionSynchronization;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.support.TransactionSynchronization;
 
 import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.services.iactn.Interaction;

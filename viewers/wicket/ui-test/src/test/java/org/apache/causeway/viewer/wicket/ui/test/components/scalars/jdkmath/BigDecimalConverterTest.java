@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.test.components.scalars.jdkmath;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import javax.validation.constraints.Digits;
+import jakarta.validation.constraints.Digits;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

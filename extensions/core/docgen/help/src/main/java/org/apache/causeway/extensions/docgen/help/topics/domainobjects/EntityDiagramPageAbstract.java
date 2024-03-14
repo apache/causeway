@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;

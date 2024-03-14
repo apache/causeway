@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.jpa.applib.services;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import org.apache.causeway.commons.functional.Try;
 

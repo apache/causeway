@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.integration;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.graphql.ExecutionGraphQlRequest;
 import org.springframework.graphql.ExecutionGraphQlResponse;
@@ -29,7 +29,6 @@ import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-
 import reactor.core.publisher.Mono;
 
 /**

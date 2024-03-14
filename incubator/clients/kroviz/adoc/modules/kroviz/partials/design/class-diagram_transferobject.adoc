@@ -1,0 +1,91 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Class Diagram
+[plantuml,file="class-diagram_transferobject.png"]
+----
+@startuml
+
+package "to" {
+    interface TransferObject<<TransferObject>>
+    TransferObject <|. Argument
+    TransferObject <|. Extensions
+    TransferObject <|. Link
+    TransferObject <|. Layout
+    TransferObject <|. Icon
+    TransferObject <|. Parameter
+    TransferObject <|. Value
+    Parameter o-- Value
+    interface WithLinks{
+        links:Link[]
+    }
+    WithLinks o- Link
+    TransferObject <|.. WithLinks
+    WithLinks <|.. Links
+    WithLinks <|.. Result
+    WithLinks <|.. ResultList
+    WithLinks <|.. WithExtensions
+
+    interface WithExtensions{
+        extensions:Extensions
+    }
+    WithExtensions o- Extensions
+    WithExtensions <|.. Collection
+    WithExtensions <|.. DomainTypes
+    WithExtensions <|.. Member
+    WithExtensions <|.. Restful
+    WithExtensions <|.. ResultListResult
+    WithExtensions <|.. WithMembers
+    WithExtensions <|.. WithParameters
+
+    interface WithMembers{
+        members:Member[]
+    }
+    WithMembers o- Member
+    WithMembers <|.. DomainType
+    WithMembers <|.. Service
+    WithMembers <|.. TObject
+
+    interface WithParameters{
+        parameters:Parameter[]
+    }
+    WithParameters o-- Parameter
+    WithParameters <|.. Action
+    WithParameters <|.. Property
+
+    Link o-- Argument
+    Member -- Value
+    Property -- Value
+
+    package "bs3" {
+        class Grid
+        Grid o-- Row
+        Row o-- Col
+        Col -- DomainObject
+        Col o-- bs3.Action
+        Col o-- TabGroup
+        Col o-- FieldSet
+        Col o-- bs3.Collection
+        FieldSet o-- bs3.Action
+        FieldSet o-- bs3.Property
+        Tab o-- Row
+        TabGroup o-- Tab
+        TransferObject <|.. Grid
+    }
+
+    package "mb" {
+        TransferObject <|.. Menu
+        TransferObject <|.. Menubars
+        TransferObject <|.. MenuEntry
+        TransferObject <|.. Section
+        TransferObject <|.. ServiceAction
+        Menu o-- Section
+        MenuEntry o-- Menu
+        Menubars -- MenuEntry : primary
+        Menubars -- MenuEntry : secondary
+        Menubars -- MenuEntry : tertiary
+        Section o-- ServiceAction
+    }
+}
+@enduml
+----

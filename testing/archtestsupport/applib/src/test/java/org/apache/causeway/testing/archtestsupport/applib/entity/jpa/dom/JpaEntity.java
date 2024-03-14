@@ -20,16 +20,16 @@ package org.apache.causeway.testing.archtestsupport.applib.entity.jpa.dom;
 
 import java.util.Comparator;
 
-import javax.inject.Inject;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-import javax.persistence.Version;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Inject;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.excel.integtests.tests;
 import java.io.IOException;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -53,7 +53,7 @@ public class ExcelModuleDemoToDoItemBulkUpdateManager_IntegTest extends ExcelMod
     @Inject
     private ExcelDemoToDoItemMenu toDoItems;
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     private BulkUpdateMenuForDemoToDoItem exportImportService;
 
     private BulkUpdateManagerForDemoToDoItem bulkUpdateManager;

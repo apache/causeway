@@ -29,9 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;

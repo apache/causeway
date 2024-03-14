@@ -22,15 +22,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.inject.Inject;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -50,7 +50,7 @@ import lombok.Setter;
         schema = "public",
         name = "DeptHead"
 )
-@javax.inject.Named("university.dept.DeptHead")
+@jakarta.inject.Named("university.dept.DeptHead")
 @DomainObject(
         nature = Nature.ENTITY,
         autoCompleteRepository = DeptHeadRepository.class,

@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-
-import graphql.scalars.ExtendedScalars;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
@@ -29,6 +27,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
+import graphql.scalars.ExtendedScalars;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -40,7 +39,7 @@ public class ScalarMarshallerByteWrapper extends ScalarMarshallerAbstract<Byte> 
     }
 
     @Override
-    public Byte unmarshal(Object graphValue, Class<?> targetType) {
+    public Byte unmarshal(final Object graphValue, final Class<?> targetType) {
         return ((Integer)graphValue).byteValue();
     }
 }

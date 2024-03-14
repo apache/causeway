@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import org.springframework.stereotype.Component;
 

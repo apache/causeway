@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-restfulobjects</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
@@ -30,6 +30,9 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.jaxrsresteasy</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/viewer.restfulobjects/jaxrsresteasy</git-plugin.propertiesDir>
+		
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
 	</properties>
 
 	<build>
@@ -93,10 +96,66 @@
 					<artifactId>asm</artifactId>
 				</exclusion>
 				<exclusion>
+				    <groupId>org.jboss.resteasy</groupId>
+				    <artifactId>resteasy-servlet-initializer</artifactId>
+				</exclusion>
+				<exclusion>
+    				<groupId>org.jboss.resteasy</groupId>
+    				<artifactId>resteasy-jackson2-provider</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.module</groupId>
+					<artifactId>jackson-module-jaxb-annotations</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.resteasy.spring</groupId>
+					<artifactId>resteasy-spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.resteasy</groupId>
+					<artifactId>resteasy-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jboss.resteasy</groupId>
+					<artifactId>resteasy-core-spi</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.jboss.resteasy.spring</groupId>
+			<artifactId>resteasy-spring</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.resteasy</groupId>
+					<artifactId>resteasy-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${resteasy.version}</version> 
+			<exclusions>
+			    <exclusion>
+			        <groupId>commons-logging</groupId>
+			        <artifactId>commons-logging</artifactId>
+			    </exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-servlet-initializer</artifactId>
+		    <version>${resteasy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<version>${resteasy.version}</version>
 		</dependency>
 
 		<dependency>

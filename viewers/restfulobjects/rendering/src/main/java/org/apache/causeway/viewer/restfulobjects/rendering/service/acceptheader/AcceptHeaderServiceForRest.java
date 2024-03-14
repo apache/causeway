@@ -22,13 +22,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Named;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.ext.Provider;
+import jakarta.inject.Named;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ContainerResponseContext;
+import jakarta.ws.rs.container.ContainerResponseFilter;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.ext.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -47,17 +47,17 @@ import static org.apache.causeway.commons.internal.base._NullSafe.stream;
  */
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".AcceptHeaderServiceForRest")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForRest")
 @InteractionScope
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
-    private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();
+    private static ThreadLocal<List<jakarta.ws.rs.core.MediaType>> mediaTypesByThread = new ThreadLocal<>();
 
     /**
      * Not API - called by RO viewer filter.
      */
-    private static void setMediaTypes(List<MediaType> mediaTypes) {
+    private static void setMediaTypes(final List<MediaType> mediaTypes) {
         mediaTypesByThread.set(mediaTypes);
     }
     /**

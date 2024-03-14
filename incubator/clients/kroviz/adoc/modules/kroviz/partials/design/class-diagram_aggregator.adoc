@@ -1,0 +1,170 @@
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Aggregator Diagram
+[plantuml,file="class-diagram_aggregator.png"]
+----
+@startuml
+
+class LogEntry {
+    url:Href
+    title:String
+    startedAt:Date
+    updatedAt:Date
+    request:String
+    response:String
+    blob: Blob
+    object:TransferObject
+    aggregators:List<BaseAggregator>
+    cacheHits:int
+}
+
+class ResponseHandler<<Facade,ChainOfResponsibility>>{
+    handle(LogEntry)
+    canHandle(json)
+    doHandle()
+    parse(json)
+}
+
+package "to" {
+    interface TransferObject {}
+    TransferObject <|-- Layout
+    TransferObject <|-- TObject
+    TransferObject <|-- Icon
+
+    package "bs" {
+        class GridBs{}
+    }
+    TransferObject <|- GridBs
+}
+
+package "aggregator" {
+    abstract class BaseAggregator {
+        {abstract} dpm:DisplayModel
+        {abstract} update()
+    }
+
+    abstract class AggregatorWithLayout {
+        parentUrl: String
+        + update()
+    }
+    BaseAggregator <|-- AggregatorWithLayout
+
+    class CollectionAggregator{
+        parent: ObjectAggregator
+        + update()
+    }
+
+    class ObjectAggregator {
+        collectionMap: Map<String, CollectionAggregator>
+        + update()
+    }
+    ObjectAggregator o-- CollectionAggregator
+
+    AggregatorWithLayout <|-- CollectionAggregator
+    AggregatorWithLayout <|-- ObjectAggregator
+
+    note right of BaseAggregator::update
+    1. <b>ResponseHandlers</b> call
+        update with <b>LogEntry</b>
+    2. LogEntry.<b>object</b>
+        gets added to <b>DM</b>
+    3. if object contains a <b>Link</b> (href),
+        it gets invoked and <b>this</b>
+        (aggregator) is passed
+        as argument.
+    end note
+}
+
+package "model" {
+    class Exposer {
+        delegate: TObject
+        iconName: String
+        + dynamise()
+        + get(propertyName: String)
+        + setIcon(icon: Icon)
+    }
+    note as ExposerNote
+    dynamise() and get()
+    use <b>Kotlin/JS</b> function
+    <b>asDynamic()</b>
+    end note
+    Exposer..ExposerNote
+
+    abstract class BaseDisplayModel {
+        isRendered:Boolean
+        title:String
+        {abstract} readyToRender():Boolean
+    }
+
+    abstract class DisplayModelWithLayout {
+        layout: Layout
+        grid: GridBs
+        collectionProperties: CollectionProperties
+        icon: Icon
+        + readyToRender()
+    }
+
+    class ObjectDM {
+        + data:Exposer
+        + collections:Map<String,CollectionDM>
+        - dirty:Boolean
+        + readyToRender()
+    }
+    note left of ObjectDM::dirty
+    Used in
+    UI editing
+    to signal
+    object
+    change.
+    end note
+
+    class CollectionDM {
+        data:List<Exposer>
+        - rawData:List<TransferObject>
+    }
+
+    BaseDisplayModel <|-- DisplayModelWithLayout
+    DisplayModelWithLayout <|-- CollectionDM
+    DisplayModelWithLayout <|-- ObjectDM
+    ObjectDM o-- CollectionDM
+    note left on link
+    An <b>ObjectDM</b>
+    can have zero or more
+    <b><i>parented collections</i></b>.
+    end note
+
+}
+
+ResponseHandler "(1)".> TransferObject : (1) \n converts \n response(JSON), \n blob(Image) \n into
+ResponseHandler "(2)".> BaseAggregator : (2) \n create \n if missing
+ResponseHandler .> LogEntry  : (3) \n assign \n aggregator
+
+BaseAggregator -> BaseDisplayModel
+CollectionAggregator .> CollectionDM : uses
+ObjectAggregator .> ObjectDM : uses
+ObjectAggregator .> CollectionDM : uses
+
+LogEntry -->   TransferObject : object
+LogEntry "m" --> "n" BaseAggregator
+Exposer  -> TObject : delegate
+
+note top of BaseAggregator
+Hierarchies of
+<b>Aggregators</b> and
+<b>DisplayModels</b>
+<b>parallel</b> each
+other
+end note
+
+note as N3
+As soon as all data defining the <i><u>appearance</u></i>
+(<b>Layout, Properties</b>) is available,
+<b>DM</b> is passed on to <b>ViewManager</b> for rendering.
+Note that <i><u>content</u></i> data may still come in and
+is added to the collection in the background
+(-> <b>Kotlin.mutableListOf</b>).
+end note
+DisplayModelWithLayout..N3
+
+@enduml
+----

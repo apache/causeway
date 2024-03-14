@@ -22,8 +22,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
@@ -55,7 +55,7 @@ import lombok.RequiredArgsConstructor;
     menuBar = DomainServiceLayout.MenuBar.SECONDARY,
     named = "Activity"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class CommandLogMenu {
 

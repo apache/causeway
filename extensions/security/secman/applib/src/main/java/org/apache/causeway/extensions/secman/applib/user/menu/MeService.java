@@ -20,9 +20,9 @@ package org.apache.causeway.extensions.secman.applib.user.menu;
 
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -55,7 +55,7 @@ import lombok.RequiredArgsConstructor;
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class MeService {
 

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import javax.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElement;
 
 /**
  * @since 2.0 {@index}

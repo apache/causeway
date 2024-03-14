@@ -23,8 +23,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Programmatic;

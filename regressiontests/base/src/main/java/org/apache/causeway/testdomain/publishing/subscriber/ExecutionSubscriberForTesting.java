@@ -21,14 +21,14 @@ package org.apache.causeway.testdomain.publishing.subscriber;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.util.schema.MemberExecutionDtoUtils;

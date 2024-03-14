@@ -20,7 +20,7 @@ package org.apache.causeway.applib.jaxb;
 
 import java.nio.charset.StandardCharsets;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.shiro;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.CredentialsException;

@@ -3,7 +3,7 @@ package org.apache.causeway.viewer.graphql.viewer.controller;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;

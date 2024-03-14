@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.ignore.javalang;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;

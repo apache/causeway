@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Category;

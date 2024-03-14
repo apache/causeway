@@ -20,9 +20,9 @@ package org.apache.causeway.persistence.jpa.integration.entity;
 
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;

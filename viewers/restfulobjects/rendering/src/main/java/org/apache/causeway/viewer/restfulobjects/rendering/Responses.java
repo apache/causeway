@@ -23,8 +23,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;

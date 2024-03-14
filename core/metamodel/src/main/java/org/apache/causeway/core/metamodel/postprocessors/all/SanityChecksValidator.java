@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

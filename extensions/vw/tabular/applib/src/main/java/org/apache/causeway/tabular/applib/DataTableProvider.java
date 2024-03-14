@@ -20,7 +20,7 @@ package org.apache.causeway.tabular.applib;
 
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

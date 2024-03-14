@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.ws.rs.ProcessingException;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
@@ -84,6 +84,12 @@ public class RestfulClientConfig {
     private String oauthClientSecret;
 
     /**
+     * If left empty, the platform default is used.
+     */
+    @XmlElement(name="jsonProviderForJaxb")
+    private Class<?> jsonProviderForJaxb;
+
+    /**
      * If enabled, logs conversation (request/response) details.
      */
     @XmlElement(name="useRequestDebugLogging")
@@ -95,7 +101,7 @@ public class RestfulClientConfig {
      * Value {@code 0} represents infinity. Negative values are not allowed.
      * <p>
      * The default value is infinity (0).
-     * @see javax.ws.rs.client.ClientBuilder#connectTimeout(long, TimeUnit)
+     * @see jakarta.ws.rs.client.ClientBuilder#connectTimeout(long, TimeUnit)
      */
     @XmlElement(name="connectTimeoutInMillis")
     @Builder.Default
@@ -110,7 +116,7 @@ public class RestfulClientConfig {
      * Value {@code 0} represents infinity. Negative values are not allowed.
      * <p>
      * The default value is infinity (0).
-     * @see javax.ws.rs.client.ClientBuilder#readTimeout(long, TimeUnit)
+     * @see jakarta.ws.rs.client.ClientBuilder#readTimeout(long, TimeUnit)
      */
     @XmlElement(name="readTimeoutInMillis")
     @Builder.Default

@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;

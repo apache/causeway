@@ -26,8 +26,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import javax.inject.Named;
-import javax.persistence.Table;
+import jakarta.inject.Named;
+import jakarta.persistence.Table;
 
 import org.springframework.lang.Nullable;
 

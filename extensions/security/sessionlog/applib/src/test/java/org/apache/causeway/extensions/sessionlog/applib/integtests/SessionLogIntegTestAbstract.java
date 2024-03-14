@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

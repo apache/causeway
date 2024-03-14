@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

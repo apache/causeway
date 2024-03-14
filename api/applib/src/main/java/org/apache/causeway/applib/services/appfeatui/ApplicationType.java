@@ -25,8 +25,8 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.SortedSet;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;

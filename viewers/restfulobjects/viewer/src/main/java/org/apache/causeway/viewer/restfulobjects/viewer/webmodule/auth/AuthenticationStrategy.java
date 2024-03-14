@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.services.jaxb;
 
-import javax.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContext;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

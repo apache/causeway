@@ -21,8 +21,9 @@ package org.apache.causeway.applib.jaxb;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import lombok.experimental.UtilityClass;
 

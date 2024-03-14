@@ -21,10 +21,10 @@ package org.apache.causeway.core.webapp.modules;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;

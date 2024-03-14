@@ -18,21 +18,19 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-
-import graphql.Scalars;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
 import org.joda.time.LocalDate;
+import org.springframework.stereotype.Component;
 
 import static org.joda.time.format.DateTimeFormat.forPattern;
-
-import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
+import graphql.Scalars;
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -47,7 +45,7 @@ public class ScalarMarshallerJodaLocalDate extends ScalarMarshallerAbstract<Loca
     }
 
     @Override
-    public LocalDate unmarshal(Object graphValue, Class<?> targetType) {
+    public LocalDate unmarshal(final Object graphValue, final Class<?> targetType) {
         String argumentStr = (String) graphValue;
         return LocalDate.parse(argumentStr, forPattern(scalarMarshallerConfig.getLocalDateFormat()));
     }

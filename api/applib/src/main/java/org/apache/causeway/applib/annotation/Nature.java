@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.cglib.proxy.Mixin;
 

@@ -27,9 +27,9 @@ module org.apache.causeway.core.webapp {
     exports org.apache.causeway.core.webapp.routing;
     exports org.apache.causeway.core.webapp.webappctx;
 
-    requires java.annotation;
-    requires java.inject;
-    requires javax.servlet.api;
+    requires jakarta.annotation;
+    requires jakarta.inject;
+    requires jakarta.servlet;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

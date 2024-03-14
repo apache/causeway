@@ -23,15 +23,16 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.enterprise.context.spi.Contextual;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.AnnotatedConstructor;
-import javax.enterprise.inject.spi.AnnotatedField;
-import javax.enterprise.inject.spi.AnnotatedMethod;
-import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.InjectionTarget;
-import javax.inject.Provider;
+import jakarta.enterprise.context.spi.Contextual;
+import jakarta.enterprise.context.spi.CreationalContext;
+import jakarta.enterprise.inject.spi.AnnotatedConstructor;
+import jakarta.enterprise.inject.spi.AnnotatedField;
+import jakarta.enterprise.inject.spi.AnnotatedMethod;
+import jakarta.enterprise.inject.spi.AnnotatedType;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.spi.InjectionTarget;
+import jakarta.enterprise.inject.spi.InjectionTargetFactory;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal._Constants;
@@ -153,6 +154,46 @@ final class _Util {
                 // silently ignore
             }
         };
+    }
+
+    static <T> InjectionTargetFactory<T> createInjectionTargetFactory(
+            final AnnotatedType<T> type,
+            final Provider<ServiceInjector> serviceInjectorProvider) {
+
+        return bean -> new InjectionTarget<T>() {
+
+            @Override @SneakyThrows
+            public T produce(final CreationalContext<T> ctx) {
+                return type.getJavaClass().getConstructor(_Constants.emptyClasses).newInstance();
+            }
+
+            @Override
+            public void inject(final T instance, final CreationalContext<T> ctx) {
+                serviceInjectorProvider.get().injectServicesInto(instance);
+            }
+
+            @Override
+            public void dispose(final T instance) {
+                // silently ignore
+            }
+
+            @Override
+            public Set<InjectionPoint> getInjectionPoints() {
+                // silently ignore
+                return Collections.emptySet();
+            }
+
+            @Override
+            public void postConstruct(final T instance) {
+                // silently ignore
+            }
+
+            @Override
+            public void preDestroy(final T instance) {
+                // silently ignore
+            }
+        };
+
     }
 
 }

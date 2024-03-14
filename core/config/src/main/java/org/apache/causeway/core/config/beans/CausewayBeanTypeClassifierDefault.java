@@ -21,7 +21,7 @@ package org.apache.causeway.core.config.beans;
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -157,6 +157,11 @@ implements CausewayBeanTypeClassifier {
 
         if(_Annotations.isPresent(type, Component.class)) {
             return CausewayBeanMetaData.indifferent(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, type);
+        }
+
+        // unless explicitly declared otherwise, map records to viewmodels
+        if(type.isRecord()) {
+            return CausewayBeanMetaData.indifferent(BeanSort.VIEW_MODEL, type);
         }
 
         if(Serializable.class.isAssignableFrom(type)) {

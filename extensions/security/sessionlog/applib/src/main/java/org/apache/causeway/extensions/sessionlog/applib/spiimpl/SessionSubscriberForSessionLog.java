@@ -24,11 +24,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -41,6 +39,8 @@ import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

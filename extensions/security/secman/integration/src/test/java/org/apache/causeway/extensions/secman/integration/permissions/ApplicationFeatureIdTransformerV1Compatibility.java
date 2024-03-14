@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;

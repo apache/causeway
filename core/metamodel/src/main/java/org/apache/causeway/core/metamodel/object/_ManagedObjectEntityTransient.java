@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.object;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;

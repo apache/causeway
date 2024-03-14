@@ -26,13 +26,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.inject.Inject;
-
-import org.springframework.beans.factory.DisposableBean;
+import jakarta.inject.Inject;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.beans.factory.DisposableBean;
 
 import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

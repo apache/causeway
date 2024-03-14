@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.pdfjs.metamodel.facet;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes;

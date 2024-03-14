@@ -22,8 +22,8 @@ package org.apache.causeway.core.runtimeservices.session;
 
 import java.util.UUID;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -40,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class InteractionIdGeneratorDefault implements InteractionIdGenerator {
 
+    @Override
     public UUID interactionId() {
         return UUID.randomUUID();
     }

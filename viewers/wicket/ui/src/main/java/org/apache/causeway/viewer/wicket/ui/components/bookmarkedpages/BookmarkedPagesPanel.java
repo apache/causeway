@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;

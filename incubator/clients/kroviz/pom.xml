@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
+	license agreements. See the NOTICE file distributed with this work for additional
+	information regarding copyright ownership. The ASF licenses this file to
+	you under the Apache License, Version 2.0 (the "License"); you may not use
+	this file except in compliance with the License. You may obtain a copy of
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
+	by applicable law or agreed to in writing, software distributed under the
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
+	OF ANY KIND, either express or implied. See the License for the specific
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.causeway.incubator</groupId>
+        <artifactId>causeway-incubator</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.apache.causeway.incubator.clients</groupId>
+    <artifactId>causeway-client-kroviz</artifactId>
+    <name>Apache Causeway Incubator - Client kroViz</name>
+    <description>
+        Web client based on RESTful API
+    </description>
+
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.incubator.clients.kroviz</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/incubator/clients/kroviz</git-plugin.propertiesDir>
+    </properties>
+
+    <packaging>jar</packaging>
+
+    <!-- see: http://andresalmiray.com/running-gradle-inside-maven/ -->
+    <profiles>
+
+        <!-- GRADLE WRAPPER SCRIPT AUTO SELECT -->
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <gradle.executable>gradlew.bat</gradle.executable>
+            </properties>
+        </profile>
+        <profile>
+            <id>*x</id>
+            <activation>
+                <os>
+                    <family>Unix</family>
+                </os>
+            </activation>
+            <properties>
+                <gradle.executable>./gradlew.sh</gradle.executable>
+            </properties>
+        </profile>
+
+        <!-- GRADLE BUILD TASK SELECTIVE SKIPPING -->
+        <profile>
+            <id>skipTests</id>
+            <activation>
+                <property>
+                    <name>skipTests</name>
+                </property>
+            </activation>
+            <properties>
+                <gradle.skipTests>-xtest</gradle.skipTests>
+                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+            </properties>
+        </profile>
+        <profile>
+            <id>skipBrowserTests</id>
+            <activation>
+                <property>
+                    <name>!browserTests</name>
+                </property>
+            </activation>
+            <properties>
+                <gradle.skipBrowserTests>-xbrowserTest</gradle.skipBrowserTests>
+            </properties>
+        </profile>
+
+    </profiles>
+
+    <build>
+
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>**</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+
+            <!-- execute Gradle command -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>gradle-build-jar</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${gradle.executable}</executable>
+                            <arguments>
+                                <argument>clean</argument>
+                                <argument>build</argument>
+                                <argument>jar</argument>
+                                <argument>-Pversion=${project.version}</argument>
+                                <argument>-S</argument>
+                                <argument>${gradle.skipBrowserTests}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <copy
+                                        file="${project.basedir}/build/libs/kroviz-${project.version}.jar"
+                                        todir="${project.build.directory}"/>
+                                <move
+                                        file="${project.build.directory}/kroviz-${project.version}.jar"
+                                        tofile="${project.build.directory}/${project.artifactId}-${project.version}.jar"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

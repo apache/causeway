@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

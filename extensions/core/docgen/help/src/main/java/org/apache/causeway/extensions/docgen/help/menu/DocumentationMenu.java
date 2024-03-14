@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.docgen.help.menu;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -49,7 +49,7 @@ import lombok.RequiredArgsConstructor;
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DocumentationMenu {
 

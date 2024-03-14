@@ -20,7 +20,6 @@ package org.apache.causeway.testing.archtestsupport.applib.entity.jdo.dom;
 
 import java.util.Comparator;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -30,7 +29,9 @@ import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

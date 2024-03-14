@@ -26,9 +26,9 @@ module org.apache.causeway.viewer.restfulobjects.client {
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    requires java.annotation;
-    requires java.ws.rs;
-    requires java.xml.bind;
+    requires jakarta.annotation;
+    requires jakarta.ws.rs;
+    requires jakarta.xml.bind;
     requires lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;

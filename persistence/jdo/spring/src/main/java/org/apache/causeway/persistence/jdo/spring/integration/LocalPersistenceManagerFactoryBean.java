@@ -49,7 +49,7 @@ import org.springframework.util.CollectionUtils;
  * PersistenceManagerFactory instance is just a matter of configuration!
  *
  * <p><b>NOTE: This class requires JDO 3.0 or higher, as of Spring 4.0.</b>
- * It will also expose the JPA {@link javax.persistence.EntityManagerFactory} as long
+ * It will also expose the JPA {@link jakarta.persistence.EntityManagerFactory} as long
  * as the JDO provider creates a {@link javax.jdo.JDOEntityManagerFactory} reference
  * underneath, which means that this class can be used as a replacement for
  * {@link org.springframework.orm.jpa.LocalEntityManagerFactoryBean} in such a scenario.

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.accmngt.register;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;

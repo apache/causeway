@@ -26,8 +26,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;

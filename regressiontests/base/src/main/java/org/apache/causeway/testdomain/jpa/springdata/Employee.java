@@ -18,10 +18,10 @@
  */
 package org.apache.causeway.testdomain.jpa.springdata;
 
-import javax.inject.Named;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import jakarta.inject.Named;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 

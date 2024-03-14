@@ -21,17 +21,11 @@ package org.apache.causeway.testing.h2console.ui.webmodule;
 import java.util.function.Consumer;
 
 import org.h2.server.web.ConnectionInfo;
+import org.h2.server.web.H2WebServletForJakarta;
 import org.h2.server.web.WebServer;
-import org.h2.server.web.WebServlet;
-
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Provides programmatic access to otherwise protected H2 {@link WebServer} configuration.
@@ -62,67 +56,32 @@ public interface H2WebServerWrapper {
 
     @SneakyThrows
     static void withH2WebServerWrapperDo(
-            final @NonNull WebServlet webServlet,
+            final @NonNull H2WebServletForJakarta webServlet,
             final @NonNull Consumer<H2WebServerWrapper> onConfiguration) {
-        try {
-            val serverWrapper = H2WebServerWrapper.wrap(webServlet);
-            onConfiguration.accept(serverWrapper);
-        } catch (Throwable cause) {
-            // if for any reason wrapping fails, we fail hard to harden against potential security issues
-            throw _Exceptions.unrecoverable(cause, "Unable to customize settings for H2 console");
-        }
-    }
 
-    // -- HELPER
+        onConfiguration.accept(new H2WebServerWrapper() {
 
-    @SneakyThrows
-    private static H2WebServerWrapper wrap(final @NonNull WebServlet webServlet) {
-        return new H2WebServerWrapper() {
-
-            final WebServer webServer = (WebServer) _Reflect.getFieldOn(
-                    WebServlet.class.getDeclaredField("server"),
-                    webServlet);
-
-            @SneakyThrows
             @Override
-            public void setConnectionInfo(final ConnectionInfo connectionInfo) {
-                val updateSettingMethod = WebServer.class.getDeclaredMethod("updateSetting",
-                        ConnectionInfo.class);
-                _Reflect.invokeMethodOn(updateSettingMethod, webServer, connectionInfo);
+            public void setConnectionInfo(ConnectionInfo connectionInfo) {
+                webServlet.setConnectionInfo(connectionInfo);
             }
 
-            @SneakyThrows
             @Override
             public void setAllowOthers(boolean b) {
-                val method = WebServer.class.getDeclaredMethod("setAllowOthers",
-                        boolean.class);
-                _Reflect.invokeMethodOn(method, webServer, b);
-
-                // just so we verify reflection works
-                _Assert.assertEquals(b, getAllowOthers());
+                webServlet.setAllowOthers(b);
             }
 
-            @SneakyThrows
             @Override
             public boolean getAllowOthers() {
-                val method = WebServer.class.getDeclaredMethod("getAllowOthers",
-                        _Constants.emptyClasses);
-                return (boolean)_Reflect.invokeMethodOn(method, webServer,
-                        _Constants.emptyObjects)
-                        .getValue().get();
+                return webServlet.getAllowOthers();
             }
 
-            @SneakyThrows
             @Override
             public void setAdminPassword(String password) {
-                val method = WebServer.class.getDeclaredMethod("setAdminPassword",
-                        String.class);
-                _Reflect.invokeMethodOn(method, webServer, password);
+                webServlet.setAdminPassword(password);
             }
 
-        };
-
+        });
     }
-
 
 }

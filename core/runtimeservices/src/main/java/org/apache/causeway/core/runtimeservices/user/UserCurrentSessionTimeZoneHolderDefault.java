@@ -21,8 +21,8 @@ package org.apache.causeway.core.runtimeservices.user;
 import java.time.ZoneId;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ import lombok.NonNull;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".UserCurrentSessionTimeZoneHolderDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class UserCurrentSessionTimeZoneHolderDefault
 implements UserCurrentSessionTimeZoneHolder {
 

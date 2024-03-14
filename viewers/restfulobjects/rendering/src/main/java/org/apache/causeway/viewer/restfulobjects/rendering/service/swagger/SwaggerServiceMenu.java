@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -57,7 +57,7 @@ import lombok.val;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class SwaggerServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleRestfulObjectsRendering.NAMESPACE +  ".SwaggerServiceMenu";

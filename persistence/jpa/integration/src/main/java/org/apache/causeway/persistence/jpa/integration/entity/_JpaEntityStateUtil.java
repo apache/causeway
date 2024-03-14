@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.persistence.jpa.integration.entity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnitUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.PersistenceUnitUtil;
 
 import org.eclipse.persistence.exceptions.DescriptorException;
 import org.eclipse.persistence.sessions.UnitOfWork;

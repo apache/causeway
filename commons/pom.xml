@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.core</groupId>
 		<artifactId>causeway-core</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../core/pom.xml</relativePath>
 	</parent>
 
@@ -70,33 +70,27 @@
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>stax2-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.moxy</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.sdo</artifactId>
-		</dependency>
-
+		
 		<dependency>
 			<!-- provides @Inject, @Qualifier, -->
 		    <groupId>jakarta.inject</groupId>
 		    <artifactId>jakarta.inject-api</artifactId>
 		</dependency>
 		<dependency>
-        	<!-- provides javax.enterprise.inject.* -->
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>2.0.2</version> <!-- do not upgrade from 2.x before Spring 6 -->
+            <version>4.0.1</version>
             <exclusions>
+				<exclusion>
+					<!-- outdated v5.0.0 transitively brought in by 
+						jakarta.enterprise:jakarta.enterprise.cdi-api:jar:4.0.1:compile
+						-->
+					<groupId>jakarta.el</groupId>
+		    		<artifactId>jakarta.el-api</artifactId>
+				</exclusion>
             	<exclusion>
             		<groupId>jakarta.inject</groupId>
 		    		<artifactId>jakarta.inject-api</artifactId>
-            	</exclusion>
-            	<exclusion>
-            		<groupId>javax.inject</groupId>
-            		<artifactId>javax.inject</artifactId>
             	</exclusion>
             </exclusions>
         </dependency>
@@ -114,13 +108,12 @@
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
         </dependency>
-
-
+		
 		<dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
         </dependency>
-
+		
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -130,14 +123,18 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-        </dependency>
+		    <groupId>com.fasterxml.jackson.module</groupId>
+		    <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
+		</dependency>
         <dependency>
+		    <groupId>com.fasterxml.jackson.jakarta.rs</groupId>
+		    <artifactId>jackson-jakarta-rs-json-provider</artifactId>
+		</dependency>
+		<dependency>
 		    <groupId>com.fasterxml.jackson.datatype</groupId>
 		    <artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
@@ -224,7 +221,7 @@
 			<artifactId>hamcrest-library</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
+		<dependency>
             <groupId>com.approvaltests</groupId>
             <artifactId>approvaltests</artifactId>
             <scope>test</scope>
@@ -236,15 +233,6 @@
 		    <artifactId>gson</artifactId>
 		    <scope>test</scope>
 		</dependency>
-
-		<!-- provided -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
     </dependencies>
-
 
 </project>

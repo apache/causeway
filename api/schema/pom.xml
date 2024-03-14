@@ -21,22 +21,27 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.apache.causeway.core</groupId>
 		<artifactId>causeway-core</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
+
 	<artifactId>causeway-schema</artifactId>
+
 	<packaging>jar</packaging>
 	<name>Apache Causeway Api - Schemas</name>
 	<description>
         Apache Causeway schemas, for conversion into canonical DTOs (for use in integration scenarios).
     </description>
+
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.schema</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/schema</git-plugin.propertiesDir>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -52,6 +57,7 @@
 		</dependency>
 	</dependencies>
 	<profiles>
+
 		<profile>
 			<id>xsd-to-java</id>
 			<activation>
@@ -59,8 +65,10 @@
 					<name>!skip.xsd-to-java</name>
 				</property>
 			</activation>
+
 			<build>
 				<plugins>
+
 					<plugin>
 						<groupId>org.jvnet.jaxb2.maven2</groupId>
 						<artifactId>maven-jaxb2-plugin</artifactId>
@@ -87,27 +95,36 @@
 										<arg>-Xannotate</arg>
 									</args>
 									<extension>true</extension>
-									<plugins>
-										<plugin>
-											<groupId>org.jvnet.jaxb2_commons</groupId>
-											<artifactId>jaxb2-basics-annotate</artifactId>
-											<version>1.1.0</version>
-										</plugin>
-									</plugins>
 								</configuration>
 							</execution>
 						</executions>
 						<dependencies>
 							<dependency>
-								<groupId>org.jvnet.jaxb2_commons</groupId>
-								<artifactId>jaxb2-namespace-prefix</artifactId>
-								<version>1.3</version>
+							      <groupId>jakarta.xml.bind</groupId>
+							      <artifactId>jakarta.xml.bind-api</artifactId>
+							      <version>4.0.2</version>
+						    </dependency>
+						    <dependency>
+							      <groupId>jakarta.inject</groupId>
+							      <artifactId>jakarta.inject-api</artifactId>
+							      <version>2.0.1</version>
+						    </dependency>
+						    <dependency>
+							    <groupId>javax.xml.bind</groupId>
+							    <artifactId>jaxb-api</artifactId>
+							    <version>2.3.1</version>
 							</dependency>
 							<dependency>
-								<!-- fixes build on JDK 16+ see https://github.com/highsource/maven-jaxb2-plugin/issues/201 -->
-								<groupId>org.glassfish.jaxb</groupId>
-								<artifactId>jaxb-runtime</artifactId>
-								<version>2.3.3</version>
+								<groupId>org.jvnet.jaxb2_commons</groupId>
+								<artifactId>jaxb2-namespace-prefix</artifactId>
+								<version>1.3</version>  <!-- don't upgrade from 1.3 to 2.x, 
+										as this fragile combination of plugins will otherwise
+										produce invalid annotations -->
+							</dependency>
+							<dependency>
+								<groupId>org.jvnet.jaxb2_commons</groupId>
+								<artifactId>jaxb2-basics-annotate</artifactId>
+								<version>1.1.0</version>
 							</dependency>
 						</dependencies>
 					</plugin>
@@ -130,6 +147,94 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<!-- we resort to drastic means here using ant to post-process outdated namespaces -->
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-antrun-plugin</artifactId>
+		                <executions>
+		                    <execution>
+		                        <id>patch-javax-to-jakarta-ns</id>
+		                        <phase>generate-sources</phase>
+		                        <goals>
+		                            <goal>run</goal>
+		                        </goals>
+		                        <configuration>
+		                            <target>
+										<replace 
+											dir="target/generated-sources/xjc"
+											token="javax.xml.bind" 
+											value="jakarta.xml.bind">
+											<include name="**/*.java"/>
+										</replace>
+		                            </target>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+            		</plugin>
+
+<!-- generates jakarta namespaces - but (sub) plugins do fail
+					<plugin>
+					    <groupId>org.codehaus.mojo</groupId>
+					    <artifactId>jaxb2-maven-plugin</artifactId>
+					    <version>3.1.0</version>
+					    <executions>
+					        <execution>
+					            <id>xjc</id>
+					            <goals>
+					                <goal>xjc</goal>
+					            </goals>
+					            <configuration>
+									<arguments>
+										<argument>-Xnamespace-prefix</argument>
+										<argument>-Xannotate</argument>
+									</arguments>
+								</configuration>
+					        </execution>
+					    </executions>
+					    <configuration>
+					        <xjbSources>
+					            <xjbSource>src/main/resources/org/apache/causeway/schema/bindings.xjb</xjbSource>
+					        </xjbSources>
+					        <sources>
+								<source>src/main/resources/org/apache/causeway/schema/common/common-2.0.xsd</source>
+								<source>src/main/resources/org/apache/causeway/schema/cmd/cmd-2.0.xsd</source>
+								<source>src/main/resources/org/apache/causeway/schema/ixn/ixn-2.0.xsd</source>
+								<source>src/main/resources/org/apache/causeway/schema/chg/chg-2.0.xsd</source>
+								<source>src/main/resources/org/apache/causeway/schema/metamodel/metamodel-2.0.xsd</source>
+					        </sources>
+					        <outputDirectory>${basedir}/target/generated-sources/xjc</outputDirectory>
+					        <clearOutputDir>false</clearOutputDir>
+					    </configuration>
+					    <dependencies>
+							<dependency>
+							      <groupId>jakarta.xml.bind</groupId>
+							      <artifactId>jakarta.xml.bind-api</artifactId>
+							      <version>4.0.2</version>
+						    </dependency>
+							<dependency>
+							    <groupId>javax.xml.bind</groupId>
+							    <artifactId>jaxb-api</artifactId>
+							    <version>2.3.1</version>
+							</dependency>
+							<dependency>
+							      <groupId>jakarta.inject</groupId>
+							      <artifactId>jakarta.inject-api</artifactId>
+							      <version>2.0.1</version>
+						    </dependency>
+							<dependency>
+								<groupId>org.jvnet.jaxb2_commons</groupId>
+								<artifactId>jaxb2-namespace-prefix</artifactId>
+								<version>2.0</version>
+							</dependency>
+			                <dependency>
+         				    	<groupId>org.jvnet.jaxb2_commons</groupId>
+								<artifactId>jaxb2-basics-annotate</artifactId>
+								<version>1.1.0</version>
+                			</dependency>
+						</dependencies>
+					</plugin>
+
+					-->
 				</plugins>
 			</build>
 		</profile>

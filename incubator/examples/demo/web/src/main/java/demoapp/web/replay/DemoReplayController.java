@@ -18,7 +18,7 @@
  */
 package demoapp.web.replay;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.context.annotation.Profile;
 
@@ -30,8 +30,15 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.commandreplay.secondary.spi.ReplayCommandExecutionController;
 
 @Named("demo.web.DemoReplayController")
+<<<<<<< HEAD
+@DomainService(
+        nature = NatureOfService.VIEW
+)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+=======
 @DomainService
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+>>>>>>> refs/remotes/origin/master
 @Profile("commandreplay-secondary")
 public class DemoReplayController implements ReplayCommandExecutionController {
 

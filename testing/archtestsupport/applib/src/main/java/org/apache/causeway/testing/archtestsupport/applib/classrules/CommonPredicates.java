@@ -21,7 +21,7 @@ package org.apache.causeway.testing.archtestsupport.applib.classrules;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.hsqldbmgr.dom.services;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.hsqldb.util.DatabaseManagerSwing;
 
@@ -48,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Log4j2
 public class HsqlDbManagerMenu {
 

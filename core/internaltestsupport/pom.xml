@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.causeway.core</groupId>
 		<artifactId>causeway-core</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-core-internaltestsupport</artifactId>
@@ -78,6 +78,11 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-codegen-bytebuddy</artifactId>
 		</dependency>
+		<!-- required since Spring Boot 3.1.x which depends on Mockito 5.x (tests only) -->
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+		</dependency>
 
 		<!-- JDO API (non transient, provided by plugin) -->
 		<dependency>
@@ -120,7 +125,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-
 	</dependencies>
 
 </project>

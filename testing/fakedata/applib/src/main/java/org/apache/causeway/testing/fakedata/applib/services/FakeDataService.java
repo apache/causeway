@@ -21,10 +21,10 @@ package org.apache.causeway.testing.fakedata.applib.services;
 import java.util.Locale;
 import java.util.Random;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.service.FakeValuesService;

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+         http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
 -->
 <!--
 This pom is the top-level parent, responsible for deploying to
@@ -34,12 +34,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.2.3</version>
         <relativePath/>
     </parent>
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-bom</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -49,7 +49,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         Also the parent POM for the core framework and extensions.
     </description>
 
-	<properties>
+    <properties>
 
 		<!-- BUILD SPECIFICA -->
 
@@ -57,16 +57,16 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.8.0</minimalMavenBuildVersion> <!-- enforces https repos -->
-        <minimalJavaBuildVersion>11</minimalJavaBuildVersion>
-        <maven.compiler.release>11</maven.compiler.release>
-
+        <minimalMavenBuildVersion>3.8.8</minimalMavenBuildVersion> <!-- latest from github actions/setup-java@v3 -->
+        <minimalJavaBuildVersion>21</minimalJavaBuildVersion>
+        <maven.compiler.release>21</maven.compiler.release>
+        
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <causeway.skipTests>false</causeway.skipTests>
 		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2023-12-28T11:30:19Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2023-07-04T21:19:08Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -78,8 +78,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
 
 		<maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-		<maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
+        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+		<maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
 		<maven-surefire-report-plugin.version>3.2.5</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.11.0</maven.plugin.tools.version>
@@ -93,15 +94,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <assertj-guava.version>3.25.3</assertj-guava.version>
 
-        <camel.version>3.14.9</camel.version>
-
         <commons-email.version>1.6.0</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.15.1</commons-io.version>
 
         <cucumber.version>7.15.0</cucumber.version>
-
-        <cxf-rt-rs-client.version>3.6.3</cxf-rt-rs-client.version>
 
         <datanucleus-api-jdo.version>6.0.2</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
@@ -111,7 +108,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
         <datanucleus-rdbms.version>6.0.7</datanucleus-rdbms.version>
 
-        <datasource-proxy-spring-boot-starter.version>1.8.1</datasource-proxy-spring-boot-starter.version>
+        <datasource-proxy-spring-boot-starter.version>1.9.1</datasource-proxy-spring-boot-starter.version>
 
         <datatables.version>1.13.5</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
@@ -121,19 +118,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <error_prone_annotations.version>2.26.1</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-        <graphql-java.version>19.2</graphql-java.version>
         <graphql-java-extended-scalars.version>21.0</graphql-java-extended-scalars.version>
         <guava.version>33.1.0-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
-
+        
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.30.2-GA</javassist.version>
-
-        <jakartaee.version>8.0.0</jakartaee.version>
-        <jakarta.inject-api.version>1.0.5</jakarta.inject-api.version> <!-- do not upgrade 1.x to 2.x until Spring 6 -->
-        <jakarta.servlet-api.version>4.0.4</jakarta.servlet-api.version> <!-- do not upgrade 4.x to 6.x until Spring 6 -->
-        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version> <!-- don't upgrade to 3.x  before Spring 6-->
+        
+        <jaxb-impl.version>4.0.1</jaxb-impl.version>
+        <jaxws-ri.version>4.0.0</jaxws-ri.version>
+        
+        <jakartaee.version>10.0.0</jakartaee.version>
+        <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
+        <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
+        <jakarta.xml.bind-api.version>4.0.1</jakarta.xml.bind-api.version>
 
         <jbcrypt.version>0.4</jbcrypt.version>
         <jboss-jaxrs-api_2.1_spec.version>2.0.2.Final</jboss-jaxrs-api_2.1_spec.version>
@@ -156,12 +155,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.30</lombok.version> <!-- overriding Spring -->
 
-        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
-
-        <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-		<node.version>v18.12.0</node.version>
-		<npm.version>8.19.2</npm.version>
 
         <ognl.version>3.4.2</ognl.version>
 
@@ -170,27 +164,29 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
-        <resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
-        <resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
+        <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
+        <resteasy-spring.version>3.1.2.Final</resteasy-spring.version>
+        <resteasy.version>6.2.7.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
+        <resteasy-jaxb-provider.version>6.2.2.Final</resteasy-jaxb-provider.version>
 
         <select2.version>4.0.13</select2.version>
-        <shiro.version>1.13.0</shiro.version>
+        <shiro.version>2.0.0</shiro.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.12</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
+
         <sql-formatter.version>2.0.4</sql-formatter.version>
-        <spring-boot.version>2.7.18</spring-boot.version>
-        <summernote.version>0.8.20</summernote.version>
+        <snakeyaml.version>2.0</snakeyaml.version>
+        <spring-boot.version>3.2.3</spring-boot.version>
+
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.20</swagger-core.version>
 
-        <wicket.version>9.16.0</wicket.version>
-        <wicket-bootstrap.version>6.0.5</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
-        <wicket-webjars.version>3.0.7</wicket-webjars.version>
+        <wicket.version>10.0.0-M2</wicket.version>
+        <wicket-bootstrap.version>7.0.1</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
+        <wicket-webjars.version>4.0.1</wicket-webjars.version> <!-- de.agilecoders.wicket.webjars:wicket-webjars -->
         <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
-
-        <wicketstuff.version>${wicket.version}</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
-        <wicketstuff-gmap3.version>${wicket.version}</wicketstuff-gmap3.version>
+        <wicketstuff.version>10.0.0-M2</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
 		<!-- OTHER -->
 
@@ -225,7 +221,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     </properties>
     <dependencyManagement>
 
-
 		<dependencies>
 
 			<!--
@@ -237,7 +232,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.commons</groupId>
 				<artifactId>causeway-commons</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -248,7 +243,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
@@ -256,14 +251,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-schema</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -271,70 +266,70 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-codegen-bytebuddy</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-config</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-interaction</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-internaltestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-runtime</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-runtimeservices</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-security</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-transaction</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-webapp</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -345,7 +340,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-commons</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -353,49 +348,49 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-provider</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-spring</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -403,35 +398,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -442,28 +437,28 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-bypass</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-keycloak</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-shiro</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-spring</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -474,35 +469,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-model</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-prism</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-services</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -510,87 +505,87 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-applib</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-model</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-testsupport</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-test</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-test2</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-viewer</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-client</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-test</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-testing</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -598,35 +593,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-model</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-viewer</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -637,21 +632,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -659,14 +654,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-unittestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-unittestsupport-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -674,14 +669,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-integtestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-integtestsupport-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -689,14 +684,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-specsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-specsupport-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -704,14 +699,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-archtestsupport</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-archtestsupport-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -719,28 +714,28 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-integtests</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -748,14 +743,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-h2console</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-h2console-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -763,14 +758,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-hsqldbmgr</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-hsqldbmgr-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -780,7 +775,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.mavendeps</groupId>
 				<artifactId>causeway-mavendeps-webapp</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
@@ -790,51 +785,50 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-
+			
 			<!-- org.apache.causeway.extensions (docgen) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-docgen</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
-				<type>pom</type>
+				<version>3.0.0-SNAPSHOT</version><type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-docgen-help</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -843,35 +837,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-integtests</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-testing</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -880,35 +874,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -917,35 +911,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -954,14 +948,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionrepublisher</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutrepublisher-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -970,30 +964,30 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-flyway</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-flyway-impl</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 
-            <!-- org.apache.causeway.extensions (layoutloaders) -->
+            <!-- org.apache.causeway.extensions (layoutgithub) -->
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders-github</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1002,35 +996,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1039,70 +1033,70 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-delegated-springoauth2</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-encryption-spring</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1111,35 +1105,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1148,7 +1142,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-spring-security-oauth2</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1157,14 +1151,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-cors</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-cors-impl</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1173,133 +1167,133 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular-excel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-wicket-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-fixtures</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-wicket</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse-wicket</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1309,21 +1303,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime-integration</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1331,56 +1325,56 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-ui-vaa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-ui-wkt</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1388,42 +1382,42 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-ui-wkt</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1431,49 +1425,49 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-metamodel</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-ui-vaa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-persistence-jdo</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1482,29 +1476,29 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<!-- org.apache.causeway.incubator.viewer -->
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
-				<artifactId>causeway-viewer-graphql-viewer</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<artifactId>causeway-viewer-graphql</artifactId>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-graphql-applib</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-graphql-model</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-graphql-viewer</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1519,7 +1513,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <version>${maven.plugin.tools.version}</version>
             </dependency>
 
-
+			<dependency>
+				<groupId>com.fasterxml.woodstox</groupId>
+				<artifactId>woodstox-core</artifactId>
+				<version>6.6.1</version>
+			</dependency>
             <dependency>
 				<groupId>org.codehaus.woodstox</groupId>
 				<artifactId>stax2-api</artifactId>
@@ -1528,26 +1526,24 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>2.7.14</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>4.0.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
-				<version>2.7.14</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>4.0.2</version>
 			</dependency>
-            <!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
-				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
-				<groupId>com.fasterxml.woodstox</groupId>
-				<artifactId>woodstox-core</artifactId>
-				<version>6.6.1</version>
+			    <groupId>org.eclipse.persistence</groupId>
+			    <artifactId>org.eclipse.persistence.asm</artifactId>
+			    <version>9.6.0</version>
 			</dependency>
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
 	            <artifactId>jaxb-impl</artifactId>
-	            <version>2.3.9</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+	            <version>4.0.5</version>
 	        </dependency>
-            <dependency>
+	        <dependency>
                 <groupId>com.graphql-java</groupId>
                 <artifactId>graphql-java-extended-scalars</artifactId>
                 <version>${graphql-java-extended-scalars.version}</version>
@@ -1758,30 +1754,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</exclusions>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-email</artifactId>
-				<version>${commons-email.version}</version>
-				<exclusions>
-					<!-- excluded because provided by javax:javaee-api -->
-					<exclusion>
-						<groupId>com.sun.mail</groupId>
-						<artifactId>javax.mail</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>javax.activation</groupId>
-						<artifactId>activation</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-rs-client</artifactId>
-				<version>${cxf-rt-rs-client.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml</artifactId>
@@ -1883,6 +1855,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<artifactId>wicket-spring</artifactId>
 				<version>${wicket.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-tester</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.assertj</groupId>
@@ -1973,7 +1950,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-spring-boot-starter</artifactId>
-				<version>${resteasy-spring-boot-starter.version}</version>
+				<version>${resteasy-spring-boot.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.jboss.resteasy.spring</groupId>
+				<artifactId>resteasy-spring</artifactId>
+				<version>${resteasy-spring.version}</version>
 			</dependency>
 			<dependency>
 			    <groupId>org.jboss.resteasy</groupId>
@@ -2071,18 +2053,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 			<dependency>
-				<groupId>org.webjars.npm</groupId>
-				<artifactId>summernote</artifactId>
-				<version>${summernote.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>wicketstuff-gmap3</artifactId>
-				<version>${wicketstuff-gmap3.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-select2</artifactId>
 				<version>${wicketstuff.version}</version>
@@ -2121,29 +2091,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         </dependencies>
     </dependencyManagement>
-
     <repositories>
-        <!-- breaks dependabot run: timeout due to repo not accessible
-        <repository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>https://repository.apache.org/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        -->
 		<repository>
 			<id>central</id>
 			<name>Central Repository</name>
 			<url>https://repo.maven.apache.org/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Apache Repository</id>
-			<url>https://repository.apache.org/</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -2156,25 +2108,8 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		<repository>
-			<id>sonatype-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
     </repositories>
     <pluginRepositories>
-        <!-- breaks dependabot run: timeout due to repo not accessible
-        <pluginRepository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshot Repository</name>
-            <url>https://repository.apache.org/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-        -->
 		<pluginRepository>
 			<id>DataNucleus_2</id>
 			<url>https://www.datanucleus.org/downloads/maven2/</url>
@@ -2222,6 +2157,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 						<showDeprecation>true</showDeprecation>
 						<showWarnings>true</showWarnings>
 						<parameters>true</parameters>
+						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
 					</configuration>
 					<!-- goal:compile binds to phase:compile -->
 					<!-- goal:testCompile binds to phase:test-compile -->
@@ -2254,11 +2190,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.4.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${surefire.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2305,7 +2236,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 								<!-- required for DN plugin.xml loading -->
 								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
 								<!-- no requirement as of yet. <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>2.0.0-SNAPSHOT</Bundle-Version>
+									<Bundle-Name>${jar-plugin.automaticModuleName}</Bundle-Name> <Bundle-Version>3.0.0-SNAPSHOT</Bundle-Version>
 									<Bundle-Vendor>Apache Causeway™ Project</Bundle-Vendor> -->
 							</manifestEntries>
 						</archive>
@@ -2394,16 +2325,19 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
 					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
 						but doesn't seem to so bound explicitly -->
+					<!-- failing since maven-source-plugin 3.3.0 (as duplicated runs 
+					 		are no longer alloed; there is a clash with built-in goal 'jar-no-fork')
 					<executions>
 						<execution>
 							<id>package-jars</id>
-							<phase>package</phase>
+							<phase>package</phase> 
 							<goals>
 								<goal>jar</goal>
 								<goal>test-jar</goal>
 							</goals>
 						</execution>
 					</executions>
+					-->
 				</plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2462,50 +2396,48 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/.classpath</exclude>
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
-                            <exclude>**/.gitkeep</exclude>
+                            <exclude>**/*.columnOrder.txt</exclude>
+                            <exclude>**/*.drawio.svg</exclude>
+                            <exclude>**/META-INF/spring.factories</exclude>
+
+                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+
+                            <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
 
                             <exclude>**/*.iml</exclude>
-                            <exclude>**/intellij/launch/*.xml</exclude>
-
-                            <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
-                            <exclude>**/gradlew</exclude>
-                            <exclude>**/gradlew.bat</exclude>
-                            <exclude>**/rebel.xml</exclude>
-                            <exclude>**/translations**.po</exclude>
-                            <exclude>**/translations.pot</exclude>
-
-                            <exclude>**/META-INF/spring.factories</exclude>
-                            <exclude>**/MANIFEST.MF</exclude>
-                            <exclude>**/META-INF/services/**</exclude>
-
-                            <exclude>**/src/main/resources/supplemental-models.xml</exclude>
-
                             <exclude>**/webpack.config.js</exclude>
                             <exclude>**/webpack.generated.js</exclude>
                             <exclude>**/pnpm-lock.yaml</exclude>
                             <exclude>**/pnpmfile.js</exclude>
-                            <exclude>**/*.min.js</exclude>
 
                             <exclude>**/*.pdn</exclude>
                             <exclude>**/*.svg</exclude>
                             <exclude>**/*.rtf</exclude>
-                            <exclude>**/*.drawio.svg</exclude>
                             <exclude>**/*.json</exclude>
+                            <exclude>**/.gitkeep</exclude>
+                            <exclude>**/*.min.js</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/vs</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/vx</exclude>
 
-                            <exclude>**/supplemental-ui/**</exclude>
-                            <exclude>**/_nav.adoc</exclude>
-                            <exclude>**/module-nav.adoc</exclude>
-                            <exclude>**/component-nav.adoc</exclude>
-                            <exclude>**/partials/extensions.adoc</exclude>
-
+                            <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/*.ucd</exclude>
                             <exclude>**/*.ucls</exclude>
                             <exclude>**/*.puml</exclude>
+                            <exclude>**/antora/supplemental-ui/**</exclude>
 
-                            <exclude>**/datanucleus.log</exclude>
+                            <exclude>**/xml/objects/**</exclude>
+                            <exclude>**/test.data</exclude>
+                            <exclude>**/fixture-data/**</exclude>
+                            <exclude>**/partials/module-nav.adoc</exclude>
+                            <exclude>**/partials/extensions.adoc</exclude>
+                            <exclude>**/partials/component-nav.adoc</exclude>
+                            <exclude>**/_nav.adoc</exclude>
+                            <exclude>**/_overview/nav.adoc</exclude>
 
-                            <exclude>**/bootstrap-datetimepicker.min.css</exclude>
-                            <exclude>**/bootstrap-datetimepicker.css</exclude>
+                            <exclude>**/application.js</exclude>
 
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/simple-sidebar.css</exclude>
@@ -2513,7 +2445,25 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/moment.js</exclude>
                             <exclude>**/prism*.js</exclude>
                             <exclude>**/prism*.css</exclude>
-                            <exclude>**/vega*.js</exclude>
+                            <exclude>**/kroviz/webpack.config.d/**</exclude>
+
+                            <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
+                            <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
+                            <exclude>**/bootstrap-datetimepicker.min.css</exclude>
+                            <exclude>**/bootstrap-datetimepicker.css</exclude>
+                            <exclude>**/select2-bootstrap.css</exclude>
+
+                            <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+
+                            <exclude>**/src/main/resources/supplemental-models.xml</exclude>
+                            <exclude>**/datanucleus.log</exclude>
+                            <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+                            <exclude>**/gradlew</exclude>
+                            <exclude>**/gradlew.bat</exclude>
+                            <exclude>**/rebel.xml</exclude>
+                            <exclude>**/translations**.po</exclude>
+                            <exclude>**/translations.pot</exclude>
+                            <exclude>**/intellij/launch/*.xml</exclude>
 
                             <exclude>**/css/home/scss-files.txt</exclude>
                             <exclude>**/css/home/styles.css</exclude>
@@ -2521,32 +2471,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
                             <exclude>**/swagger-ui/**</exclude>
 
-                            <exclude>**/select2-bootstrap.css</exclude>
-
-                            <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
-
-                            <exclude>**/application.js</exclude>
-
-                            <exclude>**/xml/objects/**</exclude>
-                            <exclude>**/test.data</exclude>
-                            <exclude>**/fixture-data/**</exclude>
-                            <exclude>**/*.approved.*</exclude>
-                            <exclude>**/approved/*.adoc</exclude>
-                            <exclude>**/secman-permissions.yml</exclude>
-
-                            <exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
-                            <exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
-                            <exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
-                            <exclude>**/fakedata/applib/services/clobs/vs</exclude>
-                            <exclude>**/fakedata/applib/services/clobs/vx</exclude>
-
-                            <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
-                            <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
-
-                            <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
-
-                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
-                            <exclude>**/kroviz/webpack.config.d/**</exclude>
+                            <exclude>**/META-INF/services/**</exclude>
                         </excludes>
                         <licenses>
                             <license
@@ -2740,8 +2665,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <supplementalModelArtifact>org.apache.causeway:supplemental-model:1.0</supplementalModelArtifact>
                             </supplementalModelArtifacts>
 
-                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-
                              <!-- Specify the path, relative to the JAR root, where the supplemental model file is located -->
                             <supplementalModels>
                                 <supplementalModel>supplemental-models.xml</supplementalModel>
@@ -2767,12 +2690,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <configuration>
                     <rules>
                         <requireMavenVersion>
-                            <version>[3.6,)</version>
+                            <version>[3.8.8,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <version>[11,)</version>
+                            <version>[21,)</version>
                         </requireJavaVersion>
-                        <!-- seemingly not compatible with use of 2.0.0-SNAPSHOT placeholders
+                        <!-- seemingly not compatible with use of 3.0.0-SNAPSHOT placeholders
                             <requirePluginVersions> <message>All plugin versions must be defined!</message>
                             <banLatest>true</banLatest> <banRelease>true</banRelease> </requirePluginVersions> -->
                         <DependencyConvergence />
@@ -2912,7 +2835,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-deploy-plugin</artifactId>
                         <configuration>
-                            <updateReleaseInfo>true</updateReleaseInfo>
+								<!-- invalid config <updateReleaseInfo>true</updateReleaseInfo> -->
                         </configuration>
                     </plugin>
                     <plugin>
@@ -2951,7 +2874,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                     <splitindex>true</splitindex>
                                     <encoding>${project.build.sourceEncoding}</encoding>
                                     <links>
-                                        <link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+                                        <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
                                     </links>
                                     <linksource>true</linksource>
                                     <detectOfflineLinks>false</detectOfflineLinks>
@@ -3047,18 +2970,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 							<showWarnings>true</showWarnings>
 							<parameters>true</parameters>
 							<annotationProcessorPaths>
-								<!-- this is a workaround
-
+								<!-- this is a workaround 
+					
 								Details: The maven compiler plugin ought to pick up all available processors on the classpath.
-								In effect Lombok's annotation processor should be picked up implicitly, but yet is not
-
+								In effect Lombok's annotation processor should be picked up implicitly, but yet is not 
+								
 								Presence of file 'logging-dn-enhance.properties' decativates this profile and
 								the maven-compiler-plugin runs all annotation processors as picked up from the class-path.
 								-->
 									<annotationProcessorPath>
 										<groupId>org.projectlombok</groupId>
 										<artifactId>lombok</artifactId>
-										<version>${lombok.version}</version>
+										<version>${lombok.version}</version>	
 									</annotationProcessorPath>
 							</annotationProcessorPaths>
 						</configuration>
@@ -3066,47 +2989,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</plugins>
 			</build>
 		</profile>
-        <profile>
-            <id>only-eclipse</id>
-            <activation>
-                <property>
-                    <name>m2e.version</name>
-                </property>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <!--  Disable execution of some plugins in m2e (https://www.eclipse.org/m2e/documentation/m2e-execution-not-covered.html)  -->
-                        <plugin>
-                            <groupId>org.eclipse.m2e</groupId>
-                            <artifactId>lifecycle-mapping</artifactId>
-                            <version>1.0.0</version>
-                            <!--  as this is an artificial artifact only use in a profile (https://bugs.eclipse.org/bugs/show_bug.cgi?id=367870#c18)  -->
-                            <configuration>
-                                <lifecycleMappingMetadata>
-                                    <pluginExecutions>
-                                        <pluginExecution>
-                                            <!--  no native m2e support yet (https://issues.apache.org/jira/browse/MRRESOURCES-85)  -->
-                                            <pluginExecutionFilter>
-                                                <groupId>org.apache.maven.plugins</groupId>
-                                                <artifactId>maven-remote-resources-plugin</artifactId>
-                                                <versionRange>[0,1.8.0)</versionRange>
-                                                <goals>
-                                                    <goal>process</goal>
-                                                </goals>
-                                            </pluginExecutionFilter>
-                                            <action>
-                                                <ignore/>
-                                            </action>
-                                        </pluginExecution>
-                                    </pluginExecutions>
-                                </lifecycleMappingMetadata>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
         <profile>
             <id>enforce-output-timestamp-property</id>
             <activation>
@@ -3231,7 +3113,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 </property>
             </activation>
             <properties>
-                <surefire-plugin.argLine>@{argLine} -Xmx384m</surefire-plugin.argLine>
+                <surefire-plugin.argLine>
+					@{argLine}
+					-Xmx384m
+				</surefire-plugin.argLine>
             </properties>
             <build>
                 <plugins>

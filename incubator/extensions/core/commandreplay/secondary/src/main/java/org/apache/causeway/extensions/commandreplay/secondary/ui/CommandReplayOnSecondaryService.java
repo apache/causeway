@@ -21,8 +21,8 @@ package org.apache.causeway.extensions.commandreplay.secondary.ui;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -52,7 +52,7 @@ import lombok.val;
     named = "Activity",
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
 //@Log4j2
 public class CommandReplayOnSecondaryService {

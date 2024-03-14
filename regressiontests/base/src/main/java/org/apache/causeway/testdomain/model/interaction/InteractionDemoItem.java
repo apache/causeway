@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.model.interaction;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;

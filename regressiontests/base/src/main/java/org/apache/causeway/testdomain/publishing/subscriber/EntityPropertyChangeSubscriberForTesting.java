@@ -21,14 +21,14 @@ package org.apache.causeway.testdomain.publishing.subscriber;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.commons.collections.Can;
@@ -88,14 +88,14 @@ implements EntityPropertyChangeSubscriber {
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<String> getPropertyChangeEntries(KVStoreForTesting kvStore) {
+    public static Can<String> getPropertyChangeEntries(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<String>) kvStore
                 .get(EntityPropertyChangeSubscriberForTesting.class, "propertyChangeEntries")
                 .orElse(null));
     }
 
-    public static void clearPropertyChangeEntries(KVStoreForTesting kvStore) {
+    public static void clearPropertyChangeEntries(final KVStoreForTesting kvStore) {
         kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
 

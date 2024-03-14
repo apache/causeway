@@ -25,7 +25,8 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Version;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

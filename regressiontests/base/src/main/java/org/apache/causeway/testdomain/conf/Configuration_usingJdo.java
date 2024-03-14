@@ -43,7 +43,7 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
     CausewayModuleTestingFixturesApplib.class,
     KVStoreForTesting.class, // Helper for JUnit Tests
 
-    JdoTestDomainModule.class
+    JdoTestDomainModule.class,
 })
 @PropertySources({
     @PropertySource(CausewayPresets.NoTranslations),

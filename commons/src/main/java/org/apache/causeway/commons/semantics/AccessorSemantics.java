@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.commons.semantics;
 
+import java.beans.Introspector;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.Getter;
@@ -47,6 +49,8 @@ public enum AccessorSemantics {
                 ? input.startsWith(prefix)
                 : false;
     }
+
+    // -- UTILITY
 
     public static boolean isCandidateGetterName(final @Nullable String name) {
         return GET.isPrefixOf(name)
@@ -76,5 +80,26 @@ public enum AccessorSemantics {
     public static boolean isGetter(final ResolvedMethod method) {
         return isBooleanGetter(method)
                 || isNonBooleanGetter(method, type->type != void.class);
+    }
+
+    /**
+     * @since 3.0.0
+     */
+    public static boolean isRecordComponentAccessor(final ResolvedMethod method) {
+        var recordClass = method.implementationClass();
+        if(!recordClass.isRecord()) return false;
+        for(var recordComponent : recordClass.getRecordComponents()) {
+            if(method.name().equals(recordComponent.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String associationIdentifierFor(final ResolvedMethod method) {
+        final String id = AccessorSemantics.isRecordComponentAccessor(method)
+                ? method.name()
+                : Introspector.decapitalize(_Strings.baseName(method.name()));
+        return id;
     }
 }

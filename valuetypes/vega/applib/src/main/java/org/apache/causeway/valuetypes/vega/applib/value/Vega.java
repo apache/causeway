@@ -22,8 +22,8 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 

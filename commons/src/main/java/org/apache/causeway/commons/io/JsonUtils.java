@@ -39,18 +39,20 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.context._Context;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Utilities to convert from and to JSON format.
@@ -58,7 +60,22 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @UtilityClass
+@Log4j2
 public class JsonUtils {
+
+    /**
+     * Consumers of the framework may choose to use a different provider.
+     */
+    public Optional<Class<?>> getPlatformDefaultJsonProviderForJaxb() {
+        return Try.call(()->_Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider"))
+                .ifFailure(cause->
+                      log.warn("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
+                          + " on the class-path."
+                          + " Are you missing a maven dependency?")
+                )
+                .getValue()
+                .map(x->x);
+    }
 
     @FunctionalInterface
     public interface JacksonCustomizer extends UnaryOperator<ObjectMapper> {}
@@ -148,7 +165,7 @@ public class JsonUtils {
 
     /** add support for JAXB annotations */
     public ObjectMapper jaxbAnnotationSupport(final ObjectMapper mapper) {
-        return mapper.registerModule(new JaxbAnnotationModule());
+        return mapper.registerModule(new JakartaXmlBindAnnotationModule());
     }
 
     /** add support for reading java.time (ISO) */

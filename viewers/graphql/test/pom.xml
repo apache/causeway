@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-graphql</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-graphql-test</artifactId>
@@ -37,12 +37,6 @@
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/test</git-plugin.propertiesDir>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-
-		<!-- as a minimum requirement of
-		    org.springframework.graphql:spring-graphql-test:1.2.4 -->
-        <maven.compiler.release>17</maven.compiler.release>
-
-
     </properties>
 
     <build>

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.services.swagger;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;

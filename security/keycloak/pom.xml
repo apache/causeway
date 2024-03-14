@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.core</groupId>
         <artifactId>causeway-core</artifactId>
-    	<version>2.0.0-SNAPSHOT</version>
+    	<version>3.0.0-SNAPSHOT</version>
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
@@ -47,7 +47,7 @@
             <dependency>
                 <groupId>org.apache.causeway.security</groupId>
                 <artifactId>causeway-security-keycloak</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
     	</dependencies>
     </dependencyManagement>
@@ -88,6 +88,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
+            <exclusions>
+				<exclusion>
+					<!-- brought in by org.springframework.security:spring-security-oauth2-jose below -->
+					<groupId>com.nimbusds</groupId>
+  					<artifactId>nimbus-jose-jwt</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
 
         <dependency>

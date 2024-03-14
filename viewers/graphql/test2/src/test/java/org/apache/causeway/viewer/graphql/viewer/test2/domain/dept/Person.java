@@ -1,7 +1,7 @@
 package org.apache.causeway.viewer.graphql.viewer.test2.domain.dept;
 
-import javax.inject.Named;
-import javax.persistence.MappedSuperclass;
+import jakarta.inject.Named;
+import jakarta.persistence.MappedSuperclass;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

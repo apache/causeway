@@ -47,7 +47,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 )
 @ParameterLayout(
 )
-@javax.validation.constraints.Digits(
+@jakarta.validation.constraints.Digits(
         integer = Money.INTEGER,
         fraction = Money.FRACTION
 )
@@ -69,11 +69,11 @@ public @interface Money {
     int columnScale() default Money.FRACTION;
 
     int INTEGER = 10;
-    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")
+    @AliasFor( annotation = jakarta.validation.constraints.Digits.class, attribute = "integer")
     int digitsInteger() default Money.INTEGER;
 
     int FRACTION = 2;
-    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
+    @AliasFor( annotation = jakarta.validation.constraints.Digits.class, attribute = "fraction")
     int digitsFraction() default Money.FRACTION;
 
 }

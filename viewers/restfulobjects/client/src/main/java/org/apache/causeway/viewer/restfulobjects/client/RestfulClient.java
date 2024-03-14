@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Invocation.Builder;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -226,7 +226,7 @@ public class RestfulClient implements AutoCloseable {
         }
     }
 
-    private void registerAuthFilter(AuthorizationHeaderFactory authorizationHeaderFactory) {
+    private void registerAuthFilter(final AuthorizationHeaderFactory authorizationHeaderFactory) {
         client.register(AuthFilter.of(authorizationHeaderFactory));
     }
 

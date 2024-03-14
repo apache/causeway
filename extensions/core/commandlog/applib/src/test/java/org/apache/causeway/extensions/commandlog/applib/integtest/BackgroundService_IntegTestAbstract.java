@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.quartz.JobExecutionContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;

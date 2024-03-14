@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Properties;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
@@ -33,6 +33,10 @@ import com.icegreen.greenmail.util.ServerSetupTest;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -40,9 +44,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.TextUtils;
@@ -72,7 +73,7 @@ class EmailServiceDefault_IntegTest {
 
     @Autowired(required = true)
     private EmailServiceDefault emailService;
-    
+
     @Configuration
     static class MailSenderProvider {
         @Bean
@@ -80,20 +81,20 @@ class EmailServiceDefault_IntegTest {
             JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
             mailSender.setHost("127.0.0.1");
             mailSender.setPort(3025);
-            
+
             mailSender.setUsername("user");
             mailSender.setPassword("admin");
-            
+
             Properties props = mailSender.getJavaMailProperties();
             props.put("mail.transport.protocol", "smtp");
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.debug", "true");
-            
+
             return mailSender;
         }
     }
-    
+
     @Test
     void should_send_email_to_user_with_green_mail_extension() throws JSONException, MessagingException {
 
@@ -105,14 +106,14 @@ class EmailServiceDefault_IntegTest {
                 "Hello this is a simple email message");
 
         assertTrue(sent);
-        
+
         MimeMessage receivedMessage = greenMail.getReceivedMessages()[0];
 
         assertEquals(1, receivedMessage.getAllRecipients().length);
         assertEquals("tester@spring.com", receivedMessage.getAllRecipients()[0].toString());
         assertEquals("test.sender@hotmail.com", receivedMessage.getFrom()[0].toString());
         assertEquals("Message from Java Mail Sender", receivedMessage.getSubject());
-        
+
         // extract payload from multiple parts
         var bodyLines = TextUtils.readLines(GreenMailUtil.getBody(receivedMessage));
         var filteredLines = bodyLines.filter(line->line.startsWith("Hello"));

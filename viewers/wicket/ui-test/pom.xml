@@ -26,18 +26,18 @@
 	<parent>
 		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-wicket</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-wicket-ui-test</artifactId>
 	<name>Apache Causeway Viewer - Wicket (UI Test)</name>
-    <description>Eclipse IDE failes to build the UI tests since junit-api is forced onto the module-path by Wicket.
+	<description>Eclipse IDE failes to build the UI tests since junit-api is forced onto the module-path by Wicket. 
 		So as a workaround putting tests into their own artifact.</description>
 
 	<properties>
 		<maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-
+        
 		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.wicket.ui.test</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/ui-test</git-plugin.propertiesDir>
 	</properties>
@@ -45,9 +45,9 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-wicket-ui</artifactId>
-		</dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-wicket-ui</artifactId>
+        </dependency>
 
 		<!-- TESTING -->
 

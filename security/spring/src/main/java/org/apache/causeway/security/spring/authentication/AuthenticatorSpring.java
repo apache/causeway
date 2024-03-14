@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.security.spring.authentication;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
  */
 @Service
 @Named(AuthenticatorSpring.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Spring")
 public class AuthenticatorSpring implements Authenticator {
 

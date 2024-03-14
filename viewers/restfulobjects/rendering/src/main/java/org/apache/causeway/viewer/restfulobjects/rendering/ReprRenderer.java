@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 

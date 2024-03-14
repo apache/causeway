@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._Reflect;

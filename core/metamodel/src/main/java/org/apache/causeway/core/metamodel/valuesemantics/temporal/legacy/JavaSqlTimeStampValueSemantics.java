@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

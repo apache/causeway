@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
 
 import org.springframework.stereotype.Service;
 
@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".TranslationsResolverDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class TranslationsResolverDefault implements TranslationsResolver {

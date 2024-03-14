@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.ignore.annotation;
 
 import java.util.function.Predicate;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;

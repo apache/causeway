@@ -25,9 +25,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.GenericType;
-
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Row;
 import org.asciidoctor.ast.Table;
@@ -38,7 +35,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
@@ -71,6 +67,8 @@ import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.headRow;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.row;
 import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.table;
 
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.GenericType;
 import lombok.SneakyThrows;
 import lombok.val;
 
@@ -92,7 +90,6 @@ import lombok.val;
 @TestMethodOrder(OrderAnnotation.class) // run tests in sequence for reporting
 class RestServiceSimpifiedRepresentationTest {
 
-    @LocalServerPort int port; // just for reference (not used)
     @Inject RestEndpointService restService;
 
     private final RoSpecSampler refSampler = new RoSpecSampler();

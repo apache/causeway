@@ -25,9 +25,9 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
@@ -351,8 +351,8 @@ public class ArchitectureDomainRules {
 
     /**
      * This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB
-     * {@link javax.xml.bind.annotation.XmlRootElement} annotation) must also be annotated with JAXB
-     * {@link javax.xml.bind.annotation.XmlTransient} annotation.
+     * {@link jakarta.xml.bind.annotation.XmlRootElement} annotation) must also be annotated with JAXB
+     * {@link jakarta.xml.bind.annotation.XmlTransient} annotation.
      *
      * <p>
      * The rationale here is that injected services are managed by the runtime and are not/cannot be serialized to
@@ -378,8 +378,8 @@ public class ArchitectureDomainRules {
 
     /**
      * This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB
-     * {@link javax.xml.bind.annotation.XmlRootElement} annotation) must also be annotated with JAXB
-     * {@link javax.xml.bind.annotation.XmlTransient} annotation.
+     * {@link jakarta.xml.bind.annotation.XmlRootElement} annotation) must also be annotated with JAXB
+     * {@link jakarta.xml.bind.annotation.XmlTransient} annotation.
      *
      * <p>
      * The rationale here is that injected services are managed by the runtime and are not/cannot be serialized to

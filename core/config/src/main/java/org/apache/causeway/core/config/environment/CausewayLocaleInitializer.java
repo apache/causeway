@@ -21,8 +21,8 @@ package org.apache.causeway.core.config.environment;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
@@ -49,11 +49,11 @@ public class CausewayLocaleInitializer {
         final int pos = localeSpec.indexOf('_');
         Locale locale;
         if (pos == -1) {
-            locale = new Locale(localeSpec, "");
+            locale = Locale.of(localeSpec);
         } else {
             final String language = localeSpec.substring(0, pos);
             final String country = localeSpec.substring(pos + 1);
-            locale = new Locale(language, country);
+            locale = Locale.of(language, country);
         }
         return locale;
     }

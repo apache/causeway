@@ -23,10 +23,10 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;

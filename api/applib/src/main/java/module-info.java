@@ -126,25 +126,21 @@ module org.apache.causeway.applib {
 
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    requires transitive jakarta.activation;
-    requires transitive java.annotation;
-    requires transitive java.desktop;
-    requires transitive java.instrument;
-    requires transitive java.persistence;
-    requires transitive java.sql;
-    requires transitive java.ws.rs;
-    requires transitive java.xml.bind;
-    requires transitive java.xml;
-    requires transitive java.inject;
     requires lombok;
     requires transitive org.apache.causeway.commons;
-    requires transitive org.apache.causeway.schema;
     requires org.apache.logging.log4j;
+    requires spring.tx;
+    requires transitive jakarta.activation;
+    requires transitive jakarta.annotation;
+    requires transitive jakarta.inject;
+    requires transitive jakarta.persistence;
+    requires transitive jakarta.ws.rs;
+    requires transitive jakarta.xml.bind;
+    requires transitive org.apache.causeway.schema;
     requires transitive org.joda.time;
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
-    requires spring.tx;
 
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;

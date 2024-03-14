@@ -21,10 +21,9 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
 
@@ -48,7 +47,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
-    @Inject
     public UserResourceServerside() {
         super();
         log.debug("<init>");

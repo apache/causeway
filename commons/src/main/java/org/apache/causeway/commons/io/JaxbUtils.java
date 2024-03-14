@@ -23,9 +23,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +31,6 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBContextFactory;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.SchemaOutputResolver;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -48,6 +38,14 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContextFactory;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.SchemaOutputResolver;
+import jakarta.xml.bind.Unmarshaller;
 
 import org.springframework.lang.Nullable;
 
@@ -74,23 +72,16 @@ import lombok.experimental.UtilityClass;
  * @implNote instead of using {@link JAXBContext#newInstance(Class...)},
  *      which does lookup the JaxbContextFactory on each call,
  *      and which - depending on system-properties - could change during the lifetime of an application,
- *      we rather utilize the com.sun.xml.bind.v2.ContextFactory directly.
+ *      we rather utilize the org.glassfish.jaxb.runtime.v2.JAXBContextFactory directly.
  *
  * @since 2.0 {@index}
  */
 @UtilityClass
 public class JaxbUtils {
 
-    private final static Class<?> JAXB_CONTEXT_FACTORY = com.sun.xml.bind.v2.ContextFactory.class;
+    private final static jakarta.xml.bind.JAXBContextFactory JAXB_CONTEXT_FACTORY =
+            new org.glassfish.jaxb.runtime.v2.JAXBContextFactory();
     private final static Map<String,Object> JAXB_CONTEXT_FACTORY_PROPS = Collections.<String,Object>emptyMap();
-    private final static MethodHandle JAXB_CONTEXT_FACTORY_METHOD_HANDLE = jaxbContextFactoryMethodHandle();
-
-    @SneakyThrows
-    private static MethodHandle jaxbContextFactoryMethodHandle() {
-        return MethodHandles.publicLookup()
-                .findStatic(JAXB_CONTEXT_FACTORY, "createContext",
-                        MethodType.methodType(JAXBContext.class, Class[].class, Map.class));
-    }
 
     @Data @Builder
     public static class JaxbOptions {
@@ -388,7 +379,7 @@ public class JaxbUtils {
     @SneakyThrows
     private static <T> JAXBContext contextOf(final Class<?> ... classesToBeBound) {
         try {
-            return (JAXBContext) JAXB_CONTEXT_FACTORY_METHOD_HANDLE.invoke(open(classesToBeBound), JAXB_CONTEXT_FACTORY_PROPS);
+            return JAXB_CONTEXT_FACTORY.createContext(open(classesToBeBound), JAXB_CONTEXT_FACTORY_PROPS);
         } catch (Exception e) {
             val msg = String.format("obtaining JAXBContext for classes (to be bound) {%s}", _NullSafe.stream(classesToBeBound)
                     .map(Class::getName)

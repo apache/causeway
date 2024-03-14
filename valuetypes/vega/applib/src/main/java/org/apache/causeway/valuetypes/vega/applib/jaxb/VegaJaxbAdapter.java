@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.valuetypes.vega.applib.jaxb;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.causeway.valuetypes.vega.applib.stringify.VegaStringifier;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;

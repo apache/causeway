@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.test.domain.dom;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Repository;
 

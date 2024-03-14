@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.secman.jdo.permission.dom;
 
-import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -32,7 +31,9 @@ import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Uniques;
 import javax.jdo.annotations.Version;
 import javax.jdo.annotations.VersionStrategy;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;

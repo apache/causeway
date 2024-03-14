@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.metamodel.BeanSort;

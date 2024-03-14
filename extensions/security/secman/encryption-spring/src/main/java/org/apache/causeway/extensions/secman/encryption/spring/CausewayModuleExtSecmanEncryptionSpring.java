@@ -50,7 +50,7 @@ public class CausewayModuleExtSecmanEncryptionSpring {
         // set up the list of supported encoders and their prefixes
         val encoders = Map.<String, PasswordEncoder>of(
                 "bcrypt", new BCryptPasswordEncoder(),
-                "scrypt", new SCryptPasswordEncoder());
+                "scrypt", SCryptPasswordEncoder.defaultsForSpringSecurity_v5_8());
 
         return new DelegatingPasswordEncoder("bcrypt", encoders);
     }

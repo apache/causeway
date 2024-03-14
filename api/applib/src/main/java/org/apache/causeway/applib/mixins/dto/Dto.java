@@ -24,7 +24,7 @@ package org.apache.causeway.applib.mixins.dto;
  *
  * <p>
  *     A JAXB view model is one annotated with
- *     {@link javax.xml.bind.annotation.XmlRootElement}.
+ *     {@link jakarta.xml.bind.annotation.XmlRootElement}.
  * </p>
  *
  * <p>

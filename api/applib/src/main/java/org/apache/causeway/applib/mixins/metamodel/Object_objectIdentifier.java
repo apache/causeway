@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.mixins.metamodel;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.MemberSupport;
@@ -34,7 +34,7 @@ import lombok.val;
 
 /**
  * Contributes a property exposing the internal identifier of the domain
- * object, typically as specified by {@link javax.inject.Named}.
+ * object, typically as specified by {@link jakarta.inject.Named}.
  *
  * <p>
  *     The object identifier is also accessible from the

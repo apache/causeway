@@ -21,9 +21,9 @@ module org.apache.causeway.core.interaction {
     exports org.apache.causeway.core.interaction.scope;
     exports org.apache.causeway.core.interaction.session;
 
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.sql;
-    requires java.inject;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

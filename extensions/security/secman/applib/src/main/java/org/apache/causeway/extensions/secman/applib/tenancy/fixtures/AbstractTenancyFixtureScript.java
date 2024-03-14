@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.applib.tenancy.fixtures;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancyRepository;

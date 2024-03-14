@@ -22,10 +22,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 

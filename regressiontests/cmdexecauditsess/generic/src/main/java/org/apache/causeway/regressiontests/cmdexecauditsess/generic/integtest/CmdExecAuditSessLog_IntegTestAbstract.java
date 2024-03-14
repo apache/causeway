@@ -20,7 +20,7 @@ package org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest;
 
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

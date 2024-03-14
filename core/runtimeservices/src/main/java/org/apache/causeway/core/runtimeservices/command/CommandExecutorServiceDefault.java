@@ -22,10 +22,10 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

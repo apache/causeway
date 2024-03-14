@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.security.bypass.authorization;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
  */
 @Service
 @Named(AuthorizorBypass.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.LATE)
+@jakarta.annotation.Priority(PriorityPrecedence.LATE)
 @Qualifier("Bypass")
 public class AuthorizorBypass implements Authorizor {
 

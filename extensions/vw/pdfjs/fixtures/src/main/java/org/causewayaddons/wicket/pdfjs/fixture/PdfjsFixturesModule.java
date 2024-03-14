@@ -18,7 +18,7 @@
  */
 package org.causewayaddons.wicket.pdfjs.fixture;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;

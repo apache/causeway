@@ -23,17 +23,21 @@ module org.apache.causeway.viewer.commons.services {
     exports org.apache.causeway.viewer.commons.services.menu;
     exports org.apache.causeway.viewer.commons.services;
 
-    requires java.annotation;
-    requires java.inject;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
+    requires static lombok;
+
+    requires jakarta.annotation;
+    requires jakarta.inject;
+    requires jakarta.servlet;
+
+    requires transitive org.apache.causeway.applib;
+    requires transitive org.apache.causeway.commons;
+    requires transitive org.apache.causeway.viewer.commons.applib;
+
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.viewer.commons.applib;
+
     requires org.apache.logging.log4j;
     requires spring.beans;
     requires spring.context;
-    requires javax.servlet.api;
     requires org.apache.causeway.viewer.commons.model;
 }

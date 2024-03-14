@@ -25,12 +25,12 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
-import org.springframework.lang.Nullable;
+import jakarta.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;

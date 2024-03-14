@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 
 import java.util.Locale;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;

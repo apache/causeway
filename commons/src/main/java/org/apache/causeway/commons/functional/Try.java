@@ -25,6 +25,8 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 

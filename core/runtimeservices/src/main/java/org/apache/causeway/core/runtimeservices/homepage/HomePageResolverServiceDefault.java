@@ -20,9 +20,9 @@ package org.apache.causeway.core.runtimeservices.homepage;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ import lombok.val;
 
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".HomePageResolverServiceDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;

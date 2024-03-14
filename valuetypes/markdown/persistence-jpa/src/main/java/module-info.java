@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.markdown.persistence.jpa {
     exports org.apache.causeway.valuetypes.markdown.persistence.jpa.converters;
     exports org.apache.causeway.valuetypes.markdown.persistence.jpa;
 
-    requires java.persistence;
+    requires jakarta.persistence;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.markdown.applib;
     requires spring.boot.autoconfigure;

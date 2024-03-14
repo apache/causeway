@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
 import org.datanucleus.identity.StringId;
 

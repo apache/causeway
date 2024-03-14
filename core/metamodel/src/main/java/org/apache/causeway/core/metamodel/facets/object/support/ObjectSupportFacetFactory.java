@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;

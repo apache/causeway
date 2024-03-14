@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.extensions.sse.wicket.webmodule;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ import lombok.Getter;
 @Service
 @Named(WebModuleServerSentEvents.LOGICAL_TYPE_NAME)
 @Qualifier("ServerSentEvents")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public final class WebModuleServerSentEvents extends WebModuleAbstract {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSseWicket.NAMESPACE + ".WebModuleServerSentEvents";

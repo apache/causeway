@@ -30,9 +30,10 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
 import javax.sql.DataSource;
-import javax.transaction.Status;
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
+
+import jakarta.transaction.Status;
+import jakarta.transaction.TransactionManager;
+import jakarta.transaction.UserTransaction;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

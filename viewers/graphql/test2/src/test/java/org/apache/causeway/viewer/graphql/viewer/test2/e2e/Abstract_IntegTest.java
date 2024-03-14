@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test2.e2e;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;

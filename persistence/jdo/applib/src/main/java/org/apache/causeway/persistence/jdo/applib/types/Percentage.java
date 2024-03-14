@@ -47,7 +47,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 )
 @ParameterLayout(
 )
-@javax.validation.constraints.Digits(
+@jakarta.validation.constraints.Digits(
         integer = Percentage.INTEGER,
         fraction = Percentage.FRACTION
 )
@@ -69,11 +69,11 @@ public @interface Percentage {
     int columnScale() default Percentage.FRACTION;
 
     int INTEGER = 3;
-    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "integer")
+    @AliasFor( annotation = jakarta.validation.constraints.Digits.class, attribute = "integer")
     int digitsInteger() default Percentage.INTEGER;
 
     int FRACTION = 2;
-    @AliasFor( annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
+    @AliasFor( annotation = jakarta.validation.constraints.Digits.class, attribute = "fraction")
     int digitsFraction() default Percentage.FRACTION;
 
 }

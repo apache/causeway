@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.util.Enums;
 

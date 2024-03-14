@@ -45,23 +45,24 @@ class YamlUtilsTest {
 
     @Test
     void parseRecord() {
-        var yamlTemplate = ""
-                + "name: sven\r\n"
-                + "address: {street: backerstreet, zip: 1234}\r\n"
-                + "additionalAddresses:\r\n"
-                + "- zip: 23\r\n"
-                + "  street: \"brownstreet\"\r\n"
-                + "- zip: 34\r\n"
-                + "  street: \"bluestreet\"\r\n"
-                + "java8Time:\r\n"
-                + "  localTime: ${localTime}\r\n"
-                + "  localDate: ${localDate}\r\n"
-                + "  localDateTime: ${localDateTime}\r\n"
-                + "  offsetTime: ${offsetTime}\r\n"
-                + "  offsetDateTime: ${offsetDateTime}\r\n"
-                + "  zonedDateTime: ${zonedDateTime}\r\n";
+        var yamlTemplate = """
+                name: sven
+                address: {street: backerstreet, zip: 1234}
+                additionalAddresses:
+                - zip: 23
+                  street: "brownstreet"
+                - zip: 34
+                  street: "bluestreet"
+                java8Time:
+                  localTime: ${localTime}
+                  localDate: ${localDate}
+                  localDateTime: ${localDateTime}
+                  offsetTime: ${offsetTime}
+                  offsetDateTime: ${offsetDateTime}
+                  zonedDateTime: ${zonedDateTime}
+                """;
 
-        var yaml = person.getJava8Time().interpolator().applyTo(yamlTemplate);
+        var yaml = person.java8Time().interpolator().applyTo(yamlTemplate);
 
         // debug
         //System.err.printf("%s%n", yaml);

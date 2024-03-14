@@ -20,9 +20,9 @@
 
 package org.apache.causeway.regressiontests.layouts.integtest.model;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessorOrder;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessorOrder;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.Response;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Service;
 

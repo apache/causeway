@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 

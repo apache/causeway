@@ -20,7 +20,7 @@ package org.apache.causeway.core.config.beans;
 
 import java.util.Objects;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;

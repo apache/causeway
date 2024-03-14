@@ -25,8 +25,8 @@ import java.util.function.BiFunction;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -63,7 +63,7 @@ import lombok.val;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class MetaModelServiceMenu {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".MetaModelServiceMenu";

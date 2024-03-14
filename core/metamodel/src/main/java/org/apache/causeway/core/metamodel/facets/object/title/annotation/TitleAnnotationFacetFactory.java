@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.title.annotation;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.commons.collections.Can;

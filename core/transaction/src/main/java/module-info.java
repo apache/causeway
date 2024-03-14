@@ -23,9 +23,9 @@ module org.apache.causeway.core.transaction {
     exports org.apache.causeway.core.transaction.events;
     exports org.apache.causeway.core.transaction.scope;
 
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.sql;
-    requires java.inject;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
@@ -35,5 +35,5 @@ module org.apache.causeway.core.transaction {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
-    requires java.transaction;
+    requires jakarta.transaction;
 }

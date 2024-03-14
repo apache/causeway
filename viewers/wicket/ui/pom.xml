@@ -26,7 +26,7 @@
 	<parent>
 		<groupId>org.apache.causeway.viewer</groupId>
 		<artifactId>causeway-viewer-wicket</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-viewer-wicket-ui</artifactId>
@@ -232,10 +232,6 @@
 			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>org.webjars.npm</groupId>
-			<artifactId>summernote</artifactId>
-		</dependency>
 		<!-- required by tempus-dominus up to v5 -->
 		<dependency>
 		    <groupId>org.webjars</groupId>

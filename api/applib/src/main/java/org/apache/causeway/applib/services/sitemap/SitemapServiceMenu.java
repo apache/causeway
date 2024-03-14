@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.services.sitemap;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -46,7 +46,7 @@ import org.apache.causeway.commons.internal.base._Strings;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class SitemapServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".SitemapServiceMenu";

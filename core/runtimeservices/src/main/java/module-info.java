@@ -55,12 +55,12 @@ module org.apache.causeway.core.runtimeservices {
 
     requires transitive jakarta.activation;
     requires transitive jakarta.mail;
-    requires java.annotation;
+    requires transitive jakarta.annotation;
     requires java.desktop;
     requires java.sql;
     requires java.xml;
-    requires java.xml.bind;
-    requires java.inject;
+    requires jakarta.xml.bind;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

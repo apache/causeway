@@ -23,13 +23,14 @@ package org.apache.causeway.extensions.sessionlog.jdo.dom;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
+
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;

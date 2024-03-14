@@ -20,7 +20,7 @@ package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 
 import java.lang.reflect.Constructor;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreId;
 

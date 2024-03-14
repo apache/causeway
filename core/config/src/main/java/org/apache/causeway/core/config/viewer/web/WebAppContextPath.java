@@ -22,9 +22,9 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;

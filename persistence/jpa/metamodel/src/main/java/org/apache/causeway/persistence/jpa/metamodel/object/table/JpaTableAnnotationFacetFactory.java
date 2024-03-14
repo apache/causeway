@@ -19,8 +19,8 @@
 package org.apache.causeway.persistence.jpa.metamodel.object.table;
 
 
-import javax.inject.Inject;
-import javax.persistence.Table;
+import jakarta.inject.Inject;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

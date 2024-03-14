@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;

@@ -19,7 +19,7 @@
 package org.apache.causeway.extensions.commandreplay.secondary;
 
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;

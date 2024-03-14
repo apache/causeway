@@ -20,7 +20,7 @@ package org.causewayaddons.wicket.pdfjs.fixture.demoapp.demomodule.dom;
 
 import java.util.List;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
         named = "Demo",
         menuOrder = "10.4"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class PdfJsDemoObjectWithBlobMenu {
 

@@ -21,11 +21,11 @@ package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import javax.inject.Inject;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.ext.Provider;
-import javax.xml.bind.Marshaller;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.ext.Provider;
+import jakarta.xml.bind.Marshaller;
 
 import org.jboss.resteasy.plugins.providers.jaxb.JAXBXmlRootElementProvider;
 

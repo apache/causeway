@@ -6,10 +6,10 @@ module org.apache.causeway.incubator.viewer.graphql.viewer {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.graphqljava;
-    requires java.annotation;
-    requires java.inject;
+    requires jakarta.annotation;
+    requires jakarta.inject;
     requires java.net.http;
-    requires java.persistence;
+    requires jakarta.persistence;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

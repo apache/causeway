@@ -16,7 +16,7 @@
 	<parent>
 		<groupId>org.apache.causeway.persistence</groupId>
 		<artifactId>causeway-persistence-jpa</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>2.7.14</version>
+			<version>4.0.2</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.ow2.asm</groupId>
@@ -93,22 +93,21 @@
 			</exclusions>
 		</dependency>
         <dependency>
-        	<!-- provides javax.el.* -->
+        	<!-- provides jakarta.el.* -->
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
-		    <version>3.0.3</version> <!-- do not upgrade before Spring 6 -->
+		    <version>5.0.1</version>
 		</dependency>
+		<!-- provides EL Impl -->        
+        <dependency>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-el</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<exclusions>
-				<exclusion>
-					<!-- outdated v2.0.1 transitively brought in by 
-						jakarta.transaction:jakarta.transaction-api:jar:1.3.3:compile -->
-					<groupId>jakarta.enterprise</groupId>
-					<artifactId>jakarta.enterprise.cdi-api</artifactId>
-				</exclusion>
 				<exclusion>
 					<!-- using eclipse-link instead -->
 					<groupId>org.hibernate</groupId>
@@ -116,12 +115,16 @@
 				</exclusion>
 				<exclusion>
 					<!-- using eclipse-link instead -->
-					<groupId>org.hibernate</groupId>
+					<groupId>org.hibernate.orm</groupId>
 					<artifactId>hibernate-core</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>javax.validation</groupId>
-					<artifactId>validation-api</artifactId>
+					<groupId>jakarta.inject</groupId>
+					<artifactId>jakarta.inject-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>jakarta.interceptor</groupId>
+					<artifactId>jakarta.interceptor-api</artifactId>
 				</exclusion>
 				<exclusion>
 					<!-- we use log4j-2 instead -->

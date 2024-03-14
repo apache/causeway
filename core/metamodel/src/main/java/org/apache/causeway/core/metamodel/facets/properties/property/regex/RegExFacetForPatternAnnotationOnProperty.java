@@ -29,7 +29,7 @@ public class RegExFacetForPatternAnnotationOnProperty
 extends RegExFacetAbstract {
 
     public static Optional<RegExFacet> create(
-            final Optional<javax.validation.constraints.Pattern> patternIfAny,
+            final Optional<jakarta.validation.constraints.Pattern> patternIfAny,
             final Class<?> returnType,
             final FacetHolder holder) {
 
@@ -46,7 +46,7 @@ extends RegExFacetAbstract {
 
     private RegExFacetForPatternAnnotationOnProperty(
             final String regexp,
-            final javax.validation.constraints.Pattern.Flag[] flags,
+            final jakarta.validation.constraints.Pattern.Flag[] flags,
             final String replacement,
             final FacetHolder holder) {
         super(regexp, asMask(flags), replacement, holder);

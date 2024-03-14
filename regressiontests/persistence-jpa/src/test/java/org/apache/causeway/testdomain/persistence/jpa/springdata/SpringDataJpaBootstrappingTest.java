@@ -20,12 +20,18 @@ package org.apache.causeway.testdomain.persistence.jpa.springdata;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -35,11 +41,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -47,8 +48,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingSpringDataJpa;
 import org.apache.causeway.testdomain.jpa.springdata.Employee;
 import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParametersServiceAutoConfiguration;
-import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
@@ -59,8 +58,6 @@ import lombok.val;
         })
 @ContextConfiguration(classes = {
         Configuration_usingSpringDataJpa.class,
-        FixtureScriptsSpecificationProviderAutoConfiguration.class, // because @DataJpaTest disables autoconfiguration
-        ExecutionParametersServiceAutoConfiguration.class           // because @DataJpaTest disables autoconfiguration
 })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

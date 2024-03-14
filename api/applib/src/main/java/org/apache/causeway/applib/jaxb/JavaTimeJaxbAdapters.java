@@ -27,7 +27,7 @@ import java.time.OffsetTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import lombok.experimental.UtilityClass;
 

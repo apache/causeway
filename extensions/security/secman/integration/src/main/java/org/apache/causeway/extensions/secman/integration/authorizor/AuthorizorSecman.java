@@ -22,9 +22,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,7 +66,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".AuthorizorSecman")
-@javax.annotation.Priority(PriorityPrecedence.EARLY - 10)   //
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY - 10)   //
 @Qualifier("Secman")
 public class AuthorizorSecman implements Authorizor {
 

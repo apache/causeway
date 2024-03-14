@@ -16,7 +16,7 @@
  */
 package org.apache.causeway.applib.layout.menubars.bootstrap;
 
-import javax.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBContext;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

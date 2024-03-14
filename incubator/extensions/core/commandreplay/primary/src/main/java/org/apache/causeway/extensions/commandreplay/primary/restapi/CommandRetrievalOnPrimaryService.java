@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.context.annotation.Profile;
 
@@ -47,7 +47,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
  */
 @DomainService
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CommandRetrievalOnPrimaryService")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")
 public class CommandRetrievalOnPrimaryService {
 

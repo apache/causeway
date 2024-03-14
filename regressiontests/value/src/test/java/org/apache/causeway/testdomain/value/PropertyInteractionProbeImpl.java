@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 

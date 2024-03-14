@@ -22,13 +22,14 @@ package org.apache.causeway.regressiontests.layouts.integtest;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,8 +38,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.CausewayModuleApplibMixins;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -56,6 +55,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.regressiontests.layouts.integtest.model.LayoutTestDomainModel;
 import org.apache.causeway.regressiontests.layouts.integtest.model.SimpleObject;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;

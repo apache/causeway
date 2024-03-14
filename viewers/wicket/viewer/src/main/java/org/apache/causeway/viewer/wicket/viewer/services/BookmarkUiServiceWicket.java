@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.services;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSess
 
 @Service
 @Named("causeway.viewer.wicket.BookmarkUiServiceWicket")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
 public class BookmarkUiServiceWicket implements BookmarkUiService {
 

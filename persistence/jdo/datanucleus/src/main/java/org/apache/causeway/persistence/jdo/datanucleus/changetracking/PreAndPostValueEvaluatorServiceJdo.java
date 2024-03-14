@@ -22,9 +22,9 @@ package org.apache.causeway.persistence.jdo.datanucleus.changetracking;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.datanucleus.enhancement.Persistable;
 

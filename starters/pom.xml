@@ -27,13 +27,13 @@
 		in build-artifacts.sh -->
 	<groupId>org.apache.causeway.app</groupId>
 	<artifactId>causeway-app-starter-parent</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.18</version>
+		<version>3.2.3</version>
 		<relativePath />
 	</parent>
 
@@ -46,13 +46,13 @@
 
 	<properties>
 
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>21</maven.compiler.release>
 
-		<spring-boot.version>2.7.18</spring-boot.version>
+		<spring-boot.version>3.2.3</spring-boot.version>
 		<approvaltests.version>23.0.0</approvaltests.version>
 
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
-		<resteasy.version>5.0.0.Final</resteasy.version>
+		<resteasy.version>6.0.0.Alpha2</resteasy.version>
 
 	</properties>
 
@@ -105,7 +105,7 @@
 			<dependency>
 				<groupId>org.apache.causeway</groupId>
 				<artifactId>causeway-bom</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -204,6 +204,8 @@
 
 			<properties>
 				<!-- uses maven-surefire-plugin.version, which is declared by spring-boot-starter-parent -->
+				<maven-surefire-report-plugin.version>3.2.5</maven-surefire-report-plugin.version>
+			
 				<skipTests>false</skipTests>
 				<skipUTs>${skipTests}</skipUTs>
 				<skipITs>${skipTests}</skipITs>

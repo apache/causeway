@@ -27,8 +27,8 @@ module org.apache.causeway.persistence.jpa.integration {
     exports org.apache.causeway.persistence.jpa.integration;
 
     requires java.desktop;
-    requires java.inject;
-    requires java.persistence;
+    requires jakarta.inject;
+    requires jakarta.persistence;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

@@ -22,14 +22,14 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Objects;
 
-import javax.inject.Inject;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Version;
+import jakarta.inject.Inject;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.Version;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
@@ -77,7 +77,7 @@ public class ArchitectureJpaRules {
 
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
-     * annotated with the Apache Causeway {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
+     * annotated with the Apache Causeway {@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
      * with a value of {@link org.apache.causeway.applib.jaxb.PersistentEntityAdapter}<code>.class</code>.
      *
      * <p>
@@ -92,7 +92,7 @@ public class ArchitectureJpaRules {
 
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must also be
-     * annotated with the {@link javax.persistence.EntityListeners} annotation that includes
+     * annotated with the {@link jakarta.persistence.EntityListeners} annotation that includes
      * a value of <code>org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener.class</code>.
      *
      * <p>
@@ -174,7 +174,7 @@ public class ArchitectureJpaRules {
     /**
      * This rule requires that enum fields in classes annotated with the JPA {@link Entity} annotation must also be
      * annotated with the JPA {@link Enumerated} annotation indicating that they should be persisted as
-     * {@link javax.persistence.EnumType#STRING string}s (rather than ordinal numbers).
+     * {@link jakarta.persistence.EnumType#STRING string}s (rather than ordinal numbers).
      *
      * <p>
      * The rationale here is that a string is (arguably) more stable than an ordinal number, and is certainly easier
@@ -221,7 +221,7 @@ public class ArchitectureJpaRules {
 
     /**
      * This rule requires that classes annotated with the JPA {@link Entity} annotation must contain a
-     * <code>version</code> field that is itself annotated with {@link javax.persistence.Version}.
+     * <code>version</code> field that is itself annotated with {@link jakarta.persistence.Version}.
      *
      * <p>
      * This is good practice for JPA entities to implement optimistic locking

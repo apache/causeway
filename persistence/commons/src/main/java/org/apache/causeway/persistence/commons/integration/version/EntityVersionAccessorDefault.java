@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.commons.integration.version;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ public class EntityVersionAccessorDefault implements EntityVersionAccessor {
     private final ObjectManager objectManager;
 
     @Override
-    public Object versionOf(Object domainObject) {
+    public Object versionOf(final Object domainObject) {
         ManagedObject managedObject = objectManager.adapt(domainObject);
         EntityFacet facet = managedObject.getSpecification().getFacet(EntityFacet.class);
         if (facet != null) {

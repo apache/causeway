@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.object.table;
 
-import javax.persistence.Table;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 

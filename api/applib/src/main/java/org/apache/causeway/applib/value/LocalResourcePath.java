@@ -21,9 +21,9 @@ package org.apache.causeway.applib.value;
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 

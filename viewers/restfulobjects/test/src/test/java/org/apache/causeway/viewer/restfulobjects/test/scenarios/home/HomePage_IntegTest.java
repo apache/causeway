@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.test.scenarios.home;
 
 import lombok.val;
 
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 

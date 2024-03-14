@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.auth;
 
-import javax.inject.Inject;
-
-import graphql.execution.ExecutionContext;
-import graphql.execution.ExecutionStrategyParameters;
+import jakarta.inject.Inject;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +30,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
+import graphql.execution.ExecutionContext;
+import graphql.execution.ExecutionStrategyParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

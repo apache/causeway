@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.conf;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.fixture
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
@@ -42,7 +42,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class ExcelUploadServiceForDemoToDoItem {
 
     private final FixtureScripts fixtureScripts;

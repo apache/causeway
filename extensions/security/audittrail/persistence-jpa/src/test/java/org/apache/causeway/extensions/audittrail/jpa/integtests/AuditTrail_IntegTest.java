@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.audittrail.jpa.integtests;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

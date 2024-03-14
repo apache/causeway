@@ -26,9 +26,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.ext.RuntimeDelegate;
+import jakarta.ws.rs.core.CacheControl;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.ext.RuntimeDelegate;
 
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;

@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.integration.authenticator;
 
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;

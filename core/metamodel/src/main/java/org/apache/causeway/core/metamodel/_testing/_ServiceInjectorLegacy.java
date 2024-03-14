@@ -29,8 +29,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
@@ -289,7 +289,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     }
 
     private static final Predicate<Field> isAnnotatedForInjection() {
-        return field->field.getAnnotation(javax.inject.Inject.class) != null;
+        return field->field.getAnnotation(jakarta.inject.Inject.class) != null;
     }
 
     // -- TESTING

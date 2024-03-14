@@ -25,17 +25,18 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.function.ThrowingSupplier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -52,6 +53,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -88,73 +90,123 @@ import lombok.val;
 public class DomainObjectTesterFactory implements HasMetaModelContext {
 
     public <T> ObjectTester<T> objectTester(
-            final Class<T> domainObjectType) {
+            final T domainObject) {
         val tester = getServiceInjector().injectServicesInto(
-                new ObjectTester<T>(domainObjectType));
-        tester.init();
+                new ObjectTester<T>(domainObject));
         return tester;
     }
 
     public <T> ActionTester<T> actionTester(
-            final Class<T> domainObjectType,
+            final T domainObject,
             final String actionName,
             final Where where) {
         val tester = getServiceInjector().injectServicesInto(
-                new ActionTester<T>(domainObjectType, actionName, where));
+                new ActionTester<T>(domainObject, actionName, where));
         tester.init();
         return tester;
     }
 
     public <T> ActionTester<T> actionTesterForSpecificInteraction(
-            final @NonNull Class<T> domainObjectType,
+            final @NonNull T domainObject,
             final @NonNull ActionInteraction actionInteraction) {
         val managedAction = actionInteraction.getManagedActionElseFail();
-        assertEquals(domainObjectType,
+        assertEquals(domainObject.getClass(),
                 managedAction.getOwner().getSpecification().getCorrespondingClass());
         val actionTester = getServiceInjector().injectServicesInto(
-                new ActionTester<>(domainObjectType, actionInteraction, managedAction));
+                new ActionTester<>(domainObject, actionInteraction, managedAction));
         actionTester.init();
         return actionTester;
     }
 
     public <T> PropertyTester<T> propertyTester(
-            final Class<T> domainObjectType,
+            final T domainObject,
             final String propertyName,
             final Where where) {
         val tester = getServiceInjector().injectServicesInto(
-                new PropertyTester<T>(domainObjectType, propertyName, where));
+                new PropertyTester<T>(domainObject, propertyName, where));
         tester.init();
         return tester;
     }
 
     public <T> CollectionTester<T> collectionTester(
-            final Class<T> domainObjectType,
+            final T domainObject,
             final String collectionName,
             final Where where) {
         val tester = getServiceInjector().injectServicesInto(
-                new CollectionTester<T>(domainObjectType, collectionName, where));
+                new CollectionTester<T>(domainObject, collectionName, where));
         tester.init();
         return tester;
     }
 
     // -- SHORTCUTS
 
+    public <T> ObjectTester<T> objectTester(
+            final Class<T> domainObjectType) {
+        return objectTester(domainObject(domainObjectType));
+    }
+
+    public <T> ActionTester<T> actionTester(
+            final Class<T> domainObjectType,
+            final String actionName,
+            final Where where) {
+        return actionTester(domainObject(domainObjectType), actionName, where);
+    }
+    public <T> ActionTester<T> actionTester(
+            final T domainObject,
+            final String actionName) {
+        return actionTester(domainObject, actionName, Where.ANYWHERE);
+    }
     public <T> ActionTester<T> actionTester(
             final Class<T> domainObjectType,
             final String actionName) {
-        return actionTester(domainObjectType, actionName, Where.ANYWHERE);
+        return actionTester(domainObject(domainObjectType), actionName);
+    }
+    public <T> ActionTester<T> actionTesterForSpecificInteraction(
+            final Class<T> domainObjectType,
+            final ActionInteraction actionInteraction) {
+        return actionTesterForSpecificInteraction(domainObject(domainObjectType), actionInteraction);
     }
 
     public <T> PropertyTester<T> propertyTester(
             final Class<T> domainObjectType,
+            final String propertyName,
+            final Where where) {
+        return propertyTester(domainObject(domainObjectType), propertyName, where);
+    }
+    public <T> PropertyTester<T> propertyTester(
+            final Class<T> domainObjectType,
             final String propertyName) {
-        return propertyTester(domainObjectType, propertyName, Where.ANYWHERE);
+        return propertyTester(domainObject(domainObjectType), propertyName);
+    }
+    public <T> PropertyTester<T> propertyTester(
+            final T domainObject,
+            final String propertyName) {
+        return propertyTester(domainObject, propertyName, Where.ANYWHERE);
     }
 
     public <T> CollectionTester<T> collectionTester(
             final Class<T> domainObjectType,
+            final String collectionName,
+            final Where where) {
+        return collectionTester(domainObject(domainObjectType), collectionName, where);
+    }
+    public <T> CollectionTester<T> collectionTester(
+            final Class<T> domainObjectType,
             final String collectionName) {
-        return collectionTester(domainObjectType, collectionName, Where.ANYWHERE);
+        return collectionTester(domainObject(domainObjectType), collectionName);
+    }
+    public <T> CollectionTester<T> collectionTester(
+            final T domainObject,
+            final String collectionName) {
+        return collectionTester(domainObject, collectionName, Where.ANYWHERE);
+    }
+
+    // -- HELPER
+
+    @Inject protected FactoryService factoryService;
+
+    private <T> T domainObject(final @NonNull Class<T> domainObjectType) {
+        return factoryService.viewModel(domainObjectType);
     }
 
     // -- OBJECT TESTER
@@ -162,8 +214,8 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
     public static class ObjectTester<T>
     extends Tester<T> {
 
-        protected ObjectTester(final @NonNull Class<T> domainObjectType) {
-            super(domainObjectType);
+        protected ObjectTester(final @NonNull T domainObject) {
+            super(domainObject);
         }
 
         public void assertTitle(final @Nullable String expectedResult) {
@@ -229,10 +281,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         private List<Command> capturedCommands = new ArrayList<>();
 
         private ActionTester(
-                final @NonNull Class<T> domainObjectType,
+                final @NonNull T domainObject,
                 final @NonNull ActionInteraction actionInteraction,
                 final @NonNull ManagedAction managedAction) {
-            super(domainObjectType,
+            super(domainObject,
                     managedAction.getId(),
                     "actionName",
                     managedAction.getWhere());
@@ -246,10 +298,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         }
 
         private ActionTester(
-                final @NonNull Class<T> domainObjectType,
+                final @NonNull T domainObject,
                 final @NonNull String actionName,
                 final @NonNull Where where) {
-            super(domainObjectType, actionName, "actionName", where);
+            super(domainObject, actionName, "actionName", where);
             this.parameterNegotiationStarter = null;
         }
 
@@ -658,7 +710,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             capturedCommands.add(
                     interactionService.currentInteraction().get().getCommand());
         }
-
     }
 
     // -- PROPERTY TESTER
@@ -670,10 +721,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         private Optional<ManagedProperty> managedPropertyIfAny;
 
         private PropertyTester(
-                final @NonNull Class<T> domainObjectType,
+                final @NonNull T domainObject,
                 final @NonNull String propertyName,
                 final @NonNull Where where) {
-            super(domainObjectType, propertyName, "property", where);
+            super(domainObject, propertyName, "property", where);
         }
 
         @Override
@@ -847,10 +898,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         private Optional<ManagedCollection> managedCollectionIfAny;
 
         private CollectionTester(
-                final @NonNull Class<T> domainObjectType,
+                final @NonNull T domainObject,
                 final @NonNull String collectionName,
                 final @NonNull Where where) {
-            super(domainObjectType, collectionName, "collection", where);
+            super(domainObject, collectionName, "collection", where);
         }
 
         @Override
@@ -926,19 +977,17 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         private Optional<? extends ManagedMember> managedMemberIfAny;
 
         protected MemberTester(
-                final @NonNull Class<T> domainObjectType,
+                final @NonNull T domainObject,
                 final @NonNull String memberName,
                 final @NonNull String memberSort,
                 final @NonNull Where where) {
-            super(domainObjectType);
+            super(domainObject);
             this.memberName = memberName;
             this.memberSort = memberSort;
             this.where = where;
         }
 
-        @Override
         protected final MemberTester<T> init() {
-            super.init();
             this.managedMemberIfAny = startInteractionOn(vm);
             return this;
         }
@@ -1103,7 +1152,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             }
         }
 
-
     }
 
     private static abstract class Tester<T> {
@@ -1112,29 +1160,18 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @Inject protected CausewaySystemEnvironment causewaySystemEnvironment;
         @Inject protected SpecificationLoader specificationLoader;
         @Inject protected InteractionService interactionService;
-        @Inject protected FactoryService factoryService;
 
         @Getter private final Class<T> domainObjectType;
-
-        @Getter private ObjectSpecification objectSpecification;
-        protected ManagedObject vm;
+        @Getter private final ObjectSpecification objectSpecification;
+        protected final ManagedObject vm;
 
         protected Tester(
-                final @NonNull Class<T> domainObjectType) {
-            this.domainObjectType = domainObjectType;
-        }
-
-        protected Tester<T> init() {
-            this.objectSpecification = specificationLoader.specForTypeElseFail(domainObjectType);
-            this.vm = ManagedObject.viewmodel(
-                    objectSpecification,
-                    factoryService.viewModel(domainObjectType),
-                    Optional.empty());
-            return this;
+                final @NonNull T domainObject) {
+            this.domainObjectType = _Casts.uncheckedCast(domainObject.getClass());
+            this.vm = MetaModelContext.instanceElseFail().getObjectManager().adapt(domainObject);
+            this.objectSpecification = vm.getSpecification();
         }
 
     }
-
-
 
 }

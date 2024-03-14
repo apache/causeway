@@ -18,17 +18,11 @@
  */
 package org.apache.causeway.viewer.graphql.model.types;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
-import graphql.Scalars;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLOutputType;
-import graphql.schema.GraphQLTypeReference;
-
 import static graphql.schema.GraphQLNonNull.nonNull;
 import static graphql.schema.GraphQLTypeReference.typeRef;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +37,11 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
+import graphql.Scalars;
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLOutputType;
+import graphql.schema.GraphQLTypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

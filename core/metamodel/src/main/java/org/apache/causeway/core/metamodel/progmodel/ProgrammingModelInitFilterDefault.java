@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.progmodel;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

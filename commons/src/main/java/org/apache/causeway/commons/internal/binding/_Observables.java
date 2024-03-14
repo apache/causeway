@@ -20,7 +20,8 @@ package org.apache.causeway.commons.internal.binding;
 
 import java.util.function.BooleanSupplier;
 
-import org.apache.causeway.commons.functional.ThrowingSupplier;
+import org.springframework.util.function.ThrowingSupplier;
+
 import org.apache.causeway.commons.internal.base._Lazy;
 
 /**

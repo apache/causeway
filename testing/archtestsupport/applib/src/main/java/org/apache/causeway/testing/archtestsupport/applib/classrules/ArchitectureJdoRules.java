@@ -20,10 +20,11 @@ package org.apache.causeway.testing.archtestsupport.applib.classrules;
 
 import java.util.Objects;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
+
+import jakarta.inject.Inject;
 
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
@@ -113,7 +114,7 @@ public class ArchitectureJdoRules {
 
     /**
      * This rule requires that classes annotated with the JDO {@link javax.jdo.annotations.PersistenceCapable} annotation
-     * must also be annotated with the Apache Causeway {@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
+     * must also be annotated with the Apache Causeway {@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter} annotation
      * with a value of {@link org.apache.causeway.applib.jaxb.PersistentEntityAdapter}<code>.class</code>.
      *
      * <p>

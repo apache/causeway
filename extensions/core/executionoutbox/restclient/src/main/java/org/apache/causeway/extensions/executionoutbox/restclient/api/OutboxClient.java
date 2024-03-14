@@ -23,9 +23,9 @@ package org.apache.causeway.extensions.executionoutbox.restclient.api;
 import java.util.Collections;
 import java.util.List;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.Try;
@@ -107,12 +107,12 @@ public class OutboxClient {
         this.client = RestfulClient.ofConfig(restfulClientConfig, authorizationHeaderFactory);
     }
 
-    public OutboxClient withConnectTimeoutInSecs(int connectTimeoutInSecs) {
+    public OutboxClient withConnectTimeoutInSecs(final int connectTimeoutInSecs) {
         client.getConfig().setConnectTimeoutInMillis(1000L * connectTimeoutInSecs);
         return this;
     }
 
-    public OutboxClient withReadTimeoutInSecs(int readTimeoutInSecs) {
+    public OutboxClient withReadTimeoutInSecs(final int readTimeoutInSecs) {
         client.getConfig().setReadTimeoutInMillis(1000L * readTimeoutInSecs);
         return this;
     }

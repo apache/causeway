@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.webapp.modules.logonlog;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ import lombok.val;
  */
 @Service
 @Named("causeway.webapp.WebModuleLogOnExceptionLogger")
-@javax.annotation.Priority(PriorityPrecedence.EARLY - 100)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY - 100)
 @Qualifier("LogOnExceptionLogger")
 public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 

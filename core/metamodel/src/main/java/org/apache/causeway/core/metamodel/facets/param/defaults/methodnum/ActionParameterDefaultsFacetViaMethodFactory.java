@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.defaults.methodnum;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

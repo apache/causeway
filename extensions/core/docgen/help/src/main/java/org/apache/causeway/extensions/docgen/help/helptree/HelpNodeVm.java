@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.docgen.help.helptree;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;

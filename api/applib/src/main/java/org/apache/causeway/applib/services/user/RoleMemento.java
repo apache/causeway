@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.user;
 
 import java.io.Serializable;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -44,7 +44,6 @@ import lombok.val;
  *
  * @since 1.x revised for 2.0 {@index}
  */
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Named(RoleMemento.LOGICAL_TYPE_NAME)
 @DomainObject(
         nature = Nature.VIEW_MODEL)

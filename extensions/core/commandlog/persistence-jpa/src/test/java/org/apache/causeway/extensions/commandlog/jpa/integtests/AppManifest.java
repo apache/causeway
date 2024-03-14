@@ -39,6 +39,7 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
         CausewayModuleCoreRuntimeServices.class,
         CausewayModuleSecurityBypass.class,
         CausewayModuleExtCommandLogPersistenceJpa.class,
+
 })
 @PropertySources({
         @PropertySource(CausewayPresets.UseLog4j2Test)

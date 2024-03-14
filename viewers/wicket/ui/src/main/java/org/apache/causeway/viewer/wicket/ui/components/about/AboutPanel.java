@@ -20,9 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.components.about;
 
 import java.io.InputStream;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.servlet.ServletContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.servlet.ServletContext;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;

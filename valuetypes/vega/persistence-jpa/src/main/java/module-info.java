@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.vega.persistence.jpa {
     exports org.apache.causeway.valuetypes.vega.persistence.jpa;
     exports org.apache.causeway.valuetypes.vega.persistence.jpa.converters;
 
-    requires java.persistence;
+    requires jakarta.persistence;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.vega.applib;
     requires spring.boot.autoconfigure;

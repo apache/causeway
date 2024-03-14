@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.schema.cmd.v2.CommandDto;

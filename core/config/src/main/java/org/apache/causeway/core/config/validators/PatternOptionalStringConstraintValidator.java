@@ -20,8 +20,8 @@ package org.apache.causeway.core.config.validators;
 
 import java.util.Optional;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
 
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PatternOptionalStringConstraintValidator
-        implements ConstraintValidator<javax.validation.constraints.Pattern, Optional<String>> {
+        implements ConstraintValidator<jakarta.validation.constraints.Pattern, Optional<String>> {
 
 
     private final PatternValidator patternValidator = new PatternValidator();
@@ -38,7 +38,7 @@ public class PatternOptionalStringConstraintValidator
     }
 
     @Override
-    public void initialize(javax.validation.constraints.Pattern constraintAnnotation) {
+    public void initialize(final jakarta.validation.constraints.Pattern constraintAnnotation) {
         patternValidator.initialize(constraintAnnotation);
     }
 

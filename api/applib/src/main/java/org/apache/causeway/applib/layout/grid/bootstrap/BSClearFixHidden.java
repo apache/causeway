@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.

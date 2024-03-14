@@ -20,14 +20,14 @@ package org.apache.causeway.testdomain.jpa.entities;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Transient;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;

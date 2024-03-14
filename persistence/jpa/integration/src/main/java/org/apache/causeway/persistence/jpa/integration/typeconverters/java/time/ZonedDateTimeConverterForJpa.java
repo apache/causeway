@@ -20,8 +20,8 @@ package org.apache.causeway.persistence.jpa.integration.typeconverters.java.time
 
 import java.time.ZonedDateTime;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 import org.apache.causeway.commons.internal.base._Temporals;
 

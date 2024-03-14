@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.secman.applib.permission.menu;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -49,7 +49,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named="Security"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationPermissionMenu {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermissionMenu";

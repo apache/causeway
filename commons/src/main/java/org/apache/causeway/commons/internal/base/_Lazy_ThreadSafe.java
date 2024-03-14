@@ -20,7 +20,8 @@ package org.apache.causeway.commons.internal.base;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.functional.ThrowingSupplier;
+import org.springframework.util.function.ThrowingSupplier;
+
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;

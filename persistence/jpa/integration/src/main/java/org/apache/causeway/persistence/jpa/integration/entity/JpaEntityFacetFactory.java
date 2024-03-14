@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.integration.entity;
 
-import javax.inject.Inject;
-import javax.persistence.Entity;
+import jakarta.inject.Inject;
+import jakarta.persistence.Entity;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

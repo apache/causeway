@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.webapp.modules.templresources;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ import lombok.Getter;
  */
 @Service
 @Named("causeway.webapp.WebModuleTemplateResources")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("TemplateResources")
 public final class WebModuleTemplateResources extends WebModuleAbstract {
 

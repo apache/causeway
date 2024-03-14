@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testdomain.viewers.jpa.wkt;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

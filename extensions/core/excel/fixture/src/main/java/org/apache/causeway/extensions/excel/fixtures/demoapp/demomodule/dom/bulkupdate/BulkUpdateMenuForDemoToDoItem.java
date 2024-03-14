@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -41,7 +41,7 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subc
 @DomainServiceLayout(
         named = "Excel"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class BulkUpdateMenuForDemoToDoItem {
 
     public BulkUpdateMenuForDemoToDoItem() {

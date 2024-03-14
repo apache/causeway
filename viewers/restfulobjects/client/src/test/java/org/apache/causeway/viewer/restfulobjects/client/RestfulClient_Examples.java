@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.client;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 
@@ -93,7 +93,7 @@ class RestfulClient_Examples {
 
     }
 
-    // javax.ws.rs.client.ClientBuilder
+    // jakarta.ws.rs.client.ClientBuilder
     void refiner() {
 
         RestfulClient restfulClient = RestfulClient.ofConfig(

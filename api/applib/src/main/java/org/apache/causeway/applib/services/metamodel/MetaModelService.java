@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.metamodel;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 

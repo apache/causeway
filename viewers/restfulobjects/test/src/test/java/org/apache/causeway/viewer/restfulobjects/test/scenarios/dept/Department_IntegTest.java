@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.dept;
 
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.Response;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;

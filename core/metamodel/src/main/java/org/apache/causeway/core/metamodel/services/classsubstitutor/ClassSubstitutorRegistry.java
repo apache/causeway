@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.services.classsubstitutor;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class ClassSubstitutorRegistry {
 

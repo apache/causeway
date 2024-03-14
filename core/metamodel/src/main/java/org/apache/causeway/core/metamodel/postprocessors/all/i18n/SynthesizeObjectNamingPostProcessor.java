@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all.i18n;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;

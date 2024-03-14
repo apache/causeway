@@ -25,10 +25,11 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
 import javax.jdo.FetchGroup;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
+
+import jakarta.inject.Inject;
 
 import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
@@ -370,7 +371,7 @@ implements EntityFacet {
     }
 
     @Override
-    public Object versionOf(Object pojo) {
+    public Object versionOf(final Object pojo) {
         if (getEntityState(pojo).isAttached()) {
             return JDOHelper.getVersion(pojo);
         }

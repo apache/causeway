@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.actions.action;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;

@@ -21,9 +21,9 @@ package org.apache.causeway.applib.value;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
@@ -70,7 +70,7 @@ public class Password implements Serializable {
     }
 
     public static class JaxbToStringAdapter
-    extends javax.xml.bind.annotation.adapters.XmlAdapter<String, Password> {
+    extends jakarta.xml.bind.annotation.adapters.XmlAdapter<String, Password> {
         @Override
         public Password unmarshal(final String str) throws Exception {
             return str != null

@@ -24,9 +24,9 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

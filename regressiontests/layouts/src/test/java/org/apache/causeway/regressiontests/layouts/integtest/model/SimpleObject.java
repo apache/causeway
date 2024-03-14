@@ -22,9 +22,9 @@ package org.apache.causeway.regressiontests.layouts.integtest.model;
 
 import java.util.Comparator;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -53,22 +53,22 @@ import lombok.ToString;
 import lombok.val;
 
 
-@javax.persistence.Entity
-@javax.persistence.Table(
+@jakarta.persistence.Entity
+@jakarta.persistence.Table(
     schema="simple",
     uniqueConstraints = {
-        @javax.persistence.UniqueConstraint(name = "SimpleObject__name__UNQ", columnNames = {"NAME"})
+        @jakarta.persistence.UniqueConstraint(name = "SimpleObject__name__UNQ", columnNames = {"NAME"})
     }
 )
-@javax.persistence.NamedQueries({
-        @javax.persistence.NamedQuery(
+@jakarta.persistence.NamedQueries({
+        @jakarta.persistence.NamedQuery(
                 name = SimpleObject.NAMED_QUERY__FIND_BY_NAME_LIKE,
                 query = "SELECT so " +
                         "FROM SimpleObject so " +
                         "WHERE so.name LIKE :name"
         )
 })
-//@javax.persistence.EntityListeners(CausewayEntityListener.class)
+//@jakarta.persistence.EntityListeners(CausewayEntityListener.class)
 @DomainObject(entityChangePublishing = Publishing.ENABLED)
 @Named("simple.SimpleObject")
 @DomainObjectLayout()
@@ -79,13 +79,13 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     static final String NAMED_QUERY__FIND_BY_NAME_LIKE = "SimpleObject.findByNameLike";
 
-    @javax.persistence.Id
-    @javax.persistence.GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
-    @javax.persistence.Column(name = "id", nullable = false)
+    @jakarta.persistence.Id
+    @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
+    @jakarta.persistence.Column(name = "id", nullable = false)
     private Long id;
 
-    @javax.persistence.Version
-    @javax.persistence.Column(name = "version", nullable = false)
+    @jakarta.persistence.Version
+    @jakarta.persistence.Column(name = "version", nullable = false)
     @PropertyLayout(fieldSetId = "metadata", sequence = "999")
     @Getter @Setter
     private long version;
@@ -96,21 +96,21 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return simpleObject;
     }
 
-    @Inject @javax.persistence.Transient RepositoryService repositoryService;
-    @Inject @javax.persistence.Transient TitleService titleService;
-    @Inject @javax.persistence.Transient MessageService messageService;
+    @Inject @jakarta.persistence.Transient RepositoryService repositoryService;
+    @Inject @jakarta.persistence.Transient TitleService titleService;
+    @Inject @jakarta.persistence.Transient MessageService messageService;
 
 
 
     @Title
     @Name
-    @javax.persistence.Column(length = Name.MAX_LEN, nullable = false)
+    @jakarta.persistence.Column(length = Name.MAX_LEN, nullable = false)
     @Getter @Setter @ToString.Include
     @PropertyLayout(fieldSetId = "name", sequence = "1")
     private String name;
 
     @Notes
-    @javax.persistence.Column(length = Notes.MAX_LEN, nullable = true)
+    @jakarta.persistence.Column(length = Notes.MAX_LEN, nullable = true)
     @Getter @Setter
     @Property(commandPublishing = Publishing.ENABLED, executionPublishing = Publishing.ENABLED)
     @PropertyLayout(fieldSetId = "name", sequence = "2")

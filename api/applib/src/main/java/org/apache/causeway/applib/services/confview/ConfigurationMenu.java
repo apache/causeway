@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.applib.services.confview;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )
 @Named(ConfigurationMenu.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class ConfigurationMenu {
 

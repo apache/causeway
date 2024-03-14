@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.confview;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

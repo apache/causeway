@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.encryption.jbcrypt.services;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -34,7 +34,7 @@ import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanAppli
  */
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".PasswordEncoderUsingJBcrypt")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
 public class PasswordEncoderUsingJBcrypt
 implements PasswordEncoder {

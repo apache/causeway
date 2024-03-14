@@ -24,7 +24,7 @@
     <parent>
     	<groupId>org.apache.causeway.viewer</groupId>
     	<artifactId>causeway-viewer-commons</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-viewer-commons-services</artifactId>
@@ -44,8 +44,8 @@
 
 		<!-- for access to /WEB-INF/ where translation files may reside -->
         <dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
+		    <groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 
 		<!-- TESTING -->

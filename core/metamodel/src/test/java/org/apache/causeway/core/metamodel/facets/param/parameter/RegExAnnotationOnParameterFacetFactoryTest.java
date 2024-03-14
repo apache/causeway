@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.param.parameter;
 
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

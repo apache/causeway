@@ -23,12 +23,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.factory.FactoryService;

@@ -20,16 +20,16 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.Comparator;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
@@ -50,7 +50,7 @@ import lombok.Setter;
         schema = "public",
         name = "StaffMember"
 )
-@javax.inject.Named("university.dept.StaffMember")
+@jakarta.inject.Named("university.dept.StaffMember")
 @DomainObject(nature = Nature.ENTITY, autoCompleteRepository = StaffMemberRepository.class, autoCompleteMethod = "findByNameMatching")
 @DomainObjectLayout(describedAs = "Staff member of a university department, responsible for delivering lectures, tutorials, exam invigilation and candidate interviews")
 @NoArgsConstructor
@@ -72,7 +72,7 @@ public class StaffMember extends Person implements Comparable<StaffMember> {
     @Getter @Setter
     @Property(editing = Editing.ENABLED)
     private String name;
-    public String validateName(String proposedName) {
+    public String validateName(final String proposedName) {
         if(proposedName.contains("!")) {
             return "Name cannot contain '!' character";
         }

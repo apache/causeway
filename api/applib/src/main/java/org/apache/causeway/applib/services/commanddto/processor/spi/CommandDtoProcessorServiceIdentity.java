@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.services.commanddto.processor.spi;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
  */
 @Service
 @Named(CommandDtoProcessorServiceIdentity.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.LAST)
+@jakarta.annotation.Priority(PriorityPrecedence.LAST)
 public class CommandDtoProcessorServiceIdentity implements CommandDtoProcessorService {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".CommandDtoProcessorServiceIdentity";

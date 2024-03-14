@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

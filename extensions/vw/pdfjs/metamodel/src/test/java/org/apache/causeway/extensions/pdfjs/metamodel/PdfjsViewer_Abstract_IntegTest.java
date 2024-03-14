@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.pdfjs.metamodel;
 
 import java.util.Collections;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import org.approvaltests.Approvals;
 

@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

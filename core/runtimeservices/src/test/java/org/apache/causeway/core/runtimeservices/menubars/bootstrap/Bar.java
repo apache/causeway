@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;

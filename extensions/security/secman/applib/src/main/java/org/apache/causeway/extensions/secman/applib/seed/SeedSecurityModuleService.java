@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.applib.seed;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;

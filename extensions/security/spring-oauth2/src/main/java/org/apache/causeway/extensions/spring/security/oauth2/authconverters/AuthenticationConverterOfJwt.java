@@ -32,7 +32,7 @@ import lombok.NonNull;
  * Applies if {@link Authentication} holds a principal of type {@link Jwt}.
  */
 @Component
-@javax.annotation.Priority(PriorityPrecedence.LATE - 150)
+@jakarta.annotation.Priority(PriorityPrecedence.LATE - 150)
 public class AuthenticationConverterOfJwt extends AuthenticationConverter.Abstract<Jwt> {
 
     public AuthenticationConverterOfJwt() {

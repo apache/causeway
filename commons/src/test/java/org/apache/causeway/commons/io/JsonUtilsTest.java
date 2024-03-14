@@ -57,30 +57,32 @@ class JsonUtilsTest {
     @Test
     void parseRecord() {
         var jsonTemplate =
-                  " {\r\n"
-                + "     \"name\": \"sven\",\r\n"
-                + "     \"java8Time\": {\r\n"
-                + "         \"localTime\" : \"${localTime}\",\r\n"
-                + "         \"localDate\" : \"${localDate}\",\r\n"
-                + "         \"localDateTime\" : \"${localDateTime}\",\r\n"
-                + "         \"offsetTime\" : \"${offsetTime}\",\r\n"
-                + "         \"offsetDateTime\" : \"${offsetDateTime}\",\r\n"
-                + "         \"zonedDateTime\" : \"${zonedDateTime}\"\r\n"
-                + "     },\r\n"
-                + "     \"address\": {\r\n"
-                + "         \"zip\":1234,\r\n"
-                + "         \"street\":\"backerstreet\"\r\n"
-                + "     },\r\n"
-                + "     \"additionalAddresses\" : [ {\r\n"
-                + "         \"zip\" : 23,\r\n"
-                + "         \"street\" : \"brownstreet\"\r\n"
-                + "     }, {\r\n"
-                + "         \"zip\" : 34,\r\n"
-                + "         \"street\" : \"bluestreet\"\r\n"
-                + "     } ]\r\n"
-                + " }";
+                """
+                {
+                    "name": "sven",
+                    "java8Time": {
+                        "localTime" : "${localTime}",
+                        "localDate" : "${localDate}",
+                        "localDateTime" : "${localDateTime}",
+                        "offsetTime" : "${offsetTime}",
+                        "offsetDateTime" : "${offsetDateTime}",
+                        "zonedDateTime" : "${zonedDateTime}"
+                    },
+                    "address": {
+                        "zip":1234,
+                        "street":"backerstreet"
+                    },
+                    "additionalAddresses" : [ {
+                        "zip" : 23,
+                        "street" : "brownstreet"
+                    }, {
+                        "zip" : 34,
+                        "street" : "bluestreet"
+                    } ]
+                }
+                """;
 
-        var json = person.getJava8Time().interpolator().applyTo(jsonTemplate);
+        var json = person.java8Time().interpolator().applyTo(jsonTemplate);
 
         //debug
         //System.err.printf("%s%n", json);

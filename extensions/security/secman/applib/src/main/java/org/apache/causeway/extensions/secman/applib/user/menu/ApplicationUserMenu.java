@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.secman.applib.user.menu;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -51,7 +51,7 @@ import lombok.RequiredArgsConstructor;
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationUserMenu {
 

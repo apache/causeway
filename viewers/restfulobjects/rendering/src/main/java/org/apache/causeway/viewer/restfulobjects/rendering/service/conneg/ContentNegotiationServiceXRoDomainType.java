@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
  *
  * <p>
  *     If the accept header specifies <code>application/xml</code> then the service additionally verifies that the (mapped) domain object's
- *     runtime type is annotated with the JAXB {@link javax.xml.bind.annotation.XmlRootElement} annotation so that RestEasy is able to
+ *     runtime type is annotated with the JAXB {@link jakarta.xml.bind.annotation.XmlRootElement} annotation so that RestEasy is able to
  *     unambiguously serialize it.
  * </p>
  *
@@ -56,7 +56,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
  */
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceXRoDomainType")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("XRoDomainType")
 public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationServiceAbstract {
 

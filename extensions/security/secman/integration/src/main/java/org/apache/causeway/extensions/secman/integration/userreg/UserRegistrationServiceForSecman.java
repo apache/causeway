@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.secman.integration.userreg;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".UserRegistrationServiceForSecman")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserRegistrationServiceForSecman implements UserRegistrationService {

@@ -1,0 +1,252 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+.navbar {
+    min-height: 24px;
+    height: 24px;
+}
+
+.navbar-brand {
+    height: 24px;
+    line-height: 24px;
+}
+
+.navbar-toggle {
+    /* (80px - button height 34px) / 2 = 23px */
+    margin-top: 23px;
+    padding: 9px 10px !important;
+}
+
+@media (min-width: 768px) {
+    .navbar-nav > li > a {
+        /* (80px - line-height of 27px) / 2 = 26.5px */
+        padding-top: 26.5px;
+        padding-bottom: 26.5px;
+        line-height: 27px;
+    }
+}
+
+.btn-link {
+    height: 35px;
+    margin-top: -8px;
+}
+
+.tabulator-col-content {
+    padding: 2px 2px !important;
+}
+
+div.tabulator-cell {
+    height: 35px;
+}
+
+div.tabulator-header, label.control-label {
+    font-weight: lighter !important;
+    font-size: small !important;
+}
+
+.text-danger {
+    color: red !important;
+}
+
+.text-warn {
+    color: orange !important;
+}
+
+.text-ok {
+    color: green !important;
+}
+
+.text-normal {
+    color: black;
+}
+
+.text-disabled {
+    color: lightgrey !important;
+}
+
+.nav-link {
+    padding: 4px 12px !important;
+}
+
+pre.highlight {
+    margin: 7px 0;
+    padding: 14px;
+    background: #FDF6E3;
+}
+
+.language-java {
+    color: #657B83 !important;
+}
+
+.panel-heading {
+    padding: 3px 15px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 3em;
+    background-color: #ecf0f1;
+    border-color: #ecf0f1;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    box-sizing: border-box;
+}
+
+.panel-body {
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    border-left: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ecf0f1;
+    border-right: 1px solid #ecf0f1;
+}
+
+textarea {
+    height: calc(100% - 30px) !important;
+}
+
+.button-bar {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    position:absolute;
+    bottom:0;
+}
+
+.tabulator-in-dialog {
+    max-height: calc(70vh - 60px);
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.dialog {
+    display: flex;
+    height: 100vh;
+}
+
+@font-face {
+    font-family: Chicago;
+    src: url('../fonts/ChicagoFLF.ttf');
+}
+
+div {
+    /* font-family: Chicago, sans-serif;*/
+}
+
+.causeway-logo-button-image:before {
+    content: "";
+    width: 65px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain, cover;
+    /*background-image: url(/img/kroviz-logo.svg);*/
+    background-image: url("https://svn.apache.org/repos/asf/comdev/project-logos/originals/causeway.svg");
+}
+
+.kvision-logo-button-image:before {
+    content: "";
+    width: 25px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: text-top;
+    background-color: transparent;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain, cover;
+    background-image: url("https://kvision.io/0cdf370d4484d5f175f0.svg");
+}
+
+
+
+.kv-window {
+    /* background-color: rgba(255,255,255, 0) !important;*/
+}
+
+.icon-bar-object > .btn {
+    color: #007bff;
+}
+
+.icon-bar-factory > .btn {
+    color: green;
+}
+
+.icon-bar-action {
+    color: orange !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+
+.icon-bar {
+    margin-top: 40px;
+    width: 40px;
+    height: calc(100vh - 88px);
+    scroll-behavior: auto;
+    background: GHOSTWHITE;
+}
+
+.status-bar {
+    height: 34px;
+    width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+html {
+    overflow: hidden;
+}
+
+.leaflet-container {
+    height: calc(100vh - 88px) !important;
+}
+
+.nav .nav-tabs {
+    width: 100% !important;
+}
+
+.responsive-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+    /* 75% ->  4:3 Aspect Ratio */
+    /* 66.66% ->  3:2 Aspect Ratio */
+}
+
+.form-panel {
+    width: auto;
+    height: auto;
+    overflow: auto;
+}

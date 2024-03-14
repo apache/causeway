@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.webapp.modules;
 
-import javax.annotation.Priority;
-import javax.servlet.Filter;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebListener;
+import jakarta.annotation.Priority;
+import jakarta.servlet.Filter;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebListener;
 
 import org.springframework.core.annotation.Order;
 

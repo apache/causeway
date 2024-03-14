@@ -20,8 +20,8 @@ package org.apache.causeway.testdomain.model.good;
 
 import java.time.LocalDate;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.all;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -50,7 +50,7 @@ extends MetaModelPostProcessorAbstract {
                 FaFacetOnMemberFromConfiguredRegex
                     .create(objectSpecification, objectAction));
         }
-        
+
         if(!objectAction.containsNonFallbackFacet(CssClassFacet.class)) {
             FacetUtil.addFacetIfPresent(
                 CssClassFacetOnActionFromConfiguredRegex

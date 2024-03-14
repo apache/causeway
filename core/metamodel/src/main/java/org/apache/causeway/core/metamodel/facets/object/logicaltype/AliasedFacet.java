@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.logicaltype;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;

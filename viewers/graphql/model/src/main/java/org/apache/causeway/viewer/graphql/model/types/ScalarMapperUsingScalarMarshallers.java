@@ -22,9 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import graphql.schema.GraphQLScalarType;
+import jakarta.inject.Inject;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshaller;
 
+import graphql.schema.GraphQLScalarType;
 import lombok.RequiredArgsConstructor;
 
 /**

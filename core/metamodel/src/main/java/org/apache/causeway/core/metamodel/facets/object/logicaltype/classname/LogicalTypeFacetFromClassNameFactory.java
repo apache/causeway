@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.logicaltype.classname;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;

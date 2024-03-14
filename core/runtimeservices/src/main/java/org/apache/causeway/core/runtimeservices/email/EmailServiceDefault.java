@@ -21,13 +21,13 @@ package org.apache.causeway.core.runtimeservices.email;
 import java.util.Collections;
 import java.util.List;
 
-import javax.activation.DataSource;
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-import javax.mail.MessagingException;
+import jakarta.activation.DataSource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+import jakarta.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -218,7 +218,5 @@ public class EmailServiceDefault implements EmailService {
     static boolean notEmpty(final String[] addresses) {
         return addresses != null && addresses.length > 0;
     }
-
-
 
 }

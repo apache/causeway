@@ -21,8 +21,8 @@ package org.apache.causeway.extensions.commandreplay.primary.ui;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.lang.Nullable;
@@ -59,7 +59,7 @@ import lombok.RequiredArgsConstructor;
     menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".CommandReplayOnPrimaryService")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")
 @RequiredArgsConstructor
 //@Log4j2

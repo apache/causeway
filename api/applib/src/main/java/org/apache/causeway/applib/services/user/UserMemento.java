@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;

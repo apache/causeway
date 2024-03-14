@@ -72,7 +72,8 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
     }
 
 
-    protected org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter newCounter(String name) {
+    @Override
+    protected org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 

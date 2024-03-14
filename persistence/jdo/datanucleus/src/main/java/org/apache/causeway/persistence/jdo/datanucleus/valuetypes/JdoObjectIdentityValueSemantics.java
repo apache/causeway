@@ -20,8 +20,9 @@ package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 
 import java.util.UUID;
 
-import javax.annotation.Priority;
 import javax.jdo.identity.ObjectIdentity;
+
+import jakarta.annotation.Priority;
 
 import org.springframework.stereotype.Component;
 

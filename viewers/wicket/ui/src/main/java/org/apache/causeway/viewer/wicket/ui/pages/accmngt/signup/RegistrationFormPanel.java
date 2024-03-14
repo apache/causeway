@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;

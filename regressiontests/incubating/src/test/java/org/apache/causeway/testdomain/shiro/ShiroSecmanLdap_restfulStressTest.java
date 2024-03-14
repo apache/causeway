@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.shiro;
 
 import static java.time.Duration.ofMillis;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

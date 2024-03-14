@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.commandreplay.secondary.analysis;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Service;
 
@@ -38,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalysisService")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Log4j2
 public class CommandReplayAnalysisService {
 

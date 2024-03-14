@@ -35,7 +35,7 @@
         <xs:annotation>
             <xs:documentation>A collection of interactions.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.InteractionsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.InteractionsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
@@ -65,7 +65,7 @@
                 There is typically just a single execution per command.  In more complex cases though executions can be nested, whereby a top-level execution causes other executions, as invoked through a wrapper (Wrapperproxy obtained from the WrapperFactory service).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.InteractionDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.InteractionDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
@@ -104,7 +104,7 @@
             <xs:documentation>Represents either an action invocation or a property edit.  Is subclassed by both.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.MemberExecutionDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.MemberExecutionDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -168,7 +168,7 @@
     <xs:complexType name="actionInvocationDto">
         <xs:annotation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.ActionInvocationDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.ActionInvocationDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -194,7 +194,7 @@
     <xs:complexType name="propertyEditDto">
         <xs:annotation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.PropertyEditDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.PropertyEditDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -209,7 +209,7 @@
     <xs:complexType name="metricsDto">
         <xs:annotation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.MetricsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.MetricsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -231,7 +231,7 @@
     <xs:complexType name="objectCountsDto">
         <xs:annotation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.ObjectCountsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.ObjectCountsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -255,7 +255,7 @@
             <xs:documentation>Captures any exception thrown by an action invocation.  Use as the xsd:type of the 'threw' element.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.ixn.v2.ExceptionDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.ixn.v2.ExceptionDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>

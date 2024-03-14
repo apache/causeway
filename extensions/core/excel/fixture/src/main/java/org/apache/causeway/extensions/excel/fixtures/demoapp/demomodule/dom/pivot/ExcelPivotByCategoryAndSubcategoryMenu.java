@@ -21,8 +21,8 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.piv
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -39,7 +39,7 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Exce
 @DomainServiceLayout(
         named = "Excel"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class ExcelPivotByCategoryAndSubcategoryMenu {
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)

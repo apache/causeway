@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -30,7 +30,7 @@ import lombok.NonNull;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 10)
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override

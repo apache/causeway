@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.commandlog.jdo.dom;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import org.apache.causeway.extensions.commandlog.jdo.CausewayModuleExtCommandLog
  */
 @Service
 @Named(CommandLogEntryRepository.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Jdo")
 public class CommandLogEntryRepository
 extends CommandLogEntryRepositoryAbstract<CommandLogEntry> {

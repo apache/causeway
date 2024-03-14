@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".PermissionsEvaluationServiceForSecman")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Secman")
 public class PermissionsEvaluationServiceForSecman
 implements PermissionsEvaluationService {

@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.jpa.entities;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

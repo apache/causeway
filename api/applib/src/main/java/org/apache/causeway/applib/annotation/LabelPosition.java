@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * The positioning of a label for a property or action parameter.

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.test;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.junit.jupiter.api.Test;
 

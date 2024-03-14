@@ -60,11 +60,10 @@ module org.apache.causeway.commons {
     requires transitive com.fasterxml.jackson.annotation;
     requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
-    requires transitive com.fasterxml.jackson.module.jaxb;
+    requires transitive com.fasterxml.jackson.module.jakarta.xmlbind;
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
-    requires transitive java.xml.bind;
     requires transitive lombok;
     requires transitive org.apache.logging.log4j;
     requires transitive org.jdom2;
@@ -73,13 +72,15 @@ module org.apache.causeway.commons {
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
-    requires java.inject;
-    requires java.annotation;
+    requires transitive jakarta.xml.bind;
+    requires transitive jakarta.inject;
+    requires jakarta.annotation;
     requires com.sun.xml.bind;
-    requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.dataformat.yaml;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
-    opens org.apache.causeway.commons.internal.resources to java.xml.bind, com.sun.xml.bind; // JUnit test
-    opens org.apache.causeway.commons.io to java.xml.bind, com.sun.xml.bind;
+    // JAXB JUnit test
+    opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;
+    opens org.apache.causeway.commons.io to jakarta.xml.bind;
 
 }

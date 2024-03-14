@@ -22,14 +22,14 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Providers;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.ext.Providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

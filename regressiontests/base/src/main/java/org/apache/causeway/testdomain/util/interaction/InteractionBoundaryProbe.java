@@ -20,9 +20,10 @@ package org.apache.causeway.testdomain.util.interaction;
 
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 

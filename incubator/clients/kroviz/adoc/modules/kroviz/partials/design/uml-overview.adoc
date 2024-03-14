@@ -1,0 +1,96 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+.Overview Diagram
+[plantuml,file="uml-overview.png"]
+----
+@startuml
+
+package handler {
+    class ResponseHandler<<Facade>><<ChainOfResponsibility>>{
+        handle(LogEntry)
+        canHandle(json)
+        doHandle()
+        parse(json)
+    }
+}
+
+package core {
+    package event {
+        class XHR {
+            invoke()
+        }
+        class EventStore<<Cache>><<EventSourcing>> {
+            log:LogEntry[]
+            start()
+            end()
+            fault()
+            find(href)
+        }
+        class LogEntry<<EventSourcing>> {
+            url:Href
+            title:String
+            startedAt:Date
+            updatedAt:Date
+            request:String
+            response:String
+            blob:Blob
+            object:TransferObject
+            aggregators:BaseAggregator[]
+            cacheHits:int
+        }
+        class ResourceProxy<<Proxy>> {
+            + load(tObject:Tobject)
+            + fetch(...)
+            - process()
+            - processCached()
+        }
+
+        EventStore o- LogEntry
+        ResourceProxy "(1)"--> EventStore
+        ResourceProxy "(2)"--> XHR
+    }
+
+    package aggregator {
+        abstract  BaseAggregator<<Redux>><<Aggregator>> {
+            update(logEntry)
+        }
+        abstract AggregatorWithLayout {
+            layout:Layout
+        }
+        BaseAggregator <|.. AggregatorWithLayout
+    }
+}
+
+package "to" {
+    interface TransferObject<<TransferObject>>
+}
+
+XHR --> ResponseHandler : TransferObject \n is written into \n LogEntry
+LogEntry -> TransferObject
+LogEntry -->"1..n" BaseAggregator
+
+ResponseHandler .> TransferObject : converts \n JSON \n into TO
+
+circle RestfulObjects<<RemoteFacade>>
+package remote <<Node>> {
+    class ApacheCauseway<<(F, #FF7700)FrameWork>>
+    class NakedObjects<<(F, #FF7700)FrameWork>>
+    RestfulObjects <|- ApacheCauseway
+    RestfulObjects <|-- NakedObjects
+}
+XHR -( RestfulObjects : invoke() \njson string / blob <
+
+note right of ResourceProxy
+When ever a resource is required, the proxy is queried.
+(1) It's served from the <b>EventStore</b>, if possible. <b>LogEntry.cacheHits</b> will be incremented.
+(2) If it's not available yet, <b>XHR</b> fetches it from remote and puts it into the <b>EventStore</b>.
+
+In any case, a <b>LogEntry</b> containing the response (blob) will be passed on to it's aggregator(s).
+
+The aggregator to be used is either determined at the point where the resource is requested,
+or, based on the content of the response, assigned by the matching handler.
+end note
+
+@enduml
+----

@@ -20,11 +20,11 @@ package org.apache.causeway.core.webapp.webappctx;
 
 import java.util.EventListener;
 
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;

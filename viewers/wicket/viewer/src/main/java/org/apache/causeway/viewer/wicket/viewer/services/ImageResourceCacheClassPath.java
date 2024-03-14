@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.wicket.viewer.services;
 
 import java.io.ByteArrayInputStream;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.request.cycle.RequestCycle;

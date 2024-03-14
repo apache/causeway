@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.viewers.common.wkt;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -26,16 +26,17 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.annotation.DirtiesContext.MethodMode;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Refs;

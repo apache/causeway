@@ -33,7 +33,7 @@
         <xs:annotation>
             <xs:documentation>Collection of commandDto's</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.CommandsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.CommandsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
@@ -63,7 +63,7 @@
                 Commands can also be deferred, which is to say that they can be scheduled to be invoked in the background.  In such cases the originating command/action which schedules the background commands is called the _parent_ of the background commands.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.CommandDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.CommandDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexType>
@@ -135,7 +135,7 @@
             <xs:documentation>Represents the information required to be able to invoke an action or modify a property on the target(s).  Specifically, is the identifier of the action/property, along with the parameter arguments.  Is subclassed by 'actionDto' and 'propertyDto'.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.MemberDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.MemberDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -159,7 +159,7 @@
             <xs:documentation>Captures the information required to be able to invoke an action on the target(s).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.ActionDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.ActionDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -181,7 +181,7 @@
             <xs:documentation>Captures the information required to be able to modify a property on the target(s).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.PropertyDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.PropertyDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -198,7 +198,7 @@
             <xs:documentation>A list of of parameter/argument values.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.ParamsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.ParamsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -211,7 +211,7 @@
             <xs:documentation>Defines an action parameter: its name, type and value (ie provided argument).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.ParamDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.ParamDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -225,7 +225,7 @@
             <xs:documentation>Key value mapping.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.cmd.v2.MapDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.cmd.v2.MapDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>

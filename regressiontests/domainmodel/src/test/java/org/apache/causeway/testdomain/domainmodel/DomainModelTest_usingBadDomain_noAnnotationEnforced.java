@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;

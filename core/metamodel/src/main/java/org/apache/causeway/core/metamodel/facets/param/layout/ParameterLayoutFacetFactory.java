@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.param.layout;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

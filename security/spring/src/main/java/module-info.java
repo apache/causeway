@@ -22,8 +22,9 @@ module org.apache.causeway.security.spring {
     exports org.apache.causeway.security.spring.authentication;
     exports org.apache.causeway.security.spring.webmodule;
 
-    requires java.annotation;
-    requires java.inject;
+    requires jakarta.annotation;
+    requires jakarta.inject;
+    requires jakarta.servlet;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
@@ -38,5 +39,4 @@ module org.apache.causeway.security.spring {
     requires spring.security.core;
     requires spring.security.web;
     requires spring.web;
-    requires javax.servlet.api;
 }

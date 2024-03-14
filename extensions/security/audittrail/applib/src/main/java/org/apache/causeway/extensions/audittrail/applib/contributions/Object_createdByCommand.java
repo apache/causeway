@@ -22,7 +22,7 @@ package org.apache.causeway.extensions.audittrail.applib.contributions;
 import java.util.Comparator;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

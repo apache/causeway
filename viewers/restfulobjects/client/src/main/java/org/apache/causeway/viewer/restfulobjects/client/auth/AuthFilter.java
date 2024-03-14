@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.client.auth;
 
 import java.io.IOException;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.ClientRequestContext;
+import jakarta.ws.rs.client.ClientRequestFilter;
 
 import lombok.RequiredArgsConstructor;
 

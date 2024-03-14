@@ -24,8 +24,9 @@ import java.util.function.BiConsumer;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;

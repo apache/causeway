@@ -27,15 +27,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 

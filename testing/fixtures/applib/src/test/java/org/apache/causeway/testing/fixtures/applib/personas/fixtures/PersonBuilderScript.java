@@ -20,7 +20,7 @@
 
 package org.apache.causeway.testing.fixtures.applib.personas.fixtures;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptWithResult;
 import org.apache.causeway.testing.fixtures.applib.personas.dom.Person;

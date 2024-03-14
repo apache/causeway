@@ -19,8 +19,9 @@
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.datastoreidentity;
 
 
-import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
+
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;

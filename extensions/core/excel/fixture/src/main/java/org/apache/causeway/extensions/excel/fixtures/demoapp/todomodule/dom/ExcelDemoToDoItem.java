@@ -28,10 +28,11 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.lang.Nullable;
 
@@ -183,14 +184,14 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
     //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
-    //@javax.validation.constraints.Digits(integer=10, fraction=2)
+    //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
     @Property(editing = Editing.DISABLED, editingDisabledReason = "Update using action")
     @Getter @Setter
     private BigDecimal cost;
 
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
     //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
-    //@javax.validation.constraints.Digits(integer=10, fraction=2)
+    //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
     @Property(
             editing = Editing.DISABLED,
             editingDisabledReason = "Update using action"
@@ -263,11 +264,11 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     //region > updateCosts (action)
     public ExcelDemoToDoItem updateCosts(
             @Nullable
-            @javax.validation.constraints.Digits(integer=10, fraction=2)
+            @jakarta.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal cost,
 
             @Nullable
-            @javax.validation.constraints.Digits(integer=10, fraction=2)
+            @jakarta.validation.constraints.Digits(integer=10, fraction=2)
             final BigDecimal previousCost
     ) {
         setCost(cost);

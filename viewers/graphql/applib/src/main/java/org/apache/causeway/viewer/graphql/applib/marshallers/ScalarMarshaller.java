@@ -27,7 +27,7 @@ import org.springframework.lang.NonNull;
  *
  * <p>
  *     The implementations are called following a chain-of-responsibility pattern, first one matching is used.
- *     Use {@link javax.annotation.Priority} (with {@link org.apache.causeway.applib.annotation.PriorityPrecedence} values)
+ *     Use {@link jakarta.annotation.Priority} (with {@link org.apache.causeway.applib.annotation.PriorityPrecedence} values)
  *     to override the framework-provided defaults, earliest wins.
  * </p>
  *

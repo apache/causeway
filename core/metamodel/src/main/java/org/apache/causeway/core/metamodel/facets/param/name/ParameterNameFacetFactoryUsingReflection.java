@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.param.name;
 
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

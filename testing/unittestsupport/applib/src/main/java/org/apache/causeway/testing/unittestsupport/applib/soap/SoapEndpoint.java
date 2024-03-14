@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testing.unittestsupport.applib.soap;
 
-import javax.xml.ws.Endpoint;
+import jakarta.xml.ws.Endpoint;
 
 class SoapEndpoint {
 
@@ -39,7 +39,7 @@ class SoapEndpoint {
         return implementor;
     }
 
-    int publish(int port) {
+    int publish(final int port) {
         if (implementor == null) {
             this.implementor = getSpec().getEndpointImplementorFactory().get();
 

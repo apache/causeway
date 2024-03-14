@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 

@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.testing.fixtures.applib.teardown.jdo;
 
-import javax.inject.Inject;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.annotations.DiscriminatorStrategy;
 import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.metadata.DiscriminatorMetadata;
 import javax.jdo.metadata.InheritanceMetadata;
 import javax.jdo.metadata.TypeMetadata;
+
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.base._Strings;

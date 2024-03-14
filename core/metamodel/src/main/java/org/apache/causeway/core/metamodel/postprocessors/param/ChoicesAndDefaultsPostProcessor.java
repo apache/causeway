@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.param;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;

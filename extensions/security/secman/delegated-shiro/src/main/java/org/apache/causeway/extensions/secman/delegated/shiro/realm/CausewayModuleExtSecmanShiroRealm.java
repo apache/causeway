@@ -22,7 +22,7 @@ package org.apache.causeway.extensions.secman.delegated.shiro.realm;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -35,7 +35,6 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;

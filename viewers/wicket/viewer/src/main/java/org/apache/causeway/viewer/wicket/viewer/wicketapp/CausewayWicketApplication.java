@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;

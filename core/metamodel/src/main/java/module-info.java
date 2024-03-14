@@ -145,13 +145,13 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.all.hide;
 
     requires jakarta.activation;
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.desktop;
     requires java.sql;
-    requires java.validation;
+    requires jakarta.validation;
     requires java.xml;
-    requires java.xml.bind;
-    requires java.inject;
+    requires jakarta.xml.bind;
+    requires jakarta.inject;
     requires lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
@@ -167,6 +167,6 @@ open module org.apache.causeway.core.metamodel {
 //JUnit testing stuff, not required as long this module is an 'open' one
 //    opens org.apache.causeway.core.metamodel.services to spring.core;
 //    opens org.apache.causeway.core.metamodel.services.registry to spring.core;
-//    opens org.apache.causeway.core.metamodel.services.grid to java.xml.bind;
-//    opens org.apache.causeway.core.metamodel.services.metamodel to java.xml.bind;
+//    opens org.apache.causeway.core.metamodel.services.grid to jakarta.xml.bind;
+//    opens org.apache.causeway.core.metamodel.services.metamodel to jakarta.xml.bind;
 }

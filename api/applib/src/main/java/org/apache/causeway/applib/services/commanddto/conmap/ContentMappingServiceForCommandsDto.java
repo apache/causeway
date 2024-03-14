@@ -20,10 +20,10 @@ package org.apache.causeway.applib.services.commanddto.conmap;
 
 import java.util.List;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.ws.rs.core.MediaType;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ContentMappingServiceForCommandsDto";
 
     @Override
-    public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
+    public Object map(final Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = isSupported(CommandsDto.class, acceptableMediaTypes);
         if(!supported) {
             return null;

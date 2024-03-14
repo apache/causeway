@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testing.archtestsupport.applib.domain.dom;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;

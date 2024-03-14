@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.logging.log4j.Logger;
 

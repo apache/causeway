@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -229,6 +230,7 @@ implements HasMetaModelContext {
 
         methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), propertyAccessors::add);
         methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), propertyAccessors::add);
+        methodRemover.removeMethods(AccessorSemantics::isRecordComponentAccessor, propertyAccessors::add);
 
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
     }

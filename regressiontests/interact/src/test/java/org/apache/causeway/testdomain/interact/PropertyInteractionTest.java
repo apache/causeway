@@ -19,10 +19,11 @@
 package org.apache.causeway.testdomain.interact;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Where;

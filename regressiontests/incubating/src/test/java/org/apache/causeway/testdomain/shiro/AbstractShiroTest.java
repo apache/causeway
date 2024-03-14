@@ -21,24 +21,24 @@ package org.apache.causeway.testdomain.shiro;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.config.Ini;
-import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.ini.IniSecurityManagerFactory;
+import org.apache.shiro.lang.util.LifecycleUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
-import org.apache.shiro.util.LifecycleUtils;
 import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForCauseway;
+//import org.apache.causeway.security.shiro.webmodule.WebModuleShiro.EnvironmentLoaderListenerForCauseway;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- * 
- * This class was initially copied over from the ApacheDS user Guide, however it has/had 
+ *
+ * This class was initially copied over from the ApacheDS user Guide, however it has/had
  * some glitches with inconsistent LocalThread (subjectThreadState) context.
  * <p>
  * IniSecurityManagerFactory was deprecated in Shiro 1.4, but we could not find a migration guide yet.
@@ -57,7 +57,7 @@ class AbstractShiroTest {
      *
      * @param subject the Subject instance
      */
-    protected void setSubject(Subject subject) {
+    protected void setSubject(final Subject subject) {
         clearSubject();
         subjectThreadState = createThreadState(subject);
         subjectThreadState.bind();
@@ -67,7 +67,7 @@ class AbstractShiroTest {
         return SecurityUtils.getSubject();
     }
 
-    protected ThreadState createThreadState(Subject subject) {
+    protected ThreadState createThreadState(final Subject subject) {
         return new SubjectThreadState(subject);
     }
 
@@ -93,26 +93,28 @@ class AbstractShiroTest {
     }
 
     @SneakyThrows
-    protected static void setSecurityManager(ServiceInjector serviceInjector, String iniResource) {
-        
+    protected static void setSecurityManager(final ServiceInjector serviceInjector, final String iniResource) {
+
         val ini = Ini.fromResourcePath(iniResource);
         val factory = new IniSecurityManagerFactory(ini);
         val securityManager = factory.getInstance();
 
+        /*TODO[ISIS-3275] shiro-web no jakarta API support
         val listener = new EnvironmentLoaderListenerForCauseway(serviceInjector);
         listener.injectServicesIntoRealms(securityManager);
-        
-//debug        
+        */
+
+//debug
 //        ini.getSections().forEach(section->{
 //            section.entrySet().forEach(es->{
 //                System.out.println("" + es.getKey() + "=" +es.getValue());
 //            });
 //        });
-       
+
         setSecurityManager(securityManager);
     }
-    
-    protected static void setSecurityManager(SecurityManager securityManager) {
+
+    protected static void setSecurityManager(final SecurityManager securityManager) {
         try {
             // guard against SecurityManager already being set
             getSecurityManager();
@@ -121,7 +123,7 @@ class AbstractShiroTest {
             // happy case, fall through
         }
         SecurityUtils.setSecurityManager(securityManager);
-        
+
         _Assert.assertEquals(securityManager, SecurityUtils.getSecurityManager(), "expected same object");
     }
 

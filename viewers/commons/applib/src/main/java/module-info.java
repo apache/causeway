@@ -21,13 +21,16 @@ module org.apache.causeway.viewer.commons.applib {
     exports org.apache.causeway.viewer.commons.applib.services.header;
     exports org.apache.causeway.viewer.commons.applib.services.branding;
     exports org.apache.causeway.viewer.commons.applib.services.menu;
+    exports org.apache.causeway.viewer.commons.applib.services.menu.model;
     exports org.apache.causeway.viewer.commons.applib;
     exports org.apache.causeway.viewer.commons.applib.mixins;
 
-    requires java.inject;
-    requires lombok;
+    requires static lombok;
+
     requires transitive org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
+    requires transitive org.apache.causeway.commons;
+
+    requires jakarta.inject;
     requires org.apache.causeway.core.config;
     requires transitive org.apache.causeway.core.metamodel;
     requires spring.context;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 
 import org.datanucleus.identity.LongId;
 

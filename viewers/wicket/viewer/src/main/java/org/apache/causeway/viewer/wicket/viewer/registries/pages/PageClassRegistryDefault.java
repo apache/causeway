@@ -20,10 +20,10 @@ package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.wicket.Page;
 

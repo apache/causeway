@@ -43,19 +43,19 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import javax.activation.DataSource;
-import javax.inject.Named;
-import javax.persistence.Column;
-import javax.validation.Constraint;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.Payload;
-import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.activation.DataSource;
+import jakarta.inject.Named;
+import jakarta.persistence.Column;
+import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -107,7 +107,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
 import lombok.val;
-
 
 /**
  * Configuration 'beans' with meta-data (IDE-support).
@@ -1755,14 +1754,14 @@ public class CausewayConfiguration {
                     /**
                      * If set, then ensures that for all properties of JAXB-style view models where the property's type
                      * is an entity, then that entity's type has been correctly annotated with
-                     * @{@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
+                     * @{@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
                      * be converted into a serializable form).
                      */
                     private boolean referenceTypeAdapter = true;
                     /**
                      * If set, then ensures that for all properties of JAXB-style view models where the property's type
                      * is a date or time, then that property has been correctly annotated with
-                     * @{@link javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
+                     * @{@link jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter} (so that the property's value can
                      * be converted into a serializable form).
                      */
                     private boolean dateTimeTypeAdapter = true;
@@ -1869,19 +1868,19 @@ public class CausewayConfiguration {
                      * Intended for testing purposes only, if set then the requested <code>to:</code> of the email will
                      * be ignored, and instead sent to this email address instead.
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String to;
                     /**
                      * Intended for testing purposes only, if set then the requested <code>cc:</code> of the email will
                      * be ignored, and instead sent to this email address instead.
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String cc;
                     /**
                      * Intended for testing purposes only, if set then the requested <code>bcc:</code> of the email will
                      * be ignored, and instead sent to this email address instead.
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String bcc;
                 }
 
@@ -1960,7 +1959,7 @@ public class CausewayConfiguration {
                      *     {@link org.apache.causeway.applib.services.email.EmailService}, at least).
                      * </p>
                      */
-                    @javax.validation.constraints.Email
+                    @jakarta.validation.constraints.Email
                     private String address;
                 }
 
@@ -2232,7 +2231,7 @@ public class CausewayConfiguration {
                  * If not specified, the application.name is used instead.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoHeader = Optional.empty();
 
                 /**
@@ -2244,7 +2243,7 @@ public class CausewayConfiguration {
                  * If not specified, the {@link Application#getName() application name} is used instead.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> brandLogoSignin = Optional.empty();
 
                 /**
@@ -2254,7 +2253,7 @@ public class CausewayConfiguration {
                  *     This is expected to be a local resource.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private Optional<String> faviconUrl = Optional.empty();
 
                 /**
@@ -2313,7 +2312,7 @@ public class CausewayConfiguration {
                  *     {@link #getName() name} and/or {@link #getImage() image}.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*$")
                 private String url;
                 /**
                  * URL of an organisation or individual to give credit to, appearing as text in the footer.
@@ -2332,7 +2331,7 @@ public class CausewayConfiguration {
                  *     {@link #getName() name} and/or {@link #getImage() image}.
                  * </p>
                  */
-                @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+                @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
                 private String image;
 
                 /**
@@ -2782,8 +2781,8 @@ public class CausewayConfiguration {
             private boolean suppressUpdateLink = false;
 
             /**
-             * If left unset (the default), then the RO viewer will use the {@link javax.ws.rs.core.UriInfo}
-             * (injected using {@link javax.ws.rs.core.Context}) to figure out the base Uri (used to render
+             * If left unset (the default), then the RO viewer will use the {@link jakarta.ws.rs.core.UriInfo}
+             * (injected using {@link jakarta.ws.rs.core.Context}) to figure out the base Uri (used to render
              * <code>href</code>s).
              *
              * <p>
@@ -2794,7 +2793,7 @@ public class CausewayConfiguration {
              * If set, eg <code>https://dev.myapp.com/</code>, then this value will be used instead.
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*+$")
+            @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?/([^/]+/)*+$")
             private Optional<String> baseUri = Optional.empty();
         }
 
@@ -2821,7 +2820,7 @@ public class CausewayConfiguration {
             /**
              * The base path at which the Wicket viewer is mounted.
              */
-            @javax.validation.constraints.Pattern(regexp="^[/](.*[/]|)$") @NotNull @NotEmpty
+            @jakarta.validation.constraints.Pattern(regexp="^[/](.*[/]|)$") @NotNull @NotEmpty
             private String basePath = "/wicket/";
 
             /**
@@ -2864,7 +2863,7 @@ public class CausewayConfiguration {
              *     Spring by default under <code>static</code> package).
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
             private Optional<String> css = Optional.empty();
 
             /**
@@ -2896,7 +2895,7 @@ public class CausewayConfiguration {
              *     Spring by default under <code>static</code> package).
              * </p>
              */
-            @javax.validation.constraints.Pattern(regexp="^[^/].*$")
+            @jakarta.validation.constraints.Pattern(regexp="^[^/].*$")
             private Optional<String> js = Optional.empty();
 
             /**
@@ -3730,18 +3729,18 @@ public class CausewayConfiguration {
             private final PrimaryAccess primaryAccess = new PrimaryAccess();
             @Data
             public static class PrimaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
                 private Optional<String> baseUrlRestful = Optional.empty();
                 private Optional<String> user = Optional.empty();
                 private Optional<String> password = Optional.empty();
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
                 private Optional<String> baseUrlWicket = Optional.empty();
             }
 
             private final SecondaryAccess secondaryAccess = new SecondaryAccess();
             @Data
             public static class SecondaryAccess {
-                @javax.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
+                @jakarta.validation.constraints.Pattern(regexp="^http[s]?://[^:]+?(:\\d+)?.*([^/]+/)$")
                 private Optional<String> baseUrlWicket = Optional.empty();
             }
 

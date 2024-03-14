@@ -21,8 +21,8 @@ package org.apache.causeway.applib.services.appfeatui;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -48,7 +48,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @Named(ApplicationFeatureMenu.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationFeatureMenu {
 
     public static final String LOGICAL_TYPE_NAME =

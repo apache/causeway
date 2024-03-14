@@ -20,7 +20,7 @@ package org.apache.causeway.testing.archtestsupport.applib.modules.customer.dom;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.testing.archtestsupport.applib.modules.base.api.BaseJpa;
 import org.apache.causeway.testing.archtestsupport.applib.modules.customer.api.Customer;

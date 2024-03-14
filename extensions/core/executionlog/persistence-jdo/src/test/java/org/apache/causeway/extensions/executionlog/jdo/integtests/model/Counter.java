@@ -20,11 +20,12 @@
 
 package org.apache.causeway.extensions.executionlog.jdo.integtests.model;
 
-import javax.inject.Named;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
+
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.publishing.jpa;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;

@@ -20,15 +20,16 @@ package org.apache.causeway.testdomain.wrapper.jdo;
 
 import java.util.concurrent.ExecutionException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.repository.RepositoryService;

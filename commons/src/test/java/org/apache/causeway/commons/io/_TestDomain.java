@@ -33,72 +33,59 @@ import java.util.Objects;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _TestDomain {
 
-    @Data @AllArgsConstructor @NoArgsConstructor
-    public static class Person {
-        String name;
-        Address address;
-        Can<Address> additionalAddresses;
-        Java8Time java8Time;
+    public static record Person(
+            String name,
+            Address address,
+            Can<Address> additionalAddresses,
+            Java8Time java8Time) {
     }
 
-    @Data @AllArgsConstructor @NoArgsConstructor
-    public static class Address {
-        int zip;
-        String street;
+    public static record Address(
+            int zip,
+            String street) {
     }
 
-    @Data @AllArgsConstructor @NoArgsConstructor
-    public static class Java8Time {
-        LocalTime localTime;
-        LocalDate localDate;
-        LocalDateTime localDateTime;
-        OffsetTime offsetTime;
-        OffsetDateTime offsetDateTime;
-        ZonedDateTime zonedDateTime;
+    public static record Java8Time(
+            LocalTime localTime,
+            LocalDate localDate,
+            LocalDateTime localDateTime,
+            OffsetTime offsetTime,
+            OffsetDateTime offsetDateTime,
+            ZonedDateTime zonedDateTime) {
 
         _StringInterpolation interpolator() {
             return new _StringInterpolation(Map.of(
-                    "localTime", DateTimeFormatter.ISO_LOCAL_TIME.format(getLocalTime()),
-                    "localDate", DateTimeFormatter.ISO_LOCAL_DATE.format(getLocalDate()),
-                    "localDateTime", DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(getLocalDateTime()),
-                    "offsetTime", DateTimeFormatter.ISO_OFFSET_TIME.format(getOffsetTime()),
-                    "offsetDateTime", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(getOffsetDateTime()),
-                    "zonedDateTime", DateTimeFormatter.ISO_ZONED_DATE_TIME.format(getZonedDateTime())
+                    "localTime", DateTimeFormatter.ISO_LOCAL_TIME.format(localTime()),
+                    "localDate", DateTimeFormatter.ISO_LOCAL_DATE.format(localDate()),
+                    "localDateTime", DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(localDateTime()),
+                    "offsetTime", DateTimeFormatter.ISO_OFFSET_TIME.format(offsetTime()),
+                    "offsetDateTime", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(offsetDateTime()),
+                    "zonedDateTime", DateTimeFormatter.ISO_ZONED_DATE_TIME.format(zonedDateTime())
                     ));
         }
 
         @Override
         public boolean equals(final Object obj) {
-            if (obj instanceof Java8Time) {
-                var other = (Java8Time) obj;
-                return Objects.equals(this.getLocalTime(), other.getLocalTime())
-                        && Objects.equals(this.getLocalDate(), other.getLocalDate())
-                        && Objects.equals(this.getLocalDateTime(), other.getLocalDateTime())
-                        && Objects.equals(this.getOffsetTime(), other.getOffsetTime())
-                        && Objects.equals(this.getOffsetDateTime().toInstant(), other.getOffsetDateTime().toInstant())
-                        && Objects.equals(this.getZonedDateTime().toInstant(), other.getZonedDateTime().toInstant());
+            if (obj instanceof Java8Time other) {
+                return Objects.equals(this.localTime(), other.localTime())
+                        && Objects.equals(this.localDate(), other.localDate())
+                        && Objects.equals(this.localDateTime(), other.localDateTime())
+                        && Objects.equals(this.offsetTime(), other.offsetTime())
+                        && Objects.equals(this.offsetDateTime().toInstant(), other.offsetDateTime().toInstant())
+                        && Objects.equals(this.zonedDateTime().toInstant(), other.zonedDateTime().toInstant());
             }
             return false;
         }
-
-        @Override
-        public int hashCode() {
-            return 1;
-        }
     }
 
-    @Data @AllArgsConstructor @NoArgsConstructor
-    public static class Java8TimeStringified {
-        String localDate;
-        String localDateTime;
+    public static record Java8TimeStringified(
+            String localDate,
+            String localDateTime) {
     }
 
     Person samplePerson() {

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testing.fakedata.integtests;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;

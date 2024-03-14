@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.asciidoc.persistence.jpa {
     exports org.apache.causeway.valuetypes.asciidoc.persistence.jpa;
     exports org.apache.causeway.valuetypes.asciidoc.persistence.jpa.converters;
 
-    requires java.persistence;
+    requires jakarta.persistence;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.asciidoc.applib;
     requires spring.boot.autoconfigure;

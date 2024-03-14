@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
@@ -56,14 +55,35 @@ import org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Cou
 import org.apache.causeway.extensions.executionoutbox.jpa.CausewayModuleExtExecutionOutboxPersistenceJpa;
 import org.apache.causeway.extensions.executionoutbox.jpa.integtests.model.Counter;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml;
+import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy;
+import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 @SpringBootTest(
-        classes = OutboxRestClient_IntegTest.AppManifest.class,
+        classes = {
+                OutboxRestClient_IntegTest.TestManifest.class,
+                CausewayModuleCoreRuntimeServices.class,
+                CausewayModuleSecurityBypass.class,
+
+                CausewayModuleTestingFixturesApplib.class,
+                CausewayModuleExtExecutionOutboxPersistenceJpa.class,
+
+                // RESTEASY013015: could not find the type for bean named jpaSharedEM_entityManagerFactory
+                //CausewayModuleViewerRestfulObjectsJaxrsResteasy.class, // replaced
+                SpringBeanProcessorRegressionWorkaround.class,
+                CausewayModuleViewerRestfulObjectsViewer.class,
+                WebModuleJaxrsResteasy.class,
+                RestfulObjectsJaxbWriterForXml.class,
+                // ---
+
+                CausewayModuleCoreWebapp.class,
+                // mixins
+                Counter_bumpUsingMixin.class,
+                Counter_bumpUsingMixinWithExecutionPublishingDisabled.class,
+        },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
@@ -71,26 +91,21 @@ public class OutboxRestClient_IntegTest  {
 
     @EnableAutoConfiguration
     @Configuration
-    @Import({
-            CausewayModuleCoreRuntimeServices.class,
-            CausewayModuleSecurityBypass.class,
-            CausewayModulePersistenceJpaEclipselink.class,
-            CausewayModuleTestingFixturesApplib.class,
-            CausewayModuleExtExecutionOutboxPersistenceJpa.class,
-            CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
-            CausewayModuleCoreWebapp.class,
-
-            // mixins
-            Counter_bumpUsingMixin.class,
-            Counter_bumpUsingMixinWithExecutionPublishingDisabled.class
-    })
     @PropertySources({
             @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @EntityScan(basePackageClasses = {Counter.class})
-    @ComponentScan(basePackageClasses = {AppManifest.class, Counter.class})
-    public static class AppManifest {
+    @ComponentScan(basePackageClasses = {TestManifest.class, Counter.class})
+    public static class TestManifest {
     }
+
+    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
+    @Inject InteractionService interactionService;
+    @Inject RepositoryService repositoryService;
+    @Inject CounterRepository<Counter> counterRepository;
+    @Inject WrapperFactory wrapperFactory;
+    @Inject TransactionService transactionService;
+    @Inject RestEndpointService restEndpointService;
 
     @LocalServerPort
     protected int port;
@@ -243,15 +258,5 @@ public class OutboxRestClient_IntegTest  {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter).act();
         });
     }
-
-
-    @Inject RestEndpointService restEndpointService;
-
-    @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;
-    @Inject InteractionService interactionService;
-    @Inject RepositoryService repositoryService;
-    @Inject CounterRepository<Counter> counterRepository;
-    @Inject WrapperFactory wrapperFactory;
-    @Inject TransactionService transactionService;
 
 }

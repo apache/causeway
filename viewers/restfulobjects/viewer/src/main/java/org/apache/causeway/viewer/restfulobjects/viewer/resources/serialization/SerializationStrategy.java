@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization
 
 import java.util.Collection;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;

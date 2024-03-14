@@ -21,7 +21,7 @@ package org.apache.causeway.persistence.commons.integration.changetracking;
 
 import java.awt.Color;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.commons.internal.debug._XrayEvent;

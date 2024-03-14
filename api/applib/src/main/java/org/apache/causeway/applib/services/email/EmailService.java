@@ -21,8 +21,8 @@ package org.apache.causeway.applib.services.email;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.activation.DataSource;
-import javax.annotation.PostConstruct;
+import jakarta.activation.DataSource;
+import jakarta.annotation.PostConstruct;
 
 /**
  *

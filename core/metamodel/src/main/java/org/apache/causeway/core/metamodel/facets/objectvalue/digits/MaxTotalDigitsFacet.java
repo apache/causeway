@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.digits;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Digits;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Digits;
 
 import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  * </ul>
  *
  * <p>
- * In JPA's {@link javax.persistence.Column}, this corresponds to {@link Column#precision()}.
+ * In JPA's {@link jakarta.persistence.Column}, this corresponds to {@link Column#precision()}.
  *
  * <p>
  * In JDO's <code>@Column</code> annotation, this corresponds to <code>@Column#length</code>.

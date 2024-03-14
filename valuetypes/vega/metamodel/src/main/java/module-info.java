@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.vega.metamodel {
     exports org.apache.causeway.valuetypes.vega.metamodel;
     exports org.apache.causeway.valuetypes.vega.metamodel.semantics;
 
-    requires java.inject;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

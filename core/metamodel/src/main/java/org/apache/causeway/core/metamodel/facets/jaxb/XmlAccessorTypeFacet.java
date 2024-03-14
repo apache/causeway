@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.jaxb;
 
-import javax.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessType;
 
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 

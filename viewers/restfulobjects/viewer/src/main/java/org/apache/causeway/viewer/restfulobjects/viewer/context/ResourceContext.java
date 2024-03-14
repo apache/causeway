@@ -24,13 +24,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.ext.Providers;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Request;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.ext.Providers;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

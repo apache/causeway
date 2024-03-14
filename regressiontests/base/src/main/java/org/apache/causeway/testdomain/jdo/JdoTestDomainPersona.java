@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.jdo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;

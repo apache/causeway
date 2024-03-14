@@ -22,8 +22,8 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
 
 import org.springframework.lang.Nullable;
 

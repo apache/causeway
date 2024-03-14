@@ -1,0 +1,13 @@
+build
+./out
+./target
+.idea/
+.gradle
+*.iml
+*.ipr
+*.iws
+/refresh.sh
+package-lock.json
+node_modules/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * Whether a component is unchanging and so does not require repainting.

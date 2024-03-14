@@ -41,9 +41,9 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
-import org.apache.causeway.commons.functional.ThrowingConsumer;
-import org.apache.causeway.commons.functional.ThrowingFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 

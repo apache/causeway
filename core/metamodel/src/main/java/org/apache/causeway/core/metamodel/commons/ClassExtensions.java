@@ -43,10 +43,6 @@ public final class ClassExtensions {
         return ClassExtensions.newInstance(type, _Constants.emptyClasses, _Constants.emptyObjects);
     }
 
-    public static Object newInstance(final Class<?> extendee, final Class<?> constructorParamType, final Object constructorArg) {
-        return ClassExtensions.newInstance(extendee, new Class[] { constructorParamType }, new Object[] { constructorArg });
-    }
-
     /**
      * Tries to instantiate using a constructor accepting the supplied
      * arguments; if no such constructor then falls back to trying the no-arg

@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain.simple.query;
 
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.FieldCoordinates;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLOutputType;
-
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -41,6 +35,11 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Member
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.FieldCoordinates;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
 import lombok.Getter;
 import lombok.val;
 

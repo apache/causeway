@@ -23,14 +23,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import jakarta.inject.Inject;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -42,6 +41,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.val;

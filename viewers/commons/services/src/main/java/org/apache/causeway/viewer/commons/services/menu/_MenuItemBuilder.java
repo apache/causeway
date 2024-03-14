@@ -29,7 +29,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
 import lombok.NonNull;
@@ -40,10 +39,23 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 final class _MenuItemBuilder {
 
-    public static void buildMenuItems(
+    static interface Visitor {
+
+        void addTopLevel(MenuItemDto menuDto);
+        void addSectionSpacer();
+        void addMenuAction(MenuItemDto menuDto);
+
+        /**
+         * @param named - not null and not empty
+         */
+        void addSectionLabel(String named);
+
+    }
+
+    static void buildMenuItems(
             final MetaModelContext mmc,
             final BSMenuBar menuBar,
-            final MenuVisitor menuBuilder) {
+            final Visitor menuBuilder) {
 
         val itemsPerSectionCounter = new LongAdder();
 
@@ -98,7 +110,7 @@ final class _MenuItemBuilder {
     private static class MenuProcessor {
 
         private final MetaModelContext metaModelContext;
-        private final MenuVisitor menuVisitor;
+        private final Visitor menuVisitor;
 
         private BSMenu currentTopLevel;
         private boolean pushedCurrentTopLevel = false;
@@ -143,7 +155,7 @@ final class _MenuItemBuilder {
                     actionLayoutData.getNamed(),
                     actionLayoutData.getCssClassFa());
 
-            menuVisitor.addSubMenu(menuDto);
+            menuVisitor.addMenuAction(menuDto);
         }
 
     }

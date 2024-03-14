@@ -20,8 +20,8 @@ package org.apache.causeway.extensions.secman.applib.tenancy.menu;
 
 import java.util.Collection;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -52,7 +52,7 @@ import org.apache.causeway.extensions.secman.applib.tenancy.man.ApplicationTenan
         named = "Security",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class ApplicationTenancyMenu {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancyMenu";

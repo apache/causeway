@@ -20,7 +20,7 @@ package org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.fixture
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.internal.collections._Lists;

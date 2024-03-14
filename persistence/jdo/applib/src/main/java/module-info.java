@@ -21,8 +21,8 @@ module org.apache.causeway.persistence.jdo.applib {
     exports org.apache.causeway.persistence.jdo.applib.types;
     exports org.apache.causeway.persistence.jdo.applib;
 
-    requires java.inject;
-    requires java.validation;
+    requires jakarta.inject;
+    requires jakarta.validation;
     requires transitive javax.jdo;
     requires org.apache.causeway.applib;
     requires org.datanucleus.store.rdbms;

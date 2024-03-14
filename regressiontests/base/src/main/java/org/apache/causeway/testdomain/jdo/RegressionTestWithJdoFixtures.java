@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.jdo;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

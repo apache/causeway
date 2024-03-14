@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -68,7 +68,10 @@ implements
             // either ViewModel interface (highest precedence)
             ViewModelFacetForViewModelInterface.create(type, facetHolder)
             // or Serializable interface (if any)
-            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder)));
+            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder))
+            // or else Java record (if any)
+            .or(()->ViewModelFacetForJavaRecord.create(type, facetHolder))
+        );
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }

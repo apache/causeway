@@ -22,9 +22,9 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;

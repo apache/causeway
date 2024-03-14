@@ -20,8 +20,8 @@ package org.apache.causeway.valuetypes.jodatime.integration.valuesemantics;
 
 import java.time.ZonedDateTime;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.joda.time.DateTime;
 

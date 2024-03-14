@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.excel.applib;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.inject.ServiceInjector;

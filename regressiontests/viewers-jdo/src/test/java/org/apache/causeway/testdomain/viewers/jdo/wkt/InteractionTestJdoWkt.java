@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.viewers.jdo.wkt;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
@@ -27,12 +27,13 @@ import org.datanucleus.PropertyNames;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.id.LogicalType;

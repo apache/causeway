@@ -21,13 +21,13 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bul
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
 
 import org.springframework.lang.Nullable;
 

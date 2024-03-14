@@ -20,9 +20,7 @@
 
 package org.apache.causeway.extensions.sessionlog.applib.spiimpl;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 
@@ -30,6 +28,8 @@ import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

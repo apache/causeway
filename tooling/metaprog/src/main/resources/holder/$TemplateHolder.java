@@ -18,7 +18,7 @@
  */
 package /*${java-package}*/;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import /*${showcase-fully-qualified-type}*/;
 

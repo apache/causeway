@@ -20,7 +20,7 @@
 
 package org.apache.causeway.extensions.executionlog.applib.integtest.model;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;

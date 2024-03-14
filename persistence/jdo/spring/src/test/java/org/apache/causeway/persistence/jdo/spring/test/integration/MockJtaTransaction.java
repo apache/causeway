@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.persistence.jdo.spring.test.integration;
 
-import javax.transaction.Status;
-import javax.transaction.Synchronization;
 import javax.transaction.xa.XAResource;
 
-class MockJtaTransaction implements javax.transaction.Transaction {
+import jakarta.transaction.Status;
+import jakarta.transaction.Synchronization;
+
+class MockJtaTransaction implements jakarta.transaction.Transaction {
 
     private Synchronization synchronization;
 
@@ -32,7 +33,7 @@ class MockJtaTransaction implements javax.transaction.Transaction {
     }
 
     @Override
-    public void registerSynchronization(Synchronization synchronization) {
+    public void registerSynchronization(final Synchronization synchronization) {
         this.synchronization = synchronization;
     }
 
@@ -41,12 +42,12 @@ class MockJtaTransaction implements javax.transaction.Transaction {
     }
 
     @Override
-    public boolean enlistResource(XAResource xaResource) {
+    public boolean enlistResource(final XAResource xaResource) {
         return false;
     }
 
     @Override
-    public boolean delistResource(XAResource xaResource, int i) {
+    public boolean delistResource(final XAResource xaResource, final int i) {
         return false;
     }
 

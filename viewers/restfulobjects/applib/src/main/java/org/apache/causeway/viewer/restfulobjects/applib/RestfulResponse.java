@@ -24,13 +24,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Map;
 
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.Response.Status.Family;
-import javax.ws.rs.core.Response.StatusType;
+import jakarta.ws.rs.core.CacheControl;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.Response.Status.Family;
+import jakarta.ws.rs.core.Response.StatusType;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;

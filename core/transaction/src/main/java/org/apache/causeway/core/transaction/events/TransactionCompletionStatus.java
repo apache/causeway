@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.transaction.events;
 
-import javax.transaction.Status;
+import jakarta.transaction.Status;
 
 /**
  * @since 2.0 {@index}
@@ -40,7 +40,7 @@ public enum TransactionCompletionStatus {
      * @param status field from {@link Status}.
      * @return
      */
-    public static TransactionCompletionStatus forStatus(int status) {
+    public static TransactionCompletionStatus forStatus(final int status) {
         switch (status) {
             case 3:
                 // int STATUS_COMMITTED = 3;

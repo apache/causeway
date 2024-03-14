@@ -21,14 +21,14 @@ package org.apache.causeway.testdomain.publishing.subscriber;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.commons.collections.Can;
@@ -54,25 +54,25 @@ implements CommandSubscriber {
     }
 
     @Override
-    public void onReady(Command command) {
+    public void onReady(final Command command) {
         on("readyCommands", command);
         log.debug("publish ready command {}", ()->command.getCommandDto());
     }
 
     @Override
-    public void onStarted(Command command) {
+    public void onStarted(final Command command) {
         on("startedCommands", command);
         log.debug("publish started command {}", ()->command.getCommandDto());
     }
 
     @Override
-    public void onCompleted(Command command) {
+    public void onCompleted(final Command command) {
         on("completedCommands", command);
         log.debug("publish completed command {}", ()->command.getCommandDto());
     }
 
 
-    private void on(String verb, Command command) {
+    private void on(final String verb, final Command command) {
         @SuppressWarnings("unchecked")
         val commands = (List<Command>) kvStore.get(this, verb).orElseGet(ArrayList::new);
 
@@ -84,13 +84,13 @@ implements CommandSubscriber {
     // -- UTILITIES
 
     @SuppressWarnings("unchecked")
-    public static Can<Command> getPublishedCommands(KVStoreForTesting kvStore) {
+    public static Can<Command> getPublishedCommands(final KVStoreForTesting kvStore) {
         return Can.ofCollection(
                 (List<Command>) kvStore.get(CommandSubscriberForTesting.class, "completedCommands")
                 .orElse(null));
     }
 
-    public static void clearPublishedCommands(KVStoreForTesting kvStore) {
+    public static void clearPublishedCommands(final KVStoreForTesting kvStore) {
         kvStore.clear(CommandSubscriberForTesting.class);
     }
 

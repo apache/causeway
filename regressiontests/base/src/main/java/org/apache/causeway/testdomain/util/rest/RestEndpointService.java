@@ -20,12 +20,10 @@ package org.apache.causeway.testdomain.util.rest;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.GenericType;
-import javax.xml.bind.JAXBException;
-
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.Invocation;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.xml.bind.JAXBException;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -43,6 +41,7 @@ import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;

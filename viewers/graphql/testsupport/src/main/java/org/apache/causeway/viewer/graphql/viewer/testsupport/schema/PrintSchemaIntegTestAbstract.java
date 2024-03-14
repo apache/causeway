@@ -22,7 +22,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import graphql.schema.idl.SchemaPrinter;
 

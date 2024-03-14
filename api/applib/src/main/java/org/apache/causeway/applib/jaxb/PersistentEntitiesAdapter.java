@@ -21,8 +21,8 @@ package org.apache.causeway.applib.jaxb;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.inject.Inject;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;

@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway</groupId>
 		<artifactId>causeway-bom</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
@@ -154,7 +154,7 @@
 						<configuration>
 							<toolchains>
 								<jdk>
-									<version>11</version>
+									<version>21</version>
 									<vendor>openjdk</vendor>
 								</jdk>
 							</toolchains>

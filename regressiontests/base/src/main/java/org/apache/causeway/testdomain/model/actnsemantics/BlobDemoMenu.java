@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testdomain.model.actnsemantics;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -35,7 +35,7 @@ import lombok.val;
 @DomainObjectLayout(
         named="Blob Demo Menu"
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class BlobDemoMenu {
 
     @Inject private FactoryService factoryService;

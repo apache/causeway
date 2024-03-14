@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
 import java.util.UUID;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

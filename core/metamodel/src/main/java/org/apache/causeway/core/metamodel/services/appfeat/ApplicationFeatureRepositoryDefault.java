@@ -30,8 +30,8 @@ import java.util.SortedSet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;

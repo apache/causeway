@@ -20,7 +20,7 @@ package org.apache.causeway.testing.archtestsupport.applib.classrules;
 
 import java.util.Optional;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 

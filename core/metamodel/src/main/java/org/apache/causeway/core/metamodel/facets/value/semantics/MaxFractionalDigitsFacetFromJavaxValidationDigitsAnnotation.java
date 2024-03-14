@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.value.semantics;
 
 import java.util.Optional;
 
-import javax.validation.constraints.Digits;
+import jakarta.validation.constraints.Digits;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacet;

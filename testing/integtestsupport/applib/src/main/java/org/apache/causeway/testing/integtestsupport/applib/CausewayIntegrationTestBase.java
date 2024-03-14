@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testing.integtestsupport.applib;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.context.ApplicationContext;
 

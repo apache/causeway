@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.junit.jupiter.api.Test;
 

@@ -32,7 +32,7 @@ import org.springframework.core.annotation.AnnotationConfigurationException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
-import org.springframework.core.annotation.SynthesizedAnnotation;
+//import org.springframework.core.annotation.SynthesizedAnnotation;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -236,21 +236,24 @@ implements InvocationHandler {
                         additional.get(), null, annotationType);
 
         val classLoader = annotationType.getClassLoader();
-        val interfaces = isVisible(classLoader, SynthesizedAnnotation.class)
-                ? new Class<?>[] {annotationType, SynthesizedAnnotation.class}
-                : new Class<?>[] {annotationType};
+        /* removal of SynthesizedAnnotation in Spring 6
+         * https://github.com/spring-projects/spring-framework/commit/69f23095b810615862336d35d878dda63f7b4fca */
+        val interfaces = //isVisible(classLoader, SynthesizedAnnotation.class)
+                //? new Class<?>[] {annotationType, SynthesizedAnnotation.class}
+                //:
+                    new Class<?>[] {annotationType};
         val proxy = (A) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
         return Optional.of(proxy);
     }
 
-    private static boolean isVisible(final ClassLoader classLoader, final Class<?> interfaceClass) {
-        try {
-            return Class.forName(interfaceClass.getName(), false, classLoader) == interfaceClass;
-        }
-        catch (ClassNotFoundException ex) {
-            return false;
-        }
-    }
+//    private static boolean isVisible(final ClassLoader classLoader, final Class<?> interfaceClass) {
+//        try {
+//            return Class.forName(interfaceClass.getName(), false, classLoader) == interfaceClass;
+//        }
+//        catch (ClassNotFoundException ex) {
+//            return false;
+//        }
+//    }
 
     /**
      * If annotations from a getter method are competing with annotations from its corresponding field,

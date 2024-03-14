@@ -20,12 +20,12 @@ package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
 
 import java.time.ZonedDateTime;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Form;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;

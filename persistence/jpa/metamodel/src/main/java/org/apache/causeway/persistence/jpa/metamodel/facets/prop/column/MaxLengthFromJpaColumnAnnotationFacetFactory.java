@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.facets.prop.column;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;

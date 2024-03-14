@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.test;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

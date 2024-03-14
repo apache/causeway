@@ -103,9 +103,9 @@ public interface XrayModel {
         public static ThreadMemento fromCurrentThread() {
             val ct = Thread.currentThread();
             return ThreadMemento.of(
-                    String.format("thread-%d-%s", ct.getId(), ct.getName()),
-                    String.format("Thread-%d [%s]", ct.getId(), ct.getName()),
-                    String.format("Thread-%d\n%s", ct.getId(), ct.getName()));
+                    String.format("thread-%d-%s", ct.threadId(), ct.getName()),
+                    String.format("Thread-%d [%s]", ct.threadId(), ct.getName()),
+                    String.format("Thread-%d\n%s", ct.threadId(), ct.getName()));
         }
 
     }

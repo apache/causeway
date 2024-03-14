@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway</groupId>
 		<artifactId>causeway-bom</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>3.0.0-SNAPSHOT</version>
 		<relativePath>../bom/pom.xml</relativePath>
 	</parent>
 
@@ -36,38 +36,24 @@
 	<description>
         Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
         eg. code mining, automated documentation.
-        (Targeted for JVM 11+)
+        (Targeted for JVM 21+)
     </description>
 
 	<packaging>pom</packaging>
 
 	<properties>
-
-		<maven.compiler.release>11</maven.compiler.release>
-
 		<jar-plugin.automaticModuleName>org.apache.causeway.tooling</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/tooling</git-plugin.propertiesDir>
-		<gradle-tooling.version>7.1.1</gradle-tooling.version>
+		<gradle-tooling.version>7.3-20210825160000+0000</gradle-tooling.version>
 		<maven-model-builder.version>3.9.6</maven-model-builder.version>
 		<picocli.version>4.7.5</picocli.version>
-
+		
 		<!-- brings in structurizr-core as a transitive dependency -->
 		<structurizr-export.version>2.1.1</structurizr-export.version>
-
+		
+		<!-- override surefire defaults from bom, as this is not a Java module yet -->
+		<surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>gradle-repo</id>
-			<url>https://repo.gradle.org/gradle/libs-releases-local/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 	<build>
 		<resources>
@@ -101,102 +87,46 @@
 					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
 					<excludeSubProjects>true</excludeSubProjects>
 					<excludes>
-                        <exclude>**/target/**</exclude>
-                        <exclude>**/target-ide/**</exclude>
+						<exclude>**/target/**</exclude>
+						<exclude>**/target-ide/**</exclude>
 
-                        <exclude>**/node_modules/**</exclude>
-                        <exclude>**/node/npm</exclude>
-                        <exclude>**/node/npm.cmd</exclude>
+						<exclude>**/node_modules/**</exclude>
+						<exclude>**/node/npm</exclude>
+						<exclude>**/node/npm.cmd</exclude>
 
-                        <exclude>**/*.project</exclude>
-                        <exclude>**/.classpath</exclude>
-                        <exclude>**/.settings/**</exclude>
-                        <exclude>**/*.launch</exclude>
-                        <exclude>**/.gitkeep</exclude>
+						<exclude>**/*.project</exclude>
+						<exclude>**/.classpath</exclude>
+						<exclude>**/.settings/**</exclude>
+						<exclude>**/*.launch</exclude>
 
-                        <exclude>**/*.iml</exclude>
-                        <exclude>**/intellij/launch/*.xml</exclude>
+						<exclude>**/*.iml</exclude>
+						<exclude>**/webpack.generated.js</exclude>
 
-                        <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
-                        <exclude>**/gradlew</exclude>
-                        <exclude>**/gradlew.bat</exclude>
-                        <exclude>**/rebel.xml</exclude>
-                        <exclude>**/translations**.po</exclude>
-                        <exclude>**/translations.pot</exclude>
+						<exclude>**/*.pdn</exclude>
+						<exclude>**/*.svg</exclude>
+						<exclude>**/*.rtf</exclude>
+						<exclude>**/*.json</exclude>
+						<exclude>**/*.min.js</exclude>
+						<exclude>**/*.puml</exclude>
 
-                        <exclude>**/META-INF/spring.factories</exclude>
-                        <exclude>**/MANIFEST.MF</exclude>
-                        <exclude>**/META-INF/services/**</exclude>
+						<exclude>**/module-nav.adoc</exclude>
+						<exclude>**/component-nav.adoc</exclude>
 
-                        <exclude>**/src/main/resources/supplemental-models.xml</exclude>
+						<exclude>**/MANIFEST.MF</exclude>
+						<exclude>**/*.ucd</exclude>
+						<exclude>**/*.ucls</exclude>
 
-                        <exclude>**/webpack.config.js</exclude>
-                        <exclude>**/webpack.generated.js</exclude>
-                        <exclude>**/pnpm-lock.yaml</exclude>
-                        <exclude>**/pnpmfile.js</exclude>
-                        <exclude>**/*.min.js</exclude>
+						<exclude>**/datanucleus.log</exclude>
+						<exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+						<exclude>**/gradlew</exclude>
+						<exclude>**/gradlew.bat</exclude>
 
-                        <exclude>**/*.pdn</exclude>
-                        <exclude>**/*.svg</exclude>
-                        <exclude>**/*.rtf</exclude>
-                        <exclude>**/*.drawio.svg</exclude>
-                        <exclude>**/*.json</exclude>
+						<exclude>**/intellij/launch/*.xml</exclude>
 
-                        <exclude>**/supplemental-ui/**</exclude>
-                        <exclude>**/_nav.adoc</exclude>
-                        <exclude>**/module-nav.adoc</exclude>
-                        <exclude>**/component-nav.adoc</exclude>
-                        <exclude>**/partials/extensions.adoc</exclude>
+						<exclude>**/org/apache/causeway/tooling/adocmodel/test/attributed-table.adoc</exclude>
+						<exclude>**/org/apache/causeway/tooling/adocmodel/test/simple-table.adoc</exclude>
 
-                        <exclude>**/*.ucd</exclude>
-                        <exclude>**/*.ucls</exclude>
-                        <exclude>**/*.puml</exclude>
-
-                        <exclude>**/datanucleus.log</exclude>
-
-                        <exclude>**/bootstrap-datetimepicker.min.css</exclude>
-                        <exclude>**/bootstrap-datetimepicker.css</exclude>
-
-                        <exclude>**/jquery.zclip.js</exclude>
-                        <exclude>**/simple-sidebar.css</exclude>
-                        <exclude>**/causeway-bootstrap-growl.js</exclude>
-                        <exclude>**/moment.js</exclude>
-                        <exclude>**/prism*.js</exclude>
-                        <exclude>**/prism*.css</exclude>
-                        <exclude>**/vega*.js</exclude>
-
-                        <exclude>**/css/home/scss-files.txt</exclude>
-                        <exclude>**/css/home/styles.css</exclude>
-                        <exclude>**/css/site-custom.css</exclude>
-
-                        <exclude>**/swagger-ui/**</exclude>
-
-                        <exclude>**/select2-bootstrap.css</exclude>
-
-                        <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
-
-                        <exclude>**/application.js</exclude>
-
-                        <exclude>**/xml/objects/**</exclude>
-                        <exclude>**/test.data</exclude>
-                        <exclude>**/fixture-data/**</exclude>
-                        <exclude>**/*.approved.*</exclude>
-                        <exclude>**/approved/*.adoc</exclude>
-                        <exclude>**/secman-permissions.yml</exclude>
-
-                        <exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
-                        <exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
-                        <exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
-                        <exclude>**/fakedata/applib/services/clobs/vs</exclude>
-                        <exclude>**/fakedata/applib/services/clobs/vx</exclude>
-
-                        <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
-                        <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
-
-                        <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
-
-                        <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
-                        <exclude>**/kroviz/webpack.config.d/**</exclude>
+						<exclude>**/META-INF/services/**</exclude>
 					</excludes>
 					<licenses>
 						<license
@@ -221,7 +151,7 @@
 		</plugins>
 
 	</build>
-
+	
 	<dependencyManagement>
 		<dependencies>
 
@@ -349,7 +279,6 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-internaltestsupport</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
 		</dependency>
 
 	</dependencies>
@@ -363,8 +292,6 @@
 		<module>cli</module>
 	</modules>
 
-	<profiles>
-	</profiles>
 </project>
 
 

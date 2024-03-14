@@ -58,7 +58,8 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
     }
 
 
-    protected org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter newCounter(String name) {
+    @Override
+    protected org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
 

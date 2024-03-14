@@ -20,9 +20,9 @@ package org.apache.causeway.applib.services.layout;
 
 import java.util.Set;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
-import javax.inject.Named;
+import jakarta.activation.MimeType;
+import jakarta.activation.MimeTypeParseException;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
@@ -51,7 +51,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 public class LayoutServiceMenu {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".LayoutServiceMenu";

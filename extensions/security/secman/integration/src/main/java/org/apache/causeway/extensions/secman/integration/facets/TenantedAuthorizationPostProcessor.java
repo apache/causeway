@@ -21,8 +21,8 @@ package org.apache.causeway.extensions.secman.integration.facets;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;

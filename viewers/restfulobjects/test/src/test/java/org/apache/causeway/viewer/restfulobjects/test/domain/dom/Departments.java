@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.test.domain.dom;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.Departments")
 @DomainService
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Departments {
 

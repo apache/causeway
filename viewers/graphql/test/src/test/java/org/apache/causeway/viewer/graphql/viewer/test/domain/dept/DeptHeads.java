@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.graphql.viewer.test.domain.dept;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.DeptHeads")
 @DomainService
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeptHeads {
 

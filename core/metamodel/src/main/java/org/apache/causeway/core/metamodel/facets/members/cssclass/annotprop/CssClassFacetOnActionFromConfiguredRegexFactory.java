@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -42,7 +42,7 @@ extends FacetFactoryAbstract {
         if(processMethodContext.isMixinMain()) {
             return; // don't match regex against 'act' say
         }
-        
+
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
         if(facetHolder.containsNonFallbackFacet(CssClassFacet.class)) {
             return;

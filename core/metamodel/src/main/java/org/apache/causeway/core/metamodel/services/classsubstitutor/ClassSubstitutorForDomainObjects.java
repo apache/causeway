@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ import lombok.val;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 20) // before ClassSubstitutorForCollections
 public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
     private CausewayBeanTypeRegistry causewayBeanTypeRegistry;

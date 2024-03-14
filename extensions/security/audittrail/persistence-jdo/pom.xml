@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-audittrail</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -56,13 +56,6 @@
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-runtime</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>javax.jdo</artifactId>
-            <version>${datanucleus-jdo-api.version}</version>
-            <optional>true</optional>  <!-- for datanucleus-jdo-query annotation processor, brought in via profile -->
         </dependency>
 
         <!-- testing -->

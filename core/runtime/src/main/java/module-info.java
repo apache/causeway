@@ -21,9 +21,9 @@ module org.apache.causeway.core.runtime {
     exports org.apache.causeway.core.runtime.flushmgmt;
     exports org.apache.causeway.core.runtime.events;
 
-    requires java.annotation;
+    requires jakarta.annotation;
     requires java.desktop;
-    requires java.inject;
+    requires jakarta.inject;
     requires lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;

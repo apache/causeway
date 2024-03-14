@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.ignore.datanucleus;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;

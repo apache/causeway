@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.testing.fixtures.applib.queryresultscache;
 
-import javax.annotation.Priority;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.EventListener;

@@ -20,8 +20,8 @@ package org.apache.causeway.core.config.environment;
 
 import java.util.TimeZone;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 
 import org.springframework.stereotype.Component;
 

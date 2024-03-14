@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.testing.h2console.ui.webmodule;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 import org.h2.server.web.ConnectionInfo;
-import org.h2.server.web.WebServlet;
+import org.h2.server.web.H2WebServletForJakarta;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named("causeway.test.WebModuleH2Console")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("H2Console")
 @Log4j2
 public class WebModuleH2Console extends WebModuleAbstract {
@@ -87,6 +87,8 @@ public class WebModuleH2Console extends WebModuleAbstract {
     @Getter
     private final String name = "H2Console";
 
+
+
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
@@ -110,7 +112,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
     // -- WRAPPER AROUND H2'S SERVLET
 
-    public static class H2WebServlet extends WebServlet {
+    public static class H2WebServlet extends H2WebServletForJakarta {
 
         private static final long serialVersionUID = 1L;
 

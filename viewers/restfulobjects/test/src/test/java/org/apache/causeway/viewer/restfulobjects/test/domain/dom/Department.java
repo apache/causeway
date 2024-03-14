@@ -25,15 +25,15 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.inject.Inject;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -57,7 +57,7 @@ import lombok.val;
         schema = "public",
         name = "Department"
 )
-@javax.inject.Named("university.dept.Department")
+@jakarta.inject.Named("university.dept.Department")
 @NoArgsConstructor
 @DomainObject(nature = Nature.ENTITY, bounding = Bounding.BOUNDED)
 @DomainObjectLayout(describedAs = "University department specializing in a field of study")

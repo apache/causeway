@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.jaxbadapters;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

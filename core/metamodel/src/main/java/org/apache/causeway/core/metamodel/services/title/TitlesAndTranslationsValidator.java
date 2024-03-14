@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.title;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;

@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.facets.properties.property;
 
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Pattern;
 
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;

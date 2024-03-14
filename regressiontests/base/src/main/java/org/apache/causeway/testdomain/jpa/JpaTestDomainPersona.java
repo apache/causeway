@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.jpa;
 
 import java.util.TreeSet;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.CausewayConfiguration;

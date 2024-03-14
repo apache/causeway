@@ -39,7 +39,7 @@
         <xs:annotation>
             <xs:documentation>Represents a value of fundamental type.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ValueDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.ValueDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="1">
@@ -77,7 +77,7 @@
             <xs:documentation>A fixed-size ordered list of named type/value pairs.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.TypedTupleDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.TypedTupleDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -91,7 +91,7 @@
         <xs:annotation>
             <xs:documentation>Object identifier.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.OidDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.OidDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:attribute name="type" type="xs:string"/>
@@ -103,7 +103,7 @@
             <xs:documentation>A collection of (argument) values
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.CollectionDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.CollectionDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -117,7 +117,7 @@
         <xs:annotation>
             <xs:documentation>Data type that stores binary data.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.BlobDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.BlobDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -131,7 +131,7 @@
         <xs:annotation>
             <xs:documentation>Data type that stores textual data.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ClobDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.ClobDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -145,7 +145,7 @@
         <xs:annotation>
             <xs:documentation>A list of OIDs</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.OidsDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.OidsDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -157,7 +157,7 @@
         <xs:annotation>
             <xs:documentation>Enumeration</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.EnumDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.EnumDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -170,7 +170,7 @@
         <xs:annotation>
             <xs:documentation>Value type</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ValueType")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.ValueType")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -213,7 +213,7 @@
             <xs:documentation>Captures a period of time, eg for capturing metrics/timings.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.PeriodDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.PeriodDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -237,7 +237,7 @@
             <xs:documentation>Captures a pair of numbers representing a difference.  Used for example to capture metrics (number objects modified before and after).
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.DifferenceType")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.DifferenceType")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:sequence>
@@ -261,7 +261,7 @@
             <xs:documentation>Captures both a value and its corresponding type.  Used for the return value of action invocations, and for the new value in property edits.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.ValueWithTypeDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.ValueWithTypeDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -277,7 +277,7 @@
             <xs:documentation>Defines a named value, a tuple of: name, type and value.
             </xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.NamedValueWithTypeDto")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.NamedValueWithTypeDto")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:complexContent>
@@ -291,7 +291,7 @@
         <xs:annotation>
             <xs:documentation>Whether this interaction with a member is invoking an action, or editing a property.</xs:documentation>
             <xs:appinfo>
-                <annox:annotate>@javax.inject.Named("causeway.schema.common.v2.InteractionType")</annox:annotate>
+                <annox:annotate>@jakarta.inject.Named("causeway.schema.common.v2.InteractionType")</annox:annotate>
             </xs:appinfo>
         </xs:annotation>
         <xs:restriction base="xs:string">

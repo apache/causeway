@@ -20,8 +20,8 @@ package org.apache.causeway.testing.archtestsupport.applib.domain.dom;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;

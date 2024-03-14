@@ -22,14 +22,15 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySources;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;

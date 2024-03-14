@@ -20,25 +20,26 @@ package org.apache.causeway.testdomain.persistence.jdo;
 
 import java.sql.SQLException;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;

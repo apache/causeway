@@ -19,14 +19,16 @@
 package org.apache.causeway.testdomain.domainmodel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -54,6 +56,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
@@ -61,6 +64,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForJavaRecord;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -74,6 +78,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
@@ -104,6 +109,8 @@ import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModel;
+import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelUsingAnnotations;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
 import org.apache.causeway.testdomain.model.good.ProperViewModelInferredFromNotBeingAnEntity;
@@ -113,6 +120,7 @@ import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @SpringBootTest(
@@ -997,7 +1005,106 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
     }
 
+    // -- JAVA RECORD AS VIEWMODEL
+
+    @RequiredArgsConstructor
+    enum RecordScenario {
+        PLAIN(ProperRecordAsViewModel.class, Can.of(
+                    new ProperRecordAsViewModel("Hello!", 3, true)
+                )),
+        ANNOTATED(ProperRecordAsViewModelUsingAnnotations.class, Can.of(
+                    new ProperRecordAsViewModelUsingAnnotations("Hello!", 3, true)
+                ));
+        final Class<?> recordClass;
+        final Can<?> samples;
+        final String classFriendlyName() {
+            return _Strings.asNaturalName.apply(recordClass.getSimpleName());
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(RecordScenario.class)
+    void javaRecordAsViewModel(final RecordScenario scenario) {
+        final Class<?> classUnderTest = scenario.recordClass;
+        final Object sample = scenario.samples.getFirstElseFail();
+        val viewModel = MetaModelContext.instanceElseFail().getObjectManager().adapt(sample);
+        val elementType = viewModel.getSpecification();
+        val viewmodelFacet = elementType.getFacet(ViewModelFacet.class);
+
+        assertEquals(BeanSort.VIEW_MODEL, elementType.getBeanSort());
+        assertEquals(classUnderTest.getName(), elementType.getFeatureIdentifier().getLogicalTypeName());
+        assertTrue(ViewModelFacetForJavaRecord.class.isInstance(viewmodelFacet),
+                ()->"Record is expected to have a ViewModelFacetForJavaRecord");
+
+        val bookmark = viewmodelFacet.serializeToBookmark(viewModel);
+        val viewModelAfterRoundTrip = viewmodelFacet.instantiate(elementType, Optional.of(bookmark));
+        assertEquals(viewModel.getPojo(), viewModelAfterRoundTrip.getPojo());
+
+        val isExpectedExplicitlyAnnotated = scenario == RecordScenario.ANNOTATED;
+
+        val additionalString = testerFactory
+                .propertyTester(sample, "additionalString");
+        additionalString.assertExists(true);
+        additionalString.assertVisibilityIsNotVetoed();
+        additionalString.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        additionalString.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        additionalString.assertValue("add Hello!");
+
+        val arbitraryString = testerFactory
+                .propertyTester(sample, "arbitraryString");
+        arbitraryString.assertExists(true);
+        arbitraryString.assertVisibilityIsNotVetoed();
+        arbitraryString.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        arbitraryString.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        arbitraryString.assertValue("Hello!");
+
+        val arbitraryInt = testerFactory
+                .propertyTester(sample, "arbitraryInt");
+        arbitraryInt.assertExists(true);
+        arbitraryInt.assertVisibilityIsNotVetoed();
+        arbitraryInt.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        arbitraryInt.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        arbitraryInt.assertValue(3);
+
+        val arbitraryBoolean = testerFactory
+                .propertyTester(sample, "arbitraryBoolean");
+        arbitraryBoolean.assertExists(true);
+        arbitraryBoolean.assertVisibilityIsNotVetoed();
+        arbitraryBoolean.assertUsabilityIsVetoedWith("Disabled, property has no setter.");
+        arbitraryBoolean.assertIsExplicitlyAnnotated(isExpectedExplicitlyAnnotated);
+        arbitraryBoolean.assertValue(true);
+    }
+
+    @ParameterizedTest
+    @EnumSource(RecordScenario.class)
+    void javaRecordAsDataRowModel(final RecordScenario scenario) {
+        final Class<?> classUnderTest = scenario.recordClass;
+
+        var dataTable = DataTable.forDomainType(classUnderTest);
+        dataTable.setDataElementPojos(scenario.samples);
+
+        assertEquals(scenario.classFriendlyName(), dataTable.getTableFriendlyName());
+        assertEquals(scenario.samples.size(), dataTable.getDataRows().size());
+        assertEquals(4, dataTable.getDataColumns().size());
+
+        assertEquals("""
+                Additional String: add Hello!
+                Arbitrary Boolean: true
+                Arbitrary Int: 3
+                Arbitrary String: Hello!
+                """, tableToString(dataTable));
+    }
+
     // -- HELPER
+
+    private String tableToString(final DataTable dataTable) {
+        var sb = new StringBuilder();
+        dataTable.visit((column, cellValues) ->
+            sb.append(String.format("%s: %s\n",
+                    column.getColumnFriendlyName(),
+                    "" + cellValues.getFirstElseFail().getPojo())));
+        return sb.toString();
+    }
 
     private void assertHasProperty(final ObjectSpecification spec, final String propertyId) {
         spec.getPropertyElseFail(propertyId);

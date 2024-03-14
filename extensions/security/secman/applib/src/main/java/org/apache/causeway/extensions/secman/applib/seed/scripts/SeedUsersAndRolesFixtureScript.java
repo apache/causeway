@@ -21,9 +21,7 @@ package org.apache.causeway.extensions.secman.applib.seed.scripts;
 import java.io.File;
 import java.util.function.Supplier;
 
-import javax.inject.Inject;
-
-import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutLoadersRoleAndPermissions;
+import jakarta.inject.Inject;
 
 import org.springframework.lang.Nullable;
 
@@ -46,6 +44,7 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtDocgenR
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionLogRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtExecutionOutboxRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtH2ConsoleRoleAndPermissions;
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutLoadersRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanAdminRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanRegularUserRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSessionLogRoleAndPermissions;

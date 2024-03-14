@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.extensions.commandreplay.primary.config;
 
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
+import jakarta.inject.Named;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,7 @@ import lombok.val;
  */
 @Service
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".PrimaryConfig")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 //@Log4j2
 public class PrimaryConfig {
 

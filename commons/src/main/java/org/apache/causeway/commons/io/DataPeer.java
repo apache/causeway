@@ -23,7 +23,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import org.apache.causeway.commons.functional.ThrowingConsumer;
+import org.springframework.util.function.ThrowingConsumer;
+
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 

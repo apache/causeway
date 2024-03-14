@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.JAXBException;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.xml.bind.JAXBException;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -49,7 +49,7 @@ import lombok.val;
 @DomainService(
         aliased = "testdomain.jdo.InventoryResourceAlias" // <-- as tested with RestEndpointService
 )
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JdoInventoryResource {
 

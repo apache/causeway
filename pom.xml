@@ -24,7 +24,7 @@
 
 	<groupId>org.apache.causeway</groupId>
 	<artifactId>causeway-all</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
@@ -113,9 +113,9 @@
 		</profile>
 
 		<!-- ALL MODULES -->
-
+		
 		<profile>
-			<id>module-all</id>
+		    <id>module-all</id>
 			<activation>
 				<property>
 					<name>module-all</name>
@@ -123,7 +123,10 @@
 			</activation>
 			<modules>
 				<module>antora</module>
-				<module>incubator</module>
+
+				<!-- incubator, without kroviz -->
+				<module>incubator/extensions/core/commandreplay</module>
+
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
@@ -140,6 +143,24 @@
 			</activation>
 			<modules>
 				<module>antora</module>
+				<module>regressiontests</module>
+				<module>tooling</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-all-except-kroviz</id>
+			<activation>
+				<property>
+					<name>module-all-except-kroviz</name>
+				</property>
+			</activation>
+			<modules>
+				<module>antora</module>
+
+				<!-- incubator, without kroviz -->
+				<module>incubator/extensions/core/commandreplay</module>
+
 				<module>regressiontests</module>
 				<module>tooling</module>
 			</modules>
@@ -191,6 +212,7 @@
 				</property>
 			</activation>
 			<modules>
+				<module>incubator/clients/kroviz</module>
 				<module>incubator/extensions/core/commandreplay</module>
 			</modules>
 		</profile>
@@ -204,6 +226,18 @@
 			</activation>
 			<modules>
 				<module>incubator/extensions/core/commandreplay</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>module-incubator-kroviz</id>
+			<activation>
+				<property>
+					<name>module-incubator-kroviz</name>
+				</property>
+			</activation>
+			<modules>
+				<module>incubator/clients/kroviz</module>
 			</modules>
 		</profile>
 
@@ -232,184 +266,6 @@
 			<modules>
 				<module>tooling</module>
 			</modules>
-		</profile>
-
-		<profile>
-			<id>causeway-app-starter-surefire</id>
-			<activation>
-				<property>
-					<name>!skip.causeway-app-starter-surefire</name>
-				</property>
-			</activation>
-
-			<properties>
-				<!-- uses maven-surefire-plugin.version, which is declared by spring-boot-starter-parent -->
-				<skipTests>false</skipTests>
-				<skipUTs>${skipTests}</skipUTs>
-				<skipITs>${skipTests}</skipITs>
-				<skipBDDs>${skipTests}</skipBDDs>
-				<surefire-plugin.argLine></surefire-plugin.argLine>
-			</properties>
-
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-surefire-plugin</artifactId>
-							<version>${maven-surefire-plugin.version}</version>
-							<executions>
-								<execution>
-									<id>default-test</id>
-									<phase>test</phase>
-									<goals>
-										<goal>test</goal>
-									</goals>
-									<configuration>
-										<skipTests>${skipUTs}</skipTests>
-										<includes>
-											<include>**/*Test*.java</include>
-										</includes>
-										<excludes>
-											<exclude>**/*Testing.java</exclude>
-											<exclude>**/*IntegTest*.java</exclude>
-											<exclude>**/*Abstract*.java</exclude>
-										</excludes>
-										<useFile>true</useFile>
-										<printSummary>true</printSummary>
-										<reportsDirectory>${project.build.directory}/surefire-unittest-reports</reportsDirectory>
-										<forkCount>1</forkCount>
-										<reuseForks>true</reuseForks>
-										<argLine>${surefire-plugin.argLine}</argLine>
-									</configuration>
-								</execution>
-								<execution>
-									<id>integ-test</id>
-									<phase>integration-test</phase>
-									<goals>
-										<goal>test</goal>
-									</goals>
-									<configuration>
-										<skipTests>${skipITs}</skipTests>
-										<includes>
-											<include>**/*IntegTest*.java</include>
-										</includes>
-										<excludes>
-											<exclude>**/*Abstract*.java</exclude>
-										</excludes>
-										<useFile>true</useFile>
-										<printSummary>true</printSummary>
-										<reportsDirectory>${project.build.directory}/surefire-integtest-reports</reportsDirectory>
-										<forkCount>1</forkCount>
-										<reuseForks>true</reuseForks>
-										<argLine>${surefire-plugin.argLine}</argLine>
-									</configuration>
-								</execution>
-								<execution>
-									<id>bdd-specs</id>
-									<phase>integration-test</phase>
-									<goals>
-										<goal>test</goal>
-									</goals>
-									<configuration>
-										<skipTests>${skipBDDs}</skipTests>
-										<includes>
-											<include>**/*Spec*.java</include>
-										</includes>
-										<excludes>
-											<exclude>**/*Test.java</exclude>
-											<exclude>**/*Testing.java</exclude>
-											<exclude>**/*IntegTest*.java</exclude>
-											<exclude>**/*Abstract*.java</exclude>
-										</excludes>
-										<useFile>true</useFile>
-										<printSummary>true</printSummary>
-										<reportsDirectory>${project.build.directory}/surefire-bddspecs-reports</reportsDirectory>
-										<forkCount>1</forkCount>
-										<reuseForks>true</reuseForks>
-										<argLine>${surefire-plugin.argLine}</argLine>
-									</configuration>
-								</execution>
-							</executions>
-						</plugin>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-surefire-report-plugin</artifactId>
-							<version>${maven-surefire-report-plugin.version}</version>
-							<configuration>
-								<showSuccess>false</showSuccess>
-							</configuration>
-							<executions>
-								<execution>
-									<id>test</id>
-									<phase>test</phase>
-								</execution>
-								<execution>
-									<id>integration-test</id>
-									<phase>integration-test</phase>
-								</execution>
-								<execution>
-									<id>bdd-specs</id>
-									<phase>integration-test</phase>
-								</execution>
-							</executions>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-
-		<profile>
-			<id>causeway-app-starter-docker</id>
-			<activation>
-				<property>
-					<name>!skip.causeway-app-starter-docker</name>
-				</property>
-			</activation>
-			<properties>
-				<jib-maven-plugin.version>3.4.1</jib-maven-plugin.version>
-			</properties>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>com.google.cloud.tools</groupId>
-							<artifactId>jib-maven-plugin</artifactId>
-							<version>${jib-maven-plugin.version}</version>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-
-		<!-- running: mvn spring-boot:run -->
-		<profile>
-			<id>causeway-app-starter-boot</id>
-			<activation>
-				<property>
-					<name>!skip.causeway-app-starter-boot</name>
-				</property>
-			</activation>
-			<properties>
-			</properties>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.springframework.boot</groupId>
-							<artifactId>spring-boot-maven-plugin</artifactId>
-							<version>${spring-boot.version}</version>
-							<executions>
-								<execution>
-									<goals>
-										<goal>repackage</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
 		</profile>
 
 		<profile>

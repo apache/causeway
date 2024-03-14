@@ -117,8 +117,8 @@ public final class ProgrammingModelConstants {
     @RequiredArgsConstructor
     public enum MethodExcludeMarker {
         DOMAIN_EXCLUDE(Domain.Exclude.class),
-        PRE_DESTROY_JAVAX(javax.annotation.PreDestroy.class),
-        POST_CONSTRUCT_JAVAX(javax.annotation.PostConstruct.class),
+        PRE_DESTROY_JAVAX(jakarta.annotation.PreDestroy.class),
+        POST_CONSTRUCT_JAVAX(jakarta.annotation.PostConstruct.class),
         //PRE_DESTROY__JAKARTA(jakarta.annotation.PreDestroy.class),
         //POST_CONSTRUCT_JAKARTA(jakarta.annotation.PreDestroy.class)
         ;

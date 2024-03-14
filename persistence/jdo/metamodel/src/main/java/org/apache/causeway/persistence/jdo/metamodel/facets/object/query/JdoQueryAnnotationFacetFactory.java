@@ -21,9 +21,10 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.object.query;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
+
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

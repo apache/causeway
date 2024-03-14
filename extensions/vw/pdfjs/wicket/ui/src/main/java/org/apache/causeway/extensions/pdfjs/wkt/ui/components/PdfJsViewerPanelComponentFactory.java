@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.ui.components;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;

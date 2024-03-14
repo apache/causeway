@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.parented;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;

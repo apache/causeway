@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.facets.prop.transients;
 
-import javax.inject.Inject;
-import javax.persistence.Transient;
+import jakarta.inject.Inject;
+import jakarta.persistence.Transient;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;

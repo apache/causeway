@@ -21,7 +21,7 @@ package org.apache.causeway.testdomain.model.bad;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

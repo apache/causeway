@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 

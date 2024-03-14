@@ -20,13 +20,13 @@ package org.apache.causeway.core.webapp.modules;
 
 import java.util.Optional;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterRegistration;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterRegistration;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRegistration;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;

@@ -20,9 +20,9 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.schema.metamodel.v2.Member;

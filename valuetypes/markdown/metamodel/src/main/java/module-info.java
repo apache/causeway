@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.markdown.metamodel {
     exports org.apache.causeway.valuetypes.markdown.metamodel;
     exports org.apache.causeway.valuetypes.markdown.metamodel.semantics;
 
-    requires java.inject;
+    requires jakarta.inject;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

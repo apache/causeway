@@ -21,7 +21,7 @@ package org.apache.causeway.core.runtimeservices.user;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorDefault")
-@javax.annotation.Priority(PriorityPrecedence.LAST)
+@jakarta.annotation.Priority(PriorityPrecedence.LAST)
 @Qualifier("Default")
 public class ImpersonateMenuAdvisorDefault implements ImpersonateMenuAdvisor {
 

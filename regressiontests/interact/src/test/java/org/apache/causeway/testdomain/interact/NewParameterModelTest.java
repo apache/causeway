@@ -23,12 +23,13 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -72,7 +73,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"biArgEnabled", "patEnabled"})
+    @ValueSource(strings = {"biArgEnabled", "patEnabled", "patRecordEnabled"})
     void paramAnnotations_whenNpm_shouldBeRecognized(final String mixinName) {
 
         val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
@@ -167,7 +168,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"biArgEnabled", "patEnabled"})
+    @ValueSource(strings = {"biArgEnabled", "patEnabled", "patRecordEnabled"})
     void actionInteraction_shouldProvideChoices(final String mixinName) {
 
         val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.classsubstitutor;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
 
     public ClassSubstitutorDefault() {

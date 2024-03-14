@@ -19,11 +19,12 @@
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable;
 
 
-import javax.inject.Inject;
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;

@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

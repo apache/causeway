@@ -20,7 +20,7 @@ package org.apache.causeway.testdomain.ldap;
 
 import java.util.Hashtable;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

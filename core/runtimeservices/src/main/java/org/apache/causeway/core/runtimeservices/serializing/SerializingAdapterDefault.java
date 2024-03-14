@@ -21,9 +21,9 @@ package org.apache.causeway.core.runtimeservices.serializing;
 import java.io.Serializable;
 import java.util.Optional;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;

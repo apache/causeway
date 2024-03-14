@@ -18,15 +18,16 @@
  */
 package org.apache.causeway.testdomain.eventhandling;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.runtimeservices.eventbus.EventBusServiceSpring;

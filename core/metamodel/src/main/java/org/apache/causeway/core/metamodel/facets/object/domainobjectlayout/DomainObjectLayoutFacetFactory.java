@@ -16,7 +16,7 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.commons.internal.base._Lazy;

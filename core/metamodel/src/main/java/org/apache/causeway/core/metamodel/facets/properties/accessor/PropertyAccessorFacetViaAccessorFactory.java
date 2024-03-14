@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.accessor;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -69,7 +69,8 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
-        return AccessorSemantics.isGetter(method);
+        return AccessorSemantics.isGetter(method)
+                || AccessorSemantics.isRecordComponentAccessor(method);
     }
 
     /**
