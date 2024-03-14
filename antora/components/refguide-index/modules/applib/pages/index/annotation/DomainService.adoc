@@ -12,7 +12,8 @@ Also indicates whether the domain service acts as a repository for an entity, an
 ----
 @interface DomainService {
   String[] aliased() default {};     // <.>
-  NatureOfService nature() default NatureOfService.VIEW;     // <.>
+  @Deprecated(forRemoval = true, since = "2.0.0-RC4")
+NatureOfService nature() default NatureOfService.VIEW;     // <.>
 }
 ----
 
@@ -24,6 +25,13 @@ Alternative logical type name(s) for the annotated type.
 <.> xref:#nature[nature]
 +
 --
+[WARNING]
+====
+[red]#_deprecated:_#
+
+has no scope limiting effect any longer, see [CAUSEWAY-3697]
+====
+
 The nature of this service, either in the UI or REST only
 --
 
@@ -36,6 +44,13 @@ Alternative logical type name(s) for the annotated type.
 
 [#nature]
 === nature
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+has no scope limiting effect any longer, see [CAUSEWAY-3697]
+====
 
 The nature of this service, either in the UI or REST only
 
