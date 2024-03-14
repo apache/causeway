@@ -25,10 +25,9 @@ import org.joda.time.LocalDateTime;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 
 @Named("testdomain.ProperServiceWithMixin")
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService()
 public class ProperServiceWithMixin {
 
     @Action

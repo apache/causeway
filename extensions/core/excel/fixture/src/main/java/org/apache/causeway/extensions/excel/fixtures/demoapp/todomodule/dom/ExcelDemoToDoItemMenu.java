@@ -47,7 +47,7 @@ import org.apache.causeway.applib.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named("libExcelFixture.ExcelDemoToDoItemMenu")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)

@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.Departments")
 @DomainService(
-        nature=NatureOfService.VIEW)
+        nature=NatureOfService.BOTH)
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Departments {

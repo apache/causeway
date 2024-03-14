@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import lombok.RequiredArgsConstructor;
 
 @Named("university.admin.AdminMenu")
-@DomainService(nature=NatureOfService.VIEW)
+@DomainService(nature=NatureOfService.BOTH)
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class AdminMenu {

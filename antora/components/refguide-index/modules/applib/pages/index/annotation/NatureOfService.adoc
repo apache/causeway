@@ -9,52 +9,74 @@ The different sorts of domain services recognized by Causeway, as specified in _
 .NatureOfService.java
 ----
 enum NatureOfService {
-  VIEW     // <.>
-  REST     // <.>
-  boolean isView()     // <.>
-  boolean isRestOnly()     // <.>
+  WEB_UI     // <.>
+  WEB_API     // <.>
+  BOTH     // <.>
+  boolean isBoth()     // <.>
+  boolean isWebUi()     // <.>
+  boolean isWebApi()     // <.>
 }
 ----
 
-<.> xref:#VIEW[VIEW]
+<.> xref:#WEB_UI[WEB_UI]
 +
 --
-The service's actions appear in the REST API and in 'viewers', eg. in the menu bar.
+The service's actions appear only in the menu bar human-usable Web UIs (such as Wicket viewer). They do _not_ appear in any REST or GraphQL APIs.
 --
-<.> xref:#REST[REST]
+<.> xref:#WEB_API[WEB_API]
 +
 --
-The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
+The service's actions should only be visible in the Web API exposed by the Restful Objects viewer and the GraphQL viewer. They do _not_ appear in any human-usable Web UIs (such as Wicket viewer)
 --
-<.> xref:#isView_[isView()]
+<.> xref:#BOTH[BOTH]
 +
 --
-Whether a service contributes its actions to viewers and to the REST API.
+The service's actions appear in the menu bar of Web UIs (such as Wicket viewer), and also appear in the Web APIs (Restful Objects viewer and GraphQL viewer).
 --
-<.> xref:#isRestOnly_[isRestOnly()]
+<.> xref:#isBoth_[isBoth()]
 +
 --
-Whether a service contributes its actions exclusively to the REST API.
+Whether a service contributes its actions to both human-usable Web UIs and the Web APIs.
+--
+<.> xref:#isWebUi_[isWebUi()]
++
+--
+Whether a service contributes its actions exclusively to human-usable Web UIs.
+--
+<.> xref:#isWebApi_[isWebApi()]
++
+--
+Whether a service contributes its actions to Web APIs (REST and GraphQL)
 --
 
 == Members
 
-[#VIEW]
-=== VIEW
+[#WEB_UI]
+=== WEB_UI
 
-The service's actions appear in the REST API and in 'viewers', eg. in the menu bar.
+The service's actions appear only in the menu bar human-usable Web UIs (such as Wicket viewer). They do _not_ appear in any REST or GraphQL APIs.
 
-[#REST]
-=== REST
+[#WEB_API]
+=== WEB_API
 
-The service's actions should only be visible in the REST API exposed by the Restful Objects viewer.
+The service's actions should only be visible in the Web API exposed by the Restful Objects viewer and the GraphQL viewer. They do _not_ appear in any human-usable Web UIs (such as Wicket viewer)
 
-[#isView_]
-=== isView()
+[#BOTH]
+=== BOTH
 
-Whether a service contributes its actions to viewers and to the REST API.
+The service's actions appear in the menu bar of Web UIs (such as Wicket viewer), and also appear in the Web APIs (Restful Objects viewer and GraphQL viewer).
 
-[#isRestOnly_]
-=== isRestOnly()
+[#isBoth_]
+=== isBoth()
 
-Whether a service contributes its actions exclusively to the REST API.
+Whether a service contributes its actions to both human-usable Web UIs and the Web APIs.
+
+[#isWebUi_]
+=== isWebUi()
+
+Whether a service contributes its actions exclusively to human-usable Web UIs.
+
+[#isWebApi_]
+=== isWebApi()
+
+Whether a service contributes its actions to Web APIs (REST and GraphQL)

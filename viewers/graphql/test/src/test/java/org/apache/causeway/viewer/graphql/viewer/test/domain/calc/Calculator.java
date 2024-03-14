@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @Named("university.calc.Calculator")
-@DomainService(nature= NatureOfService.VIEW)
+@DomainService(nature= NatureOfService.BOTH)
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Calculator {

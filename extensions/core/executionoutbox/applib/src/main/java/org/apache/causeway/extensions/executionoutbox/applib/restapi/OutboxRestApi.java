@@ -47,7 +47,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Named(OutboxRestApi.LOGICAL_TYPE_NAME)
-@DomainService(nature = NatureOfService.REST)
+@DomainService(nature = NatureOfService.WEB_API)
 @RequiredArgsConstructor
 public class OutboxRestApi  {
 

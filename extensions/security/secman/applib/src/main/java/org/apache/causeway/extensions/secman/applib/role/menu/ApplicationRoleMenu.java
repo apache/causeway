@@ -49,7 +49,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Named(ApplicationRoleMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @DomainServiceLayout(
         named = "Security",

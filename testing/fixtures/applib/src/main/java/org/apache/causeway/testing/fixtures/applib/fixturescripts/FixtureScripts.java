@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.context.annotation.Import;
 
@@ -65,7 +64,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstrac
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 
 
@@ -76,7 +74,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named(FixtureScripts.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(

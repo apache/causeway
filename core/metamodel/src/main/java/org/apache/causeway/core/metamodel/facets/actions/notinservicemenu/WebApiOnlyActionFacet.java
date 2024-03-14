@@ -19,21 +19,18 @@
 package org.apache.causeway.core.metamodel.facets.actions.notinservicemenu;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 
-public abstract class NotInServiceMenuFacetAbstract extends FacetAbstract implements NotInServiceMenuFacet {
+/**
+ * Indicates that the (repository) action should not be contributed to any
+ * objects.
+ *
+ * <p>
+ * In the standard Apache Causeway Programming Model, corresponds to annotating the
+ * action method using <tt>@NotContributed</tt>.
+ */
+public interface WebApiOnlyActionFacet extends Facet {
 
-    private static final Class<? extends Facet> type() {
-        return NotInServiceMenuFacet.class;
-    }
-
-    public NotInServiceMenuFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    public NotInServiceMenuFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
+    String hides(VisibilityContext ic);
 
 }

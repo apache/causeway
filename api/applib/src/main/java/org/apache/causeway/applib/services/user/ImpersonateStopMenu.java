@@ -52,7 +52,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named(ImpersonateStopMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(

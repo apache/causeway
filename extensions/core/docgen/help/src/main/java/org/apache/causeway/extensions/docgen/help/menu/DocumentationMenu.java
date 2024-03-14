@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.x {@index}
  */
 @Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".DocumentationMenu")
-@DomainService(nature = NatureOfService.VIEW)
+@DomainService(nature = NatureOfService.BOTH)
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )

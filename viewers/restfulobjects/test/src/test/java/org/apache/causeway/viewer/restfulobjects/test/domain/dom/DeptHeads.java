@@ -32,8 +32,13 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.DeptHeads")
+<<<<<<< HEAD
 @DomainService(nature=NatureOfService.VIEW)
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+=======
+@DomainService(nature=NatureOfService.BOTH)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+>>>>>>> refs/remotes/origin/master
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class DeptHeads {
 

@@ -57,7 +57,7 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @Named(ImpersonateMenu.LOGICAL_TYPE_NAME)
 @DomainServiceLayout(

@@ -13,7 +13,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import lombok.RequiredArgsConstructor;
 
 @Named("university.calc.I18nCalculator")
-@DomainService(nature= NatureOfService.VIEW)
+@DomainService(nature= NatureOfService.BOTH)
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class I18nCalculator {

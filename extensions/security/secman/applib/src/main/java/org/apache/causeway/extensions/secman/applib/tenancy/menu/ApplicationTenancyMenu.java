@@ -49,7 +49,7 @@ import org.apache.causeway.extensions.secman.applib.tenancy.man.ApplicationTenan
  */
 @Named(ApplicationTenancyMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @DomainServiceLayout(
         named = "Security",

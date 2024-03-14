@@ -15,8 +15,13 @@ import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.People")
 @DomainService(
+<<<<<<< HEAD
         nature= NatureOfService.VIEW)
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+=======
+        nature= NatureOfService.BOTH)
+@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+>>>>>>> refs/remotes/origin/master
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class People {
 

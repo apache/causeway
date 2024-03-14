@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Named(ExecutionOutboxMenu.LOGICAL_TYPE_NAME)
 @DomainService(
-    nature = NatureOfService.VIEW
+    nature = NatureOfService.BOTH
 )
 @DomainServiceLayout(
     named = "Activity",

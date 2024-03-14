@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
 )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY

@@ -58,7 +58,7 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetFor
 import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
-import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.WebApiOnlyActionFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -291,9 +291,7 @@ implements MenuBarsService {
             // services that have an imperative hidden() method.
             return false;
         }
-        return DomainServiceFacet.getNatureOfService(spec)
-                .filter(NatureOfService::isView)
-                .isPresent();
+        return true;
     }
 
 
@@ -438,7 +436,7 @@ implements MenuBarsService {
         final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
         if (domainServiceFacet != null) {
             final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-            if (!natureOfService.isView()) {
+            if (!natureOfService.isEnabledForUi()) {
                 return Stream.empty();
             }
         }
@@ -447,7 +445,7 @@ implements MenuBarsService {
 
         return objectActions
                 // skip if annotated to not be included in repository menu using legacy mechanism
-                .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
+                .filter(objectAction->objectAction.getFacet(WebApiOnlyActionFacet.class) == null)
                 .map(objectAction->{
                     val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                     String serviceName = layoutGroupFacet != null
@@ -484,9 +482,6 @@ implements MenuBarsService {
                 LINKS_SCHEMA_LOCATION)
                 .collect(Collectors.joining(" "));
     }
-
-
-
 
 }
 

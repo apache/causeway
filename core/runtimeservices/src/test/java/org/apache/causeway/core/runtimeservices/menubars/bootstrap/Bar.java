@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.NatureOfService;
 
 @DomainService(
-        nature = NatureOfService.VIEW
+        nature = NatureOfService.BOTH
         )
 @Named("simple.SimpleMenu")
 public class Bar {
