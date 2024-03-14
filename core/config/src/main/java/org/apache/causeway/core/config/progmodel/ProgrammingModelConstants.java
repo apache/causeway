@@ -466,7 +466,7 @@ public final class ProgrammingModelConstants {
         PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE_TO_UI("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to at least one proxied class:\n"
                 + "${csv}. Proxied service beans are not allowed to contribute to the UI. "
-                + "E.g. don't mix @Transactional with @DomainService(nature=VIEW)"),
+                + "E.g. don't mix @Transactional with @DomainServicenature=VIEW)"),
         UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
         ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
                 + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),

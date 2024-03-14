@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import lombok.val;
 
 @Named("regressiontests.BlobDemoMenu")
-@DomainService()
+@DomainService
 @DomainObjectLayout(
         named="Blob Demo Menu"
 )

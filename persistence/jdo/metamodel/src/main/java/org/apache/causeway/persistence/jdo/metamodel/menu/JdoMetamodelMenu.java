@@ -46,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named(CausewayModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu")
-@DomainService()
+@DomainService
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"

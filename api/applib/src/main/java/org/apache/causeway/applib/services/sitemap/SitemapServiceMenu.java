@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._Strings;
  * @since 2.x {@index}
  */
 @Named(SitemapServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService()
+@DomainService
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

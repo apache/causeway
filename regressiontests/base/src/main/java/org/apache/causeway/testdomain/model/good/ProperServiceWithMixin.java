@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.MemberSupport;
 
 @Named("testdomain.ProperServiceWithMixin")
-@DomainService()
+@DomainService
 public class ProperServiceWithMixin {
 
     @Action

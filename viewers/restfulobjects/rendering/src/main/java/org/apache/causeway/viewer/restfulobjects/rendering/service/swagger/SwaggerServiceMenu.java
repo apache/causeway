@@ -52,7 +52,7 @@ import lombok.val;
  * @since 1.x {@index}
  */
 @Named(SwaggerServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService()
+@DomainService
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
