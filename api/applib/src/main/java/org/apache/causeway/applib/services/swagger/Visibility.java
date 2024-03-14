@@ -46,7 +46,7 @@ public enum Visibility {
      * The generated swagger spec is therefore restricted only to include only
      * view models ({@link DomainObject#nature()} of
      * {@link org.apache.causeway.applib.annotation.Nature#VIEW_MODEL})
-     * and to REST domain services ({@link DomainService#nature()} of
+     * and to Web API domain services ({@link DomainService#nature()} of
      * {@link NatureOfService#WEB_API}). Exposing entities also would couple the
      * REST client too deeply to the backend implementation.
      * </p>
@@ -60,7 +60,7 @@ public enum Visibility {
      * This visibility level removes all constraints and so includes the
      * specifications of domain entities as well as view models. This is
      * perfectly acceptable where the team developing the REST client is the
-     * same as the team developing the backend service ... the use of the REST
+     * same as the team developing the backend service ... the use of the Web
      * API between the client and server is a private implementation detail of
      * the application.
      * </p>
