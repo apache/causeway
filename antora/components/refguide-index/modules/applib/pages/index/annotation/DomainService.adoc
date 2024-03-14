@@ -12,7 +12,7 @@ Also indicates whether the domain service acts as a repository for an entity, an
 ----
 @interface DomainService {
   String[] aliased() default {};     // <.>
-  NatureOfService nature() default NatureOfService.BOTH;     // <.>
+  NatureOfService nature() default NatureOfService.VIEW;     // <.>
 }
 ----
 

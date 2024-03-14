@@ -29,9 +29,8 @@ For the domain class itself, this will be `@javax.jdo.annotations.PersistenceCap
         strategy= VersionStrategy.DATE_TIME,
         column="version"
 )
-@DomainObject(                                                          // <.>
-        logicalTypeName = "simple.SimpleObject"
-)
+@Named("simple.SimpleObject")                                           // <.>
+@DomainObject                                                           // <.>
 public class SimpleObject { /* ... */ }
 ----
 
@@ -46,9 +45,9 @@ The table will default to the entity name if omitted.
 <.> For entities that are using `DATASTORE` identity, indicates how the id will be assigned.
 A common strategy is to allow the database to assign the id, for example using an identity column or a sequence.
 <.> The `@Version` annotation is useful for optimistic locking; the strategy indicates what to store in the `version` column.
-<.> The `@DomainObject` annotation identifies the domain object to Apache Causeway (not DataNucleus).
+<.> the `@Named` annotation defines a logical name for the concrete class; used in security and bookmarks.
+<.> The `@DomainObject` annotation identifies the domain object to Apache Causeway (not to DataNucleus).
 It isn't necessary to include this annotation -- at least, not for entities -- but it is nevertheless recommended.
-In particular, its strongly recommended that the `logicalTypeName` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for DataNucleus' `@PersistenceCapable` annotation.
 
 
 == Scalar Properties

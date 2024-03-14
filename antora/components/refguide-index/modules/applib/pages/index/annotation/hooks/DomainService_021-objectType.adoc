@@ -21,9 +21,8 @@ For example:
 
 [source,java]
 ----
-@DomainService(
-    logicalTypeName="orders.OrderMenu"
-)
+@Named("orders.OrderMenu")
+@DomainService
 public class OrderMenu {
     ...
 }

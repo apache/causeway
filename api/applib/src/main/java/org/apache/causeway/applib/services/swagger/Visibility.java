@@ -22,9 +22,6 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.Value;
 
@@ -39,27 +36,21 @@ import org.apache.causeway.applib.annotation.Value;
 public enum Visibility {
 
     /**
-     * Specification for use by third-party clients, ie public use and not
-     * under the control of the authors of the backend Apache Causeway application.
+     * The generated swagger spec is restricted only to include only
+     * {@link org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model}s.
      *
      * <p>
-     * The generated swagger spec is therefore restricted only to include only
-     * view models ({@link DomainObject#nature()} of
-     * {@link org.apache.causeway.applib.annotation.Nature#VIEW_MODEL})
-     * and to Web API domain services ({@link DomainService#nature()} of
-     * {@link NatureOfService#WEB_API}). Exposing entities also would couple the
+     * Specification for use by third-party clients, ie public use and not under the control of the authors of the
+     * backend Apache Causeway application.  Exposing entities also would couple the
      * REST client too deeply to the backend implementation.
      * </p>
      */
     PUBLIC,
     /**
-     * Specification for use only by internally-managed clients, ie private
-     * internal use.
+     * Includes the specifications of domain entities as well as view models.
      *
      * <p>
-     * This visibility level removes all constraints and so includes the
-     * specifications of domain entities as well as view models. This is
-     * perfectly acceptable where the team developing the REST client is the
+     * This is perfectly acceptable where the team developing the REST client is the
      * same as the team developing the backend service ... the use of the Web
      * API between the client and server is a private implementation detail of
      * the application.

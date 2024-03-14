@@ -7,15 +7,13 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 import lombok.RequiredArgsConstructor;
 
 @Named("university.dept.People")
-@DomainService(
-        nature= NatureOfService.BOTH)
+@DomainService
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class People {

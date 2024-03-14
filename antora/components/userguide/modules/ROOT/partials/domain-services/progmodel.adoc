@@ -65,7 +65,8 @@ For the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)], all menu se
 ----
 import lombok.RequiredArgsConstructor;
 
-@DomainService(nature = NatureOfService.BOTH)           // <.>
+@Named("customers.Customers")
+@DomainService                                          // <.>
 @RequiredArgsConstructor(onConstructor_ = {@Inject} )   // <.>
 public class Customers {
 
@@ -96,8 +97,6 @@ public class Customers {
 <.> xref:refguide:applib:index/annotation/Action.adoc#restrictTo[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
 
-
-The REST API would be similar to the above `CustomerMenu`, but annotated with a `@DomainService(nature=NatureOfService.WEB_API)`.
 
 The `CustomerRepository` would look something like:
 [source,java]

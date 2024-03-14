@@ -17,7 +17,6 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -27,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 @Named("university.calc.Calculator")
-@DomainService(nature= NatureOfService.BOTH)
+@DomainService
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class Calculator {

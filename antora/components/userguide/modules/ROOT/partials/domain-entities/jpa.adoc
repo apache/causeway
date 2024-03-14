@@ -23,9 +23,8 @@ For the domain class itself, this will be the `@javax.persistence.Entity` annota
     // ...
 )
 @EntityListeners(CausewayEntityListener.class)                          // <.>
-@DomainObject(                                                          // <.>
-        logicalTypeName = "simple.SimpleObject"
-)
+@Named("simple.SimpleObject")                                           // <.>
+@DomainObject                                                           // <.>
 public class SimpleObject {
 
     @javax.persistence.Id                                               // <.>
@@ -48,9 +47,9 @@ public class SimpleObject {
 It's recommended that the schema corresponds to the module in which the entity resides.
 The table will default to the entity name if omitted.
 <.> Required boilerplate that allows Causeway to inject domain services into the entity when retrieved from the database
+<.> the `@Named` annotation defines a logical name for the concrete class; used in security and bookmarks.
 <.> The `@DomainObject` annotation identifies the domain object to Apache Causeway (not EclipseLink).
 It isn't necessary to include this annotation -- at least, not for entities -- but it is nevertheless recommended.
-In particular, its strongly recommended that the `logicalTypeName` (which acts like an alias to the concrete domain class) is specified; note that it corresponds to the schema/table for EcilpseLink's `@Table` annotation.
 <.> Specified the primary key, indicating that the database will assign the key, for example using an identity column or a sequence.
 <.> Indicates the column name (though this would be inferred) and nullability (such a primary keys should not be nullable).
 <.> The `@Version` annotation is useful for optimistic locking; the strategy indicates what to store in the `version` column.
