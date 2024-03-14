@@ -2348,6 +2348,11 @@ public class CausewayConfiguration {
         @Data
         public static class Graphql {
 
+            /**
+             * Which style of schema to expose: &quot;simple&quot;, &quot;rich&quot; or some combination of both.
+             *
+             * @since 2.0 {@index}
+             */
             public enum SchemaStyle {
                 /**
                  * Expose only the &quot;simple&quot; schema, defining only fields that return the state of the domain
@@ -2405,7 +2410,11 @@ public class CausewayConfiguration {
             }
 
             /**
-             * Which {@link SchemaStyle} to expose.
+             * Which {@link SchemaStyle} to expose, &quot;simple&quot; or &quot;rich&quot;.  By default both are
+             * exposed under top-level field names.
+             *
+             * @see Schema.Rich#getTopLevelFieldName()
+             * @see Schema.Simple#getTopLevelFieldName()
              */
             private SchemaStyle schemaStyle = SchemaStyle.RICH_AND_SIMPLE;
 
@@ -2496,7 +2505,7 @@ public class CausewayConfiguration {
              * Specifies which elements of the metamodel are included within the generated
              * GraphQL spec.
              *
-             * @since 1.x {@index}
+             * @since 2.x {@index}
              */
             public enum ApiScope {
 
@@ -2528,7 +2537,8 @@ public class CausewayConfiguration {
             }
 
             /**
-             * Which domain objects to include the GraphQL schema.
+             * Which domain objects to include the GraphQL schema.  By default, all domain objects are exposed
+             * (entities and view models).
              */
             private ApiScope apiScope = ApiScope.ALL;
 

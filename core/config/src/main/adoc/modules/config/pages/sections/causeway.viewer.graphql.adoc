@@ -16,7 +16,7 @@ include::../section-hooks/causeway.viewer.graphql~pre.adoc[]
 causeway.viewer.graphql.api-scope
 
 | 
-| Which domain objects to include the GraphQL schema.
+| Which domain objects to include the GraphQL schema. By default, all domain objects are exposed (entities and view models).
 
 
 |
@@ -138,7 +138,7 @@ causeway.viewer.graphql. +
 schema-style
 
 | 
-| Which ``SchemaStyle`` to expose.
+| Which ``SchemaStyle`` to expose, "simple" or "rich". By default both are exposed under top-level field names. @see Schema.Rich#getTopLevelFieldName() @see Schema.Simple#getTopLevelFieldName()
 
 
 |

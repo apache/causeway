@@ -1,0 +1,72 @@
+= CausewayConfiguration.Viewer.Graphql.SchemaStyle _(enum)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Which style of schema to expose: "simple", "rich" or some combination of both.
+
+== API
+
+[source,java]
+.CausewayConfiguration_Viewer_Graphql_SchemaStyle.java
+----
+enum SchemaStyle {
+  SIMPLE_ONLY     // <.>
+  RICH_ONLY     // <.>
+  SIMPLE_AND_RICH     // <.>
+  RICH_AND_SIMPLE     // <.>
+  boolean isRich()
+  boolean isSimple()
+}
+----
+
+<.> xref:#SIMPLE_ONLY[SIMPLE_ONLY]
++
+--
+Expose only the "simple" schema, defining only fields that return the state of the domain objects but with no fields to represent additional facets of state (such as whether an action is hidden or disabled).
+--
+<.> xref:#RICH_ONLY[RICH_ONLY]
++
+--
+Expose only the "rich" schema, exposing not only fields that return the state of the domain objects but _also_ with fields to represent additional facets of state (such as whether an action is hidden or disabled).
+--
+<.> xref:#SIMPLE_AND_RICH[SIMPLE_AND_RICH]
++
+--
+Exposes both the simple and rich schemas, for the query have each under a field as defined by _Schema.Simple#getTopLevelFieldName()_ (by default "simple") and _Schema.Rich#getTopLevelFieldName()_ (by default "rich").
+--
+<.> xref:#RICH_AND_SIMPLE[RICH_AND_SIMPLE]
++
+--
+Exposes both the simple and rich schemas, for the query have each under a field as defined by _Schema.Simple#getTopLevelFieldName()_ (by default "simple") and _Schema.Rich#getTopLevelFieldName()_ (by default "rich").
+--
+
+== Members
+
+[#SIMPLE_ONLY]
+=== SIMPLE_ONLY
+
+Expose only the "simple" schema, defining only fields that return the state of the domain objects but with no fields to represent additional facets of state (such as whether an action is hidden or disabled).
+
+Suitable for clients where the application logic and state is the responsibility of the client.
+
+[#RICH_ONLY]
+=== RICH_ONLY
+
+Expose only the "rich" schema, exposing not only fields that return the state of the domain objects but _also_ with fields to represent additional facets of state (such as whether an action is hidden or disabled).
+
+Optionally, fields for Scenario (given/when/then) testing may also be added if the _Schema.Rich#isEnableScenarioTesting()_ config property is set.
+
+Suitable for clients where the application logic and state remains in the backend, within the domain model hosted by Causeway.
+
+[#SIMPLE_AND_RICH]
+=== SIMPLE_AND_RICH
+
+Exposes both the simple and rich schemas, for the query have each under a field as defined by _Schema.Simple#getTopLevelFieldName()_ (by default "simple") and _Schema.Rich#getTopLevelFieldName()_ (by default "rich").
+
+For mutations, use the _simple_ schema types.
+
+[#RICH_AND_SIMPLE]
+=== RICH_AND_SIMPLE
+
+Exposes both the simple and rich schemas, for the query have each under a field as defined by _Schema.Simple#getTopLevelFieldName()_ (by default "simple") and _Schema.Rich#getTopLevelFieldName()_ (by default "rich").
+
+For mutations, use the _rich_ schema types.

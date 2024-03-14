@@ -1132,7 +1132,7 @@ org.springframework.boot:spring-boot-configuration-processor:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:core:index/config/datasources/DataSourceIntrospectionService.adoc[DataSourceIntrospectionService]
+xref:refguide:core:index/config/CausewayConfiguration_Viewer_Graphql_ApiScope.adoc[CausewayConfiguration.Viewer.Graphql.ApiScope], xref:refguide:core:index/config/CausewayConfiguration_Viewer_Graphql_SchemaStyle.adoc[CausewayConfiguration.Viewer.Graphql.SchemaStyle], xref:refguide:core:index/config/datasources/DataSourceIntrospectionService.adoc[DataSourceIntrospectionService]
 ****
 
 |Apache Causeway Core - Interaction
@@ -2518,6 +2518,12 @@ skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLModel>> {
   BorderColor #2e6295
   shadowing false
 }
+skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLTest2>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
 skinparam rectangle<<GraphQL.ApacheCausewayViewerGraphQLTestSupport>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -2547,15 +2553,17 @@ rectangle "GraphQL\n<size:10>[Software System]</size>" <<GraphQL>> {
   rectangle "==Apache Causeway Viewer - GraphQL (Applib)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLApplib>> as GraphQL.ApacheCausewayViewerGraphQLApplib
   rectangle "==Apache Causeway Viewer - GraphQL (Model)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLModel>> as GraphQL.ApacheCausewayViewerGraphQLModel
   rectangle "==Apache Causeway Viewer - GraphQL (Test)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLTest>> as GraphQL.ApacheCausewayViewerGraphQLTest
+  rectangle "==Apache Causeway Viewer - GraphQL (Test 2)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLTest2>> as GraphQL.ApacheCausewayViewerGraphQLTest2
   rectangle "==Apache Causeway Viewer - GraphQL (Test Support)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLTestSupport>> as GraphQL.ApacheCausewayViewerGraphQLTestSupport
   rectangle "==Apache Causeway Viewer - GraphQL (Viewer)\n<size:10>[Container: packaging: jar]</size>" <<GraphQL.ApacheCausewayViewerGraphQLViewer>> as GraphQL.ApacheCausewayViewerGraphQLViewer
 }
 
+GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLModel : "<color:#707070>"
 GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLTest : "<color:#707070>"
+GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLTest2 : "<color:#707070>"
 GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLTestSupport : "<color:#707070>"
 GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLViewer : "<color:#707070>"
 GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLApplib : "<color:#707070>"
-GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCausewayViewerGraphQLModel : "<color:#707070>"
 @enduml
 ----
 
@@ -2660,6 +2668,24 @@ Group: org.apache.causeway.viewer
 Artifact: causeway-viewer-graphql-test
 Type: jar
 Directory: /viewers/graphql/test
+----
+|.Dependencies
+****
+com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:jar:<managed> +
+com.github.vertical-blank:sql-formatter:jar:<managed> +
+com.h2database:h2:jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-graphql-testsupport:jar:<managed> +
+org.springframework.boot:spring-boot-test-autoconfigure:jar:<managed> +
+****
+
+|Apache Causeway Viewer - GraphQL (Test 2)
+[source,yaml]
+----
+Group: org.apache.causeway.viewer
+Artifact: causeway-viewer-graphql-test2
+Type: jar
+Directory: /viewers/graphql/test2
 ----
 |.Dependencies
 ****
@@ -7323,6 +7349,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7347,6 +7379,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****
