@@ -24,7 +24,6 @@ import org.apache.causeway.core.metamodel.facets.actions.action.ActionOverloadin
 import org.apache.causeway.core.metamodel.facets.actions.contributing.derived.ContributingFacetFromMixinFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
-import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetFromDomainServiceFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
@@ -179,8 +178,6 @@ extends ProgrammingModelAbstract {
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new BookmarkPolicyFacetFallbackFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HomePageFacetAnnotationFactory(mmc));
-
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new NotInServiceMenuFacetFromDomainServiceFacetFactory(mmc));
 
         // must come after CssClassFacetOnMemberFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CssClassFacetOnActionFromConfiguredRegexFactory(mmc));

@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenu;
@@ -58,7 +57,6 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetFor
 import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForMenuBarXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForMenuBarXml;
-import org.apache.causeway.core.metamodel.facets.actions.notinservicemenu.WebApiOnlyActionFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -432,20 +430,13 @@ implements MenuBarsService {
             final ActionScope actionType) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
 
-        // skip if annotated to not be included in repository menu using @DomainService
-        final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
-        if (domainServiceFacet != null) {
-            final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-            if (!natureOfService.isEnabledForUi()) {
-                return Stream.empty();
-            }
+        if (!DomainServiceFacet.contributingToUi().test(serviceSpec)) {
+            return Stream.empty();
         }
 
         final Stream<ObjectAction> objectActions = serviceSpec.streamDeclaredActions(actionType, MixedIn.INCLUDED);
 
         return objectActions
-                // skip if annotated to not be included in repository menu using legacy mechanism
-                .filter(objectAction->objectAction.getFacet(WebApiOnlyActionFacet.class) == null)
                 .map(objectAction->{
                     val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                     String serviceName = layoutGroupFacet != null
@@ -457,7 +448,6 @@ implements MenuBarsService {
                     }
                     return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
                 });
-
     }
 
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {

@@ -30,7 +30,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -45,9 +44,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named(LogoutMenu.LOGICAL_TYPE_NAME)
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY
 )

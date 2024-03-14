@@ -421,6 +421,11 @@ extends
      */
     boolean isInjectable();
 
+    /**
+     * Whether represents a bean, that is in effect annotated with {@link DomainService}.
+     */
+    boolean isDomainService();
+
     default boolean isMixin() {
         return getBeanSort().isMixin();
     }

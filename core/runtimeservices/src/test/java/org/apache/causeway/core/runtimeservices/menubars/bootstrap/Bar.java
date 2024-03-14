@@ -22,11 +22,8 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 
-@DomainService(
-        nature = NatureOfService.BOTH
-        )
+@DomainService
 @Named("simple.SimpleMenu")
 public class Bar {
 

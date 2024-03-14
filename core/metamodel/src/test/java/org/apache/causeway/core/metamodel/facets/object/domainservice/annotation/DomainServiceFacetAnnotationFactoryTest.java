@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 
@@ -56,7 +55,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            final Facet facet = facetHolder.getFacet(DomainServiceFacet.class);
+            var facet = facetHolder.getFacet(DomainServiceFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof DomainServiceFacetForAnnotation);
             DomainServiceFacetForAnnotation domainServiceFacet = (DomainServiceFacetForAnnotation) facet;

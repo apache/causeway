@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services.metamodel;
 
 import java.lang.reflect.Modifier;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +31,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -239,7 +237,7 @@ class MetaModelExporter {
         }
 
         if (specification.isInjectable()) {
-            if(DomainServiceFacet.getNatureOfService(specification).isPresent()) {
+            if(specification.isDomainService()) {
                 addActions(specification, domainClassByObjectSpec, config);
             }
         } else {
@@ -406,9 +404,7 @@ class MetaModelExporter {
 
         final List<org.apache.causeway.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> ! (
-                config.isIgnoreFallbackFacets()
-                    && facet.getPrecedence().isFallback()))
+        .filter(facet -> (!config.isIgnoreFallbackFacets() || !facet.getPrecedence().isFallback()))
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 
@@ -452,38 +448,19 @@ class MetaModelExporter {
     }
 
     private void sortFacetAttributes(final List<FacetAttr> attributes) {
-        Collections.sort(attributes, new Comparator<FacetAttr>() {
-            @Override
-            public int compare(final FacetAttr o1, final FacetAttr o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        Collections.sort(attributes, (o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
     private static void sortDomainClasses(final List<DomainClassDto> specifications) {
-        Collections.sort(specifications, new Comparator<DomainClassDto>() {
-            @Override
-            public int compare(final DomainClassDto o1, final DomainClassDto o2) {
-                return o1.getId().compareTo(o2.getId());
-            }
-        });
+        Collections.sort(specifications, (o1, o2) -> o1.getId().compareTo(o2.getId()));
     }
 
     private void sortMembers(final List<? extends Member> members) {
-        Collections.sort(members, new Comparator<Member>() {
-            @Override public int compare(final Member o1, final Member o2) {
-                return o1.getId().compareTo(o2.getId());
-            }
-        });
+        Collections.sort(members, (o1, o2) -> o1.getId().compareTo(o2.getId()));
     }
 
     private void sortFacets(final List<org.apache.causeway.schema.metamodel.v2.Facet> facets) {
-        Collections.sort(facets, new Comparator<org.apache.causeway.schema.metamodel.v2.Facet>() {
-            @Override public int compare(final org.apache.causeway.schema.metamodel.v2.Facet o1,
-                    final org.apache.causeway.schema.metamodel.v2.Facet o2) {
-                return o1.getId().compareTo(o2.getId());
-            }
-        });
+        Collections.sort(facets, (o1, o2) -> o1.getId().compareTo(o2.getId()));
     }
 
     private boolean isValueType(final ObjectSpecification specification) {

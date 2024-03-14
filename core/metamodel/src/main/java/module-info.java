@@ -29,7 +29,6 @@ open module org.apache.causeway.core.metamodel {
     //XXX ... org.apache.causeway.core.metamodel.facets.* : probably don't expose directly
     exports org.apache.causeway.core.metamodel.facets.actions.action.invocation;
     exports org.apache.causeway.core.metamodel.facets.actions.layout;
-    exports org.apache.causeway.core.metamodel.facets.actions.notinservicemenu;
     exports org.apache.causeway.core.metamodel.facets.actions.semantics;
     exports org.apache.causeway.core.metamodel.facets.actcoll.typeof;
     exports org.apache.causeway.core.metamodel.facets.all.described;

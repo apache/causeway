@@ -25,12 +25,11 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 
 @Named("testdomain.RoSpecSampler")
-@DomainService(nature = NatureOfService.WEB_API)
+@DomainService
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class RoSpecSampler {
 

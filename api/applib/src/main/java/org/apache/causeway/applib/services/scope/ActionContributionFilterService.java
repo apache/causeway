@@ -16,24 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.notinservicemenu;
+package org.apache.causeway.applib.services.scope;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.springframework.lang.Nullable;
 
-public abstract class WebApiOnlyActionFacetAbstract extends FacetAbstract implements WebApiOnlyActionFacet {
+import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.id.LogicalType;
 
-    private static final Class<? extends Facet> type() {
-        return WebApiOnlyActionFacet.class;
-    }
+/**
+ * Optional SPI to limit the scope of {@link DomainService} actions that contribute to UI or Web-API(s).
+ *
+ * @since 2.0.0 {index}
+ */
+public interface ActionContributionFilterService {
 
-    public WebApiOnlyActionFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
+    /**
+     * Whether {@link LogicalType} represents a domain-service
+     * that contributes actions to the UI.
+     */
+    boolean isContributingToUi(final @Nullable LogicalType logicalType);
 
-    public WebApiOnlyActionFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
+    /**
+     * Whether {@link LogicalType} represents a domain-service
+     * that contributes actions to the Web API(s).
+     */
+    boolean isContributingToWebApi(final @Nullable LogicalType logicalType);
 
 }

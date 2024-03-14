@@ -30,7 +30,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -44,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @Named("testdomain.jpa.InventoryResource")
-@DomainService(nature = NatureOfService.WEB_API)
+@DomainService
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = { @Inject })
 public class JpaInventoryResource {

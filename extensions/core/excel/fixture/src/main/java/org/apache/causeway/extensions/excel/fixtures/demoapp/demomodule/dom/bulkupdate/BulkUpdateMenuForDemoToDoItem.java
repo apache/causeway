@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -37,9 +36,7 @@ import org.apache.causeway.extensions.excel.applib.ExcelService;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Category;
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory;
 
-@DomainService(
-        nature = NatureOfService.BOTH
-)
+@DomainService
 @Named("libExcelFixture.BulkUpdateMenuForDemoToDoItem")
 @DomainServiceLayout(
         named = "Excel"

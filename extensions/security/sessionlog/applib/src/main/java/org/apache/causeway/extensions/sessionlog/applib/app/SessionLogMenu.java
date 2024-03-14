@@ -33,7 +33,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
@@ -50,7 +49,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  */
 @Named(SessionLogMenu.LOGICAL_TYPE_NAME)
-@DomainService(nature = NatureOfService.BOTH)
+@DomainService
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Activity"

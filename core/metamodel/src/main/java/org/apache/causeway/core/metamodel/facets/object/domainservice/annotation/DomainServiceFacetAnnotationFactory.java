@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
@@ -54,7 +55,7 @@ implements MetaModelRefiner {
         addFacet(
                 new DomainServiceFacetForAnnotation(
                         facetHolder,
-                        domainServiceIfAny.get().nature()));
+                        Can.empty())); //TODO[CAUSEWAY-3697] provide services
 
         addFacetIfPresent(
                 AliasedFacetForDomainServiceAnnotation

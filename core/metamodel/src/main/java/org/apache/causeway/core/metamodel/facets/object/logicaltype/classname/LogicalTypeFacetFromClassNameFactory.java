@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -122,8 +121,8 @@ implements
             return false; //skip validation
         }
         if (objectSpec.isInjectable()) {
-            // only check if domain service is contributing visible somehow (Web UI or Web APIREST)
-            if(DomainServiceFacet.getNatureOfService(objectSpec).isEmpty()) {
+            // only check if its a domain service (that is potentially contributing to UI or Web-API(s).
+            if(!objectSpec.isDomainService()) {
                 return false; //skip validation
             }
 

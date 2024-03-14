@@ -18,53 +18,37 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservice;
 
-import java.util.Optional;
+import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.annotation.NatureOfService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-/**
- * Corresponds to annotating the class with the {@link org.apache.causeway.applib.annotation.DomainService} annotation.
- */
 public interface DomainServiceFacet extends Facet {
 
     /**
-     * Corresponds to {@link org.apache.causeway.applib.annotation.DomainService#nature()}.
-     *
+     * Whether facetHolder represents a service that contributes actions to the UI.
+     * May or may not also contribute to the Web API(s).
      */
-    NatureOfService getNatureOfService();
-
-    // -- UTILITY
-
-    static Optional<NatureOfService> getNatureOfService(final @Nullable FacetHolder facetHolderIfAny) {
-        return Optional.ofNullable(facetHolderIfAny)
-        .map(facetHolder->facetHolder.getFacet(DomainServiceFacet.class))
-        .filter(_NullSafe::isPresent)
-        .map(DomainServiceFacet::getNatureOfService);
-    }
+    boolean isContributingToUi();
 
     /**
-     * @param facetHolderIfAny - null-able
-     * @return whether facetHolder represents a service that contributes actions to the Web UI (may or may not also contribute to the Web APIs)
+     * Whether facetHolder represents a service that contributes actions the Web API(s).
+     * May or may not also contribute to the UI.
      */
-    static boolean isContributingToUi(final @Nullable FacetHolder facetHolderIfAny) {
-        return getNatureOfService(facetHolderIfAny)
-                .filter(NatureOfService::isEnabledForUi)
-                .isPresent();
+    boolean isContributingToWebApi();
+
+    // -- PREDICATES
+
+    static Predicate<ObjectSpecification> contributingToUi() {
+        return spec-> spec.lookupFacet(DomainServiceFacet.class)
+                .map(DomainServiceFacet::isContributingToUi)
+                .orElse(false);
     }
 
-    /**
-     * @param facetHolderIfAny - null-able
-     * @return whether facetHolder represents a service that contributes actions the Web API (may or may not also contribute to the Web UI)
-     */
-    static boolean isContributingToWebApi(final @Nullable FacetHolder facetHolderIfAny) {
-        return getNatureOfService(facetHolderIfAny)
-                .filter(NatureOfService::isEnabledForWebApi)
-                .isPresent();
+    static Predicate<ObjectSpecification> contributingToWebApi() {
+        return spec-> spec.lookupFacet(DomainServiceFacet.class)
+                .map(DomainServiceFacet::isContributingToWebApi)
+                .orElse(false);
     }
 
 }

@@ -36,10 +36,12 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.Attributes;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -341,6 +343,17 @@ implements FacetHolder {
     public boolean isInjectable() {
         return isInjectableLazy.get();
     }
+
+    private _Lazy<Boolean> isDomainServiceLazy = _Lazy.threadSafe(()->
+        Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.lookup(_ClassCache.getInstance(), getCorrespondingClass())
+            .map("true"::equals)
+            .orElse(false));
+
+    @Override
+    public boolean isDomainService() {
+        return isDomainServiceLazy.get();
+    }
+
 
     // -- TO STRING
 

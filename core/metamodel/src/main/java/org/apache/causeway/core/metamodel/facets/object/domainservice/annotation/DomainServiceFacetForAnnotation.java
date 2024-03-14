@@ -18,16 +18,36 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservice.annotation;
 
-import org.apache.causeway.applib.annotation.NatureOfService;
+import org.apache.causeway.applib.services.scope.ActionContributionFilterService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
+
+import lombok.NonNull;
 
 public class DomainServiceFacetForAnnotation
 extends DomainServiceFacetAbstract {
 
     public DomainServiceFacetForAnnotation(
-            final FacetHolder facetHolder,
-            final NatureOfService natureOfService) {
-        super(facetHolder, natureOfService);
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull Can<ActionContributionFilterService> filterServices) {
+        super(facetHolder,
+                evaluateIsContributingToUi(filterServices),
+                evaluateIsContributingToWebApi(filterServices));
     }
+
+    // -- HELPER
+
+    private static boolean evaluateIsContributingToWebApi(
+            final Can<ActionContributionFilterService> filterServices) {
+        // TODO[CAUSEWAY-3697] honor filterServices
+        return true;
+    }
+
+    private static boolean evaluateIsContributingToUi(
+            final Can<ActionContributionFilterService> filterServices) {
+        // TODO[CAUSEWAY-3697] honor filterServices
+        return true;
+    }
+
 }

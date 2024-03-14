@@ -64,7 +64,10 @@ extends ResourceAbstract
 implements DomainServiceResource {
 
     private static final Predicate<ManagedObject> NATURE_REST = (final ManagedObject input) -> {
-        return DomainServiceFacet.isContributingToWebApi(input.getSpecification());
+        var isContributingToWebApi = input.getSpecification().lookupFacet(DomainServiceFacet.class)
+                .map(DomainServiceFacet::isContributingToWebApi)
+                .orElse(false);
+        return isContributingToWebApi;
     };
 
     public DomainServiceResourceServerside() {

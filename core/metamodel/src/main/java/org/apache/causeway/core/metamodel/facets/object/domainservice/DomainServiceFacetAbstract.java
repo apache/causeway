@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservice;
 
-
 import java.util.function.BiConsumer;
 
-import org.apache.causeway.applib.annotation.NatureOfService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
+import lombok.Getter;
+import lombok.NonNull;
 
 public abstract class DomainServiceFacetAbstract
 extends FacetAbstract
@@ -35,23 +35,25 @@ implements DomainServiceFacet {
         return DomainServiceFacet.class;
     }
 
-    private final NatureOfService natureOfService;
+    @Getter(onMethod_={@Override})
+    private final boolean contributingToUi;
+
+    @Getter(onMethod_={@Override})
+    private final boolean contributingToWebApi;
 
     public DomainServiceFacetAbstract(
-            final FacetHolder facetHolder,
-            final NatureOfService natureOfService) {
+            final @NonNull FacetHolder facetHolder,
+            final boolean contributingToUi,
+            final boolean contributingToWebApi) {
         super(DomainServiceFacetAbstract.type(), facetHolder);
-        this.natureOfService = natureOfService;
-    }
-
-    @Override
-    public NatureOfService getNatureOfService() {
-        return natureOfService;
+        this.contributingToUi = contributingToUi;
+        this.contributingToWebApi = contributingToWebApi;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("natureOfService", natureOfService);
+        visitor.accept("isContributingToUi", isContributingToUi());
+        visitor.accept("isContributingToWebApi", isContributingToWebApi());
     }
 }
