@@ -446,7 +446,7 @@ public final class Facets {
     }
 
     @SuppressWarnings("unchecked")
-    public Optional<TemporalCharacteristicsProvider> valueTemporalAndOffsetCharacteristics(
+    public Optional<TemporalCharacteristicsProvider> valueTemporalCharacteristicsProvider(
             final ObjectSpecification objectSpec) {
         return objectSpec.valueFacet()
             .flatMap(valueFacet->valueFacet.getAllValueSemantics().stream()
@@ -454,9 +454,9 @@ public final class Facets {
             .flatMap(valueSemantics->_Casts.castTo(TemporalCharacteristicsProvider.class, valueSemantics));
     }
 
-    public TemporalCharacteristicsProvider valueTemporalAndOffsetCharacteristicsElseFail(
+    public TemporalCharacteristicsProvider valueTemporalCharacteristicsProviderElseFail(
             final ObjectSpecification objectSpec) {
-        return valueTemporalAndOffsetCharacteristics(objectSpec)
+        return valueTemporalCharacteristicsProvider(objectSpec)
                 .orElseThrow(()->_Exceptions.illegalState("no temporal characteristics found for %s",
                         objectSpec));
     }

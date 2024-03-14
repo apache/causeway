@@ -93,13 +93,13 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
         case OFFSET:
             Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timeoffset",
                     new PropertyModel<ZoneOffset>(temporalDecomposition, "zoneOffset"),
-                    temporalAndOffsetCharacteristics().getAvailableOffsets())
+                    temporalCharacteristicsProvider().getAvailableOffsets())
                 .setRequired(true);
             break;
         case ZONED:
             Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timezone",
                     new PropertyModel<ZoneId>(temporalDecomposition, "zoneId"),
-                    temporalAndOffsetCharacteristics().getAvailableZoneIds())
+                    temporalCharacteristicsProvider().getAvailableZoneIds())
                 .setRequired(true);
             break;
         case LOCAL:
@@ -131,12 +131,12 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     // -- HELPER
 
-    private TemporalCharacteristicsProvider temporalAndOffsetCharacteristics() {
-        return Facets.valueTemporalAndOffsetCharacteristicsElseFail(scalarModel().getElementType());
+    private TemporalCharacteristicsProvider temporalCharacteristicsProvider() {
+        return Facets.valueTemporalCharacteristicsProviderElseFail(scalarModel().getElementType());
     }
 
     private OffsetCharacteristic offsetCharacteristic() {
-        return temporalAndOffsetCharacteristics().getOffsetCharacteristic();
+        return temporalCharacteristicsProvider().getOffsetCharacteristic();
     }
 
     private <X> TextField<X> installUpdateNotifier(final TextField<X> textField) {
