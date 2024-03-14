@@ -37,7 +37,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import lombok.RequiredArgsConstructor;
 
 @Named(TranslationServicePoMenu.LOGICAL_TYPE_NAME)
-@DomainService()
+@DomainService
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

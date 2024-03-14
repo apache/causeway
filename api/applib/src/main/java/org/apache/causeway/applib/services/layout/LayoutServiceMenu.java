@@ -46,7 +46,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
  * @since 1.x {@index}
  */
 @Named(LayoutServiceMenu.LOGICAL_TYPE_NAME)
-@DomainService()
+@DomainService
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY

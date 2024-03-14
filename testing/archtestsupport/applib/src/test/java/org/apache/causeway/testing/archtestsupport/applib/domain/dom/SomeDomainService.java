@@ -23,7 +23,7 @@ import jakarta.inject.Named;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 
-@DomainService()
+@DomainService
 @Named("foo2")
 @DomainServiceLayout()
 public class SomeDomainService {
