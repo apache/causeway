@@ -19,19 +19,13 @@
 package org.apache.causeway.applib.value.semantics;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.temporal.Temporal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
@@ -44,50 +38,8 @@ public interface TemporalValueSemantics<T extends Temporal>
 extends
     OrderRelation<T, Duration>,
     Parser<T>,
-    Renderer<T> {
-
-    static enum TemporalCharacteristic {
-
-        /**
-         * Temporal value type has no date information, just time.
-         */
-        TIME_ONLY,
-
-        /**
-         * Temporal value type has no time information, just date.
-         */
-        DATE_ONLY,
-
-        /**
-         * Temporal value type has both date and time information.
-         */
-        DATE_TIME
-    }
-
-    static enum OffsetCharacteristic {
-
-        /**
-         * Temporal value type has no time-zone data.
-         */
-        LOCAL,
-
-        /**
-         * Temporal value type has time-zone offset data.
-         */
-        OFFSET,
-
-        /**
-         * Temporal value type has time-zone id data.
-         */
-        ZONED;
-
-        public boolean isLocal() {return this == LOCAL;}
-        public boolean isOffset() {return this == OFFSET;}
-        public boolean isZoned() {return this == ZONED;}
-    }
-
-    TemporalCharacteristic getTemporalCharacteristic();
-    OffsetCharacteristic getOffsetCharacteristic();
+    Renderer<T>,
+    TemporalCharacteristicsProvider {
 
     static enum EditingFormatDirection {
 
@@ -353,29 +305,6 @@ extends
             throw _Exceptions.unmatchedCase(timePrecision);
         }
 
-    }
-
-    /**
-     * For temporal value editing, provides the list of available time zones to choose from.
-     */
-    default List<ZoneId> getAvailableZoneIds() {
-        return ZoneId.getAvailableZoneIds().stream()
-            .sorted()
-            .map(ZoneId::of)
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * For temporal value editing, provides the list of available offsets to choose from.
-     */
-    default List<ZoneOffset> getAvailableOffsets() {
-        val now = LocalDateTime.now();
-        return getAvailableZoneIds().stream()
-            .map(ZoneId::getRules)
-            .flatMap(zoneIdRules->zoneIdRules.getValidOffsets(now).stream())
-            .sorted()
-            .distinct()
-            .collect(Collectors.toList());
     }
 
 }

@@ -29,8 +29,8 @@ import java.util.Locale;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
+import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider.OffsetCharacteristic;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -50,15 +50,17 @@ import lombok.Setter;
  * based on existing widgets, that do not support zone or offset information.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class TemporalDecomposition<T extends Temporal> implements IConverter<T> {
+public class TemporalDecomposition<T> implements IConverter<T> {
     private static final long serialVersionUID = 1L;
 
     public static <T extends Temporal> TemporalDecomposition<T> create(final Class<T> type,
             final ScalarModel scalarModel,
-            final TemporalValueSemantics<T> temporalValueSemantics,
+            final OffsetCharacteristic offsetCharacteristic,
             final ConverterBasedOnValueSemantics<T> fullConverter) {
 
-        var needsDecomposition = !temporalValueSemantics.getOffsetCharacteristic().isLocal()
+        _Assert.assertTrue(fullConverter.canHandle(type));
+
+        var needsDecomposition = !offsetCharacteristic.isLocal()
                 && scalarModel.getViewOrEditMode().isEditing();
 
         var baseEditingPattern = fullConverter.getEditingPattern();
@@ -66,7 +68,7 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
             ? stripZoneSuffixFrom(baseEditingPattern)
             : baseEditingPattern;
 
-        var tempDecomp = new TemporalDecomposition<>(type, temporalValueSemantics, fullConverter,
+        var tempDecomp = new TemporalDecomposition<>(type, offsetCharacteristic, fullConverter,
                 scalarModel.getViewOrEditMode(),
                 editingPattern);
 
@@ -77,7 +79,7 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
     }
 
     private final @NonNull Class<T> type;
-    private final @NonNull TemporalValueSemantics<T> temporalValueSemantics;
+    private final OffsetCharacteristic offsetCharacteristic;
     private final @NonNull ConverterBasedOnValueSemantics<T> fullConverter;
     private final @NonNull ViewOrEditMode viewOrEditMode;
 
@@ -85,6 +87,7 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
     private final String editingPattern;
 
     private void initFrom(final ManagedValue proposedValue) {
+        //TODO[CAUSEWAY-3489] handle non java.time.Temporal values also
         var temporalValue = MmUnwrapUtils.single(proposedValue.getValue().getValue());
         if(temporalValue instanceof ZonedDateTime) {
             var zonedDateTime = (ZonedDateTime) temporalValue;
@@ -99,6 +102,8 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
         //TODO[CAUSEWAY-3489] zone/offset info on new temporal value should be set to current user's info from session
     }
 
+    // -- CONVERTER
+
     @Override
     public T convertToObject(final String noZoneValue, final Locale locale) throws ConversionException {
         var fullTemporalString = noZoneValue + getZoneOrOffsetSuffix();
@@ -111,12 +116,8 @@ public class TemporalDecomposition<T extends Temporal> implements IConverter<T> 
 
     // -- SPECIALIZATION
 
-    private OffsetCharacteristic offsetCharacteristic() {
-        return temporalValueSemantics.getOffsetCharacteristic();
-    }
-
     private String getZoneOrOffsetSuffix() {
-        switch (offsetCharacteristic()) {
+        switch (offsetCharacteristic) {
         case OFFSET:
             return " " + _Temporals.formatZoneId(zoneOffset==null
                     ? ZoneOffset.UTC

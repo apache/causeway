@@ -26,18 +26,16 @@ import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
@@ -183,13 +181,9 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
     // -- CONVERSION
 
     public final <T> Optional<IConverter<T>> getConverter(final Class<T> requiredType) {
-
-        _Assert.assertTypeIsInstanceOf(
-                ClassUtils.resolvePrimitiveIfNecessary(getMetaModel().getElementType().getCorrespondingClass()),
-                requiredType);
-
+        final ObjectFeature propOrParam = getMetaModel();
         return Optional.of(
-                new ConverterBasedOnValueSemantics<>(getMetaModel(), getViewOrEditMode()));
+                new ConverterBasedOnValueSemantics<>(requiredType, propOrParam, getViewOrEditMode()));
     }
 
     // -- PREDICATES

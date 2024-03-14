@@ -21,12 +21,25 @@ package org.apache.causeway.core.metamodel.valuetypes;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 
+import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider;
+
 public abstract class TemporalSemanticsAdapter<T, D extends Temporal>
-extends ValueSemanticsAdapter<T, D, Duration> {
+extends ValueSemanticsAdapter<T, D, Duration>
+implements TemporalCharacteristicsProvider {
 
     // -- ORDER RELATION
 
     protected final static Duration ALMOST_A_SECOND = Duration.ofNanos(999_999_999);
     protected final static Duration ALMOST_A_MILLI_SECOND = Duration.ofNanos(999_999);
+
+    @Override
+    public final TemporalCharacteristic getTemporalCharacteristic() {
+        return ((TemporalCharacteristicsProvider)getDelegate()).getTemporalCharacteristic();
+    }
+
+    @Override
+    public final OffsetCharacteristic getOffsetCharacteristic() {
+        return ((TemporalCharacteristicsProvider)getDelegate()).getOffsetCharacteristic();
+    }
 
 }

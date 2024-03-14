@@ -23,6 +23,10 @@ import java.util.Locale;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -38,10 +42,22 @@ implements IConverter<T> {
 
     private static final long serialVersionUID = 1L;
 
+    public final Class<T> type;
+    public final Class<?> resolvedType;
+
     public ConverterBasedOnValueSemantics(
+            final @NonNull Class<T> type,
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ViewOrEditMode scalarRepresentation) {
         super(propOrParam, scalarRepresentation);
+        this.type = type;
+        this.resolvedType = ClassUtils.resolvePrimitiveIfNecessary(propOrParam.getElementType().getCorrespondingClass());
+        _Assert.assertTypeIsInstanceOf(resolvedType, type);
+    }
+
+    public final boolean canHandle(final @Nullable Class<?> aType) {
+        return aType!=null
+                && resolvedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(aType));
     }
 
     /**
