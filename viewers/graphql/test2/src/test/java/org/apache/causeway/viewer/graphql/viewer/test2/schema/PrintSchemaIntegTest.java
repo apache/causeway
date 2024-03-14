@@ -18,19 +18,7 @@
  */
 package org.apache.causeway.viewer.graphql.viewer.test2.schema;
 
-import graphql.schema.idl.SchemaPrinter;
-
-import lombok.val;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -38,10 +26,9 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.viewer.graphql.viewer.test2.domain.UniversityModule;
 import org.apache.causeway.viewer.graphql.viewer.testsupport.schema.PrintSchemaIntegTestAbstract;
-
-import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 @Import({
         UniversityModule.class,
