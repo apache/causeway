@@ -127,10 +127,10 @@ public class _OsUtil {
         }
         val rt = Runtime.getRuntime();
         val os = OS.current();
-        final String cmd;
+        final String[] cmd;
         switch(os) {
         case WINDOWS:
-            cmd = String.format("taskkill /F /PID %s /T", pidTrimmed);
+            cmd = new String[] {"taskkill.exe", "/F", "/PID", pidTrimmed, "/T"};
             break;
         case LINUX:
             //XXX implement eventually
@@ -139,7 +139,7 @@ public class _OsUtil {
         default:
             throw _Exceptions.unsupportedOperation("OS " + os + " not (yet) supported");
         }
-        rt.exec(new String[]{cmd});
+        rt.exec(cmd);
     }
 
     /**
