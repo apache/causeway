@@ -18,18 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservice.annotation;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.scope.ActionContributionFilterService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -40,9 +46,20 @@ public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
-    @Inject
+    private final Can<ActionContributionFilterService> actionContributionFilterServices;
+
+    @Component
+    public static class FilterHolder {
+        @Autowired(required = false)
+        List<ActionContributionFilterService> actionContributionFilterServices;
+        Can<ActionContributionFilterService> toCan() {
+            return Can.ofCollection(actionContributionFilterServices);
+        }
+    }
+
     public DomainServiceFacetAnnotationFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
+        this.actionContributionFilterServices = mmc.getServiceInjector().injectServicesInto(new FilterHolder()).toCan();
     }
 
     @Override
@@ -51,11 +68,18 @@ implements MetaModelRefiner {
         if (!domainServiceIfAny.isPresent()) {
             return;
         }
+
         val facetHolder = processClassContext.getFacetHolder();
+
+        val logicalType = _Casts.castTo(ObjectSpecification.class, facetHolder)
+                .map(ObjectSpecification::getLogicalType)
+                .orElseGet(()->LogicalType.fqcn(processClassContext.getCls())); // JUnit support
+
         addFacet(
                 new DomainServiceFacetForAnnotation(
-                        facetHolder,
-                        Can.empty())); //TODO[CAUSEWAY-3697] provide services
+                        logicalType,
+                        actionContributionFilterServices,
+                        facetHolder));
 
         addFacetIfPresent(
                 AliasedFacetForDomainServiceAnnotation

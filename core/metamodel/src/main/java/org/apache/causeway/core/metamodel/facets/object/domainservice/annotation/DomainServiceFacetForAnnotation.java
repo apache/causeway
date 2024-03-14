@@ -18,36 +18,40 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservice.annotation;
 
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.scope.ActionContributionFilterService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
-import lombok.NonNull;
-
 public class DomainServiceFacetForAnnotation
 extends DomainServiceFacetAbstract {
 
     public DomainServiceFacetForAnnotation(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull Can<ActionContributionFilterService> filterServices) {
-        super(facetHolder,
-                evaluateIsContributingToUi(filterServices),
-                evaluateIsContributingToWebApi(filterServices));
+            final LogicalType logicalType,
+            final Can<ActionContributionFilterService> filterServices,
+            final FacetHolder holder) {
+        super(evaluateIsContributingToUi(logicalType, filterServices),
+                evaluateIsContributingToWebApi(logicalType, filterServices),
+                holder);
     }
 
     // -- HELPER
 
-    private static boolean evaluateIsContributingToWebApi(
+    private static boolean evaluateIsContributingToUi(
+            final LogicalType logicalType,
             final Can<ActionContributionFilterService> filterServices) {
-        // TODO[CAUSEWAY-3697] honor filterServices
-        return true;
+        var veto = filterServices.stream()
+            .anyMatch(spi->!spi.isContributingToUi(logicalType));
+        return !veto;
     }
 
-    private static boolean evaluateIsContributingToUi(
+    private static boolean evaluateIsContributingToWebApi(
+            final LogicalType logicalType,
             final Can<ActionContributionFilterService> filterServices) {
-        // TODO[CAUSEWAY-3697] honor filterServices
-        return true;
+        var veto = filterServices.stream()
+            .anyMatch(spi->!spi.isContributingToWebApi(logicalType));
+        return !veto;
     }
 
 }

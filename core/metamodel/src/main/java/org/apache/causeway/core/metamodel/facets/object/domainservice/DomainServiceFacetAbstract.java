@@ -42,9 +42,9 @@ implements DomainServiceFacet {
     private final boolean contributingToWebApi;
 
     public DomainServiceFacetAbstract(
-            final @NonNull FacetHolder facetHolder,
             final boolean contributingToUi,
-            final boolean contributingToWebApi) {
+            final boolean contributingToWebApi,
+            final @NonNull FacetHolder facetHolder) {
         super(DomainServiceFacetAbstract.type(), facetHolder);
         this.contributingToUi = contributingToUi;
         this.contributingToWebApi = contributingToWebApi;
