@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -172,22 +171,6 @@ public class CommonDomainObject
                 .filter((this::inApiScope))
                 .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.getApiVariant(), act))
                 .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
-    }
-
-    private boolean inApiScope(ObjectAction act) {
-        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
-            return true;
-        }
-        val returnType = act.getElementType();
-        return returnType.isViewModelOrValueOrVoid() &&
-               act.getParameterTypes().stream().allMatch(ObjectSpecification::isViewModelOrValue);
-    }
-
-    private boolean inApiScope(final ObjectAssociation objAssoc) {
-        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
-            return true;
-        }
-        return objAssoc.getElementType().isViewModelOrValue();
     }
 
     @SuppressWarnings("unused")

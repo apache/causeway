@@ -53,6 +53,7 @@ public class RichTopLevelMutation
 
         objectSpecifications.forEach(objectSpec -> {
             objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
+                    .filter(this::inApiScope)
                     .filter(x -> ! x.getSemantics().isSafeInNature())
                     .forEach(objectAction -> addAction(objectSpec, objectAction));
             objectSpec.streamProperties(MixedIn.INCLUDED)

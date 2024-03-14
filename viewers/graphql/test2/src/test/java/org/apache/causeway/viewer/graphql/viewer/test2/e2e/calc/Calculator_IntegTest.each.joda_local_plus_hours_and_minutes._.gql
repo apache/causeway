@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      jodaLocalPlusHoursAndMinutes {
+        invoke(time: "13:35:05", numHours: 2, numMinutes: 20) {
+          results
+        }
+      }
+    }
+  }
+}

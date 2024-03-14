@@ -23,7 +23,6 @@ import java.util.List;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -49,18 +48,16 @@ public abstract class CommonTopLevelQueryAbstract
         super(schemaStrategy.getSchemaType().name() + "Schema", context);
         this.schemaStrategy = schemaStrategy;
 
-        boolean includeEntities = context.causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
 
                 case ABSTRACT:
                 case VIEW_MODEL:
-                    addDomainObject(objectSpec, schemaStrategy, context);
-                    break;
                 case ENTITY:
-                    if (includeEntities) {
-                        addDomainObject(objectSpec, schemaStrategy, context);
-                    }
+                    val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
+                    addChildField(gqlvDomainObject.newField());
+                    domainObjects.add(gqlvDomainObject);
+                    break;
 
             }
         });
@@ -76,15 +73,6 @@ public abstract class CommonTopLevelQueryAbstract
                     break;
             }
         });
-    }
-
-    private void addDomainObject(
-            final ObjectSpecification objectSpec,
-            final SchemaStrategy schemaStrategy,
-            final Context context) {
-        val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
-        addChildField(gqlvDomainObject.newField());
-        domainObjects.add(gqlvDomainObject);
     }
 
     public static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {

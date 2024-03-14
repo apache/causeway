@@ -12,6 +12,14 @@ include::../section-hooks/causeway.viewer.graphql~pre.adoc[]
 |Default
 |Description
 |
+[[causeway.viewer.graphql.api-scope]]
+causeway.viewer.graphql.api-scope
+
+| 
+| Which domain objects to include the GraphQL schema.
+
+
+|
 [[causeway.viewer.graphql.api-variant]]
 causeway.viewer.graphql. +
 api-variant

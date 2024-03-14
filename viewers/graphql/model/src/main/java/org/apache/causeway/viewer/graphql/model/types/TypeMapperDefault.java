@@ -95,26 +95,35 @@ public class TypeMapperDefault implements TypeMapper {
             final OneToOneFeature oneToOneFeature,
             final SchemaType schemaType) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
+
         switch (otoaObjectSpec.getBeanSort()) {
 
             case VIEW_MODEL:
-            case ENTITY:
+                return typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
 
-                GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, schemaType));
-                return oneToOneFeature.isOptional()
-                        ? fieldTypeRef
-                        : nonNull(fieldTypeRef);
+            case ENTITY:
+                return typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
 
             case VALUE:
-
-                GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.getCorrespondingClass());
-
-                return oneToOneFeature.isOptional()
-                        ? scalarType
-                        : nonNull(scalarType);
+                return scalarTypePossiblyOptional(oneToOneFeature, otoaObjectSpec);
         }
         return null;
     }
+
+    private static GraphQLOutputType typeRefPossiblyOptional(OneToOneFeature oneToOneFeature, SchemaType schemaType, ObjectSpecification otoaObjectSpec) {
+        GraphQLTypeReference fieldTypeRef = typeRef(TypeNames.objectTypeNameFor(otoaObjectSpec, schemaType));
+        return oneToOneFeature.isOptional()
+                ? fieldTypeRef
+                : nonNull(fieldTypeRef);
+    }
+
+    private GraphQLOutputType scalarTypePossiblyOptional(OneToOneFeature oneToOneFeature, ObjectSpecification otoaObjectSpec) {
+        GraphQLOutputType scalarType = outputTypeFor(otoaObjectSpec.getCorrespondingClass());
+        return oneToOneFeature.isOptional()
+                ? scalarType
+                : nonNull(scalarType);
+    }
+
 
     @Override
     @Nullable
@@ -124,8 +133,9 @@ public class TypeMapperDefault implements TypeMapper {
 
         switch (objectSpecification.getBeanSort()){
             case ABSTRACT:
-            case ENTITY:
             case VIEW_MODEL:
+                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
+            case ENTITY:
                 return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
 
             case VALUE:
@@ -179,8 +189,9 @@ public class TypeMapperDefault implements TypeMapper {
         val elementObjectSpec = oneToOneFeature.getElementType();
         switch (elementObjectSpec.getBeanSort()) {
             case ABSTRACT:
-            case ENTITY:
             case VIEW_MODEL:
+                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
+            case ENTITY:
                 return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
 
             case VALUE:
@@ -208,8 +219,9 @@ public class TypeMapperDefault implements TypeMapper {
             final SchemaType schemaType){
         switch (elementType.getBeanSort()) {
             case ABSTRACT:
-            case ENTITY:
             case VIEW_MODEL:
+                return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
+            case ENTITY:
                 return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
 
             case VALUE:

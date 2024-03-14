@@ -1,0 +1,11 @@
+{
+  rich {
+    university_calc_Calculator {
+      not {
+        invoke(x: true) {
+          results
+        }
+      }
+    }
+  }
+}
