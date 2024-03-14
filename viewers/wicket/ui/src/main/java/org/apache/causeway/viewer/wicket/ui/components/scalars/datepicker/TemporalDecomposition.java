@@ -151,7 +151,7 @@ public class TemporalDecomposition<T> implements IConverter<T> {
         case OFFSET:
             return " " + _Temporals.formatZoneId(zoneOffset==null
                     ? ZoneOffset.UTC
-                    : zoneId,
+                    : zoneOffset,
                 _Temporals.ISO_OFFSET_ONLY_FORMAT);
         case ZONED:
             return " " + _Temporals.formatZoneId(zoneId==null
