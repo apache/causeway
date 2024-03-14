@@ -96,7 +96,8 @@ public class Context {
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
                 .filter(x ->
                            x.isViewModel()
-                        || x.isEntity() && includeEntities
+                        || (includeEntities && x.isEntity())
+                        || (includeEntities && x.isAbstract()) // this is a little bit inaccurate; Person.class was not being picked up, not sure that MappedSuperclass is enough to install the EntityFacet though.
                         || x.getBeanSort().isManagedBeanContributing()
                 )
                 .filter(predicate)
