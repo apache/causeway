@@ -31,10 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.locale.UserLocale;
+import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider.OffsetCharacteristic;
+import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider.TemporalCharacteristic;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalCharacteristic;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.causeway.core.config.CausewayConfiguration;

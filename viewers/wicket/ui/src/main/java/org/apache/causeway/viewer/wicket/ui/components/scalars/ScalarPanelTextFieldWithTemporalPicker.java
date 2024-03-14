@@ -29,10 +29,8 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.OffsetCharacteristic;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider;
+import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider.OffsetCharacteristic;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
@@ -70,7 +68,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
         this.temporalDecomposition = TemporalDecomposition.create(type,
                 scalarModel,
-                temporalValueSemantics(),
+                offsetCharacteristic(),
                 (ConverterBasedOnValueSemantics<T>)converterElseFail());
 
         val textField = new TextFieldWithDateTimePicker<T>(
@@ -95,13 +93,13 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
         case OFFSET:
             Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timeoffset",
                     new PropertyModel<ZoneOffset>(temporalDecomposition, "zoneOffset"),
-                    temporalValueSemantics().getAvailableOffsets())
+                    temporalCharacteristicsProvider().getAvailableOffsets())
                 .setRequired(true);
             break;
         case ZONED:
             Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timezone",
                     new PropertyModel<ZoneId>(temporalDecomposition, "zoneId"),
-                    temporalValueSemantics().getAvailableZoneIds())
+                    temporalCharacteristicsProvider().getAvailableZoneIds())
                 .setRequired(true);
             break;
         case LOCAL:
@@ -133,14 +131,12 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     // -- HELPER
 
-    private TemporalValueSemantics<T> temporalValueSemantics() {
-        return _Casts.uncheckedCast(Facets.valueTemporalSemantics(scalarModel().getElementType())
-                .orElseThrow(()->_Exceptions.illegalState("no (temporal) value semantics found for %s",
-                        scalarModel().getElementType())));
+    private TemporalCharacteristicsProvider temporalCharacteristicsProvider() {
+        return Facets.valueTemporalCharacteristicsProviderElseFail(scalarModel().getElementType());
     }
 
     private OffsetCharacteristic offsetCharacteristic() {
-        return temporalValueSemantics().getOffsetCharacteristic();
+        return temporalCharacteristicsProvider().getOffsetCharacteristic();
     }
 
     private <X> TextField<X> installUpdateNotifier(final TextField<X> textField) {

@@ -117,7 +117,8 @@ public class ConverterTester<T extends Serializable> {
             final ViewOrEditMode representation) {
         val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
         val prop = customerSpec.getPropertyElseFail("value");
-        return new ConverterBasedOnValueSemantics<>(prop, representation);
+        var propType = (Class<T>) prop.getElementType().getCorrespondingClass();
+        return new ConverterBasedOnValueSemantics<T>(propType, prop, representation);
     }
 
     public void runWithInteraction(final @NonNull ThrowingRunnable runnable) {
