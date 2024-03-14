@@ -436,7 +436,7 @@ implements MenuBarsService {
         final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
         if (domainServiceFacet != null) {
             final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
-            if (!natureOfService.isBoth()) {
+            if (!natureOfService.isEnabledForUi()) {
                 return Stream.empty();
             }
         }
@@ -482,9 +482,6 @@ implements MenuBarsService {
                 LINKS_SCHEMA_LOCATION)
                 .collect(Collectors.joining(" "));
     }
-
-
-
 
 }
 

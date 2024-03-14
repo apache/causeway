@@ -25,16 +25,16 @@ package org.apache.causeway.applib.annotation;
  */
 public enum NatureOfService {
     /**
-     * The service's actions appear only in the menu bar human-usable Web UIs (such as Wicket viewer).
+     * The service's actions appear only in the menu bar human-usable UIs (such as Wicket viewer).
      * They do <i>not</i> appear in any REST or GraphQL APIs.
      */
-    WEB_UI,
+    WEB_UI, //TODO perhaps rename to UI_ONLY?
 
     /**
      * The service's actions should only be visible in the Web API exposed by the Restful Objects viewer and the
      * GraphQL viewer.  They do <i>not</i> appear in any human-usable Web UIs (such as Wicket viewer)
      */
-    WEB_API,
+    WEB_API, //TODO perhaps rename to WEBAPI_ONLY?
 
     /**
      * The service's actions appear in the menu bar of Web UIs (such as Wicket viewer), and also appear in the
@@ -44,35 +44,53 @@ public enum NatureOfService {
      * Contributing actions to the 'viewer' implies, that these must also be exposed to the REST API,
      * simply because alternative viewers might be solely based on the provided REST end-points.
      */
-    BOTH,
+    BOTH, //TODO perhaps rename to ENABLED_EVERYWHERE?
+
+    /**
+     * @deprecated use {@link #BOTH} instead
+     * @see NatureOfService#BOTH
+     */
+    @Deprecated
+    VIEW,
+
+    /**
+     * @deprecated use {@link #WEB_API} instead
+     * @see NatureOfService#WEB_API
+     */
+    @Deprecated
+    REST
+
     ;
 
     // -- BASIC PREDICATES
 
     /**
-     * Whether a service contributes its actions to both human-usable Web UIs and the Web APIs.
+     * Whether a service contributes its actions to both human-usable UIs and the Web APIs.
      *
      * @see NatureOfService#BOTH
      */
-    public boolean isBoth() {
-        return this == BOTH;
+    public boolean isEnabledEverywhere() {
+        return this == BOTH
+                || this == VIEW;
     }
 
     /**
-     * Whether a service contributes its actions exclusively to human-usable Web UIs.
+     * Whether a service contributes its actions to human-usable UIs.
      * @see NatureOfService#WEB_UI
      */
-    public boolean isWebUi() {
-        return this == WEB_UI || this == BOTH;
+    public boolean isEnabledForUi() {
+        return isEnabledEverywhere()
+                || this == WEB_UI;
     }
 
     /**
      * Whether a service contributes its actions to Web APIs (REST and GraphQL)
      * @see NatureOfService#WEB_API
      */
-    public boolean isWebApi() {
-        return this == WEB_API || this == BOTH;
+    public boolean isEnabledForWebApi() {
+        return isEnabledEverywhere()
+                || this == WEB_API
+                || this == REST;
     }
-
 
 }

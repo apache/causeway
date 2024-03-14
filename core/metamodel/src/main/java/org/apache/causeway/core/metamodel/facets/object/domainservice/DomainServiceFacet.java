@@ -51,9 +51,9 @@ public interface DomainServiceFacet extends Facet {
      * @param facetHolderIfAny - null-able
      * @return whether facetHolder represents a service that contributes actions to the Web UI (may or may not also contribute to the Web APIs)
      */
-    static boolean isContributingToWebUi(final @Nullable FacetHolder facetHolderIfAny) {
+    static boolean isContributingToUi(final @Nullable FacetHolder facetHolderIfAny) {
         return getNatureOfService(facetHolderIfAny)
-                .filter(NatureOfService::isWebUi)
+                .filter(NatureOfService::isEnabledForUi)
                 .isPresent();
     }
 
@@ -63,7 +63,7 @@ public interface DomainServiceFacet extends Facet {
      */
     static boolean isContributingToWebApi(final @Nullable FacetHolder facetHolderIfAny) {
         return getNatureOfService(facetHolderIfAny)
-                .filter(NatureOfService::isWebApi)
+                .filter(NatureOfService::isEnabledForWebApi)
                 .isPresent();
     }
 
