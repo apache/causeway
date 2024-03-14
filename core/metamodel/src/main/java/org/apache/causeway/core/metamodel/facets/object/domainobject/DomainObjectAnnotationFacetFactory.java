@@ -600,7 +600,7 @@ implements
 
                                 proxies.forEach(spec->{
                                     ValidationFailure.raiseFormatted(spec,
-                                        ProgrammingModelConstants.Violation.PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE_TO_UI
+                                        ProgrammingModelConstants.Violation.PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE
                                             .builder()
                                             .addVariable("logicalTypeName", spec.getLogicalTypeName())
                                             .addVariable("csv", asCsv(proxies.toList()))

@@ -463,10 +463,10 @@ public final class ProgrammingModelConstants {
         NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to multiple non-abstract classes:\n"
                 + "${csv}"),
-        PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE_TO_UI("Logical type name (or alias) ${logicalTypeName} "
+        PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to at least one proxied class:\n"
-                + "${csv}. Proxied service beans are not allowed to contribute to the UI. "
-                + "E.g. don't mix @Transactional with @DomainServicenature=VIEW)"),
+                + "${csv}. Proxied service beans are not allowed to contribute actions to the UI or Web-API(s). "
+                + "E.g. don't mix @Transactional with @DomainService"),
         UNKNONW_SORT_WITH_ACTION("${type}: is a (concrete) but UNKNOWN sort, yet has ${actionCount} actions: ${actions}"),
         ACTION_METHOD_OVERLOADING_NOT_ALLOWED("Action method overloading is not allowed, "
                 + "yet ${type} has action(s) that have a the same member name: ${overloadedNames}"),
