@@ -72,7 +72,7 @@ extends ReprRendererAbstract<Void> {
         addLinkToUser(getResourceContext().getInteractionService().currentInteractionContextElseFail());
         addLinksToApplicationLogos();
         addLinkToMenuBars();
-        addLinkToServices(metaModelContext.streamServiceAdapters());
+        addLinkToServices(metaModelContext.streamServicesContributingToWebApi());
         addLinkToVersion();
         addLinkToDomainTypes(getResourceContext().getMetaModelContext().getSpecificationLoader().snapshotSpecifications());
 

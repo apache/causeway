@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
@@ -38,7 +37,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.io.UrlUtils;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -63,13 +61,6 @@ public class DomainServiceResourceServerside
 extends ResourceAbstract
 implements DomainServiceResource {
 
-    private static final Predicate<ManagedObject> NATURE_REST = (final ManagedObject input) -> {
-        var isContributingToWebApi = input.getSpecification().lookupFacet(DomainServiceFacet.class)
-                .map(DomainServiceFacet::isContributingToWebApi)
-                .orElse(false);
-        return isContributingToWebApi;
-    };
-
     public DomainServiceResourceServerside() {
         super();
         log.debug("<init>");
@@ -87,12 +78,10 @@ implements DomainServiceResource {
         val resourceContext = createResourceContext(
                 RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val metaModelContext = resourceContext.getMetaModelContext();
+        final Stream<ManagedObject> serviceAdapters = resourceContext.streamServicesContributingToWebApi();
 
-        final Stream<ManagedObject> serviceAdapters = metaModelContext.streamServiceAdapters()
-                .filter(NATURE_REST);
-
-        final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(
+                resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
         .includesSelf()
         .with(serviceAdapters);

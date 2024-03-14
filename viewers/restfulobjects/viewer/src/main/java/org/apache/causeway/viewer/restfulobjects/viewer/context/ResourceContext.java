@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -252,5 +254,10 @@ implements IResourceContext {
     @Getter(onMethod = @__(@Override))
     @Setter //(onMethod = @__(@Override))
     private ObjectAdapterLinkTo objectAdapterLinkTo;
+
+    public final Stream<ManagedObject> streamServicesEnabledForWebApi() {
+        return metaModelContext.streamServiceAdapters()
+                .filter(object->DomainServiceFacet.contributingToWebApi().test(object.getSpecification()));
+    }
 
 }

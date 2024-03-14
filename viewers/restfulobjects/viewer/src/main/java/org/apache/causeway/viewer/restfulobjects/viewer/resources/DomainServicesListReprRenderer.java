@@ -28,10 +28,12 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ListRep
 
 public class DomainServicesListReprRenderer extends ListReprRenderer {
 
-    public DomainServicesListReprRenderer(final IResourceContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public DomainServicesListReprRenderer(
+            final IResourceContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, representation);
     }
-
 
     @Override
     public JsonRepresentation render() {
@@ -44,17 +46,17 @@ public class DomainServicesListReprRenderer extends ListReprRenderer {
         return representation;
     }
 
-
     private void addLinkToSelf() {
-        final JsonRepresentation link = LinkBuilder.newBuilder(getResourceContext(), Rel.SELF.getName(), RepresentationType.LIST, "services").build();
+        final JsonRepresentation link = LinkBuilder.newBuilder(
+                getResourceContext(), Rel.SELF.getName(), RepresentationType.LIST, "services")
+                .build();
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(streamServiceAdapters());
+            renderer.with(resourceContext.streamServicesContributingToWebApi());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
-
         getLinks().arrayAdd(link);
     }
 

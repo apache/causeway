@@ -60,7 +60,6 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacet
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
-import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
@@ -264,7 +263,7 @@ implements MenuBarsService {
     private BSMenuBars menuBarsFromAnnotationsOnly() {
         final BSMenuBars menuBars = new BSMenuBars();
 
-        val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
+        val visibleServiceAdapters = metaModelContext.streamServicesContributingToUi()
                 .filter(this::isVisibleAdapterForMenu)
                 .collect(Can.toCan());
 
@@ -428,12 +427,8 @@ implements MenuBarsService {
     private Stream<ServiceAndAction> streamServiceActions(
             final ManagedObject serviceAdapter,
             final ActionScope actionType) {
+
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-
-        if (!DomainServiceFacet.contributingToUi().test(serviceSpec)) {
-            return Stream.empty();
-        }
-
         final Stream<ObjectAction> objectActions = serviceSpec.streamDeclaredActions(actionType, MixedIn.INCLUDED);
 
         return objectActions

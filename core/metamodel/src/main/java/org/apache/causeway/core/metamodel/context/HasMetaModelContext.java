@@ -22,11 +22,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.locale.UserLocale;
+import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
@@ -44,6 +43,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -208,6 +208,16 @@ public interface HasMetaModelContext {
 
     default Stream<ManagedObject> streamServiceAdapters() {
         return getMetaModelContext().streamServiceAdapters();
+    }
+
+    default Stream<ManagedObject> streamServicesContributingToWebApi() {
+        return streamServiceAdapters()
+                .filter(object->DomainServiceFacet.contributingToWebApi().test(object.getSpecification()));
+    }
+
+    default Stream<ManagedObject> streamServicesContributingToUi() {
+        return streamServiceAdapters()
+                .filter(object->DomainServiceFacet.contributingToUi().test(object.getSpecification()));
     }
 
 }
