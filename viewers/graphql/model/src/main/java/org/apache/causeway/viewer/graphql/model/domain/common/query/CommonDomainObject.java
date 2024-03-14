@@ -31,16 +31,13 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLInputObjectType.newInputObject;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
+import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
@@ -74,7 +71,7 @@ public class CommonDomainObject
 
     @Getter private final GraphQLInputObjectType gqlInputObjectType;
 
-    public static String typeNameFor(SchemaStrategy schemaStrategy, ObjectSpecification objectSpecification) {
+    public static String typeNameFor(final SchemaStrategy schemaStrategy, final ObjectSpecification objectSpecification) {
         return TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType());
     }
 
@@ -126,6 +123,7 @@ public class CommonDomainObject
 
     }
 
+    @Override
     public GraphQLFieldDefinition newField(
             final String fieldName,
             final String description) {
@@ -193,7 +191,7 @@ public class CommonDomainObject
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
         Object target = dataFetchingEnvironment.getArgument("object");
         return ObjectFeatureUtils.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);

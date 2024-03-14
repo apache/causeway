@@ -5,7 +5,13 @@
 
 This page will be added to as development progresses.
 
-== Programming Model (CAUSEWAY-3692) 
+== Programming Model (CAUSEWAY-3697)
+
+Annotation attribute 
+`@DomainService(nature=..)` was marked for removal and no longer has any scope filtering effect. 
+This filtering is or will be replaced by some other mechanism eg. configuration option.
+
+== Programming Model (CAUSEWAY-3692)
 
 Annotation attribute 
 `@Parameter(dependentDefaultsPolicy=..)` was renamed to
