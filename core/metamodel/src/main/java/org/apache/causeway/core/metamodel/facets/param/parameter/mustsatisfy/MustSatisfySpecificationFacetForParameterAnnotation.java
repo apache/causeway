@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -36,11 +37,12 @@ extends MustSatisfySpecificationFacetAbstract {
     public static Optional<MustSatisfySpecificationFacet> create(
             final Optional<Parameter> parameterIfAny,
             final FacetHolder holder,
-            final FactoryService factoryService) {
+            final FactoryService factoryService,
+            final ServiceInjector serviceInjector) {
 
         val specifications = parameterIfAny
                 .map(Parameter::mustSatisfy)
-                .map(classes -> toSpecifications(factoryService, classes))
+                .map(classes -> toSpecifications(factoryService, serviceInjector, classes))
                 .orElseGet(Can::empty);
 
         return specifications.isEmpty()

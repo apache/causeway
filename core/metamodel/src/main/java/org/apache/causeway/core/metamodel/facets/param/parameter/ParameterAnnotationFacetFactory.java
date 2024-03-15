@@ -83,7 +83,7 @@ extends FacetFactoryAbstract {
 
         addFacetIfPresent(
                 MustSatisfySpecificationFacetForParameterAnnotation
-                .create(parameterIfAny, holder, getFactoryService()));
+                .create(parameterIfAny, holder, getFactoryService(), getServiceInjector()));
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {

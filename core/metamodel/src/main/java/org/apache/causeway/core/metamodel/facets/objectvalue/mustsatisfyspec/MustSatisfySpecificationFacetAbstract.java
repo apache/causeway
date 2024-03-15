@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -85,9 +86,10 @@ implements MustSatisfySpecificationFacet {
      */
     protected static Can<Specification> toSpecifications(
             final FactoryService factoryService,
-            final Class<? extends Specification>[] classes) {
+            ServiceInjector serviceInjector, final Class<? extends Specification>[] classes) {
         return Arrays.stream(classes)
                 .map(factoryService::getOrCreate)
+                .peek(serviceInjector::injectServicesInto)
                 .collect(Can.toCan());
     }
 
@@ -103,13 +105,9 @@ implements MustSatisfySpecificationFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
-        return other instanceof MustSatisfySpecificationFacetAbstract
-                ? Objects.equals(
-                        this
-                            .specifications.map(Specification::getClass),
-                        ((MustSatisfySpecificationFacetAbstract)other)
-                            .specifications.map(Specification::getClass))
-                : false;
+        return other instanceof MustSatisfySpecificationFacetAbstract &&
+            Objects.equals( this.specifications.map(Specification::getClass),
+                         ((MustSatisfySpecificationFacetAbstract) other).specifications.map(Specification::getClass));
     }
 
 

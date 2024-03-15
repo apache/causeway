@@ -256,7 +256,7 @@ extends FacetFactoryAbstract {
         // search for @Property(mustSatisfy=...)
         addFacetIfPresent(
                 MustSatisfySpecificationFacetForPropertyAnnotation
-                .create(propertyIfAny, holder, getFactoryService()));
+                .create(propertyIfAny, holder, getFactoryService(), getServiceInjector()));
     }
 
     void processEntityPropertyChangePublishing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
