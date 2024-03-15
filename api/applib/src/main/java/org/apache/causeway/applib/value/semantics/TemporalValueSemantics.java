@@ -39,7 +39,7 @@ extends
     OrderRelation<T, Duration>,
     Parser<T>,
     Renderer<T>,
-    TemporalCharacteristicsProvider {
+    TemporalSupport<T> {
 
     static enum EditingFormatDirection {
 

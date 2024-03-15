@@ -20,12 +20,25 @@ package org.apache.causeway.core.metamodel.valuetypes;
 
 import java.time.Duration;
 import java.time.temporal.Temporal;
+import java.util.Optional;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider;
+import org.apache.causeway.applib.value.semantics.TemporalSupport;
 
 public abstract class TemporalSemanticsAdapter<T, D extends Temporal>
 extends ValueSemanticsAdapter<T, D, Duration>
-implements TemporalCharacteristicsProvider {
+implements
+    TemporalSupport<T> {
+
+    // -- TEMPORAL DECOMPOSITION
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public final Optional<TemporalDecomposition> decomposeTemporal(final @Nullable T value) {
+        return ((TemporalSupport<D>)getDelegate()).decomposeTemporal(toDelegateValue(value));
+    }
 
     // -- ORDER RELATION
 

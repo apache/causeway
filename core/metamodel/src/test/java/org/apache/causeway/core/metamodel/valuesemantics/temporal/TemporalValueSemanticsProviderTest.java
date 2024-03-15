@@ -22,12 +22,15 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.locale.UserLocale;
@@ -37,6 +40,7 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.EditingFormatDirection;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.schema.common.v2.ValueType;
 
@@ -107,6 +111,11 @@ class TemporalValueSemanticsProviderTest {
                 @NonNull final TemporalEditingPattern editingPattern) {
             return super.getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic, timePrecision, direction,
                     editingPattern); }
+
+        @Override
+        public Optional<TemporalDecomposition> decomposeTemporal(final @Nullable Temporal temporal) {
+            throw _Exceptions.notImplemented(); // method not tested yet
+        }
 
     }
 

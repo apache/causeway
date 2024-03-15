@@ -32,9 +32,11 @@ import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.TemporalSupport;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -270,6 +272,18 @@ implements ValueFacet<T> {
         return fallbackRenderer(getLogicalType(), featureIdentifier);
     }
 
+    // -- TEMPORAL SUPPORT
+
+    @Override
+    public Optional<TemporalSupport<T>> selectTemporalSupportForFeature(final @Nullable ObjectFeature feature) {
+        return (feature!=null
+                ? streamValueSemanticsHonoringQualifiers(feature)
+                : getAllValueSemantics().stream())
+            .filter(TemporalSupport.class::isInstance)
+            .map(temporalDecomposer->_Casts.<TemporalSupport<T>>uncheckedCast(temporalDecomposer))
+            .findFirst();
+    }
+
     // -- COMPOSITE VALUE SUPPORT
 
     @Override
@@ -320,18 +334,18 @@ implements ValueFacet<T> {
     // -- HELPER
 
     private Stream<ValueSemanticsProvider<T>> streamValueSemanticsHonoringQualifiers(
-            final FacetHolder feature) {
+            final @NonNull ObjectFeature feature) {
         return getAllValueSemantics()
-                .stream()
-                .filter(isMatchingAnyOf(qualifiersAccepted(feature)));
+            .stream()
+            .filter(isMatchingAnyOf(qualifiersAccepted(feature)));
     }
 
-    private Can<String> qualifiersAccepted(final FacetHolder feature) {
+    private Can<String> qualifiersAccepted(final @NonNull ObjectFeature feature) {
         return feature.lookupFacet(ValueSemanticsSelectingFacet.class)
-        .map(ValueSemanticsSelectingFacet::value)
-        .map(_Strings::emptyToNull)
-        .stream()
-        .collect(Can.toCan());
+                    .map(ValueSemanticsSelectingFacet::value)
+                    .map(_Strings::emptyToNull)
+                    .stream()
+                    .collect(Can.toCan());
     }
 
     private Predicate<ValueSemanticsProvider<T>> isMatchingAnyOf(final Can<String> qualifiersAccepted) {

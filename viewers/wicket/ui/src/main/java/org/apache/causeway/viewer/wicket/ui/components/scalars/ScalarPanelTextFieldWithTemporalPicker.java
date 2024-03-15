@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TemporalDecomposition;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TemporalDecompositionModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TextFieldWithDateTimePicker;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -51,7 +51,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     private static final long serialVersionUID = 1L;
 
-    private TemporalDecomposition<T> temporalDecomposition;
+    private TemporalDecompositionModel<T> temporalDecomposition;
 
     public ScalarPanelTextFieldWithTemporalPicker(
             final String id, final ScalarModel scalarModel, final Class<T> type) {
@@ -66,7 +66,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     protected final TextField<T> createTextField(final String id) {
         val scalarModel = scalarModel();
 
-        this.temporalDecomposition = TemporalDecomposition.create(type,
+        this.temporalDecomposition = TemporalDecompositionModel.create(type,
                 scalarModel,
                 offsetCharacteristic(),
                 (ConverterBasedOnValueSemantics<T>)converterElseFail());

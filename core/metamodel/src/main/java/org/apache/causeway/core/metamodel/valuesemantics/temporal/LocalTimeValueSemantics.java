@@ -20,9 +20,11 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Optional;
 
 import jakarta.inject.Named;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.commons.collections.Can;
@@ -53,6 +55,15 @@ extends TemporalValueSemanticsProvider<LocalTime> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalTime::from,
                 TemporalAdjust::adjustLocalTime);
+    }
+
+    // -- TEMPORAL DECOMPOSITION
+
+    @Override
+    public Optional<TemporalDecomposition> decomposeTemporal(final @Nullable LocalTime temporal) {
+        return Optional.ofNullable(temporal)
+                .map(t->new TemporalDecomposition(temporal, Optional.empty(),
+                        temporalCharacteristic, offsetCharacteristic));
     }
 
     // -- ORDER RELATION
