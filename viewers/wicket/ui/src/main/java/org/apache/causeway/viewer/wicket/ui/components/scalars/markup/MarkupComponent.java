@@ -30,7 +30,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmRenderUtils;
+import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
@@ -106,7 +106,7 @@ public class MarkupComponent extends WebComponent {
         if(modelObject instanceof ManagedObject) {
             val adapter = (ManagedObject) modelObject;
             val feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
-            val asHtml = MmRenderUtils.htmlStringForValueType(feature, adapter);
+            val asHtml = MmValueUtils.htmlStringForValueType(feature, adapter);
             return asHtml != null
                 ? asHtml
                 : fallback;

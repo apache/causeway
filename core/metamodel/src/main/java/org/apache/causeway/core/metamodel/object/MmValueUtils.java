@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.TemporalSupport;
 import org.apache.causeway.applib.value.semantics.TemporalSupport.TemporalDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -37,7 +38,6 @@ public class MmValueUtils {
 
     // -- CONTEXT FACTORIES
 
-    //TODO[CAUSEWAY-3489] ever used ?
     public Optional<ValueSemanticsProvider.Context> createValueSemanticsContext(
             final @Nullable ObjectFeature feature,
             final @Nullable ObjectSpecification elementType) {
@@ -45,12 +45,36 @@ public class MmValueUtils {
                 .map(valueFacet->valueFacet.createValueSemanticsContext(feature));
     }
 
-    //TODO[CAUSEWAY-3489] ever used ?
     public Optional<ValueSemanticsProvider.Context> createValueSemanticsContext(
             final @Nullable ObjectFeature feature,
             final @Nullable ManagedObject valueObject) {
         return valueFacet(valueObject)
                 .map(valueFacet->valueFacet.createValueSemanticsContext(feature));
+    }
+
+    // -- RENDERER
+
+    public String htmlStringForValueType(
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject adapter) {
+
+        if(!ManagedObjects.isSpecified(adapter)) {
+            return "";
+        }
+
+        val spec = adapter.getSpecification();
+        val valueFacet = spec.valueFacet().orElse(null);
+        if(valueFacet==null) {
+            return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
+        }
+
+        @SuppressWarnings("unchecked")
+        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
+        if(renderer==null) {
+            return String.format("missing Renderer %s", spec.getCorrespondingClass());
+        }
+
+        return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), adapter.getPojo());
     }
 
     // -- TEMPORAL DECOMPOSITION

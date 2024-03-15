@@ -24,7 +24,7 @@ import java.util.UUID;
 import org.apache.causeway.applib.services.bookmark.idstringifiers.PredefinedSerializables;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmRenderUtils;
+import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -51,7 +51,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
         if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
-                MmRenderUtils.htmlStringForValueType(getModel().getObjectMember(), getModel().getObject())
+                MmValueUtils.htmlStringForValueType(getModel().getObjectMember(), getModel().getObject())
             );
         } else {
             // resort to (textual) title rendering
