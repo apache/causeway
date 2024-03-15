@@ -29,6 +29,7 @@ import org.apache.causeway.applib.value.semantics.DefaultsProvider;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.TemporalSupport;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.causeway.commons.collections.Can;
@@ -158,6 +159,10 @@ extends
         return selectRendererForCollection(coll)
                 .orElseGet(()->fallbackRenderer(coll.getFeatureIdentifier()));
     }
+
+    // -- TEMPORAL SUPPORT
+
+    Optional<TemporalSupport<T>> selectTemporalSupportForFeature(final @Nullable ObjectFeature feature);
 
     // -- COMPOSITE VALUE SUPPORT
 

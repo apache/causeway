@@ -30,8 +30,8 @@ import lombok.experimental.UtilityClass;
 public class MmRenderUtils {
 
     public String htmlStringForValueType(
-            final @Nullable ManagedObject adapter,
-            final @Nullable ObjectFeature feature) {
+            final @Nullable ObjectFeature feature,
+            final @Nullable ManagedObject adapter) {
 
         if(!ManagedObjects.isSpecified(adapter)) {
             return "";

@@ -51,7 +51,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
         if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
-                MmRenderUtils.htmlStringForValueType(getModel().getObject(), getModel().getObjectMember())
+                MmRenderUtils.htmlStringForValueType(getModel().getObjectMember(), getModel().getObject())
             );
         } else {
             // resort to (textual) title rendering

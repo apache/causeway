@@ -20,9 +20,11 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import javax.inject.Named;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.OrderRelation;
@@ -55,6 +57,15 @@ implements OrderRelation<LocalDate, Duration> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDate::from,
                 TemporalAdjust::adjustLocalDate);
+    }
+
+    // -- TEMPORAL DECOMPOSITION
+
+    @Override
+    public Optional<TemporalDecomposition> decomposeTemporal(final @Nullable LocalDate temporal) {
+        return Optional.ofNullable(temporal)
+                .map(t->new TemporalDecomposition(temporal, Optional.empty(),
+                        temporalCharacteristic, offsetCharacteristic));
     }
 
     // -- ORDER RELATION

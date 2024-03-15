@@ -106,7 +106,7 @@ public class MarkupComponent extends WebComponent {
         if(modelObject instanceof ManagedObject) {
             val adapter = (ManagedObject) modelObject;
             val feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
-            val asHtml = MmRenderUtils.htmlStringForValueType(adapter, feature);
+            val asHtml = MmRenderUtils.htmlStringForValueType(feature, adapter);
             return asHtml != null
                 ? asHtml
                 : fallback;

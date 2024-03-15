@@ -20,12 +20,15 @@ package org.apache.causeway.core.metamodel.valuesemantics.temporal;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 import javax.inject.Named;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
@@ -53,6 +56,17 @@ extends TemporalValueSemanticsProvider<OffsetDateTime> {
                 TYPICAL_LENGTH, MAX_LENGTH,
                 OffsetDateTime::from,
                 TemporalAdjust::adjustOffsetDateTime);
+    }
+
+    // -- TEMPORAL DECOMPOSITION
+
+    @Override
+    public Optional<TemporalDecomposition> decomposeTemporal(final @Nullable OffsetDateTime temporal) {
+        return Optional.ofNullable(temporal)
+                .map(t->new TemporalDecomposition(
+                        temporal.toLocalDateTime(),
+                        Optional.of(Either.right(t.getOffset())),
+                        temporalCharacteristic, offsetCharacteristic));
     }
 
     // -- ORDER RELATION

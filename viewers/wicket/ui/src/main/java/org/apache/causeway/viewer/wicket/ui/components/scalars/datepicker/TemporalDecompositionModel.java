@@ -19,11 +19,8 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.Locale;
 
@@ -32,13 +29,17 @@ import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider.OffsetCharacteristic;
+import org.apache.causeway.applib.value.semantics.TemporalSupport.TemporalDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
-import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.object.MmValueUtils;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
@@ -53,10 +54,10 @@ import lombok.Setter;
  * based on existing widgets, that do not support zone or offset information.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class TemporalDecomposition<T> implements IConverter<T> {
+public class TemporalDecompositionModel<T> implements IConverter<T> {
     private static final long serialVersionUID = 1L;
 
-    public static <T extends Temporal> TemporalDecomposition<T> create(final Class<T> type,
+    public static <T extends Temporal> TemporalDecompositionModel<T> create(final Class<T> type,
             final ScalarModel scalarModel,
             final OffsetCharacteristic offsetCharacteristic,
             final ConverterBasedOnValueSemantics<T> fullConverter) {
@@ -77,7 +78,7 @@ public class TemporalDecomposition<T> implements IConverter<T> {
                         .orElse(ZoneOffset.UTC)
                 : ZoneOffset.UTC; // not used
 
-        var tempDecomp = new TemporalDecomposition<>(type,
+        var tempDecomp = new TemporalDecompositionModel<>(type,
                 offsetCharacteristic,
                 userZoneId,
                 fullConverter,
@@ -85,7 +86,7 @@ public class TemporalDecomposition<T> implements IConverter<T> {
                 editingPattern);
 
         if(needsDecomposition) {
-            tempDecomp.initFrom(scalarModel.proposedValue());
+            tempDecomp.initFrom(scalarModel.getMetaModel(), scalarModel.proposedValue());
         }
         return tempDecomp;
     }
@@ -99,37 +100,23 @@ public class TemporalDecomposition<T> implements IConverter<T> {
     @Getter
     private final String editingPattern;
 
-    /**
-     * @implNote only supports zoned types as known at the time of writing
-     */
-    private void initFrom(final ManagedValue proposedValue) {
-        var temporalValue = MmUnwrapUtils.single(proposedValue.getValue().getValue());
-        if(temporalValue instanceof ZonedDateTime) {
-            var zonedDateTime = (ZonedDateTime) temporalValue;
-            this.zoneId = zonedDateTime.getZone();
-        } else if(temporalValue instanceof OffsetDateTime) {
-            var offsetDateTime = (OffsetDateTime) temporalValue;
-            this.zoneOffset = offsetDateTime.getOffset();
-        } else if(temporalValue instanceof OffsetTime) {
-            var offsetTime = (OffsetTime) temporalValue;
-            this.zoneOffset = offsetTime.getOffset();
-        } else if(temporalValue instanceof org.joda.time.DateTime) {
-            var jodaDateTime = (org.joda.time.DateTime) temporalValue;
-            this.zoneId = jodaDateTime.getZone().toTimeZone().toZoneId();
-        } else {
-            // either temporalValue is null or unsupported
-            switch (offsetCharacteristic) {
-            case OFFSET:
-                this.zoneOffset = userZoneId.getRules().getOffset(Instant.now());
-                break;
-            case ZONED:
-                this.zoneId = userZoneId;
-                break;
-            case LOCAL:
-            default:
-                break;
-            }
-        }
+    private void initFrom(final ObjectFeature objectFeature, final ManagedValue proposedValue) {
+        var temporalValue = proposedValue.getValue().getValue();
+        var zoneOrOffset = MmValueUtils.temporalDecomposition(objectFeature, temporalValue)
+            .flatMap(TemporalDecomposition::zoneOrOffset)
+            .orElseGet(()->{
+                // either temporalValue is null, empty or unsupported
+                switch (offsetCharacteristic) {
+                case ZONED:
+                    return Either.left(userZoneId);
+                case OFFSET:
+                    return Either.right(userZoneId.getRules().getOffset(Instant.now()));
+                case LOCAL:
+                default:
+                    throw _Exceptions.unexpectedCodeReach();
+                }
+            });
+        zoneOrOffset.accept(this::setZoneId, this::setZoneOffset);
     }
 
     // -- CONVERTER
