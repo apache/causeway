@@ -29,8 +29,9 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
 
-import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider;
 import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider.OffsetCharacteristic;
+import org.apache.causeway.applib.value.semantics.TemporalSupport;
+import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
@@ -93,13 +94,13 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
         case OFFSET:
             Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timeoffset",
                     new PropertyModel<ZoneOffset>(temporalDecomposition, "zoneOffset"),
-                    temporalCharacteristicsProvider().getAvailableOffsets())
+                    temporalSupport().getAvailableOffsets())
                 .setRequired(true);
             break;
         case ZONED:
             Wkt.dropDownChoiceWithAjaxUpdateAdd(container, "timezone",
                     new PropertyModel<ZoneId>(temporalDecomposition, "zoneId"),
-                    temporalCharacteristicsProvider().getAvailableZoneIds())
+                    temporalSupport().getAvailableZoneIds())
                 .setRequired(true);
             break;
         case LOCAL:
@@ -131,12 +132,12 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     // -- HELPER
 
-    private TemporalCharacteristicsProvider temporalCharacteristicsProvider() {
-        return Facets.valueTemporalCharacteristicsProviderElseFail(scalarModel().getElementType());
+    private TemporalSupport<?> temporalSupport() {
+        return MmValueUtils.temporalSupportElseFail(scalarModel().getMetaModel(), scalarModel().getElementType());
     }
 
     private OffsetCharacteristic offsetCharacteristic() {
-        return temporalCharacteristicsProvider().getOffsetCharacteristic();
+        return temporalSupport().getOffsetCharacteristic();
     }
 
     private <X> TextField<X> installUpdateNotifier(final TextField<X> textField) {

@@ -10,10 +10,6 @@ and https://accounts.eclipse.org/mailing-list/asciidoc-wg[]. However, we are hap
 help with transfer of source code, if any project (under the umbrella of the
 _AsciiDoc Working Group_) is willing to take over.
 
-WARNING: This is work-in-progress, no official Maven artifacts are published yet at the time of writing.
-However, snapshots are available with our nightly-builds:
-https://github.com/apache-causeway-committers/causeway-nightly[]
-
 == Usage
 
 Say we have a list of employees, which we want to express as ascii-doc table.
@@ -38,8 +34,8 @@ Lets generate a _Document_ model programmatically, then print it to _System.out_
 [source,java]
 ----
 
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.*;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.*;
 
 ...
 
@@ -117,15 +113,13 @@ A simple block corresponds to a normal paragraph.
 
 == Install
 
-Use Maven and our snapshot repository for a preview:
-https://github.com/apache-causeway-committers/causeway-nightly#maven[]
+Using Maven:
 
 [source,xml]
 ----
 <dependency>
-    <groupId>org.apache.causeway.tooling</groupId>
-    <artifactId>causeway-tooling-model4adoc</artifactId>
-    <version>2.0.0-???</version>
+    <groupId>org.apache.causeway.valuetypes</groupId>
+    <artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
 </dependency>
 ----
 

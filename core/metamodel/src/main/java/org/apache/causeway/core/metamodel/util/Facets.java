@@ -34,7 +34,6 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -443,22 +442,6 @@ public final class Facets {
             .orElseThrow(()->_Exceptions.illegalArgument(
                     "ObjectSpec is expected to have a ValueFacet<%s>",
                     objectSpec.getCorrespondingClass().getName()));
-    }
-
-    @SuppressWarnings("unchecked")
-    public Optional<TemporalCharacteristicsProvider> valueTemporalCharacteristicsProvider(
-            final ObjectSpecification objectSpec) {
-        return objectSpec.valueFacet()
-            .flatMap(valueFacet->valueFacet.getAllValueSemantics().stream()
-                    .findFirst())
-            .flatMap(valueSemantics->_Casts.castTo(TemporalCharacteristicsProvider.class, valueSemantics));
-    }
-
-    public TemporalCharacteristicsProvider valueTemporalCharacteristicsProviderElseFail(
-            final ObjectSpecification objectSpec) {
-        return valueTemporalCharacteristicsProvider(objectSpec)
-                .orElseThrow(()->_Exceptions.illegalState("no temporal characteristics found for %s",
-                        objectSpec));
     }
 
     // -- HELPER

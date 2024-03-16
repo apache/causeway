@@ -26,10 +26,12 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.TemporalSupport;
 import org.apache.causeway.applib.value.semantics.TemporalSupport.TemporalDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -77,7 +79,24 @@ public class MmValueUtils {
         return renderer.htmlPresentation(valueFacet.createValueSemanticsContext(feature), adapter.getPojo());
     }
 
-    // -- TEMPORAL DECOMPOSITION
+    // -- TEMPORAL SUPPORT
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Optional<TemporalSupport> temporalSupport(
+            final @Nullable ObjectFeature objectFeature,
+            final @Nullable ObjectSpecification elementType) {
+        return valueFacet(elementType)
+                .flatMap(valueFacet->(Optional<TemporalSupport>)valueFacet
+                        .selectTemporalSupportForFeature(objectFeature));
+    }
+
+    public TemporalSupport<?> temporalSupportElseFail(
+            final @Nullable ObjectFeature objectFeature,
+            final @NonNull ObjectSpecification elementType) {
+        return temporalSupport(objectFeature, elementType)
+                .orElseThrow(()->_Exceptions.illegalState("no temporal support found for %s",
+                        elementType));
+    }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Optional<TemporalDecomposition> temporalDecomposition(
