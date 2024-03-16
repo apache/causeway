@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.objectmanager;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
+import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -71,6 +72,10 @@ interface ObjectCreator {
             }
 
             val pojo = instantiate(spec); // can only be a scalar
+            if(Specification.class.isAssignableFrom(spec.getCorrespondingClass())
+                    || !spec.isValue()) {
+                spec.getServiceInjector().injectServicesInto(pojo);
+            }
             val domainObject = ManagedObject.adaptSingular(spec, pojo);
 
             // initialize new object
@@ -82,7 +87,6 @@ interface ObjectCreator {
             }
 
             return domainObject;
-
         }
 
         //  -- HELPER

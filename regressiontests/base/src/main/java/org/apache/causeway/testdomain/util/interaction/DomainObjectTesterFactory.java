@@ -28,14 +28,15 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.function.ThrowingSupplier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -818,7 +819,38 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                 });
             });
+        }
 
+        /**
+         * Supported by all properties that reflect a value type.
+         * Uses value-semantics under the hood to do the conversion.
+         */
+        public void assertValueUpdateUsingNegotiationTextual(
+                final String parsableProposedValue,
+                final @NonNull String expectedValidationMessage) {
+
+            assertExists(true);
+
+            managedPropertyIfAny
+            .ifPresent(managedProperty->{
+                interactionService.runAnonymous(()->{
+
+                    val propNeg = managedProperty.startNegotiation();
+                    val initialValue = managedProperty.getPropertyValue();
+
+                    assertEquals(initialValue, propNeg.getValue().getValue());
+
+                    propNeg.getValueAsParsableText().setValue(parsableProposedValue);
+
+                    // yet just pending
+                    assertEquals(initialValue, managedProperty.getPropertyValue());
+                    assertEquals(parsableProposedValue, propNeg.getValueAsParsableText().getValue());
+
+                    // check expected validation message
+                    propNeg.activateValidationFeedback();
+                    assertEquals(expectedValidationMessage, propNeg.getValidationMessage().getValue());
+                });
+            });
         }
 
         @SuppressWarnings("unchecked")
@@ -832,7 +864,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             return valueFacet.selectParserForPropertyElseFallback(prop)
                     .parseableTextRepresentation(context,
-                            managedPropertyIfAny.get().getPropertyValue().getPojo());
+                            MmUnwrapUtils.single(managedPropertyIfAny.get().getPropertyValue()));
         }
 
     }
