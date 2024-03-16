@@ -2462,6 +2462,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/.classpath</exclude>
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
+                            <exclude>**/schema.gql</exclude>
+                            <exclude>**/jquery.livequery.js</exclude>
+                            <exclude>**/*._.gql</exclude>
                             <exclude>**/.gitkeep</exclude>
 
                             <exclude>**/*.iml</exclude>
