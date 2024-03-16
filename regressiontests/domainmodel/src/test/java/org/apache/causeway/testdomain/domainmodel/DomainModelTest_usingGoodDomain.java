@@ -1095,6 +1095,27 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 """, tableToString(dataTable));
     }
 
+    // -- META ANNOTAIONS
+
+    @Test
+    void propMeta_shouldHonorSpecification() {
+        val propTester = testerFactory
+                .propertyTester(ProperMemberSupport.class, "myPropWithMeta");
+        propTester.assertExists(true);
+        propTester.assertFriendlyName("Proper Name");
+        propTester.assertValueUpdateUsingNegotiationTextual("just a string", "injection worked");
+    }
+
+    @Test
+    void actionParamMeta_shouldHonorSpecification() {
+        val actTester = testerFactory
+                .actionTester(ProperMemberSupport.class, "myActionWithMetaOnParam");
+        actTester.assertExists(true);
+        //TODO[CAUSEWAY-3326] perhaps tester needs fixing?
+        //actTester.assertValidationMessage("injection worked", true, p0->"just a string");
+
+    }
+
     // -- HELPER
 
     private String tableToString(final DataTable dataTable) {

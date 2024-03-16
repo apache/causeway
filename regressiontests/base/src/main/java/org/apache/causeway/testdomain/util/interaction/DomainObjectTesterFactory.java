@@ -869,7 +869,38 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                 });
             });
+        }
 
+        /**
+         * Supported by all properties that reflect a value type.
+         * Uses value-semantics under the hood to do the conversion.
+         */
+        public void assertValueUpdateUsingNegotiationTextual(
+                final String parsableProposedValue,
+                final @NonNull String expectedValidationMessage) {
+
+            assertExists(true);
+
+            managedPropertyIfAny
+            .ifPresent(managedProperty->{
+                interactionService.runAnonymous(()->{
+
+                    val propNeg = managedProperty.startNegotiation();
+                    val initialValue = managedProperty.getPropertyValue();
+
+                    assertEquals(initialValue, propNeg.getValue().getValue());
+
+                    propNeg.getValueAsParsableText().setValue(parsableProposedValue);
+
+                    // yet just pending
+                    assertEquals(initialValue, managedProperty.getPropertyValue());
+                    assertEquals(parsableProposedValue, propNeg.getValueAsParsableText().getValue());
+
+                    // check expected validation message
+                    propNeg.activateValidationFeedback();
+                    assertEquals(expectedValidationMessage, propNeg.getValidationMessage().getValue());
+                });
+            });
         }
 
         @SuppressWarnings("unchecked")
@@ -883,7 +914,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             return valueFacet.selectParserForPropertyElseFallback(prop)
                     .parseableTextRepresentation(context,
-                            managedPropertyIfAny.get().getPropertyValue().getPojo());
+                            MmUnwrapUtils.single(managedPropertyIfAny.get().getPropertyValue()));
         }
 
     }

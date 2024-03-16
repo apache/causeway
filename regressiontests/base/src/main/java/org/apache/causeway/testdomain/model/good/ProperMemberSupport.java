@@ -99,7 +99,6 @@ public class ProperMemberSupport {
 
     @Action
     public void myAction(final String p0, final String p1) {
-
     }
 
     @MemberSupport public String namedMyAction() {
@@ -176,6 +175,14 @@ public class ProperMemberSupport {
         return null;
     }
 
+    // -- PROPER PARAM WITH META-ANNOTATIONS
+
+    @Action
+    public void myActionWithMetaOnParam(
+            @ProperAnnotationWithSpecification
+            final String p0) {
+    }
+
     // -- PROPER PROPERTY
 
     @Property
@@ -213,6 +220,11 @@ public class ProperMemberSupport {
     @MemberSupport public String validateMyProp(final String x) {
         return "think twice";
     }
+
+    // -- PROPER PROPERTY WITH META-ANNOTATIONS
+
+    @ProperAnnotationWithSpecification
+    @Getter @Setter private String myPropWithMeta;
 
     // -- PROPER COLLECTION
 
