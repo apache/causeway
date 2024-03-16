@@ -34,8 +34,8 @@ Lets generate a _Document_ model programmatically, then print it to _System.out_
 [source,java]
 ----
 
-import org.apache.causeway.tooling.model4adoc.AsciiDocWriter;
-import static org.apache.causeway.tooling.model4adoc.AsciiDocFactory.*;
+import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
+import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.*;
 
 ...
 
@@ -113,8 +113,7 @@ A simple block corresponds to a normal paragraph.
 
 == Install
 
-Use Maven and our snapshot repository for a preview:
-https://github.com/apache-causeway-committers/causeway-nightly#maven[]
+Using Maven:
 
 [source,xml]
 ----
