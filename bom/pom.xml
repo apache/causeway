@@ -66,7 +66,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <causeway.skipTests>false</causeway.skipTests>
 		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2023-07-04T21:19:08Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-03-16T11:11:00Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -2403,6 +2403,10 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
 
                             <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
+                            <exclude>**/schema.gql</exclude>
+                            <exclude>**/jquery.livequery.js</exclude>
+                            <exclude>**/*._.gql</exclude>
+                            <exclude>**/.gitkeep</exclude>
 
                             <exclude>**/*.iml</exclude>
                             <exclude>**/webpack.config.js</exclude>
