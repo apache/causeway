@@ -33,6 +33,8 @@ updates:
         versions: ["2.x"]
       - dependency-name: "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter"
         versions: ["1.9.x"]
+      - dependency-name: "de.agilecoders.wicket.webjars:wicket-webjars"
+        versions: ["4.x"]
     
   # Maintain dependencies for Maven (3.0.0 milestones)
   - package-ecosystem: "maven"
