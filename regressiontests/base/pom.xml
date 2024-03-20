@@ -90,11 +90,12 @@
 			<optional>true</optional>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.security</groupId>
-			<artifactId>causeway-security-shiro</artifactId>
-			<optional>true</optional>
-		</dependency>
+<!--Shiro 2.0.0 has no jakarta namespaces, exclude from build-->
+<!--		<dependency>-->
+<!--			<groupId>org.apache.causeway.security</groupId>-->
+<!--			<artifactId>causeway-security-shiro</artifactId>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.apache.causeway.extensions</groupId>

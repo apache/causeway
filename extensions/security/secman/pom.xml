@@ -120,7 +120,7 @@
     	<module>encryption-spring</module>
     	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>
-    	<module>delegated-shiro</module>
+<!--    	<module>delegated-shiro</module> Shiro 2.0.0 has no jakarta namespaces, exclude from build -->
     	<module>delegated-springoauth2</module>
     </modules>
 </project>
