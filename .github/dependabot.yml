@@ -24,6 +24,15 @@ updates:
     # Use custom labels
     labels:
       - "dependencies"
+    ignore:
+      - dependency-name: "org.apache.wicket*"
+        versions: ["10.x"]
+      - dependency-name: "org.wicketstuff*"
+        versions: ["10.x"]
+      - dependency-name: "org.apache.shiro*"
+        versions: ["2.x"]
+      - dependency-name: "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter"
+        versions: ["1.9.x"]
     
   # Maintain dependencies for Maven (3.0.0 milestones)
   - package-ecosystem: "maven"
