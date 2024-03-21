@@ -301,6 +301,7 @@
 		<module>../security/bypass</module>
 		<module>../security/keycloak</module>
 		<module>../security/shiro</module>
+		<module>../security/simple</module>
 		<module>../security/spring</module>
 
 		<module>../viewers/commons</module>
