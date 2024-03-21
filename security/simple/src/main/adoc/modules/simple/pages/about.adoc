@@ -24,24 +24,29 @@ In your application's `AppManifest` (top-level Spring `@Configuration` used to b
 })
 public class AppManifest {
 
-	@Bean
-	public SimpleRealm simpleRealm() {
-		return new SimpleRealm()
-        //roles
-        .addRoleWithReadAndChange("admin_role", id->true)
-        .addRoleWithReadAndChange("order_role", id->
-        		id.getFullIdentityString().contains("Order"))
-        .addRoleWithReadAndChange("customer_role", id->
-        		id.getFullIdentityString().contains("Customer"))
-        .addRoleWithReadOnly("reader_role", id->
-        		!id.getFullIdentityString().contains("TopSecret"))
-        //users
-        .addUser("sven", pwdhash, List.of("admin_role"))
-        .addUser("dick", pwdhash, List.of("reader_role", "order_role"))
-        .addUser("bob", pwdhash, List.of("reader_role", "customer_role"))
-        .addUser("joe", pwdhash, List.of("reader_role"));
-	}  
-
+  @Bean
+  public SimpleRealm simpleRealm() {
+    return new SimpleRealm()
+    //roles
+    .addRole("admin_role", id->Grant.CHANGE)
+    .addRole("order_role", id->
+        id.getFullIdentityString().contains("Order")
+            ? Grant.CHANGE
+            : Grant.NONE)
+    .addRole("customer_role", id->
+        id.getFullIdentityString().contains("Customer")
+            ? Grant.CHANGE
+            : Grant.NONE)
+    .addRole("reader_role", id->
+        id.getFullIdentityString().contains("TopSecret")
+            ? Grant.NONE
+            : Grant.READ)
+    //users
+    .addUser("sven", pwdhash, List.of("admin_role"))
+    .addUser("dick", pwdhash, List.of("reader_role", "order_role"))
+    .addUser("bob", pwdhash, List.of("reader_role", "customer_role"))
+    .addUser("joe", pwdhash, List.of("reader_role"));
+  }  
 }
 ----
 
