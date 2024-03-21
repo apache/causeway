@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
@@ -37,26 +37,42 @@ import lombok.experimental.Accessors;
 @Component
 public class SimpleRealm {
 
+    public enum Grant {
+        NONE,
+        READ,
+        CHANGE;
+        public boolean grantsRead() {
+            return this==READ
+                    || this==CHANGE;
+        }
+        public boolean grantsChange() {
+            return this==CHANGE;
+        }
+        public static Grant valueOf(@Nullable final Grant grant) {
+            return grant!=null
+                    ? grant
+                    : Grant.NONE;
+        }
+    }
+
     @Value @Accessors(fluent=true)
     public static class Role {
         String name;
-        Predicate<Identifier> grantsRead;
-        Predicate<Identifier> grantsChange;
+        Function<Identifier, Grant> grants;
     }
+
     @Value @Accessors(fluent=true)
     public static class User {
         String name;
         String encryptedPass;
         List<Role> roles;
     }
+
     final Map<String, Role> roles = new HashMap<>();
     final Map<String, User> users = new HashMap<>();
-    public SimpleRealm addRoleWithReadAndChange(final String name, final Predicate<Identifier> grants) {
-        roles.put(name, new Role(name, grants, grants));
-        return this;
-    }
-    public SimpleRealm addRoleWithReadOnly(final String name, final Predicate<Identifier> grants) {
-        roles.put(name, new Role(name, grants, id->false));
+
+    public SimpleRealm addRole(final String name, final Function<Identifier, Grant> grants) {
+        roles.put(name, new Role(name, grants));
         return this;
     }
     public SimpleRealm addUser(final String name, final String pass, final List<String> roleNames) {

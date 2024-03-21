@@ -42,6 +42,7 @@ import org.apache.causeway.core.security.authentication.AuthenticationRequestPas
 import org.apache.causeway.security.simple.authentication.SimpleAuthenticator;
 import org.apache.causeway.security.simple.authorization.SimpleAuthorizor;
 import org.apache.causeway.security.simple.realm.SimpleRealm;
+import org.apache.causeway.security.simple.realm.SimpleRealm.Grant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -53,10 +54,19 @@ class SecuritySimpleAuthTest {
 
     private SimpleRealm realm = new SimpleRealm()
                 //roles
-                .addRoleWithReadAndChange("admin_role", id->true)
-                .addRoleWithReadAndChange("order_role", id->id.getFullIdentityString().contains("Order"))
-                .addRoleWithReadAndChange("customer_role", id->id.getFullIdentityString().contains("Customer"))
-                .addRoleWithReadOnly("reader_role", id->!id.getFullIdentityString().contains("TopSecret"))
+                .addRole("admin_role", id->Grant.CHANGE)
+                .addRole("order_role", id->
+                    id.getFullIdentityString().contains("Order")
+                        ? Grant.CHANGE
+                        : Grant.NONE)
+                .addRole("customer_role", id->
+                    id.getFullIdentityString().contains("Customer")
+                        ? Grant.CHANGE
+                        : Grant.NONE)
+                .addRole("reader_role", id->
+                    id.getFullIdentityString().contains("TopSecret")
+                        ? Grant.NONE
+                        : Grant.READ)
                 //users
                 .addUser("sven", passEncoder.encode("pass0"), List.of("admin_role"))
                 .addUser("dick", passEncoder.encode("pass1"), List.of("reader_role", "order_role"))
