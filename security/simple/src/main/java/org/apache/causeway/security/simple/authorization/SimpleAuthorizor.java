@@ -34,6 +34,8 @@ import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.security.simple.CausewayModuleSecuritySimple;
 import org.apache.causeway.security.simple.realm.SimpleRealm;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * Simple in-memory {@link Authorizor} implementation.
  *
@@ -43,9 +45,10 @@ import org.apache.causeway.security.simple.realm.SimpleRealm;
 @Named(CausewayModuleSecuritySimple.NAMESPACE + ".SimpleAuthorizor")
 @javax.annotation.Priority(PriorityPrecedence.LATE - 10) // ensure earlier than bypass
 @Qualifier("Simple")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SimpleAuthorizor implements Authorizor {
 
-    @Inject protected SimpleRealm realm;
+    protected final SimpleRealm realm;
 
     @Override
     public boolean isVisible(final InteractionContext ctx, final Identifier identifier) {

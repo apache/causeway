@@ -30,11 +30,15 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.security.simple.CausewayModuleSecuritySimple;
 import org.apache.causeway.security.simple.realm.SimpleRealm;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Simple in-memory {@link Authenticator} implementation.
@@ -45,10 +49,11 @@ import org.apache.causeway.security.simple.realm.SimpleRealm;
 @Named(CausewayModuleSecuritySimple.NAMESPACE + ".SimpleAuthenticator")
 @javax.annotation.Priority(PriorityPrecedence.LATE - 10) // ensure earlier than bypass
 @Qualifier("Simple")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class SimpleAuthenticator implements Authenticator {
 
-    @Inject protected SimpleRealm realm;
-    @Inject protected PasswordEncoder passwordEncoder;
+    protected final SimpleRealm realm;
+    protected final PasswordEncoder passwordEncoder;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -84,11 +89,14 @@ public class SimpleAuthenticator implements Authenticator {
         // no-op
     }
 
-    protected boolean isValid(final AuthenticationRequestPassword request) {
-        return realm.lookupUserByName(request.getName())
-            .map(SimpleRealm.User::encryptedPass)
-            .map(encryptedPass->passwordEncoder.matches(request.getPassword(), encryptedPass))
-            .orElse(false);
+    protected boolean isValid(final @NonNull AuthenticationRequestPassword request) {
+        var plainPass = request.getPassword();
+        return _Strings.isNullOrEmpty(plainPass)
+            ? false
+            : realm.lookupUserByName(request.getName())
+                .map(SimpleRealm.User::encryptedPass)
+                .map(encryptedPass->passwordEncoder.matches(request.getPassword(), encryptedPass))
+                .orElse(false);
     }
 
 }
