@@ -67,7 +67,7 @@ implements
                 args,
                 actionResult);
 
-        val tableMemento = table.getMemento(managedAction.getMementoForArgs(args));
+        val tableMemento = table.getMemento();
 
         val model = new DataTableModelWkt(
                 bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableMemento);
@@ -85,7 +85,7 @@ implements
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
 
-        val tableMemento = table.getMemento(null);
+        val tableMemento = table.getMemento();
 
         val model = new DataTableModelWkt(
                 bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableMemento);
