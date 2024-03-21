@@ -1,0 +1,55 @@
+= Simple (Authenticator & Authorizor)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+The simple in-meory implementation, allows both authentication and authorization to be
+evaluated against a user provided `SimpleRealm` object.
+
+include::docs:mavendeps:partial$setup-and-configure-mavendeps-webapp.adoc[leveloffset=+1]
+
+
+== Update AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleSecuritySimple.class,
+        ...
+})
+public class AppManifest {
+
+	@Bean
+	public SimpleRealm simpleRealm() {
+		return new SimpleRealm()
+        //roles
+        .addRoleWithReadAndChange("admin_role", id->true)
+        .addRoleWithReadAndChange("order_role", id->
+        		id.getFullIdentityString().contains("Order"))
+        .addRoleWithReadAndChange("customer_role", id->
+        		id.getFullIdentityString().contains("Customer"))
+        .addRoleWithReadOnly("reader_role", id->
+        		!id.getFullIdentityString().contains("TopSecret"))
+        //users
+        .addUser("sven", pwdhash, List.of("admin_role"))
+        .addUser("dick", pwdhash, List.of("reader_role", "order_role"))
+        .addUser("bob", pwdhash, List.of("reader_role", "customer_role"))
+        .addUser("joe", pwdhash, List.of("reader_role"));
+	}  
+
+}
+----
+
+Make sure that no other `CausewayModuleSecurityXxx` module is imported.
+
+
+== In Use
+
+With security-simple installed, you should be able to login with credentials that are validated against the `SimpleRealm` as configured.
+
+Password hashes should match the `org.springframework.security.crypto.password.PasswordEncoder` that needs to be registered with _Spring's_ context. 

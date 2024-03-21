@@ -301,6 +301,7 @@
 		<module>../security/bypass</module>
 		<module>../security/keycloak</module>
 <!--		<module>../security/shiro</module> Shiro 2.0.0 has no jakarta namespaces, exclude from build -->
+        <module>../security/simple</module>
 		<module>../security/spring</module>
 
 		<module>../viewers/commons</module>
