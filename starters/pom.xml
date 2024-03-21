@@ -46,7 +46,7 @@
 
 	<properties>
 
-		<maven.compiler.release>21</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 
 		<spring-boot.version>3.2.3</spring-boot.version>
 		<approvaltests.version>23.0.0</approvaltests.version>

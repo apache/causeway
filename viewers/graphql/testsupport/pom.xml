@@ -36,7 +36,7 @@
 		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.testsupport</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/testsupport</git-plugin.propertiesDir>
 
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
 
         <datasource-proxy-spring-boot-starter.version>1.9.1</datasource-proxy-spring-boot-starter.version>
         <sql-formatter.version>2.0.4</sql-formatter.version>
