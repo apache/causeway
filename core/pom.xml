@@ -18,302 +18,304 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway</groupId>
-		<artifactId>causeway-bom</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../bom/pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway</groupId>
+        <artifactId>causeway-bom</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../bom/pom.xml</relativePath>
+    </parent>
 
-	<groupId>org.apache.causeway.core</groupId>
-	<artifactId>causeway-core</artifactId>
+    <groupId>org.apache.causeway.core</groupId>
+    <artifactId>causeway-core</artifactId>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<name>Apache Causeway Core</name>
+    <name>Apache Causeway Core</name>
 
-	<url>https://causeway.apache.org</url>
+    <url>https://causeway.apache.org</url>
 
-	<description>
+    <description>
         Core framework, providing metamodel, runtime and core APIs.
     </description>
 
-	<properties>
+    <properties>
 
-		<coreBaseDir>${project.build.directory}/..</coreBaseDir>
+        <coreBaseDir>${project.build.directory}/..</coreBaseDir>
 
-		<git-plugin.propertiesDir>org/apache/causeway/core</git-plugin.propertiesDir>
-		<git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
+        <git-plugin.propertiesDir>org/apache/causeway/core</git-plugin.propertiesDir>
+        <git-plugin.gitDir>${coreBaseDir}/../.git</git-plugin.gitDir>
 
-		<dependency.locations.enabled>false</dependency.locations.enabled>
+        <dependency.locations.enabled>false</dependency.locations.enabled>
 
-		<testsToExclude>**/*IntegrationTest.java</testsToExclude>
+        <testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
-		<checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
-		<pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
+        <checkstyle.configLocation>${coreBaseDir}/codequality/checkstyle.xml</checkstyle.configLocation>
+        <pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
 
-	</properties>
+    </properties>
 
-	<pluginRepositories>
-	</pluginRepositories>
+    <pluginRepositories>
+    </pluginRepositories>
 
-	<repositories>
-	</repositories>
+    <repositories>
+    </repositories>
 
-	<build>
-		<outputDirectory>${project.build.directory}/classes</outputDirectory>
-		<testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+    <build>
+        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+        <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
 
-		<pluginManagement>
-			<plugins>
+        <pluginManagement>
+            <plugins>
 
-				<plugin>
-					<groupId>pl.project13.maven</groupId>
-					<artifactId>git-commit-id-plugin</artifactId>
-					<version>${git-commit-id-plugin.version}</version>
-					<executions>
-						<execution>
-							<id>get-the-git-infos</id>
-							<goals>
-								<goal>revision</goal>
-							</goals>
-							<phase>validate</phase>
-						</execution>
-					</executions>
-					<configuration>
-						<verbose>false</verbose>
-						<useNativeGit>true</useNativeGit>
-						<dotGitDirectory>${git-plugin.gitDir}</dotGitDirectory>
+                <plugin>
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <version>${git-commit-id-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>get-the-git-infos</id>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                            <phase>validate</phase>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <verbose>false</verbose>
+                        <useNativeGit>true</useNativeGit>
+                        <dotGitDirectory>${git-plugin.gitDir}</dotGitDirectory>
 
-						<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
-						<dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
+                        <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+                        <dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
 
-						<failOnNoGitDirectory>true</failOnNoGitDirectory>
-						<injectAllReactorProjects>true</injectAllReactorProjects>
+                        <failOnNoGitDirectory>true</failOnNoGitDirectory>
+                        <injectAllReactorProjects>true</injectAllReactorProjects>
 
-						<generateGitPropertiesFile>true</generateGitPropertiesFile>
-						<generateGitPropertiesFilename>${project.build.outputDirectory}/${git-plugin.propertiesDir}/git.properties</generateGitPropertiesFilename>
+                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                        <generateGitPropertiesFilename>${project.build.outputDirectory}/${git-plugin.propertiesDir}/git.properties</generateGitPropertiesFilename>
 
-						<abbrevLength>7</abbrevLength>
-					</configuration>
+                        <abbrevLength>7</abbrevLength>
+                    </configuration>
 
-				</plugin>
+                </plugin>
 
-			</plugins>
-		</pluginManagement>
+            </plugins>
+        </pluginManagement>
 
-		<!-- build plugins; apply to all inheriting modules. Note that some plugins
-			also come from the "super-POM" for the default bindings. For example, in
-			the 'default' lifecycle, the resources, compiler, surefire, jar, install
-			and deploy plugins are automatically included because they provide the default
-			bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
-		<plugins>
-			<!-- run using: mvn org.apache.rat:apache-rat-plugin:check -->
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-		</plugins>
-	</build>
+        <!-- build plugins; apply to all inheriting modules. Note that some plugins
+            also come from the "super-POM" for the default bindings. For example, in
+            the 'default' lifecycle, the resources, compiler, surefire, jar, install
+            and deploy plugins are automatically included because they provide the default
+            bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
+        <plugins>
+            <!-- run using: mvn org.apache.rat:apache-rat-plugin:check -->
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <inherited>true</inherited>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <inherited>true</inherited>
+            </plugin>
+        </plugins>
+    </build>
 
 
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
-	<profiles>
-		<profile>
-			<id>apache-release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-toolchains-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>toolchain</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<toolchains>
-								<jdk>
-									<version>21</version>
-									<vendor>openjdk</vendor>
-								</jdk>
-							</toolchains>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+    <profiles>
+        <profile>
+            <id>apache-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-toolchains-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>toolchain</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <toolchains>
+                                <jdk>
+                                    <version>21</version>
+                                    <vendor>openjdk</vendor>
+                                </jdk>
+                            </toolchains>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>owasp</id>
-			<activation>
-				<property>
-					<name>owasp</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.owasp</groupId>
-						<artifactId>dependency-check-maven</artifactId>
-						<version>9.0.10</version>
-						<executions>
-							<execution>
-								<id>owasp-aggregate</id>
-								<goals>
-									<goal>aggregate</goal>
-								</goals>
-								<configuration>
-									<skipProvidedScope>true</skipProvidedScope>
-									<skipRuntimeScope>true</skipRuntimeScope>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>owasp</id>
+            <activation>
+                <property>
+                    <name>owasp</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>9.0.10</version>
+                        <executions>
+                            <execution>
+                                <id>owasp-aggregate</id>
+                                <goals>
+                                    <goal>aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <skipProvidedScope>true</skipProvidedScope>
+                                    <skipRuntimeScope>true</skipRuntimeScope>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>jdeps</id>
-			<activation>
-				<property>
-					<name>jdeps</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jdeps-plugin</artifactId>
-						<version>3.1.2</version>
-						<executions>
-							<execution>
-								<id>jdeps-jdkinternals</id>
-								<goals>
-									<goal>jdkinternals</goal>
-									<goal>test-jdkinternals</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>jdeps</id>
+            <activation>
+                <property>
+                    <name>jdeps</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jdeps-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>jdeps-jdkinternals</id>
+                                <goals>
+                                    <goal>jdkinternals</goal>
+                                    <goal>test-jdkinternals</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>src</id>
-			<activation>
-				<property>
-					<name>!skip.src</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>src</id>
+            <activation>
+                <property>
+                    <name>!skip.src</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>git</id>
-			<activation>
-				<property>
-					<name>git</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>pl.project13.maven</groupId>
-						<artifactId>git-commit-id-plugin</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>git</id>
+            <activation>
+                <property>
+                    <name>git</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>datanucleusenhance</id>
-			<activation>
-				<property>
-					<name>causeway-app-starter-datanucleusenhance</name>
-					<value>true</value>
-				</property>
-				<!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists>
-					</file> -->
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.datanucleus</groupId>
-						<artifactId>datanucleus-maven-plugin</artifactId>
-						<inherited>true</inherited>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>datanucleusenhance</id>
+            <activation>
+                <property>
+                    <name>causeway-app-starter-datanucleusenhance</name>
+                    <value>true</value>
+                </property>
+                <!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists>
+                    </file> -->
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-maven-plugin</artifactId>
+                        <inherited>true</inherited>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-	</profiles>
+    </profiles>
 
-	<modules>
+    <modules>
 
-		<module>../supplemental-model</module>
+        <module>../supplemental-model</module>
 
-		<module>../commons</module>
+        <module>../commons</module>
 
-		<module>../api/schema</module>
-		<module>../api/applib</module>
+        <module>../api/schema</module>
+        <module>../api/applib</module>
 
-		<module>codegen-bytebuddy</module>
-		<module>config</module>
-		<module>interaction</module>
-		<module>internaltestsupport</module>
-		<module>metamodel</module>
-		<module>runtime</module>
-		<module>runtimeservices</module>
-		<module>transaction</module>
-		<module>webapp</module>
+        <module>codegen-bytebuddy</module>
+        <module>config</module>
+        <module>interaction</module>
+        <module>internaltestsupport</module>
+        <module>metamodel</module>
+        <module>runtime</module>
+        <module>runtimeservices</module>
+        <module>transaction</module>
+        <module>webapp</module>
 
-		<module>security</module>
-		<module>../security/bypass</module>
-		<module>../security/keycloak</module>
-<!--		<module>../security/shiro</module> Shiro 2.0.0 has no jakarta namespaces, exclude from build -->
+        <module>security</module>
+        <module>../security/bypass</module>
+        <module>../security/keycloak</module>
         <module>../security/simple</module>
-		<module>../security/spring</module>
+        <module>../security/spring</module>
 
-		<module>../viewers/commons</module>
-		<module>../viewers/restfulobjects</module>
-		<module>../viewers/wicket</module>
-		<module>../viewers/graphql</module>
+        <module>../viewers/commons</module>
+        <module>../viewers/restfulobjects</module>
+        <module>../viewers/wicket</module>
+        <module>../viewers/graphql</module>
 
-		<module>../persistence/commons</module>
-		<module>../persistence/jdo</module>
-		<module>../persistence/jpa</module>
+        <module>../persistence/commons</module>
+        <module>../persistence/jdo</module>
+        <module>../persistence/jpa</module>
 
-	</modules>
+        <module>../retired/shiro/security/shiro</module>
+        <module>../retired/shiro/extensions/secman/delegated-shiro</module>
+
+    </modules>
 
 </project>
 
