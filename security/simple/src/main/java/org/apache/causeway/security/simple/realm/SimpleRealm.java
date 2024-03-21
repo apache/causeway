@@ -46,7 +46,7 @@ public class SimpleRealm {
     @Value @Accessors(fluent=true)
     public static class User {
         String name;
-        String pass; //TODO[CAUSEWAY-3698] use hash or predicate
+        String encryptedPass;
         List<Role> roles;
     }
     final Map<String, Role> roles = new HashMap<>();

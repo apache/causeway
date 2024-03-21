@@ -29,4 +29,5 @@ module org.apache.causeway.security.simple {
     requires java.inject;
     requires spring.beans;
     requires spring.context;
+    requires spring.security.crypto;
 }

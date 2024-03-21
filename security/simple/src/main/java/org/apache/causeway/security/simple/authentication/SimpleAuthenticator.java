@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -47,6 +48,7 @@ import org.apache.causeway.security.simple.realm.SimpleRealm;
 public class SimpleAuthenticator implements Authenticator {
 
     @Inject protected SimpleRealm realm;
+    @Inject protected PasswordEncoder passwordEncoder;
 
     @Override
     public final boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
@@ -84,8 +86,8 @@ public class SimpleAuthenticator implements Authenticator {
 
     protected boolean isValid(final AuthenticationRequestPassword request) {
         return realm.lookupUserByName(request.getName())
-            .map(SimpleRealm.User::pass)
-            .map(pass->pass.equals(request.getPassword()))
+            .map(SimpleRealm.User::encryptedPass)
+            .map(encryptedPass->passwordEncoder.matches(request.getPassword(), encryptedPass))
             .orElse(false);
     }
 
