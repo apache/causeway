@@ -25,19 +25,27 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.security.authentication.AuthenticationRequest;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.security.simple.authentication.SimpleAuthenticator;
+import org.apache.causeway.security.simple.authorization.SimpleAuthorizor;
 import org.apache.causeway.security.simple.realm.SimpleRealm;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 class SecuritySimpleAuthTest {
 
@@ -45,29 +53,71 @@ class SecuritySimpleAuthTest {
 
     private SimpleRealm realm = new SimpleRealm()
                 //roles
-                .addRoleWithReadAndChange("hello_role", id->id.getFullIdentityString().contains("HelloWorldObject"))
                 .addRoleWithReadAndChange("admin_role", id->true)
-                .addRoleWithReadAndChange("default_role", id->id.getFullIdentityString().startsWith("causeway.applib")
-                        || id.getFullIdentityString().startsWith("causeway.security"))
-                .addRoleWithReadAndChange("fixtures_role", id->id.getFullIdentityString().startsWith("causeway.testing.fixtures"))
-                .addRoleWithReadOnly("reader_role", id->true)
+                .addRoleWithReadAndChange("order_role", id->id.getFullIdentityString().contains("Order"))
+                .addRoleWithReadAndChange("customer_role", id->id.getFullIdentityString().contains("Customer"))
+                .addRoleWithReadOnly("reader_role", id->!id.getFullIdentityString().contains("TopSecret"))
                 //users
                 .addUser("sven", passEncoder.encode("pass0"), List.of("admin_role"))
-                .addUser("dick", passEncoder.encode("pass1"), List.of("hello_role", "default_role"))
-                .addUser("bob", passEncoder.encode("pass2"), List.of("hello_role", "default_role", "fixtures_role"))
+                .addUser("dick", passEncoder.encode("pass1"), List.of("reader_role", "order_role"))
+                .addUser("bob", passEncoder.encode("pass2"), List.of("reader_role", "customer_role"))
                 .addUser("joe", passEncoder.encode("pass3"), List.of("reader_role"));
 
     private SimpleAuthenticator simpleAuthenticator = new SimpleAuthenticator(realm, passEncoder);
+    private SimpleAuthorizor simpleAuthorizor = new SimpleAuthorizor(realm);
 
-    @RequiredArgsConstructor
+    // -- SCENARIOS
+
+    static class Order {
+        String name;
+    }
+    static class Customer {
+        String name;
+    }
+    static class TopSecret {
+        String name;
+    }
+
+    @RequiredArgsConstructor @Getter @Accessors(fluent=true)
     enum Scenario {
-        SVEN,
-        DICK,
-        BOB,
-        JOE;
+        SVEN(
+                Can.of(ord(), cus(), top()), // read grant
+                Can.of(ord(), cus(), top()), // change grant
+                Can.empty(), // read deny
+                Can.empty()), // change deny
+        DICK(
+                Can.of(ord(), cus()), // read grant
+                Can.of(ord()), // change grant
+                Can.of(top()), // read deny
+                Can.of(cus(), top())), // change deny
+        BOB(
+                Can.of(ord(), cus()), // read grant
+                Can.of(cus()), // change grant
+                Can.of(top()), // read deny
+                Can.of(ord(), top())), // change deny
+        JOE(
+                Can.of(ord(), cus()), // read grant
+                Can.empty(), // change grant
+                Can.of(top()), // read deny
+                Can.of(ord(), cus(), top())); // change deny
         String userName() { return name().toLowerCase(); }
         String plainPass() { return "pass"+ordinal(); }
+        final Can<Identifier> expectedReadGranted;
+        final Can<Identifier> expectedChangeGranted;
+        final Can<Identifier> expectedReadDenied;
+        final Can<Identifier> expectedChangeDenied;
+        static Identifier ord() {
+            return Identifier.propertyIdentifier(LogicalType.fqcn(Order.class), "name");
+        }
+        static Identifier cus() {
+            return Identifier.propertyIdentifier(LogicalType.fqcn(Customer.class), "name");
+        }
+        static Identifier top() {
+            return Identifier.propertyIdentifier(LogicalType.fqcn(TopSecret.class), "name");
+        }
     }
+
+    // -- TESTS
 
     @ParameterizedTest
     @EnumSource(Scenario.class)
@@ -82,17 +132,32 @@ class SecuritySimpleAuthTest {
         assertInvalid(new AuthenticationRequestPassword(scenario.userName(), "123xyz"));
 
         // happy case
-        assertValid(new AuthenticationRequestPassword(scenario.userName(), scenario.plainPass()), user->{
-            assertEquals(scenario.userName(), user.getName());
+        assertValid(new AuthenticationRequestPassword(scenario.userName(), scenario.plainPass()), interactionContext->{
+            assertEquals(scenario.userName(), interactionContext.getUser().getName());
+        });
+    }
+
+    @ParameterizedTest
+    @EnumSource(Scenario.class)
+    void authorization(final Scenario scenario) {
+        assertValid(new AuthenticationRequestPassword(scenario.userName(), scenario.plainPass()), interactionContext->{
+            scenario.expectedReadGranted().forEach(grant->
+                assertTrue(simpleAuthorizor.isVisible(interactionContext, grant)));
+            scenario.expectedChangeGranted().forEach(grant->
+                assertTrue(simpleAuthorizor.isUsable(interactionContext, grant)));
+            scenario.expectedReadDenied().forEach(veto->
+                assertFalse(simpleAuthorizor.isVisible(interactionContext, veto)));
+            scenario.expectedChangeDenied().forEach(veto->
+                assertFalse(simpleAuthorizor.isUsable(interactionContext, veto)));
         });
     }
 
     // -- HELPER
 
-    void assertValid(final AuthenticationRequest request, final Consumer<UserMemento> validator) {
-        var interaction = simpleAuthenticator.authenticate(request , "test");
-        assertNotNull(interaction);
-        validator.accept(interaction.getUser());
+    void assertValid(final AuthenticationRequest request, final Consumer<InteractionContext> validator) {
+        var interactionContext = simpleAuthenticator.authenticate(request , "test");
+        assertNotNull(interactionContext);
+        validator.accept(interactionContext);
     }
 
     void assertInvalid(final AuthenticationRequest request) {
