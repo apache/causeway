@@ -33,6 +33,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.security.simple.CausewayModuleSecuritySimple;
 import org.apache.causeway.security.simple.realm.SimpleRealm;
+import org.apache.causeway.security.simple.realm.SimpleRealm.Grant;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,19 +54,19 @@ public class SimpleAuthorizor implements Authorizor {
     @Override
     public boolean isVisible(final InteractionContext ctx, final Identifier identifier) {
         return roles(ctx.getUser()).stream()
-            .anyMatch(role->role.grantsRead().test(identifier));
+            .anyMatch(role->Grant.valueOf(role.grants().apply(identifier)).grantsRead());
     }
 
     @Override
     public boolean isUsable(final InteractionContext ctx, final Identifier identifier) {
         return roles(ctx.getUser()).stream()
-                .anyMatch(role->role.grantsChange().test(identifier));
+            .anyMatch(role->Grant.valueOf(role.grants().apply(identifier)).grantsChange());
     }
 
     protected List<SimpleRealm.Role> roles(final UserMemento userMemento){
         var roles = realm.lookupUserByName(userMemento.getName())
-                .map(SimpleRealm.User::roles)
-                .orElseGet(List::of);
+            .map(SimpleRealm.User::roles)
+            .orElseGet(List::of);
         return roles;
     }
 
