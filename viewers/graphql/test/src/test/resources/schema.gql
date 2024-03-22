@@ -3354,7 +3354,7 @@ type rich__university_calc_Calculator__someUuid__gqlv_action_invoke {
 }
 
 type rich__university_calc_I18nCalculator {
-  "ConcÃ¤t"
+  "Concät"
   concat: rich__university_calc_I18nCalculator__concat__gqlv_action
 }
 
@@ -3394,9 +3394,9 @@ type rich__university_calc_I18nCalculator__concat__gqlv_action_invoke {
 }
 
 type rich__university_calc_I18nCalculator__concat__gqlv_action_params {
-  "Ã„1"
+  "Ä1"
   a1: rich__university_calc_I18nCalculator__concat__a1__gqlv_action_parameter
-  "Ã„2"
+  "Ä2"
   a2: rich__university_calc_I18nCalculator__concat__a2__gqlv_action_parameter
 }
 
@@ -4892,7 +4892,7 @@ type simple__university_calc_Calculator {
 }
 
 type simple__university_calc_I18nCalculator {
-  "ConcÃ¤t"
+  "Concät"
   concat(a1: String!, a2: String!): String
 }
 
