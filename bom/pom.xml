@@ -60,7 +60,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <minimalMavenBuildVersion>3.8.8</minimalMavenBuildVersion> <!-- latest from github actions/setup-java@v3 -->
         <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
         <maven.compiler.release>17</maven.compiler.release>
-        
+
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
         <causeway.skipTests>false</causeway.skipTests>
@@ -122,13 +122,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <guava.version>33.1.0-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
-        
+
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.30.2-GA</javassist.version>
-        
+
         <jaxb-impl.version>4.0.1</jaxb-impl.version>
         <jaxws-ri.version>4.0.0</jaxws-ri.version>
-        
+
         <jakartaee.version>10.0.0</jakartaee.version>
         <jakarta.servlet-api.version>6.0.0</jakarta.servlet-api.version>
         <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
@@ -824,7 +824,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-			
+
 			<!-- org.apache.causeway.extensions (docgen) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
@@ -2332,12 +2332,12 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 					<!-- goal:aggregate (for aggregator modules) binds to phase:package -->
 					<!-- goal:jar and goal:test-jar are meant to bind to phase:package,
 						but doesn't seem to so bound explicitly -->
-					<!-- failing since maven-source-plugin 3.3.0 (as duplicated runs 
+					<!-- failing since maven-source-plugin 3.3.0 (as duplicated runs
 					 		are no longer alloed; there is a clash with built-in goal 'jar-no-fork')
 					<executions>
 						<execution>
 							<id>package-jars</id>
-							<phase>package</phase> 
+							<phase>package</phase>
 							<goals>
 								<goal>jar</goal>
 								<goal>test-jar</goal>
@@ -2704,7 +2704,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <version>[3.8.8,)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
-                            <version>[21,)</version>
+                            <version>[17,)</version>
                         </requireJavaVersion>
                         <!-- seemingly not compatible with use of 3.0.0-SNAPSHOT placeholders
                             <requirePluginVersions> <message>All plugin versions must be defined!</message>
@@ -2981,18 +2981,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 							<showWarnings>true</showWarnings>
 							<parameters>true</parameters>
 							<annotationProcessorPaths>
-								<!-- this is a workaround 
-					
+								<!-- this is a workaround
+
 								Details: The maven compiler plugin ought to pick up all available processors on the classpath.
-								In effect Lombok's annotation processor should be picked up implicitly, but yet is not 
-								
+								In effect Lombok's annotation processor should be picked up implicitly, but yet is not
+
 								Presence of file 'logging-dn-enhance.properties' decativates this profile and
 								the maven-compiler-plugin runs all annotation processors as picked up from the class-path.
 								-->
 									<annotationProcessorPath>
 										<groupId>org.projectlombok</groupId>
 										<artifactId>lombok</artifactId>
-										<version>${lombok.version}</version>	
+										<version>${lombok.version}</version>
 									</annotationProcessorPath>
 							</annotationProcessorPaths>
 						</configuration>
