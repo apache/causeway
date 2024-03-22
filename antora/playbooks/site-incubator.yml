@@ -80,7 +80,7 @@ asciidoc:
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
     page-causewayprev: "2.0.0-RC4"
-    page-causewayrel: "2.0.0-RC5"
+    page-causewayrel: "2.0.0"
 
 output:
   dir: antora/target/site
