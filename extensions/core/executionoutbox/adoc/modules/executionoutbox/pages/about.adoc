@@ -28,7 +28,7 @@ Add a section for _Execution Outbox_'s own BOM:
             <artifactId>causeway-extensions-executionoutbox</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprev}</version>
+            <version>{page-causewayprevv2}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -232,7 +232,7 @@ To setup the message processor:
             <artifactId>causeway-extensions-executionoutbox</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprev}</version>
+            <version>{page-causewayprevv2}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

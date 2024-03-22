@@ -27,7 +27,7 @@ For convenience, it includes:
 
 However, it does _not_ include a security implementation, a viewer implementation or a persistence implementation, which you should add as required:
 
-* security, add _one_ of xref:security:shiro:about.adoc[Shiro], xref:security:spring:about.adoc[Spring], xref:security:keycloak:about.adoc[Keycloak] or xref:security:bypass:about.adoc[Bypass] if prototyping
+* security, add _one_ of xref:security:spring:about.adoc[Spring], xref:security:keycloak:about.adoc[Keycloak], xref:security:shiro:about.adoc[Shiro] or xref:security:simple:about.adoc[Simple], xref:security:bypass:about.adoc[Bypass] if prototyping
 
 * for persistence, add _one_ of xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus].
 

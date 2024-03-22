@@ -197,6 +197,9 @@ content:
       start_path: security/bypass/src/main/adoc # security
       branches: HEAD
     - url: .
+      start_path: security/simple/src/main/adoc # security
+      branches: HEAD
+    - url: .
       start_path: security/shiro/src/main/adoc # security
       branches: HEAD
     - url: .
@@ -301,8 +304,10 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-causewayprev: "2.0.0-RC4"
-    page-causewayrel: "2.0.0-RC5"
+    page-causewayprevv2: "2.0.0"
+    page-causewayprevv3: "3.0.0"
+    page-causewayrelv2: "2.0.1"
+    page-causewayrelv3: "3.0.1"
 
 output:
   dir: antora/target/site

@@ -465,11 +465,15 @@ For the moment, though, we've simplified to just publish the current version.
 ----
 asciidoc:
   attributes:
-    page-causewayprev: "..."    #<.>
-    page-causewayrel: "..."     #<.>
+    page-causewayprevv2: "..."    #<.>
+    page-causewayprevv3: "..."    #<.>
+    page-causewayrelv2: "..."     #<.>
+    page-causewayrelv3: "..."     #<.>
 ----
-<.> needs to be (the current) `{page-causewayrel}`
-<.> needs to be set to the _next_ likely release version.
+<.> needs to be (the current) `{page-causewayrelv2}`
+<.> needs to be (the current) `{page-causewayrelv3}`
+<.> needs to be set to the _next_ likely release version for v2.
+<.> needs to be set to the _next_ likely release version for v3 branch
 
 * commit the changes
 +

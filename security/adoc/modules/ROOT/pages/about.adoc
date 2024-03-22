@@ -25,6 +25,7 @@ The framework allows for different authorization mechanisms through the xref:ref
 There are several implementations of these SPIs to choose from; these make up the bulk of this guide.
 
 include::security:bypass:partial$module-nav.adoc[]
+include::security:simple:partial$module-nav.adoc[]
 include::security:shiro:partial$module-nav.adoc[]
 include::security:keycloak:partial$module-nav.adoc[]
 include::security:spring:partial$module-nav.adoc[]

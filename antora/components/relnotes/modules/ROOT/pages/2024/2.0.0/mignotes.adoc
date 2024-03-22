@@ -7,15 +7,15 @@ This page will be added to as development progresses.
 
 == Programming Model (CAUSEWAY-3697)
 
-Annotation attribute 
-`@DomainService(nature=..)` was marked for removal and no longer has any scope filtering effect. 
+Annotation attribute
+`@DomainService(nature=..)` was marked for removal and no longer has any scope filtering effect.
 This filtering is or will be replaced by some other mechanism eg. configuration option.
 
 == Programming Model (CAUSEWAY-3692)
 
-Annotation attribute 
+Annotation attribute
 `@Parameter(dependentDefaultsPolicy=..)` was renamed to
-`@Parameter(precedingParamsPolicy=..)`, also enum 
+`@Parameter(precedingParamsPolicy=..)`, also enum
 `DependentDefaultsPolicy` was renamed to `PrecedingParamsPolicy` and enum value
 `UPDATE_DEPENDENT` was renamed to `RESET`.
 
@@ -25,7 +25,7 @@ CausewayConfiguration also changed:
 ----
 #old
 causeway.applib.annotation.parameter.dependentDefaultsPolicy=..
-#new 
+#new
 causeway.applib.annotation.parameter.precedingParametersPolicy=..
 ----
 
@@ -80,7 +80,7 @@ For more details, see link:https://issues.apache.org/jira/browse/CAUSEWAY-3675[C
 == Mavendeps webapp module and the GraphQL viewer (CAUSEWAY-3676)
 
 The GraphQL viewer is a brand new viewer, automatically exposing your domain object model as a GraphQL API.
-For more on this new feature, see the corresponding xref:relnotes::2024/2.0.0-RC5/relnotes.adoc#the-graphql-viewer-causeway-3676[release notes].
+For more on this new feature, see the corresponding xref:relnotes::2024/2.0.0/relnotes.adoc#the-graphql-viewer-causeway-3676[release notes].
 
 As part of this work, the `org.apache.causeway.mavendeps:causeway-mavendeps-webapp` convenience module has been updated.
 It now references all 3 viewers (Wicket, Restful and GraphQL) as a one-stop shop for bringing in viewers.
