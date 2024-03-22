@@ -16,7 +16,7 @@ To use it, just add:
 <parent>
     <groupId>org.apache.causeway.app</groupId>
     <artifactId>causeway-app-starter-parent</artifactId>
-    <version>{page-causewayprevv2}</version>                    <!--.-->
+    <version>{page-causewayprevv3}</version>                    <!--.-->
 </parent>
 ----
 <.> update as required for new versions of the framework.

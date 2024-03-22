@@ -21,7 +21,7 @@ Currently only github is supported.
             <artifactId>causeway-extensions-layoutloaders</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv2}</version>
+            <version>{page-causewayprevv3}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

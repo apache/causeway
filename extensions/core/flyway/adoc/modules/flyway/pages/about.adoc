@@ -20,7 +20,7 @@ Add a section for _Flyway_'s own BOM:
             <artifactId>causeway-extensions-flyway</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv2}</version>
+            <version>{page-causewayprevv3}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

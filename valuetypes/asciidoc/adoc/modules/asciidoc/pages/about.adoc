@@ -29,7 +29,7 @@ In your application's top level `pom.xml`, add a dependency for this module's ow
             <artifactId>causeway-valuetypes-asciidoc</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv2}</version>
+            <version>{page-causewayprevv3}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

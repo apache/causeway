@@ -25,7 +25,7 @@ In addition, add an entry for _SecMan_'s own BOM:
             <artifactId>causeway-extensions-secman</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv2}</version>
+            <version>{page-causewayprevv3}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
