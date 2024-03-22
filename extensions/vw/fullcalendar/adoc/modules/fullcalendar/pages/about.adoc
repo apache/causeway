@@ -30,7 +30,7 @@ In your application's top level `pom.xml`, add a dependency for this module's ow
             <artifactId>causeway-extensions-fullcalendar</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprev}</version>
+            <version>{page-causewayprevv2}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

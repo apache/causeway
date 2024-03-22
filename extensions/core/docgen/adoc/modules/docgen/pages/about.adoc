@@ -18,7 +18,7 @@ The _DocGen_ module automatically generates help documentation from the applicat
             <artifactId>causeway-extensions-docgen</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprev}</version>
+            <version>{page-causewayprevv2}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
