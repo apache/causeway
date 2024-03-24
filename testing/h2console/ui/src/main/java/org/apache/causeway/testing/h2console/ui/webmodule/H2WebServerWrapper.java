@@ -78,7 +78,8 @@ public interface H2WebServerWrapper {
 
             @Override
             public void setAdminPassword(String password) {
-                webServlet.setAdminPassword(password);
+                String encodedPassword = WebServer.encodeAdminPassword(password);
+                webServlet.setAdminPassword(encodedPassword);
             }
 
         });

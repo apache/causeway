@@ -20,6 +20,9 @@ package org.apache.causeway.core.security.authentication.standard;
 
 public interface RandomCodeGenerator {
 
-    public String generateRandomCode();
+    default String generateRandomCode() {
+        return generateRandomCode(10);
+    }
+    String generateRandomCode(int numChars);
 
 }

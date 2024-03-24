@@ -145,7 +145,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
                 h2WebServerWrapper.setConnectionInfo(connectionInfo);
                 h2WebServerWrapper.setAllowOthers(isWebAllowRemoteAccess());
                 if(isGenerateRandomWebAdminPassword()) {
-                    val webAdminPass = randomCodeGenerator.generateRandomCode();
+                    val webAdminPass = randomCodeGenerator.generateRandomCode(20); // h2 requires at least 12
                     log.info("webAdminPass: {}", webAdminPass);
                     h2WebServerWrapper.setAdminPassword(webAdminPass);
                 }

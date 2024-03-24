@@ -77,7 +77,7 @@ public class H2WebServletForJakarta extends HttpServlet {
                 name = "-" + name;
             }
             list.add(name);
-            if (value.length() > 0) {
+            if (!value.isEmpty()) {
                 list.add(value);
             }
         }

@@ -43,9 +43,12 @@ public class RandomCodeGeneratorDefault implements RandomCodeGenerator {
     private final SecureRandom random = new SecureRandom(); // Compliant for security-sensitive use cases
 
     @Override
-    public String generateRandomCode() {
-        final StringBuilder buf = new StringBuilder(NUMBER_CHARACTERS);
-        for (int i = 0; i < NUMBER_CHARACTERS; i++) {
+    public String generateRandomCode(final int numChars) {
+        if(numChars < NUMBER_CHARACTERS) {
+            throw new IllegalArgumentException("Must request at least %d characters".formatted(NUMBER_CHARACTERS));
+        }
+        final StringBuilder buf = new StringBuilder(numChars);
+        for (int i = 0; i < numChars; i++) {
             final int pos = random.nextInt(CHARACTERS.length());
             buf.append(CHARACTERS.charAt(pos));
         }
