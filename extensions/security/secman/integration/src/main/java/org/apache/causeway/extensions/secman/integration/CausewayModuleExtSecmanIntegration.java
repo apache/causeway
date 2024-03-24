@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.secman.integration;
 
+import org.apache.causeway.extensions.secman.integration.authenticator.AuthenticatorSecmanAutoConfiguration;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -49,6 +51,9 @@ import org.apache.causeway.extensions.secman.integration.userreg.UserRegistratio
         UserRegistrationServiceForSecman.class,
 
         UserMementoRefinerFromApplicationUser.class,
+
+        // auto-configurations
+        AuthenticatorSecmanAutoConfiguration.class,
 
 })
 public class CausewayModuleExtSecmanIntegration {
