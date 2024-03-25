@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-  roles:
+roles:
 - __name: causeway-conf-ConfigurationMenu
   description: Access configuration properties
   permissions:
