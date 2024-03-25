@@ -2403,27 +2403,37 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/.classpath</exclude>
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
-                            <exclude>**/*.columnOrder.txt</exclude>
-                            <exclude>**/*.drawio.svg</exclude>
-                            <exclude>**/META-INF/spring.factories</exclude>
-
-                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
-
-                            <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
                             <exclude>**/schema.gql</exclude>
                             <exclude>**/jquery.livequery.js</exclude>
                             <exclude>**/*._.gql</exclude>
                             <exclude>**/.gitkeep</exclude>
 
                             <exclude>**/*.iml</exclude>
+                            <exclude>**/intellij/launch/*.xml</exclude>
+
+                            <exclude>**/gradle/wrapper/gradle-wrapper.properties</exclude>
+                            <exclude>**/gradlew</exclude>
+                            <exclude>**/gradlew.bat</exclude>
+                            <exclude>**/rebel.xml</exclude>
+                            <exclude>**/translations**.po</exclude>
+                            <exclude>**/translations.pot</exclude>
+
+                            <exclude>**/META-INF/spring.factories</exclude>
+                            <exclude>**/MANIFEST.MF</exclude>
+                            <exclude>**/META-INF/services/**</exclude>
+
+                            <exclude>**/src/main/resources/supplemental-models.xml</exclude>
+
                             <exclude>**/webpack.config.js</exclude>
                             <exclude>**/webpack.generated.js</exclude>
                             <exclude>**/pnpm-lock.yaml</exclude>
                             <exclude>**/pnpmfile.js</exclude>
+                            <exclude>**/*.min.js</exclude>
 
                             <exclude>**/*.pdn</exclude>
                             <exclude>**/*.svg</exclude>
                             <exclude>**/*.rtf</exclude>
+                            <exclude>**/*.drawio.svg</exclude>
                             <exclude>**/*.json</exclude>
                             <exclude>**/.gitkeep</exclude>
                             <exclude>**/*.min.js</exclude>
@@ -2432,6 +2442,18 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
                             <exclude>**/fakedata/applib/services/clobs/vs</exclude>
                             <exclude>**/fakedata/applib/services/clobs/vx</exclude>
+                            <exclude>**/*.columnOrder.txt</exclude>
+                            <exclude>**/*.drawio.svg</exclude>
+                            <exclude>**/META-INF/spring.factories</exclude>
+
+                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+                            <exclude>**/supplemental-ui/**</exclude>
+                            <exclude>**/_nav.adoc</exclude>
+                            <exclude>**/module-nav.adoc</exclude>
+                            <exclude>**/component-nav.adoc</exclude>
+                            <exclude>**/partials/extensions.adoc</exclude>
+
+                            <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
 
                             <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/*.ucd</exclude>
@@ -2447,8 +2469,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/partials/component-nav.adoc</exclude>
                             <exclude>**/_nav.adoc</exclude>
                             <exclude>**/_overview/nav.adoc</exclude>
+                            <exclude>**/datanucleus.log</exclude>
 
                             <exclude>**/application.js</exclude>
+                            <exclude>**/bootstrap-datetimepicker.min.css</exclude>
+                            <exclude>**/bootstrap-datetimepicker.css</exclude>
 
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/simple-sidebar.css</exclude>
@@ -2474,7 +2499,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/rebel.xml</exclude>
                             <exclude>**/translations**.po</exclude>
                             <exclude>**/translations.pot</exclude>
-                            <exclude>**/intellij/launch/*.xml</exclude>
+                            <exclude>**/vega*.js</exclude>
 
                             <exclude>**/css/home/scss-files.txt</exclude>
                             <exclude>**/css/home/styles.css</exclude>
@@ -2483,6 +2508,34 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/swagger-ui/**</exclude>
 
                             <exclude>**/META-INF/services/**</exclude>
+                            <exclude>**/select2-bootstrap.css</exclude>
+
+                            <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+
+                            <exclude>**/application.js</exclude>
+
+                            <exclude>**/xml/objects/**</exclude>
+                            <exclude>**/test.data</exclude>
+                            <exclude>**/fixture-data/**</exclude>
+                            <exclude>**/*.approved.*</exclude>
+                            <exclude>**/*.approved.xml</exclude>
+                            <exclude>**/*.approved.txt</exclude>
+                            <exclude>**/approved/*.adoc</exclude>
+                            <exclude>**/secman-permissions.yml</exclude>
+
+                            <exclude>**/fakedata/applib/services/clobs/*.dtd</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.dcl</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/*.soc</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/vs</exclude>
+                            <exclude>**/fakedata/applib/services/clobs/vx</exclude>
+
+                            <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
+                            <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
+
+                            <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
+
+                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+                            <exclude>**/kroviz/webpack.config.d/**</exclude>
                         </excludes>
                         <licenses>
                             <license

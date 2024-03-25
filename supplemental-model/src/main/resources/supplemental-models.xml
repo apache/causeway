@@ -121,7 +121,7 @@
         <project>
             <groupId>org.webjars.npm</groupId>
             <artifactId>eonasdan__tempus-dominus</artifactId>
-            <version>6.7.11</version>
+            <version>6.9.5</version>
             <name>tempus-dominus</name>
             <licenses>
                 <license>
