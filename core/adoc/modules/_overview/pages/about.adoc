@@ -4989,7 +4989,7 @@ Directory: /extensions/security/secman/delegated-shiro
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:2.0.0-SNAPSHOT +
+org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:2.0.0 +
 org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
 ****
 
