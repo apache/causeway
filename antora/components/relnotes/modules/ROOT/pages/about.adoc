@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-This table summarises all releases of Apache Causeway v2.0 to date.
+This table summarises all releases of Apache Causeway to date.
 
 [cols="2,2,4a,>1,>1,>1,3a"]
 |===
@@ -16,19 +16,24 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 | Bugs
 | Detail
 
+| 3.0.0
+| _tba_
+| Release of Apache Causeway 3.0.0
+.2+| 5
+.2+| 25
+.2+| 12
+.2+|
+* xref:relnotes:ROOT:2024/3.0.0/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc[3.0.0 Migration Notes]
+* xref:relnotes:ROOT:2024/2.0.0/mignotes.adoc[2.0.0 Migration Notes]
+
 | 2.0.0
 | _tba_
-| Release of Apache Causeway 2.0.0.
-| _tba_
-| _tba_
-| _tba_
-|
-* xref:relnotes:ROOT:2024/2.0.0/relnotes.adoc[Release Notes]
-* xref:relnotes:ROOT:2024/2.0.0/mignotes.adoc[Migration Notes]
+| Release of Apache Causeway 2.0.0
 
 | 2.0.0-RC4
 | 2nd Jan 2024
-| Fourth release candidate for Apache Causeway 2.0.0.
+| Fourth release candidate for Apache Causeway 2.0.0
 | 4
 | 11
 | 18
@@ -38,7 +43,7 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 
 | 2.0.0-RC3
 | 9th Oct 2023
-| Third release candidate for Apache Causeway 2.0.0.
+| Third release candidate for Apache Causeway 2.0.0
 | 19
 | 40
 | 28
@@ -48,7 +53,7 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 
 | 2.0.0-RC2
 | 13-Jul-2023
-| Second release candidate for Apache Causeway 2.0.0.
+| Second release candidate for Apache Causeway 2.0.0
 | 6
 | 17
 | 44
@@ -58,7 +63,8 @@ This table summarises all releases of Apache Causeway v2.0 to date.
 
 | 2.0.0-RC1
 | 25-Mar-2023
-| First release candidate for Apache Causeway 2.0.0.  Project renamed.
+| First release candidate for Apache Causeway 2.0.0
+Project renamed.
 | 16
 | 13
 | 39

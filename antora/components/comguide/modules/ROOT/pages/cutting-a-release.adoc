@@ -177,7 +177,7 @@ sh preview.sh
 NOTE: this now runs `mvnd clean install -pl core/config` automatically.
 
 
-Check for any Asciidoc errors, and fix.
+Check for any AsciiDoc errors, and fix.
 Also double-check that the config property files are correctly formatted.
 
 

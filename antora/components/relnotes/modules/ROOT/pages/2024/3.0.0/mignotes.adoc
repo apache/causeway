@@ -1,0 +1,35 @@
+= Migrating from 2.0.0 to 3.0.0
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+To upgrade from v2.0 to v3.0:
+
+* move up to Java 17 (minimum)
+* update namespaces from `javax` to `jakarta`
+* if you are using the xref:security:shiro:about.adoc[Shiro security] module, this will need to choose a different security implementation.
+
+This last point is discussed xref:#simple-security-replacement-for-shiro[below].
+
+[#simple-security-replacement-for-shiro]
+== Simple Security, Replacement for Shiro (link:https://issues.apache.org/jira/browse/CAUSEWAY-3698[CAUSEWAY-3698])
+
+In 3.0.0, the Shiro modules are no longer distributed because Apache Shiro have not yet released a `jakarta` namespaced version of their framework.
+
+
+There are several migration options:
+
+* first is to leverage xref:security:spring:about.adoc[Spring Security].
++
+This can be extended in various ways, eg for xref:security:spring-oauth2:about.adoc[OAuth2] support.
+It is commonly paired with xref:security:secman:about.adoc[SecMan] for authorization
+
+* or, use xref:security:secman:about.adoc[SecMan] for both authentication and authorization
+
+* or, use xref:security:simple:about.adoc[Simple Security] which provides a programmatic approach for implementing an `Authenticator` and/or `Authorizor`.
++
+It is broadly equivalent to the Shiro `.ini` realm.
+
+We will revisit this as and when Apache Shiro release a suitable version of their framework.
+

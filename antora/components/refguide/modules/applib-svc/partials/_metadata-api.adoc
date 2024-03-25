@@ -30,7 +30,7 @@ xref:refguide:applib:index/services/layout/LayoutServiceMenu.adoc[LayoutServiceM
 
 
 |xref:refguide:applib:index/services/sitemap/SitemapService.adoc[SitemapService] & xref:refguide:applib:index/services/sitemap/SitemapServiceMenu.adoc[SitemapServiceMenu]
-|Access to a downloadable site map of the application's features, as an Asciidoc document.
+|Access to a downloadable site map of the application's features, as an AsciiDoc document.
 
 The intention is to use this as the basis for a user guide or to develop a manual regression test plan.
 
