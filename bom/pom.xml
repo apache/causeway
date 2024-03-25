@@ -2539,6 +2539,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <exclude>**/test.data</exclude>
                             <exclude>**/fixture-data/**</exclude>
                             <exclude>**/*.approved.*</exclude>
+                            <exclude>**/*.approved.xml</exclude>
                             <exclude>**/approved/*.adoc</exclude>
                             <exclude>**/secman-permissions.yml</exclude>
 
