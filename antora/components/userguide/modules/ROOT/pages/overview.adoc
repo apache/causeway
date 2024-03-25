@@ -16,7 +16,7 @@ These will be either a xref:domain-entities.adoc[domain entity] (persisted state
 To access them, a menu xref:domain-services.adoc[domain service] will be used to find from the database (a repository service) or occasionally to create a new instance (a factory service).
 
 The state managed by entities and view models is expressed in terms of xref:properties-collections-actions.adoc[properties and collections], with properties whose value either refers to other domain objects (reference types) or alternatively holds a value directly (xref:value-types.adoc[value types]).
-Apache Causeway supports a wide variety of xref:value-types.adoc[value types], including JDK types (primitives, strings or dates) Causeway-specific (eg Asciidoc, Vega) and 3rd party (eg Jodatime).
+Apache Causeway supports a wide variety of xref:value-types.adoc[value types], including JDK types (primitives, strings or dates) Causeway-specific (eg AsciiDoc, Vega) and 3rd party (eg Jodatime).
 Moreover it is possible to define your own custom types, and you can teach the framework about other 3rd party libraries you might wish to use, eg https://jscience.org[JScience].
 
 Actions allow the end-user to invoke business logic.

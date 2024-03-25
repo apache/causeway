@@ -1,0 +1,186 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+
+.Comparing v2.0.0 and v3.0.0
+[cols=">2a,^1m,^1m,2a", options="header"]
+|===
+
+|
+| v2.0.0
+| v3.0.0
+| Notes
+
+| Java
+| 11
+| 17
+|
+
+| Spring Boot
+| v2.7.18
+| v3.2.4
+| Spring Boot 2.7 is EOL.
+
+| Namespace
+| javax.*
+| jakarta.*
+|
+
+| Wicket
+| v9.17.0
+| v10.0.0
+.2+| xref:vw:ROOT:about.adoc[Wicket viewer]
+
+| Bootstrap
+| 5.3.2
+| 5.3.3
+
+| RestEasy
+| 5.0.0.Final
+| 6.2.7.Final
+| xref:vro:ROOT:about.adoc[Restful Objects viewer]
+
+| EclipseLink
+| 6.0.7
+| 6.0.7
+| xref:pjdo::about.adoc[]
+
+| DataNucleus
+| 6.0.7
+| 6.0.7
+| xref:pjdo::about.adoc[]
+
+|===
+
+
+Other highlights
+
+* xref:pjpa:ROOT:about.adoc[Persistence using JPA] has been added through an integration of EclipseLink.
++
+xref:pjdo::about.adoc[Persistence using JDO] continues to be supported through the integration with DataNucleus.
++
+[NOTE]
+====
+We use EclipseLink rather than Hibernate because the latter is licensed using LGPL, which is incompatible with ASF licensing.
+In addition, EclipseLink is the reference implementation for JPA.
+====
+
++
+Spring Data is supported for both persistence mechanisms.
+
+* multiple mechanisms of implementing view models (JAXB, programmatic, serializable).
+This is pluggable.
+
+* added a generic xref:gqlv:ROOT:about.adoc[GraphQL] API.
+
+* multiple improvements to the programming model, including:
+
+** support for meta-annotations
+
+** support for different introspection modes.
++
+In particular, "encapsulated" mode mean that the properties and collections of entities and view models do _not_ have to have `public` visibility; their programmatic API can be kept to a minimum.
+
+** supported custom scalar value types and composite types
++
+This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc], xref:valuetypes:markdown:about.adoc[Markdown], xref:valuetypes:jodatime:about.adoc[] and xref:valuetypes:vega:about.adoc[Vega] (link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
+
+** mixin classes annotated as `@Action`, `@Property` or `@Collection`
+
+** logical type name aliases
+
+* integration extensions, including xref:userguide:commandlog:about.adoc[], xref:userguide:executionlog:about.adoc[] and xref:userguide:executionoutbox:about.adoc[]
+
+* xref:vw:ROOT:about.adoc[] extensions including xref:vw:fullcalendar:about.adoc[], xref:vw:pdfjs:about.adoc[], xref:vw:tabular:about.adoc[Tabular Extension] (Excel).
++
+Also tree view and client-side filtering using datatables.net JS.
+
+* security extensions including  xref:security:secman:about.adoc[secman] ( authorization and/or authentication implemented as Causeway entities), xref:security:audittrail:about.adoc[Audit Trail] and xref:security:sessionlog:about.adoc[Session Log]
+
+* dependency/library upgrades:
+
+** Spring event bus replaces guava or axon; removes guice
+
+** ByteBuddy replaces cglib or javassist for implementation of xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[]
+
+** switch from hsqldb to h2
+
+* other extensions such as a xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[BackgroundService] for executing commands asynchronously, and xref:userguide:flyway:about.adoc[] integration.
+
+Apart from dependencies and the `javax`/`jakarta` namespace, in most regards v2.0.0 and v3.0 are functionally equivalent.
+The only feature not available in 3.0 is the Shiro module, because (at the time of release) Apache Shiro have not released `jakarta` support.
+However, either the xref:security:spring:about.adoc[Spring Security] integration or even the xref:security:simple:about.adoc[Simple Security] implementation can be used instead.
+
+---
+For `2.0.0` itself, below is the list of features, improvements and bugs made since `2.0.0-RC4`.
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3698[CAUSEWAY-3698] -  Security Integration Replacement for Shiro INI based Realm (xref:security:simple:about.adoc[])
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3676[CAUSEWAY-3676] - GraphQL viewer (xref:gqlv:ROOT:about.adoc[])
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3671[CAUSEWAY-3671] - `Object_createdByCommand`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3670[CAUSEWAY-3670] - Extend BookmarkService with better support of logical type name aliases
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3669[CAUSEWAY-3669] - Extend `CausewayConfiguration` to return all config keys and their value
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3700[CAUSEWAY-3700] - Include the secman authenticator auto-configuration...
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3697[CAUSEWAY-3697] - Deprecate `@DomainService(nature=NatureOfService..)` for Removal (to be replaced by some SPI)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3696[CAUSEWAY-3696] - Don't log ``ClientAbortException``s
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3694[CAUSEWAY-3694] - IntrospectionPolicy `ENCAPSULATION_ENABLED` should NOT require annotation on mixin main method.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3693[CAUSEWAY-3693] - [Wicket Viewer] Allow table header text to break on whitespace (CSS)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3692[CAUSEWAY-3692] - [Programming Model] Rename `DependentDefaultsPolicy` to `PrecedingParamsPolicy` to better explain intent.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3691[CAUSEWAY-3691] - [JUnit] Remove 'stable' from regression test artifact names
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3689[CAUSEWAY-3689] - Make parsing of `BigDecimal` stricter, to avoid mistypes.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3688[CAUSEWAY-3688] - Audit trail should gracefully _attempt_ to capture values, but not fail fast.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3687[CAUSEWAY-3687] - [Validation] Disallow `@Transactional` within @DomainService(nature=VIEW)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3686[CAUSEWAY-3686] - [Wicket Viewer] Veto (Reason) Icon Tooltip is potentially too verbose
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3685[CAUSEWAY-3685] - Tree Rendering: allow for nodes to be marked (as selected)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3684[CAUSEWAY-3684] - [Commons] Json/YamlUtils support for `Can<T>`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3683[CAUSEWAY-3683] - [Commons] Json/YamlUtils support for `java.time` (ISO)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3678[CAUSEWAY-3678] - REST API should return a 503 if polled before the app is fully up.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3675[CAUSEWAY-3675] - Suppress autoflush if called by `EntityChangeTracker` (to avoid concurrent modification exceptions).
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3672[CAUSEWAY-3672] - Make `DomainEventHelper` more resilient if there is a programming error with the definition of an event.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3661[CAUSEWAY-3661] - REST call for collection can return 404 error
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3646[CAUSEWAY-3646] - [Programming Model] Object Support Method for Font Awesome Layers
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3461[CAUSEWAY-3461] - [Wicket Viewer] unable to tab into `autoComplete` search field.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3404[CAUSEWAY-3404] - [Commons] Quality of Life Improvements for 2.0.0 Release
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3390[CAUSEWAY-3390] - `AuditTrailEntryRepository` has generic parameter vs secman repos (eg `ApplicationUserRepository`) that does not ... make these consistent.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3081[CAUSEWAY-3081] - Check for existence of feature in fixturescript
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2873[CAUSEWAY-2873] - petclinic tutorial (documentation)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2085[CAUSEWAY-2085] - [archunit rule] Every entity should be annotated with `@XmlJavaTypeAdapter(PersistentEntityAdapter.class)`
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3701[CAUSEWAY-3701] - Enable h2 ui console for v3
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3679[CAUSEWAY-3679] - Downloaded Excel spreadsheet shows header rows as black on black.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3674[CAUSEWAY-3674] - [Wicket Viewer] Potential NPE in `PendingParamsSnapshot`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3673[CAUSEWAY-3673] - Fix `LayoutLoadersGitHubMenu` action's incorrectly defined domain event.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3667[CAUSEWAY-3667] - [Wicket Viewer] Regression: date/time picker in param dialog is squeezed into single line
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3650[CAUSEWAY-3650] - `FixtureScripts` `runScript` vs `runFixtureScript` - one fires the `FixturesInstallingEvent`/`FixturesInstalledEvent` and the other does not.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3620[CAUSEWAY-3620] - RO viewer returns 500 not 404 if object doesn't exist.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3491[CAUSEWAY-3491] - [Wicket Viewer] cannot easily change the offset for an `OffsetTime`
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3490[CAUSEWAY-3490] - [Wicket Viewer] not possible to change the offset for an `OffsetDateTime`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3489[CAUSEWAY-3489] - [Wicket Viewer] cannot enter ZonedDateTime values and Joda `DateTime`.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3326[CAUSEWAY-3326] - ``Specification``'s Injection Points are not being resolved
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3175[CAUSEWAY-3175] - Autocomplete not supported for values, only for object references
+
+
+== Duplicate
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3695[CAUSEWAY-3695] - [DUPLICATE] Joda DateTime not being handled correctly - treated as a ZonedDateTime
+
+== Documentation
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3677[CAUSEWAY-3677] - get to green on website checks - https://whimsy.apache.org/site/
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3666[CAUSEWAY-3666] - 2.0.0 release activities

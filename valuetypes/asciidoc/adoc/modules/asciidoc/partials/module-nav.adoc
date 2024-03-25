@@ -1,5 +1,5 @@
 
 
 
-* xref:valuetypes:asciidoc:about.adoc[Asciidoc]
+* xref:valuetypes:asciidoc:about.adoc[AsciiDoc]
 

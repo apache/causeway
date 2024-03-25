@@ -22,7 +22,7 @@ This milestone also introduces a number of new features:
 
 * New value types:
 ** text-based value type with simple xref:vw:sse:about.adoc[SSE support]
-** xref:valuetypes:asciidoc:about.adoc[Asciidoc] value type
+** xref:valuetypes:asciidoc:about.adoc[AsciiDoc] value type
 ** xref:valuetypes:markdown:about.adoc[Markdown] value type
 
 * New extensions:

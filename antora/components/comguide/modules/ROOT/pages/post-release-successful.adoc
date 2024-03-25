@@ -131,7 +131,7 @@ In the main `causeway` repo (ie containing the asciidoc source):
 
 * Generate release notes
 +
-From the root directory, generate the release notes for the current release, in Asciidoc format; eg:
+From the root directory, generate the release notes for the current release, in AsciiDoc format; eg:
 +
 [source,bash,subs="attributes+"]
 ----
