@@ -46,8 +46,9 @@ jobs:
       # requires 'secrets' which we don't have yet
       MVN_STAGES: install
 
-      # options
-      SKIP_CODE_QL: false
+      # options 
+      # CodeQL action seems broken on JDK22, waiting for updates
+      SKIP_CODE_QL: true
 
     steps:
     - uses: actions/checkout@v4
