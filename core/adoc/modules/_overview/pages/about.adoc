@@ -516,7 +516,7 @@ o.a.i.testing.h2console.ui.webmodule.WebModuleH2Console +
 .Dependencies
 ****
 com.h2database:h2:jar:<managed> +
-javax.servlet:javax.servlet-api:jar:<managed> +
+jakarta.servlet:jakarta.servlet-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 ****
 
@@ -842,17 +842,16 @@ com.approvaltests:approvaltests:jar:<managed> +
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:<managed> +
 com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:<managed> +
-com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
+com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider:jar:<managed> +
+com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:jar:<managed> +
 com.fasterxml.woodstox:woodstox-core:jar:<managed> +
 com.google.code.gson:gson:jar:<managed> +
 com.sun.xml.bind:jaxb-impl:jar:<managed> +
 jakarta.annotation:jakarta.annotation-api:jar:<managed> +
-jakarta.enterprise:jakarta.enterprise.cdi-api:jar:2.0.2 +
+jakarta.enterprise:jakarta.enterprise.cdi-api:jar:4.0.1 +
 jakarta.inject:jakarta.inject-api:jar:<managed> +
 jakarta.transaction:jakarta.transaction-api:jar:<managed> +
 org.codehaus.woodstox:stax2-api:jar:<managed> +
-org.eclipse.persistence:org.eclipse.persistence.moxy:jar:<managed> +
-org.eclipse.persistence:org.eclipse.persistence.sdo:jar:<managed> +
 org.hamcrest:hamcrest-library:jar:<managed> +
 org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.1_spec:jar:<managed> +
 org.jdom:jdom2:jar:<managed> +
@@ -860,7 +859,6 @@ org.jsoup:jsoup:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
 org.junit.jupiter:junit-jupiter-params:jar:<managed> +
-org.projectlombok:lombok:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
 org.springframework:spring-context:jar:<managed> +
 org.springframework:spring-tx:jar:<managed> +
@@ -871,7 +869,7 @@ org.yaml:snakeyaml:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Either.adoc[Either], xref:refguide:commons:index/functional/Railway.adoc[Railway], xref:refguide:commons:index/functional/ThrowingConsumer.adoc[ThrowingConsumer], xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable], xref:refguide:commons:index/functional/ThrowingSupplier.adoc[ThrowingSupplier], xref:refguide:commons:index/functional/Try.adoc[Try], xref:refguide:commons:index/io/DataPeer.adoc[DataPeer], xref:refguide:commons:index/io/DataSink.adoc[DataSink], xref:refguide:commons:index/io/DataSource.adoc[DataSource], xref:refguide:commons:index/io/FileUtils.adoc[FileUtils], xref:refguide:commons:index/io/HashUtils.adoc[HashUtils], xref:refguide:commons:index/io/JaxbUtils.adoc[JaxbUtils], xref:refguide:commons:index/io/JsonUtils.adoc[JsonUtils], xref:refguide:commons:index/io/TextUtils.adoc[TextUtils], xref:refguide:commons:index/io/UrlUtils.adoc[UrlUtils], xref:refguide:commons:index/io/YamlUtils.adoc[YamlUtils], xref:refguide:commons:index/io/ZipUtils.adoc[ZipUtils]
+xref:refguide:commons:index/collections/Can.adoc[Can], xref:refguide:commons:index/collections/Cardinality.adoc[Cardinality], xref:refguide:commons:index/functional/Either.adoc[Either], xref:refguide:commons:index/functional/Railway.adoc[Railway], xref:refguide:commons:index/functional/ThrowingRunnable.adoc[ThrowingRunnable], xref:refguide:commons:index/functional/Try.adoc[Try], xref:refguide:commons:index/io/DataPeer.adoc[DataPeer], xref:refguide:commons:index/io/DataSink.adoc[DataSink], xref:refguide:commons:index/io/DataSource.adoc[DataSource], xref:refguide:commons:index/io/FileUtils.adoc[FileUtils], xref:refguide:commons:index/io/HashUtils.adoc[HashUtils], xref:refguide:commons:index/io/JaxbUtils.adoc[JaxbUtils], xref:refguide:commons:index/io/JsonUtils.adoc[JsonUtils], xref:refguide:commons:index/io/TextUtils.adoc[TextUtils], xref:refguide:commons:index/io/UrlUtils.adoc[UrlUtils], xref:refguide:commons:index/io/YamlUtils.adoc[YamlUtils], xref:refguide:commons:index/io/ZipUtils.adoc[ZipUtils]
 ****
 |===
 
@@ -1064,6 +1062,7 @@ o.a.i.applib.services.user.UserService +
 ****
 jakarta.persistence:jakarta.persistence-api:jar:<managed> +
 jakarta.validation:jakarta.validation-api:jar:<managed> +
+jakarta.ws.rs:jakarta.ws.rs-api:jar:<managed> +
 joda-time:joda-time:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
@@ -1170,6 +1169,7 @@ Directory: /core/internaltestsupport
 
 .Dependencies
 ****
+net.bytebuddy:byte-buddy-agent:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-core-codegen-bytebuddy:jar:<managed> +
 org.datanucleus:javax.jdo:jar:<managed> +
@@ -1355,11 +1355,11 @@ o.a.i.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault +
 
 .Dependencies
 ****
-com.sun.mail:jakarta.mail:jar:<managed> +
 jakarta.mail:jakarta.mail-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-codegen-bytebuddy:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
+org.eclipse.angus:jakarta.mail:jar:<managed> +
 org.hsqldb:hsqldb:jar:<managed> +
 org.springframework:spring-context-support:jar:<managed> +
 ****
@@ -1448,7 +1448,7 @@ o.a.i.core.webapp.webappctx.CausewayWebAppContextInitializer +
 
 .Dependencies
 ****
-javax.servlet:javax.servlet-api:jar:<managed> +
+jakarta.servlet:jakarta.servlet-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-interaction:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
@@ -1825,7 +1825,7 @@ Credits to the original authors. See also docs [2].
 
 .Dependencies
 ****
-javax.servlet:javax.servlet-api:jar:<managed> +
+jakarta.servlet:jakarta.servlet-api:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -1937,6 +1937,7 @@ Directory: /persistence/jpa/applib
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-transaction:jar:<managed> +
+org.eclipse.persistence:org.eclipse.persistence.moxy:jar:4.0.2 +
 org.springframework.data:spring-data-jpa:jar:<managed> +
 ****
 
@@ -1957,10 +1958,11 @@ Directory: /persistence/jpa/eclipselink
 
 .Dependencies
 ****
-jakarta.el:jakarta.el-api:jar:3.0.3 +
+jakarta.el:jakarta.el-api:jar:5.0.1 +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-integration:jar:<managed> +
-org.eclipse.persistence:org.eclipse.persistence.jpa:jar:2.7.14 +
+org.apache.tomcat.embed:tomcat-embed-el:jar:<managed> +
+org.eclipse.persistence:org.eclipse.persistence.jpa:jar:4.0.2 +
 org.springframework.boot:spring-boot-starter-data-jpa:jar:<managed> +
 ****
 
@@ -2287,7 +2289,7 @@ rectangle "Shiro\n<size:10>[Software System]</size>" <<Shiro>> {
 Group: org.apache.causeway.security
 Artifact: causeway-security-shiro
 Type: jar
-Directory: /security/shiro
+Directory: /retired/shiro/security/shiro
 ----
 |Authentication and Authorization using Apache Shiro.
 
@@ -2544,7 +2546,7 @@ o.a.i.viewer.commons.services.userprof.UserProfileUiServiceDefault +
 
 .Dependencies
 ****
-javax.servlet:javax.servlet-api:jar:<managed> +
+jakarta.servlet:jakarta.servlet-api:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
 ****
@@ -2721,7 +2723,6 @@ o.a.i.viewer.graphql.model.types.ScalarMapperUsingScalarMarshallers +
 
 .Dependencies
 ****
-com.graphql-java:graphql-java:jar:<managed> +
 com.graphql-java:graphql-java-extended-scalars:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
@@ -2777,13 +2778,19 @@ Directory: /viewers/graphql/testsupport
 |.Dependencies
 ****
 com.approvaltests:approvaltests:jar:<managed> +
+com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:jar:<managed> +
+com.github.vertical-blank:sql-formatter:jar:<managed> +
+com.h2database:h2:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
+org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-graphql-viewer:jar:<managed> +
 org.springframework:spring-context-support:jar:<managed> +
-org.springframework.graphql:spring-graphql-test:jar:${spring-graphql-test.version} +
+org.springframework.boot:spring-boot-test-autoconfigure:jar:<managed> +
+org.springframework.graphql:spring-graphql-test:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -2959,6 +2966,9 @@ Directory: /viewers/restfulobjects/client
 ****
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-applib:jar:<managed> +
+org.eclipse.parsson:parsson:jar:1.1.5 +
+org.eclipse.persistence:org.eclipse.persistence.asm:jar:<managed> +
+org.eclipse.persistence:org.eclipse.persistence.moxy:jar:<managed> +
 org.springframework:spring-context:jar:<managed> +
 ****
 
@@ -2989,8 +2999,12 @@ org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-testing:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
 org.datanucleus:javax.jdo:jar:<managed> +
+org.jboss.resteasy:resteasy-client:jar:${resteasy.version} +
+org.jboss.resteasy:resteasy-jackson2-provider:jar:${resteasy.version} +
 org.jboss.resteasy:resteasy-jaxb-provider:jar:<managed> +
+org.jboss.resteasy:resteasy-servlet-initializer:jar:${resteasy.version} +
 org.jboss.resteasy:resteasy-spring-boot-starter:jar:<managed> +
+org.jboss.resteasy.spring:resteasy-spring:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -3109,7 +3123,7 @@ o.a.i.viewer.restfulobjects.viewer.resources.VersionResourceServerside +
 
 .Dependencies
 ****
-com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
+com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-services:jar:<managed> +
@@ -3248,8 +3262,10 @@ Directory: /viewers/wicket/model
 |.Dependencies
 ****
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-model:jar:<managed> +
 org.apache.wicket:wicket-core:jar:<managed> +
+org.apache.wicket:wicket-extensions:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -3293,7 +3309,6 @@ org.webjars:jquery:jar:<managed> +
 org.webjars:jquery-ui:jar:<managed> +
 org.webjars:momentjs:jar:<managed> +
 org.webjars:select2:jar:<managed> +
-org.webjars.npm:summernote:jar:<managed> +
 org.wicketstuff:wicketstuff-select2:jar:<managed> +
 ****
 
@@ -4536,7 +4551,6 @@ Extensions.ApacheCausewayExtpdfjsParent .[#707070,thickness=2].> Extensions.Apac
 Extensions.ApacheCausewayExtpdfjsWicket .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsWicketIntegration : "<color:#707070>"
 Extensions.ApacheCausewayExtpdfjsWicket .[#707070,thickness=2].> Extensions.ApacheCausewayExtpdfjsWicketUI : "<color:#707070>"
 Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecManApplib : "<color:#707070>"
-Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecManDelegatedUsingShiro : "<color:#707070>"
 Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecManDelegatedusingSpringOauth2 : "<color:#707070>"
 Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecManEncryptionUsingjbcrypt : "<color:#707070>"
 Extensions.ApacheCausewayExtSecMan .[#707070,thickness=2].> Extensions.ApacheCausewayExtSecManEncryptionUsingSpring : "<color:#707070>"
@@ -4627,7 +4641,6 @@ org.apache.causeway.extensions:causeway-extensions-audittrail-applib:test-jar:<m
 org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
-org.datanucleus:javax.jdo:jar:${datanucleus-jdo-api.version} +
 ****
 
 |Apache Causeway Ext - Audit Trail Persistence (using JPA)
@@ -4982,14 +4995,14 @@ xref:refguide:extensions:index/secman/applib/CausewayModuleExtSecmanApplib.adoc[
 Group: org.apache.causeway.extensions
 Artifact: causeway-extensions-secman-delegated-shiro
 Type: jar
-Directory: /extensions/security/secman/delegated-shiro
+Directory: /retired/shiro/extensions/secman/delegated-shiro
 ----
 |Provides an implementation of a Shiro Realm that will automatically created delegated ApplicationUsers for any users externally authenticated in a delegate realm
 
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:2.0.0-SNAPSHOT +
+org.apache.causeway.extensions:causeway-extensions-secman-applib:jar:3.0.0-SNAPSHOT +
 org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
 ****
 
@@ -6544,11 +6557,11 @@ Directory: /tooling
 ----
 |Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
 eg. code mining, automated documentation.
-(Targeted for JVM 11+)
+(Targeted for JVM 21+)
 
 .Dependencies
 ****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
+org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.checkerframework:checker-qual:jar:3.42.0 +
 org.mapstruct:mapstruct-processor:jar:1.5.5.Final +
 org.projectlombok:lombok:jar:<managed> +
@@ -6922,7 +6935,6 @@ org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.security:causeway-security-shiro:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-metamodel:jar:<managed> +
@@ -6930,6 +6942,7 @@ org.apache.causeway.valuetypes:causeway-valuetypes-vega-metamodel:jar:<managed> 
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
+org.apache.wicket:wicket-tester:jar:<managed> +
 ****
 
 |Apache Causeway Regression Tests - Bootstrapping
@@ -7026,7 +7039,7 @@ Directory: /regressiontests/config
 ----
 |.Dependencies
 ****
-com.icegreen:greenmail-junit5:jar:1.6.15 +
+com.icegreen:greenmail-junit5:jar:2.0.1 +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
 ****
@@ -7261,11 +7274,13 @@ org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 
 == Incubator
 
-[plantuml,Incubator,svg]
+=== Kroviz Client
+
+[plantuml,Kroviz Client,svg]
 ----
 @startuml
 set separator none
-title Incubator - Containers
+title Kroviz Client - Containers
 
 left to right direction
 
@@ -7278,42 +7293,40 @@ skinparam {
 
 hide stereotype
 
-skinparam rectangle<<Incubator.ApacheCausewayIncubator>> {
+skinparam rectangle<<KrovizClient.ApacheCausewayIncubatorClientkroViz>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<Incubator>> {
+skinparam rectangle<<KrovizClient>> {
   BorderColor #9a9a9a
   FontColor #9a9a9a
   shadowing false
 }
 
-rectangle "Incubator\n<size:10>[Software System]</size>" <<Incubator>> {
-  rectangle "==Apache Causeway Incubator\n<size:10>[Container: packaging: pom]</size>" <<Incubator.ApacheCausewayIncubator>> as Incubator.ApacheCausewayIncubator
+rectangle "Kroviz Client\n<size:10>[Software System]</size>" <<KrovizClient>> {
+  rectangle "==Apache Causeway Incubator - Client kroViz\n<size:10>[Container: packaging: jar]</size>" <<KrovizClient.ApacheCausewayIncubatorClientkroViz>> as KrovizClient.ApacheCausewayIncubatorClientkroViz
 }
 
 @enduml
 ----
 
-.Projects/Modules (Incubator)
+.Projects/Modules (Kroviz Client)
 [cols="3a,5a", options="header"]
 |===
 |Coordinates |Description 
 
-|Apache Causeway Incubator
+|Apache Causeway Incubator - Client kroViz
 [source,yaml]
 ----
-Group: org.apache.causeway.incubator
-Artifact: causeway-incubator
-Type: pom
-Directory: /incubator
+Group: org.apache.causeway.incubator.clients
+Artifact: causeway-client-kroviz
+Type: jar
+Directory: /incubator/clients/kroviz
 ----
-|Collection of Apache Causeway artifacts, currently incubating.
+|Web client based on RESTful API
 |===
-
-=== Kroviz Client
 
 === Command Replay
 
@@ -7429,7 +7442,7 @@ org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<manage
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
-org.glassfish.jersey.ext:jersey-spring5:jar:<managed> +
+org.glassfish.jersey.ext:jersey-spring6:jar:<managed> +
 org.springframework.boot:spring-boot-starter-quartz:jar:<managed> +
 ****
 

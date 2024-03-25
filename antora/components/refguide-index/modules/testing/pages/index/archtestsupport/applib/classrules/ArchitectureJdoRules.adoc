@@ -38,7 +38,7 @@ This rule requires that classes annotated with the JDO _javax.jdo.annotations.Pe
 <.> xref:#every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter_[every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()]
 +
 --
-This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Causeway _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
+This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Causeway _jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
 --
 <.> xref:#every_jdo_PersistenceCapable_must_implement_Comparable_[every_jdo_PersistenceCapable_must_implement_Comparable()]
 +
@@ -83,7 +83,7 @@ The rule does _not_ apply to any entities that are subtype entities where there 
 [#every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter_]
 === every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()
 
-This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Causeway _javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
+This rule requires that classes annotated with the JDO _javax.jdo.annotations.PersistenceCapable_ annotation must also be annotated with the Apache Causeway _jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter_ annotation with a value of _org.apache.causeway.applib.jaxb.PersistentEntityAdapter_ `.class` .
 
 Tnis is so that entities can be transparently referenced from XML-style view models.
 

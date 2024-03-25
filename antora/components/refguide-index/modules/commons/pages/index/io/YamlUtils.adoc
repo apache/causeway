@@ -11,8 +11,12 @@ Utilities to convert from and to YAML format.
 class YamlUtils {
   Try<T> tryRead(Class<T> mappedType, String stringUtf8, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<T> tryRead(Class<T> mappedType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<T> tryReadCustomized(Class<T> mappedType, String stringUtf8, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  Try<T> tryReadCustomized(Class<T> mappedType, DataSource source, YamlLoadCustomizer loadCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
   void write(Object pojo, DataSink sink, JsonUtils.JacksonCustomizer... customizers)     // <.>
   String toStringUtf8(Object pojo, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  void writeCustomized(Object pojo, DataSink sink, YamlDumpCustomizer dumpCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
+  String toStringUtf8Customized(Object pojo, YamlDumpCustomizer dumpCustomizer, JsonUtils.JacksonCustomizer... customizers)     // <.>
   DumperOptions allowReadOnlyProperties(DumperOptions opts)     // <.>
 }
 ----
@@ -27,12 +31,32 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 --
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 --
+<.> xref:#tryReadCustomized_Class_String_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadCustomized(Class, String, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
+--
+<.> xref:#tryReadCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer[tryReadCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+--
 <.> xref:#write_Object_DataSink_JsonUtils_JacksonCustomizer[write(Object, DataSink, JsonUtils_JacksonCustomizer)]
 +
 --
 Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
 --
 <.> xref:#toStringUtf8_Object_JsonUtils_JacksonCustomizer[toStringUtf8(Object, JsonUtils_JacksonCustomizer)]
++
+--
+Converts given _pojo_ to an UTF8 encoded _String_ .
+--
+<.> xref:#writeCustomized_Object_DataSink_YamlDumpCustomizer_JsonUtils_JacksonCustomizer[writeCustomized(Object, DataSink, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)]
++
+--
+Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
+--
+<.> xref:#toStringUtf8Customized_Object_YamlDumpCustomizer_JsonUtils_JacksonCustomizer[toStringUtf8Customized(Object, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)]
 +
 --
 Converts given _pojo_ to an UTF8 encoded _String_ .
@@ -55,6 +79,16 @@ Tries to deserialize YAML content from given UTF8 encoded _String_ into an insta
 
 Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
 
+[#tryReadCustomized_Class_String_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
+=== tryReadCustomized(Class, String, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given UTF8 encoded _String_ into an instance of given _mappedType_ .
+
+[#tryReadCustomized_Class_DataSource_YamlLoadCustomizer_JsonUtils_JacksonCustomizer]
+=== tryReadCustomized(Class, DataSource, YamlLoadCustomizer, JsonUtils_JacksonCustomizer)
+
+Tries to deserialize YAML content from given xref:refguide:commons:index/io/DataSource.adoc[DataSource] into an instance of given _requiredType_ .
+
 [#write_Object_DataSink_JsonUtils_JacksonCustomizer]
 === write(Object, DataSink, JsonUtils_JacksonCustomizer)
 
@@ -62,6 +96,16 @@ Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSi
 
 [#toStringUtf8_Object_JsonUtils_JacksonCustomizer]
 === toStringUtf8(Object, JsonUtils_JacksonCustomizer)
+
+Converts given _pojo_ to an UTF8 encoded _String_ .
+
+[#writeCustomized_Object_DataSink_YamlDumpCustomizer_JsonUtils_JacksonCustomizer]
+=== writeCustomized(Object, DataSink, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)
+
+Writes given _pojo_ to given xref:refguide:commons:index/io/DataSink.adoc[DataSink] .
+
+[#toStringUtf8Customized_Object_YamlDumpCustomizer_JsonUtils_JacksonCustomizer]
+=== toStringUtf8Customized(Object, YamlDumpCustomizer, JsonUtils_JacksonCustomizer)
 
 Converts given _pojo_ to an UTF8 encoded _String_ .
 

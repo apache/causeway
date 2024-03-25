@@ -27,7 +27,7 @@ Example usage:
    
 ----
 
-Lastly; note that _javax.persistence.AttributeOverrides_ and _javax.persistence.AttributeOverride_ provide a standardised way of fine-tuning the column definitions.
+Lastly; note that _jakarta.persistence.AttributeOverrides_ and _jakarta.persistence.AttributeOverride_ provide a standardised way of fine-tuning the column definitions.
 
 == API
 

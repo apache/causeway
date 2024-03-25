@@ -3,7 +3,7 @@
 
 Allows JAXB-annotated view models to act as a mixee in order that other modules (and the core framework) can contribute behaviour.
 
-A JAXB view model is one annotated with _javax.xml.bind.annotation.XmlRootElement_ .
+A JAXB view model is one annotated with _jakarta.xml.bind.annotation.XmlRootElement_ .
 
 The two mixin behaviours contributed by the core framework are the ability to download the view model as XML (using xref:refguide:applib:index/mixins/dto/Dto_downloadXml.adoc[Dto_downloadXml] ) and to download the XSD schema for that XML (using xref:refguide:applib:index/mixins/dto/Dto_downloadXsd.adoc[Dto_downloadXsd] ).
 

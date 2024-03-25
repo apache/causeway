@@ -9,7 +9,7 @@ Configuration Bean to support Causeway Security using Keycloak.
 .CausewayModuleSecurityKeycloak.java
 ----
 class CausewayModuleSecurityKeycloak {
-  WebSecurityConfigurerAdapter webSecurityConfigurer(CausewayConfiguration causewayConfiguration, KeycloakOauth2UserService keycloakOidcUserService, List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED, List<LogoutHandler> logoutHandlers)
+  SecurityFilterChain filterChain(HttpSecurity http, CausewayConfiguration causewayConfiguration, KeycloakOauth2UserService keycloakOidcUserService, List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED, List<LogoutHandler> logoutHandlers)
   KeycloakOauth2UserService keycloakOidcUserService(OAuth2ClientProperties oauth2ClientProperties, CausewayConfiguration causewayConfiguration)
 }
 ----
