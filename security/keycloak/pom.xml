@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.core</groupId>
         <artifactId>causeway-core</artifactId>
-    	<version>3.0.0-SNAPSHOT</version>
+    	<version>3.0.0</version>
         <relativePath>../../core/pom.xml</relativePath>
     </parent>
 
@@ -47,7 +47,7 @@
             <dependency>
                 <groupId>org.apache.causeway.security</groupId>
                 <artifactId>causeway-security-keycloak</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
     	</dependencies>
     </dependencyManagement>
