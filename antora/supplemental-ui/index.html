@@ -608,7 +608,7 @@
           <div class="row">
             <div class="col-lg-12 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Prereqs: Java 11 and Maven 3.6+.  <br/>
+                Prereqs: v3.x: Java 17 and Maven 3.6+; v2.x: Java 11<br/>
                 We recommend you try out using Linux, MacOS or WSL2 <br/>
                 (to <a href="https://github.com/spring-projects/spring-boot/issues/17766">avoid exceeding</a> Windows' limits due to classpath length).
               </p>
@@ -620,16 +620,15 @@
                   Try out the framework with the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
                   <p>
                   <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Run it locally (JPA or JDO) using:
+                    Run it locally using:
                   <pre id="helloworld-docker-text"  style="margin-top: 5px">
-docker run -p 8080:8080 apache/causeway-app-helloworld:jpa-SNAPSHOT
-docker run -p 8080:8080 apache/causeway-app-helloworld:jdo-SNAPSHOT</pre>
+docker run -p 8080:8080 apache/causeway-app-helloworld:latest</pre>
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
                     Build from source (JPA or JDO) using:
                 <pre id="helloworld-jpa-text">
 APP=causeway-app-helloworld
-BRANCH=jpa   # or BRANCH=jdo
+BRANCH=v3-jpa   # or: v3-jdo ; v2-jpa ; v2-jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -645,16 +644,15 @@ mvn spring-boot:run</pre>
                 Develop your own app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                Run it locally (JPA or JDO) using:
+                Run it locally using:
                 <pre id="simpleapp-docker-jpa-text"  style="margin-top: 5px">
-docker run -p 8080:8080 apache/causeway-app-simpleapp:jpa-SNAPSHOT
-docker run -p 8080:8080 apache/causeway-app-simpleapp:jdo-SNAPSHOT</pre>
+docker run -p 8080:8080 apache/causeway-app-simpleapp:latest</pre>
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
                     Build from source (JPA or JDO) using:
               <pre id="simpleapp-jpa-text">
 APP=causeway-app-simpleapp
-BRANCH=jpa   # or BRANCH=jdo
+BRANCH=v3-jpa   # or: v3-jdo ; v2-jpa ; v2-jdo
 curl https://codeload.github.com/apache/$APP/zip/$BRANCH | jar xv
 cd $APP-$BRANCH
 
@@ -675,8 +673,7 @@ mvn -pl webapp spring-boot:run</pre>
                   <br/>
                   <p class="cta-text text-left" style="margin-block-end: 0; ">
                   <pre id="demoapp-docker-text"  style="margin-top: 5px">
-docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest
-docker run -p 8080:8080 apache/causeway-app-demo-jdo:latest</pre>
+docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest    # or: ...-jdo:latest</pre>
                   <br/>
                 <p>
               </div>
