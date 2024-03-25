@@ -24,6 +24,7 @@ updates:
     # Use custom labels
     labels:
       - "dependencies"
+      - "Spring Boot 2.x"
     ignore:
       - dependency-name: "org.apache.wicket*"
         versions: ["10.x"]
