@@ -309,13 +309,16 @@ This has two benefits: first, the top-level `index.html` (in `supplemental-ui`) 
 [#create-doc-branch]
 === Create doc branch
 
+NOTE: At the time of writing we support two branches, `v2` and `v3`.
+Adjust these instructions if necessary.
+
 First, we update all versions in `antora.yml`:
 
-* Update all `antora.yml` files:
+* Update all `antora.yml` files to use the latest branch ({page-causewayrelv3}):
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-causewayrel}/g' {} \;
+find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv3}/g' {} \;
 ----
 
 * Commit all these changes:
@@ -326,16 +329,16 @@ git add .
 git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 ----
 
-We now create a branch to reference in the `site.yml`, later on.
+We now create a branch which can be referenced in the `site.yml`, later on.
 
-* We create the `{page-causewayrel}` branch.
+* We create the `{page-causewayrelv3}` branch.
 +
-This mirrors the "rel/causeway-{page-causewayrel}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/causeway-{page-causewayrelv3}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
-git branch {page-causewayrel}
-git push origin {page-causewayrel}
+git branch {page-causewayrelv3}
+git push origin {page-causewayrelv3}
 ----
 
 Now we make sure that the docs in the new doc branch are actually up-to-date.
@@ -345,7 +348,7 @@ Now we make sure that the docs in the new doc branch are actually up-to-date.
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout {page-causewayrel}
+git checkout {page-causewayrelv3}
 ----
 
 * build framework
