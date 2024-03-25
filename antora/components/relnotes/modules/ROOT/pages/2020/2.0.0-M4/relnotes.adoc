@@ -13,7 +13,7 @@ The release includes support for a new (additional) link:https://cwiki.apache.or
 On the flip side, support for contributed actions from domain services has been removed; use xref:refguide:applib-classes:mixees-and-mixins.adoc[Mixins]instead.
 
 This release also has a reworking/simplification of the command service and background commands.
-This includes new extension modules to persist commands (xref:userguide:commandlog:about.adoc[Command Log].
+This includes new extension modules to persist commands (xref:userguide:commandlog:about.adoc[Command Log]).
 // commandreplay moved to incubator for the time being
 //and xref:userguide:commandreplay:about.adoc[Command Replay], to assist regression testing.
 
