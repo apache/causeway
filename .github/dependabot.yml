@@ -38,7 +38,7 @@ updates:
     
   # Maintain dependencies for Maven (3.0.0 milestones)
   - package-ecosystem: "maven"
-    target-branch: "spring6"
+    target-branch: "v3"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
@@ -47,4 +47,4 @@ updates:
     # Use custom labels
     labels:
       - "dependencies"
-      - "Spring 6.x"
+      - "Spring Boot 3.x"

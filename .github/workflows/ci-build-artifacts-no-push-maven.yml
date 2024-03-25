@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - master
-      - spring6
+      - v3
   pull_request:
     branches:
       - master
-      - spring6
+      - v3
 
 jobs:
   # This is a matrix build {'java', 'javascript'},
@@ -57,7 +57,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: 21
+        java-version: 22
 
     - name: Print Maven Version
       if: matrix.language == 'java'
