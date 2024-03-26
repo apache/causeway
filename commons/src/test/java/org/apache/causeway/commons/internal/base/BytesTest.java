@@ -29,6 +29,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -171,6 +172,14 @@ class BytesTest {
                 _Bytes.decodeBase64(
                         Base64.getUrlDecoder(),
                         _Bytes.encodeToBase64(Base64.getUrlEncoder(), testimonial)));
+    }
+
+    // -- HEX
+
+    @Test
+    void hexDump(){
+        final byte[] bytes = {Byte.MIN_VALUE, -1, 0, 1, Byte.MAX_VALUE};
+        assertEquals("80 ff 00 01 7f", _Bytes.hexDump(bytes));
     }
 
     // -- OPERATOR COMPOSITION

@@ -274,12 +274,14 @@ public final class Blob implements NamedWithMimeType {
         return HashUtils.tryDigest(hashAlgorithm, bytes, 4*1024); // 4k default
     }
 
-    public Try<HashUtils.Hash> tryMd5() {
-        return tryHash(HashAlgorithm.MD5);
+    public String md5Hex() {
+        return tryHash(HashAlgorithm.MD5)
+                .valueAsNonNullElseFail()
+                .asHexString();
     }
 
-    public String md5Hex() {
-        return tryMd5()
+    public String sha256Hex() {
+        return tryHash(HashAlgorithm.SHA256)
                 .valueAsNonNullElseFail()
                 .asHexString();
     }
