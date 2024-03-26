@@ -115,7 +115,7 @@ public final class _Bytes {
             return IntStream.empty();
         }
         return IntStream.range(0, bytes.length)
-                .map(index->(int)bytes[index]);
+                .map(index->(bytes[index] & 0xff));
     }
 
     /**
@@ -123,10 +123,10 @@ public final class _Bytes {
      * while the element wise type conversion is preserving sign,
      * but ignoring overflow.
      * @apiNote The Java byte type is signed.
-     * @implNote certainly not the most sufficient algorithm, as we resort to boxing and temporary list creation
+     * @implNote certainly not the most efficient algorithm, as we resort to boxing and temporary list creation
      * @see #streamAsInts(byte[])
      */
-    public static byte[] ofIntStream(final @Nullable IntStream intStream) {
+    private static byte[] ofIntStream(final @Nullable IntStream intStream) {
         if(intStream==null) {
             return new byte[0];
         }
@@ -152,7 +152,11 @@ public final class _Bytes {
         if(bytes==null) {
             return "";
         }
-        return _Bytes.streamAsInts(bytes).mapToObj(Integer::toHexString)
+        return _Bytes.streamAsInts(bytes)
+                .mapToObj(Integer::toHexString)
+                .map(s->s.length()==1
+                    ? "0" + s
+                    : s)
                 .collect(Collectors.joining(_Strings.nullToEmpty(delimiter)));
     }
 
