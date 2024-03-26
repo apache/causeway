@@ -10,7 +10,7 @@ The state managed by entities and view models is expressed in terms of xref:prop
 This latter is the topic of this page.
 
 
-Apache Causeway supports a wide variety of value types, including JDK types (eg primitives, dates and `String`) Causeway-specific (eg `Asciidoc`, `Vega`) and 3rd party (eg Joda Time).
+Apache Causeway supports a wide variety of value types, including JDK types (eg primitives, dates and `String`) Causeway-specific (eg `AsciiDoc`, `Vega`) and 3rd party (eg Joda Time).
 Moreover it is possible to define your own custom types.
 You can even teach the framework about other 3rd party libraries you might wish to use.
 

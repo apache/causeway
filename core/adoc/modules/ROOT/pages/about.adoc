@@ -60,7 +60,7 @@ There are also two `core` modules not listed above, because their documentation 
 [#generated-index]
 == Generated Index
 
-This is probably a good place as any to mention that the documentation/website procedures include tooling to automatically create Asciidoc reference documentation for _any_ Java class in the codebase.
+This is probably a good place as any to mention that the documentation/website procedures include tooling to automatically create AsciiDoc reference documentation for _any_ Java class in the codebase.
 
 This is used extensively for the classes in the applib; these can be referenced using the form `\xref:refguide:applib:index/xxx.adoc[]`.
 

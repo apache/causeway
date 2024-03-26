@@ -1,10 +1,10 @@
-= Asciidoc Syntax
+= AsciiDoc Syntax
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
 
-This page describes the main syntax conventions when writing Asciidoctor/Asciidoc.
+This page describes the main syntax conventions when writing Asciidoctor/AsciiDoc.
 
 For more info, see:
 
@@ -96,7 +96,7 @@ Let the markup specify the logical indentation.
 .Start each sentence on a new line
 ****
 Don't worry about wrapping sentences at 80 characters, just start each new sentence on a new line.
-Asciidoc will take care of the rendering.
+AsciiDoc will take care of the rendering.
 
 This simple tip has a number of other benefits:
 
@@ -278,14 +278,14 @@ renders as:
 where:
 
 * the `cols` attribute says how many columns there are and their respective widths.
-* the "a" suffix indicates that the contents is parsed as Asciidoc
+* the "a" suffix indicates that the contents is parsed as AsciiDoc
 
 === Column Attributes
 
 Other options are (link:http://mrhaki.blogspot.co.uk/2014/11/awesome-asciidoctor-styling-columns-and.html[credit]):
 
 * e: emphasized
-* a: Asciidoc markup
+* a: AsciiDoc markup
 * m: monospace
 * h: header style, all column values are styled as header
 * s: strong
@@ -299,7 +299,7 @@ For example:
 .Table with column style e,a,m
 [cols="e,a,m"]
 |===
-| Emphasized (e) | Asciidoc (a) | Monospaced (m)
+| Emphasized (e) | AsciiDoc (a) | Monospaced (m)
 
 | Asciidoctor
 | NOTE: *Awesome* way to write documentation
@@ -313,7 +313,7 @@ renders as
 .Table with column style e,a,m
 [cols="e,a,m"]
 |===
-| Emphasized (e) | Asciidoc (a) | Monospaced (m)
+| Emphasized (e) | AsciiDoc (a) | Monospaced (m)
 
 | Asciidoctor
 | NOTE: *Awesome* way to write documentation

@@ -37,8 +37,15 @@ You will also require the following commands/tools:
 * `curl` - to download the ZIP and ASC files
 * `gpg` - to verify signatures
 * `unzip` - to unzip the ZIP files
-* JDK 11
-* Apache Maven (`mvn`) 3.6.3+
+* JDK 17
++
+[NOTE]
+====
+v2 is for the most part compatible with Java 11 and almost all of the modules target Java 11.
+The one exception is GraphQL viewer's test modules, which require Java 17.
+====
+
+* Apache Maven (`mvn`) 3.9.6+
 
 == Verifying source artifacts
 
