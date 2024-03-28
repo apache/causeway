@@ -44,9 +44,9 @@
 | xref:vro:ROOT:about.adoc[Restful Objects viewer]
 
 | EclipseLink
-| 6.0.7
-| 6.0.7
-| xref:pjdo::about.adoc[]
+| 2.7.14
+| 4.0.2
+| xref:pjpa::about.adoc[]
 
 | DataNucleus
 | 6.0.7
