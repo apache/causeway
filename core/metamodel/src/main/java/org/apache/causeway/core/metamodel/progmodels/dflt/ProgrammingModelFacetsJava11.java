@@ -16,7 +16,9 @@
  * under the License. */
 package org.apache.causeway.core.metamodel.progmodels.dflt;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
@@ -105,6 +107,10 @@ public final class ProgrammingModelFacetsJava11
 extends ProgrammingModelAbstract {
 
     public ProgrammingModelFacetsJava11(final MetaModelContext mmc) {
+        this(mmc, Can.empty());
+    }
+    
+    public ProgrammingModelFacetsJava11(final MetaModelContext mmc, Can<MetaModelRefiner> refiners) {
         super(mmc);
 
         // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
@@ -115,6 +121,10 @@ extends ProgrammingModelAbstract {
         addPostProcessors();
 
         addValidators();
+        
+        for (val metaModelRefiner : refiners) {
+            metaModelRefiner.refineProgrammingModel(this);
+        }
     }
 
     private void addFacetFactories() {

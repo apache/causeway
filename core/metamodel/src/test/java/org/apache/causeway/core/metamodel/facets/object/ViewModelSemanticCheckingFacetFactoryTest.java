@@ -52,7 +52,7 @@ class ViewModelSemanticCheckingFacetFactoryTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)
-                .programmingModelFactory(mmc->new ProgrammingModelAbstract(mmc) {})
+                .programmingModelFactory((mmc, refiners)->new ProgrammingModelAbstract(mmc) {})
                 .build();
 
         facetFactory = new ViewModelSemanticCheckingFacetFactory(metaModelContext);

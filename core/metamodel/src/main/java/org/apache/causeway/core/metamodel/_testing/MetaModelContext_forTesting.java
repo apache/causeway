@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -72,6 +73,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -159,8 +161,12 @@ extends MetaModelContext {
     private SpecificationLoader specificationLoader;
 
     @Builder.Default
-    private Function<MetaModelContext, ProgrammingModel> programmingModelFactory = ProgrammingModelFacetsJava11::new;
-
+    Can<Function<MetaModelContext, MetaModelRefiner>> refiners = Can.empty();
+    
+    @Builder.Default
+    private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory = 
+        (mmc, refiners)->new ProgrammingModelFacetsJava11(mmc, refiners);
+    
     private InteractionService interactionService;
 
     private TranslationService translationService;
@@ -354,7 +360,9 @@ extends MetaModelContext {
         return programmingModelRef.get();
     }
     private final ProgrammingModel initProgrammingModel() {
-        val programmingModel = programmingModelFactory.apply(this);
+        var metamodelRefiners = refiners.map(factory->factory.apply(this));
+        val programmingModel = programmingModelFactory.apply(this, metamodelRefiners); 
+                 
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
         return programmingModel;
     }

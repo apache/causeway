@@ -48,7 +48,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
 
         metaModelContext = MetaModelContext_forTesting
         .builder()
-        .programmingModelFactory(mmc->{
+        .programmingModelFactory((mmc, refiners)->{
 
             val programmingModel = new ProgrammingModelAbstract(mmc) {};
 

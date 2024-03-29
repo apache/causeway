@@ -61,16 +61,13 @@ implements ProgrammingModelService {
 
     private ProgrammingModel createProgrammingModel() {
 
-        log.info("About to create the ProgrammingModel.");
-
-        val programmingModel = new ProgrammingModelFacetsJava11(metaModelContext);
-
         // from all plugins out there, add their contributed FacetFactories, Validators
         // and PostProcessors to the programming model
         val metaModelRefiners = metaModelContext.getServiceRegistry().select(MetaModelRefiner.class);
-        for (val metaModelRefiner : metaModelRefiners) {
-            metaModelRefiner.refineProgrammingModel(programmingModel);
-        }
+        
+        log.info("About to create the ProgrammingModel w/ {} refiners.", metaModelRefiners.size());
+        
+        val programmingModel = new ProgrammingModelFacetsJava11(metaModelContext, metaModelRefiners);
 
         // finalize the programming model (make it immutable)
         programmingModel.init(programmingModelInitFilter);
