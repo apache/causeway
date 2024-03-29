@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 
 import lombok.Getter;
 import lombok.val;
@@ -43,17 +42,12 @@ implements HasMetaModelContext {
 
     protected final void setupWithDefaultProgrammingModel() {
         metaModelContext = MetaModelContext_forTesting.builder()
-                .programmingModelFactory(mmc->{
-                    val progModel = new ProgrammingModelFacetsJava11(mmc);
-                    progModel.init(new ProgrammingModelInitFilterDefault());
-                    return progModel;
-                })
                 .build();
     }
 
     protected final void setupWithProgrammingModel(final BiConsumer<MetaModelContext, ProgrammingModelAbstract> factory) {
         metaModelContext = MetaModelContext_forTesting.builder()
-                .programmingModelFactory(mmc->{
+                .programmingModelFactory((mmc, refiners)->{
                     val progModel = new ProgrammingModelAbstract(mmc) {
                         @Override protected void assertNotInitialized(){}
                     };

@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -59,12 +60,8 @@ import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.Ent
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
-
-import lombok.val;
 
 class DomainObjectAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
@@ -682,12 +679,7 @@ extends FacetFactoryTestAbstract {
         @Test
         public void testValidationDomainObjectWithAliasesConfigured() {
             metaModelContext = MetaModelContext_forTesting.builder()
-                    .programmingModelFactory(mmc -> {
-                        val progModel = new ProgrammingModelFacetsJava11(mmc);
-                        facetFactory.refineProgrammingModel(progModel);
-                        progModel.init(new ProgrammingModelInitFilterDefault());
-                        return progModel;
-                    })
+                    .refiners(Can.of(__->facetFactory))
                     .build();
             getConfiguration().getCore().getMetaModel().getValidator().setAllowLogicalTypeNameAsAlias(true);
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
@@ -701,12 +693,7 @@ extends FacetFactoryTestAbstract {
         @Test
         public void testValidationDomainServiceWithAliasesConfigured() {
             metaModelContext = MetaModelContext_forTesting.builder()
-                    .programmingModelFactory(mmc -> {
-                        val progModel = new ProgrammingModelFacetsJava11(mmc);
-                        facetFactory.refineProgrammingModel(progModel);
-                        progModel.init(new ProgrammingModelInitFilterDefault());
-                        return progModel;
-                    })
+                    .refiners(Can.of(__->facetFactory))
                     .build();
             getConfiguration().getCore().getMetaModel().getValidator().setAllowLogicalTypeNameAsAlias(true);
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
@@ -719,12 +706,7 @@ extends FacetFactoryTestAbstract {
         @Test
         public void testValidationDomainObjectWithAliasesDefault() {
             metaModelContext = MetaModelContext_forTesting.builder()
-                    .programmingModelFactory(mmc -> {
-                        val progModel = new ProgrammingModelFacetsJava11(mmc);
-                        facetFactory.refineProgrammingModel(progModel);
-                        progModel.init(new ProgrammingModelInitFilterDefault());
-                        return progModel;
-                    })
+                    .refiners(Can.of(__->facetFactory))
                     .build();
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
@@ -737,12 +719,7 @@ extends FacetFactoryTestAbstract {
         @Test
         public void testValidationDomainServiceWithAliasesDefault() {
             metaModelContext = MetaModelContext_forTesting.builder()
-                    .programmingModelFactory(mmc -> {
-                        val progModel = new ProgrammingModelFacetsJava11(mmc);
-                        facetFactory.refineProgrammingModel(progModel);
-                        progModel.init(new ProgrammingModelInitFilterDefault());
-                        return progModel;
-                    })
+                    .refiners(Can.of(__->facetFactory))
                     .build();
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
