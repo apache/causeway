@@ -33,6 +33,7 @@ import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.LayoutConstants;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
@@ -62,6 +63,8 @@ import lombok.val;
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
+    @Inject FactoryService factoryService;
+    
     private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
@@ -98,8 +101,8 @@ public class Object_inspectMetamodel {
             .orElseThrow(_Exceptions::noSuchElement);
 
         val root = MMNodeFactory.type(domainClassDto, null);
-
-        val tree = TreeNode.lazy(root, MMTreeAdapter.class);
+        
+        val tree = TreeNode.root(root, factoryService.getOrCreate(MMTreeAdapter.class));
 
         // Initialize view-model nodes of the entire tree,
         // because as it stands, all the type information gets cleared,

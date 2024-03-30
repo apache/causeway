@@ -36,6 +36,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.graph.tree.TreePath;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 import org.apache.causeway.extensions.docgen.help.applib.HelpNode;
 import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
@@ -59,6 +60,8 @@ public class HelpNodeVm implements ViewModel {
     public static HelpNodeVm forRootTopic(final HelpTopic rootTopic) {
         return new HelpNodeVm(rootTopic, rootTopic);
     }
+    
+    @Inject FactoryService factoryService;
 
     @Getter @Programmatic
     private final HelpTopic rootTopic;
@@ -97,7 +100,8 @@ public class HelpNodeVm implements ViewModel {
     @Property
     @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "tree", sequence = "1")
     public TreeNode<HelpNodeVm> getTree() {
-        final TreeNode<HelpNodeVm> tree = TreeNode.lazy(HelpNodeVm.forRootTopic(rootTopic), HelpTreeAdapter.class);
+        final TreeNode<HelpNodeVm> tree = TreeNode.root(
+                HelpNodeVm.forRootTopic(rootTopic), HelpTreeAdapter.class, factoryService);
 
         // expand the current node
         helpNode.getPath().streamUpTheHierarchyStartingAtSelf()

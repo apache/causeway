@@ -84,7 +84,7 @@ class CausewayToWicketTreeAdapter {
                 final String id, final ManagedObject treeNodeObject) {
 
             val treeNode = (TreeNode<?>) treeNodeObject.getPojo();
-            val treeAdapterClass = treeNode.getTreeAdapterClass();
+            val treeAdapterClass = treeNode.getTreeAdapter().getClass();
 
             val wrappingTreeAdapter = new _TreeModelTreeAdapter(treeAdapterClass);
 

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
@@ -30,7 +29,9 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreeNode;
+import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.graph.tree.TreeState;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
@@ -52,6 +53,7 @@ implements
 
     @Inject UrlEncodingService urlEncodingService;
     @Inject SerializingAdapter serializingAdapter;
+    @Inject FactoryService factoryService;
 
     @Override
     public Class<TreeNode<?>> getCorrespondingClass() {
@@ -77,19 +79,23 @@ implements
 
     private String toEncodedString(final TreeNode<?> treeNode) {
         final Memento memento = newMemento();
-        memento.put("primaryValue", treeNode.getValue());
-        memento.put("adapterClass", treeNode.getTreeAdapterClass());
+        memento.put("rootValue", treeNode.getRootValue());
+        memento.put("adapterClass", treeNode.getTreeAdapter().getClass());
         memento.put("treeState", treeNode.getTreeState());
+        memento.put("treePath", treeNode.getPositionAsPath());
         return memento.asString();
     }
 
     @SuppressWarnings("unchecked")
     private TreeNode<?> fromEncodedString(final String input) {
         final Memento memento = parseMemento(input);
-        return TreeNode.of(
-                memento.get("primaryValue", Object.class),
+        final TreeNode<?> rootNode = TreeNode.root(
+                memento.get("rootValue", Object.class),
                 memento.get("adapterClass", Class.class),
-                memento.get("treeState", TreeState.class));
+                memento.get("treeState", TreeState.class),
+                factoryService);
+        return rootNode.resolve(memento.get("treePath", TreePath.class))
+                .orElse(null);
     }
 
     // -- RENDERER
@@ -110,8 +116,6 @@ implements
     public Can<TreeNode<?>> getExamples() {
 
         class TreeAdapterString implements TreeAdapter<String> {
-            @Override public Optional<String> parentOf(final String value) {
-                return null; }
             @Override public int childCountOf(final String value) {
                 return 0; }
             @Override public Stream<String> childrenOf(final String value) {
@@ -119,8 +123,8 @@ implements
         }
 
         return Can.of(
-                TreeNode.of("TreeRoot", TreeAdapterString.class, TreeState.rootCollapsed()),
-                TreeNode.of("another TreeRoot", TreeAdapterString.class, TreeState.rootCollapsed()));
+                TreeNode.root("TreeRoot", new TreeAdapterString(), TreeState.rootCollapsed()),
+                TreeNode.root("another TreeRoot", new TreeAdapterString(), TreeState.rootCollapsed()));
     }
 
     // -- HELPER

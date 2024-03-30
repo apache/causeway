@@ -21,6 +21,8 @@ package org.apache.causeway.applib.graph.tree;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.springframework.lang.Nullable;
+
 class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
 
     private TreeNode<T> next;
@@ -46,8 +48,8 @@ class TreeNode_iteratorHierarchyUp<T> implements Iterator<TreeNode<T>> {
 
     // -- HELPER
 
-    private TreeNode<T> fetchNext(TreeNode<T> current) {
-        return current.getParentIfAny();
+    private @Nullable TreeNode<T> fetchNext(TreeNode<T> current) {
+        return current.lookupParent().orElse(null);
     }
 
 }

@@ -99,6 +99,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
@@ -253,6 +254,7 @@ extends MetaModelContext {
                 new BigDecimalValueSemantics(),
                 new URLValueSemantics(),
                 new UUIDValueSemantics(),
+                new TreePathValueSemantics(),
                 this);
 
         return Stream.concat(
