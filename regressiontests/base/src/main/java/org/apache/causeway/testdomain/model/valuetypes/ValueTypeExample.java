@@ -53,6 +53,7 @@ import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreeNode;
+import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.graph.tree.TreeState;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -753,6 +754,20 @@ public abstract class ValueTypeExample<T> {
     }
 
     // -- EXAMPLES - DATA STRUCTURE
+    
+    @Named("causeway.testdomain.valuetypes.ValueTypeExampleTreePath")
+    @DomainObject(
+            nature = Nature.BEAN) @Scope("prototype")
+    public static class ValueTypeExampleTreePath
+    extends ValueTypeExample<TreePath> {
+        @Property @Getter @Setter
+        private TreePath value = TreePath.root();
+        @Getter
+        private TreePath updateValue = TreePath.of(0, 1, 2, 3, 4);
+        @Action @Override
+        public TreePath sampleAction(@Parameter @Nullable final TreePath value) { return value; }
+    }
+    
 
     //TODO    TreeNode
 //    @DomainObject(
@@ -762,10 +777,10 @@ public abstract class ValueTypeExample<T> {
     extends ValueTypeExample<TreeNode<String>> {
         @Property @Getter @Setter
         private TreeNode<String> value = TreeNode.root(
-                "root", TreeAdapterString.class, TreeState.rootCollapsed());
+                "root", new TreeAdapterString(), TreeState.rootCollapsed());
         @Getter
         private TreeNode<String> updateValue = TreeNode.root(
-                "anotherRoot", TreeAdapterString.class, TreeState.rootCollapsed());
+                "anotherRoot", new TreeAdapterString(), TreeState.rootCollapsed());
 
         private static class TreeAdapterString implements TreeAdapter<String> {
             @Override public Stream<String> childrenOf(final String value) {

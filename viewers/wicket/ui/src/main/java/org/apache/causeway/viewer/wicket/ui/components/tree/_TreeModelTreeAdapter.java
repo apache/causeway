@@ -47,7 +47,8 @@ implements
 
     private final Class<? extends TreeAdapter> treeAdapterClass;
 
-    private transient TreeAdapter wrappedTreeAdapter;
+    /** non serializable delegate */
+    private transient TreeAdapter delegate;
 
     _TreeModelTreeAdapter(
             final Class<? extends TreeAdapter> treeAdapterClass) {
@@ -93,11 +94,11 @@ implements
     }
 
     private TreeAdapter wrappedTreeAdapter() {
-        if(wrappedTreeAdapter!=null) {
-            return wrappedTreeAdapter;
+        if(delegate!=null) {
+            return delegate;
         }
         try {
-            return wrappedTreeAdapter = getFactoryService().getOrCreate(treeAdapterClass);
+            return delegate = getFactoryService().getOrCreate(treeAdapterClass);
         } catch (Exception e) {
             throw new RuntimeException("failed to instantiate tree adapter", e);
         }

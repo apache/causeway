@@ -19,18 +19,33 @@
 package org.apache.causeway.applib.graph.tree;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @since 2.0 {@index}
  */
-public interface TreeState extends Serializable {
+public class TreeState implements Serializable {
 
+    // -- FACTORIES
+    
     public static TreeState rootCollapsed() {
-        return new TreeState_Default();
+        return new TreeState();
     }
 
-    public Set<TreePath> getExpandedNodePaths();
-    public Set<TreePath> getSelectedNodePaths();
+    // -- CONSTRUCTION
+    
+    private static final long serialVersionUID = 7971539034663543462L;
+
+    private final Set<TreePath> expandedNodes = new HashSet<>();
+    private final Set<TreePath> selectedNodes = new HashSet<>();
+
+    public Set<TreePath> getExpandedNodePaths() {
+        return expandedNodes;
+    }
+
+    public Set<TreePath> getSelectedNodePaths() {
+        return selectedNodes;
+    }
 
 }

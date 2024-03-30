@@ -34,15 +34,12 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.graph.Edge;
 import org.apache.causeway.applib.graph.SimpleEdge;
 import org.apache.causeway.applib.graph.Vertex;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.commons.functional.IndexedFunction;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.context._Context;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 
 /**
  * Fundamental building block of Tree structures.
@@ -55,19 +52,27 @@ import lombok.SneakyThrows;
 @Value
 public class TreeNode<T> implements Vertex<T> {
 
-    @Getter
-    private final TreeNode<T> rootNode;
+    @Getter private final TreeNode<T> rootNode;
+    @Getter private final TreeAdapter<T> treeAdapter;
+    
     private final TreePath treePath;
     private final T value;
     private final TreeState sharedState;
-    private final Class<? extends TreeAdapter<T>> treeAdapterClass;
-    private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
 
     public static <T> TreeNode<T> root(
             final T value, 
-            final Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final TreeAdapter<T> treeAdapter, 
             final TreeState sharedState) {
-        return new TreeNode<T>(value, treeAdapterClass, sharedState);
+        return new TreeNode<T>(value, treeAdapter, sharedState);
+    }
+    
+    public static <T> TreeNode<T> root(
+            final T value, 
+            final Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final TreeState sharedState,
+            final FactoryService factoryService
+            ) {
+        return root(value, factoryService.getOrCreate(treeAdapterClass));
     }
 
     // generic node constructor, with reference to root
@@ -75,24 +80,24 @@ public class TreeNode<T> implements Vertex<T> {
             final @NonNull TreeNode<T> rootNode,
             final @NonNull TreePath treePath,
             final @NonNull T value, 
-            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final @NonNull TreeAdapter<T> treeAdapter, 
             final @NonNull TreeState sharedState) {
         this.rootNode = rootNode;
         this.treePath = treePath;
         this.value = value;
-        this.treeAdapterClass = treeAdapterClass;
+        this.treeAdapter = treeAdapter;
         this.sharedState = sharedState;
     }
 
     // root-node constructor
     private TreeNode(
             final @NonNull T value, 
-            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final @NonNull TreeAdapter<T> treeAdapter, 
             final @NonNull TreeState sharedState) {
         this.rootNode = this;
         this.treePath = TreePath.root();
         this.value = value;
-        this.treeAdapterClass = treeAdapterClass;
+        this.treeAdapter = treeAdapter;
         this.sharedState = sharedState;
     }
     
@@ -167,14 +172,14 @@ public class TreeNode<T> implements Vertex<T> {
     // -- CHILDREN
 
     public int getChildCount() {
-        return treeAdapter().childCountOf(value);
+        return treeAdapter.childCountOf(value);
     }
 
     public Stream<TreeNode<T>> streamChildren() {
         if(isLeaf()) {
             return Stream.empty();
         }
-        return treeAdapter().childrenOf(value)
+        return treeAdapter.childrenOf(value)
                 .map(IndexedFunction.zeroBased((siblingIndex, childPojo)->
                     toTreeNode(treePath.append(siblingIndex), childPojo)));
     }
@@ -278,15 +283,22 @@ public class TreeNode<T> implements Vertex<T> {
     // -- CONSTRUCTION
 
     /**
-     * Convenient shortcut.
-     * @param rootNode
-     * @param treeAdapterClass
-     * @return new LazyTreeNode
+     * Creates the root node of a tree structure as inferred from given treeAdapter.
      */
     public static <T> TreeNode<T> root(
-            final T rootNode, 
-            final Class<? extends TreeAdapter<T>> treeAdapterClass) {
-        return TreeNode.root(rootNode, treeAdapterClass, TreeState.rootCollapsed());
+            final @NonNull T rootNode, 
+            final @NonNull TreeAdapter<T> treeAdapter) {
+        return TreeNode.root(rootNode, treeAdapter, TreeState.rootCollapsed());
+    }
+    
+    /**
+     * Creates the root node of a tree structure as inferred from given treeAdapter.
+     */
+    public static <T> TreeNode<T> root(
+            final @NonNull T rootNode, 
+            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass,
+            final @NonNull FactoryService factoryService) {
+        return root(rootNode, factoryService.getOrCreate(treeAdapterClass));
     }
 
     // -- PARENT NODE ITERATION
@@ -327,37 +339,10 @@ public class TreeNode<T> implements Vertex<T> {
                 false); // not parallel
     }
 
-    // -- TREE NODE ADAPTING
-
-    /**
-     * @apiNote a class rather than an instance, because otherwise
-     * the adapter would need to be serializable for Wicket's trees to work correctly.
-     */
-    public Class<? extends TreeAdapter<T>> getTreeAdapterClass() {
-        return treeAdapterClass;
-    }
-
     // -- HELPER
 
-    @SneakyThrows
-    private TreeAdapter<T> newTreeAdapter() {
-        try {
-            var adapter = treeAdapterClass.getDeclaredConstructor().newInstance();
-            return _Context.lookup(ServiceInjector.class) //TODO[CAUSEWAY-3711] requires some cooperator that provides it
-                .map(serviceInjector->serviceInjector.injectServicesInto(adapter))
-                .orElse(adapter);
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalArgumentException(
-                    String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
-        }
-    }
-
-    private TreeAdapter<T> treeAdapter() {
-        return treeAdapter.get();
-    }
-
     private TreeNode<T> toTreeNode(final TreePath treePath, final T value){
-        return new TreeNode<>(rootNode, treePath, value, getTreeAdapterClass(), sharedState);
+        return new TreeNode<>(rootNode, treePath, value, treeAdapter, sharedState);
     }
 
 }

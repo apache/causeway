@@ -31,6 +31,7 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.graph.tree.TreeState;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
@@ -52,6 +53,7 @@ implements
 
     @Inject UrlEncodingService urlEncodingService;
     @Inject SerializingAdapter serializingAdapter;
+    @Inject FactoryService factoryService;
 
     @Override
     public Class<TreeNode<?>> getCorrespondingClass() {
@@ -78,7 +80,7 @@ implements
     private String toEncodedString(final TreeNode<?> treeNode) {
         final Memento memento = newMemento();
         memento.put("rootValue", treeNode.getRootValue());
-        memento.put("adapterClass", treeNode.getTreeAdapterClass());
+        memento.put("adapterClass", treeNode.getTreeAdapter().getClass());
         memento.put("treeState", treeNode.getTreeState());
         memento.put("treePath", treeNode.getPositionAsPath());
         return memento.asString();
@@ -90,7 +92,8 @@ implements
         final TreeNode<?> rootNode = TreeNode.root(
                 memento.get("rootValue", Object.class),
                 memento.get("adapterClass", Class.class),
-                memento.get("treeState", TreeState.class));
+                memento.get("treeState", TreeState.class),
+                factoryService);
         return rootNode.resolve(memento.get("treePath", TreePath.class))
                 .orElse(null);
     }
@@ -120,8 +123,8 @@ implements
         }
 
         return Can.of(
-                TreeNode.root("TreeRoot", TreeAdapterString.class, TreeState.rootCollapsed()),
-                TreeNode.root("another TreeRoot", TreeAdapterString.class, TreeState.rootCollapsed()));
+                TreeNode.root("TreeRoot", new TreeAdapterString(), TreeState.rootCollapsed()),
+                TreeNode.root("another TreeRoot", new TreeAdapterString(), TreeState.rootCollapsed()));
     }
 
     // -- HELPER
