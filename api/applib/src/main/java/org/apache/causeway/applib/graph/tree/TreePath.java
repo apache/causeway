@@ -20,6 +20,7 @@ package org.apache.causeway.applib.graph.tree;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -44,20 +45,42 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 public interface TreePath extends Serializable {
 
     /**
+     * Number of path-elements.
+     * @apiNote Root has size = 1.
+     */
+    public int size();
+    
+    /**
      * @param indexWithinSiblings
      * @return a new TreePath instance composed of this with one canonical path entry added
      */
     public TreePath append(int indexWithinSiblings);
-
+    
+    /**
+     * Returns a sub-path containing all the path-elements of this path, skipping
+     * startIndex number of path elements at the start.
+     * @apiNote The first element of the resulting path indicates the sibling index 
+     *      of the tree-node the subPath corresponds to.
+     */
+    public TreePath subPath(int startIndex);
+    
     /**
      * Returns a TreePath instance that represents the parent path of this TreePath,
      * if this is not the root.
      */
     public @Nullable TreePath getParentIfAny();
-
+    
     public boolean isRoot();
+    public boolean startsWith(TreePath other);
 
     public IntStream streamPathElements();
+    
+    /**
+     * Optionally the 2nd path-element's value, based on presence.
+     * It corresponds to the sibling index of the child node this tree-path 
+     * (either directly references or) includes.
+     */
+    public OptionalInt childIndex();
 
     public String stringify(String delimiter);
 

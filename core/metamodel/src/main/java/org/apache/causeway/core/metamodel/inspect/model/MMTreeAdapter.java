@@ -18,18 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 public class MMTreeAdapter implements TreeAdapter<MMNode> {
-
-    @Override
-    public Optional<MMNode> parentOf(final MMNode node) {
-        return Optional.ofNullable(node.getParentNode());
-    }
 
     @Override
     public int childCountOf(final MMNode node) {

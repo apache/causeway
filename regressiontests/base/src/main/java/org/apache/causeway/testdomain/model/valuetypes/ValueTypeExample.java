@@ -761,13 +761,13 @@ public abstract class ValueTypeExample<T> {
     public static class ValueTypeExampleTreeNode
     extends ValueTypeExample<TreeNode<String>> {
         @Property @Getter @Setter
-        private TreeNode<String> value = TreeNode.of("root", TreeAdapterString.class, TreeState.rootCollapsed());
+        private TreeNode<String> value = TreeNode.root(
+                "root", TreeAdapterString.class, TreeState.rootCollapsed());
         @Getter
-        private TreeNode<String> updateValue = TreeNode.of("anotherRoot", TreeAdapterString.class, TreeState.rootCollapsed());
+        private TreeNode<String> updateValue = TreeNode.root(
+                "anotherRoot", TreeAdapterString.class, TreeState.rootCollapsed());
 
         private static class TreeAdapterString implements TreeAdapter<String> {
-            @Override public Optional<String> parentOf(final String value) {
-                return null; }
             @Override public int childCountOf(final String value) {
                 return 0; }
             @Override public Stream<String> childrenOf(final String value) {

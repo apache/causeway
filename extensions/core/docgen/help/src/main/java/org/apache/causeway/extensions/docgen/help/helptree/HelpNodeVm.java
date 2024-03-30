@@ -97,7 +97,7 @@ public class HelpNodeVm implements ViewModel {
     @Property
     @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "tree", sequence = "1")
     public TreeNode<HelpNodeVm> getTree() {
-        final TreeNode<HelpNodeVm> tree = TreeNode.lazy(HelpNodeVm.forRootTopic(rootTopic), HelpTreeAdapter.class);
+        final TreeNode<HelpNodeVm> tree = TreeNode.root(HelpNodeVm.forRootTopic(rootTopic), HelpTreeAdapter.class);
 
         // expand the current node
         helpNode.getPath().streamUpTheHierarchyStartingAtSelf()

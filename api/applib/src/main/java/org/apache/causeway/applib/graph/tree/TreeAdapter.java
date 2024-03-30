@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Domain;
@@ -32,13 +31,6 @@ import org.apache.causeway.applib.annotation.Domain;
  * @since 2.0 {@index}
  */
 public interface TreeAdapter<T> {
-
-    /**
-     * @param value - tree-node (pojo)
-     * @return the parent tree-node (pojo) of the specified {@code value} tree-node (pojo)
-     */
-    @Domain.Exclude
-    Optional<T> parentOf(T value);
 
     /**
      * @param value - tree-node (pojo)

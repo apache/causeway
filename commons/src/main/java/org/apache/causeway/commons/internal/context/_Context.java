@@ -98,6 +98,13 @@ public final class _Context {
         }
     }
 
+    /**
+     * Optionally the singleton instance of {@code type}, based on whether there is any registered.
+     * @param type non-null
+     */
+    public static <T> Optional<T> lookup(final Class<? super T> type) {
+        return Optional.ofNullable(getIfAny(type));
+    }
 
     /**
      * Gets a singleton instance of {@code type} if there is any, null otherwise.

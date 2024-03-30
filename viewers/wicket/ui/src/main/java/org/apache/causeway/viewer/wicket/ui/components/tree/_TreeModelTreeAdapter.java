@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.tree;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -56,18 +55,18 @@ implements
         this.treeAdapterClass = treeAdapterClass;
     }
 
-    @Override
-    public Optional<_TreeNodeMemento> parentOf(final _TreeNodeMemento treeModel) {
-        if(treeModel==null) {
-            return Optional.empty();
-        }
-        val pojoNode = demementify(treeModel);
-        if(pojoNode==null) {
-            return Optional.empty();
-        }
-        return wrappedTreeAdapter().parentOf(pojoNode)
-                .map(pojo->mementify(pojo, treeModel.getTreePath().getParentIfAny()));
-    }
+//    @Override
+//    public Optional<_TreeNodeMemento> parentOf(final _TreeNodeMemento treeModel) {
+//        if(treeModel==null) {
+//            return Optional.empty();
+//        }
+//        val pojoNode = demementify(treeModel);
+//        if(pojoNode==null) {
+//            return Optional.empty();
+//        }
+//        return wrappedTreeAdapter().parentOf(pojoNode)
+//                .map(pojo->mementify(pojo, treeModel.getTreePath().getParentIfAny()));
+//    }
 
     @Override
     public int childCountOf(final _TreeNodeMemento treeModel) {

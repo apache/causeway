@@ -19,17 +19,14 @@
 package org.apache.causeway.applib.graph.tree;
 
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import javax.inject.Named;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -37,10 +34,14 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.graph.Edge;
 import org.apache.causeway.applib.graph.SimpleEdge;
 import org.apache.causeway.applib.graph.Vertex;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.context._Context;
 
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -54,33 +55,63 @@ import lombok.SneakyThrows;
 @Value
 public class TreeNode<T> implements Vertex<T> {
 
-    private final TreeState sharedState;
+    @Getter
+    private final TreeNode<T> rootNode;
+    private final TreePath treePath;
     private final T value;
+    private final TreeState sharedState;
     private final Class<? extends TreeAdapter<T>> treeAdapterClass;
     private final _Lazy<TreeAdapter<T>> treeAdapter = _Lazy.of(this::newTreeAdapter);
-    private final _Lazy<TreePath> treePath = _Lazy.of(this::resolveTreePath);
 
-    public static <T> TreeNode<T> of(final T value, final Class<? extends TreeAdapter<T>> treeAdapterClass, final TreeState sharedState) {
+    public static <T> TreeNode<T> root(
+            final T value, 
+            final Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final TreeState sharedState) {
         return new TreeNode<T>(value, treeAdapterClass, sharedState);
     }
 
-    protected TreeNode(final T value, final Class<? extends TreeAdapter<T>> treeAdapterClass, final TreeState sharedState) {
-        this.value = Objects.requireNonNull(value);
-        this.treeAdapterClass = Objects.requireNonNull(treeAdapterClass);
+    // generic node constructor, with reference to root
+    protected TreeNode(
+            final @NonNull TreeNode<T> rootNode,
+            final @NonNull TreePath treePath,
+            final @NonNull T value, 
+            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final @NonNull TreeState sharedState) {
+        this.rootNode = rootNode;
+        this.treePath = treePath;
+        this.value = value;
+        this.treeAdapterClass = treeAdapterClass;
         this.sharedState = sharedState;
     }
 
+    // root-node constructor
+    private TreeNode(
+            final @NonNull T value, 
+            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final @NonNull TreeState sharedState) {
+        this.rootNode = this;
+        this.treePath = TreePath.root();
+        this.value = value;
+        this.treeAdapterClass = treeAdapterClass;
+        this.sharedState = sharedState;
+    }
+    
+    public T getRootValue() {
+        return getRootNode().getValue();
+    }
+    
     @Override
     public T getValue() {
         return value;
     }
 
-
     // -- VERTEX - IMPLEMENTATION
 
     @Override
     public int getIncomingCount() {
-        return isRoot() ? 0 : 1;
+        return getPositionAsPath().isRoot()
+                ? 0 
+                : 1;
     }
     @Override
     public int getOutgoingCount() {
@@ -88,7 +119,10 @@ public class TreeNode<T> implements Vertex<T> {
     }
     @Override
     public Stream<Edge<T>> streamIncoming() {
-        return isRoot() ? Stream.empty() : Stream.of(SimpleEdge.<T>of(getParentIfAny(), this));
+        return lookupParent()
+            .map(parentNode->SimpleEdge.<T>of(parentNode, this))
+            .map(Stream::<Edge<T>>of)
+            .orElseGet(Stream::empty);
     }
     @Override
     public Stream<Edge<T>> streamOutgoing() {
@@ -96,15 +130,39 @@ public class TreeNode<T> implements Vertex<T> {
                 .map(to->SimpleEdge.<T>of(this, to));
     }
 
-    // -- PARENT
+    // -- RESOLUTION
 
-    public @Nullable TreeNode<T> getParentIfAny() {
-        return treeAdapter().parentOf(getValue())
-                .map(this::toTreeNode)
-                .orElse(null);
+    /**
+     * Resolves given path relative to the root of this tree.
+     */
+    public Optional<TreeNode<T>> resolve(TreePath absolutePath) {
+        // optimize if absolutePath starts with this.treePath
+        return absolutePath.startsWith(treePath)
+                ? resolveRelative(absolutePath.subPath(treePath.size()))
+                : rootNode.resolveRelative(absolutePath);
     }
-
-
+    
+    /**
+     * Resolves given path relative to this node.
+     */
+    private Optional<TreeNode<T>> resolveRelative(TreePath realtivePath) {
+        final int childIndex = realtivePath.childIndex().orElse(-1);
+        if(childIndex<0) return Optional.empty();
+        
+        final Optional<TreeNode<T>> childNode = streamChildren().skip(childIndex-1).findFirst();
+        if(!childNode.isPresent()) return Optional.empty();
+        
+        return realtivePath.size()>2
+                ? childNode.get().resolveRelative(realtivePath.subPath(1))
+                : childNode;
+    }
+    
+    // -- PARENT
+    
+    public Optional<TreeNode<T>> lookupParent() {
+        return Optional.ofNullable(treePath.getParentIfAny())
+                .flatMap(this::resolve);
+    }
 
     // -- CHILDREN
 
@@ -117,17 +175,11 @@ public class TreeNode<T> implements Vertex<T> {
             return Stream.empty();
         }
         return treeAdapter().childrenOf(value)
-                .map(this::toTreeNode);
+                .map(IndexedFunction.zeroBased((siblingIndex, childPojo)->
+                    toTreeNode(treePath.append(siblingIndex), childPojo)));
     }
-
-
-
 
     // -- BASIC PREDICATES
-
-    public boolean isRoot() {
-        return getParentIfAny() == null;
-    }
 
     public boolean isLeaf() {
         return getChildCount() == 0;
@@ -135,12 +187,9 @@ public class TreeNode<T> implements Vertex<T> {
 
     // -- PATH INFO
 
-
     public TreePath getPositionAsPath() {
-        return treePath.get();
+        return treePath;
     }
-
-
 
     // -- COLLAPSE/EXPAND
 
@@ -150,7 +199,6 @@ public class TreeNode<T> implements Vertex<T> {
     public TreeState getTreeState() {
         return sharedState;
     }
-
 
     public boolean isExpanded(final TreePath treePath) {
         final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
@@ -231,12 +279,14 @@ public class TreeNode<T> implements Vertex<T> {
 
     /**
      * Convenient shortcut.
-     * @param node
+     * @param rootNode
      * @param treeAdapterClass
      * @return new LazyTreeNode
      */
-    public static <T> TreeNode<T> lazy(final T node, final Class<? extends TreeAdapter<T>> treeAdapterClass) {
-        return TreeNode.of(node, treeAdapterClass, TreeState.rootCollapsed());
+    public static <T> TreeNode<T> root(
+            final T rootNode, 
+            final Class<? extends TreeAdapter<T>> treeAdapterClass) {
+        return TreeNode.root(rootNode, treeAdapterClass, TreeState.rootCollapsed());
     }
 
     // -- PARENT NODE ITERATION
@@ -277,7 +327,7 @@ public class TreeNode<T> implements Vertex<T> {
                 false); // not parallel
     }
 
-    // -- LAZY NODE ADAPTING
+    // -- TREE NODE ADAPTING
 
     /**
      * @apiNote a class rather than an instance, because otherwise
@@ -292,7 +342,10 @@ public class TreeNode<T> implements Vertex<T> {
     @SneakyThrows
     private TreeAdapter<T> newTreeAdapter() {
         try {
-            return treeAdapterClass.getDeclaredConstructor().newInstance();
+            var adapter = treeAdapterClass.getDeclaredConstructor().newInstance();
+            return _Context.lookup(ServiceInjector.class) //TODO[CAUSEWAY-3711] requires some cooperator that provides it
+                .map(serviceInjector->serviceInjector.injectServicesInto(adapter))
+                .orElse(adapter);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalArgumentException(
                     String.format("failed to instantiate TreeAdapter '%s'", treeAdapterClass.getName()), e);
@@ -303,40 +356,8 @@ public class TreeNode<T> implements Vertex<T> {
         return treeAdapter.get();
     }
 
-    private TreeNode<T> toTreeNode(final T value){
-        return of(value, getTreeAdapterClass(), sharedState);
-    }
-
-    private TreePath resolveTreePath() {
-        final TreeNode<T> parent = getParentIfAny();
-        if(parent==null) {
-            return TreePath.root();
-        }
-        return parent.getPositionAsPath().append(indexWithinSiblings(parent));
-    }
-
-    /*
-     * @return zero based index
-     */
-    private int indexWithinSiblings(final TreeNode<T> parent) {
-        final LongAdder indexOneBased = new LongAdder();
-
-        boolean found = parent.streamChildren()
-                .peek(__->indexOneBased.increment())
-                .anyMatch(this::isEqualTo);
-
-        if(!found) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
-
-        return indexOneBased.intValue()-1;
-    }
-
-    private boolean isEqualTo(final TreeNode<T> other) {
-        if(other==null) {
-            return false;
-        }
-        return Objects.equals(this.getValue(), other.getValue());
+    private TreeNode<T> toTreeNode(final TreePath treePath, final T value){
+        return new TreeNode<>(rootNode, treePath, value, getTreeAdapterClass(), sharedState);
     }
 
 }

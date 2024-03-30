@@ -20,6 +20,7 @@ package org.apache.causeway.applib.graph.tree;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -50,6 +51,11 @@ class TreePath_Default implements TreePath {
     }
 
     @Override
+    public int size() {
+        return canonicalPath.length;
+    }
+    
+    @Override
     public TreePath append(final int indexWithinSiblings) {
         final int[] newCanonicalPath = new int[canonicalPath.length+1];
         System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length);
@@ -70,6 +76,36 @@ class TreePath_Default implements TreePath {
     @Override
     public boolean isRoot() {
         return canonicalPath.length==1;
+    }
+    
+    @Override
+    public boolean startsWith(TreePath other) {
+        if(other.size()>this.size()) return false;
+        // optimization, not strictly required
+        if(other instanceof TreePath_Default) {
+            final int lastIndexToCheck = other.size() - 1;
+            return Arrays.equals(
+                    this.canonicalPath, 0, lastIndexToCheck, 
+                    ((TreePath_Default)other).canonicalPath, 0, lastIndexToCheck);    
+        }
+        return this.stringify("/").startsWith(other.stringify("/"));
+    }
+    
+    @Override
+    public OptionalInt childIndex() {
+        return size()>=2
+                ? OptionalInt.of(canonicalPath[1])
+                : OptionalInt.empty();
+    }
+    
+    @Override
+    public TreePath subPath(int startIndex) {
+        if(startIndex<=0) return this;
+        if(startIndex>=size()) throw new IndexOutOfBoundsException(startIndex);
+        final int newSize = size() - startIndex; 
+        final int[] newCanonicalPath = new int[newSize];
+        System.arraycopy(canonicalPath, startIndex, newCanonicalPath, 0, newSize);
+        return new TreePath_Default(newCanonicalPath);
     }
 
     @Override
@@ -95,7 +131,6 @@ class TreePath_Default implements TreePath {
                     }
                     return true;
                 });
-
     }
 
     // -- OBJECT CONTRACTS

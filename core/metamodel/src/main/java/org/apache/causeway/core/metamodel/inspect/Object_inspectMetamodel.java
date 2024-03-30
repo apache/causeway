@@ -99,7 +99,7 @@ public class Object_inspectMetamodel {
 
         val root = MMNodeFactory.type(domainClassDto, null);
 
-        val tree = TreeNode.lazy(root, MMTreeAdapter.class);
+        val tree = TreeNode.root(root, MMTreeAdapter.class);
 
         // Initialize view-model nodes of the entire tree,
         // because as it stands, all the type information gets cleared,

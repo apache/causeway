@@ -18,17 +18,11 @@
  */
 package org.apache.causeway.extensions.docgen.help.helptree;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 
 public class HelpTreeAdapter implements TreeAdapter<HelpNodeVm> {
-
-    @Override
-    public Optional<HelpNodeVm> parentOf(final HelpNodeVm value) {
-        return Optional.ofNullable(value.getParent());
-    }
 
     @Override
     public int childCountOf(final HelpNodeVm value) {
