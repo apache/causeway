@@ -61,7 +61,7 @@ implements
         if(pojoNode==null) {
             return 0;
         }
-        return wrappedTreeAdapter().childCountOf(pojoNode);
+        return delegateTreeAdapter().childCountOf(pojoNode);
     }
 
     @Override
@@ -70,7 +70,7 @@ implements
         if(pojoNode==null) {
             return Stream.empty();
         }
-        return wrappedTreeAdapter().childrenOf(pojoNode)
+        return delegateTreeAdapter().childrenOf(pojoNode)
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
@@ -93,7 +93,7 @@ implements
         mementify(pojo, parent.getTreePath().append(indexWithinSiblings)));
     }
 
-    private TreeAdapter wrappedTreeAdapter() {
+    private TreeAdapter delegateTreeAdapter() {
         if(delegate!=null) {
             return delegate;
         }
