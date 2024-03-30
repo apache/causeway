@@ -19,7 +19,9 @@
 package org.apache.causeway.applib.graph.tree;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -27,11 +29,15 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
+
+import lombok.val;
 
 /**
  * Provides an unambiguous way to address nodes by position within a tree-structure. Examples:
@@ -42,19 +48,52 @@ import org.apache.causeway.commons.internal.primitives._Ints;
  * </ul>
  * @since 2.0 {@index}
  */
-public interface TreePath extends Serializable {
+@Value
+public class TreePath implements Serializable {
+    
+    // -- FACTORIES
+
+    public static TreePath of(final int ... canonicalPath) {
+        return new TreePath(canonicalPath);
+    }
+
+    public static TreePath root() {
+        return of(0);
+    }
+    
+    // -- CONSTRUCTION 
+    
+    private static final long serialVersionUID = 530511373409525896L;
+    private final int[] canonicalPath;
+    private final int hashCode;
+    
+    public TreePath(final int[] canonicalPath) {
+        Objects.requireNonNull(canonicalPath, "canonicalPath is required");
+        if(canonicalPath.length<1) {
+            throw new IllegalArgumentException("canonicalPath must not be empty");
+        }
+        this.canonicalPath = canonicalPath;
+        this.hashCode = Arrays.hashCode(canonicalPath);
+    }
 
     /**
      * Number of path-elements.
      * @apiNote Root has size = 1.
      */
-    public int size();
+    public int size() {
+        return canonicalPath.length;
+    }
     
     /**
      * @param indexWithinSiblings
      * @return a new TreePath instance composed of this with one canonical path entry added
      */
-    public TreePath append(int indexWithinSiblings);
+    public TreePath append(int indexWithinSiblings) {
+        final int[] newCanonicalPath = new int[canonicalPath.length+1];
+        System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length);
+        newCanonicalPath[canonicalPath.length] = indexWithinSiblings;
+        return new TreePath(newCanonicalPath);
+    }
     
     /**
      * Returns a sub-path containing all the path-elements of this path, skipping
@@ -62,39 +101,79 @@ public interface TreePath extends Serializable {
      * @apiNote The first element of the resulting path indicates the sibling index 
      *      of the tree-node the subPath corresponds to.
      */
-    public TreePath subPath(int startIndex);
+    public TreePath subPath(int startIndex) {
+        if(startIndex<=0) return this;
+        if(startIndex>=size()) throw new IndexOutOfBoundsException(startIndex);
+        final int newSize = size() - startIndex; 
+        final int[] newCanonicalPath = new int[newSize];
+        System.arraycopy(canonicalPath, startIndex, newCanonicalPath, 0, newSize);
+        return new TreePath(newCanonicalPath);
+
+    }
     
     /**
      * Returns a TreePath instance that represents the parent path of this TreePath,
      * if this is not the root.
      */
-    public @Nullable TreePath getParentIfAny();
-    
-    public boolean isRoot();
-    public boolean startsWith(TreePath other);
+    public @Nullable TreePath getParentIfAny() {
+        if(isRoot()) {
+            return null;
+        }
+        final int[] newCanonicalPath = new int[canonicalPath.length-1];
+        System.arraycopy(canonicalPath, 0, newCanonicalPath, 0, canonicalPath.length-1);
+        return new TreePath(newCanonicalPath);
 
-    public IntStream streamPathElements();
+    }
+    
+    public boolean isRoot() {
+        return canonicalPath.length==1;
+    }
+    
+    public boolean startsWith(TreePath other) {
+        if(other.size()>this.size()) return false;
+        // optimization, not strictly required
+        if(other instanceof TreePath) {
+            final int lastIndexToCheck = other.size() - 1;
+            return Arrays.equals(
+                    this.canonicalPath, 0, lastIndexToCheck, 
+                    ((TreePath)other).canonicalPath, 0, lastIndexToCheck);    
+        }
+        return this.stringify("/").startsWith(other.stringify("/"));
+    }
+
+    public IntStream streamPathElements() {
+        return IntStream.of(canonicalPath);
+    }
     
     /**
      * Optionally the 2nd path-element's value, based on presence.
      * It corresponds to the sibling index of the child node this tree-path 
      * (either directly references or) includes.
      */
-    public OptionalInt childIndex();
-
-    public String stringify(String delimiter);
-
-    public Stream<TreePath> streamUpTheHierarchyStartingAtSelf();
-
-    // -- CONSTRUCTION
-
-    public static TreePath of(final int ... canonicalPath) {
-        return new TreePath_Default(canonicalPath);
+    public OptionalInt childIndex() {
+        return size()>=2
+                ? OptionalInt.of(canonicalPath[1])
+                : OptionalInt.empty();
     }
 
-    public static TreePath root() {
-        return of(0);
+    public String stringify(String delimiter) {
+        _Assert.assertTrue(_Strings.isNotEmpty(delimiter), ()->"non-empty delimiter required");
+        return delimiter + streamPathElements()
+            .mapToObj(i->""+i)
+            .collect(Collectors.joining(delimiter));
     }
+
+    public Stream<TreePath> streamUpTheHierarchyStartingAtSelf() {
+        val hasMore = _Refs.booleanRef(true);
+        return Stream.iterate((TreePath)this, __->hasMore.isTrue(), TreePath::getParentIfAny)
+                .filter(x->{
+                    if(x.isRoot()) {
+                        hasMore.setValue(false); // stop the stream only after we have included the root
+                    }
+                    return true;
+                });
+    }
+
 
     /**
      * Parses stringified tree path of format {@code <delimiter>0<delimiter>3<delimiter>1} ...,
@@ -126,5 +205,27 @@ public interface TreePath extends Serializable {
 
         return of(canonicalPath);
     }
+
+    // -- OBJECT CONTRACTS
+
+    @Override
+    public boolean equals(final Object obj) {
+        if(obj instanceof TreePath) {
+            final TreePath other = (TreePath) obj;
+            return Arrays.equals(canonicalPath, other.canonicalPath);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public String toString() {
+        return stringify("/");
+    }
+
 
 }

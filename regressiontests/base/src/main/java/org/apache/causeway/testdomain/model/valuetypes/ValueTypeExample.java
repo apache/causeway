@@ -768,8 +768,6 @@ public abstract class ValueTypeExample<T> {
                 "anotherRoot", TreeAdapterString.class, TreeState.rootCollapsed());
 
         private static class TreeAdapterString implements TreeAdapter<String> {
-            @Override public int childCountOf(final String value) {
-                return 0; }
             @Override public Stream<String> childrenOf(final String value) {
                 return Stream.empty(); }
         }

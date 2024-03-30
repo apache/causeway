@@ -37,7 +37,9 @@ public interface TreeAdapter<T> {
      * @return number of child tree-nodes of the specified {@code value} tree-node (pojo)
      */
     @Domain.Exclude
-    int childCountOf(T value);
+    default int childCountOf(T value) {
+        return Math.toIntExact(childrenOf(value).count());
+    }
 
     /**
      * @param value - tree-node (pojo)

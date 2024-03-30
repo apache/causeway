@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.tree;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -55,24 +54,8 @@ implements
         this.treeAdapterClass = treeAdapterClass;
     }
 
-//    @Override
-//    public Optional<_TreeNodeMemento> parentOf(final _TreeNodeMemento treeModel) {
-//        if(treeModel==null) {
-//            return Optional.empty();
-//        }
-//        val pojoNode = demementify(treeModel);
-//        if(pojoNode==null) {
-//            return Optional.empty();
-//        }
-//        return wrappedTreeAdapter().parentOf(pojoNode)
-//                .map(pojo->mementify(pojo, treeModel.getTreePath().getParentIfAny()));
-//    }
-
     @Override
-    public int childCountOf(final _TreeNodeMemento treeModel) {
-        if(treeModel==null) {
-            return 0;
-        }
+    public int childCountOf(final @Nullable _TreeNodeMemento treeModel) {
         val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return 0;
@@ -81,10 +64,7 @@ implements
     }
 
     @Override
-    public Stream<_TreeNodeMemento> childrenOf(final _TreeNodeMemento treeModel) {
-        if(treeModel==null) {
-            return Stream.empty();
-        }
+    public Stream<_TreeNodeMemento> childrenOf(final @Nullable _TreeNodeMemento treeModel) {
         val pojoNode = demementify(treeModel);
         if(pojoNode==null) {
             return Stream.empty();
@@ -93,14 +73,18 @@ implements
                 .map(newPojoToTreeModelMapper(treeModel));
     }
 
+    // -- HELPER
+    
     _TreeNodeMemento mementify(final @NonNull Object pojo, final @NonNull TreePath treePath) {
         return new _TreeNodeMemento(
                 treePath,
                 ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow());
     }
-    private @Nullable Object demementify(final _TreeNodeMemento model) {
-        Objects.requireNonNull(model);
-        return model.getPojo();
+    
+    private @Nullable Object demementify(final @Nullable _TreeNodeMemento model) {
+        return model!=null
+                ? model.getPojo()
+                : null;
     }
 
     private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {

@@ -97,6 +97,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.PasswordValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.ShortValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.TreeNodeValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
@@ -156,6 +157,7 @@ import lombok.NonNull;
         OidDtoValueSemantics.class,
         UUIDValueSemantics.class,
         LocaleValueSemantics.class,
+        TreePathValueSemantics.class,
         TreeNodeValueSemantics.class,
         ChangesDtoValueSemantics.class,
         CommandDtoValueSemantics.class,
