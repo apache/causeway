@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.graph.tree;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
@@ -141,7 +142,17 @@ public class TreeNode<T> implements Vertex<T> {
      * Resolves given path relative to the root of this tree.
      */
     public Optional<TreeNode<T>> resolve(TreePath absolutePath) {
-        // optimize if absolutePath starts with this.treePath
+        /* 
+         * Optimize if absolutePath starts with this.treePath:
+         * 
+         * If current path is 
+         *   /p0/p1/p2/p3 
+         * and we want to resolve
+         *   /p0/p1/p2/p3/p4/p5
+         * then instead of starting from root, we can start from here, resolving sub-node 
+         *   /p3/p4/p5
+         * observe: the relative path /p3 would point to the sub-node itself
+         */
         return absolutePath.startsWith(treePath)
                 ? resolveRelative(absolutePath.subPath(treePath.size()))
                 : rootNode.resolveRelative(absolutePath);
@@ -149,16 +160,24 @@ public class TreeNode<T> implements Vertex<T> {
     
     /**
      * Resolves given path relative to this node.
+     * <p>
+     * E.g. starting from root, '/0' will return the root;<br>
+     * starting from root, '/0/2' will return the 3rd child of root;<br>
+     * starting from sub-node '/0/2', '/2/9' will resolve the 10th child ('/0/2/9') of this sub-node;<br>
      */
-    private Optional<TreeNode<T>> resolveRelative(TreePath realtivePath) {
-        final int childIndex = realtivePath.childIndex().orElse(-1);
-        if(childIndex<0) return Optional.empty();
+    private Optional<TreeNode<T>> resolveRelative(TreePath relativePath) {
         
-        final Optional<TreeNode<T>> childNode = streamChildren().skip(childIndex-1).findFirst();
+        if(Objects.equals(this.treePath, relativePath)) {
+            return Optional.of(this);
+        }
+        
+        final int childIndex = relativePath.childIndex().orElse(-1);
+        if(childIndex<0) return Optional.empty();
+        final Optional<TreeNode<T>> childNode = streamChildren().skip(childIndex).findFirst();
         if(!childNode.isPresent()) return Optional.empty();
         
-        return realtivePath.size()>2
-                ? childNode.get().resolveRelative(realtivePath.subPath(1))
+        return relativePath.size()>2
+                ? childNode.get().resolveRelative(relativePath.subPath(1))
                 : childNode;
     }
     
