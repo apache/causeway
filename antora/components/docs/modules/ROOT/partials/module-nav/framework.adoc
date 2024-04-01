@@ -7,7 +7,6 @@
 
 ** Process
 *** xref:comguide:ROOT:about.adoc[Committers' Guide]
-*** xref:tooling:ROOT:about.adoc[Tooling]
 
 ** Automated Analysis
 *** link:https://sonarcloud.io/dashboard?id=apache_causeway[SonarCloud.io]

@@ -244,14 +244,6 @@ content:
       start_path: testing/unittestsupport/adoc # testing
       branches: [2.0.0, 3.0.0]
 
-# tooling
-    - url: .
-      start_path: tooling/adoc # toc
-      branches: [2.0.0, 3.0.0]
-    - url: .
-      start_path: tooling/cli/adoc # cli
-      branches: [2.0.0, 3.0.0]
-
 # valuetypes
     - url: .
       start_path: valuetypes/adoc # valuetypes

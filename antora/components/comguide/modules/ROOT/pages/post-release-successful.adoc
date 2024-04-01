@@ -364,6 +364,7 @@ popd
 +
 [source,bash,subs="attributes+"]
 ----
+#TODO this is outdated info
 mvnd -D module-tooling -D skip.essential install -DskipTests
 ----
 +

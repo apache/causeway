@@ -251,17 +251,14 @@ Note that this also includes the Restful Objects and GraphQL viewers.
 | module-regressiontests
 | Regression Tests (for the CI pipelines)
 
-| module-tooling
-| Tooling Ecosystem (Code Mining, Automated Docs, ...)
-
 |===
 
 You can also skip building the "essential" modules that are released, by adding the `-Dskip.essential`.
-For example, to just build the tooling module, use:
+For example, to just build the xxx module, use:
 
 [source,bash]
 ----
-mvn clean install -Dmodule-tooling -Dskip.essential
+mvn clean install -Dmodule-xxx -Dskip.essential
 ----
 
 

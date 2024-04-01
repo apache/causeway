@@ -164,6 +164,7 @@ The next step is to generate the website, ensuring that the config, examples, pr
 +
 [source,bash,subs="attributes+"]
 ----
+#TODO this is outdated info
 mvnd -D module-tooling -D skip.essential install -DskipTests -T1C
 ----
 
