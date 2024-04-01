@@ -6,7 +6,7 @@
 [source,java]
 .TreeState.java
 ----
-interface TreeState {
+class TreeState {
   TreeState rootCollapsed()
   Set<TreePath> getExpandedNodePaths()
   Set<TreePath> getSelectedNodePaths()

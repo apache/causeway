@@ -9,20 +9,15 @@ Provides the parent/child relationship information between pojos to derive a tre
 .TreeAdapter.java
 ----
 interface TreeAdapter<T> {
-  Optional<T> parentOf(T value)     // <.>
   int childCountOf(T value)     // <.>
   Stream<T> childrenOf(T value)     // <.>
 }
 ----
 
-<.> xref:#parentOf_T[parentOf(T)]
 <.> xref:#childCountOf_T[childCountOf(T)]
 <.> xref:#childrenOf_T[childrenOf(T)]
 
 == Members
-
-[#parentOf_T]
-=== parentOf(T)
 
 [#childCountOf_T]
 === childCountOf(T)

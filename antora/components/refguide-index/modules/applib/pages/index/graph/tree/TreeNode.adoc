@@ -9,16 +9,18 @@ Fundamental building block of Tree structures.
 .TreeNode.java
 ----
 class TreeNode<T> {
-  TreeNode<T> of(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState)
+  TreeNode<T> root(T value, TreeAdapter<T> treeAdapter, TreeState sharedState)
+  TreeNode<T> root(T value, Class<? extends TreeAdapter<T>> treeAdapterClass, TreeState sharedState, FactoryService factoryService)
+  T getRootValue()
   T getValue()
   int getIncomingCount()
   int getOutgoingCount()
   Stream<Edge<T>> streamIncoming()
   Stream<Edge<T>> streamOutgoing()
-  TreeNode<T> getParentIfAny()
+  Optional<TreeNode<T>> resolve(TreePath absolutePath)     // <.>
+  Optional<TreeNode<T>> lookupParent()
   int getChildCount()
   Stream<TreeNode<T>> streamChildren()
-  boolean isRoot()
   boolean isLeaf()
   TreePath getPositionAsPath()
   TreeState getTreeState()     // <.>
@@ -29,17 +31,22 @@ class TreeNode<T> {
   void clearSelection()     // <.>
   boolean isSelected(TreePath treePath)     // <.>
   void select(TreePath... treePaths)     // <.>
-  TreeNode<T> lazy(T node, Class<? extends TreeAdapter<T>> treeAdapterClass)     // <.>
+  TreeNode<T> root(T rootNode, TreeAdapter<T> treeAdapter)     // <.>
+  TreeNode<T> root(T rootNode, Class<? extends TreeAdapter<T>> treeAdapterClass, FactoryService factoryService)     // <.>
   Iterator<TreeNode<T>> iteratorHierarchyUp()
   Stream<TreeNode<T>> streamHierarchyUp()
   Iterator<TreeNode<T>> iteratorDepthFirst()
   Iterator<TreeNode<T>> iteratorBreadthFirst()
   Stream<TreeNode<T>> streamDepthFirst()
   Stream<TreeNode<T>> streamBreadthFirst()
-  Class<? extends TreeAdapter<T>> getTreeAdapterClass()     // <.>
 }
 ----
 
+<.> xref:#resolve_TreePath[resolve(TreePath)]
++
+--
+Resolves given path relative to the root of this tree.
+--
 <.> xref:#getTreeState_[getTreeState()]
 <.> xref:#expand_TreePath[expand(TreePath)]
 +
@@ -71,14 +78,23 @@ Whether node that corresponds to given xref:refguide:applib:index/graph/tree/Tre
 --
 Select nodes by their corresponding xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] , that is, activate their selection marker.
 --
-<.> xref:#lazy_T_Class[lazy(T, Class)]
+<.> xref:#root_T_TreeAdapter[root(T, TreeAdapter)]
 +
 --
-Convenient shortcut.
+Creates the root node of a tree structure as inferred from given treeAdapter.
 --
-<.> xref:#getTreeAdapterClass_[getTreeAdapterClass()]
+<.> xref:#root_T_Class_FactoryService[root(T, Class, FactoryService)]
++
+--
+Creates the root node of a tree structure as inferred from given treeAdapter.
+--
 
 == Members
+
+[#resolve_TreePath]
+=== resolve(TreePath)
+
+Resolves given path relative to the root of this tree.
 
 [#getTreeState_]
 === getTreeState()
@@ -122,10 +138,12 @@ With the _Wicket Viewer_ corresponds to expressing CSS class _tree-node-selected
 }
 ----
 
-[#lazy_T_Class]
-=== lazy(T, Class)
+[#root_T_TreeAdapter]
+=== root(T, TreeAdapter)
 
-Convenient shortcut.
+Creates the root node of a tree structure as inferred from given treeAdapter.
 
-[#getTreeAdapterClass_]
-=== getTreeAdapterClass()
+[#root_T_Class_FactoryService]
+=== root(T, Class, FactoryService)
+
+Creates the root node of a tree structure as inferred from given treeAdapter.

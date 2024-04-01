@@ -615,7 +615,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:24.0.1 +
+io.cucumber:messages:jar:24.1.0 +
 org.apache.causeway.testing:causeway-testing-fakedata-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -1243,6 +1243,7 @@ o.a.i.core.metamodel.valuesemantics.PasswordValueSemantics +
 o.a.i.core.metamodel.valuesemantics.ShortValueSemantics +
 o.a.i.core.metamodel.valuesemantics.StringValueSemantics +
 o.a.i.core.metamodel.valuesemantics.TreeNodeValueSemantics +
+o.a.i.core.metamodel.valuesemantics.TreePathValueSemantics +
 o.a.i.core.metamodel.valuesemantics.URLValueSemantics +
 o.a.i.core.metamodel.valuesemantics.UUIDValueSemantics +
 o.a.i.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics +
@@ -5759,6 +5760,14 @@ Directory: /extensions/core/docgen
 ----
 |Provides a set of code mining features that can help building documentation for your application.
 
+.Components
+****
+o.a.i.extensions.docgen.topics.domainobjects.CausewayEntityDiagramPage +
+o.a.i.extensions.docgen.topics.domainobjects.DomainEntityDiagramPage +
+o.a.i.extensions.docgen.topics.domainobjects.EntityDiagramPageAbstract +
+o.a.i.extensions.docgen.topics.welcome.WelcomeHelpPage +
+****
+
 |Apache Causeway Ext - Docgen Help
 [source,yaml]
 ----
@@ -6911,7 +6920,31 @@ Artifact: causeway-regressiontests-base
 Type: jar
 Directory: /regressiontests/base
 ----
-|.Dependencies
+|.Components
+****
+o.a.i.testdomain.jdo.JdoInventoryDao +
+o.a.i.testdomain.jdo.JdoTestFixtures +
+o.a.i.testdomain.jpa.JpaInventoryDao +
+o.a.i.testdomain.jpa.JpaTestFixtures +
+o.a.i.testdomain.jpa.springdata.EmployeeRepository +
+o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
+o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
+o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
+o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
+o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
+o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
+o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
+o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
+o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
+o.a.i.testdomain.util.kv.KVStoreForTesting +
+o.a.i.testdomain.util.rest.RestEndpointService +
+o.a.i.testdomain.wrapperfactory.CounterRepository +
+****
+
+.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
@@ -7394,6 +7427,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7418,6 +7457,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****

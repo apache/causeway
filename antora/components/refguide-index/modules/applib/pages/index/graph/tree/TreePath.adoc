@@ -12,24 +12,47 @@ Provides an unambiguous way to address nodes by position within a tree-structure
 [source,java]
 .TreePath.java
 ----
-interface TreePath {
-  TreePath append(int indexWithinSiblings)     // <.>
-  TreePath getParentIfAny()     // <.>
-  boolean isRoot()
-  IntStream streamPathElements()
-  String stringify(String delimiter)
-  Stream<TreePath> streamUpTheHierarchyStartingAtSelf()
+class TreePath {
+  TreePath(int[] canonicalPath)
   TreePath of(int... canonicalPath)
   TreePath root()
+  int size()     // <.>
+  TreePath append(int indexWithinSiblings)     // <.>
+  TreePath subPath(int startIndex)     // <.>
+  TreePath getParentIfAny()     // <.>
+  boolean isRoot()
+  boolean startsWith(TreePath other)
+  IntStream streamPathElements()
+  OptionalInt childIndex()     // <.>
+  String stringify(String delimiter)
+  Stream<TreePath> streamUpTheHierarchyStartingAtSelf()
   TreePath parse(String treePathStringified, String delimiter)     // <.>
+  boolean equals(Object obj)
+  int hashCode()
+  String toString()
 }
 ----
 
+<.> xref:#size_[size()]
++
+--
+Number of path-elements.
+--
 <.> xref:#append_int[append(int)]
+<.> xref:#subPath_int[subPath(int)]
++
+--
+Returns a sub-path containing all the path-elements of this path, skipping startIndex number of path elements at the start.
+--
 <.> xref:#getParentIfAny_[getParentIfAny()]
 +
 --
 Returns a TreePath instance that represents the parent path of this TreePath, if this is not the root.
+--
+<.> xref:#childIndex_[childIndex()]
++
+--
+Optionally the 2nd path-element's value, based on presence. It corresponds to the sibling index of the child node this tree-path (either directly references or) includes.
 --
 <.> xref:#parse_String_String[parse(String, String)]
 +
@@ -39,13 +62,28 @@ Parses stringified tree path of format _031_ ..., as returned by _TreePath#strin
 
 == Members
 
+[#size_]
+=== size()
+
+Number of path-elements.
+
 [#append_int]
 === append(int)
+
+[#subPath_int]
+=== subPath(int)
+
+Returns a sub-path containing all the path-elements of this path, skipping startIndex number of path elements at the start.
 
 [#getParentIfAny_]
 === getParentIfAny()
 
 Returns a TreePath instance that represents the parent path of this TreePath, if this is not the root.
+
+[#childIndex_]
+=== childIndex()
+
+Optionally the 2nd path-element's value, based on presence. It corresponds to the sibling index of the child node this tree-path (either directly references or) includes.
 
 [#parse_String_String]
 === parse(String, String)
