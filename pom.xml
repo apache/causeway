@@ -125,7 +125,6 @@
 				<module>antora</module>
 				<module>incubator</module>
 				<module>regressiontests</module>
-				<module>tooling</module>
 			</modules>
 		</profile>
 
@@ -141,7 +140,6 @@
 			<modules>
 				<module>antora</module>
 				<module>regressiontests</module>
-				<module>tooling</module>
 			</modules>
 		</profile>
 
@@ -215,22 +213,7 @@
 				</property>
 			</activation>
 			<modules>
-				<!-- prerequisites ... -->
-				<module>tooling</module>
-
 				<module>regressiontests</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-tooling</id>
-			<activation>
-				<property>
-					<name>module-tooling</name>
-				</property>
-			</activation>
-			<modules>
-				<module>tooling</module>
 			</modules>
 		</profile>
 

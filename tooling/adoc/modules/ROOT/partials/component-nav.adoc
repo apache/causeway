@@ -1,3 +1,0 @@
-include::tooling:ROOT:partial$module-nav.adoc[]
-
-include::tooling:tooling-cli:partial$module-nav.adoc[]
