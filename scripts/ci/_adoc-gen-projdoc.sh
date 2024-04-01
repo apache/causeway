@@ -51,7 +51,7 @@ echo ""
 if [ -z "${JAVA_CMD}" ]; then
   echo "projdoc gen: no java, skipping"
 else
-  JARFILE="causeway-tooling-cli.jar"
+  JARFILE="causewaystuff-tooling-cli.jar"
   java -jar "${PROJECT_ROOT_PATH}/tooling/cli/target/$JARFILE" -p "${PROJECT_ROOT_PATH}" -w "${OVERVIEW_PATH}" -x "${INDEX_PATH}" $MODE
 fi
 

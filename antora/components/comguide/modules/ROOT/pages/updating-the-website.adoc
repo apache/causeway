@@ -32,6 +32,7 @@ git checkout {page-causewayrel}
 +
 [source,bash,subs="attributes+"]
 ----
+#TODO this is outdated info
 mvn -D module-tooling -D skip.essential install -DskipTests
 ----
 

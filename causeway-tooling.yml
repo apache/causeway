@@ -74,7 +74,6 @@ commands:
       #"Wicket Viewer: Gmap3": "org.apache.causeway.security:causeway-extensions-gmap3.*"
       "Wicket Viewer: SSE": "org.apache.causeway.security:causeway-extensions-sse.*"
 
-      "Tooling": org.apache.causeway.tooling.*
       "Regression Tests": org.apache.causeway.regressiontests.*
 
       Incubator: org.apache.causeway.incubator
