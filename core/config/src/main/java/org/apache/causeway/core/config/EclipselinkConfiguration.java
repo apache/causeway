@@ -34,9 +34,15 @@ import lombok.Data;
 public class EclipselinkConfiguration {
 
     /**
+     * Options are
+     * <ul>
+     * <li>true: Weave the entity classes dynamically.</li>
+     * <li>false: Do not weave the entity classes.</li>
+     * <li>static: Weave the entity classes statically.</li>
+     * </ul>
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#weaving">eclipse.weaving</a>
      */
-    private boolean weaving = false;
+    private String weaving = "false";
 
     @ConfigurationProperties("eclipselink.weaving")
     @Validated
