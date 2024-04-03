@@ -53,9 +53,9 @@ For both apps you can bump to newer versions of the framework just by updating t
 <parent>
     <groupId>org.apache.causeway.app</groupId>
     <artifactId>causeway-app-starter-parent</artifactId>
-    <version>2.0.0</version>                            <!--1-->
+    <version>3.0.0</version>                            <!--.-->
 </parent>
 ----
-<1> update as required.
+<.> update as required.
 
 Check the release notes/migration notes for details on new features and of any breaking changes.
