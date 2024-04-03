@@ -4,7 +4,7 @@
 :page-partial:
 
 As part of the release process we xref:post-release-successful.adoc#generate-website[generate] and publish the website.
-An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayrel}`).
+An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayrelv2}`).
 This branch can then be used for documentation updates.
 
 == Update docs
@@ -23,7 +23,7 @@ In the regular `causeway` repo:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout {page-causewayrel}
+git checkout {page-causewayrelv2}
 ----
 
 * make documentation updates, and commit changes
