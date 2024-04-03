@@ -171,7 +171,55 @@ To list all ``Department``s, we can submit this query using either the "rich" sc
 Together, these make up the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object.
 
 
-But if using the "rich" schema, then as well as accessing properties and collections and invoking (safe) actions, the GraphQL viewer also allows access to the usual supporting semantics.
+Queries can also include parameters.
+
+[cols="1a,1a", options="header"]
+|===
+
+|Rich schema
+|Simple schema
+
+|
+[source,graphql]
+----
+{
+  rich {
+    university_dept_Departments {
+      findDepartmentByName {
+        invoke(name: "Classics") {
+          results {
+            name {
+              get
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----
+|
+[source,graphql]
+----
+{
+  simple {
+    university_dept_Departments {
+      findDepartmentByName(name: "Classics") {
+        name
+      }
+    }
+  }
+}
+----
+|===
+
+The above is an example of invoking an action on a (singleton) domain service, but this works equally well on domain entities/view models once retrieved.
+More on this below.
+
+
+=== Supporting Metadata
+
+If you use the "rich" schema, then as well as accessing properties and collections and invoking (safe) actions, the GraphQL viewer also allows access to the usual supporting metadata.
 For example:
 
 [cols="1a,1a", options="header"]
@@ -227,10 +275,10 @@ There are also similar fields for properties:
 [#the-meta-fieldtype]
 == The Meta field/type
 
-As we saw in the previous section, the `_meta` field provides access to additional information about the domain object.
-The full list of fields provided are:
+The `_meta` field provides access to additional information about the domain object.
+Its full list of fields are:
 
-* `logicalTypeName` and `id` : these are equivalent to the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object
+* `logicalTypeName` and `id`; these are equivalent to the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[] of the domain object
 * `version` (if an entity and available)
 * `title` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-title[title()] supporting method)
 * `icon` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-icon[icon], normally the associated `.png` file) and `grid` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc[layout], normally the associated `.layout.xml` file )
@@ -239,7 +287,7 @@ These can only be downloaded if configured, see xref:#resources-blobs-clobs-layo
 
 * `cssClass` (as per the xref:userguide:ROOT:ui-layout-and-hints.adoc#object-css-styling[cssClass()] supporting method)
 
-There is also one additional field, `saveAs`; this is discussed in the xref:testsupport.adoc[Test Support].
+There is also one additional field, `saveAs`; this is discussed in the xref:testsupport.adoc[Test Support] section.
 
 
 [#queries-that-lookup-a-domain-object]
