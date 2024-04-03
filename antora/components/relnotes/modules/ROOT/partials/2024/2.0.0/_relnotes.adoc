@@ -114,8 +114,9 @@ Apart from dependencies and the `javax`/`jakarta` namespace, in most regards v2.
 The only feature not available in 3.0 is the Shiro module, because (at the time of release) Apache Shiro have not released `jakarta` support.
 However, either the xref:security:spring:about.adoc[Spring Security] integration or even the xref:security:simple:about.adoc[Simple Security] implementation can be used instead.
 
----
-For `2.0.0` itself, below is the list of features, improvements and bugs made since `2.0.0-RC4`.
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+For `2.0.0` and `3.0.0`, below lists the features, improvements and bugs made since the previous release:
 
 
 
