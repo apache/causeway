@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 2.0.0-RC4
+      BASELINE: 3.0.0
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       ANTORA_PLAYBOOKS_PATH: ${{ github.workspace }}/antora/playbooks
