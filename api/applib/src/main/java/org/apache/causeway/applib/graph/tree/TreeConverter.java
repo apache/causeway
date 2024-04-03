@@ -18,39 +18,9 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.causeway.applib.annotation.Programmatic;
-
-/**
- * Holds information for a tree, which nodes are expanded and which are selected.
- *  
- * @since 2.0 {@index}
- */
-@Programmatic
-public class TreeState implements Serializable {
-
-    // -- FACTORIES
+public interface TreeConverter<U, T> {
     
-    public static TreeState rootCollapsed() {
-        return new TreeState();
-    }
-
-    // -- CONSTRUCTION
+    public T fromUnderlyingNode(U value, T parentNode, int siblingIndex);
+    public U toUnderlyingNode(T value);
     
-    private static final long serialVersionUID = 7971539034663543462L;
-
-    private final Set<TreePath> expandedNodes = new HashSet<>();
-    private final Set<TreePath> selectedNodes = new HashSet<>();
-
-    public Set<TreePath> getExpandedNodePaths() {
-        return expandedNodes;
-    }
-
-    public Set<TreePath> getSelectedNodePaths() {
-        return selectedNodes;
-    }
-
 }

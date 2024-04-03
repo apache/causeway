@@ -154,7 +154,7 @@ public class TreeNode<T> implements Vertex<T> {
          * observe: the relative path /p3 would point to the sub-node itself
          */
         return absolutePath.startsWith(treePath)
-                ? resolveRelative(absolutePath.subPath(treePath.size()))
+                ? resolveRelative(absolutePath.subPath(treePath.size() - 1))
                 : rootNode.resolveRelative(absolutePath);
     }
     
