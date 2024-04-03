@@ -360,15 +360,9 @@ mvnd clean install -T1C -DskipTests -Dgithub
 popd
 ----
 
-* build module tooling
+* if necessary, build the module tooling
 +
-[source,bash,subs="attributes+"]
-----
-#TODO this is outdated info
-mvnd -D module-tooling -D skip.essential install -DskipTests
-----
-+
-NOTE: this now requires at least JDK 17 in order to build the `module-tooling` module that is used to generate some of the website.
+See link:https://github.com/apache-causeway-committers/causewaystuff/blob/main/tooling/cli/README.adoc[causewaystuff] documentation for more details.
 
 * generate the website:
 +
@@ -400,37 +394,20 @@ git push origin {page-causewayrelv3}
 To build the site , we need to update the `site.yml`.
 This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrelv3}).
 
-* Switch to the release branch:
+* Recreate the `website` branch off of `master`.
++
+All that will be picked up from this branch is the `supplementary-ui` files (top-level index) and the `site.yml` playbook that identifies which branch(es) to include in the website.
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout $CAUSEWAYBRANCH            #<.>
+git checkout master
+git branch -D website     #<.>
+git checkout -b website   #<.>
 ----
-<.> will be before the documentation branch of the current release
+<.> delete the branch if necessary
+<.> recreate the branch
 
-* Update with the documentation branch for the current release ({page-causewayrelv3})
-+
-[source,bash,subs="attributes+"]
-----
-git merge {page-causewayrelv3} --ff-only  #<.>
-----
-<.> move forward to incorporate any changes made thus far on the documentation branch
-
-
-* Now, revert the commit that changed the `antora.yml` files in the documentation branch
-+
-If there were no doc changes, then you can simply use:
-+
-[source,bash,subs="attributes+"]
-----
-git revert HEAD
-----
-+
-Otherwise, locate the `shaId` of the commit that applied the change and revert appropriately.
-
-
-
-Now, update `site.yml` using `site.NEXT.yml`:
+* Update `site.yml` using `site.NEXT.yml`:
 
 * move `site.yml` to one side, and replace with `site.NEXT.yml`:
 +
@@ -451,15 +428,12 @@ content:
   sources:
     - url: .
       start_path: antora/components/docs # docs
-      branches: [{page-causewayrelv3}]
+      branches: [{page-causewayrelv3}, {page-causewayrelv3}]
       # ...
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [{page-causewayrelv3}]
+      branches: [{page-causewayrelv3}, {page-causewayrelv3}]
 ----
-+
-NOTE: Previously we built a site with the current version and all previous versions.
-For the moment, though, we've simplified to just publish the current version.
 
 
 * check that the attributes are correct.
@@ -502,25 +476,9 @@ This will write to `antora/target/site`; we'll use the results in the xref:#publ
 
 === Revert site.yml
 
-Finally, restore the original `site.yml` file:
-
-* move the edited `site.yml` to `site.NEXT.yml` (in readiness for the _next_ release), and restore:
-+
-[source,bash,subs="attributes+"]
-----
-pushd antora/playbooks
-mv site.yml      site.NEXT.yml
-mv site.ORIG.yml site.yml
-popd
-----
-
-* commit
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$CAUSEWAYJIRA: reverts site.yml"
-----
+Optionally, restore the original `site.yml` file.
+However, you might want to leave it as is in case there is a requirement to regenerate the website.
+In any case, when the next release comes around, we will delete this branch anyway.
 
 
 include::partial$publish-and-index-website.adoc[]
@@ -608,10 +566,8 @@ jobs:
     env:
       # to be shared among all steps of this job
       BASELINE_MAIN: {page-causewayrelv3}
-      BASELINE_EDGE: 3.0.0-M1
+      BASELINE_EDGE: {page-causewayrelv3}
 ----
-+
-NOTE: We leave `BASELINE_EDGE` unchanged for the moment; we will update these release notes when we switch to the v3 release branch.
 
 * update any other CI scripts that might exist there.
 
@@ -625,20 +581,21 @@ git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
 
 == Update starter projects
 
-As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain four branches:
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain eight (!) branches:
 
-* `jpa` and `jdo`
+* `v2-jpa`; `v2-jdo`; `v3-jpa`; `v3-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-* `jpa-SNAPSHOT` and `jdo-SNAPSHOT`
+* `v2-jpa-SNAPSHOT`; `v2-jdo-SNAPSHOT`; `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `jpa` to `jpa-SNAPSHOT` and similarly moves `jdo` up to `jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+The general idea is that a release will fast-forward `v2-jpa` to `v2-jpa-SNAPSHOT` and similarly moves `v2-jdo` up to `v2-jdo-SNAPSHOT`, and then repeat the process for v3.
+The non-SNAPSHOT builds should always reference the most recently release of v2 or v3.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo` (where `$CAUSEWAYBRANCH` is "release-2.0.0-RC1", or "release-3.0.0-RC1" etc).
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
