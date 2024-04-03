@@ -19,14 +19,46 @@ However, 3.0.0:
 
 It also uses the `jakarta` namespace rather than `javax`.
 
-You should generally use
-
 
 There is one functional change, namely that support for xref:security:shiro:about.adoc[Shiro security] module has been dropped (for now).
 See the xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc#simple-security-replacement-for-shiro[migration notes] for options.
 
 
-
-NOTE: Not yet released.
-
 include::partial$2024/2.0.0/_relnotes.adoc[]
+
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+Version `3.x` also has a number of its own changes not present in the `2.x` release:
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3698[CAUSEWAY-3698] - Security Integration Replacement for Shiro INI based Realm
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3348[CAUSEWAY-3348] - [Programming Model] Support for Action Parameters as a Tuple using Java Records (Mixins only)
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3691[CAUSEWAY-3691] - [JUnit] Remove 'stable' from regression test artifact names
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3682[CAUSEWAY-3682] - [Commons] YamlUtils to support Java Records
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3275[CAUSEWAY-3275] - Migrate from Spring Framework 5.x to 6.x
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3699[CAUSEWAY-3699] - Lower v3 Baseline from Java 21 to 17
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3681[CAUSEWAY-3681] - [Regression] Cannot send Mail (3.x branch)
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3634[CAUSEWAY-3634] - [Wicket Viewer] Update to Wicket 10.0.0-M2
++
+Note that the final release uses Wicket 10.0
+
+== Not implemented (moved to Attic)
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2925[CAUSEWAY-2925] - [Vaa] Support for all fundemental Value Types
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2923[CAUSEWAY-2923] - [Vaa] Split the Vaadin Demo into JPA/JDO parts
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3407[CAUSEWAY-3407] - Thymeleaf/Webflux Viewer
+
