@@ -22,7 +22,7 @@ Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Causeway Core release {page-causewayrelv2}
+[RESULT] [VOTE] Apache Causeway Core release {page-causewayrelv3}
 ----
 
 using the body (alter last line as appropriate):
@@ -60,7 +60,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-causewayrelv2}                           # <.>
+export CAUSEWAYREL={page-causewayrelv3}                           # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -234,7 +234,7 @@ done
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh {page-causewayrelv2}
+sh upd.sh {page-causewayrelv3}
 ----
 
 The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.
@@ -390,7 +390,7 @@ git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
 +
 [source,bash,subs="attributes+"]
 ----
-git push origin {page-causewayrelv2}
+git push origin {page-causewayrelv3}
 ----
 
 
@@ -398,7 +398,7 @@ git push origin {page-causewayrelv2}
 === Generate the site
 
 To build the site , we need to update the `site.yml`.
-This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrelv2}).
+This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrelv3}).
 
 * Switch to the release branch:
 +
@@ -408,11 +408,11 @@ git checkout $CAUSEWAYBRANCH            #<.>
 ----
 <.> will be before the documentation branch of the current release
 
-* Update with the documentation branch for the current release ({page-causewayrelv2})
+* Update with the documentation branch for the current release ({page-causewayrelv3})
 +
 [source,bash,subs="attributes+"]
 ----
-git merge {page-causewayrelv2} --ff-only  #<.>
+git merge {page-causewayrelv3} --ff-only  #<.>
 ----
 <.> move forward to incorporate any changes made thus far on the documentation branch
 
@@ -451,11 +451,11 @@ content:
   sources:
     - url: .
       start_path: antora/components/docs # docs
-      branches: [{page-causewayrelv2}]
+      branches: [{page-causewayrelv3}]
       # ...
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [{page-causewayrelv2}]
+      branches: [{page-causewayrelv3}]
 ----
 +
 NOTE: Previously we built a site with the current version and all previous versions.
@@ -474,7 +474,7 @@ asciidoc:
     page-causewayrelv2: "..."     #<.>
     page-causewayrelv3: "..."     #<.>
 ----
-<.> needs to be (the current) `{page-causewayrelv2}`
+<.> needs to be (the current) `{page-causewayrelv3}`
 <.> needs to be (the current) `{page-causewayrelv3}`
 <.> needs to be set to the _next_ likely release version for v2.
 <.> needs to be set to the _next_ likely release version for v3 branch
@@ -538,10 +538,10 @@ In the `causeway` repo:
 RC=RC1                                                <.>
 git checkout master
 git pull
-git merge release-{page-causewayrelv2}-$RC
+git merge release-{page-causewayrelv3}-$RC
 git push origin master
-git branch -d release-{page-causewayrelv2}-$RC
-git push origin release-{page-causewayrelv2}-$RC --delete
+git branch -d release-{page-causewayrelv3}-$RC
+git push origin release-{page-causewayrelv3}-$RC --delete
 ----
 <.> adjust RC number as required
 
@@ -560,7 +560,7 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayrelv2}
+      BASELINE: {page-causewayrelv3}
 ----
 
 * in `ci-build-site-no-push.yml`:
@@ -572,7 +572,7 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayrelv2}
+      BASELINE: {page-causewayrelv3}
 ----
 
 * commit and push:
@@ -607,7 +607,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE_MAIN: {page-causewayrelv2}
+      BASELINE_MAIN: {page-causewayrelv3}
       BASELINE_EDGE: 3.0.0-M1
 ----
 +
@@ -664,14 +664,14 @@ For example, for a release of Apache Causeway Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Causeway version {page-causewayrelv2} Released
+[ANN] Apache Causeway version {page-causewayrelv3} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrelv2}.
+The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrelv3}.
 
 New features in this release include:
 
