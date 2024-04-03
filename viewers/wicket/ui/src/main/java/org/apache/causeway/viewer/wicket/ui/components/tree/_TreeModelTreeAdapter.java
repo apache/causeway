@@ -19,89 +19,85 @@
 package org.apache.causeway.viewer.wicket.ui.components.tree;
 
 import java.io.Serializable;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
+import org.apache.causeway.applib.graph.tree.TreeAdapterWithConverter;
+import org.apache.causeway.applib.graph.tree.TreeConverter;
 import org.apache.causeway.applib.graph.tree.TreePath;
-import org.apache.causeway.commons.functional.IndexedFunction;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-
-import lombok.NonNull;
-import lombok.val;
 
 /**
  *  {@link TreeAdapter} for _TreeModel nodes.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 class _TreeModelTreeAdapter
+extends TreeAdapterWithConverter<Object, _TreeNodeMemento>
 implements
     TreeAdapter<_TreeNodeMemento>,
+    TreeConverter<Object, _TreeNodeMemento>,
     HasMetaModelContext,
     Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Class<? extends TreeAdapter> treeAdapterClass;
+    private final Class<? extends TreeAdapter> delegateClass;
 
     /** non serializable delegate */
     private transient TreeAdapter delegate;
 
     _TreeModelTreeAdapter(
-            final Class<? extends TreeAdapter> treeAdapterClass) {
-        this.treeAdapterClass = treeAdapterClass;
+            final TreeAdapter delegate) {
+        this.delegate = delegate;
+        this.delegateClass = delegate.getClass();
+    }
+    
+    // -- TREE CONVERTER
+    
+    @Override
+    public _TreeNodeMemento fromUnderlyingNode(
+            final Object pojoNode, final _TreeNodeMemento parentNode, final int siblingIndex) {
+        return mementify(pojoNode, parentNode.getTreePath().append(siblingIndex));
     }
 
     @Override
-    public int childCountOf(final @Nullable _TreeNodeMemento treeModel) {
-        val pojoNode = demementify(treeModel);
-        if(pojoNode==null) {
-            return 0;
-        }
-        return delegateTreeAdapter().childCountOf(pojoNode);
-    }
-
-    @Override
-    public Stream<_TreeNodeMemento> childrenOf(final @Nullable _TreeNodeMemento treeModel) {
-        val pojoNode = demementify(treeModel);
-        if(pojoNode==null) {
-            return Stream.empty();
-        }
-        return delegateTreeAdapter().childrenOf(pojoNode)
-                .map(newPojoToTreeModelMapper(treeModel));
-    }
-
-    // -- HELPER
-    
-    _TreeNodeMemento mementify(final @NonNull Object pojo, final @NonNull TreePath treePath) {
-        return new _TreeNodeMemento(
-                treePath,
-                ManagedObject.adaptSingular(getSpecificationLoader(), pojo).getBookmark().orElseThrow());
-    }
-    
-    private @Nullable Object demementify(final @Nullable _TreeNodeMemento model) {
-        return model!=null
-                ? model.getPojo()
+    public @Nullable Object toUnderlyingNode(_TreeNodeMemento node) {
+        return node!=null
+                ? node.getPojo()
                 : null;
     }
-
-    private Function<Object, _TreeNodeMemento> newPojoToTreeModelMapper(final _TreeNodeMemento parent) {
-        return IndexedFunction.zeroBased((indexWithinSiblings, pojo)->
-        mementify(pojo, parent.getTreePath().append(indexWithinSiblings)));
+    
+    // -- TREE ADAPTER WITH CONVERTER
+    
+    @Override
+    protected TreeConverter<Object, _TreeNodeMemento> converter() {
+        return this;
     }
-
-    private TreeAdapter delegateTreeAdapter() {
+    
+    @Override
+    protected TreeAdapter<Object> underlyingAdapter() {
         if(delegate!=null) {
             return delegate;
         }
         try {
-            return delegate = getFactoryService().getOrCreate(treeAdapterClass);
+            return getFactoryService().getOrCreate(delegateClass);
         } catch (Exception e) {
-            throw new RuntimeException("failed to instantiate tree adapter", e);
+            throw _Exceptions.unrecoverable(e, "failed to instantiate tree adapter of type %s", 
+                    delegateClass.getName());
         }
+    }
+    
+    // -- HELPER
+    
+    _TreeNodeMemento mementify(final Object pojo, final TreePath treePath) {
+        return new _TreeNodeMemento(
+                treePath,
+                ManagedObject.adaptSingular(getSpecificationLoader(), pojo)
+                    .getBookmark()
+                    .orElseThrow());
     }
 
 }
