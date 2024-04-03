@@ -314,11 +314,11 @@ Adjust these instructions if necessary.
 
 First, we update all versions in `antora.yml`:
 
-* Update all `antora.yml` files to use the latest branch ({page-causewayrelv2}):
+* Update all `antora.yml` files to use the latest branch ({page-causewayrelv3}):
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv2}/g' {} \;
+find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv3}/g' {} \;
 ----
 
 * Commit all these changes:
@@ -331,14 +331,14 @@ git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 
 We now create a branch which can be referenced in the `site.yml`, later on.
 
-* We create the `{page-causewayrelv2}` branch.
+* We create the `{page-causewayrelv3}` branch.
 +
-This mirrors the "rel/causeway-{page-causewayrelv2}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
+This mirrors the "rel/causeway-{page-causewayrelv3}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
 +
 [source,bash,subs="attributes+"]
 ----
-git branch {page-causewayrelv2}
-git push origin {page-causewayrelv2}
+git branch {page-causewayrelv3}
+git push origin {page-causewayrelv3}
 ----
 
 Now we make sure that the docs in the new doc branch are actually up-to-date.
@@ -348,7 +348,7 @@ Now we make sure that the docs in the new doc branch are actually up-to-date.
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout {page-causewayrelv2}
+git checkout {page-causewayrelv3}
 ----
 
 * build framework
@@ -474,7 +474,7 @@ asciidoc:
     page-causewayrelv2: "..."     #<.>
     page-causewayrelv3: "..."     #<.>
 ----
-<.> needs to be (the current) `{page-causewayrelv3}`
+<.> needs to be (the current) `{page-causewayrelv2}`
 <.> needs to be (the current) `{page-causewayrelv3}`
 <.> needs to be set to the _next_ likely release version for v2.
 <.> needs to be set to the _next_ likely release version for v3 branch
