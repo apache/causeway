@@ -5,9 +5,7 @@
 :page-partial:
 
 
-NOTE: Not yet released.
-
-After almost six years effort (!), v2.0.0 and v3.0.0 are the first official releases of Apache Causeway, now re-platformed to run on Spring Boot.
+After almost six years effort (!), v2.0.0 and v3.0.0 are the first official releases of Apache Causeway, now re-platformed to run on Spring Boot v2.x and v3.x respectively.
 The two versions are being released at the same time.
 
 include::partial$2024/2.0.0/_relnotes.adoc[]

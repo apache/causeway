@@ -19,9 +19,9 @@ This table summarises all releases of Apache Causeway to date.
 | 3.0.0
 | _tba_
 | Release of Apache Causeway 3.0.0
-.2+| 5
-.2+| 25
-.2+| 12
+| 7
+| 28
+| 14
 .2+|
 * xref:relnotes:ROOT:2024/3.0.0/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc[3.0.0 Migration Notes]
@@ -30,6 +30,9 @@ This table summarises all releases of Apache Causeway to date.
 | 2.0.0
 | _tba_
 | Release of Apache Causeway 2.0.0
+| 5
+| 25
+| 12
 
 | 2.0.0-RC4
 | 2nd Jan 2024
