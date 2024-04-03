@@ -39,6 +39,22 @@
     <release>
       <Version>
         <name>causeway</name>
+        <created>2024-04-03</created>
+        <revision>2.0.0</revision>
+      </Version>
+    </release>
+
+    <release>
+      <Version>
+        <name>causeway</name>
+        <created>2024-04-03</created>
+        <revision>3.0.0</revision>
+      </Version>
+    </release>
+
+    <release>
+      <Version>
+        <name>causeway</name>
         <created>2024-01-02</created>
         <revision>2.0.0-RC4</revision>
       </Version>
