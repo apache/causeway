@@ -26,6 +26,8 @@ updates:
       - "dependencies"
       - "Spring Boot 2.x"
     ignore:
+      - dependency-name: "org.springframework.boot*"
+        versions: ["3.x"]
       - dependency-name: "org.apache.wicket*"
         versions: ["10.x"]
       - dependency-name: "org.wicketstuff*"
