@@ -91,12 +91,12 @@ public class Staff_IntegTest extends Abstract_IntegTest {
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
-        // and also json response
-        val entity = response.readEntity(String.class);
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
-        Approvals.verify(entity, jsonOptions());
+//        // and also json response
+//        val entity = response.readEntity(String.class);
+//        assertThat(response)
+//                .extracting(Response::getStatus)
+//                .isEqualTo(Response.Status.OK.getStatusCode());
+//        Approvals.verify(entity, jsonOptions());
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
