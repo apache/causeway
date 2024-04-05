@@ -27,6 +27,7 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.value.Blob;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +45,17 @@ public class Staff {
             final Department department
     ){
         return staffMemberRepository.create(name, department);
+    }
+
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public StaffMember createStaffMemberWithPhoto(
+            final String name,
+            final Department department,
+            final Blob photo
+    ){
+        final var staffMember = createStaffMember(name, department);
+        staffMember.setPhoto(photo);
+        return staffMember;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
