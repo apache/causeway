@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class Staff {
 
     final StaffMemberRepository staffMemberRepository;
+    final DepartmentRepository departmentRepository;
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public StaffMember createStaffMember(
@@ -50,9 +51,10 @@ public class Staff {
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public StaffMember createStaffMemberWithPhoto(
             final String name,
-            final Department department,
+            final Department.SecondaryKey departmentSecondaryKey,
             final Blob photo
     ){
+        var department = departmentRepository.findByName(departmentSecondaryKey.getName());
         final var staffMember = createStaffMember(name, department);
         staffMember.setPhoto(photo);
         return staffMember;

@@ -18,50 +18,27 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.staff;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacetFromAction;
-
-import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.transaction.annotation.Propagation;
 
-import lombok.Getter;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.io.DataSource;
+import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
+import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
+
 import lombok.SneakyThrows;
 import lombok.val;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Base64;
-import java.util.Optional;
-
-import com.google.common.io.Resources;
-import com.google.gson.GsonBuilder;
-
-public class Staff_IntegTest extends Abstract_IntegTest {
-
-    private GsonBuilder gsonBuilder;
-
-    @BeforeEach
-    void setup() {
-        gsonBuilder = new GsonBuilder();
-    }
+class Staff_IntegTest extends Abstract_IntegTest {
 
     @SneakyThrows
     @Test
@@ -78,25 +55,34 @@ public class Staff_IntegTest extends Abstract_IntegTest {
 
         assertThat(bookmarkBeforeIfAny).isEmpty();
 
-        final var photoEncoded = readFileAndEncodeAsBlob("StaffMember-photo-Bar.pdf");
+        final Blob photo = readFileAsBlob("StaffMember-photo-Bar.pdf");
         final var requestBuilder = restfulClient.request("services/university.dept.Staff/actions/createStaffMemberWithPhoto/invoke");
 
-        final var body = new Body(staffName, "Classics", photoEncoded);
-        final var bodyJson = gsonBuilder.create().toJson(body);
+        /*
+         *  String name,
+         *  Department.SecondaryKey departmentSecondaryKey,
+         *  Blob photo
+         */
+        var args = restfulClient.arguments()
+                .addActionParameter("name", staffName)
+                //.addActionParameter("departmentSecondaryKey", Map.of("name", "Classics")) ... can be used alternatively
+                .addActionParameter("departmentSecondaryKey", Department.SecondaryKey.class, new Department.SecondaryKey("Classics"))
+                .addActionParameter("photo", photo)
+                .build();
 
         // when
-        val response = requestBuilder.post(Entity.entity(bodyJson, "application/json"));
+        val response = requestBuilder.post(args);
 
         // then
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
-//        // and also json response
-//        val entity = response.readEntity(String.class);
-//        assertThat(response)
-//                .extracting(Response::getStatus)
-//                .isEqualTo(Response.Status.OK.getStatusCode());
-//        Approvals.verify(entity, jsonOptions());
+        // and also json response
+        val entity = response.readEntity(String.class);
+        assertThat(response)
+                .extracting(Response::getStatus)
+                .isEqualTo(Response.Status.OK.getStatusCode());
+        Approvals.verify(entity, jsonOptions());
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -106,57 +92,10 @@ public class Staff_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-    private String readFileAndEncodeAsBlob(String fileName) throws IOException, URISyntaxException {
-        byte[] bytes = Resources.toByteArray(Resources.getResource(Abstract_IntegTest.class, fileName));
-        String photoEncoded = encodePdf(fileName, bytes);
-        return photoEncoded;
-    }
-
-    private String encodePdf(final String fileName, final byte[] pdfBytes) throws URISyntaxException {
-        final String pdfBytesEncoded = Base64.getEncoder().encodeToString(pdfBytes);
-        final String encodedBlob = String.format("%s:%s:%s", fileName, "application/pdf", pdfBytesEncoded);
-        return encodedBlob;
-    }
-
-}
-
-
-@Getter
-class Body {
-
-    /**
-     * @param nameValue
-     * @param departmentValue
-     * @param blobValue - is the Blob encoded format: "filename.pdf:application/pdf:pdfBytesBase64Encoded"
-     */
-    Body(String nameValue, String departmentValue, String blobValue) {
-        photo = new Blob();
-        photo.value = blobValue;
-        name = new Name();
-        name.value = nameValue;
-        department = new Department();
-        department.value = departmentValue;
-    }
-
-    private Name name;
-
-    private Department department;
-
-    private Blob photo;
-
-    @Getter
-    static class Name {
-        private String value;
-    }
-
-    @Getter
-    static class Department {
-        private String value;
-    }
-
-    @Getter
-    static class Blob {
-        private String value;
+    private Blob readFileAsBlob(final String fileName) {
+        var bytes = DataSource.ofResource(Abstract_IntegTest.class, fileName)
+                .bytes();
+        return Blob.of(fileName, CommonMimeType.PDF, bytes);
     }
 
 }
