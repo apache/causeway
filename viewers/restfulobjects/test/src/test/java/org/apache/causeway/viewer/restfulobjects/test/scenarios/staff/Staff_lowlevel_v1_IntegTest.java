@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response;
 import com.google.common.io.Resources;
 import com.google.gson.GsonBuilder;
 
+import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +46,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
 
-public class Staff_Orig_IntegTest extends Abstract_IntegTest {
+public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
     private GsonBuilder gsonBuilder;
 
@@ -57,7 +58,7 @@ public class Staff_Orig_IntegTest extends Abstract_IntegTest {
     @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
-    public void can_create_staff_member() {
+    public void createStaffMemberWithPhoto2() {
 
         // given
         final var staffName = "Fred Smith";
@@ -67,27 +68,33 @@ public class Staff_Orig_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(staffMember);
         }).valueAsNonNullElseFail();
 
+        assertThat(bookmarkBeforeIfAny).isEmpty();
+
+        // and given
         final var departmentName = "Classics";
         final var departmentBookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = departmentRepository.findByName(departmentName);
             return bookmarkService.bookmarkFor(staffMember).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        assertThat(bookmarkBeforeIfAny).isEmpty();
-
-        final var photoEncoded = readFileAndEncodeAsBlob("StaffMember-photo-Bar.pdf");
         String departmentHref = asRelativeHref(departmentBookmark);
         Invocation.Builder departmentRequest = restfulClient.request(departmentHref);
         Response departmentResponse = departmentRequest.get();
         assertThat(departmentResponse.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
 
-        final var requestBuilder = restfulClient.request("services/university.dept.Staff/actions/createStaffMemberWithPhoto/invoke");
+        // and given
+        final var photoEncoded = readFileAndEncodeAsBlob("StaffMember-photo-Bar.pdf");
 
+        // when create request
+        final var requestBuilder = restfulClient.request("services/university.dept.Staff/actions/createStaffMemberWithPhoto2/invoke");
 
         final var body = new Body(staffName, asAbsoluteHref(departmentBookmark), photoEncoded);
         final var bodyJson = gsonBuilder.create().toJson(body);
 
-        // when
+        // then
+        Approvals.verify(bodyJson, jsonOptions());
+
+        // and when send request
         val response = requestBuilder.post(Entity.entity(bodyJson, "application/json"));
 
         // then
@@ -96,7 +103,6 @@ public class Staff_Orig_IntegTest extends Abstract_IntegTest {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
-        // Approvals.verify(entity, jsonOptions());
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -106,12 +112,12 @@ public class Staff_Orig_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-    private String asRelativeHref(Bookmark bookmark) {
-        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
-    }
-
     private String asAbsoluteHref(Bookmark bookmark) {
         return String.format("%s%s", restfulClient.getConfig().getRestfulBaseUrl(), asRelativeHref(bookmark));
+    }
+
+    private String asRelativeHref(Bookmark bookmark) {
+        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
     }
 
     private String readFileAndEncodeAsBlob(String fileName) throws IOException, URISyntaxException {
@@ -135,16 +141,14 @@ public class Staff_Orig_IntegTest extends Abstract_IntegTest {
          * @param blobValue - is the Blob encoded format: "filename.pdf:application/pdf:pdfBytesBase64Encoded"
          */
         Body(String nameValue, String departmentHrefValue, String blobValue) {
-            photo = new org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Blob(blobValue);
-            name = new org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Name(nameValue);
-            department = new org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Department(new org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Value(departmentHrefValue));
+            photo = new Blob(blobValue);
+            name = new Name(nameValue);
+            department = new Department(new Department.Value(departmentHrefValue));
         }
 
-        private org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Name name;
-
-        private org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Department department;
-
-        private org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Blob photo;
+        private Name name;
+        private Department department;
+        private Blob photo;
 
         @lombok.Value
         static class Name {
@@ -153,21 +157,20 @@ public class Staff_Orig_IntegTest extends Abstract_IntegTest {
 
         @lombok.Value
         static class Department {
-            private org.apache.causeway.viewer.restfulobjects.test.scenarios.staff.Body.Value value;
-        }
+            private Value value;
 
-        @lombok.Value
-        static class Value {
-            private String href;
+            @lombok.Value
+            static class Value {
+                private String href;
+            }
+
         }
 
         @lombok.Value
         static class Blob {
             private String value;
         }
-
     }
-
 
 }
 

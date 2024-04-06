@@ -172,7 +172,7 @@ public class RestfulClient implements AutoCloseable {
     // -- ARGUMENT BUILDER
 
     public ActionParameterListBuilder arguments() {
-        return new ActionParameterListBuilder();
+        return new ActionParameterListBuilder(this);
     }
 
     // -- RESPONSE PROCESSING
