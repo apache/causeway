@@ -624,24 +624,24 @@ git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
 
 == Update starter projects
 
-As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain four branches:
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain eight branches:
 
-* `jpa` and `jdo`
+* `v3-jpa`, `v3-jdo`, `v2-jpa,` `v2-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-* `jpa-SNAPSHOT` and `jdo-SNAPSHOT`
+* `v3-jpa-SNAPSHOT`, `v3-jdo-SNAPSHOT`, `v2-jpa-SNAPSHOT`, `v2-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `jpa` to `jpa-SNAPSHOT` and similarly moves `jdo` up to `jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+The general idea is that a release will fast-forward `v2-jpa` to `v2-jpa-SNAPSHOT` and similarly moves `v2-jdo` up to `v2-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process, and then repeat for v3.
 
 In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
-IMPORTANT: The `jpa` and `jdo` branches should always work against the most recent release, whereas the `jpa-SNAPSHOT` and `jdo-SNAPSHOT` can reference more recently nightly builds if necessary.
+IMPORTANT: The `v{2,3}-{jpa,jdo}` branches should always work against the most recent release, whereas the `v{2,3}-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
 
 
 == Update the reference app
