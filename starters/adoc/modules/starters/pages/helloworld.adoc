@@ -12,10 +12,10 @@ The application is also built nightly as a docker image, so you can quickly try 
 
 [source,bash]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-helloworld:jpa-SNAPSHOT
+docker run -d -p 8080:8080 apache/causeway-app-helloworld:v3-jpa-SNAPSHOT
 ----
 
-Replace "jpa" with "jdo" if using the JDO ORM.
+Replace "v3-jpa" with "v3-jdo" if using the JDO ORM.
 
 
 Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Causeway app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.

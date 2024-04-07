@@ -138,7 +138,6 @@ _Releases_
 _Interim Builds_
 
 * xref:comguide:ROOT:nightly-builds.adoc[]
-* xref:comguide:ROOT:nightly-deploys.adoc[]
 * xref:comguide:ROOT:weekly-builds.adoc[]
 * link:https://apache-causeway-committers.github.io/causeway-nightly[Website preview] (not ASF hosted)
 

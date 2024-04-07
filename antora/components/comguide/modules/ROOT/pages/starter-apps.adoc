@@ -6,21 +6,13 @@
 
 == Simpleapp Maintenance (JDO and JPA)
 
-When making updates for simpleapp, use the following process:
+When making updates for simpleapp, to the current snapshot:
 
-=== If the change applies to the currently released version:
-
-. make change to jpa, then merge down to jpa-SNAPSHOT
-. also merge jpa -> jdo, and fix any persistence differences if nec.
-. then merge jpa -> jpa-SNAPSHOT
-. finally, merge jpa-SNAPSHOT -> jdo-SNAPSHOT (should be a no-op)
-
-Doing it this way makes it easy to keep the branches in sync.
-
-=== If the change applies to the current snapshot, then simply:
-
-. make change to jpa-SNAPSHOT
-. merge jpa-SNAPSHOT to jdo-SNAPSHOT, and fix any persistence differences
+. make change to `v2-jpa-SNAPSHOT`
+. forward port from `v2-jpa-SNAPSHOT` to `v3-jpa-SNAPSHOT`
+. merge down from `v2-jpa-SNAPSHOT` to `v2-jdo-SNAPSHOT`
+. forward port from `v2-jdo-SNAPSHOT` to `v3-jdo-SNAPSHOT`
+. merge down from `v3-jpa-SNAPSHOT` to `v3-jdo-SNAPSHOT` (should be a no-op)
 
 [NOTE]
 ====
