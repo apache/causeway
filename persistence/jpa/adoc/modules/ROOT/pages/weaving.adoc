@@ -76,8 +76,7 @@ To enable runtime weaving, set xref:refguide:config:sections/eclipselink.adoc#ec
 eclipselink.weaving=true
 ----
 
-
-As well as setting the above configuration options, it's also necessary to run the application with the `spring-instrument.jar` Java agent, which actually performs the weaving at load-time.
+It's also necessary to run the application with the `spring-instrument.jar` Java agent, which actually performs the weaving at load-time.
 
 * Download this jar file using:
 +
