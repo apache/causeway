@@ -148,7 +148,7 @@ import lombok.NonNull;
         StringValueSemantics.class,
         PasswordValueSemantics.class,
         BufferedImageValueSemantics.class,
-        BlobValueSemantics.class,
+        BlobValueSemantics.AutoConfiguration.class,
         ClobValueSemantics.class,
         MarkupValueSemantics.class,
         URLValueSemantics.class,

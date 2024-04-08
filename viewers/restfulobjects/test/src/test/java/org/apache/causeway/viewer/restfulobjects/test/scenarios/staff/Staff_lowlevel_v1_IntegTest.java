@@ -20,8 +20,13 @@ package org.apache.causeway.viewer.restfulobjects.test.scenarios.staff;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+import javax.annotation.Priority;
+import javax.inject.Named;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
@@ -29,14 +34,31 @@ import javax.ws.rs.core.Response;
 import com.google.common.io.Resources;
 import com.google.gson.GsonBuilder;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
+import org.apache.causeway.schema.common.v2.ValueType;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -46,6 +68,10 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
 
+
+@Order(value = Integer.MAX_VALUE)   // last
+@DirtiesContext
+@Import({Staff_lowlevel_v1_IntegTest.BlobValueSemanticsV1LegacyEncoding.class})
 public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
     private GsonBuilder gsonBuilder;
@@ -172,6 +198,84 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         }
     }
 
+    @Component
+    @Named("causeway.metamodel.value.BlobValueSemantics")
+    @Priority(PriorityPrecedence.EARLY)
+    public static class BlobValueSemanticsV1LegacyEncoding
+            extends BlobValueSemantics
+            implements
+            Renderer<Blob> {
+
+        public BlobValueSemanticsV1LegacyEncoding(){
+        }
+
+        @Override
+        public Class<Blob> getCorrespondingClass() {
+            return Blob.class;
+        }
+
+        @Override
+        public ValueType getSchemaValueType() {
+            return ValueType.BLOB;
+        }
+
+        // -- COMPOSER
+
+        @Override
+        public ValueDecomposition decompose(final Blob value) {
+            return decomposeAsString(value, this::toEncodedString, () -> null);
+        }
+
+        @Override
+        public Blob compose(final ValueDecomposition decomposition) {
+            return composeFromString(decomposition, this::fromEncodedString, ()->null);
+        }
+
+        // RENDERER
+
+        @Override
+        public String titlePresentation(final ValueSemanticsProvider.Context context, final Blob value) {
+            return renderTitle(value, Blob::getName);
+        }
+
+        @Override
+        public String htmlPresentation(final ValueSemanticsProvider.Context context, final Blob value) {
+            return renderHtml(value, Blob::getName);
+        }
+
+        private String toEncodedString(final Blob blob) {
+            return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
+            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
+        }
+
+        private Blob fromEncodedString(final String data) {
+            final int colonIdx = data.indexOf(':');
+            final String name  = data.substring(0, colonIdx);
+            final int colon2Idx  = data.indexOf(":", colonIdx+1);
+            final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
+            final String payload = data.substring(colon2Idx+1);
+            final byte[] bytes = _Bytes.decodeBase64(Base64.getDecoder(), payload.getBytes(StandardCharsets.UTF_8));
+            try {
+                return new Blob(name, new MimeType(mimeTypeBase), bytes);
+            } catch (MimeTypeParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // -- EXAMPLES
+
+        @Override
+        public Can<Blob> getExamples() {
+            return Can.of(
+                    Blob.of("a Blob", NamedWithMimeType.CommonMimeType.BIN, new byte[] {1, 2, 3}),
+                    Blob.of("another Blob", NamedWithMimeType.CommonMimeType.BIN, new byte[] {3, 4}));
+        }
+
+    }
+
+
 }
+
+
 
 
