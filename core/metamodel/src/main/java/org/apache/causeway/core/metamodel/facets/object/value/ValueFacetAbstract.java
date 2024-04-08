@@ -86,8 +86,8 @@ implements ValueFacet<T> {
         this.valueClass = valueClass;
         this.allValueSemantics = allValueSemantics;
         this.valueSerializer = selectDefaultSemantics()
-                .map(ValueSerializerDefault::forSemantics)
-                .orElse(null); // JUnit support
+                .<ValueSerializer<T>>map(ValueSerializerDefault::forSemantics)
+                .orElseGet(()->ValueSerializerFallback.forValueType(valueClass));
     }
 
     protected boolean hasSemanticsProvider() {

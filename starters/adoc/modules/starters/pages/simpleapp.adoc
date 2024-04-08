@@ -11,10 +11,10 @@ The application is also built nightly as a docker image, so you can quickly try 
 
 [source,bash]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-simpleapp:jpa-SNAPSHOT
+docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v3-jpa-SNAPSHOT
 ----
 
-Replace "jpa" with "jdo" if using the JDO ORM.
+Replace "v3-jpa" with "v3-jdo" if using the JDO ORM.
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
 

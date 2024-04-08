@@ -558,8 +558,8 @@ These are the branches referenced from the home page and getting started pages o
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT` and similarly moves `vN-jdo` up to `vN-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
-This is done for both current `vN` branches.
+The general idea is that a release will fast-forward `v{2,3}-jpa` to `v{2,3}-jpa-SNAPSHOT` and similarly moves `v{2,3}-jdo` up to `v{2,3}-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+This is done for all current `vN` branches.
 
 In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
 

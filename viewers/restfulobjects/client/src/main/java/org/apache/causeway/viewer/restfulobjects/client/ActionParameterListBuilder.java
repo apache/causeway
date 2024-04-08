@@ -24,9 +24,20 @@ import java.util.stream.Collectors;
 
 import jakarta.ws.rs.client.Entity;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.util.schema.CommonDtoUtils;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.commons.io.JsonUtils;
+import org.apache.causeway.schema.common.v2.BlobDto;
+import org.apache.causeway.schema.common.v2.ClobDto;
+import org.apache.causeway.schema.common.v2.ValueType;
+import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * @since 2.0 {@index}
@@ -88,6 +99,51 @@ public class ActionParameterListBuilder {
         return this;
     }
 
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final Blob blob) {
+        var blobDto = new BlobDto();
+        blobDto.setName(blob.getName());
+        blobDto.setMimeType(blob.getMimeType().getBaseType());
+        blobDto.setBytes(blob.getBytes());
+        var fundamentalTypeDto = new ValueWithTypeDto();
+        fundamentalTypeDto.setType(ValueType.BLOB);
+        fundamentalTypeDto.setBlob(blobDto);
+        actionParameters.put(parameterName, value(CommonDtoUtils.getFundamentalValueAsJson(fundamentalTypeDto)));
+        actionParameterTypes.put(parameterName, Blob.class);
+        return this;
+    }
+
+    public ActionParameterListBuilder addActionParameter(final String parameterName, final Clob clob) {
+        var clobDto = new ClobDto();
+        clobDto.setName(clob.getName());
+        clobDto.setMimeType(clob.getMimeType().getBaseType());
+        clobDto.setChars(clob.asString());
+        var fundamentalTypeDto = new ValueWithTypeDto();
+        fundamentalTypeDto.setType(ValueType.CLOB);
+        fundamentalTypeDto.setClob(clobDto);
+        actionParameters.put(parameterName, value(CommonDtoUtils.getFundamentalValueAsJson(fundamentalTypeDto)));
+        actionParameterTypes.put(parameterName, Blob.class);
+        return this;
+    }
+
+    public ActionParameterListBuilder addActionParameter(final String parameterName,
+            final @NonNull Map<String, Object> map) {
+        var nestedJson = JsonUtils.toStringUtf8(map);
+        actionParameters.put(parameterName, value(nestedJson));
+        actionParameterTypes.put(parameterName, Map.class);
+        return this;
+    }
+
+    public <T> ActionParameterListBuilder addActionParameter(final String parameterName,
+            final @NonNull Class<T> type,
+            final @Nullable T object) {
+        var nestedJson = object!=null
+            ? JsonUtils.toStringUtf8(object)
+            : "NULL"; // see ValueSerializerDefault.ENCODED_NULL
+        actionParameters.put(parameterName, value(nestedJson));
+        actionParameterTypes.put(parameterName, type);
+        return this;
+    }
+
     /**
      * For transport of {@link ValueDecomposition} over REST.
      * @see RestfulClient#digestValue(jakarta.ws.rs.core.Response, org.apache.causeway.applib.value.semantics.ValueSemanticsProvider)
@@ -96,14 +152,7 @@ public class ActionParameterListBuilder {
         return addActionParameter(parameterName, decomposition.stringify());
     }
 
-//XXX would be nice to have, but also requires the RO spec to be updated
-//    public ActionParameterListBuilder addActionParameterDto(String parameterName, Object parameterDto) {
-//        actionParameters.put(parameterName, dto(parameterDto));
-//        return this;
-//    }
-
     public Entity<String> build() {
-
         final StringBuilder sb = new StringBuilder();
         sb.append("{\n")
         .append(actionParameters.entrySet().stream()

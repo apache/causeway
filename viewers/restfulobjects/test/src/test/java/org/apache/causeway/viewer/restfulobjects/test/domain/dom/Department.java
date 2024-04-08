@@ -45,7 +45,10 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.SemanticsOf;
+import org.apache.causeway.applib.annotation.Value;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -63,8 +66,13 @@ import lombok.val;
 @DomainObjectLayout(describedAs = "University department specializing in a field of study")
 public class Department implements Comparable<Department> {
 
+    @Value
+    @Data @NoArgsConstructor @AllArgsConstructor
+    public static class SecondaryKey {
+        String name;
+    }
 
-    public Department(String name, DeptHead deptHead) {
+    public Department(final String name, final DeptHead deptHead) {
         this.name = name;
         this.deptHead = deptHead;
     }
@@ -87,7 +95,7 @@ public class Department implements Comparable<Department> {
             return getName();
         }
 
-        public String validate0Act(String name) {
+        public String validate0Act(final String name) {
             if (name.contains("!")) {
                 return "Name cannot contain '!' character";
             }
@@ -104,7 +112,7 @@ public class Department implements Comparable<Department> {
     private DeptHead deptHead;
 
     // overriding the default via @DomainObject to filter out the current dept head.
-    public List<DeptHead> autoCompleteDeptHead(String search) {
+    public List<DeptHead> autoCompleteDeptHead(final String search) {
         return deptHeadRepository.findByNameContaining(search)
                 .stream()
                 .filter(x -> x != getDeptHead())
@@ -115,14 +123,14 @@ public class Department implements Comparable<Department> {
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "deptHead")
     public class changeDeptHead {
-        public Department act(DeptHead newDeptHead) {
+        public Department act(final DeptHead newDeptHead) {
             setDeptHead(newDeptHead);
             return Department.this;
         }
         public DeptHead default0Act() {
             return getDeptHead();
         }
-        public String validate0Act(DeptHead newDeptHead) {
+        public String validate0Act(final DeptHead newDeptHead) {
             if (newDeptHead == getDeptHead()) {
                 return "Same as current";
             }
@@ -144,7 +152,7 @@ public class Department implements Comparable<Department> {
     @ActionLayout(associateWith = "staffMembers")
     public class addStaffMember {
 
-        public Department act(StaffMember staffMember) {
+        public Department act(final StaffMember staffMember) {
             val department = Department.this;
 
             department.staffMembers.add(staffMember);
@@ -157,7 +165,7 @@ public class Department implements Comparable<Department> {
     @ActionLayout(associateWith = "staffMembers")
     public class addStaffMembers {
 
-        public Department act(List<StaffMember> staffMembers) {
+        public Department act(final List<StaffMember> staffMembers) {
             val department = Department.this;
 
             staffMembers.forEach(sm -> sm.setDepartment(department));
@@ -181,7 +189,7 @@ public class Department implements Comparable<Department> {
     @RequiredArgsConstructor
     public class removeStaffMember {
 
-        public Department act(StaffMember staffMember) {
+        public Department act(final StaffMember staffMember) {
             val department = Department.this;
 
             department.getStaffMembers().add(staffMember);

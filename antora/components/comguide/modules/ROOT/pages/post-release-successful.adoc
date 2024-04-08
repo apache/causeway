@@ -599,7 +599,7 @@ In order that we don't break the starter apps while a release is being voted on,
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
-IMPORTANT: The `jpa` and `jdo` branches should always work against the most recent release, whereas the `jpa-SNAPSHOT` and `jdo-SNAPSHOT` can reference more recently nightly builds if necessary.
+IMPORTANT: The `v{2,3}-{jpa,jdo}` branches should always work against the most recent release, whereas the `v{2,3}-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
 
 
 == Update the reference app

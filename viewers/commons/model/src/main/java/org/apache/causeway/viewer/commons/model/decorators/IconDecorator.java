@@ -33,7 +33,7 @@ public interface IconDecorator<T, R> {
      * corresponds to the webjars path as provided by the maven artifact
      * {@code org.webjars:font-awesome}
      */
-    public static final String FONTAWESOME_RESOURCE = "font-awesome/6.5.1/css/all.min.css";
+    public static final String FONTAWESOME_RESOURCE = "font-awesome/6.5.2/css/all.min.css";
 
     R decorate(T uiComponent, Optional<FontAwesomeLayers> faLayers);
 

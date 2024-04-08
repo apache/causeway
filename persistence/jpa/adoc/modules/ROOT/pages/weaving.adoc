@@ -5,22 +5,104 @@
 
 A responsibility of all ORMs is lazy loading of related objects (so as not to load all the data in one go), and tracking of objects as they are modified (to flush back to the database).
 
-With JPA, this is typically done dynamically at runtime, using a Java agent.
-The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this.
-See xref:#runtime[below] for further details on how to set this up.
+With JPA, the code that performs this is "weaved" into your own domain entity code.
+This "weaving" can be done either statically during compile-time, or dynamically at runtime using a Java agent.
 
 
-== Configuration
 
-There are a number of EclipseLink configuration options to set or optionally to be set to enable weaving:
+[#compiletime]
+== Static (Compile-time) Weaving
 
-* at a minimum, set xref:refguide:config:sections/eclipselink.adoc#eclipselink.weaving[eclipselink.weaving]:
+To enable static weaving, set xref:refguide:config:sections/eclipselink.adoc#eclipselink.weaving[eclipselink.weaving]:
+
+[source,properties]
+.application.properties
+----
+eclipselink.weaving=static
+----
+
+WARNING: The ability to set `static` as a value is currently broken in 2.0.0/3.0.0; but a fix is available in the xref:comguide::nightly-builds.adoc[].
+
+In addition, add the following to the `pom.xml` of all modules that contain JPA entities:
+
+[source,xml]
+.pom.xml
+----
+ <build>
+    <plugins>
+        <plugin>
+            <groupId>com.ethlo.persistence.tools</groupId>
+            <artifactId>eclipselink-maven-plugin</artifactId>
+            <version>2.7.9.1</version>
+            <executions>
+                <execution>
+                    <id>weave</id>
+                    <phase>process-classes</phase>
+                    <goals>
+                        <goal>weave</goal>
+                    </goals>
+                    <configuration>
+                        <basePackage>domainapp.modules.simple.dom</basePackage> <!--.-->
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+<build>
+----
+<.> Update as required.
+
+And in the IDE, you may need to also configure to ensure that this weaving is performed as necessary, for example:
+
+image::enable-static-weaving-in-IntelliJ.png[]
+
+NOTE: Thanks for the contribution via link:https://the-asf.slack.com/archives/CFC42LWBV/p1712451654657869?thread_ts=1709070676.947439&cid=CFC42LWBV[Slack] channel.
+
+
+[#runtime]
+== Dynamic (Runtime) Weaving
+
+
+WARNING: This is currently broken in 2.0.0/3.0.0.
+The workaround is to use xref:#compiletime[static] weaving instead.
+
+The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate the dynamic agent approach.
+
+To enable runtime weaving, set xref:refguide:config:sections/eclipselink.adoc#eclipselink.weaving[eclipselink.weaving]:
 +
 [source,properties]
 .application.properties
 ----
 eclipselink.weaving=true
 ----
+
+It's also necessary to run the application with the `spring-instrument.jar` Java agent, which actually performs the weaving at load-time.
+
+* Download this jar file using:
++
+[source,bash]
+----
+mvn dependency:fetchData -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
+----
+=
+changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Causeway parent `pom.xml`.
+
+* Move and rename this file, eg to `lib/spring-instrument.jar`.
+
+* Run the application using:
++
+[source,bash]
+----
+-javaagent:lib/spring-instrument.jar
+----
++
+as a JVM option.
+
+
+
+== Configuration
+
+There are a number of other EclipseLink configuration options relate to weaving:
 
 * in addition, optionally set the following (their default values are shown):
 +
@@ -60,29 +142,3 @@ causeway.core.meta-model.introspector.policy=encapsulation_enabled
 ----
 
 The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps both use the latter option.
-
-[#runtime]
-== Runtime
-
-As well as setting the above configuration options, it's also neceesary to run the application with the `spring-instrument.jar` Java agent, which actually performs the weaving at load-time.
-
-* Download this jar file using:
-+
-[source,bash]
-----
-mvn dependency:fetchData -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
-----
-=
-changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Causeway parent `pom.xml`.
-
-* Move and rename this file, eg to `lib/spring-instrument.jar`.
-
-* Run the application using:
-+
-[source,bash]
-----
--javaagent:lib/spring-instrument.jar
-----
-+
-as a JVM option.
-
