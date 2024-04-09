@@ -1,0 +1,2 @@
+# ClassOrderer$OrderAnnotation sorts classes based on their @Order annotation
+junit.jupiter.testclass.order.default=org.junit.jupiter.api.ClassOrderer$OrderAnnotation

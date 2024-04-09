@@ -17,7 +17,9 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,20 +28,21 @@
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>causeway-viewer-restfulobjects-test</artifactId>
+	<artifactId>causeway-viewer-restfulobjects-test</artifactId>
 
 	<name>Apache Causeway Viewer - RO (Test)</name>
 
-    <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.test</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/viewer/restfulobjects/test</git-plugin.propertiesDir>
+	<properties>
+		<jar-plugin.automaticModuleName>
+			org.apache.causeway.viewer.restfulobjects.test</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/viewer/restfulobjects/test</git-plugin.propertiesDir>
 
-        <maven.install.skip>true</maven.install.skip>
-        <maven.deploy.skip>true</maven.deploy.skip>
+		<maven.install.skip>true</maven.install.skip>
+		<maven.deploy.skip>true</maven.deploy.skip>
 
-    </properties>
+	</properties>
 
-    <build>
+	<build>
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>
@@ -52,126 +55,132 @@
 		</testResources>
 	</build>
 
-    <dependencies>
+	<dependencies>
 
-        <!-- TESTING -->
-
-		<dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-webapp</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<!-- TESTING -->
 
 		<dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-commons-services</artifactId>
-            <scope>test</scope>
-        </dependency>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-webapp</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-commons-services</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-runtimeservices</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.persistence</groupId>
-            <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.security</groupId>
-            <artifactId>causeway-security-bypass</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.testing</groupId>
-            <artifactId>causeway-testing-fixtures-applib</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-restfulobjects-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.viewer</groupId>
-            <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-runtimeservices</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.persistence</groupId>
+			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.security</groupId>
+			<artifactId>causeway-security-bypass</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.core</groupId>
+			<artifactId>causeway-core-internaltestsupport</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.testing</groupId>
+			<artifactId>causeway-testing-fixtures-applib</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <!-- we use log4j-2 instead -->
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test-autoconfigure</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<!-- we use log4j-2 instead -->
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-test-autoconfigure</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.inject</groupId>
+			<artifactId>jersey-hk2</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.gavlyukovskiy</groupId>
-            <artifactId>datasource-proxy-spring-boot-starter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.vertical-blank</groupId>
-            <artifactId>sql-formatter</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.gavlyukovskiy</groupId>
+			<artifactId>datasource-proxy-spring-boot-starter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.vertical-blank</groupId>
+			<artifactId>sql-formatter</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>com.approvaltests</groupId>
-            <artifactId>approvaltests</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.approvaltests</groupId>
+			<artifactId>approvaltests</artifactId>
+			<scope>test</scope>
+		</dependency>
 
-    </dependencies>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
 </project>

@@ -60,6 +60,17 @@ public class Staff {
         return staffMember;
     }
 
+    @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+    public StaffMember createStaffMemberWithPhoto2(
+            final String name,
+            final Department department,
+            final Blob photo
+    ){
+        final var staffMember = createStaffMember(name, department);
+        staffMember.setPhoto(photo);
+        return staffMember;
+    }
+
     @Action(semantics = SemanticsOf.SAFE)
     public List<StaffMember> findAllStaffMembers(){
         return staffMemberRepository.findAll();
