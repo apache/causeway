@@ -114,9 +114,9 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             return ManagedObject.value(spec, pojo);
         }
 
-        // best effort: try 'String' type
-        return asStringElseFail(valueRepr, valueSerializer)
-                .map(string->ManagedObject.value(spec, string))
+        // best effort: try 'String' repr. type
+        return recoverPojoFromStringElseFail(valueRepr, valueSerializer)
+                .map(pojo->ManagedObject.value(spec, pojo))
                 .orElseGet(()->ManagedObject.empty(spec));
     }
 
@@ -139,7 +139,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
      * Returns the recovered nullable String, wrapped as optional.
      * @throws IllegalArgumentException if cannot be parsed as String
      */
-    private static Optional<String> asStringElseFail(
+    private static Optional<Object> recoverPojoFromStringElseFail(
             final JsonRepresentation valueRepr,
             final ValueSerializer<?> valueSerializer) {
         if (valueRepr.isString()) {
@@ -147,17 +147,8 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                     valueSerializer.destring(Format.JSON, valueRepr.asString()))
                     .mapFailure(ex->_Exceptions
                             .illegalArgument(ex, "Unable to parse value %s as String", valueRepr))
-                    .ifFailureFail()
-                    .getValue().orElse(null);
-                    ;
-            if(recoveredValue==null) {
-                return Optional.empty();
-            }
-            val recoveredStringIfAny = _Casts.castTo(String.class, recoveredValue);
-            if(recoveredStringIfAny.isPresent()) {
-                return recoveredStringIfAny;
-            }
-            throw _Exceptions.illegalArgument("Unable to parse value %s as String", recoveredValue.getClass());
+                    .valueAsNullableElseFail();
+            return Optional.ofNullable(recoveredValue);
         }
         throw _Exceptions.illegalArgument("Unable to parse value %s as String"
                 + " (using 'String' as a fallback attempt)", valueRepr);

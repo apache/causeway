@@ -22,12 +22,10 @@ import java.util.function.UnaryOperator;
 
 import javax.annotation.Priority;
 import javax.inject.Named;
-import javax.inject.Provider;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;

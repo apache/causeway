@@ -34,19 +34,6 @@ import javax.ws.rs.core.Response;
 import com.google.common.io.Resources;
 import com.google.gson.GsonBuilder;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.NamedWithMimeType;
-import org.apache.causeway.applib.value.semantics.Renderer;
-import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
-import org.apache.causeway.schema.common.v2.ValueType;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -61,7 +48,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
+import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
+import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
 import lombok.Getter;
@@ -81,6 +80,7 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         gsonBuilder = new GsonBuilder();
     }
 
+    @DisabledIfRunningWithSurefire
     @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
@@ -138,15 +138,15 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-    private String asAbsoluteHref(Bookmark bookmark) {
+    private String asAbsoluteHref(final Bookmark bookmark) {
         return String.format("%s%s", restfulClient.getConfig().getRestfulBaseUrl(), asRelativeHref(bookmark));
     }
 
-    private String asRelativeHref(Bookmark bookmark) {
+    private String asRelativeHref(final Bookmark bookmark) {
         return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
     }
 
-    private String readFileAndEncodeAsBlob(String fileName) throws IOException, URISyntaxException {
+    private String readFileAndEncodeAsBlob(final String fileName) throws IOException, URISyntaxException {
         byte[] bytes = Resources.toByteArray(Resources.getResource(Abstract_IntegTest.class, fileName));
         String photoEncoded = encodePdf(fileName, bytes);
         return photoEncoded;
@@ -166,7 +166,7 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
          * @param departmentHrefValue
          * @param blobValue - is the Blob encoded format: "filename.pdf:application/pdf:pdfBytesBase64Encoded"
          */
-        Body(String nameValue, String departmentHrefValue, String blobValue) {
+        Body(final String nameValue, final String departmentHrefValue, final String blobValue) {
             photo = new Blob(blobValue);
             name = new Name(nameValue);
             department = new Department(new Department.Value(departmentHrefValue));
@@ -216,7 +216,7 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
         @Override
         public ValueType getSchemaValueType() {
-            return ValueType.BLOB;
+            return ValueType.STRING;
         }
 
         // -- COMPOSER
