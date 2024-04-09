@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Entity;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -48,6 +50,19 @@ public class ActionParameterListBuilder {
 
     @Getter
     private final Map<String, Class<?>> actionParameterTypes = new LinkedHashMap<>();
+
+    private final RestfulClient restfulClient;
+
+    /**
+     * @deprecated  - use {@link RestfulClient#arguments()}
+     */
+    @Deprecated
+    public ActionParameterListBuilder() {
+        this(null);
+    }
+    public ActionParameterListBuilder(RestfulClient restfulClient) {
+        this.restfulClient = restfulClient;
+    }
 
     public ActionParameterListBuilder addActionParameter(final String parameterName, final String parameterValue) {
         actionParameters.put(parameterName, parameterValue != null
@@ -133,7 +148,35 @@ public class ActionParameterListBuilder {
         return this;
     }
 
-    public <T> ActionParameterListBuilder addActionParameter(final String parameterName,
+    public ActionParameterListBuilder addActionParameter(
+            final @NonNull String parameterName,
+            final @NonNull Bookmark bookmark) {
+        if (this.restfulClient == null) {
+            throw new IllegalStateException("Use RestfulClient#arguments() to create this builder");
+        }
+        actionParameters.put(parameterName, valueHref( bookmark) );
+        actionParameterTypes.put(parameterName, Map.class);
+        return this;
+    }
+
+    private String valueHref(Bookmark bookmark) {
+        String hrefValue  = asAbsoluteHref(bookmark);
+//        String hrefValue  = "\"" + asAbsoluteHref(bookmark) + "\"";
+        Map<String, String> map = Map.of("href", hrefValue);
+        return value(JsonUtils.toStringUtf8(map));
+    }
+
+    private String asAbsoluteHref(Bookmark bookmark) {
+        return String.format("%s%s", restfulClient.getConfig().getRestfulBaseUrl(), asRelativeHref(bookmark));
+    }
+
+    private String asRelativeHref(Bookmark bookmark) {
+        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
+    }
+
+
+    public <T> ActionParameterListBuilder addActionParameter(
+            final String parameterName,
             final @NonNull Class<T> type,
             final @Nullable T object) {
         var nestedJson = object!=null
