@@ -31,4 +31,5 @@ module org.apache.causeway.valuetypes.asciidoc.metamodel {
     requires spring.beans;
     requires spring.context;
     requires spring.core;
+    requires spring.boot.autoconfigure;
 }

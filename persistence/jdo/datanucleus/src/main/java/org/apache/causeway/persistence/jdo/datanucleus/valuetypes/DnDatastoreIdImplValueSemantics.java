@@ -22,7 +22,9 @@ import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreIdImpl;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -35,12 +37,21 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
-@Component
 @Priority(PriorityPrecedence.LATE)
 public class DnDatastoreIdImplValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<DatastoreIdImpl> {
 
     public static final String STRING_DELIMITER = "[OID]"; // as
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(DnDatastoreIdImplValueSemantics.class)
+        public DnDatastoreIdImplValueSemantics defaultDnDatastoreIdImplValueSemantics() {
+            return new DnDatastoreIdImplValueSemantics();
+        }
+    }
 
     public DnDatastoreIdImplValueSemantics() {
         super(DatastoreIdImpl.class);

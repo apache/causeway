@@ -28,7 +28,7 @@ import org.apache.causeway.valuetypes.vega.metamodel.semantics.VegaValueSemantic
  */
 @Configuration
 @Import({
-        VegaValueSemantics.class,
+        VegaValueSemantics.AutoConfiguration.class,
 })
 public class CausewayModuleValVegaMetaModel {
 

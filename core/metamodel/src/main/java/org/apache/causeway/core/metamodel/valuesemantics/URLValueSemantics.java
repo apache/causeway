@@ -23,7 +23,9 @@ import java.net.URL;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.Parser;
@@ -38,7 +40,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.SneakyThrows;
 
-@Component
 @Named("causeway.metamodel.value.URLValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class URLValueSemantics
@@ -46,6 +47,16 @@ extends ValueSemanticsAbstract<java.net.URL>
 implements
     Parser<java.net.URL>,
     Renderer<java.net.URL> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(URLValueSemantics.class)
+        public URLValueSemantics defaultUrlValueSemantics() {
+            return new URLValueSemantics();
+        }
+    }
 
     @Override
     public Class<java.net.URL> getCorrespondingClass() {

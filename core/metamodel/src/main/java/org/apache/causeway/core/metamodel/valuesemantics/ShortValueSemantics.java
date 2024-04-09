@@ -24,7 +24,9 @@ import java.util.function.UnaryOperator;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
@@ -45,7 +47,6 @@ import lombok.val;
 /**
  * due to auto-boxing also handles the primitive variant
  */
-@Component
 @Named("causeway.metamodel.value.ShortValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ShortValueSemantics
@@ -55,6 +56,16 @@ implements
     Parser<Short>,
     Renderer<Short>,
     IdStringifier.EntityAgnostic<Short> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(ShortValueSemantics.class)
+        public ShortValueSemantics defaultShortValueSemantics() {
+            return new ShortValueSemantics();
+        }
+    }
 
     @Override
     public Class<Short> getCorrespondingClass() {

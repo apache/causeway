@@ -21,7 +21,9 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.Markup;
@@ -34,7 +36,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.hardening._Hardening;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-@Component
 @Named("causeway.metamodel.value.MarkupValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class MarkupValueSemantics
@@ -42,6 +43,16 @@ extends ValueSemanticsAbstract<Markup>
 implements
     Parser<Markup>,
     Renderer<Markup> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(MarkupValueSemantics.class)
+        public MarkupValueSemantics defaultMarkupValueSemantics() {
+            return new MarkupValueSemantics();
+        }
+    }
 
     @Override
     public Class<Markup> getCorrespondingClass() {

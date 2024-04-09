@@ -27,4 +27,5 @@ module org.apache.causeway.valuetypes.markdown.metamodel {
     requires org.apache.causeway.schema;
     requires org.apache.causeway.valuetypes.markdown.applib;
     requires spring.context;
+    requires spring.boot.autoconfigure;
 }

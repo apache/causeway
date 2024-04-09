@@ -23,7 +23,9 @@ import java.util.UUID;
 import javax.annotation.Priority;
 import javax.jdo.identity.ObjectIdentity;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -44,7 +46,6 @@ import lombok.val;
  *     of type int, long or UUID: rather than encode the fully qualified classname, instead uses a simpler prefix.
  * </p>
  */
-@Component
 @Priority(PriorityPrecedence.LATE)
 @Builder
 public class JdoObjectIdentityValueSemantics
@@ -53,6 +54,17 @@ extends ValueSemanticsBasedOnIdStringifier<ObjectIdentity> {
     private static final String PREFIX_UUID = "u_";
     private static final String PREFIX_LONG = "l_";
     private static final String PREFIX_INT = "i_";
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(JdoObjectIdentityValueSemantics.class)
+        public JdoObjectIdentityValueSemantics defaultJdoObjectIdentityValueSemantics() {
+            return new JdoObjectIdentityValueSemantics();
+        }
+    }
+
 
     public JdoObjectIdentityValueSemantics() {
         super(ObjectIdentity.class);
