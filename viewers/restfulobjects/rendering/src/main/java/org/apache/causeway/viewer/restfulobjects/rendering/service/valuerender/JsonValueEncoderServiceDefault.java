@@ -136,7 +136,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
     }
 
     /**
-     * Returns the recovered nullable String, wrapped as optional.
+     * Returns the recovered nullable pojo, wrapped as optional.
      * @throws IllegalArgumentException if cannot be parsed as String
      */
     private static Optional<Object> recoverPojoFromStringElseFail(
@@ -146,11 +146,11 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             val recoveredValue = Try.call(()->
                     valueSerializer.destring(Format.JSON, valueRepr.asString()))
                     .mapFailure(ex->_Exceptions
-                            .illegalArgument(ex, "Unable to parse value %s as String", valueRepr))
+                            .illegalArgument(ex, "Unable to parse value %s as from String representation", valueRepr))
                     .valueAsNullableElseFail();
             return Optional.ofNullable(recoveredValue);
         }
-        throw _Exceptions.illegalArgument("Unable to parse value %s as String"
+        throw _Exceptions.illegalArgument("Unable to parse value %s from String representation"
                 + " (using 'String' as a fallback attempt)", valueRepr);
     }
 
@@ -172,7 +172,6 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             if(valueDecompositionIfAny.isPresent()) {
                 val valueDecomposition = valueDecompositionIfAny.get();
                 val valueAsJson = valueDecomposition.toJson();
-                val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                 valueDecomposition.accept(
                         simple->{
                             // special treatment for BLOB/CLOB/ENUM as these are better represented by a map
@@ -180,6 +179,10 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                                     || simple.getType() == ValueType.CLOB
                                     || simple.getType() == ValueType.ENUM) {
 
+                                /* Don't move this line of code up before
+                                 * the accept call (to attempt code de-duplication)!
+                                 * It will fail the 'else' path. */
+                                val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                                 // amend emums with "enumTitle"
                                 if(simple.getType() == ValueType.ENUM) {
                                     decompRepr.mapPutString("enumTitle", valueAdapter.getTitle());
@@ -193,6 +196,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                             }
                         },
                         tuple->{
+                            val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                             repr.mapPutJsonRepresentation("value", decompRepr);
                             val typeTupleAsFormat = "{"
                                     + tuple.getElements().stream()

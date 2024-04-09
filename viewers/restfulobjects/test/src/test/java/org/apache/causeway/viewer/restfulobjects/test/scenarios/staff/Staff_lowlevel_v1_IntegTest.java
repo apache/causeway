@@ -58,7 +58,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
@@ -80,7 +79,6 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         gsonBuilder = new GsonBuilder();
     }
 
-    @DisabledIfRunningWithSurefire
     @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
