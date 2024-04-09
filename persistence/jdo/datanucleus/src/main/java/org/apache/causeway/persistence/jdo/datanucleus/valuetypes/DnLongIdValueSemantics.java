@@ -22,7 +22,9 @@ import javax.annotation.Priority;
 
 import org.datanucleus.identity.LongId;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -34,13 +36,22 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.val;
 
-@Component
 @Priority(PriorityPrecedence.LATE)
 public class DnLongIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<LongId> {
 
     public DnLongIdValueSemantics() {
         super(LongId.class);
+    }
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(DnLongIdValueSemantics.class)
+        public DnLongIdValueSemantics defaultDnLongIdValueSemantics() {
+            return new DnLongIdValueSemantics();
+        }
     }
 
     // -- COMPOSER

@@ -28,7 +28,9 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -49,7 +51,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
-@Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BigDecimalValueSemantics
@@ -59,6 +60,16 @@ implements
     Parser<BigDecimal>,
     Renderer<BigDecimal>,
     IdStringifier.EntityAgnostic<BigDecimal> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(BigDecimalValueSemantics.class)
+        public BigDecimalValueSemantics defaultBigDecimalValueSemantics() {
+            return new BigDecimalValueSemantics();
+        }
+    }
 
     @Setter @Inject
     private SpecificationLoader specificationLoader;

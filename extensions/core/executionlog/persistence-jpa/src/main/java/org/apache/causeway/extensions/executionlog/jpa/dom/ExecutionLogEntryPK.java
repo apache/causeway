@@ -27,7 +27,9 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
@@ -73,10 +75,20 @@ public class ExecutionLogEntryPK implements Serializable {
         return interactionId + SEPARATOR + sequence;
     }
 
-    @Component
     @Priority(PriorityPrecedence.MIDPOINT)
     public static class Semantics
     extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<ExecutionLogEntryPK> {
+
+        @Configuration
+        public static class AutoConfiguration {
+
+            @Bean
+            @ConditionalOnMissingBean(Semantics.class)
+            public Semantics defaultExecutionLogEntryPKSemantics() {
+                return new Semantics();
+            }
+        }
+
 
         public Semantics() {
             super(ExecutionLogEntryPK.class);
