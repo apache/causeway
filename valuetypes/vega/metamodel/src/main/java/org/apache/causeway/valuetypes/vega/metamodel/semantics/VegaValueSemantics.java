@@ -22,6 +22,9 @@ import java.util.UUID;
 
 import jakarta.inject.Named;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -46,6 +49,17 @@ implements
     DefaultsProvider<Vega>,
     Renderer<Vega>,
     Parser<Vega> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(VegaValueSemantics.class)
+        public VegaValueSemantics defaultVegaValueSemantics() {
+            return new VegaValueSemantics();
+        }
+    }
+
 
     @Override
     public Class<Vega> getCorrespondingClass() {

@@ -23,8 +23,10 @@ import java.util.Locale;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.Parser;
@@ -38,7 +40,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.val;
 
-@Component
 @Named("causeway.metamodel.value.LocaleValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LocaleValueSemantics
@@ -46,6 +47,16 @@ extends ValueSemanticsAbstract<Locale>
 implements
     Parser<Locale>,
     Renderer<Locale> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(LocaleValueSemantics.class)
+        public LocaleValueSemantics defaultLocaleValueSemantics() {
+            return new LocaleValueSemantics();
+        }
+    }
 
     @Override
     public Class<Locale> getCorrespondingClass() {

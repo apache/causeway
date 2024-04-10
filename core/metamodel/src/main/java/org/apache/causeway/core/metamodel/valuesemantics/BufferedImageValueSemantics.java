@@ -24,8 +24,10 @@ import java.util.Optional;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.Blob;
@@ -41,7 +43,6 @@ import org.apache.causeway.schema.common.v2.BlobDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-@Component
 @Named("causeway.metamodel.value.BufferedImageValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BufferedImageValueSemantics
@@ -49,6 +50,16 @@ extends ValueSemanticsAbstract<BufferedImage>
 implements
     ImageValueSemantics,
     OrderRelation<BufferedImage, Void> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(BufferedImageValueSemantics.class)
+        public BufferedImageValueSemantics defaultBufferedImageValueSemantics() {
+            return new BufferedImageValueSemantics();
+        }
+    }
 
     @Override
     public Class<BufferedImage> getCorrespondingClass() {

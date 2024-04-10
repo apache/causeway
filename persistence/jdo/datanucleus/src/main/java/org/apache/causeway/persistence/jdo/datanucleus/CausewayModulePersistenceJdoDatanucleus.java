@@ -91,24 +91,24 @@ import lombok.extern.log4j.Log4j2;
     // @Component's
     DnEntityStateProvider.class,
 
-    DnDatastoreIdImplValueSemantics.class, // datastore identity
-    DnDatastoreUniqueLongIdValueSemantics.class,
-    JdoDatastoreIdValueSemantics.class,
-    JdoShortIdentityValueSemantics.class, // application-defined PK, javax.jdo.identity
-    JdoLongIdentityValueSemantics.class,
-    JdoIntIdentityValueSemantics.class,
-    JdoByteIdentityValueSemantics.class,
-    JdoCharIdentityValueSemantics.class,
-    JdoStringIdentityValueSemantics.class,
-    JdoObjectIdentityValueSemantics.class,
-    DnShortIdValueSemantics.class,  // application-defined PK, org.datanucleus.identity
-    DnLongIdValueSemantics.class,
-    DnIntIdValueSemantics.class,
-    DnByteIdValueSemantics.class,
-    DnCharIdValueSemantics.class,
-    DnStringIdValueSemantics.class,
-    DnObjectIdValueSemantics.class,
-    DnScoidValueSemantics.class, // in support of @PersistenceCapable(identityType=IdentityType.NONDURABLE)
+    DnDatastoreIdImplValueSemantics.AutoConfiguration.class, // datastore identity
+    DnDatastoreUniqueLongIdValueSemantics.AutoConfiguration.class,
+    JdoDatastoreIdValueSemantics.AutoConfiguration.class,
+    JdoShortIdentityValueSemantics.AutoConfiguration.class, // application-defined PK, javax.jdo.identity
+    JdoLongIdentityValueSemantics.AutoConfiguration.class,
+    JdoIntIdentityValueSemantics.AutoConfiguration.class,
+    JdoByteIdentityValueSemantics.AutoConfiguration.class,
+    JdoCharIdentityValueSemantics.AutoConfiguration.class,
+    JdoStringIdentityValueSemantics.AutoConfiguration.class,
+    JdoObjectIdentityValueSemantics.AutoConfiguration.class,
+    DnShortIdValueSemantics.AutoConfiguration.class,  // application-defined PK, org.datanucleus.identity
+    DnLongIdValueSemantics.AutoConfiguration.class,
+    DnIntIdValueSemantics.AutoConfiguration.class,
+    DnByteIdValueSemantics.AutoConfiguration.class,
+    DnCharIdValueSemantics.AutoConfiguration.class,
+    DnStringIdValueSemantics.AutoConfiguration.class,
+    DnObjectIdValueSemantics.AutoConfiguration.class,
+    DnScoidValueSemantics.AutoConfiguration.class, // in support of @PersistenceCapable(identityType=IdentityType.NONDURABLE)
 
     // @Service's
     JdoSupportServiceDefault.class,

@@ -23,7 +23,9 @@ import java.nio.file.InvalidPathException;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.LocalResourcePath;
@@ -37,7 +39,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.val;
 
-@Component
 @Named("causeway.metamodel.value.LocalResourcePathValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class LocalResourcePathValueSemantics
@@ -45,6 +46,16 @@ extends ValueSemanticsAbstract<LocalResourcePath>
 implements
     Parser<LocalResourcePath>,
     Renderer<LocalResourcePath> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(LocalResourcePathValueSemantics.class)
+        public LocalResourcePathValueSemantics defaultLocalResourcePathValueSemantics() {
+            return new LocalResourcePathValueSemantics();
+        }
+    }
 
     @Override
     public Class<LocalResourcePath> getCorrespondingClass() {

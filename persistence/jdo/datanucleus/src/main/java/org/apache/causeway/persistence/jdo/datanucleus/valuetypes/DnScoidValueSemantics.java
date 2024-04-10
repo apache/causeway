@@ -22,7 +22,9 @@ import jakarta.annotation.Priority;
 
 import org.datanucleus.identity.SCOID;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
@@ -34,10 +36,20 @@ import lombok.NonNull;
  *
  * @see SCOID
  */
-@Component
 @Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
 public class DnScoidValueSemantics
 extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<SCOID> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(DnScoidValueSemantics.class)
+        public DnScoidValueSemantics defaultDnScoidValueSemantics() {
+            return new DnScoidValueSemantics();
+        }
+    }
+
 
     public DnScoidValueSemantics() {
         super(SCOID.class);

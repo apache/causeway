@@ -21,18 +21,29 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
-@Component
 @Named("causeway.metamodel.value.InteractionDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class InteractionDtoValueSemantics
 extends XmlValueSemanticsAbstract<InteractionDto> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(InteractionDtoValueSemantics.class)
+        public InteractionDtoValueSemantics defaultInteractionDtoValueSemantics() {
+            return new InteractionDtoValueSemantics();
+        }
+    }
 
     @Override
     public final Class<InteractionDto> getCorrespondingClass() {

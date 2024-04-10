@@ -24,7 +24,9 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
@@ -45,7 +47,6 @@ import lombok.val;
 /**
  * due to auto-boxing also handles the primitive variant
  */
-@Component
 @Named("causeway.metamodel.value.IntValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class IntValueSemantics
@@ -55,6 +56,16 @@ implements
     Parser<Integer>,
     Renderer<Integer>,
     IdStringifier.EntityAgnostic<Integer>{
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(IntValueSemantics.class)
+        public IntValueSemantics defaultIntValueSemantics() {
+            return new IntValueSemantics();
+        }
+    }
 
     @Override
     public Class<Integer> getCorrespondingClass() {

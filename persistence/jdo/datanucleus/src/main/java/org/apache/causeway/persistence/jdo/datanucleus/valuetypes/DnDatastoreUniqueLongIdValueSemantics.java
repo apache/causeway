@@ -22,7 +22,9 @@ import jakarta.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreUniqueLongId;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
@@ -32,10 +34,20 @@ import lombok.NonNull;
 /**
  * @implNote has no targetEntityClass support
  */
-@Component
 @Priority(PriorityPrecedence.LATE)
 public class DnDatastoreUniqueLongIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<DatastoreUniqueLongId> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(DnDatastoreUniqueLongIdValueSemantics.class)
+        public DnDatastoreUniqueLongIdValueSemantics defaultDnDatastoreUniqueLongIdValueSemantics() {
+            return new DnDatastoreUniqueLongIdValueSemantics();
+        }
+    }
+
 
     public DnDatastoreUniqueLongIdValueSemantics() {
         super(DatastoreUniqueLongId.class);

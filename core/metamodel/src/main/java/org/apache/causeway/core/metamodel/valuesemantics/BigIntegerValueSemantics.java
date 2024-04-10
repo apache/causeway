@@ -24,7 +24,9 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -39,7 +41,6 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
 
-@Component
 @Named("causeway.metamodel.value.BigIntegerValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BigIntegerValueSemantics
@@ -49,6 +50,16 @@ implements
     Parser<BigInteger>,
     Renderer<BigInteger>,
     IdStringifier.EntityAgnostic<BigInteger> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(BigIntegerValueSemantics.class)
+        public BigIntegerValueSemantics defaultBigIntegerValueSemantics() {
+            return new BigIntegerValueSemantics();
+        }
+    }
 
     @Override
     public Class<BigInteger> getCorrespondingClass() {

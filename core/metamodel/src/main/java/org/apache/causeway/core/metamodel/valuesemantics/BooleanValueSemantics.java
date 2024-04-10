@@ -23,7 +23,9 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
@@ -43,7 +45,6 @@ import lombok.val;
 /**
  * due to auto-boxing also handles the primitive variant
  */
-@Component
 @Named("causeway.metamodel.value.BooleanValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BooleanValueSemantics
@@ -52,6 +53,17 @@ implements
     DefaultsProvider<Boolean>,
     Parser<Boolean>,
     Renderer<Boolean> {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(BooleanValueSemantics.class)
+        public BooleanValueSemantics defaultBooleanValueSemantics() {
+            return new BooleanValueSemantics();
+        }
+    }
+
 
     @Override
     public Class<Boolean> getCorrespondingClass() {
