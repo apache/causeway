@@ -101,12 +101,12 @@ extends JsonValueEncoderTestAbstract {
 
     @ParameterizedTest
     @ValueSource(classes = {
-            //boolean.class, Boolean.class, //TODO broken test
+            boolean.class, Boolean.class,
             long.class, Long.class,
             int.class, Integer.class,
             short.class, Short.class,
             byte.class, Byte.class,
-            //char.class, Character.class //TODO broken test
+            char.class, Character.class,
             double.class, Double.class,
             float.class, Float.class,
             BigInteger.class, BigDecimal.class,})

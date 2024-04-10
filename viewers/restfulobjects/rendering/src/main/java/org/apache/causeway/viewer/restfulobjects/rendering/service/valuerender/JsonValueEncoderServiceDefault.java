@@ -37,6 +37,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
@@ -76,14 +77,20 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
 
-        if(valueRepr == null) {
-            return null;
-        }
-        if (spec == null) {
-            throw new IllegalArgumentException("ObjectSpecification is required");
-        }
-        if (!spec.isValue()) {
-            throw new IllegalArgumentException("Representation must be of a value");
+        // sanity checks
+        if(valueRepr == null) return null;
+        if(spec == null) throw new IllegalArgumentException("ObjectSpecification is required");
+        if(!spec.isValue()) throw new IllegalArgumentException("Representation must be of a value");
+
+        // primitive representation checks (ignoring value-semantics)
+        val valueClass = spec.getCorrespondingClass();
+        if(ClassUtils.isPrimitiveOrWrapper(valueClass)) {
+            val primitiveWrapper = ClassUtils.resolvePrimitiveIfNecessary(valueClass);
+            if(Boolean.class.equals(primitiveWrapper)) {
+                booleanRepresentationCheck(valueRepr);
+            } else if(Character.class.equals(primitiveWrapper)) {
+                characterRepresentationCheck(valueRepr);
+            }
         }
 
         // handle composite value types (requires a ValueSemanticsProvider for the valueClass to be registered with Spring)
@@ -247,6 +254,22 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         // else
         return Facets.valueSerializerElseFail(objectSpec, cls)
                 .enstring(Format.JSON, _Casts.uncheckedCast(adapter.getPojo()));
+    }
+
+    // -- PRIMITIVE CHECKS
+
+    private void booleanRepresentationCheck(final JsonRepresentation valueRepr) {
+        if(!valueRepr.isBoolean()) {
+            throw new IllegalArgumentException("Representation must be a single character");
+        }
+    }
+
+    private void characterRepresentationCheck(final JsonRepresentation valueRepr) {
+        if(valueRepr.isString()
+                && _NullSafe.size(valueRepr.asString()) <= 1) {
+            return; // check is ok
+        }
+        throw new IllegalArgumentException("Representation must be a single character string");
     }
 
 }
