@@ -39,7 +39,7 @@
         <maven.compiler.release>17</maven.compiler.release>
 
         <datasource-proxy-spring-boot-starter.version>1.9.1</datasource-proxy-spring-boot-starter.version>
-        <sql-formatter.version>2.0.4</sql-formatter.version>
+        <sql-formatter.version>2.0.5</sql-formatter.version>
     </properties>
 
     <dependencyManagement>
