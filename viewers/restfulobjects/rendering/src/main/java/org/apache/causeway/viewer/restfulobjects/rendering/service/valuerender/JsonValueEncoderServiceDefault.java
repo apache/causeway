@@ -260,7 +260,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
     private void booleanRepresentationCheck(final JsonRepresentation valueRepr) {
         if(!valueRepr.isBoolean()) {
-            throw new IllegalArgumentException("Representation must be a single character");
+            throw new IllegalArgumentException("Representation must be boolean");
         }
     }
 
