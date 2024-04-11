@@ -59,17 +59,28 @@ public interface TreeAdapter<T> {
      * starting from root, '/0/2' will return the 3rd child of root;<br>
      * starting from sub-node '/0/2', '/2/9' will resolve the 10th child ('/0/2/9') of this sub-node
      */
+    @Domain.Exclude
     default Optional<T> resolveRelative(final @Nullable T node, final @Nullable TreePath relativePath) {
         if(node==null
                 || relativePath==null
                 || relativePath.size()<1) {
             return Optional.empty();
         }
+
+        // if relativePath is of size 1, then the path points to given start node
+        // (in this case we simply ignore the sibling index)
         if(relativePath.size()==1) return Optional.of(node);
+
+        // at this point relativePath is of size >= 2, so we should have a child index
         final int childIndex = relativePath.childIndex().orElse(-1);
         if(childIndex<0) return Optional.empty();
-        final Optional<T> childNode = childrenOf(node).skip(childIndex).findFirst();
+
+        final Optional<T> childNode = childrenOf(node)
+                .skip(childIndex)
+                .findFirst();
         if(!childNode.isPresent()) return Optional.empty();
+
+        // recursively calls itself, if there are still children left to resolve (when size of path > 2)
         return relativePath.size()>2
                 ? resolveRelative(childNode.get(), relativePath.subPath(1))
                 : childNode;
