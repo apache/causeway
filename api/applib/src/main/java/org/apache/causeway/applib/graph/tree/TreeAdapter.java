@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.Domain;
 
@@ -37,7 +40,7 @@ public interface TreeAdapter<T> {
      * @return number of child tree-nodes of the specified {@code value} tree-node (pojo)
      */
     @Domain.Exclude
-    default int childCountOf(T value) {
+    default int childCountOf(final T value) {
         return Math.toIntExact(childrenOf(value).count());
     }
 
@@ -47,5 +50,29 @@ public interface TreeAdapter<T> {
      */
     @Domain.Exclude
     Stream<T> childrenOf(T value);
+
+
+    /**
+     * Resolves given {@link TreePath} to its corresponding sub-node relative to given node if possible.
+     * <p>
+     * E.g. starting from root, '/0' will return the root;<br>
+     * starting from root, '/0/2' will return the 3rd child of root;<br>
+     * starting from sub-node '/0/2', '/2/9' will resolve the 10th child ('/0/2/9') of this sub-node
+     */
+    default Optional<T> resolveRelative(final @Nullable T node, final @Nullable TreePath relativePath) {
+        if(node==null
+                || relativePath==null
+                || relativePath.size()<1) {
+            return Optional.empty();
+        }
+        if(relativePath.size()==1) return Optional.of(node);
+        final int childIndex = relativePath.childIndex().orElse(-1);
+        if(childIndex<0) return Optional.empty();
+        final Optional<T> childNode = childrenOf(node).skip(childIndex).findFirst();
+        if(!childNode.isPresent()) return Optional.empty();
+        return relativePath.size()>2
+                ? resolveRelative(childNode.get(), relativePath.subPath(1))
+                : childNode;
+    }
 
 }
