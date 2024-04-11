@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -29,12 +30,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 @RequiredArgsConstructor
-public abstract class TreeAdapterWithConverter<U, T> 
+public abstract class TreeAdapterWithConverter<U, T>
 implements TreeAdapter<T>{
-    
+
     protected abstract TreeAdapter<U> underlyingAdapter();
     protected abstract TreeConverter<U, T> converter();
-    
+
     @Override
     public final int childCountOf(final @Nullable T t) {
         if(t==null) return 0;
@@ -53,12 +54,22 @@ implements TreeAdapter<T>{
                         .map(childFactoryForParentNode(t))
                 : Stream.empty();
     }
-    
+
+    @Override
+    public final Optional<T> resolveRelative(final @Nullable T t, final @Nullable TreePath relativePath) {
+        if(t==null) return Optional.empty();
+        val underlyingNode = converter().toUnderlyingNode(t);
+        return underlyingNode!=null
+                ? underlyingAdapter().resolveRelative(underlyingNode, relativePath)
+                        .map(childFactoryForParentNode(t))
+                : Optional.empty();
+    }
+
     // -- HELPER
-    
+
     private Function<U, T> childFactoryForParentNode(final T parentNode) {
         return IndexedFunction.zeroBased((indexWithinSiblings, pojo)->
             converter().fromUnderlyingNode(pojo, parentNode, indexWithinSiblings));
     }
-    
+
 }
