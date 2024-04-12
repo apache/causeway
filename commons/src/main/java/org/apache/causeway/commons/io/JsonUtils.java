@@ -24,7 +24,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.BeanProperty;
@@ -36,6 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -46,6 +50,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._Generics;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -61,7 +67,26 @@ import lombok.experimental.UtilityClass;
 public class JsonUtils {
 
     @FunctionalInterface
-    public interface JacksonCustomizer extends UnaryOperator<ObjectMapper> {}
+    public interface JacksonCustomizer extends UnaryOperator<ObjectMapper> {
+        public static <T> JacksonCustomizer wrapXmlAdapter(final XmlAdapter<String, T> xmlAdapter) {
+            @SuppressWarnings("unchecked")
+            var type = (Class<T>) _Generics.streamGenericTypeArgumentsOfType(xmlAdapter.getClass(), XmlAdapter.class)
+                .skip(1)
+                .findFirst()
+                .orElseThrow(()->_Exceptions.unsupportedOperation(
+                        "Failed to autodetect second generic type argument of class %s. "
+                        + "Use variant JacksonCustomizer.wrapXmlAdapter(type, xmlAdapter) "
+                        + "to provide the type explicitely.",
+                        xmlAdapter.getClass().getName()));
+            return wrapXmlAdapter(type, xmlAdapter);
+        }
+        public static <T> JacksonCustomizer wrapXmlAdapter(final Class<T> type, final XmlAdapter<String, T> xmlAdapter) {
+            return mapper->
+                mapper.registerModule(new SimpleModule()
+                        .addSerializer(new XSerializer<T>(type, xmlAdapter))
+                        .addDeserializer(type, new XDeserializer<T>(type, xmlAdapter)));
+        }
+    }
 
     // -- READING
 
@@ -211,6 +236,46 @@ public class JsonUtils {
     public ObjectMapper writingCanSupport(final ObjectMapper mapper) {
         mapper.registerModule(new SimpleModule().addSerializer(new CanSerializer()));
         return mapper;
+    }
+
+    // -- XML ADAPTER SUPPORT
+
+    static class XSerializer<T> extends StdSerializer<T> {
+        private static final long serialVersionUID = 1L;
+        private final XmlAdapter<String, T> xmlAdapter;
+        protected XSerializer(final Class<T> type, final XmlAdapter<String, T> xmlAdapter) {
+            super(type, false);
+            this.xmlAdapter = xmlAdapter;
+        }
+        @Override
+        public void serialize(final T value, final JsonGenerator gen,
+                final SerializerProvider provider) throws IOException {
+            String stringified;
+            try {
+                stringified = this.xmlAdapter.marshal(value);
+            } catch (Exception e) {
+                throw new JsonMappingException(gen, "Unable to marshal: " + e.getMessage(), e);
+            }
+            gen.writeObject(stringified);
+        }
+    }
+
+    static class XDeserializer<T> extends StdDeserializer<T> {
+        private static final long serialVersionUID = 1L;
+        private final XmlAdapter<String, T> xmlAdapter;
+        protected XDeserializer(final Class<T> type, final XmlAdapter<String, T> xmlAdapter) {
+            super(type);
+            this.xmlAdapter = xmlAdapter;
+        }
+        @Override
+        public T deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JacksonException {
+            String stringified = ctxt.readValue(p, String.class);
+            try {
+                return xmlAdapter.unmarshal(stringified);
+            } catch (Exception e) {
+                throw new JsonMappingException(p, "Unable to unmarshal (to type " + _valueType + "): " + e.getMessage(), e);
+            }
+        }
     }
 
     // -- MAPPER FACTORY

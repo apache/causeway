@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
@@ -80,11 +81,32 @@ public final class _Generics {
 
     /**
      * Returns a Stream of the actual type arguments for given type {@code cls}.
-     * @implNote always returns {@link Stream#empty()}, as we don't know how to do this
+     * @apiNote may return {@link Stream#empty()}, as we don't know how to do this in the general case
+     * @implNote will work for simple cases, but NOT for wildcards or non trivial bounds
+     */
+    public static Stream<Class<?>> streamGenericTypeArgumentsOfType(final @NonNull Class<?> cls) {
+        return streamGenericTypeArgumentsOfType(cls, cls);
+    }
+
+    /**
+     * Returns a Stream of the actual type arguments for given type {@code cls} after up-castingn to
+     * {@code stopAtSuperClass}.
+     * @apiNote may return {@link Stream#empty()}, as we don't know how to do this in the general case
+     * @implNote will work for simple cases, but NOT for wildcards or non trivial bounds
      */
     public static Stream<Class<?>> streamGenericTypeArgumentsOfType(
-            final @NonNull Class<?> cls) {
-        // maybe the best one could do is to extract any bounds on the type argument
+            final @NonNull Class<?> cls, final @NonNull Class<?> stopAtSuperClass) {
+        var superClass = genericUpCast(cls, stopAtSuperClass);
+        if(superClass instanceof ParameterizedType) {
+            final ParameterizedType pt = (ParameterizedType) superClass;
+            final Type[] typeArgs = pt.getActualTypeArguments();
+            final int typeArgCount = _NullSafe.size(typeArgs);
+            var extractedGenericTypes = Can.ofArray(typeArgs)
+                        .<Class<?>>map(typeArg->typeToClass(typeArg));
+            return extractedGenericTypes.size()==typeArgCount
+                ? extractedGenericTypes.stream()
+                : Stream.empty(); // if any of the type to class conversions failed, return an empty stream
+        }
         return Stream.empty();
     }
 
@@ -161,6 +183,32 @@ public final class _Generics {
         }
 
         return Stream.empty();
+    }
+
+    @Nullable
+    private static Class<?> typeToClass(final @NonNull Type type) {
+        if(type instanceof Class) {
+            return (Class<?>) type;
+        }
+        if(type instanceof ParameterizedType) {
+            var pType = (ParameterizedType) type;
+            return typeToClass(pType.getRawType());
+        }
+        // don't know how to do this otherwise
+        return null;
+    }
+
+    private static Type genericUpCast(final @NonNull Class<?> cls, final @NonNull Class<?> stopAtSuperClass) {
+        var superClass = cls.getGenericSuperclass();
+        if(cls.equals(stopAtSuperClass)) {
+            // don't know how to get a ParameterizedType for cls, so we assume there is a super type to the rescue
+            superClass = cls.getGenericSuperclass();
+        }
+        while (superClass instanceof ParameterizedType
+                && stopAtSuperClass != ((ParameterizedType)superClass).getRawType()) {
+            superClass = ((Class<?>) ((ParameterizedType) superClass).getRawType()).getGenericSuperclass();
+        }
+        return superClass;
     }
 
 }
