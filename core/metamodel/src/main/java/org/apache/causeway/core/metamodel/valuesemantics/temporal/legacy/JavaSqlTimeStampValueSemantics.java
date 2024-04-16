@@ -24,28 +24,17 @@ import java.time.LocalDateTime;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 
+@Component
 @Named("causeway.metamodel.value.JavaSqlTimeStampValueSemantics")
 public class JavaSqlTimeStampValueSemantics
 extends TemporalSemanticsAdapter<Timestamp, LocalDateTime> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(JavaSqlTimeStampValueSemantics.class)
-        public JavaSqlTimeStampValueSemantics defaultJavaSqlTimeStampValueSemantics() {
-            return new JavaSqlTimeStampValueSemantics();
-        }
-    }
 
     @Inject LocalDateTimeValueSemantics localDateTimeValueSemantics;
 

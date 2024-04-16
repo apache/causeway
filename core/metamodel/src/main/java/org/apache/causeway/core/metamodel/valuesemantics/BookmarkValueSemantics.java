@@ -21,9 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -39,6 +37,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.val;
 
+@Component
 @Named("causeway.metamodel.value.BookmarkValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class BookmarkValueSemantics
@@ -47,16 +46,6 @@ implements
     OrderRelation<Bookmark, Void>,
     Parser<Bookmark>,
     Renderer<Bookmark> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(BookmarkValueSemantics.class)
-        public BookmarkValueSemantics defaultBookmarkValueSemantics() {
-            return new BookmarkValueSemantics();
-        }
-    }
 
     @Override
     public Class<Bookmark> getCorrespondingClass() {

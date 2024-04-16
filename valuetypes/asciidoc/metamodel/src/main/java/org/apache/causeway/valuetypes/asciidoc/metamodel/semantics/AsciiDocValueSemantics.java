@@ -20,9 +20,7 @@ package org.apache.causeway.valuetypes.asciidoc.metamodel.semantics;
 
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -34,22 +32,13 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
+@Component
 @Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDocValueSemantics")
 public class AsciiDocValueSemantics
 extends ValueSemanticsAbstract<AsciiDoc>
 implements
     Renderer<AsciiDoc>,
     Parser<AsciiDoc> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(AsciiDocValueSemantics.class)
-        public AsciiDocValueSemantics defaultAsciiDocValueSemantics() {
-            return new AsciiDocValueSemantics();
-        }
-    }
 
     @Override
     public Class<AsciiDoc> getCorrespondingClass() {

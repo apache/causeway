@@ -197,8 +197,8 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
     }
 
     @Component
-    @Named("causeway.metamodel.value.BlobValueSemantics")
-    @Priority(PriorityPrecedence.EARLY)
+    @Named("causeway.metamodel.value.BlobValueSemanticsV1LegacyEncoding")   // must have different name to original
+    @Priority(PriorityPrecedence.EARLY)                                     // and earlier precedence to be picked up
     public static class BlobValueSemanticsV1LegacyEncoding
             extends BlobValueSemantics
             implements
