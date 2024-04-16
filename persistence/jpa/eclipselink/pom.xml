@@ -96,7 +96,7 @@
         	<!-- provides javax.el.* -->
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
-		    <version>3.0.3</version> <!-- do not upgrade before Spring 6 -->
+		    <version>6.0.0</version> <!-- do not upgrade before Spring 6 -->
 		</dependency>
 
 		<dependency>
