@@ -45,16 +45,6 @@ extends ValueSemanticsAbstract<Blob>
 implements
     Renderer<Blob> {
 
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(BlobValueSemantics.class)
-        public BlobValueSemantics defaultBlobValueSemantics() {
-            return new BlobValueSemantics();
-        }
-    }
-
     @Override
     public Class<Blob> getCorrespondingClass() {
         return Blob.class;
