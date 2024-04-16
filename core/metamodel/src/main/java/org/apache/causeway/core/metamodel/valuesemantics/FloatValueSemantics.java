@@ -23,9 +23,7 @@ import java.util.function.UnaryOperator;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.DefaultsProvider;
@@ -41,6 +39,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 /**
  * due to auto-boxing also handles the primitive variant
  */
+@Component
 @Named("causeway.metamodel.value.FloatValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class FloatValueSemantics
@@ -49,16 +48,6 @@ implements
     DefaultsProvider<Float>,
     Parser<Float>,
     Renderer<Float> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(FloatValueSemantics.class)
-        public FloatValueSemantics defaultFloatValueSemantics() {
-            return new FloatValueSemantics();
-        }
-    }
 
     @Override
     public Class<Float> getCorrespondingClass() {

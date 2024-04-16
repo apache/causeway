@@ -21,9 +21,7 @@ package org.apache.causeway.persistence.jdo.datanucleus.valuetypes;
 import javax.annotation.Priority;
 import javax.jdo.identity.IntIdentity;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -35,20 +33,10 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.val;
 
+@Component
 @Priority(PriorityPrecedence.LATE)
 public class JdoIntIdentityValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<IntIdentity> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(JdoIntIdentityValueSemantics.class)
-        public JdoIntIdentityValueSemantics defaultJdoIntIdentityValueSemantics() {
-            return new JdoIntIdentityValueSemantics();
-        }
-    }
-
 
     public JdoIntIdentityValueSemantics() {
         super(IntIdentity.class);

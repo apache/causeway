@@ -24,9 +24,7 @@ import java.time.LocalDate;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
@@ -39,19 +37,10 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
  * @see JavaUtilDateValueSemantics
  * @see JavaSqlTimeValueSemantics
  */
+@Component
 @Named("causeway.metamodel.value.JavaSqlDateValueSemantics")
 public class JavaSqlDateValueSemantics
 extends TemporalSemanticsAdapter<Date, LocalDate> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(JavaSqlDateValueSemantics.class)
-        public JavaSqlDateValueSemantics defaultJavaSqlDateValueSemantics() {
-            return new JavaSqlDateValueSemantics();
-        }
-    }
 
     @Inject LocalDateValueSemantics localDateValueSemantics;
 

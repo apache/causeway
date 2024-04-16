@@ -30,7 +30,6 @@ module org.apache.causeway.valuetypes.jodatime.integration {
     requires org.apache.causeway.valuetypes.jodatime.applib;
     requires org.joda.time;
     requires spring.context;
-    requires spring.boot.autoconfigure;
 
     opens org.apache.causeway.valuetypes.jodatime.integration.valuesemantics to org.apache.causeway.commons;
 }

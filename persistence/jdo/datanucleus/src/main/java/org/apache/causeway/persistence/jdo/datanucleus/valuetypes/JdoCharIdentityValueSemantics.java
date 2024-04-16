@@ -22,9 +22,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.jdo.identity.CharIdentity;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -38,20 +36,10 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
+@Component
 @Priority(PriorityPrecedence.LATE)
 public class JdoCharIdentityValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<CharIdentity> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(JdoCharIdentityValueSemantics.class)
-        public JdoCharIdentityValueSemantics defaultJdoCharIdentityValueSemantics() {
-            return new JdoCharIdentityValueSemantics();
-        }
-    }
-
 
     @Inject IdStringifier<Character> idStringifierForCharacter;
 

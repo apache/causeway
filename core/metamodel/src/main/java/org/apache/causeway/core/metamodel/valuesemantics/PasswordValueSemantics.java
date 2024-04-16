@@ -21,9 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
@@ -37,6 +35,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
+@Component
 @Named("causeway.metamodel.value.PasswordValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class PasswordValueSemantics
@@ -44,16 +43,6 @@ extends ValueSemanticsAbstract<Password>
 implements
     Parser<Password>,
     Renderer<Password> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(PasswordValueSemantics.class)
-        public PasswordValueSemantics defaultPasswordValueSemantics() {
-            return new PasswordValueSemantics();
-        }
-    }
 
     @Override
     public Class<Password> getCorrespondingClass() {

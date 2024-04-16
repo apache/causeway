@@ -28,7 +28,7 @@ import org.apache.causeway.valuetypes.markdown.metamodel.semantics.MarkdownValue
  */
 @Configuration
 @Import({
-        MarkdownValueSemantics.AutoConfiguration.class,
+        MarkdownValueSemantics.class,
 })
 public class CausewayModuleValMarkdownMetaModel {
 

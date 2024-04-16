@@ -25,9 +25,7 @@ import java.util.function.UnaryOperator;
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -41,6 +39,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;
 
+@Component
 @Named("causeway.metamodel.value.StringValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class StringValueSemantics
@@ -49,16 +48,6 @@ implements
     Parser<String>,
     Renderer<String>,
     IdStringifier.EntityAgnostic<String> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(StringValueSemantics.class)
-        public StringValueSemantics defaultStringValueSemantics() {
-            return new StringValueSemantics();
-        }
-    }
 
     @Override
     public Class<String> getCorrespondingClass() {

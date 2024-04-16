@@ -24,9 +24,7 @@ import javax.annotation.Priority;
 
 import org.datanucleus.identity.DatastoreId;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -42,20 +40,10 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 
+@Component
 @Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
 public class JdoDatastoreIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<DatastoreId> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(JdoDatastoreIdValueSemantics.class)
-        public JdoDatastoreIdValueSemantics defaultJdoDatastoreIdValueSemantics() {
-            return new JdoDatastoreIdValueSemantics();
-        }
-    }
-
 
     public JdoDatastoreIdValueSemantics() {
         super(DatastoreId.class);

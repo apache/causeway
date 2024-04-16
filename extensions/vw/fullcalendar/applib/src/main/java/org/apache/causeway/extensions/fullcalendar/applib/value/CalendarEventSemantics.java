@@ -29,18 +29,16 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
-import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -63,25 +61,16 @@ import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 
+@Component
+@Import({
+    // mixins
+    CalendarEventSemantics.CalendarEvent_default.class
+})
 public class CalendarEventSemantics
 extends ValueSemanticsAbstract<CalendarEvent>
 implements
     DefaultsProvider<CalendarEvent>,
     Renderer<CalendarEvent> {
-
-    @Import({
-        // mixins
-        CalendarEventSemantics.CalendarEvent_default.class
-    })
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(CalendarEventSemantics.class)
-        public CalendarEventSemantics defaultCalendarEventSemantics() {
-            return new CalendarEventSemantics();
-        }
-    }
 
     @Inject private TemporalValueSemantics<ZonedDateTime> zonedDateTimeValueSemantics;
 
