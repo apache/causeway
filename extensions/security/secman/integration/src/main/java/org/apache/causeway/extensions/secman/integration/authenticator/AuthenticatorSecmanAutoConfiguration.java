@@ -39,7 +39,6 @@ public class AuthenticatorSecmanAutoConfiguration  {
 
     @Bean(CausewayModuleExtSecmanApplib.NAMESPACE + ".AuthenticatorSecman")
     @ConditionalOnMissingBean(Authenticator.class)
-    @Qualifier("Secman")
     public Authenticator authenticatorSecman(
             final ApplicationUserRepository applicationUserRepository,
             final @Qualifier("Secman") PasswordEncoder passwordEncoder) {
