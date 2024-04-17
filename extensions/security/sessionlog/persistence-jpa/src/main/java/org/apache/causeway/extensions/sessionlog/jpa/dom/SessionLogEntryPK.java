@@ -28,9 +28,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
@@ -66,20 +64,10 @@ public class SessionLogEntryPK implements Serializable {
                 : null;
     }
 
+    @Component
     @Priority(PriorityPrecedence.MIDPOINT)
     public static class Semantics
     extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<SessionLogEntryPK> {
-
-        @Configuration
-        public static class AutoConfiguration {
-
-            @Bean
-            @ConditionalOnMissingBean(Semantics.class)
-            public Semantics defaultSessionLogEntryPKSemantics() {
-                return new Semantics();
-            }
-        }
-
 
         public Semantics() {
             super(SessionLogEntryPK.class);

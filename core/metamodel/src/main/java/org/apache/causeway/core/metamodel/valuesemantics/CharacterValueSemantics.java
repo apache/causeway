@@ -26,9 +26,7 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.recoverable.InvalidEntryException;
@@ -49,6 +47,7 @@ import lombok.val;
 /**
  * due to auto-boxing also handles the primitive variant
  */
+@Component
 @Named("causeway.metamodel.value.CharacterValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class CharacterValueSemantics
@@ -58,17 +57,6 @@ implements
     Parser<Character>,
     Renderer<Character>,
     IdStringifier.EntityAgnostic<Character> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(CharacterValueSemantics.class)
-        public CharacterValueSemantics defaultCharacterValueSemantics() {
-            return new CharacterValueSemantics();
-        }
-    }
-
 
     @Override
     public Class<Character> getCorrespondingClass() {

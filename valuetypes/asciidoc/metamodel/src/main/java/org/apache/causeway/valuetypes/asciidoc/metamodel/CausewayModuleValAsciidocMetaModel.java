@@ -31,7 +31,7 @@ import org.apache.causeway.valuetypes.asciidoc.metamodel.semantics.InteractionDt
  */
 @Configuration
 @Import({
-        AsciiDocValueSemantics.AutoConfiguration.class,
+        AsciiDocValueSemantics.class,
         ChangesDtoValueSemanticsPrettyRender.class,
         CommandDtoValueSemanticsPrettyRender.class,
         InteractionDtoValueSemanticsPrettyRender.class,

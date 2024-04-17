@@ -23,9 +23,7 @@ import jakarta.inject.Named;
 
 import org.joda.time.LocalDateTime;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
@@ -34,21 +32,12 @@ import org.apache.causeway.core.metamodel.valuetypes.TemporalSemanticsAdapter;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.valuetypes.jodatime.integration.CausewayModuleValJodatimeIntegration;
 
+@Component
 @Named(JodaLocalDateTimeValueSemantics.LOGICAL_TYPE_NAME)
 public class JodaLocalDateTimeValueSemantics
 extends TemporalSemanticsAdapter<org.joda.time.LocalDateTime, java.time.LocalDateTime>  {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleValJodatimeIntegration.NAMESPACE + ".JodaLocalDateTimeValueSemantics";
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(JodaLocalDateTimeValueSemantics.class)
-        public JodaLocalDateTimeValueSemantics defaultJodaLocalDateTimeValueSemantics() {
-            return new JodaLocalDateTimeValueSemantics();
-        }
-    }
 
     @Inject LocalDateTimeValueSemantics localDateTimeValueSemantics;
 

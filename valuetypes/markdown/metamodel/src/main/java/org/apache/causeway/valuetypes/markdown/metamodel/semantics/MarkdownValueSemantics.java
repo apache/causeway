@@ -20,9 +20,7 @@ package org.apache.causeway.valuetypes.markdown.metamodel.semantics;
 
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.Parser;
 import org.apache.causeway.applib.value.semantics.Renderer;
@@ -34,22 +32,13 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.valuetypes.markdown.applib.CausewayModuleValMarkdownApplib;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
+@Component
 @Named(CausewayModuleValMarkdownApplib.NAMESPACE + ".MarkdownValueSemantics")
 public class MarkdownValueSemantics
 extends ValueSemanticsAbstract<Markdown>
 implements
     Parser<Markdown>,
     Renderer<Markdown> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(MarkdownValueSemantics.class)
-        public MarkdownValueSemantics defaultCalendarEventSemantics() {
-            return new MarkdownValueSemantics();
-        }
-    }
 
     @Override
     public Class<Markdown> getCorrespondingClass() {

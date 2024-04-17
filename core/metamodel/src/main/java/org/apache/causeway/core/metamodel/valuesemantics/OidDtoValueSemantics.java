@@ -22,9 +22,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -34,22 +32,13 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsAdapter;
 import org.apache.causeway.schema.common.v2.OidDto;
 
+@Component
 @Named(OidDtoValueSemantics.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 public class OidDtoValueSemantics
 extends ValueSemanticsAdapter<OidDto, Bookmark, Void> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleCoreMetamodel.NAMESPACE_VALUE + ".OidDtoValueSemantics";
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(OidDtoValueSemantics.class)
-        public OidDtoValueSemantics defaultOidDtoValueSemantics() {
-            return new OidDtoValueSemantics();
-        }
-    }
 
     @Inject BookmarkValueSemantics bookmarkValueSemantics;
 

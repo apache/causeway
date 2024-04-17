@@ -21,29 +21,18 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+@Component
 @Named("causeway.metamodel.value.CommandDtoValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class CommandDtoValueSemantics
 extends XmlValueSemanticsAbstract<CommandDto> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(CommandDtoValueSemantics.class)
-        public CommandDtoValueSemantics defaultCommandDtoValueSemantics() {
-            return new CommandDtoValueSemantics();
-        }
-    }
 
     @Override
     public final Class<CommandDto> getCorrespondingClass() {

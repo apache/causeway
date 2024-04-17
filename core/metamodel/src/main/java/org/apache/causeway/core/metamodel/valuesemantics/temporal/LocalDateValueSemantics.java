@@ -24,16 +24,15 @@ import java.util.Optional;
 
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.OrderRelation;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.schema.common.v2.ValueType;
 
+@Component
 @Named("causeway.metamodel.value.LocalDateValueSemantics")
 //@Log4j2
 public class LocalDateValueSemantics
@@ -42,16 +41,6 @@ implements OrderRelation<LocalDate, Duration> {
 
     public static final int MAX_LENGTH = 12;
     public static final int TYPICAL_LENGTH = MAX_LENGTH;
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(LocalDateValueSemantics.class)
-        public LocalDateValueSemantics defaultLocalDateValueSemantics() {
-            return new LocalDateValueSemantics();
-        }
-    }
 
     @Override
     public Class<LocalDate> getCorrespondingClass() {

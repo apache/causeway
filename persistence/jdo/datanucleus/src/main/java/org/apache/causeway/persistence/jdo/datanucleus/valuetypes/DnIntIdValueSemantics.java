@@ -22,9 +22,7 @@ import jakarta.annotation.Priority;
 
 import org.datanucleus.identity.IntId;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
@@ -36,22 +34,13 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.val;
 
+@Component
 @Priority(PriorityPrecedence.LATE)
 public class DnIntIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<IntId> {
 
     public DnIntIdValueSemantics() {
         super(IntId.class);
-    }
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(DnIntIdValueSemantics.class)
-        public DnIntIdValueSemantics defaultDnIntIdValueSemantics() {
-            return new DnIntIdValueSemantics();
-        }
     }
 
     // -- COMPOSER

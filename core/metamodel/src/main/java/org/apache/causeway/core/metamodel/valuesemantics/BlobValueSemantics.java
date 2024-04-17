@@ -23,10 +23,6 @@ import java.util.function.UnaryOperator;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.Blob;
@@ -44,16 +40,6 @@ public class BlobValueSemantics
 extends ValueSemanticsAbstract<Blob>
 implements
     Renderer<Blob> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(BlobValueSemantics.class)
-        public BlobValueSemantics defaultBlobValueSemantics() {
-            return new BlobValueSemantics();
-        }
-    }
 
     @Override
     public Class<Blob> getCorrespondingClass() {

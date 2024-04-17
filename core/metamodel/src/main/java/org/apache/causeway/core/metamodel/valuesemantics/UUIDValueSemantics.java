@@ -23,9 +23,7 @@ import java.util.UUID;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -41,6 +39,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.val;
 
+@Component
 @Named("causeway.metamodel.value.UUIDValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class UUIDValueSemantics
@@ -49,16 +48,6 @@ implements
     Parser<UUID>,
     Renderer<UUID>,
     IdStringifier.EntityAgnostic<UUID> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(UUIDValueSemantics.class)
-        public UUIDValueSemantics defaultUUIDValueSemantics() {
-            return new UUIDValueSemantics();
-        }
-    }
 
     @Override
     public Class<UUID> getCorrespondingClass() {

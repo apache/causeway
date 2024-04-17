@@ -23,9 +23,7 @@ import jakarta.inject.Inject;
 
 import org.datanucleus.identity.StringId;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -39,20 +37,10 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.val;
 
+@Component
 @Priority(PriorityPrecedence.LATE)
 public class DnStringIdValueSemantics
 extends ValueSemanticsBasedOnIdStringifier<StringId> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(DnStringIdValueSemantics.class)
-        public DnStringIdValueSemantics defaultDnStringIdValueSemantics() {
-            return new DnStringIdValueSemantics();
-        }
-    }
-
 
     @Inject IdStringifier<String> idStringifierForString;
 

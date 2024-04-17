@@ -31,10 +31,10 @@ import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLo
  */
 @Configuration
 @Import({
-    JodaLocalTimeValueSemantics.AutoConfiguration.class,
-    JodaLocalDateTimeValueSemantics.AutoConfiguration.class,
-    JodaLocalDateValueSemantics.AutoConfiguration.class,
-    JodaDateTimeValueSemantics.AutoConfiguration.class,
+    JodaLocalTimeValueSemantics.class,
+    JodaLocalDateTimeValueSemantics.class,
+    JodaLocalDateValueSemantics.class,
+    JodaDateTimeValueSemantics.class,
 })
 public class CausewayModuleValJodatimeIntegration {
 

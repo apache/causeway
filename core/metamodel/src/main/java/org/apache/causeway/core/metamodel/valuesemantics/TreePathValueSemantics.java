@@ -21,10 +21,8 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.graph.tree.TreePath;
@@ -41,6 +39,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.val;
 
+@Component
 @Named("causeway.metamodel.value.TreePathValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class TreePathValueSemantics
@@ -49,16 +48,6 @@ implements
     Parser<TreePath>,
     Renderer<TreePath>,
     IdStringifier.EntityAgnostic<TreePath> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(TreePathValueSemantics.class)
-        public TreePathValueSemantics defaultTreePathValueSemantics() {
-            return new TreePathValueSemantics();
-        }
-    }
 
     @Override
     public Class<TreePath> getCorrespondingClass() {
@@ -132,17 +121,17 @@ implements
     }
 
     // -- HELPER
-
+    
     private static String canonicalStringify(@Nullable TreePath treePath) {
         return treePath!=null
                 ? treePath.stringify("/")
                 : null;
     }
-
+    
     private static TreePath canonicalDestringify(@Nullable String input) {
         return input!=null
                 ? TreePath.parse(input, "/")
                 : null;
     }
-
+    
 }

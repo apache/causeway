@@ -21,9 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -38,6 +36,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.val;
 
+@Component
 @Named("causeway.metamodel.value.ApplicationFeatureIdValueSemantics")
 @Priority(PriorityPrecedence.LATE)
 public class ApplicationFeatureIdValueSemantics
@@ -45,16 +44,6 @@ extends ValueSemanticsAbstract<ApplicationFeatureId>
 implements
     Parser<ApplicationFeatureId>,
     Renderer<ApplicationFeatureId> {
-
-    @Configuration
-    public static class AutoConfiguration {
-
-        @Bean
-        @ConditionalOnMissingBean(ApplicationFeatureIdValueSemantics.class)
-        public ApplicationFeatureIdValueSemantics defaultApplicationFeatureIdValueSemantics() {
-            return new ApplicationFeatureIdValueSemantics();
-        }
-    }
 
     @Override
     public Class<ApplicationFeatureId> getCorrespondingClass() {
