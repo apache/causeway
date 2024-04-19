@@ -176,7 +176,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <sql-formatter.version>2.0.5</sql-formatter.version>
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.2.4</spring-boot.version>
+        <spring-boot.version>3.2.5</spring-boot.version>
 
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
