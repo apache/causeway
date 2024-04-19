@@ -178,7 +178,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.13</slf4j-api.version> <!-- also provided by spring-boot-starter-logging, needed to solve convergence issues -->
         <sql-formatter.version>2.0.5</sql-formatter.version>
-        <spring-boot.version>2.7.18</spring-boot.version>
+        <spring-boot.version>3.2.5</spring-boot.version>
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
