@@ -28,6 +28,8 @@ updates:
     ignore:
       - dependency-name: "org.springframework.boot*"
         versions: ["3.x"]
+      - dependency-name: "jakarta.el:jakarta.el-api"
+        versions: ["4.x","5.x","6.x"]
       - dependency-name: "org.apache.wicket*"
         versions: ["10.x"]
       - dependency-name: "org.wicketstuff*"
