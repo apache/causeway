@@ -11,16 +11,16 @@ updates:
     target-branch: "master"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
-  # Maintain dependencies for Maven
+  # Maintain dependencies for Maven (v2 branch)
   - package-ecosystem: "maven"
     target-branch: "master"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
-    # Allow up to 10 open pull requests for maven dependencies
-    open-pull-requests-limit: 20
+      interval: "weekly"
+    # Allow up to 50 open pull requests for maven dependencies
+    open-pull-requests-limit: 50
     # Use custom labels
     labels:
       - "dependencies"
@@ -28,6 +28,8 @@ updates:
     ignore:
       - dependency-name: "org.springframework.boot*"
         versions: ["3.x"]
+      - dependency-name: "jakarta.el:jakarta.el-api"
+        versions: ["4.x","5.x","6.x"]
       - dependency-name: "org.apache.wicket*"
         versions: ["10.x"]
       - dependency-name: "org.wicketstuff*"
@@ -39,14 +41,14 @@ updates:
       - dependency-name: "de.agilecoders.wicket.webjars:wicket-webjars"
         versions: ["4.x"]
     
-  # Maintain dependencies for Maven (3.0.0 milestones)
+  # Maintain dependencies for Maven (v3 branch)
   - package-ecosystem: "maven"
     target-branch: "v3"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
-    # Allow up to 10 open pull requests for maven dependencies
-    open-pull-requests-limit: 20
+      interval: "weekly"
+    # Allow up to 50 open pull requests for maven dependencies
+    open-pull-requests-limit: 50
     # Use custom labels
     labels:
       - "dependencies"
