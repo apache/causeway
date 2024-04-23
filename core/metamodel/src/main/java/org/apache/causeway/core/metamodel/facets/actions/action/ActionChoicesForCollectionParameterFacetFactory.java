@@ -66,9 +66,8 @@ implements MetaModelRefiner {
             return;
         }
 
-        programmingModel.addValidatorSkipManagedBeans(objectSpec->{
-            // as an optimization only checking declared members (skipping inherited ones)
-            objectSpec.streamDeclaredActions(MixedIn.INCLUDED)
+        programmingModel.addValidatorSkipAbstract(objectSpec->{
+            objectSpec.streamAnyActions(MixedIn.INCLUDED)
             .forEach(objectAction->{
                 if(objectAction instanceof ObjectActionMixedIn) {
                     // we'll report only the mixin
