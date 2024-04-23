@@ -155,5 +155,17 @@ extends HasMetaModelContext {
         });
     }
 
+    default void addValidatorSkipAbstract(
+            final @NonNull Consumer<ObjectSpecification> validator,
+            final Marker ... markers) {
+
+        addValidator(new MetaModelValidatorAbstract(getMetaModelContext(), MetaModelValidator.SKIP_ABSTRACT) {
+            @Override
+            public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
+                validator.accept(spec);
+            }
+        });
+    }
+
 
 }

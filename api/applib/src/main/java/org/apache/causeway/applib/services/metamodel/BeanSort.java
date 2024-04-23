@@ -135,10 +135,8 @@ public enum BeanSort {
 
         if(isVetoed()
                 || isUnknown()
-                || isCollection()) {
-            return false;
-        }
-        if(this == MANAGED_BEAN_NOT_CONTRIBUTING) {
+                || isCollection()
+                || this == MANAGED_BEAN_NOT_CONTRIBUTING) {
             return false;
         }
 

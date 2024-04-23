@@ -22,6 +22,7 @@ import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -117,7 +118,10 @@ extends MetaModelPostProcessorAbstract {
 
         }
 
-        checkParamHasChoicesOrAutoCompleteWhenRequired(param);
+        if(MetaModelVisitor.SKIP_ABSTRACT.test(objectSpecification)) {
+            checkParamHasChoicesOrAutoCompleteWhenRequired(param);
+        }
+
     }
 
     @Override

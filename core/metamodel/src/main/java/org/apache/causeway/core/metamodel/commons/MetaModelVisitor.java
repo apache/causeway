@@ -48,6 +48,13 @@ public interface MetaModelVisitor {
     public final static Predicate<ObjectSpecification> SKIP_MANAGED_BEANS =
             spec->!spec.isInjectable();
 
+    /**
+     * non-abstract types pass this filter, if introspect-able
+     */
+    public final static Predicate<ObjectSpecification> SKIP_ABSTRACT =
+            spec->!spec.isAbstract()
+                && spec.getBeanSort().isToBeIntrospected();
+
     /** types pass this filter, if is NOT a mixin */
     public final static Predicate<ObjectSpecification> SKIP_MIXINS =
             spec->!spec.isMixin();
