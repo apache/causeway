@@ -88,6 +88,11 @@ enum ScalarPanelAdditionalButton {
             default:
                 // fall through
             }
+            
+            // hide if editing is vetoed
+            if(scalarModel.disabledReason().isPresent()) {
+                return false;
+            }
 
             // visible only if feature is not required and not already cleared
             return scalarModel.getConfiguration().getViewer().getWicket().isClearFieldButtonEnabled()
