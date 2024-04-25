@@ -662,6 +662,9 @@ implements ScalarModelChangeListener {
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel) {
 
+       val paramNegotiationModel = paramModel.getParameterNegotiationModel();
+       final int paramIndex = paramModel.getParameterIndex();
+        
        /*
         * VISIBILITY, cases to consider:
         * (1) start showing     -> Repaint.REQUIRED_ON_PARENT
@@ -671,7 +674,7 @@ implements ScalarModelChangeListener {
         */
 
        val visibilityBefore = isVisibilityAllowed();
-       val visibilityConsent = paramModel.getParameterNegotiationModel().getVisibilityConsent(paramModel.getParameterIndex());
+       val visibilityConsent = paramNegotiationModel.getVisibilityConsent(paramIndex);
        val visibilityAfter = visibilityConsent.isAllowed();
        setVisibilityAllowed(visibilityAfter);
 
@@ -684,7 +687,7 @@ implements ScalarModelChangeListener {
         */
 
        val usabilityBefore = isEnabled();
-       val usabilityConsent = paramModel.getParameterNegotiationModel().getUsabilityConsent(paramModel.getParameterIndex());
+       val usabilityConsent = paramNegotiationModel.getUsabilityConsent(paramIndex);
        val usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
            onMakeEditable();

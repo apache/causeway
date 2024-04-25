@@ -143,7 +143,8 @@ extends PromptFormAbstract<ActionModel> {
         .forEach(paramIndexForReassessment->{
             var paramRepaint =
                     // potentially updates the paramNegotiationModel
-                    Repaint.required(paramNegotiationModel.reassessDefaults(paramIndexForReassessment));
+                    Repaint.required(paramNegotiationModel
+                            .reassessVisibilityAndUsabilityAndDefaults(paramIndexForReassessment));
             _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
             val paramPanel = paramPanels.get(paramIndexForReassessment);
