@@ -271,10 +271,17 @@ public class ParameterNegotiationModel {
      * Returns whether the pending parameter changed during reassessment.
      * @see ObjectActionParameter#reassessDefault(ParameterNegotiationModel)
      */
-    public boolean reassessVisibilityAndUsabilityAndDefaults(final int paramIndexForReassessment) {
+    public boolean reassessDefaults(final int paramIndexForReassessment) {
+        return getParamMetamodel(paramIndexForReassessment).reassessDefault(this);
+    }
+    
+    /**
+     * Invalidates any consent cached previously. 
+     * Next query for visibility or usability will be reassessed.   
+     */
+    public void invalidateVisibilityAndUsability(final int paramIndexForReassessment) {
         paramModels.get(paramIndexForReassessment)
             .ifPresent(ParameterModel::invalidateVisibilityAndUsability);
-        return getParamMetamodel(paramIndexForReassessment).reassessDefault(this);
     }
 
     /**

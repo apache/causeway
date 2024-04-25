@@ -32,6 +32,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 
 import org.springframework.lang.Nullable;
@@ -40,6 +41,7 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
@@ -662,8 +664,12 @@ implements ScalarModelChangeListener {
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel) {
 
+       val visibilityBefore = isVisibilityAllowed();
+       val usabilityBefore = isCurrentlyRenderedAsUsable();
+       
        val paramNegotiationModel = paramModel.getParameterNegotiationModel();
        final int paramIndex = paramModel.getParameterIndex();
+       paramNegotiationModel.invalidateVisibilityAndUsability(paramIndex);
         
        /*
         * VISIBILITY, cases to consider:
@@ -672,8 +678,6 @@ implements ScalarModelChangeListener {
         * (3) stop showing      -> Repaint.REQUIRED
         * (4) keep hiding       -> Repaint.OPTIONAL
         */
-
-       val visibilityBefore = isVisibilityAllowed();
        val visibilityConsent = paramNegotiationModel.getVisibilityConsent(paramIndex);
        val visibilityAfter = visibilityConsent.isAllowed();
        setVisibilityAllowed(visibilityAfter);
@@ -685,8 +689,6 @@ implements ScalarModelChangeListener {
         * (7) stop being usable     -> Repaint.REQUIRED (but only if visible)
         * (8) keep being readonly   -> Repaint.OPTIONAL
         */
-
-       val usabilityBefore = isEnabled();
        val usabilityConsent = paramNegotiationModel.getUsabilityConsent(paramIndex);
        val usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
@@ -709,6 +711,19 @@ implements ScalarModelChangeListener {
        }
 
        return Repaint.OPTIONAL;
+   }
+   
+   // -- HELPER
+   
+   /**
+    * Whether the underlying UI component is currently rendered as usable. 
+    */
+   private boolean isCurrentlyRenderedAsUsable() {
+       if(!isEnabled()) return false;
+       return _Casts.castTo(ScalarPanelFormFieldAbstract.class, this)
+           .map(ScalarPanelFormFieldAbstract::getFormComponent)
+           .map(FormComponent::isEnabled)
+           .orElse(true);
    }
 
 }
