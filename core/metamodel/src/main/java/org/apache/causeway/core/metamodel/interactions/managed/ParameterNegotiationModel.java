@@ -169,22 +169,22 @@ public class ParameterNegotiationModel {
     @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
         return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
     }
+    
+    @NonNull public Observable<Consent> getObservableVisibilityConsent(final int paramNr) {
+        return paramModels.getElseFail(paramNr).getObservableVisibilityConsent();
+    }
+    
+    @NonNull public Observable<Consent> getObservableUsabilityConsent(final int paramNr) {
+        return paramModels.getElseFail(paramNr).getObservableUsabilityConsent();
+    }
 
     @NonNull public Consent getVisibilityConsent(final int paramNr) {
-        val pendingArgValues = getParamValues();
-        val paramMeta = getParamMetamodel(paramNr);
-        val isVisible = paramMeta
-                .isVisible(getHead(), pendingArgValues, InteractionInitiatedBy.USER);
-        return isVisible;
+        return getObservableVisibilityConsent(paramNr).getValue();
     }
     @NonNull public Consent getUsabilityConsent(final int paramNr) {
-        val pendingArgValues = getParamValues();
-        val paramMeta = getParamMetamodel(paramNr);
-        val isUsable = paramMeta
-                .isUsable(getHead(), pendingArgValues, InteractionInitiatedBy.USER);
-        return isUsable;
+        return getObservableUsabilityConsent(paramNr).getValue();
     }
-
+    
     // -- MULTI SELECT
 
     public MultiselectChoices getMultiselectChoices() {
@@ -271,7 +271,9 @@ public class ParameterNegotiationModel {
      * Returns whether the pending parameter changed during reassessment.
      * @see ObjectActionParameter#reassessDefault(ParameterNegotiationModel)
      */
-    public boolean reassessDefaults(final int paramIndexForReassessment) {
+    public boolean reassessVisibilityAndUsabilityAndDefaults(final int paramIndexForReassessment) {
+        paramModels.get(paramIndexForReassessment)
+            .ifPresent(ParameterModel::invalidateVisibilityAndUsability);
         return getParamMetamodel(paramIndexForReassessment).reassessDefault(this);
     }
 
@@ -317,6 +319,8 @@ public class ParameterNegotiationModel {
         @Getter @NonNull private final LazyObservable<String> observableParamValidation;
         @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
         @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
+        @Getter @NonNull private final LazyObservable<Consent> observableVisibilityConsent;
+        @Getter @NonNull private final LazyObservable<Consent> observableUsabilityConsent;
         private Observable<String> bindableParamAsTitle;
         private Observable<String> bindableParamAsHtml;
         private Bindable<String> bindableParamAsParsableText;
@@ -374,12 +378,27 @@ public class ParameterNegotiationModel {
                         .isValid(getNegotiationModel().getHead(), getNegotiationModel().getParamValues(), InteractionInitiatedBy.USER)
                         .getReasonAsString().orElse(null)
                 : (String)null);
-
+            
+            observableVisibilityConsent = _Observables.lazy(()->
+                metaModel.isVisible(
+                        negotiationModel.getHead(), 
+                        negotiationModel.getParamValues(), 
+                        InteractionInitiatedBy.USER));
+            observableUsabilityConsent = _Observables.lazy(()->
+                metaModel.isUsable(
+                        negotiationModel.getHead(), 
+                        negotiationModel.getParamValues(), 
+                        InteractionInitiatedBy.USER));
         }
 
         public void invalidateChoicesAndValidation() {
             observableParamChoices.invalidate();
             observableParamValidation.invalidate();
+        }
+        
+        public void invalidateVisibilityAndUsability() {
+            observableVisibilityConsent.invalidate();
+            observableUsabilityConsent.invalidate();
         }
 
         private boolean isValidationFeedbackActive() {
