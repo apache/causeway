@@ -141,10 +141,11 @@ extends PromptFormAbstract<ActionModel> {
         // only updates subsequent parameter panels starting from (paramIndexOfUpdated + 1)
         IntStream.range(paramIndexOfUpdated + 1, paramNegotiationModel.getParamCount())
         .forEach(paramIndexForReassessment->{
+            // potentially updates the paramNegotiationModel
+            var wasValueChanged = paramNegotiationModel
+                    .reassessDefaults(paramIndexForReassessment);
             var paramRepaint =
-                    // potentially updates the paramNegotiationModel
-                    Repaint.required(paramNegotiationModel
-                            .reassessVisibilityAndUsabilityAndDefaults(paramIndexForReassessment));
+                    Repaint.required(wasValueChanged);
             _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
             val paramPanel = paramPanels.get(paramIndexForReassessment);
