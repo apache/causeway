@@ -101,6 +101,9 @@ implements ScalarModelChangeListener {
     }
 
     public enum RenderScenario {
+        /**
+         * As used for table cell content.
+         */
         COMPACT,
         /**
          * Is viewing and cannot edit.
@@ -131,25 +134,20 @@ implements ScalarModelChangeListener {
             return this==CAN_EDIT
                 || this==CAN_EDIT_INLINE
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }
-
+        
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
             val scalarModel = scalarPanel.scalarModel();
             if(scalarModel.getRenderingHint().isInTable()) {
                 return COMPACT;
             }
-            if(scalarModel.isParameter()
-                    && !(scalarPanel instanceof ScalarPanelSelectAbstract)
-                    && scalarModel.disabledReason().isPresent()) {
-                /* this simple logic only applies for params, as those don't support inline-as-if-edit
-                 * however, our select2 component does not allow for dynamic switching of usability,
-                 * so it must not be initialized readonly here */
-                return READONLY;
-            }
-            if(scalarModel.isEditingMode()) {
-                return
-                        _Util.canParameterEnterNestedEdit(scalarModel)
+            if(scalarModel.isParameter()) {
+                return _Util.canParameterEnterNestedEdit(scalarModel)
                         ? EDITING_WITH_LINK_TO_NESTED // nested/embedded dialog
-                        : EDITING;
+                        : EDITING; // for params always EDITING even if editing is vetoed
+            }
+            // at this point we are processing a property (not a parameter)
+            if(scalarModel.isEditingMode()) {
+                return EDITING;
             }
             if(_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
                 return CAN_EDIT_INLINE;

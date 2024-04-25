@@ -212,18 +212,14 @@ extends ScalarPanelAbstract2 {
             //keep inlinePromptLink (if any) enabled
             getFormComponent().setEnabled(false);
         }
-        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
-        }
+        replaceDisabledTagWithReadonlyTagIfApplicable();
         clearTooltip();
     }
 
     @Override
     protected void onInitializeReadonly(final String disableReason) {
         formComponentEnable(false);
-        if(getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) {
-            Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
-        }
+        replaceDisabledTagWithReadonlyTagIfApplicable();
         setTooltip(disableReason);
     }
 
@@ -275,5 +271,12 @@ extends ScalarPanelAbstract2 {
     private void clearTooltip() {
         WktTooltips.clearTooltip(getFormComponent());
         WktTooltips.clearTooltip(inlinePromptLink);
+    }
+    
+    private void replaceDisabledTagWithReadonlyTagIfApplicable() {
+        if(!getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) return;
+        //[CAUSEWAY-3727] select2 does not seem to support this replacement behavior
+        if(this instanceof ScalarPanelSelectAbstract) return;
+        Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());
     }
 }
