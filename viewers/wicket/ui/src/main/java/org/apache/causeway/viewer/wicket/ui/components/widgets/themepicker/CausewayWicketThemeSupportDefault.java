@@ -53,7 +53,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 @Log4j2
 public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSupport {
 
-    private final _Lazy<ThemeProviderComposite> themeProvider = _Lazy.of(this::createThemeProvider);
+    private final _Lazy<ThemeProviderComposite> themeProvider = _Lazy.threadSafe(this::createThemeProvider);
 
     @Inject private CausewayConfiguration configuration;
     @Inject private ServiceRegistry serviceRegistry;

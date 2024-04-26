@@ -74,7 +74,7 @@ public class AuthorizorSecman implements Authorizor {
     @Inject Provider<PermissionCache> cache;
     @Inject MetaModelService metaModelService;
 
-    private _Lazy<Identifier> logoutIdentifier = _Lazy.of(this::logoutIdentifier);
+    private _Lazy<Identifier> logoutIdentifier = _Lazy.threadSafe(this::logoutIdentifier);
 
     private Identifier logoutIdentifier() {
         return Identifier.actionIdentifier(metaModelService.lookupLogicalTypeByClass(LogoutMenu.class).orElseThrow(), "logout");
