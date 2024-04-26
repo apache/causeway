@@ -25,60 +25,62 @@
   padding: 0px;
 }
 
+/*
 .tree-theme-bootstrap div.tree-branch-mid {
 }
 
 .tree-theme-bootstrap div.tree-branch-last {
 }
+*/
 
 /* node */
 
 .tree-theme-bootstrap .tree-junction {
-  display: block;
+  display: flex;
   float: left;
-  width: 18px;
   color: rgba(0,0,0,0);
 }
 
 .tree-theme-bootstrap .tree-junction-expanded {
-  display: block;
+  display: flex;
   float: left;
-  width: 18px;
   text-decoration: none;
 }
 
 /* https://fontawesome.com/icons/chevron-down?style=solid */
 .tree-theme-bootstrap .tree-junction-expanded:before {
-  font-family: "Font Awesome 5 Free", sans-serif;
+  font-family: "Font Awesome 6 Free", sans-serif;
   font-weight: 900;
   content: "\f078";
 }
 
+/*
 .tree-theme-bootstrap .tree-junction-expanded:hover {
   
 }
+*/
 
 .tree-theme-bootstrap .tree-junction-collapsed {
-  display: block;
+  display: flex;
   float: left;
-  width: 18px;
   text-decoration: none;
 }
 
 /* https://fontawesome.com/icons/chevron-right?style=solid */
 .tree-theme-bootstrap .tree-junction-collapsed:before {
-  font-family: "Font Awesome 5 Free", sans-serif;
+  font-family: "Font Awesome 6 Free", sans-serif;
   font-weight: 900;
   content: "\f054";
 }
 
+/*
 .tree-theme-bootstrap .tree-junction-collapsed:hover {
   
 }
+*/
 
 .tree-theme-bootstrap span.tree-content {
   display: block;
-  margin-left: 18px;
 }
 
 .tree-theme-bootstrap .tree-node-selected {
