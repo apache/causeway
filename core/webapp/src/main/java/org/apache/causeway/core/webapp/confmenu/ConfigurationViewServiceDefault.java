@@ -125,7 +125,7 @@ implements
 
     // -- HELPER
 
-    private _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.of(()->loadConfiguration());
+    private _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.threadSafe(()->loadConfiguration());
 
     private List<Map<String, ConfigurationProperty>> loadConfiguration() {
         val configCategories =

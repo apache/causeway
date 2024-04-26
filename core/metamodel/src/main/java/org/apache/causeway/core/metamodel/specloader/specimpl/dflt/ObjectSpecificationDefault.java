@@ -303,7 +303,7 @@ implements FacetHolder {
     // -- ELEMENT SPECIFICATION
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
-            _Lazy.of(()->lookupFacet(TypeOfFacet.class)
+            _Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
                     .map(typeOfFacet -> typeOfFacet.elementSpec()));
 
     @Override
