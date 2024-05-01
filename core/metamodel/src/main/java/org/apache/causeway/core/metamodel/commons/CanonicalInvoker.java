@@ -50,33 +50,50 @@ public class CanonicalInvoker {
     // -- CONSTRUCT
 
     public <T> T construct(final Constructor<T> constructor, final @Nullable Object... executionParameters) {
-        val adaptedExecutionParameters = ParameterAdapter.DEFAULT.adaptAll(constructor, executionParameters);
-        val t = _Reflect.invokeConstructor(constructor, adaptedExecutionParameters)
-                .mapFailure(ex->toVerboseException(ex, constructor, adaptedExecutionParameters))
+        val convertedExecutionParameters = 
+                ParameterConverters.DEFAULT.convertAll(constructor, executionParameters);
+        val t = _Reflect.invokeConstructor(constructor, convertedExecutionParameters)
+                .mapFailure(ex->toVerboseException(ex, constructor, convertedExecutionParameters))
                 .valueAsNonNullElseFail();
         return _Casts.uncheckedCast(t);
     }
 
     // -- INVOKE
 
-    public Object invoke(final MethodFacade methodFacade, final Object targetPojo, final Object[] executionParameters) {
-        return invoke(
-                methodFacade.asMethodForIntrospection().method(), targetPojo, methodFacade.getArguments(executionParameters));
+    public Object invoke(
+            final MethodFacade methodFacade, 
+            final Object targetPojo, 
+            final Object[] executionParameters) {
+        var method = methodFacade.asMethodForIntrospection().method();
+        var args = methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT);
+        return invokeWithConvertedArgs(method, targetPojo, args);
     }
 
     public void invokeAll(final Iterable<Method> methods, final Object object) {
-        methods.forEach(method->invoke(method, object));
+        // invokes with no args, no conversion needed
+        methods.forEach(method->invokeWithConvertedArgs(method, object));
     }
 
     public Object invoke(
             final Method method,
             final Object targetPojo,
             final @Nullable Object ... executionParameters) {
-        val adaptedExecutionParameters = ParameterAdapter.DEFAULT.adaptAll(method, executionParameters);
-        return _Reflect.invokeMethodOn(method, targetPojo, adaptedExecutionParameters)
+        var convertedExecutionParameters = ParameterConverters.DEFAULT.convertAll(method, executionParameters);
+        return _Reflect.invokeMethodOn(method, targetPojo, convertedExecutionParameters)
             .mapFailure(ex->toVerboseException(ex,
                     method,
-                    adaptedExecutionParameters))
+                    convertedExecutionParameters))
+            .valueAsNullableElseFail();
+    }
+    
+    public Object invokeWithConvertedArgs(
+            final Method method,
+            final Object targetPojo,
+            final @Nullable Object ... convertedExecutionParameters) {
+        return _Reflect.invokeMethodOn(method, targetPojo, convertedExecutionParameters)
+            .mapFailure(ex->toVerboseException(ex,
+                    method,
+                    convertedExecutionParameters))
             .valueAsNullableElseFail();
     }
 

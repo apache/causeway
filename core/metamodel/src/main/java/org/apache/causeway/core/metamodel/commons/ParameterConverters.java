@@ -18,57 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.commons;
 
-import java.lang.reflect.Executable;
-
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.ParameterConverter;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 
-import lombok.NonNull;
-import lombok.val;
+import lombok.experimental.UtilityClass;
 
 /**
- * Helper interface for {@link CanonicalInvoker}.
+ * Helper for {@link CanonicalInvoker}.
  */
-@FunctionalInterface
-public interface ParameterAdapter {
+@UtilityClass
+public class ParameterConverters {
 
-    // -- INTERFACE
+    public static ParameterConverter DEFAULT = new Default();
 
-    /**
-     * Replaces {@code parameterValue} (if required) to be conform with the {@code parameterType}.
-     */
-    <T> T adaptToType(final Class<T> parameterType, Object parameterValue);
-
-    // -- UTILITY
-
-    default Object[] adaptAll(
-            final @NonNull Executable executable,
-            final @Nullable Object[] executionParameters) {
-        final int paramCount = executable.getParameterCount();
-        if(paramCount==0) {
-            return _Constants.emptyObjects;
-        }
-        val parameterTypes = executable.getParameterTypes();
-        val adaptedExecutionParameters = new Object[paramCount];
-        for(int i=0; i<paramCount; ++i) {
-            val origParam = _Arrays.get(executionParameters, i).orElse(null);
-            adaptedExecutionParameters[i] = adaptToType(parameterTypes[i], origParam);
-        }
-        return adaptedExecutionParameters;
-    }
-
-    // -- DEFAULT IMPL
-
-    static ParameterAdapter DEFAULT = new Default();
-
-    static class Default implements ParameterAdapter {
+    static class Default implements ParameterConverter {
 
         @Override
-        public <T> T adaptToType(final Class<T> parameterType, final Object parameterValue) {
+        public <T> T convert(final Class<T> parameterType, final Object parameterValue) {
             return _Casts.uncheckedCast(_adaptToType(parameterType, parameterValue));
         }
 
