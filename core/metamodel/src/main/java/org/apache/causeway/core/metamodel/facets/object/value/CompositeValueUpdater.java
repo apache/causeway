@@ -22,6 +22,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
+import org.apache.causeway.core.metamodel.commons.ParameterConverters;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -85,7 +86,8 @@ public abstract class CompositeValueUpdater {
         val method = methodFacade.asMethodForIntrospection();
 
         val resultPojo = CanonicalInvoker
-                .invoke(method.method(), targetPojo, methodFacade.getArguments(executionParameters));
+                .invokeWithConvertedArgs(method.method(), targetPojo, 
+                        methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 
         return ManagedObject.value(delegate.getReturnType(), resultPojo);
     }

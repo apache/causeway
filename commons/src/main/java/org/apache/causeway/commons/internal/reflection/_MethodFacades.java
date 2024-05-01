@@ -24,7 +24,11 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -81,6 +85,35 @@ public class _MethodFacades {
         }
     }
 
+    /**
+     * Invocation helper, that converts a given object to a required type.
+     */
+    @FunctionalInterface
+    public interface ParameterConverter {
+        /**
+         * Replaces {@code parameterValue} (if required) to be conform with the {@code parameterType}.
+         */
+        <T> T convert(final Class<T> parameterType, Object parameterValue);
+        
+        // -- UTILITY
+
+        default Object[] convertAll(
+                final @NonNull Executable executable,
+                final @Nullable Object[] executionParameters) {
+            final int paramCount = executable.getParameterCount();
+            if(paramCount==0) {
+                return _Constants.emptyObjects;
+            }
+            val parameterTypes = executable.getParameterTypes();
+            val adaptedExecutionParameters = new Object[paramCount];
+            for(int i=0; i<paramCount; ++i) {
+                val origParam = _Arrays.get(executionParameters, i).orElse(null);
+                adaptedExecutionParameters[i] = convert(parameterTypes[i], origParam);
+            }
+            return adaptedExecutionParameters;
+        }
+    }
+    
     public static interface MethodFacade {
 
         Class<?>[] getParameterTypes();
@@ -110,7 +143,7 @@ public class _MethodFacades {
          */
         Executable asExecutable();
 
-        Object[] getArguments(Object[] executionParameters);
+        Object[] getArguments(Object[] executionParameters, ParameterConverter converter);
 
         <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType);
         <A extends Annotation> Optional<A> synthesizeOnParameter(final Class<A> annotationType, int paramNum);
@@ -192,8 +225,8 @@ public class _MethodFacades {
                 final Class<A> annotationType, final int paramNum) {
             return _Annotations.synthesize(method.method().getParameters()[paramNum], annotationType);
         }
-        @Override public Object[] getArguments(final Object[] executionParameters) {
-            return executionParameters;
+        @Override public Object[] getArguments(final Object[] executionParameters, ParameterConverter converter) {
+            return converter.convertAll(method.method(), executionParameters);
         }
         @Override public boolean isAnnotatedAsNullable() {
             return _NullSafe.stream(method.method().getAnnotations())
@@ -248,9 +281,10 @@ public class _MethodFacades {
             return patConstructor.constructor();
         }
         @Override @SneakyThrows
-        public Object[] getArguments(final Object[] executionParameters) {
+        public Object[] getArguments(final Object[] executionParameters, ParameterConverter converter) {
+            var convertedArgs = converter.convertAll(patConstructor.constructor(), executionParameters);
             // converts input args into a single arg tuple type (PAT semantics)
-            return new Object[] {patConstructor.constructor().newInstance(executionParameters)};
+            return new Object[] {patConstructor.constructor().newInstance(convertedArgs)};
         }
         @Override public <A extends Annotation> Optional<A> synthesize(final Class<A> annotationType) {
             return _Annotations.synthesize(method.method(), annotationType);
