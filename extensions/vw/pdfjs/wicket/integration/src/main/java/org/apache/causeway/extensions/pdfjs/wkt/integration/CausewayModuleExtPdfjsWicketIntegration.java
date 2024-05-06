@@ -22,7 +22,6 @@ import org.apache.wicket.markup.html.SecurePackageResourceGuard;
 import org.apache.wicket.protocol.http.WebApplication;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
@@ -32,9 +31,6 @@ import lombok.val;
  * @since 2.0 {@index}
  */
 @Configuration
-@Import({
-
-})
 public class CausewayModuleExtPdfjsWicketIntegration
 implements WicketApplicationInitializer {
 
@@ -43,7 +39,10 @@ implements WicketApplicationInitializer {
         // pdf.js cmap support
         val resourceGuard =
                 (SecurePackageResourceGuard) webApplication.getResourceSettings().getPackageResourceGuard();
+        // allows *.bcmap, otherwise Wicket throws 'Access denied to (static) package resource'
         resourceGuard.addPattern("+*.bcmap");
+        // allows *.mjs, otherwise Wicket throws 'Access denied to (static) package resource'
+        resourceGuard.addPattern("+*.mjs");
     }
 
     public static PdfJsVersion getPdfJsVersion() {
