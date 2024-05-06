@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.pdfjs.wkt.integration.res;
 
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceType;
 
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
@@ -38,15 +39,19 @@ extends WebjarsJavaScriptResourceReference {
         new PdfJsReference();
 
     private PdfJsReference() {
-        super(String.format("%s/build/pdf.min.js",
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
+        super(String.format("%s/build/pdf.min.%s",
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath(),
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType()==JavaScriptReferenceType.MODULE
+                    ? "mjs"
+                    : "js"));
     }
 
     /**
      * @return this resource reference singleton instance as header item
      */
     public static HeaderItem asHeaderItem() {
-        return JavaScriptHeaderItem.forReference(instance());
+        return JavaScriptHeaderItem.forReference(instance())
+                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType());
     }
 
 }

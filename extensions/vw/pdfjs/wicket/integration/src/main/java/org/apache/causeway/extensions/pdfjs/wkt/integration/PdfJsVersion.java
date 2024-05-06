@@ -18,16 +18,19 @@
  */
 package org.apache.causeway.extensions.pdfjs.wkt.integration;
 
+import org.apache.wicket.markup.head.JavaScriptReferenceType;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum PdfJsVersion {
-    //V2_X("v2plus", "pdfjs-dist/2.16.105"),
-    //V3_X("v2plus", "pdfjs-dist/3.11.174"),
-    V4_X("v2plus", "pdfjs-dist/4.2.67")
+    V2_X("v2x3x", "pdfjs-dist/2.16.105", JavaScriptReferenceType.TEXT_JAVASCRIPT),
+    V3_X("v2x3x", "pdfjs-dist/3.11.174", JavaScriptReferenceType.TEXT_JAVASCRIPT),
+    V4_X("v4", "pdfjs-dist/4.2.67", JavaScriptReferenceType.MODULE)
     ;
     @Getter private final String integrationScriptSuffix;
     @Getter private final String webjarPath;
+    @Getter private final JavaScriptReferenceType javascriptRefType;
 
 }
