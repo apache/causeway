@@ -116,37 +116,45 @@ public class RunBackgroundCommandsJob implements Job {
 
     private void executeWithinOwnTransaction(CommandDto commandDto, InteractionContext interactionContext) {
         interactionService.runAndCatch(interactionContext, () -> {
-                    transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                                // look up the CommandLogEntry again because we are within a new transaction.
-                                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
-
-                                // finally, we execute
-                                commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                                {
-                                    commandExecutorService.executeCommand(
-                                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
-                                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                                });
-                            })
-                            .ifFailureFail();
+                    executeCommandWithinOwnTransactionElseFail(commandDto);
                 })
                 .ifFailure(throwable -> {
-                    log.error("Failed to execute command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
-                    // update this command as having failed.
-                    interactionService.runAndCatch(interactionContext, () -> {
-                        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                            // look up the CommandLogEntry again because we are within a new transaction.
-                            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
-
-                            // capture the error
-                            commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                            {
-                                commandLogEntry.setException(throwable);
-                                commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                            });
-                        });
-                    });
+                    logAndCaptureFailure(throwable, commandDto, interactionContext);
                 });
+    }
+
+    private void executeCommandWithinOwnTransactionElseFail(CommandDto commandDto) {
+        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                // look up the CommandLogEntry again because we are within a new transaction.
+                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+
+                // finally, we execute
+                commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                {
+                    commandExecutorService.executeCommand(
+                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
+                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                });
+            })
+            .ifFailureFail();
+    }
+
+    private void logAndCaptureFailure(Throwable throwable, CommandDto commandDto, InteractionContext interactionContext) {
+        log.error("Failed to execute command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
+        // update this command as having failed.
+        interactionService.runAndCatch(interactionContext, () -> {
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                // look up the CommandLogEntry again because we are within a new transaction.
+                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+
+                // capture the error
+                commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                {
+                    commandLogEntry.setException(throwable);
+                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                });
+            });
+        });
     }
 
 }
