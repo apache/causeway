@@ -87,6 +87,17 @@ public class RunBackgroundCommandsJob implements Job {
         InteractionContext interactionContext = InteractionContext.builder().user(user).build();
 
         // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
+        final Optional<List<CommandDto>> commandDtosIfAny = pendingCommandDtos(interactionContext);
+
+        // for each command, we execute within its own transaction.  Failure of one should not impact the next.
+        commandDtosIfAny.ifPresent(commandDtos -> {
+            for (val commandDto : commandDtos) {
+                executeWithinOwnTransaction(commandDto, interactionContext);
+            }
+        });
+    }
+
+    private Optional<List<CommandDto>> pendingCommandDtos(InteractionContext interactionContext) {
         final Optional<List<CommandDto>> commandDtosIfAny =
                 interactionService.callAndCatch(interactionContext, () ->
                     transactionService.callTransactional(Propagation.REQUIRES_NEW, () ->
@@ -100,24 +111,24 @@ public class RunBackgroundCommandsJob implements Job {
                     )
                     .ifFailureFail()    // we give up if unable to find these
                     .getValue();
+        return commandDtosIfAny;
+    }
 
-        // for each command, we execute within its own transaction.  Failure of one should not impact the next.
-        commandDtosIfAny.ifPresent(commandDtos -> {
-            for (val commandDto : commandDtos) {
-                interactionService.runAndCatch(interactionContext, () -> {
+    private void executeWithinOwnTransaction(CommandDto commandDto, InteractionContext interactionContext) {
+        interactionService.runAndCatch(interactionContext, () -> {
                     transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                        // look up the CommandLogEntry again because we are within a new transaction.
-                        val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                                // look up the CommandLogEntry again because we are within a new transaction.
+                                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
-                        // finally, we execute
-                        commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                        {
-                            commandExecutorService.executeCommand(
-                                    CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
-                            commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                        });
-                    })
-                    .ifFailureFail();
+                                // finally, we execute
+                                commandLogEntryIfAny.ifPresent(commandLogEntry ->
+                                {
+                                    commandExecutorService.executeCommand(
+                                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
+                                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                                });
+                            })
+                            .ifFailureFail();
                 })
                 .ifFailure(throwable -> {
                     log.error("Failed to execute command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
@@ -136,8 +147,6 @@ public class RunBackgroundCommandsJob implements Job {
                         });
                     });
                 });
-            }
-        });
     }
 
 }
