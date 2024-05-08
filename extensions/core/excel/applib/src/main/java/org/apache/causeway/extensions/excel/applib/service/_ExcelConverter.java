@@ -469,7 +469,7 @@ class _ExcelConverter {
                                     templateAdapter = this.objectManager.adapt(imported);
                                 }
                                 final ManagedObject valueAdapter = this.objectManager.adapt(value);
-                                otoa.set(templateAdapter, valueAdapter, InteractionInitiatedBy.USER);
+                                otoa.set(templateAdapter, valueAdapter, InteractionInitiatedBy.PASS_THROUGH);
                             }
                         } else {
                             // not expected; just ignore.
