@@ -119,18 +119,6 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "description")
                 );
 
-        val vetoViewing = Can.of(
-                // we explicitly ensure that the user cannot grant themselves
-                // additional privileges or see stuff that they shouldn't
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "effectiveMemberPermissions"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "filterEffectiveMemberPermissions"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "resetPassword"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "lock"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "unlock"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "addRole"),
-                ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "removeRoles")
-        );
-
         newPermissions(
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.VIEWING,
@@ -140,11 +128,6 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 allowChanging);
-
-        newPermissions(
-                ApplicationPermissionRule.VETO,
-                ApplicationPermissionMode.VIEWING,
-                vetoViewing);
 
     }
 
