@@ -71,44 +71,6 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
 
     @Inject private CausewaySystemEnvironment env;
 
-    /**
-     * Prevent a regular user from viewing any of these actions.
-     *
-     * <p>
-     *     This is a constant because {@link CausewayExtSecmanAdminRoleAndPermissions} can explicitly revert the change and make the
-     *     access visible (in case a user has both admin and regular user roles).
-     * </p>
-     */
-    static final Can<ApplicationFeatureId> NOT_VISIBLE_ACTIONS = Can.of(
-
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "effectiveMemberPermissions"),
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "filterEffectiveMemberPermissions"),
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "resetPassword"),
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "lock"),
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "unlock"),
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "addRole"),
-            ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "removeRoles"),
-
-            ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "addUser"),
-            ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "removeUsers"),
-            ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "addPermission"),
-            ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "removePermissions"),
-            ApplicationFeatureId.newMember(ApplicationRole.LOGICAL_TYPE_NAME, "delete")
-    );
-
-    /**
-     * Prevent a regular user from changing any of types
-     *
-     * <p>
-     *     This is a constant so that {@link CausewayExtSecmanAdminRoleAndPermissions} can explicit allows changes to this type
-     *     (in case a user has both admin and regular user roles).
-     * </p>
-     */
-    static final Can<ApplicationFeatureId> NOT_ENABLED_TYPES = Can.of(
-            ApplicationFeatureId.newType(ApplicationRole.LOGICAL_TYPE_NAME)
-    );
-
-
     public CausewayExtSecmanRegularUserRoleAndPermissions(final Secman config) {
         super(config.getSeed().getRegularUser().getRoleName(), "Regular user of the security module");
     }
@@ -166,15 +128,6 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING,
                 allowChanging);
-
-        newPermissions(
-                ApplicationPermissionRule.VETO,
-                ApplicationPermissionMode.VIEWING,
-                NOT_VISIBLE_ACTIONS);
-        newPermissions(
-                ApplicationPermissionRule.VETO,
-                ApplicationPermissionMode.CHANGING,
-                NOT_ENABLED_TYPES);
 
     }
 
