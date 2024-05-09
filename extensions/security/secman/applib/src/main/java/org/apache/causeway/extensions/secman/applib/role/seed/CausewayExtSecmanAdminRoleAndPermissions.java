@@ -33,6 +33,7 @@ import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanAppli
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.val;
 
@@ -63,6 +64,14 @@ public class CausewayExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPer
                 Can.of(CausewayModuleExtSecmanApplib.NAMESPACE).addAll(Can.ofCollection(adminInitialPackagePermissions))
                     .map(ApplicationFeatureId::newNamespace)
         );
+
+        // Just in case an admin also has been assigned to be a regular user, we explicitly re-enable these actions that
+        // are otherwise restricted for regular users.
+        newPermissions(
+                ApplicationPermissionRule.ALLOW,
+                ApplicationPermissionMode.VIEWING,
+                CausewayExtSecmanRegularUserRoleAndPermissions.RESTRICTED_ACTIONS);
+
     }
 
     // -- HELPER
