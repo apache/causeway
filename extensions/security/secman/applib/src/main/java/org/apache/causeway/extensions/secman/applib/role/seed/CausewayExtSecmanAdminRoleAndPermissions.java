@@ -64,17 +64,6 @@ public class CausewayExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPer
                     .map(ApplicationFeatureId::newNamespace)
         );
 
-        // in case an admin also has been assigned to be a regular user, we explicitly
-        // re-enable these actions & types that are otherwise vetoed.
-        newPermissions(
-                ApplicationPermissionRule.ALLOW,
-                ApplicationPermissionMode.VIEWING,
-                CausewayExtSecmanRegularUserRoleAndPermissions.NOT_VISIBLE_ACTIONS);
-        newPermissions(
-                ApplicationPermissionRule.ALLOW,
-                ApplicationPermissionMode.CHANGING,
-                CausewayExtSecmanRegularUserRoleAndPermissions.NOT_ENABLED_TYPES);
-
     }
 
     // -- HELPER
