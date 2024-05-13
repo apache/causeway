@@ -81,7 +81,7 @@ implements AuthorizationFacet {
                         getInteractionService().currentInteractionContextElseFail(),
                         ic.getIdentifier())
                 ? null
-                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.getIdentifier());
+                : AuthorizationFacet.formatNotAuthorizedToEdit(getSystemEnvironment().isPrototyping(),ic.getIdentifier());
 
         if(disables!=null && log.isDebugEnabled()) {
             log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
