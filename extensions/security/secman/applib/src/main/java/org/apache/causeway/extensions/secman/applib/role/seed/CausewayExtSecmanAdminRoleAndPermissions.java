@@ -63,6 +63,7 @@ public class CausewayExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPer
                 Can.of(CausewayModuleExtSecmanApplib.NAMESPACE).addAll(Can.ofCollection(adminInitialPackagePermissions))
                     .map(ApplicationFeatureId::newNamespace)
         );
+
     }
 
     // -- HELPER
