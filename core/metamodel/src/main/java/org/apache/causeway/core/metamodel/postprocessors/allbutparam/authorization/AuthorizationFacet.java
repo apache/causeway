@@ -87,8 +87,9 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
     }
 
     /**
-     * @param identifier - presence results in a more verbose message
-     * @param mmc - if present AND when PROTOTYPING, results in a more concise message,
+     * @param identifier - presence results in a more detailed message (including feature origin)
+     * @param mmc - if present AND when NOT PROTOTYPING AND when identifier is also present,
+     *      results in a more concise message,
      *      only including the friendly member name (omitting the type's name)
      */
     public static String formatNotAuthorizedToEdit(
