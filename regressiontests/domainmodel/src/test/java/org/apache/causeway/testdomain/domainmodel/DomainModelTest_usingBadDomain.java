@@ -30,12 +30,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
@@ -52,7 +53,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.metamodel.specloader.IntrospectionMode;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -134,7 +135,7 @@ class DomainModelTest_usingBadDomain {
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideMe()");
+                ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
     }
 
 
@@ -149,7 +150,7 @@ class DomainModelTest_usingBadDomain {
         val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideMe()");
+                ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
@@ -163,7 +164,7 @@ class DomainModelTest_usingBadDomain {
         val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideMe()");
+                ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
     }
 
     @Test
@@ -427,7 +428,7 @@ class DomainModelTest_usingBadDomain {
 
         validator.assertAnyFailuresContaining(
                 classUnderTest,
-                ProgrammingModelConstants.Violation.INVALID_MIXIN_MAIN.builder()
+                ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_MAIN.builder()
                 .addVariable("type", classUnderTest.getName())
                 .addVariable("expectedMethodName", expectedMethodName)
                 .addVariable("actualMethodName", "other")
@@ -460,7 +461,7 @@ class DomainModelTest_usingBadDomain {
     private String unsatisfiedDomainIncludeSemantics(
             final String className,
             final String memberName) {
-        return Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+        return MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
                 .builder()
                 .addVariable("type", className)
                 .addVariable("member", memberName)

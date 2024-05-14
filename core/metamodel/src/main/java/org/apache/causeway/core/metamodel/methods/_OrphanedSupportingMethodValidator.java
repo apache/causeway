@@ -64,7 +64,7 @@ class _OrphanedSupportingMethodValidator {
 
             ValidationFailure.raise(
                     spec,
-                    ProgrammingModelConstants.Violation.ORPHANED_METHOD
+                    ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD
                         .builder()
                         .addVariablesFor(methodIdentifier)
                         .buildMessage());

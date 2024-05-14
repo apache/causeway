@@ -58,7 +58,7 @@ extends MetaModelValidatorAbstract {
 
             ValidationFailure.raiseFormatted(
                     spec,
-                    ProgrammingModelConstants.Violation.UNKNONW_SORT_WITH_ACTION
+                    ProgrammingModelConstants.MessageTemplate.UNKNONW_SORT_WITH_ACTION
                         .builder()
                         .addVariable("type", spec.getCorrespondingClass().getName())
                         .addVariable("actions", actionIds)

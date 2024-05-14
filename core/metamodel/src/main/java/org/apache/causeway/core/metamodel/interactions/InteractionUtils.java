@@ -108,7 +108,7 @@ public final class InteractionUtils {
     private static String guardAgainstEmptyReasonString(
             final @Nullable String reason, final @NonNull Identifier identifier) {
         if("".equals(reason)) {
-            val msg = ProgrammingModelConstants.Violation.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
+            val msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
                 .addVariable("className", identifier.getClassName())
                 .addVariable("memberName", identifier.getMemberLogicalName())
                 .buildMessage();

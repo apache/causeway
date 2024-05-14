@@ -36,7 +36,7 @@ public final class ValidationFailureUtils {
             final Class<A> annotationType) {
 
         ValidationFailure.raiseFormatted(holder,
-                ProgrammingModelConstants.Violation.AMBIGUOUS_MIXIN_ANNOTATIONS
+                ProgrammingModelConstants.MessageTemplate.AMBIGUOUS_MIXIN_ANNOTATIONS
                     .builder()
                     .addVariable("annot", "@" + annotationType.getSimpleName())
                     .addVariable("mixinType", holder.getFeatureIdentifier().getFullIdentityString())
@@ -50,7 +50,7 @@ public final class ValidationFailureUtils {
             final ObjectMember memberB) {
 
         ValidationFailure.raiseFormatted(memberB,
-                ProgrammingModelConstants.Violation.MEMBER_ID_CLASH
+                ProgrammingModelConstants.MessageTemplate.MEMBER_ID_CLASH
                     .builder()
                     .addVariable("type", declaringType.fqcn())
                     .addVariable("memberId", ""+memberB.getId())
@@ -64,7 +64,7 @@ public final class ValidationFailureUtils {
             final ObjectSpecification declaringType,
             final ObjectSpecification elementType) {
         ValidationFailure.raiseFormatted(facetHolder,
-                ProgrammingModelConstants.Violation.INVALID_MEMBER_ELEMENT_TYPE
+                ProgrammingModelConstants.MessageTemplate.INVALID_MEMBER_ELEMENT_TYPE
                     .builder()
                     .addVariable("type", declaringType.fqcn())
                     .addVariable("elementType", ""+elementType)

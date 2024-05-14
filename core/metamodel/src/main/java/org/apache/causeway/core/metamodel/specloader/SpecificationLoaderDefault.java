@@ -607,7 +607,7 @@ implements
         if(isMetamodelFullyIntrospected()
                 && causewayConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val warningMessage = ProgrammingModelConstants.Violation.TYPE_NOT_EAGERLY_DISCOVERED
+            val warningMessage = ProgrammingModelConstants.MessageTemplate.TYPE_NOT_EAGERLY_DISCOVERED
                     .builder()
                     .addVariable("type", cls.getName())
                     .addVariable("beanSort", causewayBeanTypeClassifier

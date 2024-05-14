@@ -79,7 +79,7 @@ class DomainModelTest_usingBadDomain_noAnnotationEnforced extends CausewayIntegr
         val tester = testerFactory.objectTester(InvalidOrphanedActionSupportNoAnnotationEnforced.class);
 
         tester.assertValidationFailureOnMember(
-                ProgrammingModelConstants.Violation.ORPHANED_METHOD, "hideOrphaned()");
+                ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideOrphaned()");
     }
 
 }
