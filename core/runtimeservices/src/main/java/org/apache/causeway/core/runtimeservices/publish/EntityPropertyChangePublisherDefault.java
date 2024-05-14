@@ -27,6 +27,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -66,6 +67,9 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
 
     private Can<EntityPropertyChangeSubscriber> enabledSubscribers = Can.empty();
 
+    @Value("${entity.property.change.publisher.bulk.threshold:10}")
+    private int propertyBulkThreshold;
+
     @PostConstruct
     public void init() {
         enabledSubscribers = Can.ofCollection(subscribers)
@@ -102,12 +106,17 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                     enabledSubscribers,
                     () -> getCannotPublishReason(propertyChanges)
             );
-
-            propertyChanges.forEach(propertyChange->{
-                for (val subscriber : enabledSubscribers) {
-                    subscriber.onChanging(propertyChange);
+            if(propertyChanges.size() <= propertyBulkThreshold) {
+                propertyChanges.forEach(propertyChange -> {
+                    for (val subscriber : enabledSubscribers) {
+                        subscriber.onChanging(propertyChange);
+                    }
+                });
+            } else {
+                for(val subscriber : enabledSubscribers) {
+                    subscriber.onBulkChanging(propertyChanges);
                 }
-            });
+            }
         } finally {
             _Xray.exitPublishing(xrayHandle);
         }
