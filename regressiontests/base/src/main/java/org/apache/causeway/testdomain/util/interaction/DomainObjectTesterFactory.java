@@ -249,7 +249,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         }
 
         public void assertValidationFailureOnMember(
-                final ProgrammingModelConstants.Violation violation,
+                final ProgrammingModelConstants.MessageTemplate violation,
                 final String memberName) {
 
             val validateDomainModel =

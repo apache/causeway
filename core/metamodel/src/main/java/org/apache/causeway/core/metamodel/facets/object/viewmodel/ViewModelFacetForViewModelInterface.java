@@ -72,11 +72,11 @@ extends ViewModelFacetAbstract {
 
 
             val violation = explicitInjectConstructors.getCardinality().isMultiple()
-                    ? ProgrammingModelConstants.Violation.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
+                    ? ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
                     : explicitInjectConstructors.getCardinality().isZero()
                         && !publicConstructors.getCardinality().isOne()
                             // in absence of a constructor with inject semantics there must be exactly one public to pick instead
-                            ? ProgrammingModelConstants.Violation.VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS
+                            ? ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MISSING_OR_MULTIPLE_PUBLIC_CONSTRUCTORS
                             : null;
 
             if(violation!=null) {

@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -139,7 +139,7 @@ extends MetaModelValidatorAbstract {
                     .collect(Collectors.joining("; "));
 
             ValidationFailure.raiseFormatted(spec,
-                    Violation.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+                    MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
                         .builder()
                         .addVariable("type", spec.getFeatureIdentifier().getClassName())
                         .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod.method()))

@@ -53,7 +53,7 @@ extends NavigableParentFacetAbstract {
             // failure
             deficiency->{
                 ValidationFailure.raiseFormatted(facetHolder,
-                        ProgrammingModelConstants.Violation.DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT
+                        ProgrammingModelConstants.MessageTemplate.DOMAIN_OBJECT_INVALID_NAVIGABLE_PARENT
                             .builder()
                             .addVariable("type", processedClass.getName())
                             .addVariable("parentType", method.returnType().getName())

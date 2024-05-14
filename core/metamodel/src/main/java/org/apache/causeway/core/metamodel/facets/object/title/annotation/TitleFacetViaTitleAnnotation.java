@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
 import org.apache.causeway.core.metamodel.facets.Evaluators.MethodEvaluator;
@@ -201,7 +201,7 @@ implements ImperativeFacet {
             final Runnable onTrue) {
         if(ObjectSupportMethod.TITLE.getMethodNames().contains(evaluator.name())) {
             ValidationFailure.raise(facetHolder,
-                    Violation.CONFLICTING_TITLE_STRATEGIES
+                    MessageTemplate.CONFLICTING_TITLE_STRATEGIES
                         .builder()
                         .addVariablesFor(facetHolder.getFeatureIdentifier())
                         .buildMessage());

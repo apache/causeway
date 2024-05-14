@@ -89,7 +89,7 @@ implements
                     && objectSpec.getBeanSort().isViewModel()
                     && !objectSpec.viewmodelFacet().isPresent()) {
                 ValidationFailure.raiseFormatted(objectSpec,
-                        ProgrammingModelConstants.Violation.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
+                        ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MISSING_SERIALIZATION_STRATEGY
                             .builder()
                             .addVariable("type", objectSpec.getCorrespondingClass().getName())
                             .buildMessage());
@@ -101,7 +101,7 @@ implements
                 facetRanking
                 .visitTopRankPairsSemanticDiffering(ViewModelFacet.class, (a, b)->{
                     ValidationFailure.raiseFormatted(objectSpec,
-                            ProgrammingModelConstants.Violation.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
+                            ProgrammingModelConstants.MessageTemplate.VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES
                                 .builder()
                                 .addVariable("type", objectSpec.getFullIdentifier())
                                 .addVariable("facetA", a.getClass().getSimpleName())

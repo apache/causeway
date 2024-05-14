@@ -106,7 +106,7 @@ class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstr
         val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
         val actionId = actionInteraction.getMetamodel().map(ObjectAction::getFeatureIdentifier).orElse(null);
         assertEquals(
-                AuthorizationFacet.formatNotAuthorizedToEdit(actionId), 
+                AuthorizationFacet.formatNotAuthorizedToEdit(actionId, objectManager.getMetaModelContext()),
                 veto.getReasonAsString().orElse(null));
     }
 

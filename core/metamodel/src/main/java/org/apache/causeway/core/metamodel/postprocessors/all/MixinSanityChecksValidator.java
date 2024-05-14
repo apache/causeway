@@ -68,7 +68,7 @@ implements
         if(contributing==null
                 || contributing.isUnspecified()) {
             ValidationFailure.raiseFormatted(objSpec,
-                    ProgrammingModelConstants.Violation.INVALID_MIXIN_TYPE
+                    ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_TYPE
                         .builder()
                         .addVariable("type", objSpec.getCorrespondingClass().getName())
                         .buildMessage());
@@ -104,7 +104,7 @@ implements
 
         if(actualContributing!=expectedContributing) {
             ValidationFailure.raiseFormatted(objSpec,
-                    ProgrammingModelConstants.Violation.INVALID_MIXIN_SORT
+                    ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_SORT
                         .builder()
                         .addVariable("type", objSpec.getCorrespondingClass().getName())
                         .addVariable("expectedContributing", expectedContributing.name())
@@ -121,7 +121,7 @@ implements
 
         if(!expectedMethodName.equals(actualMethodName)) {
             ValidationFailure.raiseFormatted(objSpec,
-                    ProgrammingModelConstants.Violation.INVALID_MIXIN_MAIN
+                    ProgrammingModelConstants.MessageTemplate.INVALID_MIXIN_MAIN
                         .builder()
                         .addVariable("type", objSpec.getCorrespondingClass().getName())
                         .addVariable("expectedMethodName", expectedMethodName)

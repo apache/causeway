@@ -67,7 +67,7 @@ extends MetaModelValidatorAbstract {
 
             ValidationFailure.raiseFormatted(
                     spec,
-                    ProgrammingModelConstants.Violation.ACTION_METHOD_OVERLOADING_NOT_ALLOWED
+                    ProgrammingModelConstants.MessageTemplate.ACTION_METHOD_OVERLOADING_NOT_ALLOWED
                     .builder()
                     .addVariable("type", spec.getCorrespondingClass().getName())
                     .addVariable("overloadedNames", overloadedNames.toString())
