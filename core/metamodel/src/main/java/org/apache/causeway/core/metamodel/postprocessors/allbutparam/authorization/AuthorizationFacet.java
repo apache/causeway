@@ -84,10 +84,12 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                 .orElse(false);
     }
     
-    public static String formatNotAuthorizedToEdit(final @Nullable Identifier identifier) {
+    public static String formatNotAuthorizedToEdit(final boolean useNaturalName,
+                                                   final @Nullable Identifier identifier) {
         return identifier!=null
-                ? String.format("Not authorized to edit feature: %s", identifier.getLogicalIdentityString("#"))
-                : "Not authorized to edit";
+                ? String.format("Not authorized to edit or use feature: %s",
+                    useNaturalName ? identifier.getMemberNaturalName() : identifier.getLogicalIdentityString("#"))
+                : "Not authorized to edit or use";
     }
 
 }
