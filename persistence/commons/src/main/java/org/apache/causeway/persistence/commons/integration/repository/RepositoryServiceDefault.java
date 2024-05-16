@@ -21,7 +21,9 @@ package org.apache.causeway.persistence.commons.integration.repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -78,6 +80,7 @@ implements RepositoryService, HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     final MetaModelContext metaModelContext;
 
+    private Map<Class, Boolean> bulkModeMap = new ConcurrentHashMap<>();
     private boolean autoFlush;
 
     @PostConstruct
@@ -116,12 +119,20 @@ implements RepositoryService, HasMetaModelContext {
         return domainObject;
     }
 
-
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
-        transactionService.flushTransaction();
+        if(!bulkModeMap.computeIfAbsent(object.getClass(), aClass -> false)) {
+            transactionService.flushTransaction();
+        }
         return object;
+    }
+
+    @Override
+    public <T> void setBulkMode(final T object, final Boolean bulkMode) {
+        if (!bulkModeMap.computeIfAbsent(object.getClass(), aClass -> bulkMode)) {
+            transactionService.flushTransaction();
+        }
     }
 
     @Override

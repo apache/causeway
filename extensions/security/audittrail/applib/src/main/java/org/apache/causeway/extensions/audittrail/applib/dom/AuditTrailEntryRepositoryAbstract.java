@@ -24,7 +24,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -77,13 +76,14 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     public Can<AuditTrailEntry> createForBulk(Can<EntityPropertyChange> entityPropertyChanges) {
         Collection<AuditTrailEntry> auditTrailEntries = new ArrayList<>();
         try {
+            repositoryService.setBulkMode(AuditTrailEntry.class, true);
             entityPropertyChanges.forEach(change -> {
                 E entry = factoryService.detachedEntity(auditTrailEntryClass);
                 entry.init(change);
                 auditTrailEntries.add(repositoryService.persist(entry));
             });
         } finally {
-            transactionService.flushTransaction();
+            repositoryService.setBulkMode(AuditTrailEntry.class, false);
         }
         return Can.ofCollection(auditTrailEntries);
     }
