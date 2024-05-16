@@ -35,7 +35,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -53,7 +52,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     @Inject RepositoryService repositoryService;
     @Inject FactoryService factoryService;
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
-    @Inject TransactionService transactionService;
 
     private final Class<E> auditTrailEntryClass;
 

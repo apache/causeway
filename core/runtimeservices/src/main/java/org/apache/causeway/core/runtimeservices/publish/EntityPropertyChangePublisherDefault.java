@@ -67,7 +67,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
 
     private Can<EntityPropertyChangeSubscriber> enabledSubscribers = Can.empty();
 
-    @Value("${entity.property.change.publisher.bulk.threshold:10}")
+    @Value("${entity.property.change.publisher.bulk.threshold:1}")
     private int propertyBulkThreshold;
 
     @PostConstruct
