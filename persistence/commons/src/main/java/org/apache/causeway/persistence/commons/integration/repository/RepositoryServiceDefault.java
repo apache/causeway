@@ -122,15 +122,16 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
-        if(!bulkModeMap.computeIfAbsent(object.getClass(), aClass -> false)) {
+        if(!bulkModeMap.getOrDefault(object.getClass(), Boolean.FALSE)) {
             transactionService.flushTransaction();
         }
         return object;
     }
 
     @Override
-    public <T> void setBulkMode(final T object, final Boolean bulkMode) {
-        if (!bulkModeMap.computeIfAbsent(object.getClass(), aClass -> bulkMode)) {
+    public <T extends Class> void setBulkMode(final T aClass, final Boolean bulkMode) {
+        bulkModeMap.computeIfAbsent(aClass, cl -> bulkMode);
+        if (!bulkMode) {
             transactionService.flushTransaction();
         }
     }

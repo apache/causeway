@@ -85,12 +85,12 @@ public interface RepositoryService {
     <T> T detachedEntity(@NonNull T entity);
 
     /**
-     * Suspends flushing transaction for {@param object} instances until the {@param bulkMode} is turned off again.
+     * Suspends flushing transaction for {@param aClass} instances until the {@param bulkMode} is turned off again.
      * <p>
      * Usage should be wrapped in a try {} finally {} construction.
      *
      */
-    <T> void setBulkMode(final T object, final Boolean bulkMode);
+    <T extends Class> void setBulkMode(final T aClass, final Boolean bulkMode);
 
     /**
      * Persist the specified object (or do nothing if already persistent).

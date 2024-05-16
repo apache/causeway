@@ -76,14 +76,14 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     public Can<AuditTrailEntry> createForBulk(Can<EntityPropertyChange> entityPropertyChanges) {
         Collection<AuditTrailEntry> auditTrailEntries = new ArrayList<>();
         try {
-            repositoryService.setBulkMode(AuditTrailEntry.class, true);
+            repositoryService.setBulkMode(AuditTrailEntry.class, Boolean.TRUE);
             entityPropertyChanges.forEach(change -> {
                 E entry = factoryService.detachedEntity(auditTrailEntryClass);
                 entry.init(change);
                 auditTrailEntries.add(repositoryService.persist(entry));
             });
         } finally {
-            repositoryService.setBulkMode(AuditTrailEntry.class, false);
+            repositoryService.setBulkMode(AuditTrailEntry.class, Boolean.FALSE);
         }
         return Can.ofCollection(auditTrailEntries);
     }
