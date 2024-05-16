@@ -407,7 +407,10 @@ public final class ProgrammingModelConstants {
 
     //maybe gradually consolidate all MM validation raisers here
     @RequiredArgsConstructor
-    public static enum Violation {
+    public static enum MessageTemplate {
+        NOT_AUTHORIZED_TO_EDIT_OR_USE("Not authorized to edit or use."),
+        NOT_AUTHORIZED_TO_EDIT_OR_USE_MEMBER("Not authorized to edit or use ${member}."),
+        NOT_AUTHORIZED_TO_EDIT_OR_USE_FEATURE("Not authorized to edit or use feature ${type}#${member}."),
         CONFLICTING_TITLE_STRATEGIES(
                 "${type} has title() method with @Title annotation, which is not allowed; "
                 + "consider either removing the @Title annotation or renaming the method"),
@@ -511,7 +514,7 @@ public final class ProgrammingModelConstants {
         }
         @RequiredArgsConstructor
         public static class ViolationBuilder {
-            private final Violation violaton;
+            private final MessageTemplate violaton;
             private final Map<String, String> vars = new HashMap<>();
             public ViolationBuilder addVariable(final String name, final String value) {
                 vars.put(name, value);

@@ -102,7 +102,7 @@ extends ExecutionPublishingFacetAbstract {
                     }
                 } else {
                     // we are dealing with an action
-                    val actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+                    val actionPublishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
                     switch (actionPublishingPolicy) {
                         case NONE:
                             return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);

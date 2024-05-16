@@ -49,7 +49,7 @@
 		<maven.compiler.release>11</maven.compiler.release>
 
 		<spring-boot.version>2.7.18</spring-boot.version>
-		<approvaltests.version>23.1.0</approvaltests.version>
+		<approvaltests.version>24.0.0</approvaltests.version>
 
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
 		<resteasy.version>5.0.0.Final</resteasy.version>

@@ -57,8 +57,8 @@ extends MetaModelValidatorAbstract {
                     .anyMatch(String::isEmpty)) {
 
             val validationResponse = spec.isInjectable()
-                    ? ProgrammingModelConstants.Violation.DOMAIN_SERVICE_MISSING_A_NAMESPACE
-                    : ProgrammingModelConstants.Violation.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
+                    ? ProgrammingModelConstants.MessageTemplate.DOMAIN_SERVICE_MISSING_A_NAMESPACE
+                    : ProgrammingModelConstants.MessageTemplate.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 
             ValidationFailure.raiseFormatted(spec,
                     validationResponse.builder()

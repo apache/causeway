@@ -600,7 +600,7 @@ implements
 
                                 proxies.forEach(spec->{
                                     ValidationFailure.raiseFormatted(spec,
-                                        ProgrammingModelConstants.Violation.PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE
+                                        ProgrammingModelConstants.MessageTemplate.PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE
                                             .builder()
                                             .addVariable("logicalTypeName", spec.getLogicalTypeName())
                                             .addVariable("csv", asCsv(proxies.toList()))
@@ -613,7 +613,7 @@ implements
                                 .filter(this::logicalTypeNameIsNotIncludedInAliased)
                                 .forEach(spec->{
                                     ValidationFailure.raiseFormatted(spec,
-                                        ProgrammingModelConstants.Violation.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
+                                        ProgrammingModelConstants.MessageTemplate.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
                                             .builder()
                                             .addVariable("logicalTypeName", spec.getLogicalTypeName())
                                             .addVariable("csv", asCsv(collidingSpecs))

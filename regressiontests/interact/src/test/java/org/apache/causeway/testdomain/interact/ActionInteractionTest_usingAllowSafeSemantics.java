@@ -21,13 +21,14 @@ package org.apache.causeway.testdomain.interact;
 import javax.inject.Named;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.TestPropertySource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -105,7 +106,7 @@ class ActionInteractionTest_usingAllowSafeSemantics extends InteractionTestAbstr
         val veto = actionInteraction.getInteractionVeto().orElseThrow(); // should not throw
         val actionId = actionInteraction.getMetamodel().map(ObjectAction::getFeatureIdentifier).orElse(null);
         assertEquals(
-                AuthorizationFacet.formatNotAuthorizedToEdit(actionId), 
+                AuthorizationFacet.formatNotAuthorizedToEdit(actionId, objectManager.getMetaModelContext()),
                 veto.getReasonAsString().orElse(null));
     }
 

@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorizat
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.ActionVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.CollectionVisibilityContext;
@@ -83,11 +85,24 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 vc.getWhere())) != null)
                 .orElse(false);
     }
-    
-    public static String formatNotAuthorizedToEdit(final @Nullable Identifier identifier) {
-        return identifier!=null
-                ? String.format("Not authorized to edit feature: %s", identifier.getLogicalIdentityString("#"))
-                : "Not authorized to edit";
+
+    /**
+     * @param identifier - presence results in a more detailed message (including feature origin)
+     * @param mmc - if present AND when NOT PROTOTYPING AND when identifier is also present,
+     *      results in a more concise message,
+     *      only including the friendly member name (omitting the type's name)
+     */
+    public static String formatNotAuthorizedToEdit(
+            final @Nullable Identifier identifier,
+            final @Nullable MetaModelContext mmc) {
+        var template = identifier==null
+            ? ProgrammingModelConstants.MessageTemplate.NOT_AUTHORIZED_TO_EDIT_OR_USE
+            : mmc!=null && !mmc.getSystemEnvironment().isPrototyping()
+                ? ProgrammingModelConstants.MessageTemplate.NOT_AUTHORIZED_TO_EDIT_OR_USE_MEMBER
+                : ProgrammingModelConstants.MessageTemplate.NOT_AUTHORIZED_TO_EDIT_OR_USE_FEATURE;
+        return template.builder()
+                .addVariablesFor(identifier)
+                .buildMessage();
     }
 
 }

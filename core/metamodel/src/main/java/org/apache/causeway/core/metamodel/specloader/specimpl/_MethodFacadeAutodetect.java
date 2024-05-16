@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Violation;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -54,7 +54,7 @@ class _MethodFacadeAutodetect {
                 || method.paramCount() > 1) {
             // invalid
             ValidationFailure.raiseFormatted(inspectedTypeSpec,
-                    Violation.PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION
+                    MessageTemplate.PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION
                         .builder()
                         .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().getClassName())
                         .addVariable("member", method.name())
@@ -66,7 +66,7 @@ class _MethodFacadeAutodetect {
         if(!patConstructors.isCardinalityOne()) {
             // invalid
             ValidationFailure.raiseFormatted(inspectedTypeSpec,
-                    Violation.PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS
+                    MessageTemplate.PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS
                         .builder()
                         .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().getClassName())
                         .addVariable("member", method.name())

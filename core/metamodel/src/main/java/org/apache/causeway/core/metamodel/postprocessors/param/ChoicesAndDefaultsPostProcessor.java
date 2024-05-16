@@ -245,7 +245,7 @@ extends MetaModelPostProcessorAbstract {
             if(!hasChoicesOrAutoComplete(param)) {
 
                 ValidationFailure.raiseFormatted(param,
-                        ProgrammingModelConstants.Violation.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
+                        ProgrammingModelConstants.MessageTemplate.PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE.builder()
                             .addVariable("paramId", param.getFeatureIdentifier().toString())
                             .buildMessage());
             }

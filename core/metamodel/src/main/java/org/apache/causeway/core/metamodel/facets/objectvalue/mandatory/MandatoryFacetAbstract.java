@@ -151,7 +151,7 @@ implements MandatoryFacet {
             val holder = mandatoryFacet.getFacetHolder();
 
             ValidationFailure.raiseFormatted(holder,
-                    ProgrammingModelConstants.Violation.CONFLICTING_OPTIONALITY.builder()
+                    ProgrammingModelConstants.MessageTemplate.CONFLICTING_OPTIONALITY.builder()
                         .addVariable("member", holder.getFeatureIdentifier().getFullIdentityString())
                         .addVariable("conflictingFacets", conflictingFacets.stream()
                                 .map(MandatoryFacet::summarize)
