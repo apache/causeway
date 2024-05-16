@@ -22,6 +22,8 @@ package org.apache.causeway.extensions.audittrail.applib.dom;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,13 +35,14 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.val;
 
 /**
- * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
+ * Provides supporting functionality for querying {@link org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry audit trail entry} entities.
  *
  * @since 2.0 {@index}
  */
@@ -60,10 +63,23 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         return auditTrailEntryClass;
     }
 
+    @Override
     public AuditTrailEntry createFor(final EntityPropertyChange change) {
         E entry = factoryService.detachedEntity(auditTrailEntryClass);
         entry.init(change);
         return repositoryService.persistAndFlush(entry);
+    }
+
+    @Override
+    public Can<AuditTrailEntry> createForBulk(Can<EntityPropertyChange> entityPropertyChanges) {
+        Collection<AuditTrailEntry> auditTrailEntries = new ArrayList<>();
+        entityPropertyChanges.forEach(change -> {
+            E entry = factoryService.detachedEntity(auditTrailEntryClass);
+            entry.init(change);
+            auditTrailEntries.add(entry);
+        });
+        repositoryService.persistAndFlush(auditTrailEntries);
+        return Can.ofCollection(auditTrailEntries);
     }
 
     public Optional<AuditTrailEntry> findFirstByTarget(final Bookmark target) {
@@ -302,6 +318,4 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         }
         repositoryService.removeAll(auditTrailEntryClass);
     }
-
-
 }
