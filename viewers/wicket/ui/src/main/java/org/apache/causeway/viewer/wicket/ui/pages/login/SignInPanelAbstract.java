@@ -37,9 +37,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.cookies.CookieUtils;
 
+import org.apache.causeway.applib.value.semantics.TimeZoneChoiceProvider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.valuesemantics.temporal.ZonedDateTimeValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
@@ -266,7 +266,7 @@ implements HasMetaModelContext {
 
             add(Wkt.dropDownChoice("timezone",
                     new PropertyModel<ZoneId>(SignInPanelAbstract.this, "timezone"),
-                    new ZonedDateTimeValueSemantics().getAvailableZoneIds())
+                    getTimeZoneChoiceProvider().getAvailableZoneIds())
                 .setRequired(true)
                 .setMarkupId(TIME_ZONE_SELECT));
 
@@ -309,6 +309,11 @@ implements HasMetaModelContext {
             }
         }
 
+        private TimeZoneChoiceProvider getTimeZoneChoiceProvider() {
+            return getMetaModelContext().getServiceRegistry().lookupService(TimeZoneChoiceProvider.class)
+                    .orElseGet(TimeZoneChoiceProvider::fallback);
+        }
+        
     }
 
     /**
