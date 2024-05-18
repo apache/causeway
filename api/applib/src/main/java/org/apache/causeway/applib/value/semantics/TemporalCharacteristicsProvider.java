@@ -18,15 +18,7 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import lombok.val;
-
-public interface TemporalCharacteristicsProvider {
+public interface TemporalCharacteristicsProvider extends TimeZoneChoiceProvider {
 
     static enum TemporalCharacteristic {
 
@@ -70,27 +62,5 @@ public interface TemporalCharacteristicsProvider {
 
     TemporalCharacteristic getTemporalCharacteristic();
     OffsetCharacteristic getOffsetCharacteristic();
-
-    /**
-     * For temporal value editing, provides the list of available time zones to choose from.
-     */
-    default List<ZoneId> getAvailableZoneIds() {
-        return ZoneId.getAvailableZoneIds().stream()
-            .sorted()
-            .map(ZoneId::of)
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * For temporal value editing, provides the list of available offsets to choose from.
-     */
-    default List<ZoneOffset> getAvailableOffsets() {
-        val now = LocalDateTime.now();
-        return getAvailableZoneIds().stream()
-            .map(ZoneId::getRules)
-            .flatMap(zoneIdRules->zoneIdRules.getValidOffsets(now).stream())
-            .sorted()
-            .distinct()
-            .collect(Collectors.toList());
-    }
+    
 }
