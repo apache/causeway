@@ -18,72 +18,80 @@
  */
 package org.apache.causeway.viewer.graphql.model.domain;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.*;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class TypeNames {
 
-    public static String objectTypeFieldNameFor(
+    public String objectTypeFieldNameFor(
             final ObjectSpecification objectSpecification) {
         return sanitized(objectSpecification.getLogicalTypeName());
     }
 
-    public static String objectTypeNameFor(
+    public String objectTypeNameFor(
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
         return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.getLogicalTypeName());
     }
 
-    public static String metaTypeNameFor(
+    public String metaTypeNameFor(
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
         return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_meta";
     }
 
-    public static String inputTypeNameFor(
+    public String inputTypeNameFor(
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
         return objectTypeNameFor(objectSpecification, schemaType) + "__gqlv_input";
     }
 
-    public static String enumTypeNameFor(
+    public String enumTypeNameFor(
             final ObjectSpecification objectSpec,
             final SchemaType schemaType) {
         return objectTypeNameFor(objectSpec, schemaType) + "__gqlv_enum";
     }
 
-    public static String actionTypeNameFor(
+    public String actionTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectAction oa,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + oa.asciiId() + "__gqlv_action";
     }
 
-    public static String actionInvokeTypeNameFor(
+    public String actionInvokeTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectAction oa,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + oa.asciiId() + "__gqlv_action_invoke";
     }
 
-    public static String actionParamsTypeNameFor(
+    public String actionParamsTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectAction oa,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + oa.asciiId() + "__gqlv_action_params";
     }
 
-    public static String actionArgsTypeNameFor(
+    public String actionArgsTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectAction oa,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + oa.asciiId() + "__gqlv_action_args";
     }
 
-    public static String actionParamTypeNameFor(
+    public String actionParamTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectActionParameter oap,
             final SchemaType schemaType) {
@@ -91,36 +99,55 @@ public final class TypeNames {
         return objectTypeNameFor(owningType, schemaType) + "__" + objectFeature.asciiId() + "__" + oap.asciiId() + "__gqlv_action_parameter";
     }
 
-    public static String propertyTypeNameFor(
+    public String propertyTypeNameFor(
             final ObjectSpecification owningType,
             final OneToOneAssociation otoa,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + otoa.asciiId() + "__gqlv_property";
     }
 
-    public static String propertyLobTypeNameFor(
+    public String propertyLobTypeNameFor(
             final ObjectSpecification owningType,
             final OneToOneAssociation otoa,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + otoa.asciiId() + "__gqlv_property_lob";
     }
 
-    public static String collectionTypeNameFor(
+    public String collectionTypeNameFor(
             final ObjectSpecification owningType,
             final OneToManyAssociation otma,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + otma.asciiId() + "__gqlv_collection";
     }
 
-    public static String memberTypeNameFor(
+    public String memberTypeNameFor(
             final ObjectSpecification owningType,
             final ObjectMember objectMember,
             final SchemaType schemaType) {
         return objectTypeNameFor(owningType, schemaType) + "__" + objectMember.asciiId() + "__gqlv_member";
     }
 
-    private static String sanitized(final String name) {
-        return name.replace('.', '_').replace("#", "__").replace("()","");
+    // -- HELPER
+    
+    String sanitized(final String name) {
+        var result = name.replace('.', '_').replace("#", "__").replace("()", "");
+        result = hyphenedToCamelCase(result);
+        return result;    
+    }
+
+    /**
+     * Converts e.g. {@code a-b} to {@code aB}.
+     * Which allows namespaces that contain a hyphen like 
+     * {@code university.calc.calculator-hyphenated} to be referenced from QraphQL via
+     * {@code university.calc.calculatorHyphenated} say. 
+     */
+    private String hyphenedToCamelCase(String string) {
+      final int hyphenStart = string.indexOf("-");
+      return hyphenStart > 0
+        ? string.substring(0,hyphenStart) + Arrays.stream(string.substring(hyphenStart + 1).split("-"))
+              .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+              .collect(Collectors.joining())
+        : string;
     }
 
 }
