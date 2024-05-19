@@ -20,6 +20,9 @@ package org.apache.causeway.viewer.graphql.model.domain;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.lang.Character;
 
 import lombok.experimental.UtilityClass;
 
@@ -120,7 +123,14 @@ public final class TypeNames {
     }
 
     private static String sanitized(final String name) {
-        return name.replace('.', '_').replace("#", "__").replace("()","");
+        String result = name.replace('.', '_').replace("#", "__").replace("()","");
+        int hyphenStart = result.indexOf("-");
+        if(hyphenStart > 0) {
+        	result = result.substring(0,hyphenStart) + Arrays.stream(result.substring(hyphenStart + 1).split("-"))
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining());
+        }
+        return result;    
     }
 
 }

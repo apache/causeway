@@ -113,6 +113,7 @@ type RICHSchema {
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
+  university_calc_calculatorHyphenated: rich__university_calc_calculatorHyphenated
   university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
   university_dept_Departments: rich__university_dept_Departments
   university_dept_DeptHead(object: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_DeptHead
@@ -164,6 +165,7 @@ type SIMPLESchema {
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
   university_calc_I18nCalculator: simple__university_calc_I18nCalculator
+  university_calc_calculatorHyphenated: simple__university_calc_calculatorHyphenated
   university_dept_Department(object: simple__university_dept_Department__gqlv_input): simple__university_dept_Department
   university_dept_Departments: simple__university_dept_Departments
   university_dept_DeptHead(object: simple__university_dept_DeptHead__gqlv_input): simple__university_dept_DeptHead
@@ -225,6 +227,7 @@ type ScenarioStep {
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
+  university_calc_calculatorHyphenated: rich__university_calc_calculatorHyphenated
   university_dept_Department(object: rich__university_dept_Department__gqlv_input): rich__university_dept_Department
   university_dept_Departments: rich__university_dept_Departments
   university_dept_DeptHead(object: rich__university_dept_DeptHead__gqlv_input): rich__university_dept_DeptHead
@@ -3400,6 +3403,1222 @@ type rich__university_calc_I18nCalculator__concat__gqlv_action_params {
   a2: rich__university_calc_I18nCalculator__concat__a2__gqlv_action_parameter
 }
 
+type rich__university_calc_calculatorHyphenated {
+  "Add Big Decimals"
+  addBigDecimals: rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action
+  "Add Big Integers"
+  addBigIntegers: rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action
+  "Add Byte Wrappers"
+  addByteWrappers: rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action
+  "Add Bytes"
+  addBytes: rich__university_calc_calculatorHyphenated__addBytes__gqlv_action
+  "Add Double Wrappers"
+  addDoubleWrappers: rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action
+  "Add Doubles"
+  addDoubles: rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action
+  "Add Float Wrappers"
+  addFloatWrappers: rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action
+  "Add Floats"
+  addFloats: rich__university_calc_calculatorHyphenated__addFloats__gqlv_action
+  "Add Integer Wrappers"
+  addIntegerWrappers: rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action
+  "Add Integers"
+  addIntegers: rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action
+  "Add Short Wrappers"
+  addShortWrappers: rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action
+  "Add Shorts"
+  addShorts: rich__university_calc_calculatorHyphenated__addShorts__gqlv_action
+  "And"
+  and: rich__university_calc_calculatorHyphenated__and__gqlv_action
+  "Concat"
+  concat: rich__university_calc_calculatorHyphenated__concat__gqlv_action
+  "Jdk 8 Local Plus Days"
+  jdk8LocalPlusDays: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action
+  "Jdk 8 Local Plus Hours And Minutes"
+  jdk8LocalPlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action
+  "Jdk 8 Offset Plus Days And Hours And Minutes"
+  jdk8OffsetPlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action
+  "Jdk 8 Offset Plus Hours And Minutes"
+  jdk8OffsetPlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action
+  "Jdk 8 Zoned Plus Days And Hours And Minutes"
+  jdk8ZonedPlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action
+  "Joda Local Plus Days"
+  jodaLocalPlusDays: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action
+  "Joda Local Plus Hours And Minutes"
+  jodaLocalPlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action
+  "Joda Plus Days And Hours And Minutes"
+  jodaPlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action
+  "Next Month"
+  nextMonth: rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action
+  "Not"
+  not: rich__university_calc_calculatorHyphenated__not__gqlv_action
+  "Or"
+  or: rich__university_calc_calculatorHyphenated__or__gqlv_action
+  "Some Locale"
+  someLocale: rich__university_calc_calculatorHyphenated__someLocale__gqlv_action
+  "Some Url"
+  someUrl: rich__university_calc_calculatorHyphenated__someUrl__gqlv_action
+  "Some Uuid"
+  someUuid: rich__university_calc_calculatorHyphenated__someUuid__gqlv_action
+}
+
+type rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: String!, y: String): rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_params
+  validate(x: String, y: String): String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_args {
+  x: String
+  y: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addBigDecimals__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addBigDecimals__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addBigDecimals__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigDecimals__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String, y: String): String
+  hidden(x: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: String!, y: String): rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_params
+  validate(x: String, y: String): String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_args {
+  x: String
+  y: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigIntegers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addBigIntegers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addBigIntegers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addBigIntegers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBigIntegers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: String, y: String): String
+  hidden(x: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Byte!, y: Byte): rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_params
+  validate(x: Byte, y: Byte): String
+}
+
+type rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
+type rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_args
+  results: Int
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addByteWrappers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addByteWrappers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addByteWrappers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addByteWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addByteWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte, y: Byte): String
+  hidden(x: Byte): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBytes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Byte!, y: Byte!): rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_params
+  validate(x: Byte, y: Byte): String
+}
+
+type rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_args {
+  x: Byte
+  y: Byte
+}
+
+type rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_args
+  results: Byte
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBytes__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addBytes__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addBytes__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addBytes__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addBytes__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Byte, y: Byte): String
+  hidden(x: Byte): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float): rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_args
+  results: Float
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubleWrappers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addDoubleWrappers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addDoubleWrappers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubleWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubleWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_args
+  results: Float
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubles__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addDoubles__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addDoubles__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubles__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addDoubles__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float): rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_args
+  results: Float
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloatWrappers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addFloatWrappers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addFloatWrappers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addFloatWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloatWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloats__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Float!, y: Float!): rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_params
+  validate(x: Float, y: Float): String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_args {
+  x: Float
+  y: Float
+}
+
+type rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_args
+  results: Float
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloats__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addFloats__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addFloats__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addFloats__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addFloats__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Float, y: Float): String
+  hidden(x: Float): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Int!, y: Int): rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_params
+  validate(x: Int, y: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_args
+  results: Int
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegerWrappers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addIntegerWrappers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addIntegerWrappers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegerWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegerWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int, y: Int): String
+  hidden(x: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Int!, y: Int!): rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_params
+  validate(x: Int, y: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_args {
+  x: Int
+  y: Int
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_args
+  results: Int
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addIntegers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addIntegers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addIntegers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Int, y: Int): String
+  hidden(x: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Short!, y: Short): rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_params
+  validate(x: Short, y: Short): String
+}
+
+type rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
+type rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_args
+  results: Short
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addShortWrappers__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addShortWrappers__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addShortWrappers__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addShortWrappers__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addShortWrappers__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short, y: Short): String
+  hidden(x: Short): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addShorts__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Short!, y: Short!): rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_params
+  validate(x: Short, y: Short): String
+}
+
+type rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_args {
+  x: Short
+  y: Short
+}
+
+type rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_args
+  results: Short
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__addShorts__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__addShorts__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__addShorts__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__addShorts__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__addShorts__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Short, y: Short): String
+  hidden(x: Short): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__and__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!, y: Boolean!): rich__university_calc_calculatorHyphenated__and__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__and__gqlv_action_params
+  validate(x: Boolean, y: Boolean): String
+}
+
+type rich__university_calc_calculatorHyphenated__and__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
+type rich__university_calc_calculatorHyphenated__and__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__and__gqlv_action_args
+  results: Boolean
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__and__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__and__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__and__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__and__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__and__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean, y: Boolean): String
+  hidden(x: Boolean): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__concat__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(prefix: String!, suffix: String): rich__university_calc_calculatorHyphenated__concat__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__concat__gqlv_action_params
+  validate(prefix: String, suffix: String): String
+}
+
+type rich__university_calc_calculatorHyphenated__concat__gqlv_action_args {
+  prefix: String
+  suffix: String
+}
+
+type rich__university_calc_calculatorHyphenated__concat__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__concat__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__concat__gqlv_action_params {
+  "Prefix"
+  prefix: rich__university_calc_calculatorHyphenated__concat__prefix__gqlv_action_parameter
+  "Suffix"
+  suffix: rich__university_calc_calculatorHyphenated__concat__suffix__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__concat__prefix__gqlv_action_parameter {
+  datatype: String
+  disabled(prefix: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__concat__suffix__gqlv_action_parameter {
+  datatype: String
+  disabled(prefix: String, suffix: String): String
+  hidden(prefix: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__date__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_params {
+  "Date"
+  date: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__date__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__numDays__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: String): String
+  hidden(time: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: String): String
+  hidden(numHours: Int, time: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: DateTime
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: DateTime
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int): String
+  hidden(dateTime: DateTime): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
+  hidden(dateTime: DateTime, numDays: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: Time!): rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: Time): String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: Time
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args
+  results: Time
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: Time): String
+  hidden(time: Time): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: Time): String
+  hidden(numHours: Int, time: Time): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: Time): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__date__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(date: String!, numDays: Int!): rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_params
+  validate(date: String, numDays: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_args {
+  date: String
+  numDays: Int
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_params {
+  "Date"
+  date: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__date__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__numDays__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(date: String, numDays: Int): String
+  hidden(date: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: String): String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: String): String
+  hidden(time: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: String): String
+  hidden(numHours: Int, time: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_params
+  validate(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
+}
+
+type rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_args {
+  month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+}
+
+type rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_args
+  results: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action_params {
+  "Month"
+  month: rich__university_calc_calculatorHyphenated__nextMonth__month__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__nextMonth__month__gqlv_action_parameter {
+  choices: [rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum]
+  datatype: String
+  disabled(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__not__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!): rich__university_calc_calculatorHyphenated__not__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__not__gqlv_action_params
+  validate(x: Boolean): String
+}
+
+type rich__university_calc_calculatorHyphenated__not__gqlv_action_args {
+  x: Boolean
+}
+
+type rich__university_calc_calculatorHyphenated__not__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__not__gqlv_action_args
+  results: Boolean
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__not__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__not__x__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__not__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__or__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(x: Boolean!, y: Boolean!): rich__university_calc_calculatorHyphenated__or__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__or__gqlv_action_params
+  validate(x: Boolean, y: Boolean): String
+}
+
+type rich__university_calc_calculatorHyphenated__or__gqlv_action_args {
+  x: Boolean
+  y: Boolean
+}
+
+type rich__university_calc_calculatorHyphenated__or__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__or__gqlv_action_args
+  results: Boolean
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__or__gqlv_action_params {
+  "X"
+  x: rich__university_calc_calculatorHyphenated__or__x__gqlv_action_parameter
+  "Y"
+  y: rich__university_calc_calculatorHyphenated__or__y__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__or__x__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__or__y__gqlv_action_parameter {
+  datatype: String
+  disabled(x: Boolean, y: Boolean): String
+  hidden(x: Boolean): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__someLocale__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_calculatorHyphenated__someLocale__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_calculatorHyphenated__someLocale__gqlv_action_invoke {
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__someUrl__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_calculatorHyphenated__someUrl__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_calculatorHyphenated__someUrl__gqlv_action_invoke {
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__someUuid__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke: rich__university_calc_calculatorHyphenated__someUuid__gqlv_action_invoke
+  validate: String
+}
+
+type rich__university_calc_calculatorHyphenated__someUuid__gqlv_action_invoke {
+  results: UUID
+  target: String
+}
+
 "University department specializing in a field of study"
 type rich__university_dept_Department {
   "Object metadata"
@@ -4894,6 +6113,65 @@ type simple__university_calc_Calculator {
 type simple__university_calc_I18nCalculator {
   "Concät"
   concat(a1: String!, a2: String!): String
+}
+
+type simple__university_calc_calculatorHyphenated {
+  "Add Big Decimals"
+  addBigDecimals(x: String!, y: String): String
+  "Add Big Integers"
+  addBigIntegers(x: String!, y: String): String
+  "Add Byte Wrappers"
+  addByteWrappers(x: Byte!, y: Byte): Int
+  "Add Bytes"
+  addBytes(x: Byte!, y: Byte!): Byte
+  "Add Double Wrappers"
+  addDoubleWrappers(x: Float!, y: Float): Float
+  "Add Doubles"
+  addDoubles(x: Float!, y: Float!): Float
+  "Add Float Wrappers"
+  addFloatWrappers(x: Float!, y: Float): Float
+  "Add Floats"
+  addFloats(x: Float!, y: Float!): Float
+  "Add Integer Wrappers"
+  addIntegerWrappers(x: Int!, y: Int): Int
+  "Add Integers"
+  addIntegers(x: Int!, y: Int!): Int
+  "Add Short Wrappers"
+  addShortWrappers(x: Short!, y: Short): Short
+  "Add Shorts"
+  addShorts(x: Short!, y: Short!): Short
+  "And"
+  and(x: Boolean!, y: Boolean!): Boolean
+  "Concat"
+  concat(prefix: String!, suffix: String): String
+  "Jdk 8 Local Plus Days"
+  jdk8LocalPlusDays(date: String!, numDays: Int!): String
+  "Jdk 8 Local Plus Hours And Minutes"
+  jdk8LocalPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: String!): String
+  "Jdk 8 Offset Plus Days And Hours And Minutes"
+  jdk8OffsetPlusDaysAndHoursAndMinutes(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): DateTime
+  "Jdk 8 Offset Plus Hours And Minutes"
+  jdk8OffsetPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: Time!): Time
+  "Jdk 8 Zoned Plus Days And Hours And Minutes"
+  jdk8ZonedPlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  "Joda Local Plus Days"
+  jodaLocalPlusDays(date: String!, numDays: Int!): String
+  "Joda Local Plus Hours And Minutes"
+  jodaLocalPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: String!): String
+  "Joda Plus Days And Hours And Minutes"
+  jodaPlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  "Next Month"
+  nextMonth(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
+  "Not"
+  not(x: Boolean!): Boolean
+  "Or"
+  or(x: Boolean!, y: Boolean!): Boolean
+  "Some Locale"
+  someLocale: String
+  "Some Url"
+  someUrl: String
+  "Some Uuid"
+  someUuid: UUID
 }
 
 "University department specializing in a field of study"
