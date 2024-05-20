@@ -182,7 +182,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <summernote.version>0.8.20</summernote.version>
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable module-path for testing, that is, put everything on the class-path -->
-        <swagger-core.version>2.2.21</swagger-core.version>
+        <swagger-core.version>2.2.22</swagger-core.version>
 
         <wicket.version>9.17.0</wicket.version>
         <wicket-bootstrap.version>6.0.5</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap... -->
