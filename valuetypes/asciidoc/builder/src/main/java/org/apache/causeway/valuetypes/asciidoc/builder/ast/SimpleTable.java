@@ -55,4 +55,9 @@ public class SimpleTable extends SimpleStructuralNode implements Table {
         setAttribute(GRID_ATTR, this.grid = grid, true);
     }
 
+    @Override
+    public void assignColumnWidths() {
+        // no-op
+    }
+
 }
