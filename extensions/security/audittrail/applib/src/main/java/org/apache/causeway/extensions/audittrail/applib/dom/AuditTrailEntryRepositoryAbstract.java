@@ -22,11 +22,11 @@ package org.apache.causeway.extensions.audittrail.applib.dom;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -72,17 +72,13 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
 
     @Override
     public Can<AuditTrailEntry> createForBulk(Can<EntityPropertyChange> entityPropertyChanges) {
-        Collection<AuditTrailEntry> auditTrailEntries = new ArrayList<>();
-        try {
-            repositoryService.setBulkMode(AuditTrailEntry.class, Boolean.TRUE);
-            entityPropertyChanges.forEach(change -> {
-                E entry = factoryService.detachedEntity(auditTrailEntryClass);
-                entry.init(change);
-                auditTrailEntries.add(repositoryService.persist(entry));
-            });
-        } finally {
-            repositoryService.setBulkMode(AuditTrailEntry.class, Boolean.FALSE);
-        }
+        Collection<AuditTrailEntry> auditTrailEntries = repositoryService.execInBulk(() -> entityPropertyChanges.stream()
+                .map(change -> {
+                    E entry = factoryService.detachedEntity(auditTrailEntryClass);
+                    entry.init(change);
+                    return repositoryService.persist(entry);
+                }).collect(Collectors.toList()), AuditTrailEntry.class
+        );
         return Can.ofCollection(auditTrailEntries);
     }
 
@@ -322,4 +318,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         }
         repositoryService.removeAll(auditTrailEntryClass);
     }
+
+
 }

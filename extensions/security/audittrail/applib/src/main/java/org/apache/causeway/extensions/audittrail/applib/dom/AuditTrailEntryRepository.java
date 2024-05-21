@@ -39,7 +39,9 @@ public interface AuditTrailEntryRepository {
 
     AuditTrailEntry createFor(final EntityPropertyChange change);
 
-    Can<AuditTrailEntry> createForBulk(final Can<EntityPropertyChange> entityPropertyChanges);
+    default Can<AuditTrailEntry> createForBulk(final Can<EntityPropertyChange> entityPropertyChanges) {
+        return Can.empty();
+    }
 
     Optional<AuditTrailEntry> findFirstByTarget(final Bookmark target);
 

@@ -20,6 +20,7 @@ package org.apache.causeway.applib.services.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
@@ -85,12 +86,12 @@ public interface RepositoryService {
     <T> T detachedEntity(@NonNull T entity);
 
     /**
-     * Suspends flushing transaction for {@param aClass} instances until the {@param bulkMode} is turned off again.
-     * <p>
-     * Usage should be wrapped in a try {} finally {} construction.
+     * Enables bulk mode for all {@param aClass} in {@param callable}.
+     *
+     * Used for a large collection of persist calls without calling flush.
      *
      */
-    <T extends Class> void setBulkMode(final T aClass, final Boolean bulkMode);
+    <T> T execInBulk(Callable<T> callable, Class<?>... classes);
 
     /**
      * Persist the specified object (or do nothing if already persistent).
