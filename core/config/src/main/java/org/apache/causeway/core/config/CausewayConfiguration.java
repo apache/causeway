@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -2095,6 +2096,14 @@ public class CausewayConfiguration {
 
                 @Data
                 public static class Bulk {
+
+                    /**
+                     * Determines the threshold as to whether to execute a set of entity changes in blk, in other words without a transaction flush in between.
+                     *
+                     * <p>
+                     *     If the threshold is passed (by default, anything more than 1 entity to persist), then the {@link org.apache.causeway.applib.services.repository.RepositoryService#execInBulk(Callable)} API is used.
+                     * </p>
+                     */
                     int threshold = 1;
                 }
             }
