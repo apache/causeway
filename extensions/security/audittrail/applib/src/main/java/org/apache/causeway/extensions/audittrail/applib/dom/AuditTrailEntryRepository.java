@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
+import org.apache.causeway.commons.collections.Can;
 
 /**
  * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
@@ -37,6 +38,10 @@ public interface AuditTrailEntryRepository {
 
 
     AuditTrailEntry createFor(final EntityPropertyChange change);
+
+    default Can<AuditTrailEntry> createForBulk(final Can<EntityPropertyChange> entityPropertyChanges) {
+        return Can.ofCollection(entityPropertyChanges.map(this::createFor).toList());
+    }
 
     Optional<AuditTrailEntry> findFirstByTarget(final Bookmark target);
 

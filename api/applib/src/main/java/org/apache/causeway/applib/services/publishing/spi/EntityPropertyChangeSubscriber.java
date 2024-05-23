@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.services.publishing.spi;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
 
 /**
@@ -48,4 +49,7 @@ public interface EntityPropertyChangeSubscriber extends HasEnabling {
      */
     void onChanging(EntityPropertyChange entityPropertyChange);
 
+    default void onBulkChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+        entityPropertyChanges.forEach(this::onChanging);
+    }
 }

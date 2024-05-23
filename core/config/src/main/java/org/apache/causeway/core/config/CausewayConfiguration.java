@@ -2085,6 +2085,19 @@ public class CausewayConfiguration {
                     Mode mode = Mode.WRITE;
                 }
             }
+
+            private final EntityPropertyChangePublisher entityPropertyChangePublisher = new EntityPropertyChangePublisher();
+
+            @Data
+            public static class EntityPropertyChangePublisher {
+
+                private final Bulk bulk = new Bulk();
+
+                @Data
+                public static class Bulk {
+                    int threshold = 1;
+                }
+            }
         }
     }
 

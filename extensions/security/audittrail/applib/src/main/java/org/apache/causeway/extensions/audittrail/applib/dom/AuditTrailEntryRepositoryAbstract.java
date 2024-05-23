@@ -33,6 +33,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
@@ -60,10 +61,16 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         return auditTrailEntryClass;
     }
 
+    @Override
     public AuditTrailEntry createFor(final EntityPropertyChange change) {
         E entry = factoryService.detachedEntity(auditTrailEntryClass);
         entry.init(change);
         return repositoryService.persistAndFlush(entry);
+    }
+
+    @Override
+    public Can<AuditTrailEntry> createForBulk(Can<EntityPropertyChange> entityPropertyChanges) {
+        return Can.ofCollection(repositoryService.execInBulk(() -> entityPropertyChanges.map(this::createFor).toList()));
     }
 
     public Optional<AuditTrailEntry> findFirstByTarget(final Bookmark target) {

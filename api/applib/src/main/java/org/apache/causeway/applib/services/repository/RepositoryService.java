@@ -20,6 +20,7 @@ package org.apache.causeway.applib.services.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
@@ -83,6 +84,14 @@ public interface RepositoryService {
      * @since 2.0
      */
     <T> T detachedEntity(@NonNull T entity);
+
+    /**
+     * Enables bulk mode for all generic repository calls in {@param callable}.
+     *
+     * Used for a large collection of generic repository calls without calling flush.
+     *
+     */
+    <T> T execInBulk(Callable<T> callable);
 
     /**
      * Persist the specified object (or do nothing if already persistent).

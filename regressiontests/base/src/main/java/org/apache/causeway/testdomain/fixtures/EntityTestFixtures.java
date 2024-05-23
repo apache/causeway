@@ -19,6 +19,7 @@
 package org.apache.causeway.testdomain.fixtures;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,6 +115,25 @@ implements
     public abstract void clearRepository();
     /** usable iff a transactional context is provided by the caller */
     public abstract void add3Books();
+    public abstract Object addBook(BookDto bookDto);
+    public abstract void addInventory(Set<?> books);
+
+    public void clearRepositoryInBulk() {
+        repository.execInBulk(()->{
+            clearRepository();
+            return null;
+        });
+    }
+
+    public void add3BooksInBulk() {
+        repository.execInBulk(()->{
+            addInventory(BookDto.samples()
+                    .sorted(Comparator.comparing(BookDto::getName))
+                    .map(this::addBook)
+                    .collect(Collectors.toSet()));
+            return null;
+        });
+    }
 
     // -- ASSERTIONS
 
@@ -227,9 +247,9 @@ implements
     public final void resetTo3Books(final Runnable onBeforeInstall) {
         isInstalled.compute(isInst->{
             interactionService.runAnonymous(()->{
-                clearRepository();
+                clearRepositoryInBulk();
                 onBeforeInstall.run();
-                add3Books();
+                add3BooksInBulk();
             });
             return false;
         });

@@ -24,6 +24,8 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.commons.collections.Can;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +72,14 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
             return;
         }
         auditTrailEntryRepository.createFor(entityPropertyChange);
+    }
+
+    @Override
+    public void onBulkChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+        if (!isEnabled()) {
+            return;
+        }
+        auditTrailEntryRepository.createForBulk(entityPropertyChanges);
     }
 
 }
