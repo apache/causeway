@@ -77,8 +77,6 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
                     ValueType.SVG_MAPPED -> add(createSvgMap(fi))
                     ValueType.BUTTON -> add(createButton(fi))
                     ValueType.CANVAS -> add(createVega(fi))
-                    else -> {
-                    }
                 }
             }
         }

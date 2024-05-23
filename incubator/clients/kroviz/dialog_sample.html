@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resizable Dialog</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .dialog {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+        .content {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .button-bar {
+            position: absolute;
+            bottom: 0;
+            background-color: transparent;
+            padding-bottom: 10px;
+        }
+        .round-button-red {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background-color: rgb(255, 0, 0, 0.7);
+            color: black;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        .round-button-green {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background-color: rgb(0, 128, 0, 0.7);
+            color: black;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        i.fas {
+            display: inline-block;
+            border-radius: 60px;
+        }
+    </style>
+</head>
+<body>
+<div id="dialog" title="Resizable Dialog">
+    <div class="dialog-content">
+        <!-- Your content goes here. -->
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.</p>
+        <!-- More content... -->
+    </div>
+    <div class="button-bar">
+        <button class="round-button-green" title="OK">
+            <i class="fas fa-check"></i>
+        </button>
+        <button class="round-button-red" title="Cancel">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( function() {
+        $( "#dialog" ).dialog({
+            width: 400,
+            height: 300,
+            resizable: true
+        });
+    } );
+</script>
+</body>
+</html>

@@ -115,7 +115,7 @@ TO's are created from JSON responses
 
 ==== Event Sourcing (EAA)
 
-Requests, reponses, and resulting TO's are logged.
+Requests, responses, and resulting TO's are logged.
 Before requests are sent out to the server this log is consulted and used as a cache.
 
 ==== Proxy (GOF)

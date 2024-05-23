@@ -126,6 +126,8 @@ pre.highlight {
     border-left: 1px solid #ecf0f1;
     border-bottom: 1px solid #ecf0f1;
     border-right: 1px solid #ecf0f1;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 textarea {
@@ -135,24 +137,49 @@ textarea {
 .button-bar {
     margin-top: 10px;
     margin-left: 10px;
-    margin-bottom: 10px;
-    position:absolute;
-    bottom:0;
+    margin-bottom: 10px; /* due to 10px for resize corner */
+    position: absolute;
+    bottom: 0;
+    background-color: transparent;
+}
+
+.round-button-red {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgb(255, 0, 0, 0.7);
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+.round-button-green {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgb(0, 128, 0, 0.7);
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+i.fas {
+    display: inline-block;
+    border-radius: 60px;
 }
 
 .tabulator-in-dialog {
     max-height: calc(70vh - 60px);
 }
 
-.dialog-content {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
 .dialog {
     display: flex;
-    height: 100vh;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+.dialog-content {
+    height: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 @font-face {

@@ -48,27 +48,32 @@ class RoDialog(
 ) :
     Displayable, RoWindow(caption = caption, closeButton = true, menu = menu) {
 
-    private val okButton:Button;
-    private val cancelButton:Button;
+    private var okButton: Button
+    private var cancelButton: Button
     init {
-        okButton = Button(
-            text = defaultAction,
-            icon = IconManager.find(defaultAction),
-            style = ButtonStyle.SUCCESS
-        )
+        val iconName =  IconManager.find(defaultAction)
+        okButton = initButton(defaultAction, iconName, "round-button-green")
         okButton.onClick {
             execute()
         }
 
-        cancelButton = Button(
-            "Cancel",
-            "fas fa-times",
-            ButtonStyle.OUTLINEINFO
-        )
+        cancelButton = initButton("Cancel", "fas fa-times", "round-button-red")
         cancelButton.onClick {
             close()
         }
     }
+
+    private fun initButton( title:String, iconName:String, cssClass:String) : Button {
+        val button =  Button(
+            "",
+            iconName,
+        )
+        button.title = title
+        button.addCssClass(cssClass)
+        button.addCssClass("fas")
+        return button
+    }
+
     @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleUpButton = Button(
         "",
@@ -100,7 +105,6 @@ class RoDialog(
         contentHeight = CssSize(heightPerc, UNIT.perc)
 
         vPanel {
-            height = CssSize(heightPerc, UNIT.vh)
             this.addCssClass("dialog")
 
             formPanel = FormPanelFactory(items).panel
@@ -109,7 +113,7 @@ class RoDialog(
 
             val buttonBar = buildButtonBar(customButtons)
             buttonBar.addCssClass("button-bar")
-            add(buttonBar)
+            this.add(buttonBar)
         }
     }
 
