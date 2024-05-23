@@ -79,7 +79,7 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
         if (!isEnabled()) {
             return;
         }
-        auditTrailEntryRepository.createForBulk(entityPropertyChanges);
+        auditTrailEntryRepository.createFor(entityPropertyChanges);
     }
 
 }

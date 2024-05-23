@@ -69,7 +69,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     }
 
     @Override
-    public Can<AuditTrailEntry> createForBulk(Can<EntityPropertyChange> entityPropertyChanges) {
+    public Can<AuditTrailEntry> createFor(Can<EntityPropertyChange> entityPropertyChanges) {
         return Can.ofCollection(repositoryService.execInBulk(() -> entityPropertyChanges.map(this::createFor).toList()));
     }
 

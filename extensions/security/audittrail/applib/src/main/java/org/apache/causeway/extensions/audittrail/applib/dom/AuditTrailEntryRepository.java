@@ -39,7 +39,7 @@ public interface AuditTrailEntryRepository {
 
     AuditTrailEntry createFor(final EntityPropertyChange change);
 
-    default Can<AuditTrailEntry> createForBulk(final Can<EntityPropertyChange> entityPropertyChanges) {
+    default Can<AuditTrailEntry> createFor(final Can<EntityPropertyChange> entityPropertyChanges) {
         return Can.ofCollection(entityPropertyChanges.map(this::createFor).toList());
     }
 
