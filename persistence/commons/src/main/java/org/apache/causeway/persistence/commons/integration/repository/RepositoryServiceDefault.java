@@ -62,14 +62,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Named(CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor
-@Log4j2
+//@Log4j2
 public class RepositoryServiceDefault
 implements RepositoryService, HasMetaModelContext {
 
@@ -198,7 +197,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed()) {
+        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed() && !threadLocalBulkMode.get()) {
             transactionService.flushTransaction();
         }
         return submitQuery(query);

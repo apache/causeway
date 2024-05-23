@@ -21,7 +21,6 @@ package org.apache.causeway.testdomain.jdo;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -78,8 +77,13 @@ public class JdoTestFixtures extends EntityTestFixtures {
     }
 
     @Override
-    public void addInventory(Set<BookDto> books) {
-        val inventory = JdoInventory.of("Sample Inventory", books.stream().map(JdoBook::fromDto).collect(Collectors.toSet()));
+    public Object addBook(BookDto bookDto) {
+        return repository.persistAndFlush(JdoBook.fromDto(bookDto));
+    }
+
+    @Override
+    public void addInventory(Set<?> books) {
+        val inventory = JdoInventory.of("Sample Inventory", (Set<JdoProduct>) books);
         repository.persistAndFlush(inventory);
     }
 

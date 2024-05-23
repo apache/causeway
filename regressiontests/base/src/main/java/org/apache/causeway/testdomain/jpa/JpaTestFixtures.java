@@ -21,7 +21,6 @@ package org.apache.causeway.testdomain.jpa;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -78,8 +77,13 @@ public class JpaTestFixtures extends EntityTestFixtures {
     }
 
     @Override
-    public void addInventory(Set<BookDto> books) {
-        val inventory = new JpaInventory("Sample Inventory", books.stream().map(JpaBook::fromDto).collect(Collectors.toSet()));
+    public Object addBook(BookDto bookDto) {
+        return repository.persistAndFlush(JpaBook.fromDto(bookDto));
+    }
+
+    @Override
+    public void addInventory(Set<?> books) {
+        val inventory = new JpaInventory("Sample Inventory", (Set<JpaProduct>) books);
         repository.persistAndFlush(inventory);
     }
 

@@ -115,7 +115,8 @@ implements
     public abstract void clearRepository();
     /** usable iff a transactional context is provided by the caller */
     public abstract void add3Books();
-    public abstract void addInventory(Set<BookDto> books);
+    public abstract Object addBook(BookDto bookDto);
+    public abstract void addInventory(Set<?> books);
 
     public void clearRepositoryInBulk() {
         repository.execInBulk(()->{
@@ -128,7 +129,7 @@ implements
         repository.execInBulk(()->{
             addInventory(BookDto.samples()
                     .sorted(Comparator.comparing(BookDto::getName))
-                    .map(repository::persistAndFlush)
+                    .map(this::addBook)
                     .collect(Collectors.toSet()));
             return null;
         });

@@ -40,7 +40,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import lombok.val;
 
 /**
- * Provides supporting functionality for querying {@link org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry audit trail entry} entities.
+ * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
  *
  * @since 2.0 {@index}
  */
