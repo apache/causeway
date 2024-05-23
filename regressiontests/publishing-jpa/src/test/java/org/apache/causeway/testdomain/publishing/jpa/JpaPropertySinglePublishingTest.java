@@ -43,7 +43,7 @@ import org.apache.causeway.testdomain.publishing.stubs.PropertyPublishingTestAbs
                 "logging.level.org.apache.causeway.applib.services.publishing.log.EntityPropertyChangeLogger=DEBUG",
                 "logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.causeway.testdomain.util.rest.KVStoreForTesting=DEBUG",
-                "causeway.core.runtimeservices.entitypropertychangepublisher.bulk.threshold=1000",
+                "causeway.core.runtime-services.entity-property-change-publisher.bulk.threshold=1000",
         })
 @TestPropertySource({
     CausewayPresets.UseLog4j2Test
