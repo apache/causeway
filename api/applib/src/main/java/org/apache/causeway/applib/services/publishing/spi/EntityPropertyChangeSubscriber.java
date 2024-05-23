@@ -50,5 +50,6 @@ public interface EntityPropertyChangeSubscriber extends HasEnabling {
     void onChanging(EntityPropertyChange entityPropertyChange);
 
     default void onBulkChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+        entityPropertyChanges.forEach(this::onChanging);
     }
 }

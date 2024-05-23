@@ -86,12 +86,12 @@ public interface RepositoryService {
     <T> T detachedEntity(@NonNull T entity);
 
     /**
-     * Enables bulk mode for all {@param aClass} in {@param callable}.
+     * Enables bulk mode for all generic repository calls in {@param callable}.
      *
-     * Used for a large collection of persist calls without calling flush.
+     * Used for a large collection of generic repository calls without calling flush.
      *
      */
-    <T> T execInBulk(Callable<T> callable, Class<?>... classes);
+    <T> T execInBulk(Callable<T> callable);
 
     /**
      * Persist the specified object (or do nothing if already persistent).

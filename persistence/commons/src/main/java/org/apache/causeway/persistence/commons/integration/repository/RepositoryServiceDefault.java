@@ -19,11 +19,8 @@
 package org.apache.causeway.persistence.commons.integration.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
@@ -63,6 +60,7 @@ import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -83,7 +81,7 @@ implements RepositoryService, HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     final MetaModelContext metaModelContext;
 
-    private ThreadLocal<Map<Class, Boolean>> threadLocal = ThreadLocal.withInitial(HashMap::new);
+    private ThreadLocal<Boolean> threadLocalBulkMode = ThreadLocal.withInitial(() -> Boolean.FALSE);
     private boolean autoFlush;
 
     @PostConstruct
@@ -105,23 +103,21 @@ implements RepositoryService, HasMetaModelContext {
         return factoryService.detachedEntity(entity);
     }
 
+    @SneakyThrows
     @Override
-    public <T> T execInBulk(Callable<T> callable, Class<?>... classes) {
+    public <T> T execInBulk(Callable<T> callable) {
         try {
-            Arrays.stream(classes).forEach(aClass -> setBulkMode(aClass, Boolean.TRUE));
+            setBulkMode(Boolean.TRUE);
             return callable.call();
-        } catch (Exception e) {
-            log.error("Error executing bulk", e);
-            return null;
         } finally {
-            Arrays.stream(classes).forEach(aClass -> setBulkMode(aClass, Boolean.FALSE));
+            setBulkMode(Boolean.FALSE);
         }
     }
 
-    protected  <T extends Class> void setBulkMode(final T aClass, final Boolean bulkMode) {
-        threadLocal.get().computeIfAbsent(aClass, cl -> bulkMode);
+    private void setBulkMode(final Boolean bulkMode) {
+        threadLocalBulkMode.set(bulkMode);
         if (!bulkMode) {
-            threadLocal.remove();
+            threadLocalBulkMode.remove();
             transactionService.flushTransaction();
         }
     }
@@ -147,7 +143,7 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
-        if (!threadLocal.get().getOrDefault(object.getClass(), Boolean.FALSE)) {
+        if (!threadLocalBulkMode.get()) {
             transactionService.flushTransaction();
         }
         return object;
@@ -167,7 +163,7 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public void removeAndFlush(final Object domainObject) {
         remove(domainObject);
-        if (!threadLocal.get().getOrDefault(domainObject.getClass(), Boolean.FALSE)) {
+        if (!threadLocalBulkMode.get()) {
             transactionService.flushTransaction();
         }
     }
