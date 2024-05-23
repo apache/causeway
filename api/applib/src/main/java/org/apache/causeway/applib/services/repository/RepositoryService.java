@@ -20,6 +20,7 @@ package org.apache.causeway.applib.services.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
@@ -83,6 +84,15 @@ public interface RepositoryService {
      * @since 2.0
      */
     <T> T detachedEntity(@NonNull T entity);
+
+    /**
+     * Executes the passed in {@param callable} in bulk mode, meaning that the transaction will not be flushed within.
+     *
+     * <p>
+     * Used for example by the audit trail extension, as a performance optimization.
+     * </p>
+     */
+    <T> T execInBulk(Callable<T> callable);
 
     /**
      * Persist the specified object (or do nothing if already persistent).

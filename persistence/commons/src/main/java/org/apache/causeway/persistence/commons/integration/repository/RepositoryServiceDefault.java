@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,7 @@ import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @Service
@@ -78,6 +80,7 @@ implements RepositoryService, HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     final MetaModelContext metaModelContext;
 
+    private ThreadLocal<Boolean> suppressFlush = ThreadLocal.withInitial(() -> Boolean.FALSE);
     private boolean autoFlush;
 
     @PostConstruct
@@ -97,6 +100,26 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T detachedEntity(final @NonNull T entity) {
         return factoryService.detachedEntity(entity);
+    }
+
+    @SneakyThrows
+    @Override
+    public <T> T execInBulk(Callable<T> callable) {
+        try {
+            suppressFlushing();
+            return callable.call();
+        } finally {
+            resumeFlushing();
+        }
+    }
+
+    private void suppressFlushing() {
+        this.suppressFlush.set(Boolean.TRUE);
+    }
+
+    private void resumeFlushing() {
+        this.suppressFlush.remove();
+        transactionService.flushTransaction();
     }
 
     @Override
@@ -120,7 +143,9 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
-        transactionService.flushTransaction();
+        if (!suppressFlush.get()) {
+            transactionService.flushTransaction();
+        }
         return object;
     }
 
@@ -138,7 +163,9 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public void removeAndFlush(final Object domainObject) {
         remove(domainObject);
-        transactionService.flushTransaction();
+        if (!suppressFlush.get()) {
+            transactionService.flushTransaction();
+        }
     }
 
 
@@ -171,7 +198,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed()) {
+        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed() && !suppressFlush.get()) {
             transactionService.flushTransaction();
         }
         return submitQuery(query);

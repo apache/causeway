@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.testdomain.jdo;
 
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -72,6 +73,17 @@ public class JdoTestFixtures extends EntityTestFixtures {
         .forEach(products::add);
 
         val inventory = JdoInventory.of("Sample Inventory", products);
+        repository.persistAndFlush(inventory);
+    }
+
+    @Override
+    public Object addBook(BookDto bookDto) {
+        return repository.persistAndFlush(JdoBook.fromDto(bookDto));
+    }
+
+    @Override
+    public void addInventory(Set<?> books) {
+        val inventory = JdoInventory.of("Sample Inventory", (Set<JdoProduct>) books);
         repository.persistAndFlush(inventory);
     }
 
