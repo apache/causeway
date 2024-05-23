@@ -114,19 +114,12 @@ implements RepositoryService, HasMetaModelContext {
     }
 
     private void suppressFlushing() {
-        setSuppressFlush(Boolean.TRUE);
+        this.suppressFlush.set(Boolean.TRUE);
     }
 
     private void resumeFlushing() {
-        setSuppressFlush(Boolean.FALSE);
-    }
-
-    private void setSuppressFlush(final Boolean suppressFlush) {
-        this.suppressFlush.set(suppressFlush);
-        if (!suppressFlush) {
-            this.suppressFlush.remove();
-            transactionService.flushTransaction();
-        }
+        this.suppressFlush.remove();
+        transactionService.flushTransaction();
     }
 
     @Override
