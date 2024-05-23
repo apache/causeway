@@ -49,6 +49,16 @@ public interface EntityPropertyChangeSubscriber extends HasEnabling {
      */
     void onChanging(EntityPropertyChange entityPropertyChange);
 
+    /**
+     * Receives a collection of {@link EntityPropertyChange property change event}s for the
+     * changing entities.
+     *
+     * <p>
+     *     The default implementation simply delegates to {@link #onChanging(EntityPropertyChange)} for
+     *     each, but subclasses could override in order to perform work in bulk.
+     * </p>
+     * @param entityPropertyChanges
+     */
     default void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
         entityPropertyChanges.forEach(this::onChanging);
     }
