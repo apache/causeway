@@ -86,10 +86,11 @@ public interface RepositoryService {
     <T> T detachedEntity(@NonNull T entity);
 
     /**
-     * Enables bulk mode for all generic repository calls in {@param callable}.
+     * Executes the passed in {@param callable} in bulk mode, meaning that the transaction will not be flushed within.
      *
-     * Used for a large collection of generic repository calls without calling flush.
-     *
+     * <p>
+     * Used for example by the audit trail extension, as a performance optimization.
+     * </p>
      */
     <T> T execInBulk(Callable<T> callable);
 
