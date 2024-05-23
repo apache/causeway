@@ -80,7 +80,7 @@ implements RepositoryService, HasMetaModelContext {
     @Getter(onMethod_ = {@Override})
     final MetaModelContext metaModelContext;
 
-    private ThreadLocal<Boolean> threadLocalBulkMode = ThreadLocal.withInitial(() -> Boolean.FALSE);
+    private ThreadLocal<Boolean> suppressFlush = ThreadLocal.withInitial(() -> Boolean.FALSE);
     private boolean autoFlush;
 
     @PostConstruct
@@ -106,17 +106,17 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T execInBulk(Callable<T> callable) {
         try {
-            setBulkMode(Boolean.TRUE);
+            setSuppressFlush(Boolean.TRUE);
             return callable.call();
         } finally {
-            setBulkMode(Boolean.FALSE);
+            setSuppressFlush(Boolean.FALSE);
         }
     }
 
-    private void setBulkMode(final Boolean bulkMode) {
-        threadLocalBulkMode.set(bulkMode);
-        if (!bulkMode) {
-            threadLocalBulkMode.remove();
+    private void setSuppressFlush(final Boolean suppressFlush) {
+        this.suppressFlush.set(suppressFlush);
+        if (!suppressFlush) {
+            this.suppressFlush.remove();
             transactionService.flushTransaction();
         }
     }
@@ -142,7 +142,7 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
-        if (!threadLocalBulkMode.get()) {
+        if (!suppressFlush.get()) {
             transactionService.flushTransaction();
         }
         return object;
@@ -162,7 +162,7 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public void removeAndFlush(final Object domainObject) {
         remove(domainObject);
-        if (!threadLocalBulkMode.get()) {
+        if (!suppressFlush.get()) {
             transactionService.flushTransaction();
         }
     }
@@ -197,7 +197,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed() && !threadLocalBulkMode.get()) {
+        if(autoFlush && !FlushMgmt.isAutoFlushSuppressed() && !suppressFlush.get()) {
             transactionService.flushTransaction();
         }
         return submitQuery(query);
