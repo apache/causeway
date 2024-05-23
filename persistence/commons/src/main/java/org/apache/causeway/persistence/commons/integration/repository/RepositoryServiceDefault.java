@@ -106,11 +106,19 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T execInBulk(Callable<T> callable) {
         try {
-            setSuppressFlush(Boolean.TRUE);
+            suppressFlushing();
             return callable.call();
         } finally {
-            setSuppressFlush(Boolean.FALSE);
+            resumeFlushing();
         }
+    }
+
+    private void suppressFlushing() {
+        setSuppressFlush(Boolean.TRUE);
+    }
+
+    private void resumeFlushing() {
+        setSuppressFlush(Boolean.FALSE);
     }
 
     private void setSuppressFlush(final Boolean suppressFlush) {
