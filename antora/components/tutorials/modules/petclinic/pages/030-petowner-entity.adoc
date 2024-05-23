@@ -5,12 +5,11 @@
 
 In this set of exercises we'll just focus on the `PetOwner` entity.
 
-[#exercise-3-1-rename-petowners-name-property]
-== Ex 3.1: Rename PetOwner's name property
+[#exercise-3-1-rename-petowners-knownAs-property]
+== Ex 3.1: Add PetOwner's knownAs property
 
-In the domain we are working on, `PetOwner` has a `firstName` and a `lastName` property, not a single `name` property.
-
-In this exercise, we'll rename ``PetOwner``'s `name` property to be `lastName`, and change the fixture script that sets up data to something more realistic.
+In this exercise, we'll add a new property, `knownAs`, to capture the ``PetOwner``'s preferred name.
+We'll also update the fixture script that sets up data to something more realistic.
 
 
 
@@ -18,181 +17,184 @@ In this exercise, we'll rename ``PetOwner``'s `name` property to be `lastName`, 
 
 [source,bash]
 ----
-git checkout tags/03-01-renames-PetOwner-name-property
+git checkout tags/03-01-adds-PetOwner-knownAs-property
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
-Remember you can use the menu:Prototyping[Fixture Scripts] menu to setup some example data.
+Use the menu:Prototyping[Fixture Scripts] menu to setup some example data.
 
 
 === Tasks
 
-Checkout the solution above and review the git history to see the changes that have already been made.
-These include:
-
-* property `PetOwner#name` -> `PetOwner#lastName` renamed
-* JPA mappings updated:
-** the corresponding JPQL named queries
-** the method names of `PetOwnerRepository`
+* add a `knownAs` property:
 +
-This is a Spring Data repository, which uses a link:https://www.baeldung.com/spring-data-derived-queries[naming convention] to infer the queries
-
-** uniqueness constraint for `PetOwner`
-
-* the action method names of `PetOwners` domain service renamed
+[source,java]
+.PetOwner.java
+----
+@Column(length = 40, nullable = true, name = "knownAs")     // <.>
+@Getter @Setter
+@Property(editing = Editing.ENABLED)                        // <.>
+@PropertyLayout(
+        fieldSetId = LayoutConstants.FieldSetId.IDENTITY,   // <.>
+        sequence = "1.1"                                    // <.>
+)
+private String knownAs;
+----
+<.> JPA annotation, declared to be `nullable` because we don't necessarily have a value
+<.> The xref:refguide:applib:index/annotation/Property.adoc[@Property] annotation provides domain semantics.
+(In comparison, the xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation defines UI hints/semantics.
+Directly editable (similar to the "notes" property)
+<.> Renders this new property in the same field set as `name` ...
+<.> ... and after the `name`, not before it
 +
-This also requires updating the `menubars.layout.xml`, which references these action names.
+It's also possible to define UI semantics through the associated `.layout.xml` file; we'll look at that alternative in a later exercise.
 
-* updating the xref:refguide:applib:index/annotation/ActionLayout.adoc#associateWith[@ActionLayout] of the `updateName` and `delete` action methods in `PetOwner`
+* update `PetOwner_persona` to specify an `knownAs` for some of the owners:
 +
-In the UI, the buttons for these actions are located close to the renamed "lastName" property
+[source,java]
+.PetOwner_persona.java
+----
+public enum PetOwner_persona
+implements Persona<PetOwner, PetOwner_persona.Builder> {
 
-* renames `@Name` meta-annotation to `@LastName`.
+    JAMAL("Jamal Washington", "jamal.pdf", "J"),
+    CAMILA("Camila González", "camila.pdf", null),
+    ARJUN("Arjun Patel", "arjun.pdf", null),
+    NIA("Nia Robinson", "nia.pdf", null),
+    OLIVIA("Olivia Hartman", "olivia.pdf", null),
+    LEILA("Leila Hassan", "leila.pdf", null),
+    MATT("Matthew Miller", "matt.pdf", "Matt"),
+    BENJAMIN("Benjamin Thatcher", "benjamin.pdf", "Ben"),
+    JESSICA("Jessica Raynor", "jessica.pdf", "Jess"),
+    DANIEL("Daniel Keating", "daniel.pdf", "Dan");
+
+    private final String name;
+    private final String contentFileName;
+    private final String knownAs;
+
+    ...
+}
+----
+
+* for the builder, use the `knownAs` value of the entity once created:
 +
-Meta-annotations are a useful way of eliminating duplication where the same value type appears in multiple locations, for example as both an entity property and in action parameters.
+[source,java]
+.PetOwner_persona.java
+----
+@Override
+protected PetOwner buildResult(final ExecutionContext ec) {
 
-Build and run the application to make sure it still runs fine.
+    val petOwner = wrap(PetOwners).create(persona.name);
+
+    // ...
+
+    if (persona.knownAs != null) {
+        petOwner.setKnownAs(persona.knownAs);
+    }
+
+    // ...
+}
+----
 
 
 
-[#exercise-3-2-add-petowners-firstname-property]
-== Ex 3.2: Add PetOwner's firstName property
+[#exercise-3-2-define-PetOwners-title-imperatively]
+== Ex 3.2: Define PetOwner's title imperatively
 
-Now that `PetOwner` has a `lastName` property, let's also add a `firstName` property.
-We'll also update our fixture script (which sets up ``PetOwner``s) so that it is more descriptive.
+Every domain object has a title, allowing end-users to distinguish one object instance from another.
+There's no requirement for this title to be unique, but it does need to be unique "enough".
+
+Our app currently declares the title of `PetOwner` declaratively using the xref:refguide:applib:index/annotation/Title.adoc[@Title] annotation on the `name` property.
+In this exercise, let's change that to also include the `knownAs` property as defined.
+Our rule will be:
+
+* if there is a `knownAs`, then the title should be "<name> (<knownAs>)"
+* but if `knownAs` is empty, then the title should be simply the `name`, as it is now.
+
+To do that, we need to define the title imperatively, using the xref:refguide:applib-methods:ui-hints.adoc#title[title()] method.
 
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-02-adds-PetOwner-firstName-property
+git checkout tags/03-02-define-PetOwner-title-imperatively
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 === Tasks
 
-* copy `@LastName` meta-annotation to create `@FirstName`:
-+
-[source,java]
-.FirstName.java
-----
-@Property(maxLength = FirstName.MAX_LEN, optionality = Optionality.OPTIONAL)
-@Parameter(maxLength = FirstName.MAX_LEN, optionality = Optionality.OPTIONAL)
-@ParameterLayout(named = "First Name")
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface FirstName {
+* locate the `name` property of `PetOwner`, and remove the `@Title` annotation
 
-    int MAX_LEN = 40;
-}
-----
-+
-Note that this property/parameter is optional.
-Its parameter name has also been updated.
-
-
-* add a new (JPA nullable) property `firstName` to `PetOwner`:
-+
-[source,java]
-----
-@FirstName
-@Column(length = FirstName.MAX_LEN, nullable = true)
-@Getter @Setter @ToString.Include
-@PropertyLayout(fieldSetId = "name", sequence = "2")
-private String firstName;
-----
-
-* add a new factory method to accept a `firstName`, and refactor the existing one:
+* add a new `title()` method:
 +
 [source,java]
 .PetOwner.java
 ----
-public static PetOwner withName(String name) {
-    return withName(name, null);
-}
-
-public static PetOwner withName(String lastName, String firstName) {
-    val simpleObject = new PetOwner();
-    simpleObject.setLastName(lastName);
-    simpleObject.setFirstName(firstName);
-    return simpleObject;
-}
-----
-
-
-* remove `@Title` annotation from `lastName` property, and add a `title()` method to derive from both properties:
-+
-[source,java]
-.PetOwner.java
-----
+@ObjectSupport      // <.>
 public String title() {
-    return getLastName() + (getFirstName() != null ? ", " + getFirstName() : "");
+    return getName() + (getKnownAs() != null ? " (" + getKnownAs() + ")" : "");
 }
 ----
-
-
-* Update the `PetOwner_persona` enum with more realistically last names (family names).
-+
-Learn more about fixture scripts xref:testing:fixtures:about.adoc[here].
+<.> The xref:refguide:applib:index/annotation/ObjectSupport.adoc[@ObjectSupport] annotation tells the framework to include this method in the metamodel.
 
 
 
-[#exercise-3-3-modify-petowners-updatename-action]
-== Ex 3.3: Modify PetOwner's updateName action
+[#exercise-3-3-remaining-PetOwner-properties]
+== Ex 3.3: Remaining `PetOwner` properties
 
-Although we've added a `firstName` property, currently it can't be edited.
-In this exercise we'll modify the `updateName` action to also allow the `firstName` to be changed.
+Comparing `PetOwner` as it is currently defined with our domain model, there are a couple of changes still to make:
+
+* we need to rename `lastCheckedIn` property to `lastVisit` property
+
+* we still need to add in a `telephoneNumber` property, and an `emailAddress` property
+
+
+We'll make these changes in this exercise.
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-03-modifies-PetOwner-updateName-action
+git checkout tags/03-03-remaining-PetOwner-properties
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 === Tasks
 
-* update `PetOwner#updateName` to also accept a new `firstName` parameter:
-+
-image::03-03/refactor-updateName.png[width=800px]
+Rename the `lastCheckedIn` property to `lastVisit`:
+
+* rename the field in `PetOwner`
+* update `PetOwner_persona` also (but your IDE probably refactored this already).
+* to make it more realistic, let's change the fixture script so that the value of `lastVisit` is some number of days in the past:
 +
 [source,java]
-.PetOwner.java
+.PetOwner_persona.java
 ----
-@Action(semantics = IDEMPOTENT, commandPublishing = Publishing.ENABLED, executionPublishing = Publishing.ENABLED)
-@ActionLayout(associateWith = "lastName", promptStyle = PromptStyle.INLINE)
-public PetOwner updateName(
-        @LastName final String lastName,
-        @FirstName String firstName) {
-    setLastName(lastName);
-    setFirstName(firstName);
-    return this;
-}
-public String default0UpdateName() {
-    return getLastName();
-}
-public String default1UpdateName() {
-    return getFirstName();
-}
+final var numDaysAgo = fakeDataService.ints().between(100, 2);                          // <.>
+final var lastVisit = clockService.getClock().nowAsLocalDate().minusDays(numDaysAgo);   // <.>
+petOwner.setLastVisit(lastVisit);
 ----
+<.> The xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] provides an easy way to create fake data for testing and prototyping
+<.> It's good practice to use xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], so it can be easily mocked in tests
 
-* add in a "default" supporting method for the new parameter.
-+
-[source,java]
-.PetOwner.java
-----
-public String default1UpdateName() {
-    return getFirstName();
-}
-----
-+
-The "default" supporting methods are called when the action prompt is rendered, providing the default for the "Nth" parameter of the corresponding action.
+Add the `telephoneNumber` property:
 
+* ...
+* ...
+
+Add the `emailAddress` property:
+
+* ...
+* ...
+
+
+TODO: ideas for future steps:
+- introduce a meta-annotation
+- introduce a custom type for these
 
 
 

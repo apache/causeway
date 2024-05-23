@@ -28,11 +28,15 @@ package pets {
     class PetOwner <<role>> {
         +id
         ..
-        #lastName
-        #firstName
+        #name
+        #knownAs
         ..
         -phoneNumber
         -emailAddress
+        ..
+        -lastVisit
+        ..
+        -notes
     }
 }
 
