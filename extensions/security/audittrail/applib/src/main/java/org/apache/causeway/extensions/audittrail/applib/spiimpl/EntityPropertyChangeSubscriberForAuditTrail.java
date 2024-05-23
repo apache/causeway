@@ -75,7 +75,7 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
     }
 
     @Override
-    public void onBulkChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
         if (!isEnabled()) {
             return;
         }

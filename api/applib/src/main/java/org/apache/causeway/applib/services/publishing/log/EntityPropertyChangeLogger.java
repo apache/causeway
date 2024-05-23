@@ -59,7 +59,7 @@ public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscribe
     }
 
     @Override
-    public void onBulkChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
         entityPropertyChanges.stream().map(EntityPropertyChange::toString).forEach(log::debug);
     }
 }

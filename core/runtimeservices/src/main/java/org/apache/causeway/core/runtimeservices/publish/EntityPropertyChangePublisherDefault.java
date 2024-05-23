@@ -113,7 +113,7 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                 });
             } else {
                 for (val subscriber : enabledSubscribers) {
-                    subscriber.onBulkChanging(propertyChanges);
+                    subscriber.onChanging(propertyChanges);
                 }
             }
         } finally {
