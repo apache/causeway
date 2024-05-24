@@ -100,7 +100,6 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.moxy</artifactId>
-			<version>4.0.2</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.ow2.asm</groupId>
