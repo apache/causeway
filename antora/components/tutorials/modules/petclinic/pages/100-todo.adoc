@@ -1,0 +1,4 @@
+
+TODO: ideas for future steps:
+- introduce a meta-annotation
+- introduce a custom type for these

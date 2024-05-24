@@ -151,7 +151,6 @@ Comparing `PetOwner` as it is currently defined with our domain model, there are
 
 * we still need to add in a `telephoneNumber` property, and an `emailAddress` property
 
-
 We'll make these changes in this exercise.
 
 === Solution
@@ -181,22 +180,119 @@ petOwner.setLastVisit(lastVisit);
 <.> The xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] provides an easy way to create fake data for testing and prototyping
 <.> It's good practice to use xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService], so it can be easily mocked in tests
 
-Add the `telephoneNumber` property:
+Now add the two new properties:
 
-* ...
-* ...
+* Add the `telephoneNumber` property:
++
+[source,java]
+.PetOwner.java
+----
+@Column(length = 40, nullable = true, name = "telephoneNumber")
+@Getter @Setter
+@Property(editing = Editing.ENABLED)
+@PropertyLayout(fieldSetId = "contact", sequence = "1.1")   // <.>
+private String telephoneNumber;
+----
+<.> This places the property in a new "contact" fieldset group; we'll define that below
 
-Add the `emailAddress` property:
+* and add the `emailAddress` property:
++
+[source,java]
+.PetOwner.java
+----
+@Column(length = 40, nullable = true, name = "emailAddress")
+@Getter @Setter
+@Property(editing = Editing.ENABLED)
+@PropertyLayout(fieldSetId = "contact", sequence = "1.2")
+private String emailAddress;
+----
 
-* ...
-* ...
+And now let's define the referenced "contact" fieldset.
+
+* Locate the associated `.layout.xml` file for `PetOwner`.
+Before the "Details" fieldset, add:
++
+[source,xml]
+.PetOwner.layout.xml
+----
+<bs3:col span="12">
+    <cpt:fieldSet name="Contact" id="contact"/>
+</bs3:col>
+----
+
+TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
+For example, with IntelliJ you can use "Reload Changed Classes" menu item.
+
+You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
+
+[#exercise-3-4-list-new-properties-of-PetOwner]
+== Ex 3.4: List-new-properties-of-PetOwner
+
+Several of the actions in the "Pet Owners" menu return lists of ``PetOwner``s; the "list" action returns all of them.
+
+When we do this we see only the `name` property of the `PetOwner`.
+Let's update the app to see some other properties we added in the previous exercise.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-04-list-new-properties-of-PetOwner
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* Locate the `PetOwner.columnOrder.txt` and make these changes:
++
+[source,text]
+.PetOwner.columnOrder.txt
+----
+name
+telephoneNumber
+emailAddress
+lastVisit
+----
+
+Confirm that "Pet Owners > List" now shows the additional properties as columns.
+
+TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
+For example, with IntelliJ you can use "Reload Changed Classes" menu item.
+
+You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
 
 
-TODO: ideas for future steps:
-- introduce a meta-annotation
-- introduce a custom type for these
 
+[#exercise-3-5-run-default-fixture-at-startup]
+== Ex 3.5: Run default fixture at startup
 
+Prototyping involves a lot of iteration, meaning make a change, re-run the app, in the app re-create some example objects, inspect the result.
+
+One way to create objects is from the Prototyping menu; you might already have been doing this.
+
+xxx
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-04-list-new-properties-of-PetOwner
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+----
+----
+
+----
+----
+
+----
+----
+*UP TO HERE*
 
 [#exercise-3-4-modify-the-menu-action-to-create-petowners]
 == Ex 3.4: Modify the menu action to create PetOwners
