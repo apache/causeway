@@ -188,7 +188,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--  as served by wicket via webjars -->
         <wicketstuff.version>10.0.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
 
-		<!-- OTHER -->
+        <vaadin.version>23.2.10</vaadin.version>
+
+        <!-- OTHER -->
 
 		<distMgmtSnapshotsName>Apache Development Snapshot Repository</distMgmtSnapshotsName>
         <distMgmtSnapshotsUrl>https://repository.apache.org/content/repositories/snapshots</distMgmtSnapshotsUrl>
@@ -2059,13 +2061,36 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${select2.version}</version>
 			</dependency>
 
+            <dependency>
+                <groupId>org.webjars.npm</groupId>
+                <artifactId>mobile-drag-drop</artifactId>
+                <version>2.3.0-rc.2</version>
+            </dependency>
+
 			<dependency>
 				<groupId>org.wicketstuff</groupId>
 				<artifactId>wicketstuff-select2</artifactId>
 				<version>${wicketstuff.version}</version>
 			</dependency>
 
-			<dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-spring-boot-starter</artifactId>
+                <version>${vaadin.version}</version>
+                <exclusions>
+                    <!-- this is a library module, don't pull in embedded tomcat etc. here -->
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>vaadin-dev-server</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
 				<groupId>io.cucumber</groupId>
 				<artifactId>cucumber-java</artifactId>
 				<version>${cucumber.version}</version>
