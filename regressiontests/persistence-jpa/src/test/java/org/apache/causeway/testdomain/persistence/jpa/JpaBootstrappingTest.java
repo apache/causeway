@@ -58,7 +58,7 @@ import lombok.val;
                 Configuration_usingJpa.class,
         },
         properties = {
-                "spring.datasource.url=jdbc:h2:mem:JpaBootstrappingTest",
+                "spring.datasource.url=jdbc:h2:mem:JpaBootstrappingTest",//;TRACE_LEVEL_SYSTEM_OUT=3",
         })
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

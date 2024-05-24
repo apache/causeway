@@ -21,6 +21,8 @@ package org.apache.causeway.applib.services.publishing.log;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.apache.causeway.commons.collections.Can;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -56,4 +58,8 @@ public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscribe
         log.debug(entityPropertyChange.toString());
     }
 
+    @Override
+    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+        entityPropertyChanges.stream().map(EntityPropertyChange::toString).forEach(log::debug);
+    }
 }

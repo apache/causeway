@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.testdomain.jpa;
 
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -75,6 +76,16 @@ public class JpaTestFixtures extends EntityTestFixtures {
         repository.persistAndFlush(inventory);
     }
 
+    @Override
+    public Object addBook(BookDto bookDto) {
+        return repository.persistAndFlush(JpaBook.fromDto(bookDto));
+    }
+
+    @Override
+    public void addInventory(Set<?> books) {
+        val inventory = new JpaInventory("Sample Inventory", (Set<JpaProduct>) books);
+        repository.persistAndFlush(inventory);
+    }
 
 
 }

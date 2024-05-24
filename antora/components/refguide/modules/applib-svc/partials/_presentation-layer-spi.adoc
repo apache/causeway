@@ -51,6 +51,13 @@ For example, the viewer remembers which tabs are selected, and for collections w
 
 
 
+|xref:refguide:applib:index/services/publishing/spi/PageRenderSubscriber.adoc[PageRenderSubscriber]
+|Hook to allow work to be performed before rendering the page.
+For example, this could be used for simple metric gathering.
+Or, it could be used to preload data in bulk to avoid N+1 problems.
+
+
+
 |xref:refguide:applib:index/services/routing/RoutingService.adoc[RoutingService]
 |Return an alternative object than that returned by an action.
 
