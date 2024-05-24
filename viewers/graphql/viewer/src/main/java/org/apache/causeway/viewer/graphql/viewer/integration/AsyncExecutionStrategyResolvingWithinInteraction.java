@@ -20,16 +20,17 @@ package org.apache.causeway.viewer.graphql.viewer.integration;
 
 import java.util.concurrent.CompletableFuture;
 
+import graphql.execution.AsyncExecutionStrategy;
+import graphql.execution.ExecutionContext;
+import graphql.execution.ExecutionStrategyParameters;
+import graphql.execution.FieldValueInfo;
+
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
-import graphql.execution.AsyncExecutionStrategy;
-import graphql.execution.ExecutionContext;
-import graphql.execution.ExecutionStrategyParameters;
-import graphql.execution.FieldValueInfo;
 import lombok.val;
 
 @Service
@@ -47,7 +48,6 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
         this.userMementoProvider = userMementoProvider;
     }
 
-
     @Override
     protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo(
             final ExecutionContext executionContext,
@@ -58,12 +58,27 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
         if (userMemento != null) {
             return interactionService.call(
                     InteractionContext.builder().user(userMemento).build(),
-                    () -> super.resolveFieldWithInfo(executionContext, parameters)
+                    () -> resolveFieldWithInfo2(executionContext, parameters)
             );
         } else {
             return interactionService.callAnonymous(
-                    () -> super.resolveFieldWithInfo(executionContext, parameters)
+                    () -> resolveFieldWithInfo2(executionContext, parameters)
             );
         }
     }
+
+    /**
+     * Adapts the super type result into a {@code CompletableFuture<FieldValueInfo> }
+     * <p>
+     * super.resolveFieldWithInfo(..) return type changed to {@link Object} with graphql-java 22.0
+     */
+    protected CompletableFuture<FieldValueInfo> resolveFieldWithInfo2(
+            final ExecutionContext executionContext,
+            final ExecutionStrategyParameters parameters) {
+        var obj = super.resolveFieldWithInfo(executionContext, parameters);
+        return obj instanceof FieldValueInfo
+                ? CompletableFuture.completedFuture((FieldValueInfo)obj)
+                : (CompletableFuture<FieldValueInfo>)obj;
+    }
+
 }
