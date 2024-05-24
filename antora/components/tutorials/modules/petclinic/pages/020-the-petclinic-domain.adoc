@@ -337,6 +337,9 @@ The xref:testing:fixtures:about.adoc#personas-and-builders[persona] pattern lets
 
 In this exercise we'll modify the `PetOwners_persona` (copied from `SimpleObjects_persona` earlier) to create more realistic data.
 
+We'll also update the existing top-level `DomainAppDemo` fixture script, so that it will recreate our new ``PetOwner``s.
+This will allow us to quickly create a whole set of `PetOwner` objects from the "Prototyping" menu.
+
 
 === Solution
 
@@ -349,7 +352,50 @@ mvn -pl spring-boot:run
 
 === Tasks
 
-* locate the `PetOwners_persona` class
-* refactor the enum constants and values to create 10 realistic pet owner names
-* (optional) we'll use the associated `.pdf` to store a "veterinary clinic service agreement" for each pet owner.
+* locate the `PetOwners_persona` class, and refactor the enum constants and values to create 10 realistic pet owner names
++
+[source,java]
+.PetOwners_persona.java
+----
+@RequiredArgsConstructor
+public enum PetOwner_persona
+implements Persona<PetOwner, PetOwner_persona.Builder> {
 
+    JAMAL("Jamal Washington", "jamal.pdf", "J"),
+    CAMILA("Camila González", "camila.pdf", null),
+    ARJUN("Arjun Patel", "arjun.pdf", null),
+    NIA("Nia Robinson", "nia.pdf", null),
+    OLIVIA("Olivia Hartman", "olivia.pdf", null),
+    LEILA("Leila Hassan", "leila.pdf", null),
+    MATT("Matthew Miller", "matt.pdf", "Matt"),
+    BENJAMIN("Benjamin Thatcher", "benjamin.pdf", "Ben"),
+    JESSICA("Jessica Raynor", "jessica.pdf", "Jess"),
+    DANIEL("Daniel Keating", "daniel.pdf", "Dan");
+
+    ...
+}
+----
+
+* create new `.pdf` files each pet owner, to store a "veterinary clinic service agreement" for each.
++
+The solution already provides these `.pdf` files, so you might want to borrow them.
+
+* locate the `DomainAppDemo` class and update:
++
+[source,java]
+.DomainAppDemo.java
+----
+@Override
+protected void execute(final ExecutionContext ec) {
+    ec.executeChildren(this, moduleWithFixturesService.getTeardownFixture());
+    ec.executeChild(this, new PetOwner_persona.PersistAll());   // <.>
+}
+----
+<.> change to set up ``PetOwner``s (rather than ``SimpleObject``s, as before)
+
+
+Test that you can quickly create a whole set of `PetOwner` objects
+from the "Prototyping" menu:
+
+* "Prototyping > Run Fixture Script" and select "Domain App Demo", or
+* "Prototyping > Recreate Objects and Return First".
