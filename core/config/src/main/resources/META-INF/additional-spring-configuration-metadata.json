@@ -4,35 +4,6 @@
       "name": "datanucleus.identifier.case",
       "type": "org.apache.causeway.core.config.DatanucleusConfiguration.Identifier.Case",
       "description": "Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE."
-    }
-  ],
-  "hints": [
-    {
-      "name": "causeway.testing.fixtures.initial-script",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
-        }
-      }]
-    },
-    {
-      "name": "causeway.testing.fixtures.fixture-scripts-specification.recreate",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
-        }
-      }]
-    },
-    {
-      "name": "causeway.testing.fixtures.fixture-scripts-specification.run-script-default",
-      "providers": [{
-        "name": "class-reference",
-        "parameters": {
-          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
-        }
-      }]
     },
     {
       "name": "causeway.value-types.temporal.editing.date-pattern",
@@ -98,7 +69,37 @@
       "name": "causeway.value-types.temporal.editing.zone-joining-pattern",
       "type": "java.lang.String",
       "defaultValue": "%1$s %2$s"
+    }
+  ],
+  "hints": [
+    {
+      "name": "causeway.testing.fixtures.initial-script",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
+        }
+      }]
     },
+    {
+      "name": "causeway.testing.fixtures.fixture-scripts-specification.recreate",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
+        }
+      }]
+    },
+    {
+      "name": "causeway.testing.fixtures.fixture-scripts-specification.run-script-default",
+      "providers": [{
+        "name": "class-reference",
+        "parameters": {
+          "target": "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"
+        }
+      }]
+    },
+    
     {
       "name": "causeway.viewer.wicket.themes.provider",
       "providers": [{
@@ -251,4 +252,3 @@
     }
   ]
 }
-
