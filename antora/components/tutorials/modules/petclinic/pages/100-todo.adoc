@@ -5,3 +5,6 @@ TODO: ideas for future steps:
 
 
 add validation for telephone number and email address.
+
+
+PetOwner#daysSinceLastVisit could be made into a mixin - eg if these marketing analytics were the responsibility of some other module.
