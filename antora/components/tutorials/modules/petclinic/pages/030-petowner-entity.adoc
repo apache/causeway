@@ -517,11 +517,10 @@ public PetOwner updateName( ... ) { ... }
 Confirm that prompt is still inline.
 
 * Using a configuration property we can change the default for object actions to use a dialog rather than inline.
-+
-using the Spring boot profile trick from before:
+We'll use the "dev" profile introduced earlier:
 +
 [source,yaml]
-.application-custom.yaml
+.application-dev.yaml
 ----
 causeway:
   viewer:
@@ -529,7 +528,7 @@ causeway:
       prompt-style: dialog
 ----
 +
-Remember to activate this new profile (`-Dspring.profiles.active=dev,custom`) and confirm that the `updateName` prompt now uses a sidebar dialog.
+Remember to activate this new profile (`-Dspring.profiles.active=dev`) and confirm that the `updateName` prompt now uses a sidebar dialog.
 
 * We can overide the default dialog style for both service and object actions using further configuration properties.
 +
@@ -567,27 +566,21 @@ causeway:
 
 
 
-[#exercise-3-7-derived-name-property]
-== Ex 3.7: Derived name property
+[#exercise-3-9-derived-days-since-last-visit-property]
+== Ex 3.9: Derived 'days since last visit' property
 
-The ``PetOwner``'s `firstName` and `lastName` properties are updated using the `updateName` action, but when the action's button is invoked, it only "replaces" the `lastName` property:
+Not every property has to persisted, nor editable (indeed most properties are not editable).
 
-image::Owner-updateName-prompt.png[width="400px"]
+For example, it might be useful to calculate the number of days since the pet owner last visited; perhaps for marketing purposes.
 
-In this exercise we'll improve the UI by introducing a derived `name` property and then hiding the `firstName` and `lastName`:
-
-image::Owner-name.png[width="400px"]
-
-When `PetOwner#updateName` is invoked, the prompt we'll want see is:
-
-image::Owner-name-updated.png[width="400px"]
+In this exercise we'll see how easy it is to create such a derived property.
 
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-07-derived-PetOwner-name
+git checkout tags/03-09-derived-days-since-last-visit-property
 mvn clean install
 mvn -pl spring-boot:run
 ----
@@ -595,18 +588,66 @@ mvn -pl spring-boot:run
 
 === Tasks
 
+Locate the `PetOwner` class:
 
-* Add `getName()` as the derived `name` property:
+* inject an instance of xref:refguide:applib:index/services/clock/ClockService.adoc[]:
 +
 [source,java]
 .PetOwner.java
 ----
-@Transient
-@PropertyLayout(fieldSetId = "name", sequence = "1")
-public String getName() {
-    return getFirstName() + " " + getLastName();
+@Inject
+@Transient                  // <.>
+ClockService clockService;
+----
+<.> instructs JPA that this field is not persisted
++
+Note that Apache Causeway allows services to be injected into entities (actually, into pretty much any domain object)
+
+* implement `getDaysSinceLastVisit()` method, calculating the number of days since "today".
++
+[source,java]
+.PetOwner.java
+----
+@Property
+@PropertyLayout(fieldSetId = LayoutConstants.FieldSetId.DETAILS, sequence = "3.1")  // <.>
+public long getDaysSinceLastVisit() {
+    return Math.abs(ChronoUnit.DAYS.between(getLastVisit(), clockService.getClock().nowAsLocalDate()));
 }
 ----
+<.> positioned just after the `lastVisit` property
+
+*  update `PetOwner.columnOrder.txt` to indicate whether this new property should be rendered in standalone tables (returned from finder actions):
++
+[source,text]
+.PetOwner.columnOrder.txt
+----
+name
+telephoneNumber
+emailAddress
+daysSinceLastVisit
+#lastVisit
+#knownAs
+#attachment
+#notes
+#version
+----
+
+*  similarly, update `HomePageViewModel#petOwners.columnOrder.txt` to indicate whether this new property should be rendered on the home page:
++
+[source,text]
+.HomePageViewModel#petOwners.columnOrder.txt
+----
+name
+telephoneNumber
+emailAddress
+daysSinceLastVisit
+#lastVisit
+#knownAs
+#attachment
+#notes
+#version
+----
+
 
 * Hide the `lastName` and `firstName` properties, using `@Property(hidden=...)`.
 We can also remove the `@PropertyLayout` annotation.
