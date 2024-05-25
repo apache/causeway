@@ -12,7 +12,6 @@ In this exercise, we'll add a new property, `knownAs`, to capture the ``PetOwner
 We'll also update the fixture script that sets up data to something more realistic.
 
 
-
 === Solution
 
 [source,bash]
@@ -384,7 +383,13 @@ The positioning of the collection is also specified in the corresponding layout 
 
 By default this will show all of the properties of `PetOwner`.
 
+image::03-06/home-page-default-columns.png[]
+
+
 We can change this by creating a file `HomePageViewModel#petOwners.columnOrder.txt`, alongside the `HomePageViewModel`:
+
+
+Instead
 
 [source,txt]
 .HomePageViewModel#petOwners.columnOrder.txt
