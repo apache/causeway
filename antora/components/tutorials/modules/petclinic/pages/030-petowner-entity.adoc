@@ -255,7 +255,7 @@ emailAddress
 lastVisit
 ----
 
-Confirm that "Pet Owners > List" now shows the additional properties as columns.
+Confirm that menu:Pet Owners[List All] now shows the additional properties as columns.
 
 TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
 For example, with IntelliJ you can use "Reload Changed Classes" menu item.
@@ -264,34 +264,154 @@ You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[h
 
 
 
-[#exercise-3-5-run-default-fixture-at-startup]
-== Ex 3.5: Run default fixture at startup
 
-Prototyping involves a lot of iteration, meaning make a change, re-run the app, in the app re-create some example objects, inspect the result.
+[#exercise-3-5-initial-fixture-script]
+== Ex 3.5: Initial Fixture Script
 
-One way to create objects is from the Prototyping menu; you might already have been doing this.
+As we prototype with an in-memory database, it means that we need to setup the database each time we restart the application.
+Using the menu:Prototyping[Fixture Scripts] menu to setup data saves some time, but it would nicer still if that script could be run automatically.
+We can do that by specifying a configuration property.
 
-xxx
+We can also leverage link:https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.profiles[Spring Boot profiles] to keep this configuration separate.
+
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-04-list-new-properties-of-PetOwner
+git checkout tags/03-05-initial-fixture-script
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
+
 === Tasks
 
+* locate the `application.yml` configuration file (in the webapp module) and create this new file alongside it:
++
+[source,yaml]
+.application-dev.yml
 ----
+causeway:
+  testing:
+    fixtures:
+      initial-script: domainapp.webapp.application.fixture.scenarios.DomainAppDemo
 ----
+
+* modify the startup of your application to enable this profile, using this system prpoerty:
++
+[source]
+----
+-Dspring.profiles.active=dev
+----
+
+We also need to make one small modification to the fixture script itself.
+The initial fixtures are run with a built-in user called "\__system", that has no roles and therefore no permissions.
+We either need to change the fixture script to run as a different user that _will_ have permissions (there's a service called xref:refguide:applib:index/services/sudo/SudoService.adoc[] that would let us do that), or, simpler, just temporarily switch off permission checks.
+We'll go with the second option:
+
+* locate the `PetOwner_persona.Builder` class, and make this change:
++
+[source,java]
+.PetOwner_persona.java
+----
+@RequiredArgsConstructor
+public enum PetOwner_persona /*...*/ {
+
+    @Accessors(chain = true)
+    public static class Builder extends BuilderScriptWithResult<PetOwner> {
+
+        @Override
+        protected PetOwner buildResult(final ExecutionContext ec) {
+
+            val petOwner = petOwners.create(persona.name); // <.>
+
+            // ...
+        }
+        // ...
+    }
+    // ...
+}
+----
+<.> Previously this was `wrap(petOwners).create(...)`.
+The `wrap(...)` method uses the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[] to wrap the domain object in a proxy, and the proxy enforces all the business rules, including visibility.
+
+When you now run the application you should now find that there are 10 `PetOwner` objects already created.
+
+
+[#exercise-3-6-update-home-page-to-show-PetOwners]
+== Ex 3.5: Update Home Page to show PetOwners
+
+Every Causeway app can nominate a home page, basically a xref:userguide::view-models.adoc[view model] that's been annotated with xref:refguide:applib:index/annotation/HomePage.adoc[].
+Currently the home page for our app is the one we inherited from the starter app, showing a list of ``SimpleObject``s.
+
+In this exercise, we'll refactor the home page view model to show a list of ``PetOwner``s instead.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-06-update-home-page-to-show-pet-owners
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+=== Tasks
+
+Locate the `HomePageViewModel` class:
+
+* inject `PetOwners` domain service (instead of `SimpleObjects`)
+* change the `title()` implementation
+* rename the collection from `getObjects()` to `getPetOwners()`
+
+The positioning of the collection is also specified in the corresponding layout file, and so also needs updating.
+
+* locate the `HomePageViewModel.layout.xml` file, and update accordingly
++
+[source,xml]
+.HomePageViewModel.layout.xml
+----
+<bs3:col span="6" unreferencedCollections="true">
+    <bs3:row>
+        <bs3:col span="12">
+            <cpt:collection id="petOwners" defaultView="table"/>
+        </bs3:col>
+    </bs3:row>
+</bs3:col>
+----
+
+By default this will show all of the properties of `PetOwner`.
+
+We can change this by creating a file `HomePageViewModel#petOwners.columnOrder.txt`, alongside the `HomePageViewModel`:
+
+[source,txt]
+.HomePageViewModel#petOwners.columnOrder.txt
+----
+name
+telephoneNumber
+emailAddress
+#attachment
+#lastVisit
+#knownAs
+#version
+----
+
+TIP: the action "Download .columnOrder.txt files (ZIP)" (available only when prototyping) provides an easy way to obtain this file; you can then update as required.
+
 
 ----
 ----
 
 ----
 ----
+
+----
+----
+
+TODO: change the home page to list the pet owners by default.
+
 *UP TO HERE*
 
 [#exercise-3-4-modify-the-menu-action-to-create-petowners]
@@ -326,58 +446,6 @@ public PetOwner create(
 }
 ----
 
-
-=== Optional exercise
-
-NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
-
-It would be nice if the `PetOwner` were identified by both their `firstName` and their `lastName`; at the moment every `PetOwner` must have a unique `lastName`.
-Or, even better would be to introduce some sort of "customerNumber" and use this as the unique identifier.
-
-
-
-
-[#exercise-3-5-initial-fixture-script]
-== Ex 3.5: Initial Fixture Script
-
-As we prototype with an in-memory database, it means that we need to setup the database each time we restart the application.
-Using the menu:Prototyping[Fixture Scripts] menu to setup data saves some time, but it would nicer still if that script could be run automatically.
-We can do that by specifying a configuration property.
-
-We can also leverage link:https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.profiles[Spring Boot profiles] to keep this configuration separate.
-
-
-=== Solution
-
-[source,bash]
-----
-git checkout tags/03-05-initial-fixture-script
-mvn clean install
-mvn -pl spring-boot:run
-----
-
-
-=== Tasks
-
-* create the following file in `src/main/resources` of the webapp (alongside the existing `application.yml` file):
-+
-[source,yaml]
-.application-dev.yaml
-----
-causeway:
-  testing:
-    fixtures:
-      initial-script: petclinic.webapp.application.fixture.scenarios.PetClinicDemo
-----
-
-* modify the startup of your application to enable this profile, using this system prpoerty:
-+
-[source]
-----
--Dspring.profiles.active=dev
-----
-
-When you run the application you should now find that there are 10 `PetOwner` objects already created.
 
 
 
