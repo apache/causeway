@@ -397,5 +397,5 @@ protected void execute(final ExecutionContext ec) {
 Test that you can quickly create a whole set of `PetOwner` objects
 from the "Prototyping" menu:
 
-* "Prototyping > Run Fixture Script" and select "Domain App Demo", or
-* "Prototyping > Recreate Objects and Return First".
+* menu:Prototyping[Run Fixture Script] and select "Domain App Demo", or
+* menu:Prototyping[Recreate Objects and Return First].
