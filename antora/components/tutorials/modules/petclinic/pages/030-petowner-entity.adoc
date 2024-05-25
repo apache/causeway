@@ -186,12 +186,13 @@ Now add the two new properties:
 [source,java]
 .PetOwner.java
 ----
-@Column(length = 40, nullable = true, name = "telephoneNumber")
+@Column(length = 40, nullable = true, name = "telephoneNumber") // <.>
 @Getter @Setter
 @Property(editing = Editing.ENABLED)
 @PropertyLayout(fieldSetId = "contact", sequence = "1.1")   // <.>
 private String telephoneNumber;
 ----
+<.> The JPA `@Column` annotation indicates that the property is optional in the database; Causeway also understands this for the domain layer.
 <.> This places the property in a new "contact" fieldset group; we'll define that below
 
 * and add the `emailAddress` property:
@@ -339,7 +340,7 @@ When you now run the application you should now find that there are 10 `PetOwner
 
 
 [#exercise-3-6-update-home-page-to-show-PetOwners]
-== Ex 3.5: Update Home Page to show PetOwners
+== Ex 3.6: Update Home Page to show PetOwners
 
 Every Causeway app can nominate a home page, basically a xref:userguide::view-models.adoc[view model] that's been annotated with xref:refguide:applib:index/annotation/HomePage.adoc[].
 Currently the home page for our app is the one we inherited from the starter app, showing a list of ``SimpleObject``s.
@@ -386,10 +387,7 @@ By default this will show all of the properties of `PetOwner`.
 image::03-06/home-page-default-columns.png[]
 
 
-We can change this by creating a file `HomePageViewModel#petOwners.columnOrder.txt`, alongside the `HomePageViewModel`:
-
-
-Instead
+We can change this by creating a file `HomePageViewModel#petOwners.columnOrder.txt`, alongside the `HomePageViewModel`.
 
 [source,txt]
 .HomePageViewModel#petOwners.columnOrder.txt
@@ -405,39 +403,29 @@ emailAddress
 
 TIP: the action "Download .columnOrder.txt files (ZIP)" (available only when prototyping) provides an easy way to obtain this file; you can then update as required.
 
+TIP: You can config your IDE so that any changes made to this file are picked up automatically without having to restart the app.
+If using IntelliJ for example, use "Reload Changed Classes" action.
 
-----
-----
 
-----
-----
+[#exercise-3-7-modify-the-menu-action-to-create-petowners]
+== Ex 3.7: Modify the menu action to create PetOwners
 
-----
-----
+If we want to create a new `PetOwner` and specify additional details, at the moment it's a two stage process: create the `PetOwner` (using menu:PetOwners[create]), then set the additional details afterwards.
 
-TODO: change the home page to list the pet owners by default.
-
-*UP TO HERE*
-
-[#exercise-3-4-modify-the-menu-action-to-create-petowners]
-== Ex 3.4: Modify the menu action to create PetOwners
-
-If we want to create a new `PetOwner` and provide their `firstName`, at the moment it's a two stage process: create the `PetOwner` (using `PetOwners#create` action from the menu), then update their name (using the `updateName` action that we just looked at).
-
-In this exercise we'll simplify that workflow by allowing the `firstName` to optionally be specified during the initial create.
+In this exercise we'll simplify that workflow by allowing the additional details to optionally be specified during the create.
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-04-modifies-PetOwners-create-action
+git checkout tags/03-07-modifies-PetOwners-create-action
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 === Tasks
 
-* update `Orders#create` action, so that the end user can specify a `firstName` when creating a new `PetOwner`:
+* update `PetOwners#create()` method, to allow the additional details to optionally be specified:
 +
 [source,java]
 .PetOwners.java
@@ -445,30 +433,48 @@ mvn -pl spring-boot:run
 @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
 @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
 public PetOwner create(
-        @LastName final String lastName,
-        @FirstName final String firstName) {
-    return repositoryService.persist(PetOwner.withName(lastName, firstName));
+        @Name final String name,
+        @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL)
+        final String knownAs,
+        @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL)
+        final String telephoneNumber,
+        @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL)
+        final String emailAddress) {
+    final var petOwner = PetOwner.withName(name);
+    petOwner.setKnownAs(knownAs);
+    petOwner.setTelephoneNumber(telephoneNumber);
+    petOwner.setEmailAddress(emailAddress);
+    return repositoryService.persist(petOwner);
 }
 ----
 
+* also update `PetOwner_persona.Builder` fixture script, passing in `null` for the new parameters:
++
+[source,java]
+.PetOwner_persona.java
+----
+val petOwner = PetOwners.create(persona.name, null, null, null);
+----
+
+When you run the app, confirm that only the `name` parameter is optional:
+
+image::03-07/new-parameters-are-optional.png[width=80%]
 
 
-
-
-[#exercise-3-6-prompt-styles]
-== Ex 3.6: Prompt styles
+[#exercise-3-8-prompt-styles]
+== Ex 3.8: Prompt styles
 
 The framework provides many ways to customise the UI, either through the layout files or using the `@XxxLayout` annotations.
 Default UI conventions can also be specified using the `application.yml` configuration file.
 
-In this exercise we'll change the prompt style for both a service (menu) action, ie `PetOwners#create`, and an object action, ie `PetOwner#updateName`.
+In this exercise we'll change the prompt style for both a service (menu) action, ie menu::PetOwners[create], and an object action, ie `PetOwner#updateName`.
 
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-06-prompt-styles
+git checkout tags/03-08-prompt-styles
 mvn clean install
 mvn -pl spring-boot:run
 ----
@@ -479,12 +485,36 @@ mvn -pl spring-boot:run
 * Service (menu) actions are always shown in a dialog, of which there are two styles: modal prompt, or sidebar.
 If not specified explicitly, they will default to dialog modal.
 +
-Therefore remove the `@ActionLayout(promptStyle)` for `PetOwners#create` and confirm that the dialog is now shown as a modal prompt.
+Therefore, remove the `@ActionLayout(promptStyle)` for `PetOwners#create`
++
+[source,java]
+.PetOwners.java
+----
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+// @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
+public PetOwner create( ... ) { ... }
+----
++
+Confirm that the dialog is now shown as a modal prompt.
 
 * Object actions can be shown either inline or in a dialog, but default to inline.
 If forced to use a dialog, then they default to a sidebar prompt rather than a modal prompt.
 +
-Therefore remove the `@ActionLayout(promptStyle)` for `PetOwner#updateName` and confirm that prompt is still inline.
+Remove the `@ActionLayout(promptStyle)` for `PetOwner#updateName`:
+
+[source,java]
+.PetOwner.java
+----
+@Action( ... )
+@ActionLayout(
+        ...
+        // promptStyle = PromptStyle.INLINE,
+        ...
+)
+public PetOwner updateName( ... ) { ... }
+----
++
+Confirm that prompt is still inline.
 
 * Using a configuration property we can change the default for object actions to use a dialog rather than inline.
 +
@@ -506,7 +536,7 @@ Remember to activate this new profile (`-Dspring.profiles.active=dev,custom`) an
 Switch the defaults so that service actions prefer to use a sidebar dialog, while object actions would use a modal dialog:
 +
 [source,yaml]
-.application-custom.yaml
+.application-dev.yaml
 ----
 causeway:
   viewer:
@@ -516,14 +546,14 @@ causeway:
       dialog-mode-for-menu: sidebar
 ----
 
-* Optional: now use `@ActionLayout(promptStyle=...)` to override these defaults.
+* Optional: use `@ActionLayout(promptStyle=...)` to override these defaults.
 +
 Be aware that "inline" makes no sense/is not supported for service actions.
 
 * Finish off the exercises by setting up these defaults to retain the original behaviour:
 +
 [source,yaml]
-.application-custom.yaml
+.application-dev.yaml
 ----
 causeway:
   viewer:
