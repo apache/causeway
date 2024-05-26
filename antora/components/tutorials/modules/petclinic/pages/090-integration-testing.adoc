@@ -4,8 +4,9 @@
 
 In an earlier section of this tutorial we looked at unit testing, but integration tests are at least as important, probably more so, as they exercise the entire application from an end-users perspective, rather than an individual part.
 
-Integration tests are _not_ written using Selenium or similar, so avoid the fragility and maintenance effort that such tests often entail.
+We don't write integration tests using Selenium or similar, and so avoid the fragility and maintenance effort that such tests often entail.
 Instead, the framework provides the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] domain service which simulates the user interface in a type-safe way.
+Another term sometimes used is _subcutaneous_ testing; we execute the test "under the skin".
 
 
 [#exercise-9-1-testing-bookvisit-using-an-integtest]
@@ -24,29 +25,35 @@ mvn clean package jetty:run
 
 === Tasks
 
-* in the `pom.xml` of the visits module, add the following dependency:
+* in the `pom.xml` of the visits module, add the following dependencies:
 +
 [source,xml]
 .module-visits/pom.xml
 ----
 <dependency>
-    <groupId>org.apache.causeway.mavendeps</groupId>
-    <artifactId>causeway-mavendeps-integtests</artifactId>
-    <type>pom</type>
+    <groupId>org.apache.causeway.testing</groupId>
+    <artifactId>causeway-testing-integtestsupport-applib</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.apache.causeway.persistence</groupId>
+    <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
     <scope>test</scope>
 </dependency>
 ----
 
-* add an abstract class `VisitsModuleIntegTestAbstract` for the `visits` module, for other integ tests to subclass:
+
+* add an abstract class `VisitModuleIntegTestAbstract` for the `visits` module, for other integ tests to subclass:
 +
 [source,java]
-.VisitsModuleIntegTestAbstract.java
+.VisitModuleIntegTestAbstract.java
 ----
 @SpringBootTest(
-        classes = VisitsModuleIntegTestAbstract.TestApp.class
+        classes = VisitModuleIntegTestAbstract.TestApp.class
 )
 @ActiveProfiles("test")
-public abstract class VisitsModuleIntegTestAbstract
+public abstract class VisitModuleIntegTestAbstract
         extends CausewayIntegrationTestAbstractWithFixtures {
 
     @SpringBootConfiguration
@@ -58,7 +65,7 @@ public abstract class VisitsModuleIntegTestAbstract
             CausewayModulePersistenceJpaEclipselink.class,
             CausewayModuleTestingFixturesApplib.class,
 
-            VisitsModule.class
+            VisitModule.class                           // <.>
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
@@ -68,16 +75,17 @@ public abstract class VisitsModuleIntegTestAbstract
     }
 }
 ----
+<.> Most of this class is boilerplate, but it does reference the module under test.
 
-* also update the `application-test.yml` file for the `visits` module, to ensure that the database schemas for both modules are created:
+* also update the `application-test.yml` file for the `visit` module, to ensure that the database schemas for both modules are created:
 +
 [source,yaml]
-.module-visits/src/test/resources/application-test.yml
+.module-visit/src/test/resources/application-test.yml
 ----
 causeway:
   persistence:
     schema:
-      auto-create-schemas: pets,visits
+      auto-create-schemas: petowner,visit
 ----
 
 * add a class `Bootstrap_IntegTest` integration test, inheriting from the `VisitsModuleIntegTestAbstract:
@@ -85,7 +93,7 @@ causeway:
 [source,java]
 .Bootstrap_IntegTest.java
 ----
-public class Bootstrap_IntegTest extends VisitsModuleIntegTestAbstract {
+public class Bootstrap_IntegTest extends VisitModuleIntegTestAbstract {
 
     @Test
     public void checks_can_bootstrap() {}
@@ -97,42 +105,46 @@ Make sure this test runs and passes in both the IDE and using "mvn clean install
 
 Now we can write our actual test:
 
-* Now add a class `Pet_bookVisit_IntegTest` integration test, also inheriting from the `VisitsModuleIntegTestAbstract:
+* Now add a class `PetOwner_bookVisit_IntegTest` integration test, also inheriting from the `VisitModuleIntegTestAbstract:
 +
 [source,java]
-.Pet_bookVisit_IntegTest.java
+.PetOwner_bookVisit_IntegTest.java
 ----
-public class Pet_bookVisit_IntegTest extends VisitsModuleIntegTestAbstract {
+public class PetOwner_bookVisit_IntegTest extends VisitModuleIntegTestAbstract {
 
     @BeforeEach
     void setup() {
-        fixtureScripts.run(new Pet_persona.PersistAll());                       // <.>
+        fixtureScripts.run(new PetOwner_persona.PersistAll());                       // <.>
     }
 
     @Test
     public void happy_case() {
 
         // given
-        Pet somePet = fakeDataService.enums().anyOf(Pet_persona.class)          // <.>
-                        .findUsing(serviceRegistry);
-        List<Visit> before = visitRepository.findByPetOrderByVisitAtDesc(somePet);
+        PetOwner somePetOwner = fakeDataService.enums()                             // <.>
+                .anyOf(PetOwner_persona.class)
+                .findUsing(serviceRegistry);
+        Pet somePet = fakeDataService.collections()
+                .anyOf(somePetOwner.getPets());
+
+        List<Visit> before = visitRepository.findByPetOwner(somePetOwner);
+        assertThat(before).isEmpty();
 
         // when
-        LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime()    // <.>
-                                    .plusDays(fakeDataService.ints().between(1, 3));
-        String reason = fakeDataService.strings().upper(40);                    // <3>
+        LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime()        // <.>
+                .plusDays(fakeDataService.ints().between(1, 3));
 
-        wrapMixin(Pet_bookVisit.class, somePet).act(visitAt, reason);           // <.>
+        wrapMixin(PetOwner_bookVisit.class, somePetOwner).act(somePet, visitAt);    // <.>
 
         // then
-        List<Visit> after = visitRepository.findByPetOrderByVisitAtDesc(somePet);
-        after.removeAll(before);
-        assertThat(after).hasSize(1);                                           // <.>
+        List<Visit> after = visitRepository.findByPetOwner(somePetOwner);
+        assertThat(after).hasSize(1);
+
         Visit visit = after.get(0);
 
-        assertThat(visit.getPet()).isSameAs(somePet);                           // <.>
-        assertThat(visit.getVisitAt()).isEqualTo(visitAt);                      // <6>
-        assertThat(visit.getReason()).isEqualTo(reason);                        // <6>
+        assertThat(visit.getPet()).isSameAs(somePet);                               // <.>
+        assertThat(visit.getPet().getPetOwner()).isSameAs(somePetOwner);            // <.>
+        assertThat(visit.getVisitAt()).isEqualTo(visitAt);                          // <6>
     }
 
     @Inject FakeDataService fakeDataService;
@@ -142,7 +154,7 @@ public class Pet_bookVisit_IntegTest extends VisitsModuleIntegTestAbstract {
 }
 ----
 <.> uses same fixture script used for prototyping to set up ``Pet``s and their ``PetOwner``s.
-<.> uses the xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] to select a `Pet` persona at random and uses that person to look up the corresponding domain object.
+<.> uses the xref:refguide:testing:index/fakedata/applib/services/FakeDataService.adoc[FakeDataService] to select a random `PetOwner` and corresponding `Pet`
 <.> sets up some randomised but valid argument values
 <.> invokes the action, using the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] to simulate the UI
 <.> asserts that one new `Visit` has been created for the `Pet`.
@@ -150,58 +162,29 @@ public class Pet_bookVisit_IntegTest extends VisitsModuleIntegTestAbstract {
 +
 Run the test and check that it passes.
 
-* write an error scenario which checks that a reason has been provided:
-+
-[source,java]
-.Pet_bookVisit_IntegTest.java
-----
-@Test
-public void reason_is_required() {
-
-    // given
-    Pet somePet = fakeDataService.enums().anyOf(Pet_persona.class)
-                    .findUsing(serviceRegistry);
-    List<Visit> before = visitRepository.findByPetOrderByVisitAtDesc(somePet);
-
-    // when, then
-    LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime()
-                                .plusDays(fakeDataService.ints().between(1, 3));
-
-    assertThatThrownBy(() ->
-        wrapMixin(Pet_bookVisit.class, somePet).act(visitAt, null)
-    )
-    .isInstanceOf(InvalidException.class)
-    .hasMessage("'Reason' is mandatory");
-}
-----
 
 * write an error scenario which checks that the `visitAt` date cannot be in the past:
 +
 [source,java]
-.Pet_bookVisit_IntegTest.java
+.PetOwner_bookVisit_IntegTest.java
 ----
 @Test
 public void cannot_book_in_the_past() {
 
     // given
-    Pet somePet = fakeDataService.enums().anyOf(Pet_persona.class)
+    PetOwner somePetOwner = fakeDataService.enums()
+            .anyOf(PetOwner_persona.class)
             .findUsing(serviceRegistry);
-    List<Visit> before = visitRepository.findByPetOrderByVisitAtDesc(somePet);
+    Pet somePet = fakeDataService.collections()
+            .anyOf(somePetOwner.getPets());
 
     // when, then
     LocalDateTime visitAt = clockService.getClock().nowAsLocalDateTime();
-    String reason = fakeDataService.strings().upper(40);
 
     assertThatThrownBy(() ->
-            wrapMixin(Pet_bookVisit.class, somePet).act(visitAt, reason)
+            wrapMixin(PetOwner_bookVisit.class, somePetOwner).act(somePet, visitAt)
     )
             .isInstanceOf(InvalidException.class)
-            .hasMessage("Must be in the future");
+            .hasMessage("Must book in the future");
 }
 ----
-
-*
-
-
-
-
