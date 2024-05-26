@@ -1086,7 +1086,7 @@ This has the benefit of being dynamic; we can move fields around in the layout w
 
 [source,bash]
 ----
-git checkout tags/03-14-PetOwner-fieldsets
+git checkout tags/03-14-use-layout-xml-for-ui-semantics
 mvn clean install
 mvn -pl spring-boot:run
 ----
