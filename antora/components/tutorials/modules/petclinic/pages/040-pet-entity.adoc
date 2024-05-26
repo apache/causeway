@@ -68,12 +68,11 @@ public class Pet implements Comparable<Pet> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     @Getter @Setter
-    @PropertyLayout(fieldSetId = "metadata", sequence = "1")
     private Long id;
 
     @Version
     @Column(name = "version", nullable = false)
-    @PropertyLayout(fieldSetId = "metadata", sequence = "999")
+    @PropertyLayout(fieldSetId = "metadata", sequence = "999")  // <.>
     @Getter @Setter
     private long version;
 
@@ -86,14 +85,14 @@ public class Pet implements Comparable<Pet> {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "owner_id")
-    @PropertyLayout(fieldSetId = "name", sequence = "1")
+    @PropertyLayout(fieldSetId = "identity", sequence = "1")    // <1>
     @Getter @Setter
     private PetOwner petOwner;
 
     @PetName
     @Column(name = "name", length = PetName.MAX_LEN, nullable = false)
     @Getter @Setter
-    @PropertyLayout(fieldSetId = "name", sequence = "2")
+    @PropertyLayout(fieldSetId = "identity", sequence = "2")    // <1>
     private String name;
 
 
@@ -106,61 +105,161 @@ public class Pet implements Comparable<Pet> {
     }
 }
 ----
+<.> we'll look at the layout in the next exercise.
+
+* locate the owning module, `PetOwnerModule`.
+Add in a line to delete all ``Pet`` entities on teardown:
++
+[source,java]
+.PetOwnerModule.java
+----
+@Override
+public FixtureScript getTeardownFixture() {
+    return new TeardownFixtureJpaAbstract() {
+        @Override
+        protected void execute(ExecutionContext executionContext) {
+            deleteFrom(Pet.class);          // <.>
+            deleteFrom(PetOwner.class);
+        }
+    };
+}
+----
+<.> This lne must come before the deletion of ``PetOwner``s, because (in a later exercise) the `PetOwner` entity will have child ``Pet`` entities; we always delete from the leaf level up.
++
+This is used during integration tests, to reset the database after each test.
+
 
 Run the application, and confirm that the application starts correctly.
 
-Login as `secman-admin` login (password: `pass`) to access the menu:Prototyping[H2 Console]:
+Let's also confirm that JPA created the corresponding table automatically:
 
+* Login as `secman-admin` login (password: `pass`)
+
+* Access the menu:Prototyping[H2 Console]:
++
 image::04-01/h2-console-prompt.png[]
 
-There is no password.
+* Connect.
+There is no password for `sa`.
 
-Confirm the `Pet` table is created correctly:
-
+* Confirm the `Pet` table is created correctly:
++
 image::04-01/pet-and-petowner-tables-created.png[]
 
 
 
-[#exercise-4-2-add-petrepository]
-== Ex 4.2: Add PetRepository
+[#exercise-4-2-add-pet-ui-and-layout-semantics]
+== Ex 4.2: Add Pet's UI and layout semantics
 
-We will need to find the ``Pet``s belonging to a `PetOwner`.
-We do this by introducing a `PetRepository`, implemented as a link:https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.definition[Spring Data repository].
+Next, let's add in the UI and layout semantics for `Pet`.
+At the moment we're "flying blind" because we don't have any demo `Pet` instances to see, but we can refine these files later; it's good to have some scaffolding.
+
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/04-02-PetRepository
+git checkout tags/04-02-pet-ui-and-layout-semantics
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
-
-
 === Tasks
 
-* create the `PetRepository`, extending Spring Data's `org.springframework.data.repository.Repository` interface:
+* annotate the `Pet#name` property with xref:refguide:applib:index/annotation/Title.adoc[@Title]:
 +
 [source,java]
-.PetRepository.java
+.Pet.java
 ----
-import org.springframework.data.repository.Repository;
+@PetName
+@Title                                                              // <.>
+@Column(name = "name", length = PetName.MAX_LEN, nullable = false)
+@Getter @Setter
+@PropertyLayout(fieldSetId = "identity", sequence = "2")
+private String name;
+----
+<.> added
 
-public interface PetRepository extends Repository<Pet, Long> {
-
-    List<Pet> findByPetOwner(PetOwner petOwner);
-}
+* create a `.layout.xml` file for `Pet` (easiest is to copy an existing one and adapt)
++
+[source,xml]
+.Pet.layout.xml
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject bookmarking="AS_ROOT"/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+            <bs3:row>
+                <bs3:col span="12">
+                    <bs3:tabGroup>
+                        <bs3:tab name="Identity">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Identity" id="identity"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Other">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Metadata">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Metadata" id="metadata"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                    </bs3:tabGroup>
+                </bs3:col>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Details" id="details"/>
+                </bs3:col>
+            </bs3:row>
+        </bs3:col>
+        <bs3:col span="6">
+            <bs3:row>
+                <bs3:col span="12">
+                </bs3:col>
+            </bs3:row>
+            <bs3:tabGroup  unreferencedCollections="true">
+            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>
 ----
 
-Confirm the application still runs
+* next, download a suitable icon to represent the pet; name it a `Pet.png`
 
+* create column order file, used to determine the order of columns of any actions that might be written that return a list of ``Pet``s
++
+[source,text]
+.Pet.columnOrder.txt
+----
+petOwner
+name
+#id
+#version
+----
 
 
 [#exercise-4-3-add-petowners-collection-of-pets]
 == Ex 4.3: Add PetOwner's collection of Pets
 
-In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s, using a xref:userguide:ROOT:mixins.adoc[mixin].
+According to our model, ``Pet``s are owned by ``PetOwner``s:
+
 
 [plantuml]
 ----
@@ -192,98 +291,138 @@ package pets {
 PetOwner *-r--> "0..*" Pet
 ----
 
+In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s.
+
+
 === Solution
 
 [source,bash]
 ----
-git checkout tags/04-03-PetOwner-pets-mixin-collection
+git checkout tags/04-03-PetOwner-pets-collection
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 === Tasks
 
-* create the `PetOwner_pets` mixin class:
+* update the `PetOwner` class, add a `pets` collection:
 +
 [source,java]
 ----
-import org.apache.causeway.applib.annotation.Collection;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-
-import lombok.RequiredArgsConstructor;
-
-@Collection                                             // <.>
-@CollectionLayout(defaultView = "table")
-@RequiredArgsConstructor                                // <.>
-public class PetOwner_pets {                            // <.>
-
-    private final PetOwner petOwner;                    // <.>
-
-    public List<Pet> coll() {
-        return petRepository.findByPetOwner(petOwner);  // <.>
-    }
-
-    @Inject PetRepository petRepository;                // <5>
-}
+@org.apache.causeway.applib.annotation.Collection
+@Getter
+@OneToMany(mappedBy = "petOwner", cascade = CascadeType.ALL, orphanRemoval = true)
+private Set<Pet> pets = new TreeSet<>();
 ----
-<.> indicates that this is a collection mixin
-<.> lombok annotation to avoid some boilerplate
-<.> collection name is derived from the mixin class name, being the name after the '_'.
-<.> the "mixee" that is being contributed to, in other words `PetOwner`.
-<.> inject the `PetRepository` as defined in previous exercise, in order to find the ``Pet``s owned by the `PetOwner`.
-
-* Run the application to confirm that the `pets` collection is visible (it won't have any `Pet` instances in it just yet).
 
 
-* update the `PetOwner.layout.xml` file to specify the position of the `pets` collection.
-For example:
+* update `PetOwner.layout.xml` file to position the `pets` collection on the right-hand side, above the `attachment` property:
 +
 [source,xml]
 .PetOwner.layout.xml
 ----
-<bs:grid>
-    <bs:row>
-        <!--...-->
-    </bs:row>
-    <bs:row>
-        <bs:col span="6">
-            <!--...-->
-        </bs:col>
-        <bs:col span="6">
-            <bs:tabGroup  unreferencedCollections="true" collapseIfOne="false">
-                <bs:tab name="Pets">                   <!--.-->
-                    <bs:row>
-                        <bs:col span="12">
-                            <c:collection id="pets"/>
-                        </bs:col>
-                    </bs:row>
-                </bs:tab>
-            </bs:tabGroup>
-        </bs:col>
-    </bs:row>
-</bs:grid>
+<bs3:col span="6">
+    <bs3:row>
+        <bs3:col span="12">
+            <bs3:row>
+                <bs3:col span="12">
+                    <cpt:collection id="pets"/>
+                </bs3:col>
+            </bs3:row>
+            <cpt:fieldSet name="Content" id="content">
+                <cpt:property id="attachment">
+                    <cpt:action id="updateAttachment" position="PANEL"/>
+                </cpt:property>
+            </cpt:fieldSet>
+        </bs3:col>
+    </bs3:row>
+    <bs3:tabGroup  unreferencedCollections="true">
+    </bs3:tabGroup>
+</bs3:col>
 ----
-<.> define a tab on the right hand side to hold the `pets` collection.
-+
-Run the application (or just reload the changed classes) and confirm the positioning the `pets` collection.
 
 
-* Create a column order file to define the order of columns in the ``PetOwner``'s `pets` collection:
+* Create a column order file to define the order of columns in the ``PetOwner``'s `pets` collection.
+It should be in the same package as `PetOwner`:
 +
 [source,xml]
 .PetOwner#pets.columnOrder.txt
 ----
 name
-id
+#id
+#version
+#petOwner
 ----
+
+Run the application to confirm that the `pets` collection is visible and that the column order in the `pets` collection is correct.
+(It won't have any `Pet` instances in it just yet, of course).
+
+
+
+[#exercise-4-4-add-actions-to-add-or-remove-pets]
+== Ex 4.4: Add actions to add or remove Pets
+
+Given that a `PetOwner` knows the ``Pet``(s) that they own, it seems a reasonable responsibility to maintain this collection using behaviour on the `PetOwner`.
+
+So in this exercise we'll add two actions on `PetOwner`: one to add a `Pet` and one to remove.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/04-04-add-remove-pets
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* within `PetOwner`, create the `addPet` action:
 +
-Run the application (or just reload the changed classes) and confirm the columns of the `pets` collection are correct.
+[source,java]
+.Pet.java
+----
+@Action
+@ActionLayout(associateWith = "pets", sequence = "1")   // <.>
+public PetOwner addPet(@PetName final String name) {
+    final var pet = new Pet();
+    pet.setName(name);
+    pet.setPetOwner(this);
+    pets.add(pet);
+    return this;
+}
+----
+<.> UI hint to render button near the `pets` collection
+
+* and create the `removePet` action:
++
+[source,java]
+.Pet.java
+----
+@Action(choicesFrom = "pets")                           // <.>
+@ActionLayout(associateWith = "pets", sequence = "2")   // <.>
+public PetOwner removePet(@PetName final Pet pet) {     // <1>
+    pets.remove(pet);                                   // <.>
+    return this;
+}
+----
+<.> Indicates that a drop-down list of choices for the parameter should be taken from the `pets` collection
+<.> UI hint to render button near the `pets` collection
+<.> To delete the object, it's sufficient to simply remove from the ``PetOwner#pets`` collection, because `orphanRemoval` was set to `true`
+
+Run the application and confirm that you can now add and remove pets for a pet owner.
+
+[#exercise-4-5-extend-the-fixture-data-to-add-in-Pets]
+== Ex 4.5: Extend the fixture data to add in Pets
+
+UP TO HERE.
+
+Recall that our
 
 
 
-
-[#exercise-4-4-add-pets-remaining-properties]
-== Ex 4.4: Add Pet's remaining properties
+[#exercise-4-5-add-pets-remaining-properties]
+== Ex 4.5: Add Pet's remaining properties
 
 In this exercise we'll add the remaining properties for `Pet`.
 
@@ -322,7 +461,7 @@ Pet  "*" -u-> PetSpecies
 
 [source,bash]
 ----
-git checkout tags/04-04-pet-remaining-properties
+git checkout tags/04-03-pet-remaining-properties
 mvn clean install
 mvn -pl spring-boot:run
 ----
@@ -384,131 +523,15 @@ private String notes;
 Run the application and use menu:Prototyping[H2 Console] to confirm the database schema for `Pet` is as expected.
 
 
-[#exercise-4-5-digression-clean-up-casing-of-database-schema]
-== Ex 4.5: Digression: clean-up casing of database schema
-
-Reviewing the tables in the database we can see that we have a mix between lower- and upper-case table and column names.
-In this exercise we'll take a timeout to make everything consistent.
-
-=== Solution
-
-[source,bash]
-----
-git checkout tags/04-05-db-schema-consistent-casings
-mvn clean install
-mvn -pl spring-boot:run
-----
-
-=== Tasks
-
-* check out the tag and inspect the changes:
-
-** `Pet` entity table name
-** `PetOwner` entity table name and column names
-** JDBC URL
-
-* run the application to check the database schema.
-
-
-
-[#exercise-4-6-add-petowner-action-to-add-pets]
-== Ex 4.6: Add PetOwner action to add Pets
-
-In this exercise we'll bring in the capability to add ``Pet``s, as a responsibility of `PetOwner`.
-We'll use an mixin action to implement this.
-
-=== Solution
-
-[source,bash]
-----
-git checkout tags/04-06-PetOwner-addPet-action
-mvn clean install
-mvn -pl spring-boot:run
-----
-
-=== Tasks
-
-* create the `PetOwner_addPet` action mixin:
-+
-[source,java]
-.PetOwner_addPet.java
-----
-@Action(                                                // <.>
-        semantics = SemanticsOf.IDEMPOTENT,
-        commandPublishing = Publishing.ENABLED,
-        executionPublishing = Publishing.ENABLED
-)
-@ActionLayout(associateWith = "pets")                   // <.>
-@RequiredArgsConstructor
-public class PetOwner_addPet {                          // <.>
-
-    private final PetOwner petOwner;                    // <.>
-
-    public PetOwner act(
-            @PetName final String name,
-            final PetSpecies petSpecies
-            ) {
-        repositoryService.persist(new Pet(petOwner, name, petSpecies));
-        return petOwner;
-    }
-
-    @Inject RepositoryService repositoryService;
-}
-----
-<.> indicates that this class is a mixin action.
-<.> the action is associated with the "pets" collection (defined earlier).
-This means that in the UI, the button representing the action will be rendered close to the table representing the "pets" collection.
-<.> the action name "addPet" is derived from the mixin class name.
-+
-Run the application and verify that ``Pet``s can now be added to ``PetOwner``s.
-
-Let's now add some validation to ensure that two pets with the same name cannot be added.
-
-* first, we need a new method in `PetRepository`:
-+
-[source,java]
-.PetRepository.java
-----
-Optional<Pet> findByPetOwnerAndName(PetOwner petOwner, String name);
-----
-
-* Now use a supporting xref:userguide:ROOT:business-rules.adoc#validity[validate] method to prevent two pets with the same name from being added:
-+
-[source,java]
-.PetOwner_addPet.java
-----
-public String validate0Act(final String name) {
-    return petRepository.findByPetOwnerAndName(petOwner, name).isPresent()
-            ? String.format("Pet with name '%s' already defined for this owner", name)
-            : null;
-}
-
-@Inject PetRepository petRepository;
-----
-+
-NOTE: we could also just rely on the database, but adding a check here will make for better UX.
-+
-Run the application and check the validation message is fired when you attempt to add two ``Pet``s with the same name for the same `PetOwner` (but two different ``PetOwner``s should be able to have a ``Pet`` with the same name).
-
-
-* Let's suppose that owners own dogs for this particular clinic.
-Use a xref:refguide:applib-methods:prefixes.adoc#default[default] supporting method to default the petSpecies parameter:
-+
-[source,java]
-.PetOwner_addPet.java
-----
-public PetSpecies default1Act() {
-    return PetSpecies.Dog;
-}
-----
-+
-Run the application once more to test.
 
 
 
 
-[#exercise-4-7-add-pets-ui-customisation]
-== Ex 4.7: Add Pet's UI customisation
+
+
+[#exercise-4-7-pet-title-and-dynamic-icons]
+== Ex 4.7: Pet title and dynamic icons
+
 
 If we run the application and create a `Pet`, then the framework will render a page but the layout could be improved.
 So in this exercise we'll add a layout file for `Pet` and other UI files.
@@ -526,68 +549,6 @@ mvn -pl spring-boot:run
 
 === Tasks
 
-* Create a `Pet.layout.xml` file as follows:
-+
-[source,xml]
-.Pet.layout.xml
-----
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs:grid xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/links https://causeway.apache.org/applib/layout/links/links.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:bs="https://causeway.apache.org/applib/layout/grid/bootstrap3" xmlns:cpt="https://causeway.apache.org/applib/layout/component" xmlns:lnk="https://causeway.apache.org/applib/layout/links" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <bs:row>
-        <bs:col span="12" unreferencedActions="true">
-            <cpt:domainObject bookmarking="AS_ROOT"/>
-        </bs:col>
-    </bs:row>
-    <bs:row>
-        <bs:col span="6">
-            <bs:row>
-                <bs:col span="12">
-                    <bs:tabGroup>
-                        <bs:tab name="General">
-                            <bs:row>
-                                <bs:col span="12">
-                                    <cpt:fieldSet id="name"/>
-                                </bs:col>
-                            </bs:row>
-                        </bs:tab>
-                        <bs:tab name="Metadata">
-                            <bs:row>
-                                <bs:col span="12">
-                                    <cpt:fieldSet name="Metadata" id="metadata"/>
-                                </bs:col>
-                            </bs:row>
-                        </bs:tab>
-                        <bs:tab name="Other">
-                            <bs:row>
-                                <bs:col span="12">
-                                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
-                                </bs:col>
-                            </bs:row>
-                        </bs:tab>
-                    </bs:tabGroup>
-                    <cpt:fieldSet id="details" name="Details"/>
-                    <cpt:fieldSet id="notes" name="Notes"/>
-                </bs:col>
-            </bs:row>
-            <bs:row>
-                <bs:col span="12">
-                </bs:col>
-            </bs:row>
-        </bs:col>
-        <bs:col span="6">
-            <bs:tabGroup unreferencedCollections="true"/>
-        </bs:col>
-    </bs:row>
-</bs:grid>
-----
-
-* reload changed classes (or run the application), and check the layout.
-+
-TIP: if the layout isn't quite as you expect, try using menu:Metadata[Rebuild metamodel] to force the domain object metamodel to be recreated.
-
-* add a `Pet.png` file to act as the icon, in the same package.
-+
-This might be a good point to find a better icon for `PetOwner`, too.
 
 * we also need a title for each `Pet`, which we can provide using a
 xref:refguide:applib-methods:ui-hints.adoc#title[title()] method:
