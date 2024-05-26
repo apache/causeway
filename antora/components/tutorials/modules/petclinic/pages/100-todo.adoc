@@ -8,6 +8,8 @@ validate pet name is unique within Pet
 
 refactor addPet to be an inline-mixin.
 
+need a disable and a hide action
+
 
 update home page, show upcoming appointments
 
