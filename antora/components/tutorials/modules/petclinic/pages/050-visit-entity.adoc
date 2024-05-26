@@ -74,6 +74,37 @@ causeway.persistence.schema.auto-create-schemas=\
     petowner,visit,simple,...
 ----
 
+* add permissions to the new "visit" namespace.
+We could do this by adding a new security role, but for simplicity we'll just add to the existing role (`PetOwnerModuleSuperuserRole), renaming it as we do:
++
+[source,java]
+.CustomRolesAndUsers.java
+----
+private static class PetClinicSuperuserRole                         // <.>
+    extends AbstractRoleAndPermissionsFixtureScript {
+
+    public static final String ROLE_NAME = "petclinic-superuser";   // <.>
+
+    public PetClinicSuperuserRole() {
+        super(ROLE_NAME, "Permission to use everything in the 'petowner' and 'visit' modules");
+    }
+
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        newPermissions(
+                ApplicationPermissionRule.ALLOW,
+                ApplicationPermissionMode.CHANGING,
+                Can.of(ApplicationFeatureId.newNamespace("petowner"),
+                       ApplicationFeatureId.newNamespace("visit")       // <.>
+                )
+        );
+    }
+}
+----
+<.> renamed
+<.> renamed
+<.> added
+
 
 [#exercise-5-2-visit-module-dependencies]
 == Ex 5.2: Visit Module Dependencies
@@ -193,7 +224,7 @@ mvn -pl spring-boot:run
 @Named(VisitModule.NAMESPACE + ".Visit")
 @DomainObject(entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @ToString(onlyExplicitlyIncluded = true)
 public class Visit implements Comparable<Visit> {
@@ -210,7 +241,7 @@ public class Visit implements Comparable<Visit> {
     @Getter @Setter
     private long version;
 
-    Visit(Pet pet, LocalDateTime visitAt) {
+    public Visit(Pet pet, LocalDateTime visitAt) {
         this.pet = pet;
         this.visitAt = visitAt;
     }
@@ -330,8 +361,8 @@ image::05-02/Visit-entity.png[]
 
 
 
-[#exercise-5-3-book-visit-action]
-== Ex 5.3: "Book Visit" action
+[#exercise-5-4-book-visit-action]
+== Ex 5.4: "Book Visit" action
 
 We now want to extend our domain model so that ``Visit``s to be created.
 
@@ -347,34 +378,17 @@ include::partial$domain.adoc[]
 Causeway's solution to this is to allow the visit module to define behaviour, but have the behaviour seem to belong to the `Pet` entity, at least so far as the user interface is concerned.
 This is done using a xref:userguide::mixins.adoc[].
 
+Because `Visit` is its own root entity, we're also going to need a repository to be able to look them up for a given `Pet`.
+
+In this exercise we'll define the repository, and create the "book visit" mixin action (also sometimes called a contributed action.
+We'll also create a mixin _collection_ to be able to view the visits from a ``PetOwner``'s UI, too.
+
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/05-03-book-visit-action
-mvn clean install
-mvn -pl spring-boot:run
-----
-
-
-
-=== Tasks
-
-
-
-[#exercise-5-4-capture-visit-reason]
-== Ex 5.3: Capture visit reason
-
-In addition to the key properties, the `Visit` has one further mandatory property, `reason`.
-This is required to be specified when a `Visit` is created ("what is the purpose of this visit?")
-
-In this exercise we'll extend the "book visit" action to also capture that reason.
-
-
-[source,bash]
-----
-git checkout tags/05-03-schedule-visit-action
+git checkout tags/05-04-book-visit-action
 mvn clean install
 mvn -pl spring-boot:run
 ----
@@ -382,128 +396,133 @@ mvn -pl spring-boot:run
 
 === Tasks
 
-* add the `@Reason` meta-annotation
+* create the `VisitRepository`, using Spring Data:
 +
 [source,java]
-.Reason.java
+.VisitRepository.java
 ----
-@Property(maxLength = Reason.MAX_LEN)
-@PropertyLayout(named = "Reason")
-@Parameter(maxLength = Reason.MAX_LEN)
-@ParameterLayout(named = "Reason")
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Reason {
+import org.springframework.data.repository.Repository;
 
-    int MAX_LEN = 255;
+// ...
+
+public interface VisitRepository extends Repository<Visit, Long> {
+
+    @Query("select v from Visit v where v.pet.petOwner = :petOwner")
+    List<Visit> findByPetOwner(PetOwner petOwner);
+
 }
 ----
 
-* add the `reason` mandatory property:
+* define the "book visit" mixin action on `PetOwner`, in the _visit_ module.
++
+NOTE: we simply use a datetime to capture when the visit occurs.
+This isn't particularly realistic, we know - there would probably be a domain concept such as `AppointmentSlot`.
 +
 [source,java]
-.Visit.java
+.PetOwner_bookVisit.java
 ----
-@Reason
-@Column(name = "reason", length = FirstName.MAX_LEN, nullable = false)
-@Getter @Setter
-@PropertyLayout(fieldSetId = "details", sequence = "1")
-private String reason;
-----
-
-
-* update constructor (as this is a mandatory property)
-+
-[source,java]
-.Visit.java
-----
-Visit(Pet pet, LocalDateTime visitAt, String reason) {
-    this.pet = pet;
-    this.visitAt = visitAt;
-    this.reason = reason;
-}
-----
-
-* create a "visits" mixin collection as a mixin of `Pet`, so we can see the ``Visit``s that have been booked:
-+
-[source,java]
-.Pet_visits.java
-----
-@Collection
-@CollectionLayout(defaultView = "table")
+@Action                                                     // <.>
+@ActionLayout(associateWith = "visits")                     // <.>
 @RequiredArgsConstructor
-public class Pet_visits {
+public class PetOwner_bookVisit {                           // <.>
 
-    private final Pet pet;
+    private final PetOwner petOwner;                        // <.>
 
+    @MemberSupport
+    public PetOwner act(Pet pet, LocalDateTime visitAt) {
+        Visit visit = new Visit(pet, visitAt);
+        repositoryService.persistAndFlush(visit);           // <.>
+        return petOwner;
+    }
+    @MemberSupport
+    public Set<Pet> choices0Act() {                         // <.>
+        return petOwner.getPets();
+    }
+    @MemberSupport
+    public Pet default0Act() {                              // <.>
+        Set<Pet> pets = petOwner.getPets();
+        return pets.size() == 1 ? pets.iterator().next() : null;
+    }
+    @MemberSupport
+    public LocalDateTime default1Act() {                    // <7>
+        return officeHoursTomorrow();
+    }
+    @MemberSupport
+    public String validate1Act(LocalDateTime visitAt) {
+        if (visitAt.isBefore(officeHoursTomorrow())) {
+            return "Must book in the future";
+        }
+        return null;
+    }
+
+    private LocalDateTime officeHoursTomorrow() {
+        return clockService.getClock().nowAsLocalDate().atStartOfDay().plusDays(1).plusHours(9);
+    }
+
+
+    @Inject ClockService clockService;
+    @Inject RepositoryService repositoryService;            // <5>
+}
+----
+<.> indicates that this class is a mixin action
+<.> anticipates there being a "visits" collection also
+<.> the name of the contributed action is inferred from the mixin's class name
+<.> the type to which this mixin is being contributed, that is, `PetOwner`
+<.> injected xref:refguide:applib:index/services/repository/RepositoryService.adoc[] acts as a facade to the database for all entities.
+For querying it's usually worth defining a custom repository.
+<.> the xref:refguide:applib-methods:prefixes.adoc#choices[choices...()] supporting method provides programmatic set of choices for a parameter, in this case for the 0^th^ parameter `Pet`, rendered as a drop-down list.
+<.> the xref:refguide:applib-methods:prefixes.adoc#default[default...()] supporting method returns a default value for a parameter.
+
+* define the "visits" mixin collection on `PetOwner`, in the _visit_ module.
++
+[source,java]
+.PetOwner_visits.java
+----
+@Collection                                     // <.>
+@RequiredArgsConstructor
+public class PetOwner_visits {
+
+    private final PetOwner petOwner;            // <.>
+
+    @MemberSupport
     public List<Visit> coll() {
-        return visitRepository.findByPetOrderByVisitAtDesc(pet);
+        return visitRepository.findByPetOwner(petOwner);
     }
 
     @Inject VisitRepository visitRepository;
 }
 ----
+<.> indicates that this class is a mixin collection
+<.> the type to which this mixin is being contributed, that is, `PetOwner`
 
-* create a "bookVisit" mixin action (in the visits module), as a mixin of `Pet`.
+* update ``PetOwner``'s `.layout.xml`, to indicate where the contributed `visits` collection should be placed:
 +
-We can use xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to ensure that the date/time specified is in the future, and to set a default date/time for "tomorrow"
-+
-[source,java]
-.Pet_bookVisit.java
+[source,xml]
+.PetOwner.layout.xml
 ----
-@Action(
-        semantics = SemanticsOf.IDEMPOTENT,
-        commandPublishing = Publishing.ENABLED,
-        executionPublishing = Publishing.ENABLED
-)
-@ActionLayout(associateWith = "visits", sequence = "1")
-@RequiredArgsConstructor
-public class Pet_bookVisit {
-
-    private final Pet pet;
-
-    public Visit act(
-            LocalDateTime visitAt,
-            @Reason final String reason
-            ) {
-        return repositoryService.persist(new Visit(pet, visitAt, reason));
-    }
-    public String validate0Act(LocalDateTime visitAt) {
-        return clockService.getClock().nowAsLocalDateTime().isBefore(visitAt)   // <.>
-                ? null
-                : "Must be in the future";
-    }
-    public LocalDateTime default0Act() {
-        return clockService.getClock().nowAsLocalDateTime()                     // <.>
-                .toLocalDate()
-                .plusDays(1)
-                .atTime(LocalTime.of(9, 0));
-    }
-
-    @Inject ClockService clockService;
-    @Inject RepositoryService repositoryService;
-}
+<bs3:col span="12">
+    <bs3:row>
+        <bs3:col span="12">
+            <cpt:collection id="pets"/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12">
+            <cpt:collection id="visits"/>
+        </bs3:col>
+    </bs3:row>
+    <cpt:fieldSet name="Content" id="content">
+        ...
+    </cpt:fieldSet>
+</bs3:col>
 ----
-<.> ensures that the date/time specified is in the future.
-<.> defaults to 9am tomorrow morning.
-
-Also add in the UI files:
-
-* add a `Pet#visits.columnOrder.txt` file
 +
-to define which properties of Visit are visible as columns in ``Pet``'s `visits` collection.
+[NOTE]
+====
+Strictly speaking, updating the `.layout.xml` _does_ make the `petowner` module aware of `visit` module, albeit it in a very soft way.
+
+Alternatively, the `.layout.xml` can be left untouched in which case the contributed `visits` collection will be rendered in the same place as any other "unreferencedCollections".
+====
 
 
-
-=== Optional exercises
-
-NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
-
-. Download a separate `Visit-NN.png` for each of the days of the month (1 to 31), and then use `iconName()` to show a more useful icon based on the `visitAt` date.
-
-. Use choices to provide a set of available date/times, in 15 minutes slots, say.
-
-. Refine the list of slots to filter out any visits that already exist
-+
-Assume that visits take 15 minutes, and that only on visit can happen at a time.
 
