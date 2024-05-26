@@ -26,8 +26,6 @@ mvn clean install
 mvn -pl spring-boot:run
 ----
 
-
-
 === Tasks
 
 * create a meta-annotation `@PetName` for the Pet's name:
@@ -52,13 +50,13 @@ public @interface PetName {
 ----
 @Entity
 @Table(
-    schema="pets",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "Pet__owner_name__UNQ", columnNames = {"owner_id, name"})
-    }
+        schema= PetOwnerModule.SCHEMA,
+        uniqueConstraints = {
+                @UniqueConstraint(name = "Pet__owner_name__UNQ", columnNames = {"owner_id, name"})
+        }
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("pets.Pet")
+@Named(PetOwnerModule.NAMESPACE + ".Pet")
 @DomainObject(entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -93,7 +91,7 @@ public class Pet implements Comparable<Pet> {
     private PetOwner petOwner;
 
     @PetName
-    @Column(name = "name", length = FirstName.MAX_LEN, nullable = false)
+    @Column(name = "name", length = PetName.MAX_LEN, nullable = false)
     @Getter @Setter
     @PropertyLayout(fieldSetId = "name", sequence = "2")
     private String name;
@@ -106,11 +104,20 @@ public class Pet implements Comparable<Pet> {
     public int compareTo(final Pet other) {
         return comparator.compare(this, other);
     }
-
 }
 ----
 
-Run the application, and confirm that the table is created correctly using menu:Prototyping[H2 Console].
+Run the application, and confirm that the application starts correctly.
+
+Login as `secman-admin` login (password: `pass`) to access the menu:Prototyping[H2 Console]:
+
+image::04-01/h2-console-prompt.png[]
+
+There is no password.
+
+Confirm the `Pet` table is created correctly:
+
+image::04-01/pet-and-petowner-tables-created.png[]
 
 
 
