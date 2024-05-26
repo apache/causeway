@@ -75,64 +75,122 @@ causeway.persistence.schema.auto-create-schemas=\
 ----
 
 
-== next exercise:
+[#exercise-5-2-visit-module-dependencies]
+== Ex 5.2: Visit Module Dependencies
 
-set up dependencies
-- maven
-- spring
 
-reference new module in AppManifest
-- remove transitive dependencies
+Although we have a visit module, it currently is unaware of the pet owner module.
+And similarly, the top-level application doesn't yet know about visit module.
 
+In this exercise we'll fix this, so that:
+
+application -> visit module -> petowner module
+
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/05-02-visit-module-dependencies
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== tasks
+
+* in the new visit module's `pom.xml`, add a Maven dependency on `petowner` module:
++
+[source,xml]
+.visit/pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.starters</groupId>
+    <artifactId>simpleapp-jpa-module-petowner</artifactId>
+</dependency>
+----
++
+TIP: In your IDE you may need to reload/refresh dependencies to rebuild the classpath.
+
+* in the `VisitModule` Causeway module, add a corresponding import on `PetOwnerModule`:
 +
 [source,java]
-.VisitsModule.java
+.VisitModule.java
 ----
+@Configuration
+@Import({
+        PetOwnerModule.class,
+        // ...
+})
+// ...
+public class VisitModule ... { ... }
 ----
 
+* in the webapp module, add a Maven dependency on the visit module:
+[source,xml]
+.visit/pom.xml
+----
+<dependency>
+    <groupId>org.apache.causeway.starters</groupId>
+    <artifactId>simpleapp-jpa-module-visit</artifactId>
+</dependency>
+----
++
+The dependency on `<artifactId>simpleapp-jpa-module-petowner</artifactId>` can also be removed, due to transitivity.
+
+* and in the webapp's `ApplicationModule` Causeway module, add a corresponding import on `VisitModule`.
 +
 [source,java]
 .ApplicationModule.java
 ----
+@Configuration
+@Import({
+        VisitModule.class,
+        SimpleModule.class,
+})
+@ComponentScan
+public class ApplicationModule {
+}
 ----
++
+The import on `PetOwnerModule.class` can be removed, due to transitivity.
+
+Run the application and check that it starts ok.
 
 
-
-
-[#exercise-5-2-visit-entitys-key-properties]
-== Ex 5.2: Visit entity's key properties
+[#exercise-5-3-visit-entitys-key-properties]
+== Ex 5.3: Visit entity's key properties
 
 Now we have a visits module, we can now add in the `Visit` entity.
 We'll start just with the key properties.
 
 
+=== Solution
 
 [source,bash]
 ----
-git checkout tags/05-02-visit-entity-key-properties
+git checkout tags/05-03-visit-entity-key-properties
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 
-
 === Tasks
 
-* add a `Visit` entity, declaring the `pet` and `visitedAt` key properties:
+* add a `Visit` entity (in the `dom.visit` subpackage), declaring the `pet` and `visitAt` key properties:
 +
 [source,java]
 .Visit.java
 ----
 @Entity
 @Table(
-    schema="visits",        // <.>
-    name = "Visit",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "Visit__pet_visitAt__UNQ", columnNames = {"owner_id", "name"})
-    }
+        schema=VisitModule.SCHEMA,
+        uniqueConstraints = {
+                @UniqueConstraint(name = "Visit__pet_visitAt__UNQ", columnNames = {"pet_id", "visitAt"})
+        }
 )
 @EntityListeners(CausewayEntityListener.class)
-@Named("visits.Visit")
+@Named(VisitModule.NAMESPACE + ".Visit")
 @DomainObject(entityChangePublishing = Publishing.ENABLED)
 @DomainObjectLayout()
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -144,7 +202,6 @@ public class Visit implements Comparable<Visit> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     @Getter @Setter
-    @PropertyLayout(fieldSetId = "metadata", sequence = "1")
     private Long id;
 
     @Version
@@ -153,26 +210,27 @@ public class Visit implements Comparable<Visit> {
     @Getter @Setter
     private long version;
 
-
     Visit(Pet pet, LocalDateTime visitAt) {
         this.pet = pet;
         this.visitAt = visitAt;
     }
 
-
+    @ObjectSupport
     public String title() {
-        return titleService.titleOf(getPet()) + " @ " + getVisitAt().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+        return titleService.titleOf(getPet())       // <.>
+                + " @ "
+                + getVisitAt().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
     }
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pet_id")
-    @PropertyLayout(fieldSetId = "name", sequence = "1")
+    @PropertyLayout(fieldSetId = "identity", sequence = "1")
     @Getter @Setter
     private Pet pet;
 
     @Column(name = "visitAt", nullable = false)
     @Getter @Setter
-    @PropertyLayout(fieldSetId = "name", sequence = "2")
+    @PropertyLayout(fieldSetId = "identity", sequence = "2")
     private LocalDateTime visitAt;
 
 
@@ -184,25 +242,134 @@ public class Visit implements Comparable<Visit> {
         return comparator.compare(this, other);
     }
 
-    @Inject @Transient TitleService titleService;
+    @Inject @Transient TitleService titleService;   // <1>
 }
 ----
-<.> in the "visits" schema.
-Modules are vertical, cutting through the layers.
-Therefore the database schemas echo the Spring ``@Configuration``s and maven modules.
-+
-Run the application, and confirm that the table is created correctly using menu:Prototyping[H2 Console].
+<.> uses the injected xref:refguide:applib:index/services/title/TitleService.adoc[] to obtain the title of the object, as determined by the framework.
 
+* create a `Visit.layout.xml` layout file:
++
+[source,xml]
+.Visit.layout.xml
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+        xsi:schemaLocation="https://causeway.apache.org/applib/layout/component https://causeway.apache.org/applib/layout/component/component.xsd https://causeway.apache.org/applib/layout/grid/bootstrap3 https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+        xmlns:cpt="https://causeway.apache.org/applib/layout/component"
+        xmlns:bs3="https://causeway.apache.org/applib/layout/grid/bootstrap3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <cpt:domainObject bookmarking="AS_ROOT"/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+            <bs3:row>
+                <bs3:col span="12">
+                    <bs3:tabGroup>
+                        <bs3:tab name="Identity">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Identity" id="identity"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Other">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Other" id="other" unreferencedProperties="true"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                        <bs3:tab name="Metadata">
+                            <bs3:row>
+                                <bs3:col span="12">
+                                    <cpt:fieldSet name="Metadata" id="metadata"/>
+                                </bs3:col>
+                            </bs3:row>
+                        </bs3:tab>
+                    </bs3:tabGroup>
+                </bs3:col>
+                <bs3:col span="12">
+                    <cpt:fieldSet name="Details" id="details"/>
+                </bs3:col>
+            </bs3:row>
+        </bs3:col>
+        <bs3:col span="6">
+            <bs3:row>
+                <bs3:col span="12">
+                </bs3:col>
+            </bs3:row>
+            <bs3:tabGroup  unreferencedCollections="true">
+            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+</bs3:grid>
+----
+
+* create a `Visit.columnOrder.txt` file
++
+[source,text]
+.Visit.columnOrder.txt
+----
+pet
+visitAt
+#id
+#version
+----
+
+* download a `Visit.png` file.
+
+
+
+Run the application, and login as `secman-admin`/`pass` to confirm that the table is created correctly using menu:Prototyping[H2 Console].
+Also check that the unique index has been created correctly.
+
+image::05-02/Visit-entity.png[]
 
 
 
 [#exercise-5-3-book-visit-action]
 == Ex 5.3: "Book Visit" action
 
+We now want to extend our domain model so that ``Visit``s to be created.
+
+However, there's a problem:
+
+* we would like that behaviour to reside on `PetOwner` (say)
+* however the pet owner module doesn't know about visits.
+
+We can see this in the domain model:
+
+include::partial$domain.adoc[]
+
+Causeway's solution to this is to allow the visit module to define behaviour, but have the behaviour seem to belong to the `Pet` entity, at least so far as the user interface is concerned.
+This is done using a xref:userguide::mixins.adoc[].
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/05-03-book-visit-action
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+
+
+=== Tasks
+
+
+
+[#exercise-5-4-capture-visit-reason]
+== Ex 5.3: Capture visit reason
+
 In addition to the key properties, the `Visit` has one further mandatory property, `reason`.
 This is required to be specified when a `Visit` is created ("what is the purpose of this visit?")
 
-In this exercise we'll add that additional property and use a mixin to allow ``Visit``s to be created.
+In this exercise we'll extend the "book visit" action to also capture that reason.
 
 
 [source,bash]
@@ -321,10 +488,6 @@ public class Pet_bookVisit {
 <.> defaults to 9am tomorrow morning.
 
 Also add in the UI files:
-
-* create a `Visit.layout.xml` layout file.
-
-* add a `Visit.png` file
 
 * add a `Pet#visits.columnOrder.txt` file
 +
