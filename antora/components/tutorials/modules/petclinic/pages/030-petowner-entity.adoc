@@ -807,7 +807,7 @@ public String validate0UpdateName(String newName) {             // <.>
     return null;
 }
 ----
-<.> validates the "0^th^" parameter of `updateName`.
+<.> The xref:refguide:applib-methods:prefixes.adoc#validate[validate...()] supporting method is used to validate parameters; in this case the "0^th^" parameter of `updateName`.
 More details on the validate supporting method can be found xref:refguide:applib-methods:prefixes.adoc#validate[here].
 
 In this exercise we'll move this constraint onto the `@Name` meta-annotation instead, using a xref:refguide:applib:index/spec/Specification.adoc[].

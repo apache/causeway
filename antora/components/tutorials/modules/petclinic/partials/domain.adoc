@@ -35,6 +35,7 @@ package pets {
         -emailAddress
         ..
         -lastVisit
+        -/daysSinceLastVisit
         ..
         -notes
     }
@@ -48,12 +49,6 @@ package visits {
         ..
         #pet
         #visitAt: LocalDateTime
-        ..
-        -reason
-        ..
-        -cost
-        -paid: boolean
-        -outcome
     }
 }
 
