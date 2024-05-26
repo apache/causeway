@@ -1071,106 +1071,185 @@ public PetOwner create(
 Run the application and try to enter an invalid
 
 
-[#exercise-3-10-field-layout]
-== Ex 3.10: Field layout
+[#exercise-3-14-use-layout-xml-file-for-ui-semantics]
+== Ex 3.14: Use layout xml file for UI semantics
 
-At the moment all the properties of `PetOwner` are grouped into a single fieldset.
-The UI would be improved by grouping properties according to their nature, for example the "phoneNumber" and "emailAddress" in a "Contact Details" fieldset.
+At the moment the associated `.layout.xml` file for `PetOwner` is used to define rows, columns and fieldsets, while the xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation is grouped to associate properties with those fieldsets.
 
-We do this using the associated `PetOwner.layout.xml` file (which defines the positioning of the fieldsets), and also using the annotations within `PetOwner` (which associate the properties to those fieldsets).
+If we prefer, we can move specify this association within the `PetOwner.layout.xml` file instead.
+And we can also do the same thing associating actions with properties or collections.
+
+This has the benefit of being dynamic; we can move fields around in the layout without having to recompile/restart the application.
+
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-10-PetOwner-fieldsets
+git checkout tags/03-14-PetOwner-fieldsets
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 === Task
 
-* modify the `PetOwner.layout.xml`, adding two new `fieldSet` definitions after the first `tabGroup`:
-+
-[source,xml]
-.PetOwner.layout.xml
-----
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs:grid>
-    <bs:row>
-        <!-- ... -->
-    </bs:row>
-    <bs:row>
-        <bs:col span="6">
-            <bs:tabGroup>
-                <!-- ... -->
-            </bs:tabGroup>
-            <c:fieldSet id="contactDetails" name="Contact Details"/> <!--.-->
-            <c:fieldSet id="notes" name="Notes"/>                    <!--.-->
-        </bs:col>
-        <bs:col span="6">
-            <!-- ... -->
-        </bs:col>
-    </bs:row>
-</bs:grid>
-----
-<.> fieldSet for contact details
-<.> fieldset for the notes
+Associate properties with fieldsets using `.layout.xml`:
 
-* modify the `@PropertyLayout` annotation for the properties to associate with these fieldsets:
+* associate `name` property with `identity` fieldset:
+
+** remove `@PropertyLayout` from `PetOwner`:
 +
 [source,java]
 .PetOwner.java
 ----
-// ...
-@PropertyLayout(fieldSetId = "contactDetails", sequence = "1")    // <.>
-private String phoneNumber;
-
-// ...
-@PropertyLayout(fieldSetId = "contactDetails", sequence = "2")    // <.>
-private String emailAddress;
-
-// ...
-@PropertyLayout(fieldSetId = "notes", sequence = "1")               // <.>
-private String notes;
+@Name
+@Column(length = Name.MAX_LEN, nullable = false, name = "name")
+@Getter @Setter @ToString.Include
+// @PropertyLayout(fieldSetId = LayoutConstants.FieldSetId.IDENTITY, sequence = "1")
+private String name;
 ----
-<.> associates as the 1^st^ property in the "contact details" fieldset
-<.> associates as the 2^nd^ property in the "contact details" fieldset
-<.> associates with the "notes" fieldset
 
-Run the application; the layout should look like:
-
-image::03-10/fieldsets.png[width=800]
-
-
-The layout file can be reloaded dynamically (on IntelliJ, menu:Run[Debugging Actions > Reload Changed Classes]), so you can inspect any updates without having to restart the app.
-Experiment with this by moving a fieldset into a tab group, or change the width of a column).
-
-
-
-=== Optional Exercise
-
-NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
-
-It is also possible to associate the properties to fieldsets using only the `.layout.xml` file.
-In fact, pretty much all of the metadata in the `@XxxLayout` annotations can be specified in the layout file.
-
+** add to `PetOwner.layout.xml`:
++
 [source,xml]
 .PetOwner.layout.xml
 ----
-<c:fieldSet id="contactDetails" name="Contact Details">
-    <c:property id="phoneNumber"/>
-    <c:property id="emailAddress"/>
-</c:fieldSet>
-<c:fieldSet id="notes" name="Notes">
-    <c:property id="notes"/>
-</c:fieldSet>
+<cpt:fieldSet name="Identity" id="identity">
+    <cpt:property id="name"/>
+</cpt:fieldSet>
 ----
 
-The `@PropertyLayout` annotations could then be removed.
+* similarly for `knownAs`
+* similarly for `telephoneNumber`
+* similarly for `emailAddress`
+* similarly for `notes`
+* similarly for `lastVisit`
+* similarly for `daysSinceLastVisit`
+* similarly for `attachment`
 
-Using the layout file to specify individual properties provides even more fine-grained control when dynamically reloading, so you could for example switch the order of properties in a fieldset and inspect the changes immediately without having to restart the app.
-You might find though that the main benefit of the layout file is to declare how the different "regions" of the UI fit together in terms of rows, columns, tabs and fieldsets, and then use annotations to slot the properties/actions into those regions.
-It really is a matter of personal preference which approach you use.
+* associate `version` property with `metadata` fieldset, and also explicitly specify the location of the two framework-provided properties that also reside in that fieldset:
+
+** change ``PetOwner#version` property to::
++
+[source,java]
+.PetOwner.java
+----
+@Version
+@Column(name = "version", nullable = false)
+//@PropertyLayout(fieldSetId = "metadata", sequence = "999")    // <.>
+@Property                                                       // <.>
+@Getter @Setter
+private long version;
+----
+<.> The `@PropertyLayout` was removed...
+<.> ... but `@Property` has been added instead.
++
+This is because at least one of @Property` or `@PropertyLayout` must be present to identify the field as a property (at least using the configuration of the framework is concerned).
+
+** add to `PetOwner.layout.xml`:
++
+[source,xml]
+.PetOwner.layout.xml
+----
+<cpt:fieldSet name="Metadata" id="metadata">
+    <cpt:property id="logicalTypeName"/>        // <.>
+    <cpt:property id="objectIdentifier"/>       // <1>
+    <cpt:property id="version"/>
+</cpt:fieldSet>
+----
+<.> framework-provided properties.
+If we want the `version` property to appear last in the fieldset, then we need to specify these other properties also.
 
 
+* associate the `updateName` action with the `name` property
+
+** remove from `PetOwner`:
++
+[source,java]
+.PetOwner.java
+----
+    @Action( ... )
+    @ActionLayout(
+            // associateWith = "name",      // <.>
+            ...
+    )
+    public PetOwner updateName(
+            @Name final String name) { ... }
+----
+<.> deleted this line
+
+** add to `PetOwner.layout.xml`:
++
+[source,xml]
+.PetOwner.layout.xml
+----
+<cpt:property id="name">
+    <cpt:action id="updateName"/>
+</cpt:property>
+----
+
+* similarly `updateAttachment` action
+
+** remove from `PetOwner`:
++
+[source,java]
+.PetOwner.java
+----
+@Action( ... )
+// @ActionLayout(                               // <.>
+//      associateWith = "attachment",           // <1>
+//      position = ActionLayout.Position.PANEL  // <1>
+// )                                            // <1>
+public PetOwner updateAttachment( ... ) { ... }
+----
+<.> deleted lines
+
+** add to `PetOwner.layout.xml`:
++
+[source,xml]
+.PetOwner.layout.xml
+----
+<cpt:property id="attachment">
+    <cpt:action id="updateAttachment" position="PANEL"/>
+</cpt:property>
+----
+
+
+** remove from `PetOwner`:
++
+[source,java]
+.PetOwner.java
+----
+@Action( ... )
+@ActionLayout(
+    // fieldSetId = LayoutConstants.FieldSetId.IDENTITY,        // <.>
+    // position = ActionLayout.Position.PANEL,                  // <1>
+    describedAs = "Deletes this object from the persistent datastore"
+)
+public void delete() { ... }
+----
+<.> deleted lines
+
+* add to `PetOwner.layout.xml`:
++
+[source,xml]
+.PetOwner.layout.xml
+----
+<cpt:fieldSet name="Identity" id="identity">
+    <cpt:action id="delete" position="PANEL"/>  <!--.-->
+    <cpt:property id="name">
+        <cpt:action id="updateName"/>
+    </cpt:property>
+    ...
+</cpt:fieldSet>
+----
+<.> added, _before_ any of the ``<property>``s
+
+
+Whether you choose to use layout file only or a mixture of layout file and annotations is a matter of taste.
+Notice that the `.layout.xml` files has elements with the "unreferencedProperties", "unreferencedCollections" or "unreferencedActions" (and is considered invalid if these are missing).
+As you might expect, these tags indicate where to render properties, collections or actions whose placement has not been specified explicitly.
+
+IMPORTANT::
+This is an important principle of the _naked objects pattern_ ; the domain object should always be rendered in some way or another.
+The presence of UI semantics (`@XxxLayout` annotations or the `.layout.xml` files) merely influence how that rendering is performed.
