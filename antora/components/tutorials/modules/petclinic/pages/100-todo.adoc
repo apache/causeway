@@ -9,6 +9,9 @@ validate pet name is unique within Pet
 refactor addPet to be an inline-mixin.
 
 
+update home page, show upcoming appointments
+
+
 visit
 - need some words about adding VisitRepository
 
