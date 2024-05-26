@@ -1,14 +1,10 @@
 
 TODO: ideas for future steps:
-- introduce a meta-annotation
-- introduce a custom type for these
+* more user-friendly error message if hit duplicate (enter two pet owners with same name)
 
-
-add validation for telephone number and email address.
 
 
 PetOwner#daysSinceLastVisit could be made into a mixin - eg if these marketing analytics were the responsibility of some other module.
-
 
 
 hidden properties

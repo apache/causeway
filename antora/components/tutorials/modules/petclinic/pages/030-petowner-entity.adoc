@@ -611,7 +611,9 @@ Note that Apache Causeway allows services to be injected into entities (actually
 @Property
 @PropertyLayout(fieldSetId = LayoutConstants.FieldSetId.DETAILS, sequence = "3.1")  // <.>
 public long getDaysSinceLastVisit() {
-    return Math.abs(ChronoUnit.DAYS.between(getLastVisit(), clockService.getClock().nowAsLocalDate()));
+    return getLastVisit() != null
+            ? ChronoUnit.DAYS.between(getLastVisit(), clockService.getClock().nowAsLocalDate())
+            : null;
 }
 ----
 <.> positioned just after the `lastVisit` property
@@ -650,34 +652,22 @@ daysSinceLastVisit
 
 
 
-[#exercise-3-8-add-other-properties-for-petowner]
-== Ex 3.8: Add other properties for PetOwner
+[#exercise-3-10-use-meta-annotations-to-reduce-duplication]
+== Ex 3.10: Use meta-annotations to reduce duplication
 
-Let's add the two remaining properties for `PetOwner`:
+There is some duplication between menu:PetOwners[create] action and the `PetOwner` class; both define a "name" parameter along with other optional parameters, "telephoneNumber, "emailAddress" and "knownAs".
 
-[plantuml]
-----
-hide empty members
-hide methods
+With "name" you might have noticed that the `@Name` meta-annotation that came with the starter, and which centralizes the domain knowledge about what a "name" is.
 
-class Owner {
-    +id
-    ..
-    #lastName
-    #firstName
-    ..
-    -phoneNumber
-    -emailAddress
-}
-----
+In this exercise we'll use the same approach with the "telephoneNumber".
+(We won't do "emailAddress" or "knownAs" though - we'll explore an even more powerful way to reduce duplication in the following exercise).
 
-They are `phoneNumber` and `emailAddress`.
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/03-08-add-remaining-PetOwner-properties
+git checkout tags/03-10-use-meta-annotations-to-reduce-duplication
 mvn clean install
 mvn -pl spring-boot:run
 ----
@@ -690,73 +680,73 @@ mvn -pl spring-boot:run
 .PhoneNumber.java
 ----
 @Property(
-        editing = Editing.ENABLED,  // <.>
+        editing = Editing.ENABLED,
         maxLength = PhoneNumber.MAX_LEN,
         optionality = Optionality.OPTIONAL
 )
-@Parameter(maxLength = PhoneNumber.MAX_LEN, optionality = Optionality.OPTIONAL)
+@Parameter(
+        maxLength = PhoneNumber.MAX_LEN,
+        optionality = Optionality.OPTIONAL
+)
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneNumber {
 
-    int MAX_LEN = 30;
+    int MAX_LEN = 40;
 }
 ----
-<.> any properties annotated with this meta-annotation will be editable by default
 
-* Similarly, create an `@EmailAddress` meta-annotation, defined to be an editable property:
-+
-[source,java]
-.EmailAddress.java
-----
-@Property(
-        editing = Editing.ENABLED,
-        maxLength = EmailAddress.MAX_LEN,
-        optionality = Optionality.OPTIONAL
-)
-@PropertyLayout(named = "E-mail")   // <.>
-@Parameter(maxLength = EmailAddress.MAX_LEN, optionality = Optionality.OPTIONAL)
-@ParameterLayout(named = "E-mail")  // <.>
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EmailAddress {
-
-    int MAX_LEN = 100;
-}
-----
-<.> xref:refguide:applib:index/annotation/PropertyLayout.adoc#named[@PropertyLayout#named] allows characters to be used that are not valid Java identifiers.
-<.> xref:refguide:applib:index/annotation/ParameterLayout.adoc#named[@ParameterLayout#named] - ditto.
-
-* add properties to `PetOwner`:
+* update the `telephoneNumber` of `PetOwner` to use the meta-annotation:
 +
 [source,java]
 .PetOwner.java
 ----
-@PhoneNumber
-@Column(length = PhoneNumber.MAX_LEN, nullable = true)
-@PropertyLayout(fieldSetId = "name", sequence = "1.5")
+@PhoneNumber                                                                        // <.>
+@Column(length = PhoneNumber.MAX_LEN, nullable = true, name = "telephoneNumber")    // <.>
 @Getter @Setter
-private String phoneNumber;
-
-@EmailAddress
-@Column(length = EmailAddress.MAX_LEN, nullable = true)
-@PropertyLayout(fieldSetId = "name", sequence = "1.6")
-@Getter @Setter
-private String emailAddress;
+@PropertyLayout(fieldSetId = "contact", sequence = "1.1")                           // <.>
+private String telephoneNumber;
 ----
+<.> updated to use meta-annotation
+<.> The JPA implementation used by Apache Causeway (EclipseLink) does not support meta-annotations, so the field must still be annotated with `@Column`.
+We can at least use the `PhoneNumber.MAX_LEN` for the length.
+<.> Any annotations defined at the field level supplement or override those inherited from the meta-annotation.
+
+* and update the `PetOwners#create()` action method also:
++
+[source,java]
+.PetOwners.java
+----
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+// @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
+public PetOwner create(
+        @Name final String name,
+        @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL)
+        final String knownAs,
+        @PhoneNumber                        // <.>
+        final String telephoneNumber,
+        @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL)
+        final String emailAddress) {
+        // ...
+}
+----
+<.> updated to use meta-annotation
 
 
 
 
-[#exercise-3-9-validation]
-== Ex 3.9: Validation
+[#exercise-3-11-validation]
+== Ex 3.11: Validation
 
-At the moment there are no constraints for the format of `phoneNumber` or `emailAddress` properties.
+At the moment there are no constraints for the format of `telePhoneNumber` properties.
 We can fix this by adding rules to their respective meta-annotations.
+
+
+=== Solution
 
 [source,bash]
 ----
-git checkout tags/03-09-validation-rules-using-metaannotations
+git checkout tags/03-11-validation-rules-using-metaannotations
 mvn clean install
 mvn -pl spring-boot:run
 ----
@@ -773,49 +763,35 @@ mvn -pl spring-boot:run
         editing = Editing.ENABLED,
         maxLength = PhoneNumber.MAX_LEN,
         optionality = Optionality.OPTIONAL,
-        regexPattern = "[+]?[0-9 ]+",       // <.>
-        regexPatternReplacement =           // <.>
-            "Specify only numbers and spaces, optionally prefixed with '+'.  " +
-            "For example, '+353 1 555 1234', or '07123 456789'"
+        regexPattern = PhoneNumber.REGEX_PATTERN,                           // <.>
+        regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT     // <.>
 )
-@Parameter(maxLength = PhoneNumber.MAX_LEN, optionality = Optionality.OPTIONAL)
+@Parameter(
+        maxLength = PhoneNumber.MAX_LEN,
+        optionality = Optionality.OPTIONAL,
+        regexPattern = PhoneNumber.REGEX_PATTERN,                           // <1>
+        regexPatternReplacement = PhoneNumber.REGEX_PATTERN_REPLACEMENT     // <2>
+)
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PhoneNumber {
 
-    int MAX_LEN = 30;
+    int MAX_LEN = 40;
+    String REGEX_PATTERN = "[+]?[0-9 ]+";
+    String REGEX_PATTERN_REPLACEMENT =
+            "Specify only numbers and spaces, optionally prefixed with '+'.  " +
+            "For example, '+353 1 555 1234', or '07123 456789'";
+
 }
 ----
 <.> regex constraint
 <.> validation message if the constraint is not met
 
-* Similarly, update `@EmailAddress`:
-+
-[source,java]
-.EmailAddress.java
-----
-@Property(
-        editing = Editing.ENABLED,
-        maxLength = EmailAddress.MAX_LEN,
-        optionality = Optionality.OPTIONAL,
-        regexPattern = "[^@]+@[^@]+[.][^@]+",                   // <.>
-        regexPatternReplacement = "Invalid email address"       // <.>
-)
-@PropertyLayout(named = "E-mail")
-@Parameter(maxLength = EmailAddress.MAX_LEN, optionality = Optionality.OPTIONAL)
-@ParameterLayout(named = "E-mail")
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EmailAddress {
-
-    int MAX_LEN = 100;
-}
-----
-<.> regex constraint.
-(Should really use a more comprehensive regex, eg see https://emailregex.com).
-<.> validation message if the constraint is not met
-
 Try out the application and check that these rules are applied.
+
+
+[#exercise-3-12-more-validation]
+== Ex 3.12: More validation
 
 The `updateName` action also has a validation rule, applied directly to the method:
 
@@ -834,25 +810,38 @@ public String validate0UpdateName(String newName) {             // <.>
 <.> validates the "0^th^" parameter of `updateName`.
 More details on the validate supporting method can be found xref:refguide:applib-methods:prefixes.adoc#validate[here].
 
-We can Move this constraint onto the `@LastName` meta-annotation instead:
+In this exercise we'll move this constraint onto the `@Name` meta-annotation instead, using a xref:refguide:applib:index/spec/Specification.adoc[].
 
-*  Update the `@LastName` meta-annotation using a xref:refguide:applib-classes:spec.adoc#specification[Specification]:
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-12-moves-validation-onto-metaannotation
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+*  Update the `@Name` meta-annotation using a xref:refguide:applib-classes:spec.adoc#specification[Specification]:
 +
 [source,java]
-.LastName.java
+.Name.java
 ----
-@Property(maxLength = LastName.MAX_LEN, mustSatisfy = LastName.Spec.class)  // <.>
-@Parameter(maxLength = LastName.MAX_LEN, mustSatisfy = LastName.Spec.class) // <1>
-@ParameterLayout(named = "Last Name")
+@Property(maxLength = Name.MAX_LEN, mustSatisfy = Name.Spec.class)      // <.>
+@Parameter(maxLength = Name.MAX_LEN, mustSatisfy = Name.Spec.class)     // <1>
+@ParameterLayout(named = "Name")
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LastName {
+public @interface Name {
 
     int MAX_LEN = 40;
+    String PROHIBITED_CHARACTERS = "&%$!";
 
-    class Spec extends AbstractSpecification<String> {                      // <.>
+    class Spec extends AbstractSpecification<String> {                  // <.>
         @Override public String satisfiesSafely(String candidate) {
-            for (char prohibitedCharacter : "&%$!".toCharArray()) {
+            for (char prohibitedCharacter : PROHIBITED_CHARACTERS.toCharArray()) {
                 if( candidate.contains(""+prohibitedCharacter)) {
                     return "Character '" + prohibitedCharacter + "' is not allowed.";
                 }
@@ -865,19 +854,221 @@ public @interface LastName {
 <.> indicates that the property or parameter value must satisfy the specification below
 <.> defines the specification definition, where a non-null value is the reason why the specification is not satisfied.
 
-* Remove the `validate0UpdateName` from `PetOwner`.
+* Remove the `validate0UpdateName` method and `PROHIBITED_CHARACTERS` constant from `PetOwner`.
+
+* update the `@ActionLayout#describedAs` annotation for "updateName" to use `Name.PROHIBITED_CHARACTERS`
 
 Test the app once more.
 
-=== Optional exercise
-
-NOTE: If you decide to do this optional exercise, make the changes on a git branch so that you can resume with the main flow of exercises later.
-
-As well as validating the `lastName`, it would be nice to also validate `firstName` with the same rule.
-As the logic is shared, create a new meta-(meta-)annotation called `@Name`, move the specification (and anything else that is common between lastName and firstName) to that new meta annotation, and then meta-annotate `@LastName` and `@FirstName` with `@Name`.
+NOTE: in making this refactoring we actually fixed a bug: there was no validation of the parameter when a new `PetOwner` was created; but now there is.
 
 
 
+
+[#exercise-3-13-scalar-custom-value-types]
+== Ex 3.13: Scalar custom value types
+
+We could use meta-annotations for the "emailAddress" property and parameter, but instead we'll reduce duplication using an even more powerful technique, namely custom value types.
+We'll define a custom class `EmailAddress` with value semantics, allowing validation and any other behaviour to move onto the custom class itself.
+
+Apache Causeway supports both scalar and composite value types.
+For email address, we'll use a single string, so it's a scalar value type.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-13-scalar-custom-value-type-for-email-address
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+* Define the `EmailAddress` value type:
++
+[source,java]
+.EmailAddress.java
+----
+@javax.persistence.Embeddable                                           // <.>
+@org.apache.causeway.applib.annotation.Value                            // <.>
+@lombok.EqualsAndHashCode                                               // <.>
+public class EmailAddress implements Serializable {                     // <.>
+
+    static final int MAX_LEN = 100;
+    static final int TYPICAL_LEN = 30;
+    static final Pattern REGEX =
+        Pattern.compile("^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-zA-Z]{2,})$");
+
+    public static EmailAddress of(String value) {                       // <.>
+        if (_Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+        if(!EmailAddress.REGEX.matcher(value).matches()) {
+            throw new RuntimeException("Invalid email format");
+        }
+
+        final var ea = new EmailAddress();
+        ea.value = value;
+        return ea;
+    }
+
+    protected EmailAddress() {}                                         // <.>
+
+    @Getter
+    @Column( length = MAX_LEN, nullable = true, name = "emailAddress")  // <1>
+    String value;                                                       // <.>
+}
+----
+<.> Required JPA annotations
+<.> Indicates to Causeway that this class is a value type (as opposed to an entity, view model or domain service)
+<.> Value types generally implement equals and hashCode
+<.> Value types generally are serializable
+<.> Validation moves to the factory method
+<.> no-arg constructor is required by JPA
+<.> The single data attribute to be persisted
+
+* Implement a "value semantics provider".
+This tells Causeway how to interact with the value type
++
+[source,java]
+.EmailAddressValueSemantics.java
+----
+@Named(PetOwnerModule.NAMESPACE + ".EmailAddressValueSemantics")
+@Component                                                                  // <.>
+public class EmailAddressValueSemantics
+        extends ValueSemanticsAbstract<EmailAddress> {                      // <.>
+
+    @Override
+    public Class<EmailAddress> getCorrespondingClass() {
+        return EmailAddress.class;
+    }
+
+    @Override
+    public ValueType getSchemaValueType() {                                 // <.>
+        return ValueType.STRING;
+    }
+
+    @Override
+    public ValueDecomposition decompose(final EmailAddress value) {         // <.>
+        return decomposeAsNullable(value, EmailAddress::getValue, ()->null);
+    }
+
+    @Override
+    public EmailAddress compose(final ValueDecomposition decomposition) {   // <4>
+        return composeFromNullable(
+                decomposition, ValueWithTypeDto::getString, EmailAddress::of, ()->null);
+    }
+
+    @Override
+    public DefaultsProvider<EmailAddress> getDefaultsProvider() {           // <.>
+        return () -> null;
+    }
+
+    @Override
+    public Renderer<EmailAddress> getRenderer() {                           // <.>
+        return (context, emailAddress) ->  emailAddress == null ? null : emailAddress.getValue();
+    }
+
+    @Override
+    public Parser<EmailAddress> getParser() {                               // <.>
+        return new Parser<>() {
+
+            @Override
+            public String parseableTextRepresentation(Context context, EmailAddress emailAddress) {
+                return renderTitle(emailAddress, EmailAddress::getValue);
+            }
+
+            @Override
+            public EmailAddress parseTextRepresentation(Context context, String text) {
+                return EmailAddress.of(text);
+            }
+
+            @Override
+            public int typicalLength() {
+                return EmailAddress.TYPICAL_LEN;
+            }
+
+            @Override
+            public int maxLength() {
+                return EmailAddress.MAX_LEN;
+            }
+        };
+    }
+
+    @Override
+    public IdStringifier<EmailAddress> getIdStringifier() {                 // <.>
+        return new IdStringifier.EntityAgnostic<>() {
+            @Override
+            public Class<EmailAddress> getCorrespondingClass() {
+                return EmailAddressValueSemantics.this.getCorrespondingClass();
+            }
+
+            @Override
+            public String enstring(@NonNull EmailAddress value) {
+                return _Strings.base64UrlEncode(value.getValue());
+            }
+
+            @Override
+            public EmailAddress destring(@NonNull String stringified) {
+                return EmailAddress.of(_Strings.base64UrlDecode(stringified));
+            }
+        };
+    }
+}
+----
+<.> Defined as a Spring `@Component` so that the framework can discover and use this value semantics provider
+<.> Typically inherit from `ValueSemanticsAbstract`, a convenience superclass
+<.> The `schemaValueType` in essence defines the widget that will be used to interact with render the value
+<.> The `ValueDecomposition` is primarily used by the xref:vro::about.adoc[] to convert to/from JSON.
+<.> The `DefaultsProvider` provides an initial value, if any.
+For some values there is often a reasonable default, eg `0` for a number, or `[0,0]` for a coordinate, or today's date.
+<.> The `Renderer` provides string and if required HTML representations of the value
+<.> The `Parser` converts string representations into the value.
+Note how this code delegates back to the `EmailAddress` value type itself
+<.> The `IdStringifier` returns a string representation of the value, in case it is used as an identifier of the object.
+The returned string would appear in URLs or bookmarks, for example.
+
+* update `PetOwner#emailAddress` to use the `EmailAddress` value type:
++
+[source,java]
+.PetOwner.java
+----
+@javax.persistence.Embedded                                                 // <.>
+@Getter @Setter
+@Property(editing = Editing.ENABLED, optionality = Optionality.OPTIONAL)    // <.>
+@PropertyLayout(fieldSetId = "contact", sequence = "1.2")
+private EmailAddress emailAddress;                                          // <.>
+----
+<.> required JPA annotation
+<.> need to explicitly indicate that this property is optional (previously it was inferred from `@Column(nullable=)`)
+<.> change the type from `String` to `EmailAddress`
+
+* update `PetOwners#create` to use the `EmailAddress` value type:
++
+[source,java]
+.PetOwner.java
+----
+@Action(semantics = SemanticsOf.NON_IDEMPOTENT)
+// @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
+public PetOwner create(
+        @Name final String name,
+        @Parameter(maxLength = 40, optionality = Optionality.OPTIONAL)
+        final String knownAs,
+        @PhoneNumber
+        final String telephoneNumber,
+        @Parameter(optionality = Optionality.OPTIONAL)
+        final EmailAddress emailAddress) {                  // <.>
+    final var petOwner = PetOwner.withName(name);
+    petOwner.setKnownAs(knownAs);
+    petOwner.setTelephoneNumber(telephoneNumber);
+    petOwner.setEmailAddress(emailAddress);
+    return repositoryService.persist(petOwner);
+}
+----
+<.> Change the parameter' type from `String` to `EmailAddress`
+
+Run the application and try to enter an invalid
 
 
 [#exercise-3-10-field-layout]
@@ -983,70 +1174,3 @@ You might find though that the main benefit of the layout file is to declare how
 It really is a matter of personal preference which approach you use.
 
 
-
-[#exercise-3-11-column-orders]
-== Ex 3.11: Column Orders
-
-The home page of the webapp shows a list of all `PetOwner`s (inherited from the original simple app).
-We also see a list of `PetOwner`s if we invoke menu:Pet Owners[List All].
-
-The first is a "parented" collection (it is parented by the home page view model), the second is a standalone collection (it is returned from an action).
-
-The properties that are shown as columns that are shown is based on two different mechanisms.
-The first is whether the property is visible at all in any tables, which can be specified using `@PropertyLayout(hidden=...)` (see xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[@PropertyLayout#hidden]).
-The second is to use a "columnOrder" file.
-
-In this exercise, we'll use the latter approach.
-
-=== Solution
-
-[source,bash]
-----
-git checkout tags/03-11-PetOwner-columnOrder
-mvn clean install
-mvn -pl spring-boot:run
-----
-
-=== Task
-
-* Declare the `id` field of `PetOwner` as a property by adding a getter and other annotations:
-+
-[source,java]
-.PetOwner.java
-----
-@Id
-@GeneratedValue(strategy = GenerationType.AUTO)
-@Column(name = "id", nullable = false)
-@Getter @Setter                                             // <.>
-@PropertyLayout(fieldSetId = "metadata", sequence = "1")    // <.>
-private Long id;
-----
-<.> makes field available as a property
-<.> positions property in the metadata fieldset (before `version`).
-
-* update the columnOrder for standalone collections of `PetOrder`:
-+
-[source,java]
-.PetOwner.columnOrder.txt
-----
-name
-id
-#version
-----
-+
-This will show only `name` and `id`; none of the other properties will be visible as columns.
-
-* create a new file `HomePageViewModel#objects.columnOrder.txt` (in the same package as `HomePageViewModel`) to define the columns visible in the `objects` collection of that view model:
-+
-[source,java]
-.HomePageViewModel#objects.columnOrder.txt
-----
-name
-id
-#version
-----
-
-* delete the (unused) `PetOwner#others.columnOrder.txt` file.
-
-Run the application and confirm the columns are as expected.
-You should also be able to update the files and reload changes (on IntelliJ, menu:Run[Debugging Actions > Reload Changed Classes]) and inspect the updates without having to restart the app.
