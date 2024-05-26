@@ -6,6 +6,8 @@ TODO: ideas for future steps:
 validate pet name is unique within Pet
 
 
+refactor addPet to be an inline-mixin.
+
 
 visit
 - need some words about adding VisitRepository
