@@ -1253,3 +1253,38 @@ As you might expect, these tags indicate where to render properties, collections
 IMPORTANT::
 This is an important principle of the _naked objects pattern_ ; the domain object should always be rendered in some way or another.
 The presence of UI semantics (`@XxxLayout` annotations or the `.layout.xml` files) merely influence how that rendering is performed.
+
+
+[#exercise-3-15-update-icon-for-pet-owner]
+== Ex 3.15: Update icon for Pet Owner
+
+As we've learnt in previous exercises, every domain object has a title which allows the end-user to distinguish one object from another.
+Every domain object also has an icon, which helps distinguish one domain object _type_ from another.
+
+The icon acts as the hyperlink from one domain object to another, for example from the home page to the `PetOwner` entity.
+But choosing a good icon also improves the feedback cycle with your domain experts; similar to personas, it helps to create a connection between the domain experts concept of the "thing" and its representation in the app's user interface.
+
+In this exercise, we'll replace the icon for `PetOwner`.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/03-15-change-pet-owner-icon-png
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Task
+
+The icon for `PetOwner` is defined in the `PetOwner.png`.
+All we need to do is replace it with some other icon.
+
+* Download a `.png` icon (it will be auto-scaled, but 32, 64 or 80 pixels is a good size).
++
+There are lots of good resources, for example https://icon8.com.
+Remember to provide appropriate accreditation if required.
+
+NOTE: the icon in the solution does indeed use a free icon from icons8.com, namely https://icons8.com/icons/set/person--icons8.
+
