@@ -26,47 +26,75 @@ mvn clean install
 mvn -pl spring-boot:run
 ----
 
-
-
-
 === Tasks
 
-Just check out the tag above and inspect the changes:
+To save time, just checkout the solution tag above and review the git history to see the files and classes that were created:
 
-* A new `petclinic-module-visits` maven module has been created
+* A new `simpleapp-jpa-module-visit` maven module was defined in the top-level `pom.xml`
 
-* its `pom.xml` declares a dependency on the `petclinic-module-pets` maven module
+* the `pom.xml` for the new visit module itself was created, and referenced from the top-level `pom.xml` as a child `<module>`
 
-* the top-level pom.xml declares the new Maven module and references it
-
-* the `VisitsModule` class is a Spring `@Configuration` bean that resides in the root of the visits module, and declares an app dependency on the pets module that mirrors the maven dependency:
+* a `VisitModule` class was created, defining the module to Causeway as a Spring `@Configuration`:
 +
 [source,java]
-.VisitsModule.java
+.VisitModule.java
 ----
 @Configuration
+@Import({
+        CausewayModuleExtPdfjsApplib.class,
+        CausewayModuleExtFullCalendarApplib.class,
+        CausewayModuleTestingFakeDataApplib.class,
+        CausewayModulePersistenceJpaApplib.class,
+})
 @ComponentScan
-@Import(PetsModule.class)
 @EnableJpaRepositories
-@EntityScan(basePackageClasses = {VisitsModule.class})
-public class VisitsModule implements ModuleWithFixtures {
+@EntityScan(basePackageClasses = {VisitModule.class})
+public class VisitModule implements ModuleWithFixtures {
+
+    public static final String NAMESPACE = "visit";
+    public static final String SCHEMA = "visit";
 
     @Override
     public FixtureScript getTeardownFixture() {
-        return new FixtureScript() {
+        return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(ExecutionContext executionContext) {
-                // nothing to do
             }
         };
     }
 }
 ----
 
-* the webapp Maven module now depends on the new visits maven module, and the top-level `ApplicationModule` Spring `@Configuration` bean now depends upon `VisitsModule` rather than `PetsModule`
+* the top-level `application.properties` was updated to ensure that the new `visit` schema is created (when running with an in-memory database)
 +
-It still depends upon `PetsModule`, but now as a transitive dependency.
+[source,properties]
+.application.properties
+----
+causeway.persistence.schema.auto-create-schemas=\
+    petowner,visit,simple,...
+----
 
+
+== next exercise:
+
+set up dependencies
+- maven
+- spring
+
+reference new module in AppManifest
+- remove transitive dependencies
+
++
+[source,java]
+.VisitsModule.java
+----
+----
+
++
+[source,java]
+.ApplicationModule.java
+----
+----
 
 
 
