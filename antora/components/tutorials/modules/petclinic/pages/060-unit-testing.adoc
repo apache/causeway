@@ -10,7 +10,7 @@ In this part of the tutorial we'll cover unit testing, later on we'll look at in
 [#exercise-6-1-unit-test-the-default-time-when-booking-visits]
 == Ex 6.1: Unit test the default time when booking visits
 
-The xref:050-visit-entity.adoc#exercise-5-3-book-visit-action["Book Visit"] action has a default time of 9am the next morning.
+The xref:050-visit-entity.adoc#exercise-5-4-book-visit-action["Book Visit"] action has a default time of 9am the next morning.
 In this section we'll write a unit test to verify this logic, using Mockito to "mock the clock".
 
 
@@ -31,23 +31,11 @@ mvn -pl spring-boot:run
 [source,xml]
 .module-visits/pom.xml
 ----
-<dependencies>
-    <!-- ... -->
-
-    <dependency>
-        <groupId>org.apache.causeway.mavendeps</groupId>
-        <artifactId>causeway-mavendeps-unittests</artifactId>
-        <type>pom</type>
-        <scope>test</scope>
-        <exclusions>
-            <exclusion>
-                <groupId>org.jmock</groupId>
-                <artifactId>jmock-junit4</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-
-</dependencies>
+<dependency>
+    <groupId>org.apache.causeway.testing</groupId>
+    <artifactId>causeway-testing-unittestsupport-applib</artifactId>
+    <scope>test</scope>
+</dependency>
 ----
 
 * add the test:
@@ -55,7 +43,7 @@ mvn -pl spring-boot:run
 [source,java]
 ----
 @ExtendWith(MockitoExtension.class)                                             // <.>
-class Pet_bookVisit_Test {
+public class PetOwner_bookVisit_Test {
 
     @Mock ClockService mockClockService;                                        // <.>
     @Mock VirtualClock mockVirtualClock;                                        // <2>
@@ -66,31 +54,31 @@ class Pet_bookVisit_Test {
     }
 
     @Nested
-    class default0 {
+    class default1 {
 
         @Test
         void defaults_to_9am_tomorrow_morning() {
 
             // given
-            Pet_bookVisit mixin = new Pet_bookVisit(null);
+            PetOwner_bookVisit mixin = new PetOwner_bookVisit(null);
             mixin.clockService = mockClockService;                              // <.>
 
-            LocalDateTime now = LocalDateTime.of(2021, 10, 21, 16, 37, 45);
+            LocalDateTime now = LocalDateTime.of(2024, 5, 26, 16, 37, 45);
 
             // expecting
-            Mockito.when(mockVirtualClock.nowAsLocalDateTime()).thenReturn(now);// <.>
+            Mockito.when(mockVirtualClock.nowAsLocalDate())                     // <.>
+                   .thenReturn(now.toLocalDate());
 
             // when
-            LocalDateTime localDateTime = mixin.default0Act();
+            LocalDateTime localDateTime = mixin.default1Act();
 
             // then
             Assertions.assertThat(localDateTime)                                // <.>
-                    .isEqualTo(LocalDateTime.of(2021,10,22,9,0,0));
+                    .isEqualTo(LocalDateTime.of(2024,5,27,9,0,0));
         }
     }
 }
 ----
-
 <.> Instructs JUnit to use Mockito for mocking.
 <.> mocks the `ClockService`, and mocks the `VirtualClock` returned by the `ClockService`.
 Automatically provisioned by Mockito.

@@ -10,7 +10,7 @@ The framework provides two main tools:
 
 * the first we've already seen is mixins.
 +
-These allow us to locate busines logic in one module that "appears" to reside in another module.
+These allow us to locate business logic in one module that "appears" to reside in another module.
 Examples are the `visits` mixin collection and `bookVisit` mixin action that are both contributed by the `visits` module to the `Pet` entity in the `pets` module.
 
 * the second is domain events.
