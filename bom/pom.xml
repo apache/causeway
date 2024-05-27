@@ -113,7 +113,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <datasource-proxy-spring-boot-starter.version>1.8.1</datasource-proxy-spring-boot-starter.version>
 
-        <datatables.version>1.13.5</datatables.version> <!-- keep in sync with DatatablesDotNet -->
+        <datatables.version>2.0.7</datatables.version> <!-- keep in sync with DatatablesDotNet -->
 
         <docx4j.version>11.3.2</docx4j.version>
 
