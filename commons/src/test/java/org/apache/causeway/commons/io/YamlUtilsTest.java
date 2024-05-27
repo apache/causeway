@@ -60,6 +60,9 @@ class YamlUtilsTest {
                   offsetTime: ${offsetTime}
                   offsetDateTime: ${offsetDateTime}
                   zonedDateTime: ${zonedDateTime}
+                phone:
+                  home: "+99 1234"
+                  work: null
                 """;
 
         var yaml = person.java8Time().interpolator().applyTo(yamlTemplate);

@@ -14,3 +14,6 @@ java8Time:
   offsetTime: "17:33:45-02:00"
   offsetDateTime: "2007-11-21T17:33:45-02:00"
   zonedDateTime: "2007-11-21T17:33:45+01:00"
+phone:
+  home: "+99 1234"
+  work: null
