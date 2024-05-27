@@ -53,11 +53,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Generics;
-import org.apache.causeway.commons.io.JsonUtils.CanDeserializer;
-import org.apache.causeway.commons.io.JsonUtils.CanSerializer;
-import org.apache.causeway.commons.io.JsonUtils.JacksonCustomizer;
-import org.apache.causeway.commons.io.JsonUtils.XDeserializer;
-import org.apache.causeway.commons.io.JsonUtils.XSerializer;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
