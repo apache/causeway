@@ -118,6 +118,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>5.2.0</easymock.version>
+        <eclipselink.version>2.7.15</eclipselink.version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
         <error_prone_annotations.version>2.27.1</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
@@ -1532,15 +1533,20 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.jpa</artifactId>
+				<version>${eclipselink.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.moxy</artifactId>
-				<version>2.7.14</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>${eclipselink.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>org.eclipse.persistence.sdo</artifactId>
-				<version>2.7.14</version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
+				<version>${eclipselink.version}</version>
 			</dependency>
-            <!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
+			<!-- dependency convergence clash with org.apache.cxf:cxf-core:3.4.0 (used
 				by causeway-mappings-jaxrsclient-impl) TODO ... jaxrsclient was removed -->
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
