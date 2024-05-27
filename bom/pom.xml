@@ -2288,7 +2288,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-invoker-plugin</artifactId>
-                    <version>3.6.1</version>
+                    <version>3.7.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
