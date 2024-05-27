@@ -31,16 +31,16 @@ import lombok.val;
 class JsonUtilsTest {
 
     /*
-     * [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:testCompile 
+     * [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:testCompile
      *      on project causeway-commons: Compilation failure:
      * [ERROR] package com.google.gson does not exist
      * [ERROR] cannot find symbol
      * [ERROR]   symbol:   class GsonBuilder
-     * [ERROR]   location: class org.approvaltests.JsonApprovals 
+     * [ERROR]   location: class org.approvaltests.JsonApprovals
      */
     org.approvaltests.JsonApprovals dummy1; // references com.google.gson.GsonBuilder
     com.google.gson.GsonBuilder dummy2; // Requires (GSON)[https://mvnrepository.com/artifact/com.google.code.gson/gson]
-    
+
     private Person person;
 
     @BeforeEach
@@ -77,7 +77,11 @@ class JsonUtilsTest {
                 + "     }, {\r\n"
                 + "         \"zip\" : 34,\r\n"
                 + "         \"street\" : \"bluestreet\"\r\n"
-                + "     } ]\r\n"
+                + "     } ],\r\n"
+                + "  \"phone\" : {\r\n"
+                + "    \"home\" : \"+99 1234\",\r\n"
+                + "    \"work\" : null\r\n"
+                + "  }"
                 + " }";
 
         var json = person.getJava8Time().interpolator().applyTo(jsonTemplate);

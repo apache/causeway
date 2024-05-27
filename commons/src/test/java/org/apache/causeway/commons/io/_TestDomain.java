@@ -29,6 +29,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
@@ -47,12 +48,19 @@ class _TestDomain {
         Address address;
         Can<Address> additionalAddresses;
         Java8Time java8Time;
+        Phone phone;
     }
 
     @Data @AllArgsConstructor @NoArgsConstructor
     public static class Address {
         int zip;
         String street;
+    }
+
+    @Data @AllArgsConstructor @NoArgsConstructor
+    public static class Phone {
+        Optional<String> home;
+        Optional<String> work;
     }
 
     @Data @AllArgsConstructor @NoArgsConstructor
@@ -112,6 +120,8 @@ class _TestDomain {
                         OffsetTime.of(LocalTime.of(17, 33, 45), ZoneOffset.ofHours(-2)),
                         OffsetDateTime.of(LocalDateTime.of(2007, 11, 21, 17, 33, 45), ZoneOffset.ofHours(-2)),
                         ZonedDateTime.of(LocalDateTime.of(2007, 11, 21, 17, 33, 45), ZoneId.of("Europe/Vienna"))
-                        ));
+                        ),
+                new Phone(Optional.of("+99 1234"), Optional.empty())
+                );
     }
 }

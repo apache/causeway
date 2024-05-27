@@ -42,6 +42,7 @@ import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
@@ -52,6 +53,11 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Generics;
+import org.apache.causeway.commons.io.JsonUtils.CanDeserializer;
+import org.apache.causeway.commons.io.JsonUtils.CanSerializer;
+import org.apache.causeway.commons.io.JsonUtils.JacksonCustomizer;
+import org.apache.causeway.commons.io.JsonUtils.XDeserializer;
+import org.apache.causeway.commons.io.JsonUtils.XSerializer;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -171,6 +177,11 @@ public class JsonUtils {
         return mapper.setSerializationInclusion(Include.NON_NULL);
     }
 
+    /** add support for JDK 8, e.g. {@link Optional} */
+    public ObjectMapper jdk8Support(final ObjectMapper mapper) {
+        return mapper.registerModule(new Jdk8Module());
+    }
+
     /** add support for JAXB annotations */
     public ObjectMapper jaxbAnnotationSupport(final ObjectMapper mapper) {
         return mapper.registerModule(new JaxbAnnotationModule());
@@ -283,6 +294,7 @@ public class JsonUtils {
     private ObjectMapper createJacksonReader(
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
+        mapper = jdk8Support(mapper);
         mapper = readingJavaTimeSupport(mapper);
         mapper = readingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
@@ -295,6 +307,7 @@ public class JsonUtils {
     private ObjectMapper createJacksonWriter(
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper();
+        mapper = jdk8Support(mapper);
         mapper = writingJavaTimeSupport(mapper);
         mapper = writingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {

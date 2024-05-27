@@ -116,6 +116,7 @@ public class YamlUtils {
     private ObjectMapper createJacksonReader(
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper(new YAMLFactory());
+        mapper = JsonUtils.jdk8Support(mapper);
         mapper = JsonUtils.readingJavaTimeSupport(mapper);
         mapper = JsonUtils.readingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
@@ -132,6 +133,7 @@ public class YamlUtils {
             final JsonUtils.JacksonCustomizer ... customizers) {
         var mapper = new ObjectMapper(new YAMLFactory()
                 .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        mapper = JsonUtils.jdk8Support(mapper);
         mapper = JsonUtils.writingJavaTimeSupport(mapper);
         mapper = JsonUtils.writingCanSupport(mapper);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
