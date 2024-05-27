@@ -5,7 +5,7 @@
 
 In this set of exercises we'll just focus on the `PetOwner` entity.
 
-[#exercise-3-1-rename-petowners-knownAs-property]
+[#exercise-3-1-add-petowners-knownAs-property]
 == Ex 3.1: Add PetOwner's knownAs property
 
 In this exercise, we'll add a new property, `knownAs`, to capture the ``PetOwner``'s preferred name.
@@ -142,7 +142,7 @@ public String title() {
 
 
 [#exercise-3-3-remaining-PetOwner-properties]
-== Ex 3.3: Remaining `PetOwner` properties
+== Ex 3.3: Add remaining `PetOwner` properties
 
 Comparing `PetOwner` as it is currently defined with our domain model, there are a couple of changes still to make:
 
@@ -226,7 +226,7 @@ For example, with IntelliJ you can use "Reload Changed Classes" menu item.
 You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
 
 [#exercise-3-4-list-new-properties-of-PetOwner]
-== Ex 3.4: List-new-properties-of-PetOwner
+== Ex 3.4: List new properties of PetOwner
 
 Several of the actions in the "Pet Owners" menu return lists of ``PetOwner``s; the "list" action returns all of them.
 

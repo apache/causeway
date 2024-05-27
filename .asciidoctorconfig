@@ -10,9 +10,9 @@
 // see discussion here https://github.com/asciidoctor/asciidoctor-intellij-plugin/issues/548
 :kroki-default-options: inline
 
-:linkcss:
-:stylesdir: {asciidoctorconfigdir}/antora/.asciidoctor-styles
-:stylesheet: asciidoc-classic.css
+// :linkcss:
+// :stylesdir: {asciidoctorconfigdir}/antora/.asciidoctor-styles
+// :stylesheet: asciidoc-classic.css
 // :stylesdir: https://raw.githubusercontent.com/darshandsoni/asciidoctor-skins/gh-pages/css
 // :stylesheet: asciidoc-classic.css
 
