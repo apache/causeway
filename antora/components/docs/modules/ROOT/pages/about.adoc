@@ -149,7 +149,6 @@ _Interim Builds_
 _Process_
 
 * *xref:comguide:ROOT:about.adoc[Committers' Guide]*
-* xref:tooling:ROOT:about.adoc[Tooling]
 
 _Automated Analysis_
 
