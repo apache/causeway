@@ -20,6 +20,7 @@ package org.apache.causeway.commons.graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -75,6 +76,12 @@ public class GraphUtils {
             //NO_MULTI_EDGES,
             //WEIGHTED,
             ;
+
+            // -- FACTORIES
+
+            public static ImmutableEnumSet<GraphCharacteristic> directed() {
+                return ImmutableEnumSet.noneOf(GraphCharacteristic.class);
+            }
         }
 
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
@@ -197,6 +204,96 @@ public class GraphUtils {
                     }
                 }
             }
+        }
+
+    }
+
+    // -- GRAPH
+
+    /**
+     * Represents a graph, that is, nodes and edges between nodes,
+     * as reflected by the {@link Graph}'s kernel ({@link GraphKernel}).
+     *
+     * @param <T> graph's node type
+     * @since 2.1, 3.1
+     */
+    @lombok.Value @Accessors(fluent=true)
+    public class Graph<T> {
+        private final GraphKernel kernel;
+        private final Can<T> nodes;
+    }
+
+    /**
+     * Builder for a {@link Graph}.
+     * @param <T> graph's node type
+     * @since 2.1, 3.1
+     * @implNote not thread-safe, in other words: should to be used by a single thread only
+     */
+    public class GraphBuilder<T> {
+
+        @SuppressWarnings("unused")
+        private final Class<T> nodeType;
+        private final ImmutableEnumSet<GraphCharacteristic> characteristics;
+        private final List<T> nodeList;
+        private final IntList fromNode = new IntList(4); // best guess initial edge capacity
+        private final IntList toNode = new IntList(4); // best guess initial edge capacity
+
+        // -- FACTORIES
+
+        public static <T> GraphBuilder<T> directed(final Class<T> nodeType) {
+            return new GraphBuilder<T>(nodeType, GraphCharacteristic.directed());
+        }
+
+        /**
+         * Adds a new node to the graph.
+         * @apiNote nodes are not required to be unique with respect to {@link Objects#equals}.
+         */
+        public GraphBuilder<T> addNode(final @NonNull T node) {
+            nodeList.add(node);
+            return this;
+        }
+
+        /**
+         * Adds a new edge to the graph. Indices are zero-based references to the node list.
+         * @apiNote Indices are not bound checked until the {@link #build()} method is called.
+         */
+        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex) {
+            // no bound check here, but later when the kernel is built
+            fromNode.add(fromIndex);
+            toNode.add(toIndex);
+            return this;
+        }
+
+        /**
+         * Current node count. It increments with each node added.
+         */
+        public int nodeCount() {
+            return nodeList.size();
+        }
+
+        /**
+         * Current edge count. It increments with each edge added.
+         */
+        public int edgeCount() {
+            return fromNode.size();
+        }
+
+        // -- CONSTRUCTION
+
+        private GraphBuilder(final Class<T> nodeType, final ImmutableEnumSet<GraphCharacteristic> characteristics) {
+            this.nodeType = nodeType;
+            this.characteristics = characteristics;
+            this.nodeList = new ArrayList<>();
+        }
+
+        public Graph<T> build() {
+            var kernel = new GraphKernel(nodeList.size(), characteristics);
+            var edgeCount = edgeCount();
+            for (int edgeIndex = 0; edgeIndex<edgeCount; edgeIndex++) {
+                kernel.addEdge(fromNode.get(edgeIndex), toNode.get(edgeIndex));
+            }
+            var graph = new Graph<T>(kernel, Can.ofCollection(nodeList));
+            return graph;
         }
 
     }
