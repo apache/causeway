@@ -22,7 +22,7 @@ For example, use the following subject for a vote on Apache Causeway Core:
 
 [source,bash,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Causeway Core release {page-causewayrel}
+[RESULT] [VOTE] Apache Causeway Core release {page-causewayrelv3}
 ----
 
 using the body (alter last line as appropriate):
@@ -49,10 +49,10 @@ Branches and tags need to be removed for three repos:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{page-causewayrel}-RC1     # <.>
-git push --delete origin causeway-{page-causewayrel}-RC1        # <.>
-git tag -d causeway-{page-causewayrel}                          # <.>
-git tag -d causeway-{page-causewayrel}-RC1
+git push --delete origin release-{page-causewayrelv3}-RC1     # <.>
+git push --delete origin causeway-{page-causewayrelv3}-RC1        # <.>
+git tag -d causeway-{page-causewayrelv3}                          # <.>
+git tag -d causeway-{page-causewayrelv3}-RC1
 ----
 <.> deletes the remote branch (update `RCn` as necessary)
 <.> deletes the remote origin server's tag (update `RCn` as necessary)
@@ -62,14 +62,14 @@ git tag -d causeway-{page-causewayrel}-RC1
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{page-causewayrel}-RC1     # <.>
+git push --delete origin release-{page-causewayrelv3}-RC1     # <.>
 ----
 
 * For simpleapp starter app, similarly:
 +
 [source,bash,subs="attributes+"]
 ----
-git push --delete origin release-{page-causewayrel}-RC1     # <.>
+git push --delete origin release-{page-causewayrelv3}-RC1     # <.>
 ----
 
 
