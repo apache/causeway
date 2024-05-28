@@ -168,13 +168,13 @@ mvn -D module-tooling install -Dskip.essential
 
 In the regular `causeway` repo:
 
-* Create a symlink to the `causeway-tooling-cli` jar file
+* Create a symlink to the `causewaystuff-tooling-cli` jar file
 +
 [source,bash]
 ----
 mkdir -p tooling/cli/target
 pushd tooling/cli/target
-ln -s ../../../../../apache-causeway-committers/causewaystuff/tooling/cli/target/causewaystuff-tooling-cli-spring-boot.jar causeway-tooling-cli.jar
+ln -s ../../../../../apache-causeway-committers/causewaystuff/tooling/cli/target/causewaystuff-tooling-cli-spring-boot.jar causewaystuff-tooling-cli.jar
 popd
 ----
 +
