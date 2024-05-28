@@ -6,7 +6,6 @@ Offers an alternative to xref:refguide:applib:index/services/iactnlayer/Interact
 Example:
 
 ----
-
 @Test
 @InteractAs(
     userName = "sven",

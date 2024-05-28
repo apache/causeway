@@ -10,7 +10,6 @@ If the _org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.Api
 For example:
 
 ----
-
 import static org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql;
 
 public class PrintSchemaIntegTest extends PrintSchemaIntegTestAbstract {

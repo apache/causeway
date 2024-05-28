@@ -12,6 +12,7 @@ class EntityPropertyChangeLogger {
   public static final String LOGICAL_TYPE_NAME;
   boolean isEnabled()
   void onChanging(EntityPropertyChange entityPropertyChange)
+  void onChanging(Can<EntityPropertyChange> entityPropertyChanges)
 }
 ----
 

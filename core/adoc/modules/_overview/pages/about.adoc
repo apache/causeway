@@ -841,6 +841,7 @@ Directory: /commons
 com.approvaltests:approvaltests:jar:<managed> +
 com.fasterxml.jackson.core:jackson-databind:jar:<managed> +
 com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:<managed> +
+com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:<managed> +
 com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 com.fasterxml.woodstox:woodstox-core:jar:<managed> +
@@ -1220,7 +1221,6 @@ o.a.i.core.metamodel.specloader.SpecificationLoaderDefault +
 o.a.i.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BigDecimalValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BigIntegerValueSemantics +
-o.a.i.core.metamodel.valuesemantics.BlobValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BookmarkValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BooleanValueSemantics +
 o.a.i.core.metamodel.valuesemantics.BufferedImageValueSemantics +
@@ -1961,7 +1961,7 @@ Directory: /persistence/jpa/eclipselink
 jakarta.el:jakarta.el-api:jar:3.0.3 +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-integration:jar:<managed> +
-org.eclipse.persistence:org.eclipse.persistence.jpa:jar:2.7.14 +
+org.eclipse.persistence:org.eclipse.persistence.jpa:jar:<managed> +
 org.springframework.boot:spring-boot-starter-data-jpa:jar:<managed> +
 ****
 
@@ -2508,7 +2508,7 @@ Directory: /viewers/commons/model
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
-org.webjars:font-awesome:jar:6.5.1 +
+org.webjars:font-awesome:jar:6.5.2 +
 ****
 
 |Apache Causeway Commons - Prism
@@ -3051,6 +3051,7 @@ com.approvaltests:approvaltests:jar:<managed> +
 com.fasterxml.jackson.module:jackson-module-jaxb-annotations:jar:<managed> +
 com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:jar:<managed> +
 com.github.vertical-blank:sql-formatter:jar:<managed> +
+com.google.code.gson:gson:jar:<managed> +
 com.h2database:h2:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
@@ -4902,7 +4903,7 @@ Directory: /extensions/vw/pdfjs/wicket/integration
 ****
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
-org.webjars.npm:pdfjs-dist:jar:3.11.174 +
+org.webjars.npm:pdfjs-dist:jar:4.2.67 +
 ****
 
 .Document Index Entries
@@ -5760,14 +5761,6 @@ Directory: /extensions/core/docgen
 ----
 |Provides a set of code mining features that can help building documentation for your application.
 
-.Components
-****
-o.a.i.extensions.docgen.topics.domainobjects.CausewayEntityDiagramPage +
-o.a.i.extensions.docgen.topics.domainobjects.DomainEntityDiagramPage +
-o.a.i.extensions.docgen.topics.domainobjects.EntityDiagramPageAbstract +
-o.a.i.extensions.docgen.topics.welcome.WelcomeHelpPage +
-****
-
 |Apache Causeway Ext - Docgen Help
 [source,yaml]
 ----
@@ -6452,230 +6445,6 @@ xref:refguide:extensions:index/tabular/excel/CausewayModuleExtTabularExcel.adoc[
 
 === Wicket Viewer: SSE
 
-== Tooling
-
-[plantuml,Tooling,svg]
-----
-@startuml
-set separator none
-title Tooling - Containers
-
-left to right direction
-
-skinparam {
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-
-hide stereotype
-
-skinparam rectangle<<Tooling.ApacheCausewayTooling>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling.ApacheCausewayToolingC4Modeling>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling.ApacheCausewayToolingCLICommandLineInterface>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling.ApacheCausewayToolingJavaModelCodeMining>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling.ApacheCausewayToolingJavatoAsciidocCodeMining>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling.ApacheCausewayToolingMetaProgramming>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling.ApacheCausewayToolingProjectModelCodemining>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<Tooling>> {
-  BorderColor #9a9a9a
-  FontColor #9a9a9a
-  shadowing false
-}
-
-rectangle "Tooling\n<size:10>[Software System]</size>" <<Tooling>> {
-  rectangle "==Apache Causeway Tooling\n<size:10>[Container: packaging: pom]</size>" <<Tooling.ApacheCausewayTooling>> as Tooling.ApacheCausewayTooling
-  rectangle "==Apache Causeway Tooling - C4 Modeling\n<size:10>[Container: packaging: jar]</size>" <<Tooling.ApacheCausewayToolingC4Modeling>> as Tooling.ApacheCausewayToolingC4Modeling
-  rectangle "==Apache Causeway Tooling - CLI (Command Line Interface)\n<size:10>[Container: packaging: jar]</size>" <<Tooling.ApacheCausewayToolingCLICommandLineInterface>> as Tooling.ApacheCausewayToolingCLICommandLineInterface
-  rectangle "==Apache Causeway Tooling - Java to Asciidoc (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<Tooling.ApacheCausewayToolingJavatoAsciidocCodeMining>> as Tooling.ApacheCausewayToolingJavatoAsciidocCodeMining
-  rectangle "==Apache Causeway Tooling - Java Model (Code Mining)\n<size:10>[Container: packaging: jar]</size>" <<Tooling.ApacheCausewayToolingJavaModelCodeMining>> as Tooling.ApacheCausewayToolingJavaModelCodeMining
-  rectangle "==Apache Causeway Tooling - Meta Programming\n<size:10>[Container: packaging: jar]</size>" <<Tooling.ApacheCausewayToolingMetaProgramming>> as Tooling.ApacheCausewayToolingMetaProgramming
-  rectangle "==Apache Causeway Tooling - Project Model (Code mining)\n<size:10>[Container: packaging: jar]</size>" <<Tooling.ApacheCausewayToolingProjectModelCodemining>> as Tooling.ApacheCausewayToolingProjectModelCodemining
-}
-
-Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToolingCLICommandLineInterface : "<color:#707070>"
-Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToolingJavatoAsciidocCodeMining : "<color:#707070>"
-Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToolingJavaModelCodeMining : "<color:#707070>"
-Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToolingMetaProgramming : "<color:#707070>"
-Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToolingProjectModelCodemining : "<color:#707070>"
-Tooling.ApacheCausewayTooling .[#707070,thickness=2].> Tooling.ApacheCausewayToolingC4Modeling : "<color:#707070>"
-@enduml
-----
-
-.Projects/Modules (Tooling)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Causeway Tooling
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling
-Type: pom
-Directory: /tooling
-----
-|Libraries and tools not depending on the _Apache Causeway Core_ ecosystem,
-eg. code mining, automated documentation.
-(Targeted for JVM 11+)
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.checkerframework:checker-qual:jar:3.42.0 +
-org.mapstruct:mapstruct-processor:jar:1.5.5.Final +
-org.projectlombok:lombok:jar:<managed> +
-org.slf4j:slf4j-api:jar:<managed> +
-org.springframework.boot:spring-boot-starter-log4j2:jar:<managed> +
-****
-
-|Apache Causeway Tooling - C4 Modeling
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling-c4modeling
-Type: jar
-Directory: /tooling/c4modeling
-----
-|Library for programmatic C4 Model generation.
-
-See https://c4model.com/
-
-.Dependencies
-****
-com.structurizr:structurizr-export:jar:<managed> +
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-****
-
-|Apache Causeway Tooling - CLI (Command Line Interface)
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling-cli
-Type: jar
-Directory: /tooling/cli
-----
-|Command Line Interface for the _Apache Causeway Tooling_ ecosystem.
-
-.Dependencies
-****
-info.picocli:picocli:jar:<managed> +
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.tooling:causeway-tooling-c4modeling:jar:<managed> +
-org.apache.causeway.tooling:causeway-tooling-java2adoc:jar:<managed> +
-org.apache.causeway.tooling:causeway-tooling-javamodel:jar:<managed> +
-org.apache.causeway.tooling:causeway-tooling-projectmodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-builder:jar:<managed> +
-****
-
-|Apache Causeway Tooling - Java to Asciidoc (Code Mining)
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling-java2adoc
-Type: jar
-Directory: /tooling/java2adoc
-----
-|Code mining library for Java source to Asciidoc conversion.
-
-.Dependencies
-****
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.tooling:causeway-tooling-javamodel:jar:<managed> +
-org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-builder:jar:<managed> +
-org.jsoup:jsoup:jar:<managed> +
-****
-
-|Apache Causeway Tooling - Java Model (Code Mining)
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling-javamodel
-Type: jar
-Directory: /tooling/javamodel
-----
-|Code mining library for Java bytecode introspection.
-
-.Dependencies
-****
-com.github.andi-huber:code-assert:jar:-SNAPSHOT +
-com.github.javaparser:javaparser-core:jar:${javaparser.version} +
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-****
-
-|Apache Causeway Tooling - Meta Programming
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling-metaprog
-Type: jar
-Directory: /tooling/metaprog
-----
-|Tools for Java meta-programming and runtime class generaton.
-
-.Dependencies
-****
-com.graphql-java:graphql-java:jar:<managed> +
-com.squareup:javapoet:jar:${javapoet.version} +
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:${project.version} +
-org.apache.logging.log4j:log4j-core:jar:<managed> +
-****
-
-|Apache Causeway Tooling - Project Model (Code mining)
-[source,yaml]
-----
-Group: org.apache.causeway.tooling
-Artifact: causeway-tooling-projectmodel
-Type: jar
-Directory: /tooling/projectmodel
-----
-|Code mining library for Gradle/Maven project module tree introspection.
-
-.Dependencies
-****
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.maven:maven-model-builder:jar:<managed> +
-org.gradle:gradle-tooling-api:jar:<managed> +
-****
-|===
-
 == Regression Tests
 
 [plantuml,Regression Tests,svg]
@@ -6920,31 +6689,7 @@ Artifact: causeway-regressiontests-base
 Type: jar
 Directory: /regressiontests/base
 ----
-|.Components
-****
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jdo.JdoTestFixtures +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.JpaTestFixtures +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
-o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
-o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
-o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
-o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
-o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-o.a.i.testdomain.wrapperfactory.CounterRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
@@ -7427,12 +7172,6 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
-.Components
-****
-o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
-o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
-****
-
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7457,16 +7196,6 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
-
-.Components
-****
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
-o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
-o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
-o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
-o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
-o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
-****
 
 .Dependencies
 ****

@@ -10,6 +10,7 @@ Provides supporting functionality for querying xref:refguide:extensions:index/au
 ----
 interface AuditTrailEntryRepository {
   AuditTrailEntry createFor(EntityPropertyChange change)
+  Can<AuditTrailEntry> createFor(Can<EntityPropertyChange> entityPropertyChanges)
   Optional<AuditTrailEntry> findFirstByTarget(Bookmark target)
   List<AuditTrailEntry> findRecentByTarget(Bookmark target)
   List<AuditTrailEntry> findRecentByTargetAndPropertyId(Bookmark target, String propertyId)

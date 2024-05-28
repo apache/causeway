@@ -13,6 +13,7 @@ Typically it's good practice to define a domain-specific service (eg `CustomerRe
 interface RepositoryService {
   EntityState getEntityState(Object object)     // <.>
   T detachedEntity(T entity)     // <.>
+  T execInBulk(Callable<T> callable)     // <.>
   T persist(T domainObject)     // <.>
   T persistAndFlush(T domainObject)     // <.>
   void persistAndFlush(Object... domainObjects)     // <.>
@@ -42,6 +43,11 @@ Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[Enti
 +
 --
 Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
+--
+<.> xref:#execInBulk_Callable[execInBulk(Callable)]
++
+--
+Executes the passed in _callable_ in bulk mode, meaning that the transaction will not be flushed within.
 --
 <.> xref:#persist_T[persist(T)]
 +
@@ -144,6 +150,13 @@ Usually called as a precursor to persisting a domain entity, this method verifie
 This approach allows the domain entity to have regular constructor (with parameters) to set up the initial state of the domain object. This is preferred over _#detachedEntity(Class)_ , which also instantiates the class and then injects into it - but requires that the domain object has a no-arg constructor to do so.
 
 This is the same functionality as exposed by _org.apache.causeway.applib.services.factory.FactoryService#detachedEntity(Object)_ . It is provided in this service as a convenience because instantiating and _#persist(Object) persisting_ an object are often done together.
+
+[#execInBulk_Callable]
+=== execInBulk(Callable)
+
+Executes the passed in _callable_ in bulk mode, meaning that the transaction will not be flushed within.
+
+Used for example by the audit trail extension, as a performance optimization.
 
 [#persist_T]
 === persist(T)

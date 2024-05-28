@@ -16,6 +16,7 @@ class JsonUtils {
   String toStringUtf8(Object pojo, JsonUtils.JacksonCustomizer... customizers)     // <.>
   ObjectMapper indentedOutput(ObjectMapper mapper)     // <.>
   ObjectMapper onlyIncludeNonNull(ObjectMapper mapper)     // <.>
+  ObjectMapper jdk8Support(ObjectMapper mapper)     // <.>
   ObjectMapper jaxbAnnotationSupport(ObjectMapper mapper)     // <.>
   ObjectMapper readingJavaTimeSupport(ObjectMapper mapper)     // <.>
   ObjectMapper writingJavaTimeSupport(ObjectMapper mapper)     // <.>
@@ -58,6 +59,11 @@ enable indentation for the underlying generator
 +
 --
 only properties with non-null values are to be included
+--
+<.> xref:#jdk8Support_ObjectMapper[jdk8Support(ObjectMapper)]
++
+--
+add support for JDK 8, e.g. _Optional_
 --
 <.> xref:#jaxbAnnotationSupport_ObjectMapper[jaxbAnnotationSupport(ObjectMapper)]
 +
@@ -121,6 +127,11 @@ enable indentation for the underlying generator
 === onlyIncludeNonNull(ObjectMapper)
 
 only properties with non-null values are to be included
+
+[#jdk8Support_ObjectMapper]
+=== jdk8Support(ObjectMapper)
+
+add support for JDK 8, e.g. _Optional_
 
 [#jaxbAnnotationSupport_ObjectMapper]
 === jaxbAnnotationSupport(ObjectMapper)

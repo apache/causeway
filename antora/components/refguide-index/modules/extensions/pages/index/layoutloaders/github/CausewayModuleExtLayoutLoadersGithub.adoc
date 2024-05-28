@@ -42,7 +42,6 @@ Append for example:
 Returns for example:
 
 ----
-
 {
   "total_count": 1,
   "incomplete_results": false,
