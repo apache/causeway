@@ -11,7 +11,7 @@
 ** xref:020-the-petclinic-domain.adoc#exercise-2-1-refactor-simpleobject-to-petowner[image:hand.png[] *2.1*: Refactor SimpleObject to PetOwner]
 
 * xref:030-petowner-entity.adoc[PetOwner entity]
-** xref:030-petowner-entity.adoc#exercise-3-1-add-petowners-knownAs-property[image:hand.png[] *3.1*: Add PetOwner's name property]
+** xref:030-petowner-entity.adoc#exercise-3-1-add-petowners-knownAs-property[image:hand.png[] *3.1*: Add PetOwner's knownAs property]
 ** xref:030-petowner-entity.adoc#exercise-3-2-define-PetOwners-title-imperatively[image:hand.png[] *3.2*: Define PetOwner's title imperatively]
 ** xref:030-petowner-entity.adoc#exercise-3-3-remaining-PetOwner-properties[image:hand.png[] *3.3*: Add remaining `PetOwner` properties]
 ** xref:030-petowner-entity.adoc#exercise-3-4-list-new-properties-of-PetOwner[image:hand.png[] *3.4*: List new properties of PetOwner]
@@ -62,8 +62,10 @@
 
 
 // LATER: other sections could include
+//  * xref:todo.txt[]
 //  * xref:further-business-logic-worked-examples.txt[]
 //  * xref:commands-and-auditing.txt[]
 //  * xref:restful-api.txt[]
+//  * xref:graphql-api.txt[]
 //  * xref:i18n.txt[i18n]
 //  * xref:architecture-rules.txt[]
