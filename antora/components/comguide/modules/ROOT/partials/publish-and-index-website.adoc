@@ -60,20 +60,14 @@ git push origin asf-site
 
 We use link:https://docsearch.algolia.com[Algolia] to build our search index.
 
-* If required, create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `causeway-site`:
-+
-[source,ini]
-.algolia.env
-----
-APPLICATION_ID=...
-API_KEY=...
-----
-+
-CAUTION: This file should not be checked into the repo, because the API_KEY allows the index to be modified or deleted.
+* If required, create a `algolia.env` file holding the `APP_ID` and the admin `API_KEY`, in the root of `causeway-site`; see xref:comguide:ROOT:algolia-search.adoc#create-the-algolia-env-file[appendix] for details.
 
-* If required, update the `algolia-config.json` file
+* If required, update the `algolia-config.json` file; see xref:comguide:ROOT:algolia-search.adoc#create-the-crawler-config[appendix] for details.
 +
-For example, update the `stop_urls` property with any paths that should not be crawled.
+In particular, update the `stop_urls` property with any paths that should not be crawled.
++
+NOTE: Our policy is to only index the most recent version.
+This avoids lots of duplication in the index; previous versions of the page are easily accessible.
 
 * Use the Algolia-provided link:https://hub.docker.com/r/algolia/docsearch-scraper[docker image] to crawl the web pages and create the search index:
 +

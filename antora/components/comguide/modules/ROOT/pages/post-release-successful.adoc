@@ -360,14 +360,7 @@ mvnd clean install -T1C -DskipTests -Dgithub
 popd
 ----
 
-* build module tooling
-+
-[source,bash,subs="attributes+"]
-----
-mvnd -D module-tooling -D skip.essential install -DskipTests
-----
-+
-NOTE: this now requires at least JDK 17 in order to build the `module-tooling` module that is used to generate some of the website.
+* if necessary, build the module tooling, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process.
 
 * generate the website:
 +
