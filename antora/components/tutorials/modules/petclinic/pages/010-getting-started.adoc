@@ -10,11 +10,11 @@ You'll need:
 
 * Java 11
 +
-Apache Causeway should work up to at least Java 15, but stick with Java 11 for now.
+Apache Causeway works up to at least Java 21, but stick with Java 11 for now.
 
-* Maven 3.6.x
+* Maven 3.9.x
 +
-Maven 3.6.x or later is recommended.
+Maven 3.9.x or later is recommended.
 
 * git
 +
@@ -25,21 +25,20 @@ This has multiple tags for the various checkpoints so you can pick up the tutori
 +
 The Apache Causeway website has detailed documentation for setting up to use xref:setupguide:intellij:about.adoc[IntelliJ] or xref:setupguide:eclipse:about.adoc[Eclipse].
 +
-For this tutorial, make sure that your IDE is configured to support Lombok.
+For this tutorial, also make sure that your IDE is configured to support Lombok.
 
 
 
 [#exercise-1-1-starter-apps-clone-the-repo]
 == Ex 1.1: Starter apps / clone the repo
 
-Apache Causeway provides a two starter apps, xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp].
+Apache Causeway provides two starter apps, xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp].
 These are identical in terms of functionality, but the simpleapp provides more structure and includes example tests.
 
 NOTE: there are JPA and JDO variants of the starter apps.
 This tutorial uses JPA as it is the more commonly used persistence mechanism.
 
 We start the tutorial simply with a copy of xref:docs:starters:simpleapp.adoc[SimpleApp]; in subsequent exercises we'll refactor and build upon it to morph it into the petclinic domain.
-
 
 * Clone the repo:
 +
@@ -59,6 +58,16 @@ This will make it easier to inspect differences between different tags.
 git checkout tags/01-01-starter-app
 mvn clean install
 ----
++
+[NOTE]
+====
+The code at this tag was created by copying the `v2-jpa` tag of xref:docs:starters:simpleapp.adoc[SimpleApp]:
+
+[source,bash]
+----
+curl https://codeload.github.com/apache/causeway-app-simpleapp/zip/v2-jpa | jar xv
+----
+====
 
 * run the app:
 +
@@ -93,13 +102,11 @@ Running from the command line isn't ideal, so
 
 * load the project into your IDE as a Maven project, build and run.
 
-* The app is a Spring boot application, so locate the class with a main, and run.
+* The app is a Spring boot application, so locate the class with a `main()` method, and run.
 
 * alternatively, your IDE might also have specialised support for Spring Boot apps, so run the app that way if you wish.
 
-* with the IDE load
-
-If you want to go deeper, open up the xref:docs:starters:simpleapp.adoc[page describing the SimpleApp] and start to explore the xref:docs:starters:simpleapp.adoc#structure-of-the-app[structure of the app] files.
+If you want to go deeper, use the xref:docs:starters:simpleapp.adoc[Simple App docs] to xref:docs:starters:simpleapp.adoc#structure-of-the-app[explore the structure] of the application.
 
 
 
@@ -111,10 +118,9 @@ Apache Causeway is an implementation of the _naked objects pattern_, which means
 [TIP]
 ====
 An ORM such as JPA (EclipseLink or Hibernate) maps domain objects into an RDBMS or other datastore.
-You can think of Apache Causeway (and naked objects) similarly, but it's an OIM - an object _interface_ mapper.
-It maps to the UI layer rather than the persistence layer.
+Apache Causeway does a similar trick, but in the opposite direction: it maps the domain objects to the UI layer.
 
-Common to both ORMs and OIMs is an internal metamodel; this is where much of the power comes from.
+Common to both is an internal metamodel, which is where much of the power comes from.
 ====
 
 We can explore this by looking at the classes provided by the starter app:
@@ -167,7 +173,7 @@ Typically this is static and in the same package as the class; see `SimpleObject
 
 *Mini-Exercise*:
 
-(No solution is provided for this exercise).
+(no solution is provided for this exercise).
 
 * replace the `@Title` annotation with a `title()` method:
 +
@@ -190,7 +196,7 @@ In many cases the details of that representation can be inferred directly from t
 For example the label of a field for an object's property (eg `SimpleObject#name`) can be derived directly from the name of the object property itself (`getName()`).
 
 In the absence of other metadata, Apache Causeway will render a domain object with its properties to the left-hand side and its collections (if any) to the right.
-The order of these properties and collections can be specified using the `@PropertyLayout` annotation and the `@CollectionLayout` annotation.
+The order of these properties and collections can be specified using the xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation and the xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] annotation.
 There are other annotations to group properties together and to associate action buttons with either properties or collections.
 
 The downside of using annotations is that changing the layout requires that the application be restarted, and certain more complex UIs, such as multi-columns or tab groups are difficult or impossible to express.
@@ -199,6 +205,8 @@ Therefore Apache Causeway also allows the layout of domain objects to be specifi
 This is modelled upon bootstrap and so supports arbitrary rows and columns as well as tab groups and tabs.
 
 *Mini-Exercise*:
+
+(no solution is provided for this exercise).
 
 * locate the `SimpleObject.layout.xml` file
 * compare the structure of the layout file to that of the rendered object
@@ -219,6 +227,8 @@ For more on this topic, see the section of the fundamentals guide describing xre
 In a similar fashion, the actions of the various domain services are grouped into menus using the `menubars.layout.xml` file.
 
 *Mini-Exercise*:
+
+(no solution is provided for this exercise).
 
 * locate the `menubars.layout.xml` file
 * compare the structure of the layout file to that of the rendered menu bar

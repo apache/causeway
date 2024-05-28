@@ -5,12 +5,73 @@
 :page-partial:
 
 
+This appendix describes the prerequisites for the xref:comguide:ROOT:cutting-a-release.adoc[release process].
+
+== Software
+
+Instructions here are for Linux.
+
+* jdk 21
++
+[source,bash]
+----
+sdk install java 21...
+----
++
+NOTE: for v2.x branch of Causeway we target Java 11 but we still build with the more recent version of Java.
+
+* mvn 3.9.7
++
+[source,bash]
+----
+sdk install maven 3.9.7
+----
+
+* groovy 3.x
++
+[source,bash]
+----
+sdk install groovy 3.0.21
+----
+
+* pandoc 2.x
++
+[source,bash]
+----
+sudo apt update
+sudo apt install pandoc
+----
+
+* dos2unix (if building on Windows)
+
+* Node LTS
++
+Antora recommend using `nvm` (Node version manager) to install Node:
+
+** install nvm
++
+[source,bash]
+----
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+----
+
+** install LTS version of node:
++
+[source,bash]
+----
+nvm install --lts
+----
+
+* Antora itself
++
+[source,bash]
+----
+npm i -g @antora/cli@^3.1.7 @antora/site-generator@^3.1.7 asciidoctor-kroki@0.17.0
+npm i -g serve@^13.0.2
+----
 
 
-
-
-
-This section (appendix) describes the prerequisites for the xref:comguide:ROOT:cutting-a-release.adoc[release process].
 
 == Public/private key
 
@@ -79,4 +140,44 @@ Also, set up keyphrase for `gpg`; this avoids being prompted during release:
   ...
 </activeProfiles>
 ----
+
+[#doc-tooling]
+== Doc Tooling
+
+NOTE: See also link:https://github.com/apache-causeway-committers/causewaystuff/blob/main/tooling/cli/README.adoc[causewaystuff] documentation.
+
+In the `apache-causeway-committers/causewaystuff` repo:
+
+* check out `main` branch
+
+* install/use Java 21
++
+For example:
++
+[source,java]
+----
+sdk use java 21...
+----
+
+* build the tooling
++
+[source,bash,subs="attributes+"]
+----
+mvn -D module-tooling install -Dskip.essential
+----
+
+In the regular `causeway` repo:
+
+* Create a symlink to the `causewaystuff-tooling-cli` jar file
++
+[source,bash]
+----
+mkdir -p tooling/cli/target
+pushd tooling/cli/target
+ln -s ../../../../../apache-causeway-committers/causewaystuff/tooling/cli/target/causewaystuff-tooling-cli-spring-boot.jar causewaystuff-tooling-cli.jar
+popd
+----
++
+NOTE: ADJUST PATH AS NECESSARY
+
 

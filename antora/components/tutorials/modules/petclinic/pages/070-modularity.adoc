@@ -8,29 +8,28 @@ If every class potentially can depend on any other class, we'll end up with a "b
 Instead, we need to ensure that the dependency graph between packages remains acyclic.
 The framework provides two main tools:
 
-* the first we've already seen is mixins.
+* the first we've already seen: mixins.
 +
-These allow us to locate busines logic in one module that "appears" to reside in another module.
+These allow us to locate business logic in one module that "appears" to reside in another module.
 Examples are the `visits` mixin collection and `bookVisit` mixin action that are both contributed by the `visits` module to the `Pet` entity in the `pets` module.
 
 * the second is domain events.
 +
-These we haven't yet seen, but provide a way for one module to react to (or to veto) actions performed in logic in another module.
+These provide a way for one module to react to (or to veto) actions performed in logic in another module.
 
-In this part of the tutorial we'll look at domain events.
+In this section we'll look at domain events.
 
 
 
 [#exercise-7-1-refactor-petowners-delete-action]
 == Ex 7.1: refactor PetOwner's delete action
 
-Currently the `delete` action for `PetOwner` is implemented as a mixin within the `Pet` package.
-That's a nice place for that functionality, because it can delete any `Pet`s for the `PetOwner` if any exist.
+Currently the `delete` action for `PetOwner` is broken: although the owner's ``Pet``s are automatically deleted when the `PetOwner` is itself deleted, if there are any ``Visit``s then the foreign key in the database will prevent deletion.
 
-However, we also have added `Visit`, which has the same issue: we cannot delete a `Pet` if there are associated ``Visit``s.
-And, in fact, we don't want to allow a `PetOwner` and their ``Pet``s from being deleted if there are ``Visit``s in the database; they might not have paid!
+In one sense this is good: we probably don't want to allow a `PetOwner` and their ``Pet``s from being deleted if there are ``Visit``s in the database; they might not have paid!
+However, we ought to have the business logic in the domain layer rather than rely on the database's foreign key.
 
-In this exercise we will move the responsibility to delete an action back to `PetOwner`, and then use subscribers for both `Pet` and `Visit` to cascade delete or to veto the action respectively if there are related objects.
+In this exercise we'll use domain events to cascade delete or to veto the action respectively if there are related objects.
 
 
 
@@ -43,116 +42,84 @@ mvn clean install
 mvn -pl spring-boot:run
 ----
 
-To test this out:
-
-* try deleting a `PetOwner` where none of their ``Pet``s have any ``Visit``s; the action should succeed, and the `PetOwner` and the ``Pet``s should all be deleted.
-
-* now book a `Visit` for a `Pet`, then navigate back to the parent `PetOwner` and attempt to delete it.
-This time the action should be vetoed, because of that `Visit`.
-
-
 === Tasks
 
-* in `PetOwner_delete` remove the code that deletes the ``Pet``s.
-In its place, define a subclass of xref:refguide:applib-classes:events.adoc#domain-event-classes[ActionDomainEvent] as a nested class of the mixin, and reference in the xref:refguide:applib:index/annotation/Action.adoc#domainEvent[@Action#domainEvent] attribute.
+* (optional) confirm that although it's not possible to delete a `PetOwner` if there are corresponding ``Visit``s, the error we get back is a database exception
+
+* in `PetOwner`, modify the `delete` action so that it emits a specific domain event type.
 +
 [source,java]
-.PetOwner_delete.java
+.PetOwner.java
 ----
-@Action(
-        domainEvent = PetOwner_delete.ActionEvent.class,            // <.>
-        semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE,
-        commandPublishing = Publishing.ENABLED,
-        executionPublishing = Publishing.ENABLED
-)
-@ActionLayout(
-        associateWith = "name", position = ActionLayout.Position.PANEL,
-        describedAs = "Deletes this object from the persistent datastore")
-@RequiredArgsConstructor
-public class PetOwner_delete {
+    public static class DeleteActionDomainEvent
+            extends org.apache.causeway.applib.events.domain.ActionDomainEvent<PetOwner> {}     // <.>
 
-    public static class ActionEvent                                 // <.>
-            extends ActionDomainEvent<PetOwner_delete>{}
-
-    private final PetOwner petOwner;
-
-    public void act() {
-        repositoryService.remove(petOwner);
-        return;
-    }
-
-    @Inject RepositoryService repositoryService;
-}
+    @Action(
+            semantics = NON_IDEMPOTENT_ARE_YOU_SURE,
+            domainEvent = DeleteActionDomainEvent.class                                         // <.>
+    )
+    @ActionLayout(
+            describedAs = "Deletes this object from the persistent datastore")
+    public void delete() { ... }
 ----
 <.> specifies the domain event to emit when the action is called
 <.> declares the action event (as a subclass of the framework's xref:refguide:applib-classes:events.adoc#domain-event-classes[ActionDomainEvent]).
++
+NOTE: in fact, domain events are always emitted; but by default a generic `ActionDomainEvent` is used rather than a specific subclass.
 
 * create a subscriber in the `pets` package to delete all ``Pet``s when the `PetOwner_delete` action is invoked:
 +
 [source,java]
-.PetOwnerForPetsSubscriber.java
+.PetOwner_delete_subscriber.java
 ----
-@Service
-public class PetOwnerForPetsSubscriber {
+@Component
+public class PetOwner_delete_subscriber {
 
-    @EventListener(PetOwner_delete.ActionEvent.class)
-    public void on(PetOwner_delete.ActionEvent ev) {
-        switch(ev.getEventPhase()) {
-            case EXECUTING:                                             // <.>
-                PetOwner petOwner = ev.getSubject();                    // <.>
-                List<Pet> pets = petRepository.findByPetOwner(petOwner);
-                pets.forEach(repositoryService::remove);
+    @EventListener(PetOwner.DeleteActionDomainEvent.class)  // <.>
+    void on(PetOwner.DeleteActionDomainEvent event) {       // <1>
+        PetOwner subject = event.getSubject();              // <.>
+        switch (event.getEventPhase()) {                    // <.>
+            case HIDE:
                 break;
-        }
-    }
-
-    @Inject PetRepository petRepository;
-    @Inject RepositoryService repositoryService;
-}
-----
-<.> events are emitted at different phases.
-The `EXECUTING` phase is fired before the delete action itself is fired, so is the ideal place for us to perform the cascade delete.
-<.> is the mixee of the mixin that is emitting the event.
-
-* create a subscriber in the `visits` module to veto the `PetOwner_delete` if there are any `Pet`s of the `PetOwner` with at least one `Visit`:
-+
-[source,java]
-.PetOwnerForVisitsSubscriber.java
-----
-@Service
-public class PetOwnerForVisitsSubscriber {
-
-    @EventListener(PetOwner_delete.ActionEvent.class)
-    public void on(PetOwner_delete.ActionEvent ev) {
-        switch(ev.getEventPhase()) {
-            case DISABLE:
-                PetOwner petOwner = ev.getSubject();
-                List<Pet> pets = petRepository.findByPetOwner(petOwner);
-                for (Pet pet : pets) {
-                    List<Visit> visits = visitRepository.findByPetOrderByVisitAtDesc(pet);
-                    int numVisits = visits.size();
-                    if(numVisits > 0) {
-                        ev.disable(String.format("%s has %d visit%s",
-                                titleService.titleOf(pet),
-                                numVisits,
-                                numVisits != 1 ? "s" : ""));
-                    }
+            case DISABLE:                                   // <.>
+                List<Visit> visits = visitRepository.findByPetOwner(subject);
+                if (!visits.isEmpty()) {
+                    event.veto("This owner has %d visit%s", visits.size(), (visits.size() == 1 ? "" : "s"));
                 }
                 break;
+            case VALIDATE:
+                break;
+            case EXECUTING:
+                break;
+            case EXECUTED:
+                break;
         }
     }
 
-    @Inject TitleService titleService;
     @Inject VisitRepository visitRepository;
-    @Inject PetRepository petRepository;
 }
 ----
+<.> subscribes to the event using Spring `@EventListener`
+<.> returns the effective originator of the event.
+This works for both regular actions and mixin actions
+<.> the subscriber is called multiple times, for the various phases of the execution lifecycle; more on this below
+<.> if there are any ``Visit``s for this pet owner, then veto the interaction.
+In the user interface, the "delete" button will be disabled, that is greyed out.
+The returned string is used as the tooltip to explain _why_ the button is disabled.
 
+The event lifecycle allows subscribers to veto (in other words, specify preconditions) in three different ways:
 
-=== Optional Exercise
+* hide - will hide the action's button in the UI completely
+* disable - will disable (grey) out the action's button
+* validate - will prevent the button from being pressed.
+this case applies when validating the action arguments.
 
+If the action is not vetored, then the subscriber is also possible to perform additional steps:
 
-Improve the implementation of `PetOwnerForVisitsSubscriber` so that it performs only a single database query to find if there are any ``Visit`` for the `PetOwner`.
+* executing - the action is about to execute.
+* executed - the action is just execute
 
+For example, if the business rule had instead been to simply delete all ``Visit``s, then this could have been implemented in the "executing" phase.
 
-
+TIP: it's also worth knowing that these events are fired for properties and collections as well as actions.
+Therefore subscribers can substantially dictate what is accessible for any given domain object.

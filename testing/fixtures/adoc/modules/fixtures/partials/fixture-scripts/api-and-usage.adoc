@@ -192,6 +192,7 @@ This was demonstrated in the <<fixturescript, previous section>>
 The latter use case is much less frequently used, but can be helpful for example in demos, where the number of objects can be specified in the `parameters` parameter of the xref:refguide:testing:index/fixtures/applib/fixturescripts/FixtureScripts.adoc#runFixtureScript_String_String[run fixture script] action.
 
 
+[#personas-and-builders]
 == Personas and Builders
 
 Good integration tests are probably the best way to understand the behaviour of the domain model: better, even, than reading the code itself.
