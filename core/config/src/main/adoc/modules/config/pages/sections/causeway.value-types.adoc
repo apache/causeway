@@ -76,6 +76,123 @@ request-timeout
 | Max time for requests to the ``#getBackendUrl()``, when waiting for a response. (default: 5 seconds)
 
 
+|
+[[causeway.value-types.temporal.editing.date-pattern]]
+causeway.value-types.temporal. +
+editing.date-pattern
+
+|  yyyy-MM-dd
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.date-time-joining-pattern]]
+causeway.value-types.temporal. +
+editing.date-time-joining-pattern
+
+|  %1$s %2$s
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.offset-pattern-for-input]]
+causeway.value-types.temporal. +
+editing.offset-pattern-for-input
+
+|  [XXX][X]
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.offset-pattern-for-output]]
+causeway.value-types.temporal. +
+editing.offset-pattern-for-output
+
+|  XXX
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.time-pattern-hour]]
+causeway.value-types.temporal. +
+editing.time-pattern-hour
+
+|  HH
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.time-pattern-micro-second]]
+causeway.value-types.temporal. +
+editing.time-pattern-micro-second
+
+|  HH[:mm[:ss][.SSSSSS]]
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.time-pattern-milli-second]]
+causeway.value-types.temporal. +
+editing.time-pattern-milli-second
+
+|  HH[:mm[:ss][.SSS]]
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.time-pattern-minute]]
+causeway.value-types.temporal. +
+editing.time-pattern-minute
+
+|  HH[:mm]
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.time-pattern-nano-second]]
+causeway.value-types.temporal. +
+editing.time-pattern-nano-second
+
+|  HH[:mm[:ss][.SSSSSSSSS]]
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.time-pattern-second]]
+causeway.value-types.temporal. +
+editing.time-pattern-second
+
+|  HH[:mm[:ss]]
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.zone-id-pattern-for-input]]
+causeway.value-types.temporal. +
+editing.zone-id-pattern-for-input
+
+|  VV
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.zone-id-pattern-for-output]]
+causeway.value-types.temporal. +
+editing.zone-id-pattern-for-output
+
+|  VV
+| null
+
+
+|
+[[causeway.value-types.temporal.editing.zone-joining-pattern]]
+causeway.value-types.temporal. +
+editing.zone-joining-pattern
+
+|  %1$s %2$s
+| null
+
+
 
 |===
 

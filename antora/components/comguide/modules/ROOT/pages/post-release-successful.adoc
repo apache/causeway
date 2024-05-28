@@ -360,9 +360,7 @@ mvnd clean install -T1C -DskipTests -Dgithub
 popd
 ----
 
-* if necessary, build the module tooling
-+
-See link:https://github.com/apache-causeway-committers/causewaystuff/blob/main/tooling/cli/README.adoc[causewaystuff] documentation for more details.
+* if necessary, build the module tooling, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process.
 
 * generate the website:
 +

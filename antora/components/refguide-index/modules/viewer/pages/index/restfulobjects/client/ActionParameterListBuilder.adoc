@@ -7,6 +7,8 @@
 .ActionParameterListBuilder.java
 ----
 class ActionParameterListBuilder {
+  ActionParameterListBuilder()     // <.>
+  ActionParameterListBuilder(RestfulClient restfulClient)
   ActionParameterListBuilder addActionParameter(String parameterName, String parameterValue)
   ActionParameterListBuilder addActionParameter(String parameterName, int parameterValue)
   ActionParameterListBuilder addActionParameter(String parameterName, long parameterValue)
@@ -15,11 +17,26 @@ class ActionParameterListBuilder {
   ActionParameterListBuilder addActionParameter(String parameterName, double parameterValue)
   ActionParameterListBuilder addActionParameter(String parameterName, float parameterValue)
   ActionParameterListBuilder addActionParameter(String parameterName, boolean parameterValue)
+  ActionParameterListBuilder addActionParameter(String parameterName, Blob blob)
+  ActionParameterListBuilder addActionParameter(String parameterName, Clob clob)
+  ActionParameterListBuilder addActionParameter(String parameterName, Map<String, Object> map)
+  ActionParameterListBuilder addActionParameter(String parameterName, Bookmark bookmark)
+  ActionParameterListBuilder addActionParameter(String parameterName, Class<T> type, T object)
   ActionParameterListBuilder addActionParameter(String parameterName, ValueDecomposition decomposition)     // <.>
   Entity<String> build()
 }
 ----
 
+<.> xref:#ActionParameterListBuilder_[ActionParameterListBuilder()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _RestfulClient#arguments()_
+====
+--
 <.> xref:#addActionParameter_String_ValueDecomposition[addActionParameter(String, ValueDecomposition)]
 +
 --
@@ -27,6 +44,16 @@ For transport of _ValueDecomposition_ over REST.
 --
 
 == Members
+
+[#ActionParameterListBuilder_]
+=== ActionParameterListBuilder()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+- use _RestfulClient#arguments()_
+====
 
 [#addActionParameter_String_ValueDecomposition]
 === addActionParameter(String, ValueDecomposition)

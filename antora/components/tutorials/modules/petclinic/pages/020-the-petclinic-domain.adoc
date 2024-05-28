@@ -29,36 +29,373 @@ Some of the use cases we might want to support include:
 This tutorial has worked solutions for all of these.
 
 [#exercise-2-1-refactor-simpleobject-to-petowner]
-== Ex 2.1: Refactor `SimpleObject` to `PetOwner`
+== Ex 2.1: Create a new `pets` module with `PetOwner`
 
-To start with, let's rename the `SimpleObject` entity to `PetOwner`
+Using the `simple` module as a guide, we'll create a new `petowners` module and create a `PetOwner` and `PetOwners` domain service as reference.
+(We leave the `simple` module untouched, to use as a reference).
+
 
 === Solution
 
 [source,bash]
 ----
-git checkout tags/02-01-renames-SimpleObject-to-PetOwner
+git checkout tags/02-01-copies-SimpleObject-to-PetOwner
 mvn clean install
 mvn -pl spring-boot:run
 ----
 
 === Tasks
 
-Just checkout the solution above and review the git history to see the changes that have already been made.
-These include:
+To save time, just checkout the solution tag above and review the git history to see the classes that were copied and renamed:
 
-* Domain classes renamed (along with corresponding tests)
-
-** `SimpleObject` entity -> `PetOwner`
-** `SimpleObjects` domain service -> `PetOwners`
+* `dom.petowner` package:
+** `SimpleObject` -> `PetOwner` (entity)
++
+plus related `.layout.xml`, `.png` and `.columnOrder.txt` files
+** `SimpleObjects` -> `PetOwners` (domain service)
 ** `SimpleObjectRepository` repository service -> `PetOwnerRepository`
+** `SimpleModule` -> `PetOwnerModule` (module)
+* `fixture` package:
+** `PetOwner_persona` (fixture script)
+* `types` package
+** `Name` (meta annotation)
+** `Notes` (meta annotation)
+* root package of module
+** `PetOwnerModule` (Spring `@Configuration`, aka module class)
 
-** Infrastructure classes renamed
+* In the `PetOwnerModule`, the namespace and schema constants were changed:
++
+[source, java]
+.PetOwnerModule.java
+----
+// ...
+public class PetOwnerModule implements ModuleWithFixtures {
 
-** `SimpleModule` -> `PetsModule`
-** `SimpleApp` -> `PetClinicApp`
+    public static final String NAMESPACE = "petowner";
+    public static final String SCHEMA = "petowner";
+
+    // ...
+}
+----
+
+* in `application.properties`, the "petowner" schema was also added to the xref:refguide:config:sections/causeway.persistence.schema.adoc#causeway.persistence.schema.auto-create-schemas[causeway.persistence.schema.auto-create-schemas] config property:
++
+[source,properties]
+.application.properties
+----
+causeway.persistence.schema.auto-create-schemas=petowner,simple,...
+----
+
+Resource classes were also copied.
+
+In addition, the new Maven module was defined in the top-level `pom.xml`, and included in `<modules>`.
+
+Confirm that the code still builds:
+
+[source,bash]
+----
+mvn install
+----
+
+However, if you run the app confirm that it is still showing just the original `simpleapp` module:
+
+[source,bash]
+----
+mvn -pl webapp spring-boot:run
+----
+
+We'll fix this in the next exercise.
 
 
-Build and run the application (note that the main class has changed) to make sure it still runs fine.
+[#exercise-2-2-configure-the-app-to-include-the-petowner-module]
+== Ex 2.2: Configure the app to include the `petowner` module
+
+We have our new `petowner` module, but we're not actually using it; if we run the application we still see the original `simpleapp` module.
+
+[source,bash]
+----
+mvn -pl webapp spring-boot:run
+----
+
+In this exercise we'll update the app to include `petowners` as well.
 
 
+=== Solution
+
+[source,bash]
+----
+git checkout tags/02-02-configure-the-app-to-include-petowner
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+Rename the main class that acts as the entry point for the app (annotated with `@@SpringBootApplication`):
+
+* locate the `SimpleApp` class and rename to `PetClinicApp`
+
+* Also update classes that reference this type (in particular, in `pom.xml`).
++
+Your IDE can probably do this for you automatically.
+
+The `PetClinicApp` main class references the `AppManifest`, a top-level Spring `@Configuration` which imports all the other classes.
+
+* Inspect the `AppManifest` class: most will be ``CausewayXxxModule``s
+* note that it also imports the `ApplicationModule`, which defines your own modules which make up the application
+
+We want to update `ApplicationModule` to reference `PetOwnerModule`.
+We need to change both Maven and then Spring:
+
+* in the `pom.xml` (of the `webapp` module), add in a dependency to the `petowner` module:
++
+[source,xml]
+.webapp/pom.xml
+----
+<dependencies>
+
+    <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>simpleapp-jpa-module-petowner</artifactId>
+    </dependency>
+    ...
+<dependencies>
+----
++
+You might need to reimport or refresh so that your IDE rebuilds its classpath.
+
+* in the `ApplicationModule`, update the `@Import` to reference the `PetOwnerModule`:
++
+[source,java]
+.Application.java
+----
+@Configuration
+@Import({
+        PetOwnerModule.class,   //<.>
+        SimpleModule.class,
+})
+@ComponentScan
+public class ApplicationModule {
+
+}
+----
+<.> add this import
+
+Run up the application using the IDE or from maven command line.
+Although everything looks good, in fact you won't see any change.
+That's because the simpleapp starter app includes the xref:security:secman:about.adoc[SecMan] security module, for users, roles and permissions.
+We'll fix this in the next exercise.
+
+
+[#exercise-2-3-add-security-role-for-petowner-module]
+== Ex 2.3: Add security role for the `petowner` module
+
+In this exercise we'll add a security role to grant access to our new `petowner` module, and we'll make sure that our "sven" demo user is a member of this role.
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/02-03-add-security-role-for-petowner
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+The starter app is configured to use an in-memory database.
+The xref:security:secman:about.adoc[SecMan] roles and permissions are therefore set up each time the applicatoin is bootstrapped, using a fixture scripts.
+We'll learn more about fixture scripts and their role in testing in a later exercise.
+For now, all that's necessary to know is that we can use them to set up the roles.
+
+* Locate the `CustomRolesAndUsers` fixture script class
+
+* within it, copy the existing `SimpleModuleSuperuserRole` to create a similar `PetOwnerModuleSuperuserRole`:
++
+[source,java]
+.CustomRolesAndUsers.java
+----
+private static class PetOwnerModuleSuperuserRole
+        extends AbstractRoleAndPermissionsFixtureScript {
+
+    public static final String ROLE_NAME = "petowner-superuser";
+
+    public PetOwnerModuleSuperuserRole() {
+        super(ROLE_NAME, "Permission to use everything in the 'petowner' module");
+    }
+
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        newPermissions(
+                ApplicationPermissionRule.ALLOW,
+                ApplicationPermissionMode.CHANGING,
+                Can.of(ApplicationFeatureId.newNamespace("petowner"))
+        );
+    }
+}
+----
+
+* further down in the same class, update the fixture script for the "sven" end-user, and add them into our new role:
++
+[source,java]
+.CustomRolesAndUsers.java
+----
+private static class SvenUser extends AbstractUserAndRolesFixtureScript {
+    ...
+
+    private static class RoleSupplier implements Supplier<Can<String>> {
+        @Override
+        public Can<String> get() {
+            return Can.of(
+                    causewayConfiguration.getExtensions().getSecman().getSeed().getRegularUser().getRoleName(), // built-in stuff
+                    PetOwnerModuleSuperuserRole.ROLE_NAME,  // <.>
+                    SimpleModuleSuperuserRole.ROLE_NAME
+                    );
+        }
+        @Inject CausewayConfiguration causewayConfiguration;
+    }
+}
+----
+<.> reference new role.
+
+* and in the `execute()` method at top of the class, remember to include the call to the new fixture script:
++
+[source,java]
+.CustomRolesAndUsers.java
+----
+@Override
+protected void execute(ExecutionContext executionContext) {
+    executionContext.executeChildren(this,
+            new SimpleModuleSuperuserRole(),
+            new PetOwnerModuleSuperuserRole(),      // <.>
+            new SvenUser());
+}
+----
+<.> Remember to call the new module
+
+
+Now run the application from the IDE or Maven:
+
+* The menubar should now show a new "Other" menu - these are the now-visible actions arising from the `PetOwners` domain service.
+
+* Create a new `PetOwner` using "Other > Create".
++
+The resultant object will look identical in structure to a `SimpleObject`, but you can confirm that it is indeed an instance of a `PetOwner` by hovering over the title or icon and checking the tooltip.
+
+The fact that the `PetOwners` domain service's actions are displayed automatically is an important principle of the _naked objects pattern_ as implemented by Apache Causeway.
+
+[#exercise-2-4-update-menubar-for-PetOwners]
+== Ex 2.4: Update menubar for PetOwners
+
+Let's now update the menu bar so that the actions to create ``PetOwner``s live under an appropriately named menu, "Pet Owners".
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/02-04-update-menubar-for-petowners
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* Locate the `menubars.layout.xml` file.
++
+You should find it in `src/main/resources` (in the `webapp` module).
+
+* Add in the following XML, under the `<mb3:primary>` tag:
++
+[source,xml]
+.menubars.layout.xml
+----
+<mb3:primary>
+    <mb3:menu>
+        <mb3:named>Pet Owners</mb3:named>
+        <mb3:section>
+            <mb3:serviceAction objectType="petowner.PetOwners" id="create"/>
+            <mb3:serviceAction objectType="petowner.PetOwners" id="findByName"/>
+            <mb3:serviceAction objectType="petowner.PetOwners" id="findByNameLike"/>
+            <mb3:serviceAction objectType="petowner.PetOwners" id="listAll"/>
+        </mb3:section>
+    </mb3:menu>
+...
+</mb3:primary>
+----
++
+The `objectType` attribute corresponds to the `@Named` value of the `PetOwners` domain service (its "logical type name"), while the `id` attribute matches the method name of each action.
+
+Run the application; the menubar should be updated correctly.
+
+
+[#exercise-2-5-setup-demo-PetOwners]
+== Ex 2.5: Set up demo PetOwners
+
+xref:testing:fixtures:about.adoc#fixture-scripts[Fixture scripts] are used for both prototyping and for integration testing, allowing us to quickly create demo data in the H2 in-memory database.
+
+The xref:testing:fixtures:about.adoc#personas-and-builders[persona] pattern lets us define example data in an enum (the "what"), while a companion builder uses that data to set up the corresponding domain entities (the "how").
+
+In this exercise we'll modify the `PetOwners_persona` (copied from `SimpleObjects_persona` earlier) to create more realistic data.
+
+We'll also update the existing top-level `DomainAppDemo` fixture script, so that it will recreate our new ``PetOwner``s.
+This will allow us to quickly create a whole set of `PetOwner` objects from the "Prototyping" menu.
+
+
+=== Solution
+
+[source,bash]
+----
+git checkout tags/02-05-setup-demo-petowners
+mvn clean install
+mvn -pl spring-boot:run
+----
+
+=== Tasks
+
+* locate the `PetOwners_persona` class, and refactor the enum constants and values to create 10 realistic pet owner names
++
+[source,java]
+.PetOwners_persona.java
+----
+@RequiredArgsConstructor
+public enum PetOwner_persona
+implements Persona<PetOwner, PetOwner_persona.Builder> {
+
+    JAMAL("Jamal Washington", "jamal.pdf", "J"),
+    CAMILA("Camila González", "camila.pdf", null),
+    ARJUN("Arjun Patel", "arjun.pdf", null),
+    NIA("Nia Robinson", "nia.pdf", null),
+    OLIVIA("Olivia Hartman", "olivia.pdf", null),
+    LEILA("Leila Hassan", "leila.pdf", null),
+    MATT("Matthew Miller", "matt.pdf", "Matt"),
+    BENJAMIN("Benjamin Thatcher", "benjamin.pdf", "Ben"),
+    JESSICA("Jessica Raynor", "jessica.pdf", "Jess"),
+    DANIEL("Daniel Keating", "daniel.pdf", "Dan");
+
+    ...
+}
+----
+
+* create new `.pdf` files each pet owner, to store a "veterinary clinic service agreement" for each.
++
+The solution already provides these `.pdf` files, so you might want to borrow them.
+
+* locate the `DomainAppDemo` class and update:
++
+[source,java]
+.DomainAppDemo.java
+----
+@Override
+protected void execute(final ExecutionContext ec) {
+    ec.executeChildren(this, moduleWithFixturesService.getTeardownFixture());
+    ec.executeChild(this, new PetOwner_persona.PersistAll());   // <.>
+}
+----
+<.> change to set up ``PetOwner``s (rather than ``SimpleObject``s, as before)
+
+
+Test that you can quickly create a whole set of `PetOwner` objects
+from the "Prototyping" menu:
+
+* menu:Prototyping[Run Fixture Script] and select "Domain App Demo", or
+* menu:Prototyping[Recreate Objects and Return First].

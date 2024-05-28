@@ -56,7 +56,6 @@ Acts as a no-op.
 Example:
 
 ----
-
 var sb = new StringBuffer();
 var dataSink = DataSink.ofStringUtf8Consumer(sb);
 //... write to dataSink

@@ -387,8 +387,14 @@ eclipselink.validation-only
 [[eclipselink.weaving]]
 eclipselink.weaving
 
-| 
-| @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#weaving[eclipse.weaving]
+|  false
+| Options are
+
+* true: Weave the entity classes dynamically.
+* false: Do not weave the entity classes.
+* static: Weave the entity classes statically.
+
+@see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#weaving[eclipse.weaving]
 
 
 |

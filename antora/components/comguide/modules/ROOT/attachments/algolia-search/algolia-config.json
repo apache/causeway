@@ -1,0 +1,26 @@
+{
+  "index_name": "causeway-apache-org",
+  "start_urls": [
+    "https://causeway.apache.org"
+  ],
+  "sitemap_urls": [
+    "https://causeway.apache.org/sitemap.xml"
+  ],
+  "stop_urls": [
+    "https://causeway[.]apache[.]org/(docs|comguide|conguide|setupguide|relnotes|refguide|userguide|core|security|extensions|valuetypes|vro|vw|pjdo|pjpa|testing|tutorials|incubator|regressiontests)/(2.0.0|2.0.0-RC2|2.0.0-RC1|2.0.0-M9|2.0.0-M8|2.0.0-M7|2.0.0-M6|2.0.0-M5)/.*",
+    "https://causeway[.]apache[.]org/versions/(1.17.0|1.16.2|1.16.1|1.16.0|1.15.1|1.15.0|1.14.0|1.13.2|1.13.2|1.13.1|1.13.0|1.12.2|1.12.1|1.12.0|1.11.1|1.11.0)/.*"
+  ],
+  "selectors": {
+    "lvl0": {
+      "selector": "//nav[@class='breadcrumbs']//li[last()]/a",
+      "type": "xpath",
+      "global": true,
+      "default_value": "Home"
+    },
+    "lvl1": ".doc h1"
+  ,"lvl2": ".doc h2"
+  ,"lvl3": ".doc h3"
+  ,"lvl4": ".doc h4"
+  ,"text": ".doc p, .doc td.content, .doc th.tableblock"
+  }
+}

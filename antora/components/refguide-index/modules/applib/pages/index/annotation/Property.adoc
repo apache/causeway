@@ -136,7 +136,6 @@ Subscribers of this event can interact with the business rule checking (hide, di
 For example:
 
 ----
-
 public static class StartDateChanged extends PropertyDomainEvent { ... }
 
 @Property(domainEvent=StartDateChanged.class)

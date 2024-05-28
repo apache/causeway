@@ -1,5 +1,5 @@
 * xref:core:ROOT:about.adoc[Overview]
 ** xref:core:_overview:about.adoc[Maven modules]
-//** xref:core:ROOT:_todo.adoc[]
+//** xref:core:ROOT:todo.txt[]
 
 

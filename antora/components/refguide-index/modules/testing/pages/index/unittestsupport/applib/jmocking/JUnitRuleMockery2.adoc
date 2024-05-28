@@ -4,7 +4,6 @@
 Use as a `@Rule` , meaning that the `@RunWith(JMock.class)` can be ignored.
 
 ----
-
 public class MyTest {
 
     @Rule

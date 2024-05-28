@@ -45,20 +45,46 @@ The "asf-site" branch is what is published, and the content of the site resides 
 +
 CAUTION: the "admin API" should not be made public, as it allows the index to be modified or deleted.
 
+
+[#create-the-crawler-config]
 == Create the Crawler config
 
 We use Algolia's link:https://docsearch.algolia.com/docs/scraper/[DocSearch crawler] tool (also called the scraper) to index over the static html files to populate the index records.
-A config file describes how to process the files
+A config file describes how to process the files.
 
 [source,json]
 .algolia-config.json
 ----
-include::attachment$algolia-search/config.json[]
+include::attachment$algolia-search/algolia-config.json[]
 ----
 
-The config file reference can be found link:https://docsearch.algolia.com/docs/config-file[here].
+The `stop_urls` property with any paths that should not be crawled.
 
-This has been checked into causeway-site as `./algolia-config.json`.
+[NOTE]
+====
+Our policy is to only index the most recent version.
+This avoids lots of duplication in the index; previous versions of the page are easily accessible.
+====
+
+The config file reference for this file can be found link:https://docsearch.algolia.com/docs/config-file[here].
+
+The file itself resides in the `https://github.com/apache/causeway-site` repo (in the `asf-site` branch).
+
+
+[#create-the-algolia-env-file]
+== Create the algolia.env file
+
+The `algolia.env` file provides credentials to populate the search index maintained by the algolia service.
+
+[source,ini]
+.algolia.env
+----
+include::attachment$algolia-search/algolia.env[]
+----
+
+The `API_KEY` is available in the `1password.com` vault shared between all Causeway committers.
+
+The file itself resides in the `https://github.com/apache/causeway-site` repo (in the `asf-site` branch)
 
 
 == Update the Antora UI bundle
@@ -80,8 +106,8 @@ There are other options for styling, see link:https://docsearch.algolia.com/docs
 
 The remaining steps are routine and performed each time there is a change to the site:
 
-* xref:post-release-successful.adoc#generate-website[Generate website] and then
-* xref:post-release-successful.adoc#update-index-html-site-yml-generate[Index the site], and then
-* xref:post-release-successful.adoc#publish-website[Publish website].
+* xref:post-release-successful.adoc#generate-website[generate website]
+* xref:post-release-successful.adoc#publish-website[publish website].
+* xref:post-release-successful.adoc#update-the-algolia-search-index[update the algolia search index]
 
 And you're done.

@@ -3,20 +3,24 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+To page describes how to update the website _between_ releases.
+
 As part of the release process we xref:post-release-successful.adoc#generate-website[generate] and publish the website.
+<<<<<<< HEAD
 An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayrelv3}`).
 This branch can then be used for documentation updates.
+=======
+An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayprevv2}` or `{page-causewayprevv3}).
+>>>>>>> refs/remotes/origin/master
 
-== Update docs
+If we need to make a change:
 
-Prereqs:
+* make the change on `master` as normal (so that the docs will be there for the next release)
+* cherry-pick the changes onto these documentation branches.
 
-* jdk 11
-* mvn 3.x
-* groovy 3.x
-* pandoc 2.x
-* dos2unix
+Then publish as per the main release process:
 
+<<<<<<< HEAD
 In the regular `causeway` repo:
 
 * Check out the branch:
@@ -54,9 +58,11 @@ mvn clean install -pl core/config
 ====
 
 This updated website is written to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
+=======
+* xref:comguide:ROOT:post-release-successful.adoc#generate-the-site[generate the site]
+* xref:comguide:ROOT:post-release-successful.adoc#publish-website[publish the site].
+* xref:comguide:ROOT:post-release-successful.adoc#update-the-algolia-search-index[update the algolia search index]
+>>>>>>> refs/remotes/origin/master
 
 
-
-
-include::partial$publish-and-index-website.adoc[]
-
+Prereqs (software and doc tooling) are summarised in xref:comguide:ROOT:release-process-prereqs.adoc[].

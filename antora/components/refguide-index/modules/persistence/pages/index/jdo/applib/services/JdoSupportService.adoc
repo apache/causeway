@@ -90,7 +90,6 @@ To perform the most common use-case of executing a (type-safe) query against the
 Typical usage:
 
 ----
-
          final QToDoItem q = QToDoItem.candidate();
          return executeQuery(ToDoItem.class,
                              q.atPath.eq(atPath).and(
@@ -107,7 +106,6 @@ To perform a common use-case of executing a (type-safe) query against the specif
 Typical usage:
 
 ----
-
          final QToDoItem q = QToDoItem.candidate();
          return executeQueryUnique(ToDoItem.class,
                              q.atPath.eq(atPath).and(
