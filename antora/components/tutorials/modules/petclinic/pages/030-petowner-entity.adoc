@@ -251,8 +251,8 @@ mvn -pl webapp spring-boot:run
 ----
 name
 telephoneNumber
-emailAddress
 lastVisit
+emailAddress
 ----
 
 Confirm that menu:Pet Owners[List All] now shows the additional properties as columns.
