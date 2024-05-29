@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
@@ -35,6 +36,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -83,6 +85,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
+    @Autowired private CausewayConfiguration causewayConfiguration;
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
@@ -118,6 +121,7 @@ public class RunBackgroundCommandsJob implements Job {
                 commandLogEntryRepository.findBackgroundAndNotYetStarted()
                         .stream()
                         .map(CommandLogEntry::getCommandDto)
+                        .limit(causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getBatchSize())
                         .collect(Collectors.toList())
                 )
                 .ifFailureFail()
