@@ -1018,7 +1018,7 @@ public class EmailAddressValueSemantics
 ----
 <.> Defined as a Spring `@Component` so that the framework can discover and use this value semantics provider
 <.> Typically inherit from `ValueSemanticsAbstract`, a convenience superclass
-<.> The `schemaValueType` in essence defines the widget that will be used to interact with render the value
+<.> The `schemaValueType` in essence defines the widget that will be used to interact with the value
 <.> The `ValueDecomposition` is primarily used by the xref:vro::about.adoc[] to convert to/from JSON.
 <.> The `DefaultsProvider` provides an initial value, if any.
 For some values there is often a reasonable default, eg `0` for a number, or `[0,0]` for a coordinate, or today's date.
@@ -1067,7 +1067,7 @@ public PetOwner create(
 ----
 <.> Change the parameter' type from `String` to `EmailAddress`
 
-Run the application and try to enter an invalid
+Run the application and try to enter an invalid email address; the logic in the value type should prevent this.
 
 
 [#exercise-3-14-use-layout-xml-file-for-ui-semantics]
@@ -1075,9 +1075,8 @@ Run the application and try to enter an invalid
 
 At the moment the associated `.layout.xml` file for `PetOwner` is used to define rows, columns and fieldsets, while the xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation is grouped to associate properties with those fieldsets.
 
-If we prefer, we can move specify this association within the `PetOwner.layout.xml` file instead.
+If we prefer, we can specify this association within the `PetOwner.layout.xml` file instead.
 And we can also do the same thing associating actions with properties or collections.
-
 This has the benefit of being dynamic; we can move fields around in the layout without having to recompile/restart the application.
 
 
@@ -1143,7 +1142,8 @@ private long version;
 <.> The `@PropertyLayout` was removed...
 <.> ... but `@Property` has been added instead.
 +
-This is because at least one of @Property` or `@PropertyLayout` must be present to identify the field as a property (at least using the configuration of the framework is concerned).
+This is because at least one of @Property` or `@PropertyLayout` must be present to identify the field as a property (at least so far as this application has been configured.
+In fact, it is possible to configure the framework to be either less strict or more strict with respect to whether annotations are specified, see xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[]]).
 
 ** add to `PetOwner.layout.xml`:
 +
