@@ -23,7 +23,7 @@ In this exercise we'll just create the outline of the `Pet` entity, and ensure i
 ----
 git checkout tags/04-01-pet-entity-key-properties
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -161,7 +161,7 @@ At the moment we're "flying blind" because we don't have any demo `Pet` instance
 ----
 git checkout tags/04-02-pet-ui-and-layout-semantics
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -303,7 +303,7 @@ In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s.
 ----
 git checkout tags/04-03-PetOwner-pets-collection
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -375,7 +375,7 @@ So in this exercise we'll add two actions on `PetOwner`: one to add a `Pet` and 
 ----
 git checkout tags/04-04-add-remove-pets
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -428,7 +428,7 @@ In this exercise we'll extend the fixture data so that each of our pet owners ha
 ----
 git checkout tags/04-05-extend-fixture-data-to-add-in-pets
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -489,7 +489,7 @@ In this exercise we'll introduce a simple business rule: every owner's pet must 
 ----
 git checkout tags/04-06-unique-pet-names-validation
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -507,7 +507,7 @@ public String validate0AddPet(final String name) {                      // <.>
 ----
 <.> Indicates that this method is part of the Causeway metamodel
 <.> Naming convention indicates that this is the validation of the 0^th^ parameter of `addPet`
-<.> A non-null value indicates is used as the reason the action cannot be invoked
+<.> If a non-null value is returned, the framework uses its as the reason the action cannot be invoked
 <.> If null is returned then the validation has succeeded.
 
 Run the application and confirm that the validation is working as you expect.
@@ -556,7 +556,7 @@ So, we need to add a `species`, and some `notes`.
 ----
 git checkout tags/04-07-pet-remaining-properties
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -680,14 +680,14 @@ This is what we'll quickly tackle in this exercise.
 ----
 git checkout tags/04-08-dynamic-icons
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
 === Tasks
 
 
-* download additional icons for each of the `PetSpecies` (dog, cat, hamster, budgie)
+* download additional icons for each of the `PetSpecies` (dog, cat, hamster, budgerigar)
 
 * save these icons as `Pet-dog.png`, `Pet-cat.png` and so on, ie the pet species as suffix.
 
