@@ -453,6 +453,8 @@ public PetOwner create(
 ----
 val petOwner = PetOwners.create(persona.name, null, null, null);
 ----
++
+(Or, even better - pass in `knownAs` as the 2^nd^ parameter, and remove the explicit setting of this value later in the fixture script)
 
 When you run the app, confirm that only the `name` parameter is optional:
 
@@ -465,7 +467,7 @@ image::03-07/new-parameters-are-optional.png[width=80%]
 The framework provides many ways to customise the UI, either through the layout files or using the `@XxxLayout` annotations.
 Default UI conventions can also be specified using the `application.yml` configuration file.
 
-In this exercise we'll change the prompt style for both a service (menu) action, ie menu::PetOwners[create], and an object action, ie `PetOwner#updateName`.
+In this exercise we'll change the prompt style for both a service (menu) action, ie menu:PetOwners[create], and an object action, ie `PetOwner#updateName`.
 
 
 === Solution
@@ -499,7 +501,7 @@ Confirm that the dialog is now shown as a modal prompt.
 If forced to use a dialog, then they default to a sidebar prompt rather than a modal prompt.
 +
 Remove the `@ActionLayout(promptStyle)` for `PetOwner#updateName`:
-
++
 [source,java]
 .PetOwner.java
 ----
@@ -653,13 +655,12 @@ daysSinceLastVisit
 [#exercise-3-10-use-meta-annotations-to-reduce-duplication]
 == Ex 3.10: Use meta-annotations to reduce duplication
 
-There is some duplication between menu:PetOwners[create] action and the `PetOwner` class; both define a "name" parameter along with other optional parameters, "telephoneNumber, "emailAddress" and "knownAs".
+There is some duplication between menu:PetOwners[create] action and the `PetOwner` class: both define `name` as a  parameter or property respectively, and they also share a number of other parameters/properties, `telephoneNumber`, `emailAddress` and `knownAs`.
 
-With "name" you might have noticed that the `@Name` meta-annotation that came with the starter, and which centralizes the domain knowledge about what a "name" is.
+With `name` you might have noticed that the `@Name` meta-annotation that came with the starter, and which centralizes the domain knowledge about what a `name` is.
 
-In this exercise we'll use the same approach with the "telephoneNumber".
-(We won't do "emailAddress" or "knownAs" though - we'll explore an even more powerful way to reduce duplication in the following exercise).
-
+In this exercise we'll use the same approach, introducing a meta-annotation to centralize semantics for  `telephoneNumber`.
+(We won't do `emailAddress` or `knownAs` though - we'll explore an even more powerful way to reduce duplication in a following exercise).
 
 === Solution
 
@@ -752,7 +753,7 @@ mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles
 === Task
 
 
-* Update the `@Property` annotation of the `@PhoneNumber` meta-annotation:
+* Update the `@Property` and `@Parameter` annotations of the `@PhoneNumber` meta-annotation:
 +
 [source,java]
 .PhoneNumber.java
