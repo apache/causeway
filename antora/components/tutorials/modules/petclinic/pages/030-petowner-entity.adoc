@@ -307,7 +307,7 @@ causeway:
 
 We also need to make one small modification to the fixture script itself.
 The initial fixtures are run with a built-in user called "\__system", that has no roles and therefore no permissions.
-We either need to change the fixture script to run as a different user that _will_ have permissions (there's a service called xref:refguide:applib:index/services/sudo/SudoService.adoc[] that would let us do that), or, simpler, just temporarily switch off permission checks.
+We either need to change the fixture script to run as a different user that does have the permissions (there's a service called xref:refguide:applib:index/services/sudo/SudoService.adoc[] that would let us do that), or, simpler, just temporarily switch off permission checks.
 We'll go with the second option:
 
 * locate the `PetOwner_persona.Builder` class, and make this change:
@@ -366,7 +366,7 @@ Locate the `HomePageViewModel` class:
 * change the `title()` implementation
 * rename the collection from `getObjects()` to `getPetOwners()`
 
-The positioning of the collection is also specified in the corresponding layout file, and so also needs updating.
+The positioning of the collection is also specified in the corresponding layout file, and so that file also needs updating.
 
 * locate the `HomePageViewModel.layout.xml` file, and update accordingly
 +
@@ -403,12 +403,10 @@ emailAddress
 
 TIP: the action "Download .columnOrder.txt files (ZIP)" (available only when prototyping) provides an easy way to obtain this file; you can then update as required.
 
-TIP: You can config your IDE so that any changes made to this file are picked up automatically without having to restart the app.
-If using IntelliJ for example, use menu:Run[Debugging Actions > Reload Changed Classes].
 
 
-[#exercise-3-7-modify-the-menu-action-to-create-petowners]
-== Ex 3.7: Modify the menu action to create PetOwners
+[#exercise-3-7-modify-the-menu-action-that-creates-petowners]
+== Ex 3.7: Modify the menu action that creates PetOwners
 
 If we want to create a new `PetOwner` and specify additional details, at the moment it's a two stage process: create the `PetOwner` (using menu:PetOwners[create]), then set the additional details afterwards.
 
