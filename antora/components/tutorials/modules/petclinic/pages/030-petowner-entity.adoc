@@ -221,7 +221,7 @@ Before the "Details" fieldset, add:
 ----
 
 TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
-For example, with IntelliJ you can use "Reload Changed Classes" menu item.
+For example, with IntelliJ you can use menu:Run[Debugging Actions > Reload Changed Classes].
 
 You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
 
@@ -258,7 +258,7 @@ lastVisit
 Confirm that menu:Pet Owners[List All] now shows the additional properties as columns.
 
 TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
-For example, with IntelliJ you can use "Reload Changed Classes" menu item.
+For example, with IntelliJ you can use menu:Run[Debugging Actions > Reload Changed Classes].
 
 You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
 
@@ -404,7 +404,7 @@ emailAddress
 TIP: the action "Download .columnOrder.txt files (ZIP)" (available only when prototyping) provides an easy way to obtain this file; you can then update as required.
 
 TIP: You can config your IDE so that any changes made to this file are picked up automatically without having to restart the app.
-If using IntelliJ for example, use "Reload Changed Classes" action.
+If using IntelliJ for example, use menu:Run[Debugging Actions > Reload Changed Classes].
 
 
 [#exercise-3-7-modify-the-menu-action-to-create-petowners]
