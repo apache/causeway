@@ -9,7 +9,7 @@ In this set of exercises we'll just focus on the `PetOwner` entity.
 == Ex 3.1: Add PetOwner's knownAs property
 
 In this exercise, we'll add a new property, `knownAs`, to capture the ``PetOwner``'s preferred name.
-We'll also update the fixture script that sets up data to something more realistic.
+We'll also update the fixture script.
 
 
 === Solution
@@ -18,7 +18,7 @@ We'll also update the fixture script that sets up data to something more realist
 ----
 git checkout tags/03-01-adds-PetOwner-knownAs-property
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 Use the menu:Prototyping[Fixture Scripts] menu to setup some example data.
@@ -120,7 +120,7 @@ To do that, we need to define the title imperatively, using the xref:refguide:ap
 ----
 git checkout tags/03-02-define-PetOwner-title-imperatively
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -158,7 +158,7 @@ We'll make these changes in this exercise.
 ----
 git checkout tags/03-03-remaining-PetOwner-properties
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -239,7 +239,7 @@ Let's update the app to see some other properties we added in the previous exerc
 ----
 git checkout tags/03-04-list-new-properties-of-PetOwner
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -281,7 +281,7 @@ We can also leverage link:https://docs.spring.io/spring-boot/docs/current/refere
 ----
 git checkout tags/03-05-initial-fixture-script
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -354,7 +354,7 @@ In this exercise, we'll refactor the home page view model to show a list of ``Pe
 ----
 git checkout tags/03-06-update-home-page-to-show-pet-owners
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -420,7 +420,7 @@ In this exercise we'll simplify that workflow by allowing the additional details
 ----
 git checkout tags/03-07-modifies-PetOwners-create-action
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -476,7 +476,7 @@ In this exercise we'll change the prompt style for both a service (menu) action,
 ----
 git checkout tags/03-08-prompt-styles
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -582,7 +582,7 @@ In this exercise we'll see how easy it is to create such a derived property.
 ----
 git checkout tags/03-09-derived-days-since-last-visit-property
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -669,7 +669,7 @@ In this exercise we'll use the same approach with the "telephoneNumber".
 ----
 git checkout tags/03-10-use-meta-annotations-to-reduce-duplication
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -748,7 +748,7 @@ We can fix this by adding rules to their respective meta-annotations.
 ----
 git checkout tags/03-11-validation-rules-using-metaannotations
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -819,7 +819,7 @@ In this exercise we'll move this constraint onto the `@Name` meta-annotation ins
 ----
 git checkout tags/03-12-moves-validation-onto-metaannotation
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -880,7 +880,7 @@ For email address, we'll use a single string, so it's a scalar value type.
 ----
 git checkout tags/03-13-scalar-custom-value-type-for-email-address
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -1088,7 +1088,7 @@ This has the benefit of being dynamic; we can move fields around in the layout w
 ----
 git checkout tags/03-14-use-layout-xml-for-ui-semantics
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -1273,7 +1273,7 @@ In this exercise, we'll replace the icon for `PetOwner`.
 ----
 git checkout tags/03-15-change-pet-owner-icon-png
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task

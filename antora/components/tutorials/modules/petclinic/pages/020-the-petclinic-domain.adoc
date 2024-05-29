@@ -1,6 +1,7 @@
+= The PetClinic domain, and the `petowner` module
+
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-= An Example Domain
 
 By now you should understand the basics of what Apache Causeway does, but there's only so much we can learn from a single domain class.
 Let's therefore evolve the app into a slightly more interesting domain and explore other features of the framework.
@@ -28,11 +29,13 @@ Some of the use cases we might want to support include:
 
 This tutorial has worked solutions for all of these.
 
-[#exercise-2-1-refactor-simpleobject-to-petowner]
-== Ex 2.1: Create a new `pets` module with `PetOwner`
+[#exercise-2-1-create-a-new-petowner-module]
+== Ex 2.1: Create a new `petowner` module
 
-Using the `simple` module as a guide, we'll create a new `petowners` module and create a `PetOwner` and `PetOwners` domain service as reference.
-(We leave the `simple` module untouched, to use as a reference).
+In this exercise we'll create a new `petowner` module, copying the `simple` module to get us started.
+The `SimpleObject` entity will be copied to `PetOwner`, and the `SimpleObjects` domain service will be copied to `PetOwners`, but we won't change the structure.
+
+We'll also leave the `simple` module untouched, to use as a reference.
 
 
 === Solution
@@ -41,7 +44,7 @@ Using the `simple` module as a guide, we'll create a new `petowners` module and 
 ----
 git checkout tags/02-01-copies-SimpleObject-to-PetOwner
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -126,7 +129,7 @@ In this exercise we'll update the app to include `petowners` as well.
 ----
 git checkout tags/02-02-configure-the-app-to-include-petowner
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -198,7 +201,7 @@ In this exercise we'll add a security role to grant access to our new `petowner`
 ----
 git checkout tags/02-03-add-security-role-for-petowner
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -295,7 +298,7 @@ Let's now update the menu bar so that the actions to create ``PetOwner``s live u
 ----
 git checkout tags/02-04-update-menubar-for-petowners
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -347,7 +350,7 @@ This will allow us to quickly create a whole set of `PetOwner` objects from the 
 ----
 git checkout tags/02-05-setup-demo-petowners
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
