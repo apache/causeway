@@ -20,7 +20,7 @@ In this exercise we'll test the `bookVisit` mixin action (on `Pet` entity).
 [source,bash]
 ----
 git checkout tags/09-01-bookVisit-integ-test
-mvn clean package jetty:run
+mvn clean install
 ----
 
 === Tasks

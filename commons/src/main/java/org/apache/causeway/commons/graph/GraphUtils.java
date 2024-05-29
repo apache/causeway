@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,6 +31,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._PrimitiveCollections.IntList;
@@ -221,6 +224,49 @@ public class GraphUtils {
     public class Graph<T> {
         private final GraphKernel kernel;
         private final Can<T> nodes;
+
+        // -- TRAVERSAL
+
+        public void visitNeighbors(final int nodeIndex, final Consumer<T> nodeVisitor) {
+            kernel()
+                .streamNeighbors(nodeIndex)
+                .forEach(neighborIndex->
+                    nodeVisitor.accept(nodes.getElseFail(neighborIndex)));
+        }
+
+        public void visitNeighborsIndexed(final int nodeIndex, final IndexedConsumer<T> nodeVisitor) {
+            kernel()
+                .streamNeighbors(nodeIndex)
+                .forEach(neighborIndex->
+                    nodeVisitor.accept(neighborIndex, nodes.getElseFail(neighborIndex)));
+        }
+
+//        public Stream<T> streamNeighbors(final int nodeIndex) {
+//            return kernel()
+//                .streamNeighbors(nodeIndex)
+//                .mapToObj(neighborIndex->nodes.getElseFail(neighborIndex));
+//        }
+//
+//        public record IndexedNode<T>(
+//                int index,
+//                T node){
+//        }
+//
+//        public Stream<IndexedNode<T>> streamNeighborsIndexed(final int nodeIndex) {
+//            return kernel()
+//                .streamNeighbors(nodeIndex)
+//                .mapToObj(neighborIndex->new IndexedNode<>(neighborIndex, nodes.getElseFail(neighborIndex)));
+//        }
+
+        // -- TRANSFORMATION
+
+        /**
+         * Returns an isomorphic graph with this graph's nodes replaced by given mapping function.
+         */
+        public <R> Graph<R> map(final Function<T, R> nodeMapper) {
+            return new Graph<R>(kernel, nodes.map(nodeMapper));
+        }
+
     }
 
     /**

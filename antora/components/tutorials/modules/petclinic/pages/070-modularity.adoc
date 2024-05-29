@@ -39,7 +39,7 @@ In this exercise we'll use domain events to cascade delete or to veto the action
 ----
 git checkout tags/07-01-delete-action-events
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -67,7 +67,7 @@ mvn -pl spring-boot:run
 +
 NOTE: in fact, domain events are always emitted; but by default a generic `ActionDomainEvent` is used rather than a specific subclass.
 
-* create a subscriber in the `pets` package to delete all ``Pet``s when the `PetOwner_delete` action is invoked:
+* create a subscriber in the `visit` module to to veto an attempt to invoke the `PetOwner_delete` action if there are any visits
 +
 [source,java]
 .PetOwner_delete_subscriber.java

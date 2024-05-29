@@ -1,4 +1,4 @@
-= Visit module and entity
+= The visit module and Visit entity
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
@@ -8,8 +8,9 @@ In this section we'll add in the `Visit` entity:
 
 include::partial$domain.adoc[]
 
-Also, note that the `Visit` entity is in its own module.
-We'll look at the important topic of modularity in later exercises.
+Also, note that the `Visit` entity is in its own module, the `visit` module.
+So in this section of exercises we'll start to learn how Apache Causeway helps you keep your applications modular.
+
 
 
 [#exercise-5-1-the-visits-module]
@@ -23,7 +24,7 @@ In this exercise we'll just create an empty visits module.
 ----
 git checkout tags/05-01-visit-module
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -75,7 +76,7 @@ causeway.persistence.schema.auto-create-schemas=\
 ----
 
 * add permissions to the new "visit" namespace.
-We could do this by adding a new security role, but for simplicity we'll just add to the existing role (`PetOwnerModuleSuperuserRole), renaming it as we do:
+We could do this by adding a new security role, but for simplicity we'll just add to the existing role (`PetOwnerModuleSuperuserRole`), renaming it as we do:
 +
 [source,java]
 .CustomRolesAndUsers.java
@@ -115,7 +116,7 @@ And similarly, the top-level application doesn't yet know about visit module.
 
 In this exercise we'll fix this, so that:
 
-application -> visit module -> petowner module
+`application` module -> `visit` module -> `petowner` module
 
 
 
@@ -125,12 +126,14 @@ application -> visit module -> petowner module
 ----
 git checkout tags/05-02-visit-module-dependencies
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
-=== tasks
+=== Tasks
 
-* in the new visit module's `pom.xml`, add a Maven dependency on `petowner` module:
+First, let's consider the `visit` -> `petowner` dependency:
+
+* in the new `visit` module's `pom.xml`, add a Maven dependency on `petowner` module:
 +
 [source,xml]
 .visit/pom.xml
@@ -157,7 +160,10 @@ TIP: In your IDE you may need to reload/refresh dependencies to rebuild the clas
 public class VisitModule ... { ... }
 ----
 
+And next, let's consider the `application` -> `visit` dependency:
+
 * in the webapp module, add a Maven dependency on the visit module:
++
 [source,xml]
 .visit/pom.xml
 ----
@@ -169,7 +175,7 @@ public class VisitModule ... { ... }
 +
 The dependency on `<artifactId>simpleapp-jpa-module-petowner</artifactId>` can also be removed, due to transitivity.
 
-* and in the webapp's `ApplicationModule` Causeway module, add a corresponding import on `VisitModule`.
+* And, in the webapp's `ApplicationModule` Causeway module, add a corresponding import on `VisitModule`.
 +
 [source,java]
 .ApplicationModule.java
@@ -184,7 +190,7 @@ public class ApplicationModule {
 }
 ----
 +
-The import on `PetOwnerModule.class` can be removed, due to transitivity.
+The import of `PetOwnerModule.class` can similarly be removed, due to transitivity.
 
 Run the application and check that it starts ok.
 
@@ -202,7 +208,7 @@ We'll start just with the key properties.
 ----
 git checkout tags/05-03-visit-entity-key-properties
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -376,7 +382,7 @@ We can see this in the domain model:
 include::partial$domain.adoc[]
 
 Causeway's solution to this is to allow the visit module to define behaviour, but have the behaviour seem to belong to the `Pet` entity, at least so far as the user interface is concerned.
-This is done using a xref:userguide::mixins.adoc[].
+This is done using a xref:userguide::mixins.adoc[mixin].
 
 Because `Visit` is its own root entity, we're also going to need a repository to be able to look them up for a given `Pet`.
 
@@ -390,7 +396,7 @@ We'll also create a mixin _collection_ to be able to view the visits from a ``Pe
 ----
 git checkout tags/05-04-book-visit-action
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 

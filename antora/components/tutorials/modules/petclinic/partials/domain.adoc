@@ -3,7 +3,7 @@
 ----
 include::partial$skinparam.adoc[]
 
-package pets {
+package petowner {
 
     enum PetSpecies <<desc>> {
         Dog
@@ -42,7 +42,7 @@ package pets {
 }
 
 
-package visits {
+package visit {
 
     class Visit <<mi>> {
         +id

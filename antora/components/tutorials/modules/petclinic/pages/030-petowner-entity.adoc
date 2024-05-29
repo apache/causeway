@@ -9,7 +9,7 @@ In this set of exercises we'll just focus on the `PetOwner` entity.
 == Ex 3.1: Add PetOwner's knownAs property
 
 In this exercise, we'll add a new property, `knownAs`, to capture the ``PetOwner``'s preferred name.
-We'll also update the fixture script that sets up data to something more realistic.
+We'll also update the fixture script.
 
 
 === Solution
@@ -18,7 +18,7 @@ We'll also update the fixture script that sets up data to something more realist
 ----
 git checkout tags/03-01-adds-PetOwner-knownAs-property
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 Use the menu:Prototyping[Fixture Scripts] menu to setup some example data.
@@ -120,7 +120,7 @@ To do that, we need to define the title imperatively, using the xref:refguide:ap
 ----
 git checkout tags/03-02-define-PetOwner-title-imperatively
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -158,7 +158,7 @@ We'll make these changes in this exercise.
 ----
 git checkout tags/03-03-remaining-PetOwner-properties
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -221,7 +221,7 @@ Before the "Details" fieldset, add:
 ----
 
 TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
-For example, with IntelliJ you can use "Reload Changed Classes" menu item.
+For example, with IntelliJ you can use menu:Run[Debugging Actions > Reload Changed Classes].
 
 You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
 
@@ -239,7 +239,7 @@ Let's update the app to see some other properties we added in the previous exerc
 ----
 git checkout tags/03-04-list-new-properties-of-PetOwner
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run
 ----
 
 === Tasks
@@ -251,14 +251,14 @@ mvn -pl spring-boot:run
 ----
 name
 telephoneNumber
-emailAddress
 lastVisit
+emailAddress
 ----
 
 Confirm that menu:Pet Owners[List All] now shows the additional properties as columns.
 
 TIP: if you make changes to this file then your IDE may be able detect the changes automatically.
-For example, with IntelliJ you can use "Reload Changed Classes" menu item.
+For example, with IntelliJ you can use menu:Run[Debugging Actions > Reload Changed Classes].
 
 You can learn more about layout files xref:userguide::ui-layout-and-hints.adoc[here].
 
@@ -281,7 +281,7 @@ We can also leverage link:https://docs.spring.io/spring-boot/docs/current/refere
 ----
 git checkout tags/03-05-initial-fixture-script
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -307,7 +307,7 @@ causeway:
 
 We also need to make one small modification to the fixture script itself.
 The initial fixtures are run with a built-in user called "\__system", that has no roles and therefore no permissions.
-We either need to change the fixture script to run as a different user that _will_ have permissions (there's a service called xref:refguide:applib:index/services/sudo/SudoService.adoc[] that would let us do that), or, simpler, just temporarily switch off permission checks.
+We either need to change the fixture script to run as a different user that does have the permissions (there's a service called xref:refguide:applib:index/services/sudo/SudoService.adoc[] that would let us do that), or, simpler, just temporarily switch off permission checks.
 We'll go with the second option:
 
 * locate the `PetOwner_persona.Builder` class, and make this change:
@@ -354,7 +354,7 @@ In this exercise, we'll refactor the home page view model to show a list of ``Pe
 ----
 git checkout tags/03-06-update-home-page-to-show-pet-owners
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -366,7 +366,7 @@ Locate the `HomePageViewModel` class:
 * change the `title()` implementation
 * rename the collection from `getObjects()` to `getPetOwners()`
 
-The positioning of the collection is also specified in the corresponding layout file, and so also needs updating.
+The positioning of the collection is also specified in the corresponding layout file, and so that file also needs updating.
 
 * locate the `HomePageViewModel.layout.xml` file, and update accordingly
 +
@@ -403,12 +403,10 @@ emailAddress
 
 TIP: the action "Download .columnOrder.txt files (ZIP)" (available only when prototyping) provides an easy way to obtain this file; you can then update as required.
 
-TIP: You can config your IDE so that any changes made to this file are picked up automatically without having to restart the app.
-If using IntelliJ for example, use "Reload Changed Classes" action.
 
 
-[#exercise-3-7-modify-the-menu-action-to-create-petowners]
-== Ex 3.7: Modify the menu action to create PetOwners
+[#exercise-3-7-modify-the-menu-action-that-creates-petowners]
+== Ex 3.7: Modify the menu action that creates PetOwners
 
 If we want to create a new `PetOwner` and specify additional details, at the moment it's a two stage process: create the `PetOwner` (using menu:PetOwners[create]), then set the additional details afterwards.
 
@@ -420,7 +418,7 @@ In this exercise we'll simplify that workflow by allowing the additional details
 ----
 git checkout tags/03-07-modifies-PetOwners-create-action
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -455,6 +453,8 @@ public PetOwner create(
 ----
 val petOwner = PetOwners.create(persona.name, null, null, null);
 ----
++
+(Or, even better - pass in `knownAs` as the 2^nd^ parameter, and remove the explicit setting of this value later in the fixture script)
 
 When you run the app, confirm that only the `name` parameter is optional:
 
@@ -467,7 +467,7 @@ image::03-07/new-parameters-are-optional.png[width=80%]
 The framework provides many ways to customise the UI, either through the layout files or using the `@XxxLayout` annotations.
 Default UI conventions can also be specified using the `application.yml` configuration file.
 
-In this exercise we'll change the prompt style for both a service (menu) action, ie menu::PetOwners[create], and an object action, ie `PetOwner#updateName`.
+In this exercise we'll change the prompt style for both a service (menu) action, ie menu:PetOwners[create], and an object action, ie `PetOwner#updateName`.
 
 
 === Solution
@@ -476,7 +476,7 @@ In this exercise we'll change the prompt style for both a service (menu) action,
 ----
 git checkout tags/03-08-prompt-styles
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -501,7 +501,7 @@ Confirm that the dialog is now shown as a modal prompt.
 If forced to use a dialog, then they default to a sidebar prompt rather than a modal prompt.
 +
 Remove the `@ActionLayout(promptStyle)` for `PetOwner#updateName`:
-
++
 [source,java]
 .PetOwner.java
 ----
@@ -582,7 +582,7 @@ In this exercise we'll see how easy it is to create such a derived property.
 ----
 git checkout tags/03-09-derived-days-since-last-visit-property
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -655,13 +655,12 @@ daysSinceLastVisit
 [#exercise-3-10-use-meta-annotations-to-reduce-duplication]
 == Ex 3.10: Use meta-annotations to reduce duplication
 
-There is some duplication between menu:PetOwners[create] action and the `PetOwner` class; both define a "name" parameter along with other optional parameters, "telephoneNumber, "emailAddress" and "knownAs".
+There is some duplication between menu:PetOwners[create] action and the `PetOwner` class: both define `name` as a  parameter or property respectively, and they also share a number of other parameters/properties, `telephoneNumber`, `emailAddress` and `knownAs`.
 
-With "name" you might have noticed that the `@Name` meta-annotation that came with the starter, and which centralizes the domain knowledge about what a "name" is.
+With `name` you might have noticed that the `@Name` meta-annotation that came with the starter, and which centralizes the domain knowledge about what a `name` is.
 
-In this exercise we'll use the same approach with the "telephoneNumber".
-(We won't do "emailAddress" or "knownAs" though - we'll explore an even more powerful way to reduce duplication in the following exercise).
-
+In this exercise we'll use the same approach, introducing a meta-annotation to centralize semantics for  `telephoneNumber`.
+(We won't do `emailAddress` or `knownAs` though - we'll explore an even more powerful way to reduce duplication in a following exercise).
 
 === Solution
 
@@ -669,7 +668,7 @@ In this exercise we'll use the same approach with the "telephoneNumber".
 ----
 git checkout tags/03-10-use-meta-annotations-to-reduce-duplication
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -748,13 +747,13 @@ We can fix this by adding rules to their respective meta-annotations.
 ----
 git checkout tags/03-11-validation-rules-using-metaannotations
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
 
 
-* Update the `@Property` annotation of the `@PhoneNumber` meta-annotation:
+* Update the `@Property` and `@Parameter` annotations of the `@PhoneNumber` meta-annotation:
 +
 [source,java]
 .PhoneNumber.java
@@ -819,7 +818,7 @@ In this exercise we'll move this constraint onto the `@Name` meta-annotation ins
 ----
 git checkout tags/03-12-moves-validation-onto-metaannotation
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -880,7 +879,7 @@ For email address, we'll use a single string, so it's a scalar value type.
 ----
 git checkout tags/03-13-scalar-custom-value-type-for-email-address
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -1019,7 +1018,7 @@ public class EmailAddressValueSemantics
 ----
 <.> Defined as a Spring `@Component` so that the framework can discover and use this value semantics provider
 <.> Typically inherit from `ValueSemanticsAbstract`, a convenience superclass
-<.> The `schemaValueType` in essence defines the widget that will be used to interact with render the value
+<.> The `schemaValueType` in essence defines the widget that will be used to interact with the value
 <.> The `ValueDecomposition` is primarily used by the xref:vro::about.adoc[] to convert to/from JSON.
 <.> The `DefaultsProvider` provides an initial value, if any.
 For some values there is often a reasonable default, eg `0` for a number, or `[0,0]` for a coordinate, or today's date.
@@ -1068,7 +1067,7 @@ public PetOwner create(
 ----
 <.> Change the parameter' type from `String` to `EmailAddress`
 
-Run the application and try to enter an invalid
+Run the application and try to enter an invalid email address; the logic in the value type should prevent this.
 
 
 [#exercise-3-14-use-layout-xml-file-for-ui-semantics]
@@ -1076,9 +1075,8 @@ Run the application and try to enter an invalid
 
 At the moment the associated `.layout.xml` file for `PetOwner` is used to define rows, columns and fieldsets, while the xref:refguide:applib:index/annotation/PropertyLayout.adoc[@PropertyLayout] annotation is grouped to associate properties with those fieldsets.
 
-If we prefer, we can move specify this association within the `PetOwner.layout.xml` file instead.
+If we prefer, we can specify this association within the `PetOwner.layout.xml` file instead.
 And we can also do the same thing associating actions with properties or collections.
-
 This has the benefit of being dynamic; we can move fields around in the layout without having to recompile/restart the application.
 
 
@@ -1088,7 +1086,7 @@ This has the benefit of being dynamic; we can move fields around in the layout w
 ----
 git checkout tags/03-14-use-layout-xml-for-ui-semantics
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
@@ -1144,7 +1142,8 @@ private long version;
 <.> The `@PropertyLayout` was removed...
 <.> ... but `@Property` has been added instead.
 +
-This is because at least one of @Property` or `@PropertyLayout` must be present to identify the field as a property (at least using the configuration of the framework is concerned).
+This is because at least one of @Property` or `@PropertyLayout` must be present to identify the field as a property (at least so far as this application has been configured.
+In fact, it is possible to configure the framework to be either less strict or more strict with respect to whether annotations are specified, see xref:refguide:config:sections/causeway.core.meta-model.introspector.adoc#causeway.core.meta-model.introspector.policy[]]).
 
 ** add to `PetOwner.layout.xml`:
 +
@@ -1250,9 +1249,11 @@ Whether you choose to use layout file only or a mixture of layout file and annot
 Notice that the `.layout.xml` files has elements with the "unreferencedProperties", "unreferencedCollections" or "unreferencedActions" (and is considered invalid if these are missing).
 As you might expect, these tags indicate where to render properties, collections or actions whose placement has not been specified explicitly.
 
-IMPORTANT::
+[IMPORTANT]
+====
 This is an important principle of the _naked objects pattern_ ; the domain object should always be rendered in some way or another.
 The presence of UI semantics (`@XxxLayout` annotations or the `.layout.xml` files) merely influence how that rendering is performed.
+====
 
 
 [#exercise-3-15-update-icon-for-pet-owner]
@@ -1262,7 +1263,7 @@ As we've learnt in previous exercises, every domain object has a title which all
 Every domain object also has an icon, which helps distinguish one domain object _type_ from another.
 
 The icon acts as the hyperlink from one domain object to another, for example from the home page to the `PetOwner` entity.
-But choosing a good icon also improves the feedback cycle with your domain experts; similar to personas, it helps to create a connection between the domain experts concept of the "thing" and its representation in the app's user interface.
+But choosing a good icon also improves the feedback cycle with your domain expert's; similar to personas, it helps to create a connection between the domain experts concept of the "thing" and its representation in the app's user interface.
 
 In this exercise, we'll replace the icon for `PetOwner`.
 
@@ -1273,7 +1274,7 @@ In this exercise, we'll replace the icon for `PetOwner`.
 ----
 git checkout tags/03-15-change-pet-owner-icon-png
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Task
