@@ -507,7 +507,7 @@ public String validate0AddPet(final String name) {                      // <.>
 ----
 <.> Indicates that this method is part of the Causeway metamodel
 <.> Naming convention indicates that this is the validation of the 0^th^ parameter of `addPet`
-<.> A non-null value indicates is used as the reason the action cannot be invoked
+<.> If a non-null value is returned, the framework uses its as the reason the action cannot be invoked
 <.> If null is returned then the validation has succeeded.
 
 Run the application and confirm that the validation is working as you expect.
@@ -687,7 +687,7 @@ mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles
 === Tasks
 
 
-* download additional icons for each of the `PetSpecies` (dog, cat, hamster, budgie)
+* download additional icons for each of the `PetSpecies` (dog, cat, hamster, budgerigar)
 
 * save these icons as `Pet-dog.png`, `Pet-cat.png` and so on, ie the pet species as suffix.
 
