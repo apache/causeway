@@ -7,8 +7,12 @@
 ** xref:010-getting-started.adoc#exercise-1-4-naked-objects-pattern[1.4: Naked Objects pattern]
 ** xref:010-getting-started.adoc#exercise-1-5-ui-hints[1.5: UI Hints]
 
-* xref:020-the-petclinic-domain.adoc[The PetClinic Domain]
-** xref:020-the-petclinic-domain.adoc#exercise-2-1-refactor-simpleobject-to-petowner[image:hand.png[] *2.1*: Refactor SimpleObject to PetOwner]
+* xref:020-the-petclinic-domain.adoc[The PetClinic Domain and petowner module]
+** xref:020-the-petclinic-domain.adoc#exercise-2-1-create-a-new-petowner-module[image:hand.png[] *2.1*: Create new petowner module]
+** xref:020-the-petclinic-domain.adoc#exercise-2-2-configure-the-app-to-include-the-petowner-module[image:hand.png[] *2.2*: Include the petowner module]
+** xref:020-the-petclinic-domain.adoc#exercise-2-3-add-security-role-for-petowner-module[image:hand.png[] *2.3*: Add security role for the petowner module]
+** xref:020-the-petclinic-domain.adoc#exercise-2-4-update-menubar-for-PetOwners[image:hand.png[] *2.4*: Update menubar for PetOwners]
+** xref:020-the-petclinic-domain.adoc#exercise-2-5-setup-demo-PetOwners[image:hand.png[] *2.5*: Setup demo PetOwners]
 
 * xref:030-petowner-entity.adoc[PetOwner entity]
 ** xref:030-petowner-entity.adoc#exercise-3-1-add-petowners-knownAs-property[image:hand.png[] *3.1*: Add PetOwner's knownAs property]

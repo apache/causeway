@@ -20,7 +20,7 @@ In this section we'll write a unit test to verify this logic, using Mockito to "
 ----
 git checkout tags/06-01-unit-test-bookVisit-default-time
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
