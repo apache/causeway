@@ -28,6 +28,8 @@ import javax.inject.Inject;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
+
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -80,6 +82,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 
+    @Inject List<RunBackgroundCommandsJobListener> listeners;
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
@@ -100,7 +103,13 @@ public class RunBackgroundCommandsJob implements Job {
             for (val commandDto : commandDtos) {
                 executeCommandWithinOwnTransaction(commandDto, interactionContext);
             }
+
+            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            listeners.forEach(listener -> {
+                listener.executed(interactionIds);
+            });
         });
+
     }
 
     private Optional<List<CommandDto>> pendingCommandDtos(final InteractionContext interactionContext) {
