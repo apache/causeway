@@ -115,7 +115,7 @@ And similarly, the top-level application doesn't yet know about visit module.
 
 In this exercise we'll fix this, so that:
 
-application -> visit module -> petowner module
+`application` module -> `visit` module -> `petowner` module
 
 
 
