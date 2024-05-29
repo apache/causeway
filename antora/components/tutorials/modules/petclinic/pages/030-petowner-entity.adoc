@@ -1249,9 +1249,11 @@ Whether you choose to use layout file only or a mixture of layout file and annot
 Notice that the `.layout.xml` files has elements with the "unreferencedProperties", "unreferencedCollections" or "unreferencedActions" (and is considered invalid if these are missing).
 As you might expect, these tags indicate where to render properties, collections or actions whose placement has not been specified explicitly.
 
-IMPORTANT::
+[IMPORTANT]
+====
 This is an important principle of the _naked objects pattern_ ; the domain object should always be rendered in some way or another.
 The presence of UI semantics (`@XxxLayout` annotations or the `.layout.xml` files) merely influence how that rendering is performed.
+====
 
 
 [#exercise-3-15-update-icon-for-pet-owner]
@@ -1261,7 +1263,7 @@ As we've learnt in previous exercises, every domain object has a title which all
 Every domain object also has an icon, which helps distinguish one domain object _type_ from another.
 
 The icon acts as the hyperlink from one domain object to another, for example from the home page to the `PetOwner` entity.
-But choosing a good icon also improves the feedback cycle with your domain experts; similar to personas, it helps to create a connection between the domain experts concept of the "thing" and its representation in the app's user interface.
+But choosing a good icon also improves the feedback cycle with your domain expert's; similar to personas, it helps to create a connection between the domain experts concept of the "thing" and its representation in the app's user interface.
 
 In this exercise, we'll replace the icon for `PetOwner`.
 

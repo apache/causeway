@@ -87,8 +87,11 @@ Automatically provisioned by Mockito.
 <.> sets up expectations for this scenario on the mock `VirtualClock`
 <.> use link:http://joel-costigliola.github.io/assertj/[AssertJ] to assert the expected value
 
-IMPORTANT: Unit tests should have a suffix "_Test", to distinguish them from integration tests.
+[IMPORTANT]
+====
+Unit tests should have a suffix "_Test", to distinguish them from integration tests.
 The top-level pom configures Maven surefire to run the unit tests first and then integration tests as a separate execution.
+====
 
 === Optional Exercises
 
