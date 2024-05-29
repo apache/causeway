@@ -132,7 +132,7 @@ Map these to the "Simple Objects" menu.
 
 * locate the `SimpleObject` entity, and notice the methods annotated with `@Property` and `@Action`.
 +
-Map these onto the fields of the "simple object" entity, and the action buttons (eg to "change name").
+Map these onto the fields of the "simple object" entity, and the action buttons (eg to "update name").
 
 
 It's common for each entity (or more precisely, aggregate root) to have a corresponding domain service, acting as its repository.
