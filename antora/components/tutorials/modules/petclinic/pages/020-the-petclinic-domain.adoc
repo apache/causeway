@@ -347,7 +347,7 @@ Run the application; the menubar should be updated correctly.
 
 xref:testing:fixtures:about.adoc#fixture-scripts[Fixture scripts] are used for both prototyping and for integration testing, allowing us to quickly create demo data in the H2 in-memory database.
 
-The xref:testing:fixtures:about.adoc#personas-and-builders[persona] pattern lets us define example data in an enum (the "what"), while a companion builder uses that data to set up the corresponding domain entities (the "how").
+The xref:testing:fixtures:about.adoc#personas-and-builders[persona] pattern lets us define example data in an enum (the "what"), while a companion builder uses domain logic to set up the corresponding domain entities (the "how").
 
 In this exercise we'll modify the `PetOwners_persona` (copied from `SimpleObjects_persona` earlier) to create more realistic data.
 
