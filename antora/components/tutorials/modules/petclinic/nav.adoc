@@ -14,7 +14,7 @@
 ** xref:020-the-petclinic-domain.adoc#exercise-2-4-update-menubar-for-PetOwners[image:hand.png[] *2.4*: Update menubar for `PetOwners`]
 ** xref:020-the-petclinic-domain.adoc#exercise-2-5-setup-demo-PetOwners[image:hand.png[] *2.5*: Setup demo ``PetOwner``s]
 
-* xref:030-petowner-entity.adoc[PetOwner entity]
+* xref:030-petowner-entity.adoc[The `PetOwner` entity]
 ** xref:030-petowner-entity.adoc#exercise-3-1-add-petowners-knownAs-property[image:hand.png[] *3.1*: Add ``PetOwner``'s `knownAs` property]
 ** xref:030-petowner-entity.adoc#exercise-3-2-define-PetOwners-title-imperatively[image:hand.png[] *3.2*: Define ``PetOwner``'s title imperatively]
 ** xref:030-petowner-entity.adoc#exercise-3-3-remaining-PetOwner-properties[image:hand.png[] *3.3*: Add remaining `PetOwner` properties]
@@ -32,7 +32,7 @@
 ** xref:030-petowner-entity.adoc#exercise-3-15-update-icon-for-pet-owner[image:hand.png[] *3.15*: Update icon for `PetOwner`]
 
 
-* xref:040-pet-entity.adoc[Pet entity]
+* xref:040-pet-entity.adoc[The `Pet` entity]
 ** xref:040-pet-entity.adoc#exercise-4-1-pet-entitys-key-properties[image:hand.png[] *4.1*: `Pet` entity's key properties]
 ** xref:040-pet-entity.adoc#exercise-4-2-add-pet-ui-and-layout-semantics[image:hand.png[] *4.2*: Add ``Pet``'s UI and layout semantics]
 ** xref:040-pet-entity.adoc#exercise-4-3-add-petowners-collection-of-pets[image:hand.png[] *4.3*: Add ``PetOwner``'s collection of ``Pet``s]
@@ -42,7 +42,7 @@
 ** xref:040-pet-entity.adoc#exercise-4-7-add-pets-remaining-properties[image:hand.png[] *4.7*: Add ``Pet``'s remaining properties]
 ** xref:040-pet-entity.adoc#exercise-4-8-dynamic-icons-for-pet[image:hand.png[] *4.8*: Add dynamic icons for `Pet`]
 
-* xref:050-visit-entity.adoc[The `visit` module and entity]
+* xref:050-visit-entity.adoc[The `visit` module and `Visit` entity]
 ** xref:050-visit-entity.adoc#exercise-5-1-the-visits-module[image:hand.png[] *5.1*: The `visit` module]
 ** xref:050-visit-entity.adoc#exercise-5-2-visit-module-dependencies[image:hand.png[] *5.2*: The `visit` module dependencies]
 ** xref:050-visit-entity.adoc#exercise-5-3-visit-entitys-key-properties[image:hand.png[] *5.3*: `Visit` entity's key properties]
