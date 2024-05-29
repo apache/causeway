@@ -21,13 +21,24 @@ Some of the use cases we might want to support include:
 
 * create a `PetOwner`
 * add and remove ``Pet``s for said `PetOwner`
+* delete a `PetOwner` and its ``Pet``s and ``Visit``s, so long as there are no unpaid ``Visit``s.
 * book a `Pet` in for a `Visit`
+* delete a `PetOwner` and its ``Pet``s, unless there are  ``Visit``s.
+
+This tutorial has worked solutions for all of these
+
+Some ideas for future extensions to the domain:
+
 * enter an `outcome` and `cost` of a `Visit`
 * allow a `PetOwner` to pay for a `Visit`
 * find ``Visit``s not yet paid and overdue
 * delete a `PetOwner` and its ``Pet``s and ``Visit``s, so long as there are no unpaid ``Visit``s.
+* add a previous/next buttons when paging through upcoming ``Visit``s
+* make "lastVisit" non-editable and maintained automatically from ``Visit``s
 
-This tutorial has worked solutions for all of these.
+
+Once you have finished the formal tutorial, have a go at implementing some of these ideas.
+
 
 [#exercise-2-1-create-a-new-petowner-module]
 == Ex 2.1: Create a new `petowner` module
