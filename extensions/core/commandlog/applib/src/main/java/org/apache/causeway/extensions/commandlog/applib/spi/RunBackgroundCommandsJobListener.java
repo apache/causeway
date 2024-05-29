@@ -23,6 +23,8 @@ import java.util.List;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Listens to the processing of the
  * {@link org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob}.
@@ -48,4 +50,11 @@ public interface RunBackgroundCommandsJobListener {
      * @param commandInteractionIds
      */
     void executed(List<String> commandInteractionIds);
+
+    @Component
+    public static class Noop implements RunBackgroundCommandsJobListener {
+        @Override
+        public void executed(List<String> commandInteractionIds) {
+        }
+    }
 }
