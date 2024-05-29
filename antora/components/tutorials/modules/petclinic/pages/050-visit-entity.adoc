@@ -23,7 +23,7 @@ In this exercise we'll just create an empty visits module.
 ----
 git checkout tags/05-01-visit-module
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks
@@ -125,7 +125,7 @@ application -> visit module -> petowner module
 ----
 git checkout tags/05-02-visit-module-dependencies
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === tasks
@@ -202,7 +202,7 @@ We'll start just with the key properties.
 ----
 git checkout tags/05-03-visit-entity-key-properties
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -390,7 +390,7 @@ We'll also create a mixin _collection_ to be able to view the visits from a ``Pe
 ----
 git checkout tags/05-04-book-visit-action
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 

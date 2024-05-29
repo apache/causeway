@@ -39,7 +39,7 @@ In this exercise we'll use domain events to cascade delete or to veto the action
 ----
 git checkout tags/07-01-delete-action-events
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 === Tasks

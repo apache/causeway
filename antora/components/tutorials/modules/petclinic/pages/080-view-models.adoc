@@ -22,7 +22,7 @@ In this exercise we'll extend the home page by displaying additional data in new
 ----
 git checkout tags/08-01-home-page-additional-collections
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
@@ -146,7 +146,7 @@ In this exercise we'll extend the home page by providing a convenience action to
 ----
 git checkout tags/08-02-home-page-bookVisit-convenience-action
 mvn clean install
-mvn -pl spring-boot:run
+mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
 
 
