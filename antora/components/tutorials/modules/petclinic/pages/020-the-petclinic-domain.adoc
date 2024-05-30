@@ -51,9 +51,9 @@ We'll also leave the `simple` module untouched, to use as a reference.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/02-01-copies-SimpleObject-to-PetOwner
+git checkout tags/{tag-version}/02-01-copies-SimpleObject-to-PetOwner
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -106,14 +106,14 @@ In addition, the new Maven module was defined in the top-level `pom.xml`, and in
 
 Confirm that the code still builds:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn install
 ----
 
 However, if you run the app confirm that it is still showing just the original `simpleapp` module:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -pl webapp spring-boot:run
 ----
@@ -126,7 +126,7 @@ We'll fix this in the next exercise.
 
 We have our new `petowner` module, but we're not actually using it; if we run the application we still see the original `simpleapp` module.
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -pl webapp spring-boot:run
 ----
@@ -136,9 +136,9 @@ In this exercise we'll update the app to include `petowners` as well.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/02-02-configure-the-app-to-include-petowner
+git checkout tags/{tag-version}/02-02-configure-the-app-to-include-petowner
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -208,9 +208,9 @@ In this exercise we'll add a security role to grant access to our new `petowner`
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/02-03-add-security-role-for-petowner
+git checkout tags/{tag-version}/02-03-add-security-role-for-petowner
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -305,9 +305,9 @@ Let's now update the menu bar so that the actions to create ``PetOwner``s live u
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/02-04-update-menubar-for-petowners
+git checkout tags/{tag-version}/02-04-update-menubar-for-petowners
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -357,9 +357,9 @@ This will allow us to quickly create a whole set of `PetOwner` objects from the 
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/02-05-setup-demo-petowners
+git checkout tags/{tag-version}/02-05-setup-demo-petowners
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----

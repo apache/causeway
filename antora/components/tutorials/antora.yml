@@ -23,3 +23,9 @@ nav:
   - modules/ROOT/nav.adoc
   - modules/petclinic/nav.adoc
 
+asciidoc:
+  attributes:
+    tag-version: 'v2'
+    jdk-version: '11'
+    #tag-version: 'v3'
+    #jdk-version: '21'

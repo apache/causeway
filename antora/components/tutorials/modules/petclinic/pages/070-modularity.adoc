@@ -35,9 +35,9 @@ In this exercise we'll use domain events to cascade delete or to veto the action
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/07-01-delete-action-events
+git checkout tags/{tag-version}/07-01-delete-action-events
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
