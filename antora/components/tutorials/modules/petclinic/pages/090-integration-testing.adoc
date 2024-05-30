@@ -17,9 +17,9 @@ In this exercise we'll test the `bookVisit` mixin action (on `Pet` entity).
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/09-01-bookVisit-integ-test
+git checkout tags/{tag-version}/09-01-bookVisit-integ-test
 mvn clean install
 ----
 

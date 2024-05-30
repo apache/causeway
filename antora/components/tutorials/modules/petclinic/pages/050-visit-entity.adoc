@@ -20,9 +20,9 @@ In this exercise we'll just create an empty visits module.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/05-01-visit-module
+git checkout tags/{tag-version}/05-01-visit-module
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -122,9 +122,9 @@ In this exercise we'll fix this, so that:
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/05-02-visit-module-dependencies
+git checkout tags/{tag-version}/05-02-visit-module-dependencies
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -204,9 +204,9 @@ We'll start just with the key properties.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/05-03-visit-entity-key-properties
+git checkout tags/{tag-version}/05-03-visit-entity-key-properties
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -392,9 +392,9 @@ We'll also create a mixin _collection_ to be able to view the visits from a ``Pe
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/05-04-book-visit-action
+git checkout tags/{tag-version}/05-04-book-visit-action
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
