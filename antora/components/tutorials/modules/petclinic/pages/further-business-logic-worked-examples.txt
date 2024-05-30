@@ -32,9 +32,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/330-enter-an-outcome
+//git checkout tags/{tag-version}/330-enter-an-outcome
 //mvn clean package jetty:run
 //----
 //
@@ -153,9 +153,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/340-pay-for-a-visit
+//git checkout tags/{tag-version}/340-pay-for-a-visit
 //mvn clean package jetty:run
 //----
 //
@@ -255,9 +255,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/350-prevent-payment-for-a-visit-twice
+//git checkout tags/{tag-version}/350-prevent-payment-for-a-visit-twice
 //mvn clean package jetty:run
 //----
 //
@@ -321,9 +321,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/360-find-visits-not-yet-paid-and-overdue
+//git checkout tags/{tag-version}/360-find-visits-not-yet-paid-and-overdue
 //mvn clean package jetty:run
 //----
 //
@@ -439,9 +439,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/370-digression-hiding-columns-in-tables
+//git checkout tags/{tag-version}/370-digression-hiding-columns-in-tables
 //mvn clean package jetty:run
 //----
 //
@@ -509,9 +509,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/380-another-digression-icons-and-css
+//git checkout tags/{tag-version}/380-another-digression-icons-and-css
 //mvn clean package jetty:run
 //----
 //
@@ -561,9 +561,9 @@
 //
 //=== Solution
 //
-//[source,bash]
+//[source,bash,subs="attributes+"]
 //----
-//git checkout tags/390-delete-an-owner-provided-no-unpaid-visits
+//git checkout tags/{tag-version}/390-delete-an-owner-provided-no-unpaid-visits
 //mvn clean package jetty:run
 //----
 //

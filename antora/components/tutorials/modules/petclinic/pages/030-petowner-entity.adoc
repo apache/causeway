@@ -14,9 +14,9 @@ We'll also update the fixture script.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-01-adds-PetOwner-knownAs-property
+git checkout tags/{tag-version}/03-01-adds-PetOwner-knownAs-property
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -116,9 +116,9 @@ To do that, we need to define the title imperatively, using the xref:refguide:ap
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-02-define-PetOwner-title-imperatively
+git checkout tags/{tag-version}/03-02-define-PetOwner-title-imperatively
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -154,9 +154,9 @@ We'll make these changes in this exercise.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-03-remaining-PetOwner-properties
+git checkout tags/{tag-version}/03-03-remaining-PetOwner-properties
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -235,9 +235,9 @@ Let's update the app to see some other properties we added in the previous exerc
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-04-list-new-properties-of-PetOwner
+git checkout tags/{tag-version}/03-04-list-new-properties-of-PetOwner
 mvn clean install
 mvn -pl webapp spring-boot:run
 ----
@@ -277,9 +277,9 @@ We can also leverage link:https://docs.spring.io/spring-boot/docs/current/refere
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-05-initial-fixture-script
+git checkout tags/{tag-version}/03-05-initial-fixture-script
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -350,9 +350,9 @@ In this exercise, we'll refactor the home page view model to show a list of ``Pe
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-06-update-home-page-to-show-pet-owners
+git checkout tags/{tag-version}/03-06-update-home-page-to-show-pet-owners
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -414,9 +414,9 @@ In this exercise we'll simplify that workflow by allowing the additional details
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-07-modifies-PetOwners-create-action
+git checkout tags/{tag-version}/03-07-modifies-PetOwners-create-action
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -472,9 +472,9 @@ In this exercise we'll change the prompt style for both a service (menu) action,
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-08-prompt-styles
+git checkout tags/{tag-version}/03-08-prompt-styles
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -578,9 +578,9 @@ In this exercise we'll see how easy it is to create such a derived property.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-09-derived-days-since-last-visit-property
+git checkout tags/{tag-version}/03-09-derived-days-since-last-visit-property
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -664,9 +664,9 @@ In this exercise we'll use the same approach, introducing a meta-annotation to c
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-10-use-meta-annotations-to-reduce-duplication
+git checkout tags/{tag-version}/03-10-use-meta-annotations-to-reduce-duplication
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -743,9 +743,9 @@ We can fix this by adding rules to their respective meta-annotations.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-11-validation-rules-using-metaannotations
+git checkout tags/{tag-version}/03-11-validation-rules-using-metaannotations
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -814,9 +814,9 @@ In this exercise we'll move this constraint onto the `@Name` meta-annotation ins
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-12-moves-validation-onto-metaannotation
+git checkout tags/{tag-version}/03-12-moves-validation-onto-metaannotation
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -875,9 +875,9 @@ For email address, we'll use a single string, so it's a scalar value type.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-13-scalar-custom-value-type-for-email-address
+git checkout tags/{tag-version}/03-13-scalar-custom-value-type-for-email-address
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -1082,9 +1082,9 @@ This has the benefit of being dynamic; we can move fields around in the layout w
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-14-use-layout-xml-for-ui-semantics
+git checkout tags/{tag-version}/03-14-use-layout-xml-for-ui-semantics
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -1270,9 +1270,9 @@ In this exercise, we'll replace the icon for `PetOwner`.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/03-15-change-pet-owner-icon-png
+git checkout tags/{tag-version}/03-15-change-pet-owner-icon-png
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----

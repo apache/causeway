@@ -19,9 +19,9 @@ In this exercise we'll just create the outline of the `Pet` entity, and ensure i
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-01-pet-entity-key-properties
+git checkout tags/{tag-version}/04-01-pet-entity-key-properties
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -157,9 +157,9 @@ At the moment we're "flying blind" because we don't have any demo `Pet` instance
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-02-pet-ui-and-layout-semantics
+git checkout tags/{tag-version}/04-02-pet-ui-and-layout-semantics
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -299,9 +299,9 @@ In this next exercise we'll add the ``PetOwner``'s collection of ``Pet``s.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-03-PetOwner-pets-collection
+git checkout tags/{tag-version}/04-03-PetOwner-pets-collection
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -371,9 +371,9 @@ So in this exercise we'll add two actions on `PetOwner`: one to add a `Pet` and 
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-04-add-remove-pets
+git checkout tags/{tag-version}/04-04-add-remove-pets
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -424,9 +424,9 @@ In this exercise we'll extend the fixture data so that each of our pet owners ha
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-05-extend-fixture-data-to-add-in-pets
+git checkout tags/{tag-version}/04-05-extend-fixture-data-to-add-in-pets
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -485,9 +485,9 @@ In this exercise we'll introduce a simple business rule: every owner's pet must 
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-06-unique-pet-names-validation
+git checkout tags/{tag-version}/04-06-unique-pet-names-validation
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -552,9 +552,9 @@ So, we need to add a `species`, and some `notes`.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-07-pet-remaining-properties
+git checkout tags/{tag-version}/04-07-pet-remaining-properties
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -676,9 +676,9 @@ This is what we'll quickly tackle in this exercise.
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/04-08-dynamic-icons
+git checkout tags/{tag-version}/04-08-dynamic-icons
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
