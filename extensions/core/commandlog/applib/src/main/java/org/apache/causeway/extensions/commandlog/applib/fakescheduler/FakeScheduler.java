@@ -125,8 +125,13 @@ public class FakeScheduler {
 
             val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
             listeners.forEach(listener -> {
-                listener.executed(interactionIds);
+                interactionService.runAnonymous(() -> {
+                            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                                    listener.executed(interactionIds);
+                        });
+                });
             });
+
         });
 
         tasks.submit(_ConcurrentContext.singleThreaded());
@@ -134,6 +139,7 @@ public class FakeScheduler {
 
         return CommandBulkExecutionResult.builder()
                 .hasTimedOut(hasTimedOut)
+
                 .failure(tasks.getTasks().stream()
                         .map(_ConcurrentTask::getFailedWith)
                         .filter(_NullSafe::isPresent)
