@@ -71,10 +71,13 @@ public class FileUploadModels {
             final @NonNull ScalarModel scalarModel,
             final @NonNull Charset charset) {
 
+        // Charset is not serializable.
+        // (NB: can't reference 'charset' in constructor, as javac creates a hidden instance field in the inner class)
+        final String charsetName = charset.name();
+
         return new ScalarConvertingModel<List<FileUpload>, Clob>(scalarModel) {
 
             private static final long serialVersionUID = 1L;
-            private final String charsetName = charset.name(); // Charset is not serializable
 
             @SneakyThrows
             @Override
