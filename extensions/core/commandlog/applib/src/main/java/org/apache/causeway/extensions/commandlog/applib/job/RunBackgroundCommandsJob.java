@@ -188,7 +188,7 @@ public class RunBackgroundCommandsJob implements Job {
 
     private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds, InteractionContext interactionContext) {
         interactionService.runAndCatch(interactionContext, () -> {
-            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
                 listener.executed(interactionIds);
             });
         })
