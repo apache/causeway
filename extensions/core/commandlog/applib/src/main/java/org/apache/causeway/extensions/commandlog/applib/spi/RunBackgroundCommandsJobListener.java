@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 /**
  * Listens to the processing of the
  * {@link org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob}.
+ *
+ * @since 2.1 {@index}
  */
 public interface RunBackgroundCommandsJobListener {
 
