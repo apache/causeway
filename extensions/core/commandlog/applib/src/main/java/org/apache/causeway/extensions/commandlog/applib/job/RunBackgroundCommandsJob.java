@@ -104,17 +104,12 @@ public class RunBackgroundCommandsJob implements Job {
         // for each command, we execute within its own transaction.  Failure of one should not impact the next.
         commandDtosIfAny.ifPresent(commandDtos -> {
             for (val commandDto : commandDtos) {
-                executeCommandWithinOwnTransaction(commandDto, interactionContext);
+                executeCommandWithinTransaction(commandDto, interactionContext);
             }
 
             val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
             listeners.forEach(listener -> {
-                interactionService.runAndCatch(interactionContext, () -> {
-                    transactionService.runTransactional(Propagation.REQUIRED, () -> {
-                        listener.executed(interactionIds);
-                    });
-                })
-                .ifFailureFail();
+                invokeListenerCallbackWithinTransaction(listener, interactionIds, interactionContext);
             });
         });
 
@@ -136,7 +131,7 @@ public class RunBackgroundCommandsJob implements Job {
             .getValue();
     }
 
-    private void executeCommandWithinOwnTransaction(
+    private void executeCommandWithinTransaction(
             final CommandDto commandDto,
             final InteractionContext interactionContext
     ) {
@@ -183,13 +178,21 @@ public class RunBackgroundCommandsJob implements Job {
                 val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                 // capture the error
-                commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                {
+                commandLogEntryIfAny.ifPresent(commandLogEntry -> {
                     commandLogEntry.setException(throwable);
                     commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
                 });
             });
         });
+    }
+
+    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds, InteractionContext interactionContext) {
+        interactionService.runAndCatch(interactionContext, () -> {
+            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                listener.executed(interactionIds);
+            });
+        })
+        .ifFailureFail();
     }
 
     private static boolean isEncounteredDeadlock(Try<?> result) {

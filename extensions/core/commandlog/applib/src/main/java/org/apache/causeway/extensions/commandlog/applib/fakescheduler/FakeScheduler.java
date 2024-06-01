@@ -125,11 +125,7 @@ public class FakeScheduler {
 
             val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
             listeners.forEach(listener -> {
-                interactionService.runAnonymous(() -> {
-                            transactionService.runTransactional(Propagation.REQUIRED, () -> {
-                                    listener.executed(interactionIds);
-                        });
-                });
+                invokeListenerCallbackWithinTransaction(listener, interactionIds);
             });
 
         });
@@ -172,6 +168,15 @@ public class FakeScheduler {
             }
         );
     }
+
+    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds) {
+        interactionService.runAnonymous(() -> {
+            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                listener.executed(interactionIds);
+            });
+        });
+    }
+
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Inject CommandLogEntryRepository commandLogEntryRepository;
