@@ -25,11 +25,13 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -48,6 +50,11 @@ import lombok.experimental.Accessors;
  * Intended to support integration testing which uses the
  * {@link org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService} to create background
  * {@link CommandLogEntry command}s, that the integration test then needs to be executed.
+ *
+ * <p>
+ *     In effect, emulates the work performed by
+ *     {@link org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob}.
+ * </p>
  *
  * @see org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService
  * @since 2.0 {@index}
@@ -93,10 +100,7 @@ public class FakeScheduler {
             final NoCommandsPolicy noCommandsPolicy) throws InterruptedException {
 
         // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
-        List<CommandDto> commandDtos = commandLogEntryRepository.findBackgroundAndNotYetStarted()
-                .stream()
-                .map(CommandLogEntry::getCommandDto)
-                .collect(Collectors.toList());
+        List<CommandDto> commandDtos = pendingCommandDtos();
 
         if(commandDtos.isEmpty()) {
             switch (noCommandsPolicy) {
@@ -114,10 +118,16 @@ public class FakeScheduler {
         transactionService.flushTransaction();
 
         final _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Execute Command DTOs");
-        tasks.addRunnable("Bulk run all pending CommandDtos", () ->{
+        tasks.addRunnable("Bulk run all pending CommandDtos then call listeners", () ->{
             for (val commandDto : commandDtos) {
-                execute(commandDto);
+                executeCommandWithinTransaction(commandDto);
             }
+
+            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            listeners.forEach(listener -> {
+                invokeListenerCallbackWithinTransaction(listener, interactionIds);
+            });
+
         });
 
         tasks.submit(_ConcurrentContext.singleThreaded());
@@ -125,8 +135,9 @@ public class FakeScheduler {
 
         return CommandBulkExecutionResult.builder()
                 .hasTimedOut(hasTimedOut)
+
                 .failure(tasks.getTasks().stream()
-                        .map(task->task.getFailedWith())
+                        .map(_ConcurrentTask::getFailedWith)
                         .filter(_NullSafe::isPresent)
                         .findAny()
                         .orElse(null))
@@ -136,7 +147,14 @@ public class FakeScheduler {
                 .build();
     }
 
-    private void execute(final CommandDto commandDto) {
+    private List<CommandDto> pendingCommandDtos() {
+        return commandLogEntryRepository.findBackgroundAndNotYetStarted()
+                .stream()
+                .map(CommandLogEntry::getCommandDto)
+                .collect(Collectors.toList());
+    }
+
+    private void executeCommandWithinTransaction(final CommandDto commandDto) {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRED, () -> {
                     // look up the CommandLogEntry again because we are within a new transaction.
@@ -151,10 +169,19 @@ public class FakeScheduler {
         );
     }
 
+    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds) {
+        interactionService.runAnonymous(() -> {
+            transactionService.runTransactional(Propagation.REQUIRED, () -> {
+                listener.executed(interactionIds);
+            });
+        });
+    }
+
+
+    @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject TransactionService transactionService;
     @Inject InteractionService interactionService;
-    @Inject ClockService clockService;
 
 }

@@ -26,13 +26,17 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -80,6 +84,8 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 
+    @Inject List<RunBackgroundCommandsJobListener> listeners;
+    @Autowired private CausewayConfiguration causewayConfiguration;
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
@@ -98,9 +104,15 @@ public class RunBackgroundCommandsJob implements Job {
         // for each command, we execute within its own transaction.  Failure of one should not impact the next.
         commandDtosIfAny.ifPresent(commandDtos -> {
             for (val commandDto : commandDtos) {
-                executeCommandWithinOwnTransaction(commandDto, interactionContext);
+                executeCommandWithinTransaction(commandDto, interactionContext);
             }
+
+            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            listeners.forEach(listener -> {
+                invokeListenerCallbackWithinTransaction(listener, interactionIds, interactionContext);
+            });
         });
+
     }
 
     private Optional<List<CommandDto>> pendingCommandDtos(final InteractionContext interactionContext) {
@@ -109,6 +121,7 @@ public class RunBackgroundCommandsJob implements Job {
                 commandLogEntryRepository.findBackgroundAndNotYetStarted()
                         .stream()
                         .map(CommandLogEntry::getCommandDto)
+                        .limit(causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getBatchSize())
                         .collect(Collectors.toList())
                 )
                 .ifFailureFail()
@@ -118,7 +131,7 @@ public class RunBackgroundCommandsJob implements Job {
             .getValue();
     }
 
-    private void executeCommandWithinOwnTransaction(
+    private void executeCommandWithinTransaction(
             final CommandDto commandDto,
             final InteractionContext interactionContext
     ) {
@@ -165,13 +178,21 @@ public class RunBackgroundCommandsJob implements Job {
                 val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                 // capture the error
-                commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                {
+                commandLogEntryIfAny.ifPresent(commandLogEntry -> {
                     commandLogEntry.setException(throwable);
                     commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
                 });
             });
         });
+    }
+
+    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds, InteractionContext interactionContext) {
+        interactionService.runAndCatch(interactionContext, () -> {
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                listener.executed(interactionIds);
+            });
+        })
+        .ifFailureFail();
     }
 
     private static boolean isEncounteredDeadlock(Try<?> result) {

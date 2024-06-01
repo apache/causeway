@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -51,6 +53,7 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
 
         // @Component's
         RunBackgroundCommandsJob.class,
+        RunBackgroundCommandsJobListener.Noop.class,
 
         // @Service's
         CommandSubscriberForCommandLog.class,
