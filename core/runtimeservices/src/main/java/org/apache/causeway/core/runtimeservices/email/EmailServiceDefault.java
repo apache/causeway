@@ -45,6 +45,13 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * A service that sends email notifications when specific events occur
+ *
+ * <p>
+ *     Note that this default implementation requires that an implementation of Spring's {@link JavaMailSender}
+ *     is configured.
+ * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailServiceDefault")
