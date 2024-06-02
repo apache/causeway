@@ -76,6 +76,8 @@ import lombok.extern.log4j.Log4j2;
  * Is the factory of {@link Interaction}s.
  *
  * @implNote holds a reference to the current session using a thread-local
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionServiceDefault")

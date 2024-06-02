@@ -80,6 +80,9 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)

@@ -39,6 +39,10 @@ import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MessageServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

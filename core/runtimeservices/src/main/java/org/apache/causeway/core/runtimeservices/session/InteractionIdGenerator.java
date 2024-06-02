@@ -22,6 +22,10 @@ package org.apache.causeway.core.runtimeservices.session;
 
 import java.util.UUID;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 public interface InteractionIdGenerator {
 
     UUID interactionId();

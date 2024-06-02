@@ -21,6 +21,9 @@ package org.apache.causeway.core.runtimeservices.wrapper.dispatchers;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal.base._Casts;
 
+/**
+ * @param <T>
+ */
 public abstract class InteractionEventDispatcherTypeSafe<T extends InteractionEvent>
 implements InteractionEventDispatcher {
 

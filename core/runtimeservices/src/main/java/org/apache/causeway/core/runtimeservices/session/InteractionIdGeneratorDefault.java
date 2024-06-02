@@ -33,6 +33,10 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionIdGenerator")
 @Priority(PriorityPrecedence.MIDPOINT)

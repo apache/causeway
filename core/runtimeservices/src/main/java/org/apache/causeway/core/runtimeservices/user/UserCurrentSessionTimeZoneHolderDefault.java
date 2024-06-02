@@ -33,6 +33,10 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import lombok.NonNull;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".UserCurrentSessionTimeZoneHolderDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
