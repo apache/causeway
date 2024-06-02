@@ -38,6 +38,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".LocaleChoiceProviderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

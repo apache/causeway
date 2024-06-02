@@ -43,6 +43,10 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailNotificationServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

@@ -30,6 +30,9 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EventBusServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)

@@ -47,6 +47,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SchemaValueMarshallerDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

@@ -42,6 +42,8 @@ import lombok.RequiredArgsConstructor;
  *     .build();
  * Element customerAsXml = snapshot.toXml();
  * </pre>
+ *
+ * @since 1.0 {@index}
  */
 @RequiredArgsConstructor
 public class XmlSnapshotBuilder {

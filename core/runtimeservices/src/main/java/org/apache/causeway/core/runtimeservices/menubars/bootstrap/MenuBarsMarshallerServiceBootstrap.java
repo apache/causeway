@@ -44,6 +44,10 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsMarshallerBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
