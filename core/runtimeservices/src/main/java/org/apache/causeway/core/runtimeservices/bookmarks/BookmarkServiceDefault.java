@@ -53,6 +53,8 @@ import lombok.val;
 
 /**
  * This service enables a serializable 'bookmark' to be created for an entity.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".BookmarkServiceDefault")

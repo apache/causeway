@@ -41,6 +41,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+/**
+ *
+ * @since 1.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".XmlSnapshotServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

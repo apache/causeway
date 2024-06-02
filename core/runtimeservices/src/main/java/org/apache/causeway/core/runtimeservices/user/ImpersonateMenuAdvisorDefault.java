@@ -39,6 +39,8 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
  *  {@link org.apache.causeway.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String) impersonateWithRoles}
  *  action will be hidden.
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ImpersonateMenuAdvisorDefault")

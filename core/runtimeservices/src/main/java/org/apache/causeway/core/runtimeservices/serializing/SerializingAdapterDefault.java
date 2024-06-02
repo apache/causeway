@@ -52,6 +52,8 @@ import lombok.val;
  * are written/read directly
  *
  * @see PredefinedSerializables
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SerializingAdapterDefault")
