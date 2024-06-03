@@ -116,7 +116,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <easymock.version>5.2.0</easymock.version>
         <eclipselink.version>4.0.3</eclipselink.version>
-        <error_prone_annotations.version>2.27.1</error_prone_annotations.version>
+        <error_prone_annotations.version>2.28.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
