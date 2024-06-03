@@ -82,7 +82,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
 		<maven-surefire-report-plugin.version>3.2.5</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
-        <maven.plugin.tools.version>3.13.0</maven.plugin.tools.version>
+        <maven.plugin.tools.version>3.13.1</maven.plugin.tools.version>
 
         <!-- LIBRARY DEPENDENCIES -->
 
