@@ -3742,6 +3742,20 @@ public class CausewayConfiguration {
              */
             private PersistPolicy persist = PersistPolicy.ENABLED;
 
+            private final RunBackgroundCommands runBackgroundCommands = new RunBackgroundCommands();
+            @Data
+            public static class RunBackgroundCommands {
+
+                /**
+                 * Limits the number of pending commands that the <code>RunBackgroundCommandsJob</code>
+                 * will execute.  After these have been executed, any <code>RunBackgroundCommandsJobListener</code>s are called.
+                 *
+                 * <p>
+                 *     By default, quartz runs this command every 10 seconds, so the size should be proportion to that.
+                 * </p>
+                 */
+                private int batchSize = 25;
+            }
         }
 
         private final CommandReplay commandReplay = new CommandReplay();

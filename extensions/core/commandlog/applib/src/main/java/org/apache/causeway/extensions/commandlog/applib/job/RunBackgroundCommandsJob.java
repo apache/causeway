@@ -25,12 +25,19 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
+
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
-import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -41,9 +48,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.val;
@@ -79,6 +84,8 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
 
+    @Inject List<RunBackgroundCommandsJobListener> listeners;
+    @Autowired private CausewayConfiguration causewayConfiguration;
 
     @Override
     public void execute(final JobExecutionContext quartzContext) {
@@ -97,9 +104,15 @@ public class RunBackgroundCommandsJob implements Job {
         // for each command, we execute within its own transaction.  Failure of one should not impact the next.
         commandDtosIfAny.ifPresent(commandDtos -> {
             for (val commandDto : commandDtos) {
-                executeCommandWithinOwnTransaction(commandDto, interactionContext);
+                executeCommandWithinTransaction(commandDto, interactionContext);
             }
+
+            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            listeners.forEach(listener -> {
+                invokeListenerCallbackWithinTransaction(listener, interactionIds, interactionContext);
+            });
         });
+
     }
 
     private Optional<List<CommandDto>> pendingCommandDtos(final InteractionContext interactionContext) {
@@ -108,6 +121,7 @@ public class RunBackgroundCommandsJob implements Job {
                 commandLogEntryRepository.findBackgroundAndNotYetStarted()
                         .stream()
                         .map(CommandLogEntry::getCommandDto)
+                        .limit(causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getBatchSize())
                         .collect(Collectors.toList())
                 )
                 .ifFailureFail()
@@ -117,7 +131,7 @@ public class RunBackgroundCommandsJob implements Job {
             .getValue();
     }
 
-    private void executeCommandWithinOwnTransaction(
+    private void executeCommandWithinTransaction(
             final CommandDto commandDto,
             final InteractionContext interactionContext
     ) {
@@ -139,7 +153,7 @@ public class RunBackgroundCommandsJob implements Job {
         }
     }
 
-    private void executeCommandWithinOwnTransactionElseFail(final CommandDto commandDto) {
+    private void executeCommandWithinOwnTransactionElseFail(CommandDto commandDto) {
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
                 // look up the CommandLogEntry again because we are within a new transaction.
                 val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
@@ -155,7 +169,7 @@ public class RunBackgroundCommandsJob implements Job {
             .ifFailureFail();
     }
 
-    private void logAndCaptureFailure(final Throwable throwable, final CommandDto commandDto, final InteractionContext interactionContext) {
+    private void logAndCaptureFailure(Throwable throwable, CommandDto commandDto, InteractionContext interactionContext) {
         log.error("Failed to execute command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
         // update this command as having failed.
         interactionService.runAndCatch(interactionContext, () -> {
@@ -164,8 +178,7 @@ public class RunBackgroundCommandsJob implements Job {
                 val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                 // capture the error
-                commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                {
+                commandLogEntryIfAny.ifPresent(commandLogEntry -> {
                     commandLogEntry.setException(throwable);
                     commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
                 });
@@ -173,16 +186,25 @@ public class RunBackgroundCommandsJob implements Job {
         });
     }
 
-    private static boolean isEncounteredDeadlock(final Try<?> result) {
+    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds, InteractionContext interactionContext) {
+        interactionService.runAndCatch(interactionContext, () -> {
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                listener.executed(interactionIds);
+            });
+        })
+        .ifFailureFail();
+    }
+
+    private static boolean isEncounteredDeadlock(Try<?> result) {
         if (!result.isFailure()) {
             return false;
         }
         return result.getFailure()
-                .map(throwable -> throwable instanceof DeadlockLoserDataAccessException)
+                .map(throwable -> throwable instanceof PessimisticLockingFailureException)
                 .orElse(false);
     }
 
-    private static void sleep(final long retryIntervalMs) {
+    private static void sleep(long retryIntervalMs) {
         try {
             Thread.sleep(retryIntervalMs);
         } catch (InterruptedException e) {
