@@ -18,8 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.standalonecollection;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+
+import org.apache.causeway.commons.internal.binding._Observables;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -59,21 +67,48 @@ public class StandaloneCollectionPage extends PageAbstract {
     }
 
     @Override
+    public void onRendering(final Can<PageRenderSubscriber> objectRenderSubscribers) {
+        onRenderingOrRendered(objectRenderSubscribers, (pageRenderSubscriber, bookmarkListSupplier) -> {
+            pageRenderSubscriber.onRenderingCollection(bookmarkListSupplier);
+            return null;
+        });
+    }
+
+    @Override
     public void onRendered(final Can<PageRenderSubscriber> objectRenderSubscribers) {
+        onRenderingOrRendered(objectRenderSubscribers, (pageRenderSubscriber, bookmarkListSupplier) -> {
+            pageRenderSubscriber.onRenderedCollection(bookmarkListSupplier);
+            return null;
+        });
+    }
+
+    private void onRenderingOrRendered(
+            final Can<PageRenderSubscriber> objectRenderSubscribers,
+            final BiFunction<PageRenderSubscriber, Supplier<List<Bookmark>>, Void> handler) {
 
         if(objectRenderSubscribers.isEmpty()) {
             return;
         }
 
-        val bookmarks =
-            collectionModel.getObject().getDataElements().getValue().stream()
-            .map(ManagedObject::getBookmark)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .collect(Collectors.toUnmodifiableList());
+        Supplier<List<Bookmark>> listSupplier = () -> {
+
+            final var dataTableInteractive = collectionModel.getObject();
+            _Observables.LazyObservable<Can<ManagedObject>> dataElements = dataTableInteractive.getDataElements();
+            Can<ManagedObject> managedObjects = dataElements.getValue();
+
+            final var bookmarks =
+                managedObjects.stream()
+                .map(ManagedObject::getBookmark)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toUnmodifiableList());
+            return bookmarks;
+        };
 
         objectRenderSubscribers
-            .forEach(subscriber -> subscriber.onRenderedCollection(()->bookmarks));
+            .forEach(subscriber -> {
+                handler.apply(subscriber, listSupplier);
+            });
     }
 
 }

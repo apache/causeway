@@ -62,7 +62,8 @@ public interface PageRenderSubscriber extends HasEnabling {
      * <p>
      *     Determines which of the <code>onRenderedXxx</code> callbacks (if any) will next be called:
      *     <ul>
-     *         <li>if {@link PageType#DOMAIN_OBJECT}, then will call {@link #onRenderedDomainObject(Bookmark)} next</li>
+     *         <li>if {@link PageType#DOMAIN_OBJECT}, then will call {@link #onRenderingDomainObject(Bookmark)} next,
+     *             and afterwards {@link #onRenderedDomainObject(Bookmark)} next</li>
      *         <li>if {@link PageType#COLLECTION}, then will call {@link #onRenderedCollection(Supplier)} next</li>
      *         <li>if {@link PageType#VALUE}, then will call {@link #onRenderedValue(Object)} next</li>
      *     </ul>
@@ -81,6 +82,28 @@ public interface PageRenderSubscriber extends HasEnabling {
      * @param pageType - determines which of the subsequent <code>onRenderedXxx</code> callbacks (if any) will next be called.
      */
     default void onRendering(final PageType pageType) {}
+
+
+    /**
+     * Indicates that the domain object represented by the {@link Bookmark} is about to be rendered.
+     *
+     * @param bookmark - representation of the domain object that are to be rendered.
+     */
+    default void onRenderingDomainObject(final Bookmark bookmark) {}
+
+    /**
+     * Indicates that a standalone list of domain objects (each represented by a {@link Bookmark} is about to be rendered.
+     *
+     * @param bookmarkSupplier - a supplier representations of the collection of domain objects that are to be rendered.  The level of indirection is for performance (in case no implementation is interested)
+     */
+    default void onRenderingCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {}
+
+    /**
+     * Indicates that a value is about to be rendered.
+     *
+     * @param value - the actual value that is to be rendered.
+     */
+    default void onRenderingValue(final @Nullable Object value) {}
 
 
     /**
