@@ -38,8 +38,6 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
-import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
-import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -168,7 +166,7 @@ public class ParameterNegotiationModel {
         return paramModels.getElseFail(paramNr).getObservableParamValidation();
     }
     
-    @NonNull public String getImmidiateParamValidation(final int paramNr, ManagedObject proposedArg) {
+    @NonNull public String getImmidiateParamValidation(final int paramNr, final @Nullable ManagedObject proposedArg) {
         return paramModels.getElseFail(paramNr).getImmidiateParamValidation(proposedArg);
     }
 
@@ -387,10 +385,8 @@ public class ParameterNegotiationModel {
             // validate this parameter, but only when validationFeedback has been activated
             observableParamValidation = _Observables.lazy(()->
                 isValidationFeedbackActive()
-                ? getMetaModel()
-                        .isValid(getNegotiationModel().getHead(), getNegotiationModel().getParamValues(), InteractionInitiatedBy.USER)
-                        .getReasonAsString().orElse(null)
-                : (String)null);
+                    ? validateArguments(getNegotiationModel().getParamValues())
+                    : (String)null);
             
             observableVisibilityConsent = _Observables.lazy(()->
                 metaModel.isVisible(
@@ -490,30 +486,21 @@ public class ParameterNegotiationModel {
         /** 
          * TODO we somehow missed that one in the original param. neg. model design.
          * <p> 
-         * Open question: Can this be converted to an observable? 
+         * Open questions:
+         * <br> 
+         * Why is this even needed? Should we instead update the arguments model?
+         * Can this be converted to an observable? 
          */
-        public String getImmidiateParamValidation(ManagedObject proposedArg) {
+        public String getImmidiateParamValidation(final @Nullable ManagedObject proposedArg) {
             val value = getObservableParamValidation().getValue();
             if (value != null) {
                 return value;
             }
-
-            //
-            // validate individual params
-            //
-
-            final var resultSet = new InteractionResultSet();
-            InteractionUtils.isValidResultSet(
-                    metaModel, 
-                    metaModel.createProposedArgumentInteractionContext(
-                            negotiationModel.getHead(), 
-                            negotiationModel.getParamValues().replace(paramNr, proposedArg), 
-                            paramNr, 
-                            InteractionInitiatedBy.USER), 
-                    resultSet);
-            return resultSet.createConsent().getReasonAsString().orElse(null);
+            var proposedArgAsNonNull = Optional.ofNullable(proposedArg) 
+                    .orElseGet(metaModel::getEmpty); 
+            return validateArguments( 
+                        getNegotiationModel().getParamValues().replace(paramNr, proposedArgAsNonNull));
         }
-
 
         @Override
         public Bindable<String> getSearchArgument() {
@@ -523,6 +510,21 @@ public class ParameterNegotiationModel {
         @Override
         public Observable<Can<ManagedObject>> getChoices() {
             return observableParamChoices;
+        }
+        
+        // -- HELPER
+        
+        /**
+         * Calls the underlying action parameter validation logic, for given arguments.
+         */
+        private String validateArguments(final @NonNull Can<ManagedObject> arguments) {
+            return metaModel
+                    .isValid(
+                            getNegotiationModel().getHead(), 
+                            arguments, 
+                            InteractionInitiatedBy.USER)
+                    .getReasonAsString()
+                    .orElse(null);
         }
 
     }
