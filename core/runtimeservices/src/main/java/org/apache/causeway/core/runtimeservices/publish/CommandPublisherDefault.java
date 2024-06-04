@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.publish;
 import java.util.List;
 
 import javax.annotation.Priority;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
@@ -41,6 +42,10 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandPublisherDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
@@ -53,6 +58,7 @@ public class CommandPublisherDefault implements CommandPublisher {
 
     final Can<CommandSubscriber> enabledSubscribers;
 
+    @Inject
     public CommandPublisherDefault(
             final List<CommandSubscriber> subscribers,
             final Provider<InteractionLayerTracker> interactionServiceProvider) {

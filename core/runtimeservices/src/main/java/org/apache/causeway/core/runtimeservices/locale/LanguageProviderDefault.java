@@ -37,6 +37,10 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(LanguageProviderDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)

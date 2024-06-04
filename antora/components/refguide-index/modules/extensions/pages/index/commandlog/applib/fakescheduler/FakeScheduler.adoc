@@ -3,6 +3,8 @@
 
 Intended to support integration testing which uses the _org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService_ to create background xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[CommandLogEntry] s, that the integration test then needs to be executed.
 
+In effect, emulates the work performed by _org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob_ .
+
 == API
 
 [source,java]

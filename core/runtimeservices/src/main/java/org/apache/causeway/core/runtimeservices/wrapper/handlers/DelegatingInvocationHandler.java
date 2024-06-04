@@ -20,6 +20,9 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.InvocationHandler;
 
+/**
+ * @param <T>
+ */
 public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
     T getDelegate();

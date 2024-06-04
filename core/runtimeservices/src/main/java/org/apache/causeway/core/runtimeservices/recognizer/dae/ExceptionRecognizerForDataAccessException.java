@@ -47,6 +47,8 @@ import lombok.val;
 /**
  * Translates {@link DataAccessException}(s) to {@link Recognition}(s),
  * unless disabled via {@link CausewayConfiguration}.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(ExceptionRecognizerForDataAccessException.LOGICAL_TYPE_NAME)

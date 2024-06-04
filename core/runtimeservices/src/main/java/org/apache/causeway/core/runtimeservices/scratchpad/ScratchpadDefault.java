@@ -32,6 +32,10 @@ import org.apache.causeway.applib.services.scratchpad.Scratchpad;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".Scratchpad")
 @Priority(PriorityPrecedence.EARLY)

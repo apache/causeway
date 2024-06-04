@@ -1,0 +1,48 @@
+= ContextAndMsgId
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The combination of a `msgId` and context (optionally null) that represents a key to a translatable resource.
+
+For example, with this _.pot_ file:
+
+----
+#: org.causewayaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions()
+ msgid: "Active Sessions"
+
+ #: org.causewayaddons.module.audit.dom.AuditingServiceMenu
+ #: org.causewayaddons.module.command.dom.CommandServiceMenu
+ #: org.causewayaddons.module.publishing.dom.PublishingServiceMenu
+ msgid: "Activity"
+----
+
+the combination of `{org.causewayaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions(), "Active Sessions"}` represents such a key, as does `{org.causewayaddons.module.audit.dom.AuditingServiceMenu, "Activity"}` 
+
+== API
+
+[source,java]
+.ContextAndMsgId.java
+----
+class ContextAndMsgId {
+  ContextAndMsgId(String context, String msgId, Type type)
+  String getMsgId()
+  String getContext()
+  Type getType()     // <.>
+  boolean equals(Object o)
+  int hashCode()
+  int compareTo(ContextAndMsgId o)
+  String toString()
+}
+----
+
+<.> xref:#getType_[getType()]
++
+--
+Not part of equals/hashCode impl.
+--
+
+== Members
+
+[#getType_]
+=== getType()
+
+Not part of equals/hashCode impl.

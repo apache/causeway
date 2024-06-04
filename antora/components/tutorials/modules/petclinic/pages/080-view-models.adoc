@@ -18,9 +18,9 @@ In this exercise we'll extend the home page by displaying additional data in new
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/08-01-home-page-additional-collections
+git checkout tags/{tag-version}/08-01-home-page-additional-collections
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----
@@ -142,9 +142,9 @@ In this exercise we'll extend the home page by providing a convenience action to
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/08-02-home-page-bookVisit-convenience-action
+git checkout tags/{tag-version}/08-02-home-page-bookVisit-convenience-action
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----

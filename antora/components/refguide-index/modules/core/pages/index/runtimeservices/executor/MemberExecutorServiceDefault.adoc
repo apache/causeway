@@ -1,0 +1,28 @@
+= MemberExecutorServiceDefault
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== API
+
+[source,java]
+.MemberExecutorServiceDefault.java
+----
+class MemberExecutorServiceDefault {
+  Optional<InteractionInternal> getInteraction()
+  ManagedObject invokeAction(ActionExecutor actionExecutor)
+  ManagedObject setOrClearProperty(PropertyModifier propertyExecutor)
+  void prepareCommandForPublishing(Command command, InteractionHead interactionHead, ObjectMember objectMember, FacetHolder facetHolder)     // <.>
+}
+----
+
+<.> xref:#prepareCommandForPublishing_Command_InteractionHead_ObjectMember_FacetHolder[prepareCommandForPublishing(Command, InteractionHead, ObjectMember, FacetHolder)]
++
+--
+Will set the command's CommandPublishingPhase to READY, if command and objectMember have a matching member-id and if the facetHolder has a CommandPublishingFacet (has commandPublishing=ENABLED).
+--
+
+== Members
+
+[#prepareCommandForPublishing_Command_InteractionHead_ObjectMember_FacetHolder]
+=== prepareCommandForPublishing(Command, InteractionHead, ObjectMember, FacetHolder)
+
+Will set the command's CommandPublishingPhase to READY, if command and objectMember have a matching member-id and if the facetHolder has a CommandPublishingFacet (has commandPublishing=ENABLED).

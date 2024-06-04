@@ -8,7 +8,7 @@
 
 You'll need:
 
-* Java 11
+* Java {jdk-version}
 +
 Apache Causeway works up to at least Java 21, but stick with Java 11 for now.
 
@@ -24,7 +24,6 @@ This has multiple tags for the various checkpoints so you can pick up the tutori
 * a Java IDE with support for Maven.
 +
 The Apache Causeway website has detailed documentation for setting up to use xref:setupguide:intellij:about.adoc[IntelliJ] or xref:setupguide:eclipse:about.adoc[Eclipse].
-+
 For this tutorial, also make sure that your IDE is configured to support Lombok.
 
 
@@ -42,7 +41,7 @@ We start the tutorial simply with a copy of xref:docs:starters:simpleapp.adoc[Si
 
 * Clone the repo:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 git clone https://github.com/apache/causeway-app-petclinic
 ----
@@ -53,9 +52,9 @@ This will make it easier to inspect differences between different tags.
 
 * Checkout the first tag, and build:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/01-01-starter-app
+git checkout tags/{tag-version}/01-01-starter-app
 mvn clean install
 ----
 +
@@ -63,7 +62,7 @@ mvn clean install
 ====
 The code at this tag was created by copying the `v2-jpa` tag of xref:docs:starters:simpleapp.adoc[SimpleApp]:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 curl https://codeload.github.com/apache/causeway-app-simpleapp/zip/v2-jpa | jar xv
 ----
@@ -71,7 +70,7 @@ curl https://codeload.github.com/apache/causeway-app-simpleapp/zip/v2-jpa | jar 
 
 * run the app:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -pl webapp spring-boot:run
 ----
