@@ -29,7 +29,6 @@ Walks the path, ensuring keys exist and are maps, or creating required maps as i
 For example, if given a list ("a", "b", "c") and starting with an empty map, then will create:
 
 ----
-
 {
   "a": {
     "b: {
