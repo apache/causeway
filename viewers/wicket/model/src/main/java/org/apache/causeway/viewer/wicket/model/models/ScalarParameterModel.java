@@ -72,7 +72,7 @@ implements HasUiParameter {
 
         val value = getParameterNegotiationModel().getObservableParamValidation(getParameterIndex()).getValue();
         if (value != null) {
-            return null;
+            return value;
         }
 
 
