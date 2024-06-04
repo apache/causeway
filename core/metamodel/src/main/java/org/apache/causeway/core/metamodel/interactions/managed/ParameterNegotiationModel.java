@@ -488,10 +488,21 @@ public class ParameterNegotiationModel {
             return observableParamValidation;
         }
 
+        @Override
+        public Bindable<String> getSearchArgument() {
+            return bindableParamSearchArgument;
+        }
+
+        @Override
+        public Observable<Can<ManagedObject>> getChoices() {
+            return observableParamChoices;
+        }
+
+        // -- HELPER
+
         /**
          * Calls the underlying action parameter validation logic, for pending arguments.
          * (Ignoring the {@link #isValidationFeedbackActive()} flag.)
-         * @apiNote introduced for [CAUSEWAY-3753] - not sure why required.
          */
         private String getImmidiateParamValidation() {
             return metaModel
@@ -501,16 +512,6 @@ public class ParameterNegotiationModel {
                             InteractionInitiatedBy.USER)
                     .getReasonAsString()
                     .orElse(null);
-        }
-
-        @Override
-        public Bindable<String> getSearchArgument() {
-            return bindableParamSearchArgument;
-        }
-
-        @Override
-        public Observable<Can<ManagedObject>> getChoices() {
-            return observableParamChoices;
         }
 
     }
