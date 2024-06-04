@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -38,6 +39,8 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
+import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -493,4 +496,69 @@ public class ParameterNegotiationModel {
 
     }
 
+    /**
+     * TODO this is an intermediate refactoring step 
+     */
+    public String validateDirectly(int parameterIndex, ManagedObject proposedArg) {
+        val value = getObservableParamValidation(parameterIndex).getValue();
+        if (value != null) {
+            return value;
+        }
+
+        //
+        // validate individual params
+        //
+
+        final var objectActionParameter = getParamMetamodel(parameterIndex);
+        
+        final var resultSet = new InteractionResultSet();
+        InteractionUtils.isValidResultSet(
+                objectActionParameter, 
+                objectActionParameter.createProposedArgumentInteractionContext(
+                        getHead(), previousOrProposedArgs(parameterIndex, proposedArg), parameterIndex, InteractionInitiatedBy.USER), 
+                resultSet);
+        return resultSet.createConsent().getReasonAsString().orElse(null);
+    }
+    
+    // -- HELPER
+
+    /**
+     * Returns a Can of the previous args + the proposed arg.
+     */
+    private Can<ManagedObject> previousOrProposedArgs(
+            final int parameterIndex,
+            final ManagedObject proposedArg) {
+
+        final var objectAction = getHead().getMetaModel();
+        final var paramList = new ArrayList<ManagedObject>();
+
+        final var previousArgs = getParamValues();
+        for (ObjectActionParameter oap : objectAction.getParameters()) {
+            paramList.add(previousOrProposedArg(parameterIndex, oap, previousArgs, proposedArg));
+        }
+
+        return Can.ofCollection(paramList);
+    }
+
+    /**
+     * Returns either the relevant previous arg (from the {@link #getParameterNegotiationModel() negotiation model}
+     * or the proposed arg if the supplied {@link ObjectActionParameter} corresponds
+     *
+     * @param eachOap - each {@link ObjectActionParameter} of the action
+     * @param previousParamArgs - already in the negotiation model, have been validated
+     * @param proposedParamArg - current being validated
+     */
+    private ManagedObject previousOrProposedArg(
+            final int parameterIndex, 
+            final ObjectActionParameter eachOap,
+            final Can<ManagedObject> previousParamArgs,
+            final ManagedObject proposedParamArg) {
+
+        return eachOap.getParameterIndex() == parameterIndex 
+            ? proposedParamArg
+            : previousParamArgs
+                .get(eachOap.getParameterIndex())
+                .orElseGet(() -> ManagedObject.empty(eachOap.getElementType()));
+    }
+    
 }
