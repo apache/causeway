@@ -58,8 +58,13 @@ implements HasUiParameter {
     }
 
     @Override
-    public String validate(final ManagedObject proposedArg) {
-        return getParameterNegotiationModel().getImmidiateParamValidation(getParameterIndex(), proposedArg);
+    public String validate(final @NonNull ManagedObject proposedArg) {
+        proposedValue().getValue().setValue(proposedArg); // updates the pending parameter value
+        //TODO [CAUSEWAY-3753] for some reason the ParameterModel.isValidationFeedbackActive() flag is not yet active,
+        //  hence we call the immediate validation logic, that ignores the flag.
+        //  In addition, the immediate validation call does not cache its result, so its always re-evaluated.
+        //  (keeping a todo marker here, until we know this fix works as desired)
+        return getParameterNegotiationModel().getImmidiateParamValidation(getParameterIndex());
     }
 
     @Override

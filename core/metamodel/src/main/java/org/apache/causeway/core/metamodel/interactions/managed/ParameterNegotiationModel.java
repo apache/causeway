@@ -165,30 +165,35 @@ public class ParameterNegotiationModel {
     @NonNull public Observable<String> getObservableParamValidation(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableParamValidation();
     }
-    
-    @NonNull public String getImmidiateParamValidation(final int paramNr, final @Nullable ManagedObject proposedArg) {
-        return paramModels.getElseFail(paramNr).getImmidiateParamValidation(proposedArg);
+
+    /**
+     * Calls the underlying action parameter validation logic, for pending arguments.
+     * (Ignoring the {@link ParameterModel#isValidationFeedbackActive()} flag.)
+     * @apiNote introduced for [CAUSEWAY-3753] - not sure why required.
+     */
+    @NonNull public String getImmidiateParamValidation(final int paramNr) {
+        return paramModels.getElseFail(paramNr).getImmidiateParamValidation();
     }
 
     @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
         return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
     }
-    
+
     @NonNull public Observable<Consent> getObservableVisibilityConsent(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableVisibilityConsent();
     }
-    
+
     @NonNull public Observable<Consent> getObservableUsabilityConsent(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableUsabilityConsent();
     }
-    
+
     @NonNull public Consent getVisibilityConsent(final int paramNr) {
         return getObservableVisibilityConsent(paramNr).getValue();
     }
     @NonNull public Consent getUsabilityConsent(final int paramNr) {
         return getObservableUsabilityConsent(paramNr).getValue();
     }
-    
+
     // -- MULTI SELECT
 
     public MultiselectChoices getMultiselectChoices() {
@@ -278,10 +283,10 @@ public class ParameterNegotiationModel {
     public boolean reassessDefaults(final int paramIndexForReassessment) {
         return getParamMetamodel(paramIndexForReassessment).reassessDefault(this);
     }
-    
+
     /**
-     * Invalidates any consent cached previously. 
-     * Next query for visibility or usability will be reassessed.   
+     * Invalidates any consent cached previously.
+     * Next query for visibility or usability will be reassessed.
      */
     public void invalidateVisibilityAndUsability(final int paramIndexForReassessment) {
         paramModels.get(paramIndexForReassessment)
@@ -385,18 +390,18 @@ public class ParameterNegotiationModel {
             // validate this parameter, but only when validationFeedback has been activated
             observableParamValidation = _Observables.lazy(()->
                 isValidationFeedbackActive()
-                    ? validateArguments(getNegotiationModel().getParamValues())
+                    ? getImmidiateParamValidation()
                     : (String)null);
-            
+
             observableVisibilityConsent = _Observables.lazy(()->
                 metaModel.isVisible(
-                        negotiationModel.getHead(), 
-                        negotiationModel.getParamValues(), 
+                        negotiationModel.getHead(),
+                        negotiationModel.getParamValues(),
                         InteractionInitiatedBy.USER));
             observableUsabilityConsent = _Observables.lazy(()->
                 metaModel.isUsable(
-                        negotiationModel.getHead(), 
-                        negotiationModel.getParamValues(), 
+                        negotiationModel.getHead(),
+                        negotiationModel.getParamValues(),
                         InteractionInitiatedBy.USER));
         }
 
@@ -404,7 +409,7 @@ public class ParameterNegotiationModel {
             observableParamChoices.invalidate();
             observableParamValidation.invalidate();
         }
-        
+
         public void invalidateVisibilityAndUsability() {
             observableVisibilityConsent.invalidate();
             observableUsabilityConsent.invalidate();
@@ -482,24 +487,20 @@ public class ParameterNegotiationModel {
         public Observable<String> getValidationMessage() {
             return observableParamValidation;
         }
-        
-        /** 
-         * TODO we somehow missed that one in the original param. neg. model design.
-         * <p> 
-         * Open questions:
-         * <br> 
-         * Why is this even needed? Should we instead update the arguments model?
-         * Can this be converted to an observable? 
+
+        /**
+         * Calls the underlying action parameter validation logic, for pending arguments.
+         * (Ignoring the {@link #isValidationFeedbackActive()} flag.)
+         * @apiNote introduced for [CAUSEWAY-3753] - not sure why required.
          */
-        public String getImmidiateParamValidation(final @Nullable ManagedObject proposedArg) {
-            val value = getObservableParamValidation().getValue();
-            if (value != null) {
-                return value;
-            }
-            var proposedArgAsNonNull = Optional.ofNullable(proposedArg) 
-                    .orElseGet(metaModel::getEmpty); 
-            return validateArguments( 
-                        getNegotiationModel().getParamValues().replace(paramNr, proposedArgAsNonNull));
+        private String getImmidiateParamValidation() {
+            return metaModel
+                    .isValid(
+                            getNegotiationModel().getHead(),
+                            getNegotiationModel().getParamValues(),
+                            InteractionInitiatedBy.USER)
+                    .getReasonAsString()
+                    .orElse(null);
         }
 
         @Override
@@ -511,22 +512,7 @@ public class ParameterNegotiationModel {
         public Observable<Can<ManagedObject>> getChoices() {
             return observableParamChoices;
         }
-        
-        // -- HELPER
-        
-        /**
-         * Calls the underlying action parameter validation logic, for given arguments.
-         */
-        private String validateArguments(final @NonNull Can<ManagedObject> arguments) {
-            return metaModel
-                    .isValid(
-                            getNegotiationModel().getHead(), 
-                            arguments, 
-                            InteractionInitiatedBy.USER)
-                    .getReasonAsString()
-                    .orElse(null);
-        }
 
     }
-    
+
 }
