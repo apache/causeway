@@ -171,7 +171,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
 
     public abstract ManagedValue proposedValue();
 
-    public abstract String validate(ManagedObject proposedAdapter);
+    public abstract String validate(@NonNull ManagedObject proposedAdapter);
 
     @Override
     public final PromptStyle getPromptStyle() {

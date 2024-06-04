@@ -50,6 +50,10 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SitemapServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

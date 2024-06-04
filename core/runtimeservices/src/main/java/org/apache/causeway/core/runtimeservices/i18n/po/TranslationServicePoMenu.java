@@ -36,6 +36,10 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Named(TranslationServicePoMenu.LOGICAL_TYPE_NAME)
 @DomainService
 @DomainServiceLayout(

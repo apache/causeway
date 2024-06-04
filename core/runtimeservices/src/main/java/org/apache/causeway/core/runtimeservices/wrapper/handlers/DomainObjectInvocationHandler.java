@@ -71,6 +71,10 @@ import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ *
+ * @param <T>
+ */
 @Log4j2
 public class DomainObjectInvocationHandler<T>
 extends DelegatingInvocationHandlerDefault<T> {

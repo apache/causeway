@@ -16,9 +16,9 @@ In this section we'll write a unit test to verify this logic, using Mockito to "
 
 === Solution
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git checkout tags/06-01-unit-test-bookVisit-default-time
+git checkout tags/{tag-version}/06-01-unit-test-bookVisit-default-time
 mvn clean install
 mvn -pl webapp spring-boot:run -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=dev"
 ----

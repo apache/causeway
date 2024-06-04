@@ -37,6 +37,9 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import lombok.val;
 
+/**
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".HomePageResolverServiceDefault")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)

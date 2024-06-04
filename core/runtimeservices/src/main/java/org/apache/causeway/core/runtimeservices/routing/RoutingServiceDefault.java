@@ -32,6 +32,10 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")
 @Priority(PriorityPrecedence.EARLY)

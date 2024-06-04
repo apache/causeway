@@ -38,6 +38,8 @@ package org.apache.causeway.core.runtimeservices.i18n.po;
  * <p>
  *     the combination of <code>{org.causewayaddons.module.sessionlogger.dom.SessionLoggingServiceMenu#activeSessions(), "Active Sessions"}</code> represents such a key, as does <code>{org.causewayaddons.module.audit.dom.AuditingServiceMenu, "Activity"}</code>
  * </p>
+ *
+ * @since 2.0 {@index}
  */
 public class ContextAndMsgId implements Comparable<ContextAndMsgId> {
 

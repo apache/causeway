@@ -35,6 +35,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+/**
+ * @param <T>
+ */
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
     private ObjectManager objectManager;
