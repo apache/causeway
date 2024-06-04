@@ -34,6 +34,17 @@ One reason to use this option is if you wish to provide your own implementation 
 
 
 |
+[[causeway.extensions.command-log.run-background-commands.batch-size]]
+causeway.extensions.command-log. +
+run-background-commands.batch-size
+
+|  25
+| Limits the number of pending commands that the ``RunBackgroundCommandsJob`` will execute. After these have been executed, any ``RunBackgroundCommandsJobListener``s are called.
+
+By default, quartz runs this command every 10 seconds, so the size should be proportion to that.
+
+
+|
 [[causeway.extensions.command-replay.analyser.exception.enabled]]
 causeway.extensions.command-replay. +
 analyser.exception.enabled
