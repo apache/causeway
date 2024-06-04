@@ -101,7 +101,6 @@ Subscribers of this event can interact with the business rule checking (hide, di
 For example:
 
 ----
-
 public class SomeObject{
     public static class ChangeStartDateDomainEvent extends ActionDomainEvent<SomeObject> { ... }
 

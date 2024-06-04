@@ -8,7 +8,6 @@ Subclasses represent the intersection of multiple xref:refguide:applib:index/spe
 For example:
 
 ----
-
 public class MilkAndSugarSpec extends SpecificationAnd {
     public MilkAndSugarSpec() {
         super(new MustBeMilkySpec(), new TwoLumpsOfSugarSpec());

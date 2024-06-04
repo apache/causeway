@@ -266,7 +266,6 @@ Indicates that an invocation of _any_ action of the domain object (that do not t
 For example:
 
 ----
-
 @DomainObject(actionDomainEvent=SomeObject.GenericActionDomainEvent.class)
 public class SomeObject{
     public static class GenericActionDomainEvent extends ActionDomainEvent<Object> { ... }
@@ -288,7 +287,6 @@ Indicates that changes to _any_ property of the domain object (that do not thems
 For example:
 
 ----
-
 @DomainObject(propertyDomainEvent=SomeObject.GenericPropertyDomainEvent.class)
 public class SomeObject{
 
@@ -306,7 +304,6 @@ Indicates that changes to _any_ collection of the domain object (that do not the
 For example:
 
 ----
-
 @DomainObject(collectionDomainEvent=Order.GenericCollectionDomainEvent.class)
 public class Order {
 

@@ -38,7 +38,6 @@ Subscribers of this event can interact with the business rule checking (hide, di
 For example:
 
 ----
-
 public class Order {
   public static class OrderLineItems extends CollectionDomainEvent { ... }
 

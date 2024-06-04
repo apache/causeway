@@ -1,0 +1,50 @@
+= InteractionServiceDefault
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Is the factory of xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] s.
+
+== API
+
+[source,java]
+.InteractionServiceDefault.java
+----
+class InteractionServiceDefault {
+  InteractionServiceDefault(MetamodelEventService runtimeEventService, SpecificationLoader specificationLoader, ServiceInjector serviceInjector, TransactionServiceSpring transactionServiceSpring, ClockService clockService, Provider<CommandPublisher> commandPublisherProvider, ConfigurableBeanFactory beanFactory, InteractionIdGenerator interactionIdGenerator)
+  void init(ContextRefreshedEvent event)
+  int getInteractionLayerCount()
+  InteractionLayer openInteraction()
+  InteractionLayer openInteraction(InteractionContext interactionContextToUse)
+  void closeInteractionLayers()
+  Optional<InteractionLayer> currentInteractionLayer()
+  boolean isInInteraction()
+  R call(InteractionContext interactionContext, Callable<R> callable)
+  void run(InteractionContext interactionContext, ThrowingRunnable runnable)
+  R callAnonymous(Callable<R> callable)
+  void runAnonymous(ThrowingRunnable runnable)     // <.>
+  Optional<UUID> getInteractionId()
+  void completeAndPublishCurrentCommand()     // <.>
+}
+----
+
+<.> xref:#runAnonymous_ThrowingRunnable[runAnonymous(ThrowingRunnable)]
++
+--
+Variant of _#callAnonymous(Callable)_ that takes a runnable.
+--
+<.> xref:#completeAndPublishCurrentCommand_[completeAndPublishCurrentCommand()]
++
+--
+called by xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring] , but to be moved.
+--
+
+== Members
+
+[#runAnonymous_ThrowingRunnable]
+=== runAnonymous(ThrowingRunnable)
+
+Variant of _#callAnonymous(Callable)_ that takes a runnable.
+
+[#completeAndPublishCurrentCommand_]
+=== completeAndPublishCurrentCommand()
+
+called by xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[TransactionServiceSpring] , but to be moved.

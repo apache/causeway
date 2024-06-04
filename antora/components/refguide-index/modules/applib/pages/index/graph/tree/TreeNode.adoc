@@ -116,7 +116,6 @@ Select nodes by their corresponding xref:refguide:applib:index/graph/tree/TreePa
 With the _Wicket Viewer_ corresponds to expressing CSS class _tree-node-selected_ on the rendered tree node, which has default bg-color _lightgrey_ . Color can be customized by setting CSS var __
 
 ----
-
 .tree-theme-bootstrap .tree-node-selected {
     background-color: var(--tree-node-selected-bg-color, lightgrey);
 }

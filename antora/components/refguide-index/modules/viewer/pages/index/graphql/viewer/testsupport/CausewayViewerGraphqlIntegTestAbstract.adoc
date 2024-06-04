@@ -8,7 +8,6 @@ Subclass and _Import_ the Spring _org.springframework.context.annotation.Configu
 Write tests as queries with a `._.gql` suffix (or specify a different suffix through the constructor). Then override the _#each()_ method trivially:
 
 ----
-
     _@_ TestFactory
     public Iterable each() throws IOException, URISyntaxException {
         return super.each();

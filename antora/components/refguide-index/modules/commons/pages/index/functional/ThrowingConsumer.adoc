@@ -81,7 +81,6 @@ This method can be especially useful when working with method references. It all
 For example:
 
 ----
-
 list.forEach(ThrowingConsumer.of(Example::methodThatCanThrowCheckedException));
 ----
 
@@ -95,6 +94,5 @@ This method can be especially useful when working with method references. It all
 For example:
 
 ----
-
 list.forEach(ThrowingConsumer.of(Example::methodThatCanThrowCheckedException, IllegalStateException::new));
 ----

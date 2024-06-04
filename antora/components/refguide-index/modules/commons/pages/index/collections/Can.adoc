@@ -469,7 +469,6 @@ Removes the element at the specified position in this list (optional operation).
 Given _n_ indices, returns an equivalent of(where nulls are being ignored)
 
 ----
-
 Can.of(
     this.get(indices[0]).orElse(null),
     this.get(indices[1]).orElse(null),

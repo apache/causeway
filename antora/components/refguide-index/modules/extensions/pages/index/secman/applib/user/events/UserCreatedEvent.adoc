@@ -6,7 +6,6 @@ SecMan fires this event when a new user entity just got persisted.
 Users may subscribe to this event in order to apply business logic to the newly created user. eg. add default roles
 
 ----
-
 @Component
 public class Listener {
     @EventListener(UserCreatedEvent.class)

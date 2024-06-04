@@ -6,7 +6,6 @@ Indicates that a mixed-in action's parameter follows the parameters-as-tuple (PA
 Example mixin code:
 
 ----
-
 // java record as a parameters tuple
 record Params(@Parameter String key, @Parameter String name) {}
 
