@@ -59,7 +59,7 @@ implements HasUiParameter {
 
     @Override
     public String validate(final ManagedObject proposedArg) {
-        return getParameterNegotiationModel().validateDirectly(getParameterIndex(), proposedArg);
+        return getParameterNegotiationModel().getImmidiateParamValidation(getParameterIndex(), proposedArg);
     }
 
     @Override

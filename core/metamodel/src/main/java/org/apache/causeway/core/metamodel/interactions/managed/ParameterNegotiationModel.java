@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.interactions.managed;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -168,6 +167,10 @@ public class ParameterNegotiationModel {
     @NonNull public Observable<String> getObservableParamValidation(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableParamValidation();
     }
+    
+    @NonNull public String getImmidiateParamValidation(final int paramNr, ManagedObject proposedArg) {
+        return paramModels.getElseFail(paramNr).getImmidiateParamValidation(proposedArg);
+    }
 
     @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
         return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
@@ -180,7 +183,7 @@ public class ParameterNegotiationModel {
     @NonNull public Observable<Consent> getObservableUsabilityConsent(final int paramNr) {
         return paramModels.getElseFail(paramNr).getObservableUsabilityConsent();
     }
-
+    
     @NonNull public Consent getVisibilityConsent(final int paramNr) {
         return getObservableVisibilityConsent(paramNr).getValue();
     }
@@ -483,6 +486,34 @@ public class ParameterNegotiationModel {
         public Observable<String> getValidationMessage() {
             return observableParamValidation;
         }
+        
+        /** 
+         * TODO we somehow missed that one in the original param. neg. model design.
+         * <p> 
+         * Open question: Can this be converted to an observable? 
+         */
+        public String getImmidiateParamValidation(ManagedObject proposedArg) {
+            val value = getObservableParamValidation().getValue();
+            if (value != null) {
+                return value;
+            }
+
+            //
+            // validate individual params
+            //
+
+            final var resultSet = new InteractionResultSet();
+            InteractionUtils.isValidResultSet(
+                    metaModel, 
+                    metaModel.createProposedArgumentInteractionContext(
+                            negotiationModel.getHead(), 
+                            negotiationModel.getParamValues().replace(paramNr, proposedArg), 
+                            paramNr, 
+                            InteractionInitiatedBy.USER), 
+                    resultSet);
+            return resultSet.createConsent().getReasonAsString().orElse(null);
+        }
+
 
         @Override
         public Bindable<String> getSearchArgument() {
@@ -494,71 +525,6 @@ public class ParameterNegotiationModel {
             return observableParamChoices;
         }
 
-    }
-
-    /**
-     * TODO this is an intermediate refactoring step 
-     */
-    public String validateDirectly(int parameterIndex, ManagedObject proposedArg) {
-        val value = getObservableParamValidation(parameterIndex).getValue();
-        if (value != null) {
-            return value;
-        }
-
-        //
-        // validate individual params
-        //
-
-        final var objectActionParameter = getParamMetamodel(parameterIndex);
-        
-        final var resultSet = new InteractionResultSet();
-        InteractionUtils.isValidResultSet(
-                objectActionParameter, 
-                objectActionParameter.createProposedArgumentInteractionContext(
-                        getHead(), previousOrProposedArgs(parameterIndex, proposedArg), parameterIndex, InteractionInitiatedBy.USER), 
-                resultSet);
-        return resultSet.createConsent().getReasonAsString().orElse(null);
-    }
-    
-    // -- HELPER
-
-    /**
-     * Returns a Can of the previous args + the proposed arg.
-     */
-    private Can<ManagedObject> previousOrProposedArgs(
-            final int parameterIndex,
-            final ManagedObject proposedArg) {
-
-        final var objectAction = getHead().getMetaModel();
-        final var paramList = new ArrayList<ManagedObject>();
-
-        final var previousArgs = getParamValues();
-        for (ObjectActionParameter oap : objectAction.getParameters()) {
-            paramList.add(previousOrProposedArg(parameterIndex, oap, previousArgs, proposedArg));
-        }
-
-        return Can.ofCollection(paramList);
-    }
-
-    /**
-     * Returns either the relevant previous arg (from the {@link #getParameterNegotiationModel() negotiation model}
-     * or the proposed arg if the supplied {@link ObjectActionParameter} corresponds
-     *
-     * @param eachOap - each {@link ObjectActionParameter} of the action
-     * @param previousParamArgs - already in the negotiation model, have been validated
-     * @param proposedParamArg - current being validated
-     */
-    private ManagedObject previousOrProposedArg(
-            final int parameterIndex, 
-            final ObjectActionParameter eachOap,
-            final Can<ManagedObject> previousParamArgs,
-            final ManagedObject proposedParamArg) {
-
-        return eachOap.getParameterIndex() == parameterIndex 
-            ? proposedParamArg
-            : previousParamArgs
-                .get(eachOap.getParameterIndex())
-                .orElseGet(() -> ManagedObject.empty(eachOap.getElementType()));
     }
     
 }
