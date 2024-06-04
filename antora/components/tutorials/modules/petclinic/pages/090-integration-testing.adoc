@@ -188,3 +188,192 @@ public void cannot_book_in_the_past() {
             .hasMessage("Must book in the future");
 }
 ----
+
+[#exercise-9-2-adds-visit-fixture]
+== Ex 9.2: Adds fixture for ``Visit``s
+
+Currently we have a fixture for ``PetOwner``s and their ``Pet``s, but none for ``Visit``s.
+If we want to write additional integration tests for ``Visit``s also, then it's a good idea to have some fixtures.
+They can also be used when prototyping.
+
+In this exercise we'll therefore add a new fixture for the `visit` module.
+
+
+=== Solution
+
+[source,bash,subs="attributes+"]
+----
+git checkout tags/{tag-version}/09-02-adds-visit-fixture
+mvn clean install
+----
+
+=== Tasks
+
+* copy in the following persona enum (we'll add the `Builder` next):
++
+[source,java]
+.Visit_persona.java
+----
+/**
+ * Returns the most recent Visit, or the one scheduled.
+ */
+@RequiredArgsConstructor
+public enum Visit_persona
+implements Persona<Visit, Visit_persona.Builder> {
+
+    JAMAL_VISITS(PetOwner_persona.JAMAL),
+    CAMILA_VISITS(PetOwner_persona.CAMILA),
+    ARJUN_VISITS(PetOwner_persona.ARJUN),
+    NIA_VISITS(PetOwner_persona.NIA),
+    OLIVIA_VISITS(PetOwner_persona.OLIVIA),
+    LEILA_VISITS(PetOwner_persona.LEILA),
+    MATT_VISITS(PetOwner_persona.MATT),
+    BENJAMIN_VISITS(PetOwner_persona.BENJAMIN),
+    JESSICA_VISITS(PetOwner_persona.JESSICA),
+    DANIEL_VISITS(PetOwner_persona.DANIEL);
+
+    private final PetOwner_persona petOwner_p;
+
+    @Override
+    public Builder builder() {
+        return new Builder().setPersona(this);
+    }
+
+    @Override
+    public Visit findUsing(final ServiceRegistry serviceRegistry) {
+        final var owner = petOwner_p.findUsing(serviceRegistry);
+        final var visits = serviceRegistry.lookupService(VisitRepository.class)
+                .map(x -> x.findByPetOwner(owner))
+                .orElseThrow();
+        return lastOf(visits);
+    }
+
+    private static Visit lastOf(List<Visit> visits) {
+        return visits.get(visits.size()-1);
+    }
+
+    // ...
+}
+----
+
+* now add in the `Builder`:
++
+[source,java]
+.Visit_persona.java
+----
+@RequiredArgsConstructor
+public enum Visit_persona
+implements Persona<Visit, Visit_persona.Builder> {
+    // ...
+
+    @Accessors(chain = true)
+    public static class Builder extends BuilderScriptWithResult<Visit> {
+
+        @Getter @Setter private Visit_persona persona;
+
+        @Override
+        protected Visit buildResult(final ExecutionContext ec) {
+
+            final var petOwner = ec.executeChildT(this, persona.petOwner_p);    // <.>
+
+            petOwner.getPets().forEach(pet -> {
+
+                // in the past
+                final var numVisits = fakeDataService.ints().between(2, 4);     // <.>
+                for (var i = 0; i < numVisits; i++) {
+                    final var daysAgo = fakeDataService.ints().between(5, 500);
+                    final var minsInTheDay = randomAppointmentTime();
+                    final var appointmentTime = randomAppointmentTimeFromToday(-daysAgo, minsInTheDay);
+                    wrapperFactory.wrapMixin(PetOwner_bookVisit.class, petOwner, SyncControl.control().withSkipRules()).act(pet, appointmentTime);
+                }
+
+                // in the future
+                if (fakeDataService.booleans().coinFlip()) {                    // <.>
+                    final var daysAhead = fakeDataService.ints().between(1, 10);
+                    final var minsInTheDay = randomAppointmentTime();
+                    final var appointmentTime = randomAppointmentTimeFromToday(daysAhead, minsInTheDay);
+                    wrapperFactory.wrapMixin(PetOwner_bookVisit.class, petOwner, SyncControl.control().withSkipRules()).act(pet, appointmentTime);
+                }
+            });
+
+            final var numDaysAgo = fakeDataService.ints().between(2, 100);
+            final var lastVisit = clockService.getClock().nowAsLocalDate().minusDays(numDaysAgo);
+            petOwner.setLastVisit(lastVisit);
+
+            final var visits = wrapperFactory.wrapMixin(PetOwner_visits.class, petOwner, SyncControl.control().withSkipRules()).coll();
+            return lastOf(visits);
+        }
+
+        private LocalDateTime randomAppointmentTimeFromToday(int days, int appointmentTime) {
+            return clockService.getClock().nowAsLocalDate().atStartOfDay().plusDays(days).plusMinutes(appointmentTime);
+        }
+
+        private int randomAppointmentTime() {
+            return (9 * 60) + (fakeDataService.ints().between(0, 32) * 15);
+        }
+
+        // -- DEPENDENCIES
+
+        @Inject ClockService clockService;
+        @Inject FakeDataService fakeDataService;
+    }
+}
+----
+<.> Using the supplied `ExecutionContext`, we can execute any prerequisites fixtures (in this case to obtain the corresponding `PetOwner` and ``Pet``s)
+<.> we create between 2 and 4 ``Visit``s in the past for each ``Pet``.
+<.> we create a ``Visit`` in the future for approximately every other ``Pet``.
+
+* add in the `PersistAll`:
++
+[source,java]
+.Visit_persona.java
+----
+@RequiredArgsConstructor
+public enum Visit_persona
+implements Persona<Visit, Visit_persona.Builder> {
+    // ...
+
+    public static class PersistAll
+            extends PersonaEnumPersistAll<Visit, Visit_persona, Builder> {
+        public PersistAll() {
+            super(Visit_persona.class);
+        }
+    }
+}
+----
+
+* update the top-level `DomainAppDemo` fixture to create visits rather than petowners/pets:
++
+[source,java]
+.DomainAppDemo.java
+----
+public class DomainAppDemo extends FixtureScript {
+
+    @Override
+    protected void execute(final ExecutionContext ec) {
+        ec.executeChildren(this, moduleWithFixturesService.getTeardownFixture());
+        ec.executeChild(this, new Visit_persona.PersistAll());      // <.>
+    }
+
+    @Inject ModuleWithFixturesService moduleWithFixturesService;
+}
+----
+<.> Because `Visit_persona` automatically creates its prereqs, there's no need to run the `PetOwner_persona` fixture.
++
+[NOTE]
+====
+Currently the `PetOwner_persona` isn't rerunnable, so we have to take some care.
+However, it's easy to refactor if we wanted to:
+
+[source,java]
+.PetOwner_persona.java
+----
+val petOwner = serviceRegistry.lookupService(PetOwners.class)
+                    .map(x -> x.findByNameExact(persona.name))
+                    .orElseGet(
+                        () -> petOwners.create(persona.name, null, null, null)
+                    );
+----
+
+Note that the above change _isn't_ one of the exercises.
+====
