@@ -171,8 +171,8 @@ public class ParameterNegotiationModel {
      * (Ignoring the {@link ParameterModel#isValidationFeedbackActive()} flag.)
      * @apiNote introduced for [CAUSEWAY-3753] - not sure why required.
      */
-    @NonNull public String getImmidiateParamValidation(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getImmidiateParamValidation();
+    @NonNull public String validateImmediately(final int paramNr) {
+        return paramModels.getElseFail(paramNr).validateImmediately();
     }
 
     @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
@@ -390,7 +390,7 @@ public class ParameterNegotiationModel {
             // validate this parameter, but only when validationFeedback has been activated
             observableParamValidation = _Observables.lazy(()->
                 isValidationFeedbackActive()
-                    ? getImmidiateParamValidation()
+                    ? validateImmediately()
                     : (String)null);
 
             observableVisibilityConsent = _Observables.lazy(()->
@@ -504,7 +504,7 @@ public class ParameterNegotiationModel {
          * Calls the underlying action parameter validation logic, for pending arguments.
          * (Ignoring the {@link #isValidationFeedbackActive()} flag.)
          */
-        private String getImmidiateParamValidation() {
+        private String validateImmediately() {
             return metaModel
                     .isValid(
                             getNegotiationModel().getHead(),
