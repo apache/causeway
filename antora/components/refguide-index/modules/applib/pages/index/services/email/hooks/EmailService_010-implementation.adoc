@@ -5,11 +5,17 @@
 
 == Implementation
 
-As noted in the introduction, the core framework provides a default implementation, `EmailServiceDefault`.
+As noted in the introduction, the core framework provides a default implementation, xref:refguide:core:index/runtimeservices/email/EmailServiceDefault.adoc[].
 This sends email as an HTML message, using an external SMTP provider.
 
 
 === Configuration Properties
 
-The default implementation defines a number of xref:refguide:config:sections/causeway.core.runtime-services.adoc[configuration properties], under the `causeway.core.runtime-services.email` key.
+The default implementation (xref:refguide:core:index/runtimeservices/email/EmailServiceDefault.adoc[]) defines a number of xref:refguide:config:sections/causeway.core.runtime-services.adoc[configuration properties], under the `causeway.core.runtime-services.email` key.
+
+It also requires that an implementation of Spring's `JavaMailSender` is present on the classpath.
+This requires its own configuration.
+
+// https://issues.apache.org/jira/browse/CAUSEWAY-3757 is an intention to simplify this configuratoin.
+
 
