@@ -68,7 +68,7 @@ implements HasUiParameter {
     }
 
     @Override
-    public String validate(final ManagedObject proposedValue) {
+    public String validate(final ManagedObject proposedArg) {
 
         val value = getParameterNegotiationModel().getObservableParamValidation(getParameterIndex()).getValue();
         if (value != null) {
@@ -83,22 +83,22 @@ implements HasUiParameter {
         //
 
         final var interactionHead = getParameterNegotiationModel().getHead();
-        final var proposedArguments = params(getParameterNegotiationModel().getParamValues(), proposedValue);
-        final var validityContext = validityContext(interactionHead, proposedArguments);
+        final var previousOrProposedArgs = previousOrProposedArgs(proposedArg);
+        final var validityContext = validityContext(interactionHead, previousOrProposedArgs);
 
         return validate(validityContext);
     }
 
     /**
-     * All the params are null except the proposedValue for this Nth param.
+     * Returns a Can of the previous args + the proposed arg.
      */
-    private Can<ManagedObject> params(
-            final @NonNull Can<ManagedObject> previousArgs,
+    private Can<ManagedObject> previousOrProposedArgs(
             final ManagedObject proposedArg) {
 
         final var objectAction = getParameterNegotiationModel().getHead().getMetaModel();
         final var paramList = new ArrayList<ManagedObject>();
 
+        final var previousArgs = getParameterNegotiationModel().getParamValues();
         for (ObjectActionParameter oap : objectAction.getParameters()) {
             paramList.add(previousOrProposedArg(oap, previousArgs, proposedArg));
         }
