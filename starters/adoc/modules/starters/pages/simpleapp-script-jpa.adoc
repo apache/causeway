@@ -4,8 +4,8 @@
 
 [source,bash,subs="attributes+"]
 ----
-curl https://codeload.github.com/apache/causeway-app-simpleapp/zip/v3-jpa | jar xv
-cd causeway-app-simpleapp-3-jpa
+curl https://codeload.github.com/apache/causeway-app-simpleapp/zip/v{fwk-version}-jpa | jar xv
+cd causeway-app-simpleapp-{fwk-version}-jpa
 
 mvn clean install
 mvn -pl webapp spring-boot:run

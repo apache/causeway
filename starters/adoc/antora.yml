@@ -17,3 +17,12 @@
 
 name: docs
 version: latest
+
+asciidoc:
+  attributes:
+#    fwk-version: '2'
+#    fwk-jdk-version: '11'
+#    jdk-version: '11'
+    fwk-version: '3'
+    fwk-jdk-version: '17'
+    jdk-version: '21'

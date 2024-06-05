@@ -10,12 +10,12 @@ One variation uses JDO as the ORM, the other uses JPA, so you can focus on which
 
 The application is also built nightly as a docker image, so you can quickly try it out:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-helloworld:v3-jpa-SNAPSHOT
+docker run -d -p 8080:8080 apache/causeway-app-helloworld:v{fwk-version}-jpa-SNAPSHOT
 ----
 
-Replace "v3-jpa" with "v3-jdo" if using the JDO ORM.
+Replace "v{fwk-version}-jpa" with "v{fwk-version}-jdo" if using the JDO ORM.
 
 
 Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Causeway app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
@@ -32,9 +32,9 @@ It also creates a minimal application, but provides more structure along with te
 
 Apache Causeway is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* Java 21 JDK (or later)
+* Java {jdk-version} JDK (or later)
 +
-Apache Causeway v3 requires Java 17, and the helloworld app itself is currently configured for Java 21.
+Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the helloworld app itself is currently configured for Java {jdk-version}.
 
 * link:http://maven.apache.org[Apache Maven] 3.9.7+
 
