@@ -19,6 +19,10 @@
 package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
@@ -224,19 +228,39 @@ public class EntityPage extends PageAbstract {
     }
 
     @Override
+    public void onRendering(final Can<PageRenderSubscriber> pageRenderSubscribers) {
+        onRenderingOrRendered(pageRenderSubscribers, (pageRenderSubscriber, bookmark) -> {
+            pageRenderSubscriber.onRenderingDomainObject(bookmark);;
+            return null;
+        });
+    }
+
+    @Override
     public void onRendered(final Can<PageRenderSubscriber> pageRenderSubscribers) {
+        onRenderingOrRendered(pageRenderSubscribers, (pageRenderSubscriber, bookmark) -> {
+            pageRenderSubscriber.onRenderedDomainObject(bookmark);;
+            return null;
+        });
+    }
+
+    private void onRenderingOrRendered(
+            final Can<PageRenderSubscriber> pageRenderSubscribers,
+            final BiFunction<PageRenderSubscriber, Bookmark, Void> handler) {
+
+        if(pageRenderSubscribers.isEmpty()) {
+            return;
+        }
 
         // guard against unspecified
         ManagedObjects.asSpecified(model.getObject())
-        .map(ManagedObject::getBookmark)
-        // guard against no bookmark available
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .ifPresent(bookmark->{
-            pageRenderSubscribers
-                .forEach(objectRenderSubscriber -> objectRenderSubscriber.onRenderedDomainObject(bookmark));
-        });
-
+            .map(ManagedObject::getBookmark)
+            // guard against no bookmark available
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .ifPresent(bookmark->{
+                pageRenderSubscribers
+                    .forEach(pageRenderSubscriber -> handler.apply(pageRenderSubscriber, bookmark));
+            });
     }
 
     // -- HELPER

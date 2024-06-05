@@ -16,28 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.search;
+package org.apache.causeway.applib.services.search;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
 import lombok.NonNull;
 
 /**
  * EXPERIMENTAL/DRAFT
  * <p>
- * If a {@link TableSearchUiService} is registered with Spring's context,
+ * If a {@link CollectionSearchService} is registered with Spring's context,
  * viewer implementations (like Wicket Viewer) should show
  * a quick-search prompt, which is rendered on top of the UI table that
  * presents the collection in question.
  *
  * @since 2.1, 3.1 {@index}
  */
-public interface TableSearchUiService {
+public interface CollectionSearchService {
 
     /**
      * Optionally returns a {@link Predicate} that filters collections
@@ -48,13 +46,11 @@ public interface TableSearchUiService {
      * domain object's title say.
      *
      * @param domainType - entity or view-model type to be rendered as row in a table
-     * @param objSpec - meta-model accompanied with the domainType
      * @param searchString - nullable, e.g. the searchString could be parsed into tokens, and then matched against the
      *      domain object's title say
      */
-    <T> Optional<Predicate<T>> search(
+    <T> Optional<Predicate<T>> searchFilter(
             @NonNull Class<T> domainType,
-            @NonNull ObjectSpecification objSpec,
             @Nullable String searchString);
 
 }
