@@ -32,11 +32,11 @@ It also creates a minimal application, but provides more structure along with te
 
 Apache Causeway is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* Java 11 JDK (or later)
+* Java 21 JDK (or later)
 +
-Apache Causeway itself is compatible with Java 11, and the helloworld app itself is configured for Java 11.
+Apache Causeway v3 requires Java 17, and the helloworld app itself is currently configured for Java 21.
 
-* link:http://maven.apache.org[Apache Maven] 3.5+
+* link:http://maven.apache.org[Apache Maven] 3.9.7+
 
 If using JDO as the ORM, you'll also need to run the Datanucleus enhancer (this post-processes the byte code of the entities).
 The xref:setupguide:ROOT:about.adoc[Setup Guide] explains how to do this for either IntelliJ and Eclipse.
@@ -63,6 +63,7 @@ Either way, this should only take a few seconds to download, compile and run.
 Then browse to link:http://localhost:8080[], and read on.
 
 
+[#using-the-app]
 == Using the App
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the generic UI provided by xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] or use Swagger to access the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]:
@@ -128,9 +129,11 @@ The above functionality is implemented by this code (in the `HelloWorldObject` e
 
 [source,java]
 ----
-@Action(semantics = SemanticsOf.IDEMPOTENT,
-        publishing = Publishing.ENABLED,
-        associateWith = "name")
+@Action( semantics = SemanticsOf.IDEMPOTENT, executionPublishing = Publishing.ENABLED )
+@ActionLayout(
+        associateWith = "name",
+        describedAs = "Updates the object's name"
+)
 public HelloWorldObject updateName(
         @Name final String name) {
     setName(name);
