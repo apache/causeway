@@ -3,8 +3,8 @@
 
 [source,bash,subs="attributes+"]
 ----
-curl https://codeload.github.com/apache/causeway-app-helloworld/zip/v3-jpa | jar xv
-cd causeway-app-helloworld-3-jpa
+curl https://codeload.github.com/apache/causeway-app-helloworld/zip/v{fwk-version}-jpa | jar xv
+cd causeway-app-helloworld-{fwk-version}-jpa
 
 mvn clean install
 mvn spring-boot:run
