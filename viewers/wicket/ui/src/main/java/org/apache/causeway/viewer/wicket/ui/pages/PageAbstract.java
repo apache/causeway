@@ -489,14 +489,17 @@ implements ActionPromptProvider {
         enabledPageRenderSubscribers
                 .forEach(subscriber -> subscriber.onRendering(pageType));
 
+
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
             val stopWatch = _Timing.now();
+            onRendering(enabledPageRenderSubscribers);
             onNewRequestCycle();
             super.renderPage();
             stopWatch.stop();
             _Debug.log(".. rendering took %s", stopWatch.toString());
         } else {
+            onRendering(enabledPageRenderSubscribers);
             onNewRequestCycle();
             super.renderPage();
         }
@@ -511,6 +514,14 @@ implements ActionPromptProvider {
      */
     public void onNewRequestCycle() {
         // implemented only by EntityPage
+    }
+
+    /**
+     * Hook to call {@link PageRenderSubscriber} implementations
+     *
+     * @param enabledObjectRenderSubscribers  - those {@link PageRenderSubscriber}s that are {@link PageRenderSubscriber#isEnabled() enabled}
+     */
+    protected void onRendering(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
     }
 
     /**

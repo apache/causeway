@@ -60,6 +60,25 @@ public class PageRenderLogger implements PageRenderSubscriber {
     }
 
     @Override
+    public void onRenderingDomainObject(final Bookmark bookmark) {
+        log.debug("rendering object: [ {} ]", doubleQuoted(bookmark.stringify()));
+    }
+
+    @Override
+    public void onRenderingCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
+
+        final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
+
+        log.debug("rendering collection: [ {} ]", bookmarksStringified);
+    }
+
+
+    @Override
+    public void onRenderingValue(final Object value) {
+        log.debug("rendering value: [ {} ]", doubleQuoted(value));
+    }
+
+    @Override
     public void onRenderedDomainObject(final Bookmark bookmark) {
         log.debug("rendered object: [ {} ]", doubleQuoted(bookmark.stringify()));
     }
@@ -67,12 +86,7 @@ public class PageRenderLogger implements PageRenderSubscriber {
     @Override
     public void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
 
-        val bookmarksStringified =
-            _NullSafe.stream(bookmarkSupplier.get())
-            .filter(Objects::nonNull)
-            .map(Bookmark::stringify)
-            .map(this::doubleQuoted)
-            .collect(Collectors.joining(", "));
+        final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
 
         log.debug("rendered collection: [ {} ]", bookmarksStringified);
     }
@@ -85,9 +99,16 @@ public class PageRenderLogger implements PageRenderSubscriber {
 
     // -- HELPER
 
-    private String doubleQuoted(final @Nullable Object obj) {
-        return "\"" + obj + "\"";
+    private static String bookmarksStringified(Supplier<List<Bookmark>> bookmarkSupplier) {
+        return _NullSafe.stream(bookmarkSupplier.get())
+                .filter(Objects::nonNull)
+                .map(Bookmark::stringify)
+                .map(PageRenderLogger::doubleQuoted)
+                .collect(Collectors.joining(", "));
     }
 
+    private static String doubleQuoted(final @Nullable Object obj) {
+        return "\"" + obj + "\"";
+    }
 
 }
