@@ -9,12 +9,12 @@ One variation uses JPA as the ORM, the other uses JDO, so you can focus on which
 
 The application is also built nightly as a docker image, so you can quickly try it out:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v3-jpa-SNAPSHOT
+docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v{fwk-version}-jpa-SNAPSHOT
 ----
 
-Replace "v3-jpa" with "v3-jdo" if using the JDO ORM.
+Replace "v{fwk-version}-jpa" with "v{fwk-version}-jdo" if using the JDO ORM.
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
 
@@ -38,9 +38,9 @@ You can use them as a reference once your ideas have solidifid and you need to s
 
 Apache Causeway is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* Java 21 JDK (or later)
+* Java {jdk-version} JDK (or later)
 +
-Apache Causeway v3 requires Java 17, and the simpleapp itself is currently configured for Java 21.
+Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the simpleapp itself is currently configured for Java {jdk-version}.
 
 * link:http://maven.apache.org[Apache Maven] 3.9.7+
 
