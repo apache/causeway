@@ -20,9 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
@@ -36,6 +33,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
