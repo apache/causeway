@@ -9,12 +9,12 @@ One variation uses JPA as the ORM, the other uses JDO, so you can focus on which
 
 The application is also built nightly as a docker image, so you can quickly try it out:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v3-jpa-SNAPSHOT
+docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v{fwk-version}-jpa-SNAPSHOT
 ----
 
-Replace "v3-jpa" with "v3-jdo" if using the JDO ORM.
+Replace "v{fwk-version}-jpa" with "v{fwk-version}-jdo" if using the JDO ORM.
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
 
@@ -38,17 +38,16 @@ You can use them as a reference once your ideas have solidifid and you need to s
 
 Apache Causeway is a Java based framework, so in terms of prerequisites, you'll need to install:
 
-* Java 11 JDK (or later)
+* Java {jdk-version} JDK (or later)
 +
-Apache Causeway itself is compatible with Java 11, and the simpleapp itself is configured for Java 11.
+Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the simpleapp itself is currently configured for Java {jdk-version}.
 
-* link:http://maven.apache.org[Apache Maven] 3.5+
+* link:http://maven.apache.org[Apache Maven] 3.9.7+
 
 If using JDO as the ORM, you'll also need to run the Datanucleus enhancer (this post-processes the byte code of the entities).
 The xref:setupguide:ROOT:about.adoc[Setup Guide] explains how to do this for either IntelliJ and Eclipse.
 
 If using JPA as the ORM, the equivalent process to enhancement is performed at run-time, so there are no special setup considerations.
-
 
 
 == Downloading & Running
@@ -66,8 +65,7 @@ include::simpleapp-script-jdo.adoc[]
 include::simpleapp-script-jpa.adoc[]
 
 
-
-This should only take a few seconds to download, compile and run.
+Either way, this should only take a few seconds to download, compile and run.
 Then browse to link:http://localhost:8080[], and read on.
 
 
@@ -217,7 +215,11 @@ The above functionality is implemented by this code (in the `SimpleObject` entit
 
 [source,java]
 ----
-@Action(semantics = IDEMPOTENT)
+@Action(semantics = IDEMPOTENT, commandPublishing = Publishing.ENABLED, executionPublishing = Publishing.ENABLED)
+@ActionLayout(
+        associateWith = "name", promptStyle = PromptStyle.INLINE,
+        describedAs = "Updates the name of this object, certain characters (" + PROHIBITED_CHARACTERS + ") are not allowed."
+)
 public SimpleObject updateName(
         @Name final String name) {
     setName(name);
@@ -227,7 +229,6 @@ public String default0UpdateName() {
     return getName();
 }
 ----
-
 
 
 ==== Edit a property

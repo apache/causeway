@@ -36,7 +36,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
