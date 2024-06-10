@@ -116,7 +116,7 @@ public final class MmSpecUtils {
      */
     public boolean isJavaRecord(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
-        return /*spec.getCorrespondingClass().isRecord();*/ false;
+        return spec.getCorrespondingClass().isRecord();
     }
 
     /**
