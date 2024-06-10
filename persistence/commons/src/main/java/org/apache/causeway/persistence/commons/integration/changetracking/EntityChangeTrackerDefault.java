@@ -203,6 +203,10 @@ implements
 
     private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
 
+        if (!causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isEnabled()) {
+            return true;
+        }
+
         if(!EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
             return true; // ignore entities that are not enabled for entity change publishing
         }

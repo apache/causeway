@@ -2156,8 +2156,15 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private boolean suppressAutoFlush = true;
+                /**
+                 * Provides a mechanism to globally enable or disable this service.
+                 *
+                 * <p>
+                 *     By default this service is enabled (if added to the classpath as a module).
+                 * </p>
+                 */
+                private boolean enabled = true;
             }
-
         }
 
 
