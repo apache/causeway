@@ -35,8 +35,7 @@ public class MomentJsReference extends WebjarsJavaScriptResourceReference {
         new MomentJsReference();
 
     private MomentJsReference() {
-        super(String.format("momentjs/%s/min/moment.min.js",
-                "2.30.0"));
+        super(String.format("momentjs/%s/min/moment.min.js", "2.29.4"));
     }
 
     /**
