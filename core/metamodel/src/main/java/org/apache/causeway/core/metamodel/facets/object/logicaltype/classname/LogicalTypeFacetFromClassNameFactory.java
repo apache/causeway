@@ -21,11 +21,13 @@ package org.apache.causeway.core.metamodel.facets.object.logicaltype.classname;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
+import org.apache.causeway.core.metamodel.object.MmSpecUtils;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -62,75 +64,49 @@ implements
         // no-op.
     }
 
-
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-
         val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
-        if(!shouldCheck) {
-            return;
-        }
+        if(!shouldCheck) return;
 
         programmingModel.addValidatorSkipManagedBeans(objectSpec-> {
-
-            if(!check(objectSpec)) {
-                return;
-            }
+            if(skip(objectSpec)) return;
 
             val logicalType = objectSpec.getLogicalType();
-
+            
             //XXX has a slight chance to be a false positive; would need to check whether annotated with @Named
             if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())) {
-                ValidationFailure.raiseFormatted(
-                        objectSpec,
-                        "%s: the object type must be specified explicitly ('%s' config property). "
-                                + "Defaulting the object type from the package/class/package name can lead "
-                                + "to data migration issues for apps deployed to production (if the class is "
-                                + "subsequently refactored). "
-                                + "Use @Discriminator, @Named or "
-                                + "@PersistenceCapable(schema=...) to specify explicitly.",
-                        objectSpec.getFullIdentifier(),
-                        "causeway.core.meta-model.validator.explicit-logical-type-names");
+                ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
+                        .builder()
+                        .addVariable("type", objectSpec.getFullIdentifier())
+                        .addVariable("beanSort", objectSpec.getBeanSort().name())
+                        .addVariable("configProperty", "causeway.core.meta-model.validator.explicit-logical-type-names")
+                        .buildMessage());
             }
-
-            });
-
+        });
     }
+    
+    // -- HELPER
 
-    public static boolean check(final ObjectSpecification objectSpec) {
-            //TODO
-            // as a special case, don't enforce this for fixture scripts...
-            // we never invoke actions on fixture scripts anyway
-
-        if(objectSpec.isAbstract()) {
-            return false; //skip validation
-        }
-        if (objectSpec.isEntity()) {
-            return true;
-        }
+    private boolean skip(final ObjectSpecification objectSpec) {
+        if (objectSpec.isAbstract()
+                || objectSpec.isMixin()
+                || objectSpec.isValue()
+                || MmSpecUtils.isFixtureScript(objectSpec)) return true;
+        if (objectSpec.isEntity()) return false;
         if (objectSpec.isViewModel()) {
-            //final ViewModelFacet viewModelFacet = objectSpec.getFacet(ViewModelFacet.class);
-            // don't check JAXB DTOs
-            final XmlType xmlType = objectSpec.getCorrespondingClass().getAnnotation(XmlType.class);
-            if(xmlType != null) {
-                return false; //skip validation
-            }
-            return true;
-        }
-        if(objectSpec.isMixin()) {
-            return false; //skip validation
+            // skip JAXB DTOs
+            return objectSpec.getCorrespondingClass().getAnnotation(XmlType.class) != null;
         }
         if (objectSpec.isInjectable()) {
             // only check if its a domain service (that is potentially contributing to UI or Web-API(s).
-            if(!objectSpec.isDomainService()) {
-                return false; //skip validation
-            }
+            if(!objectSpec.isDomainService()) return true; 
 
-            // don't check if domain service has only programmatic methods
-            return objectSpec.streamAnyActions(MixedIn.INCLUDED).findAny().isPresent();
+            // skip if domain service has only programmatic methods
+            return objectSpec.streamAnyActions(MixedIn.INCLUDED).findAny().isEmpty();
 
         }
-        return false; //skip validation
+        return true; //skip validation
     }
 
 }

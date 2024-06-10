@@ -463,6 +463,14 @@ public final class ProgrammingModelConstants {
                 + "Consider importing type ${type} with Spring's @Import annotation. "
                 + "Types of sort VALUE should instead register a ValueSemanticsProvider with Spring, "
                 + "to be properly understood by the framework."),
+        LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT("The object type ${type} of sort ${beanSort} "
+                + "must be specified explicitly "
+                + "('${configProperty}' config property). "
+                + "Defaulting the object type from the package/class/package name can lead "
+                + "to data migration issues for apps deployed to production (if the class is "
+                + "subsequently refactored). "
+                + "Use @Discriminator, @Named or "
+                + "@PersistenceCapable(schema=...) to specify explicitly."),
         NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to multiple non-abstract classes:\n"
                 + "${csv}"),
