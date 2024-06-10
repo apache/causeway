@@ -73,7 +73,7 @@ implements
             if(skip(objectSpec)) return;
 
             val logicalType = objectSpec.getLogicalType();
-            
+
             //XXX has a slight chance to be a false positive; would need to check whether annotated with @Named
             if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())) {
                 ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
@@ -85,22 +85,24 @@ implements
             }
         });
     }
-    
+
     // -- HELPER
 
     private boolean skip(final ObjectSpecification objectSpec) {
         if (objectSpec.isAbstract()
-                || objectSpec.isMixin()
+                || MmSpecUtils.isJavaRecord(objectSpec)
                 || objectSpec.isValue()
+                || objectSpec.isMixin()
                 || MmSpecUtils.isFixtureScript(objectSpec)) return true;
         if (objectSpec.isEntity()) return false;
         if (objectSpec.isViewModel()) {
+            // with
             // skip JAXB DTOs
             return objectSpec.getCorrespondingClass().getAnnotation(XmlType.class) != null;
         }
         if (objectSpec.isInjectable()) {
             // only check if its a domain service (that is potentially contributing to UI or Web-API(s).
-            if(!objectSpec.isDomainService()) return true; 
+            if(!objectSpec.isDomainService()) return true;
 
             // skip if domain service has only programmatic methods
             return objectSpec.streamAnyActions(MixedIn.INCLUDED).findAny().isEmpty();
