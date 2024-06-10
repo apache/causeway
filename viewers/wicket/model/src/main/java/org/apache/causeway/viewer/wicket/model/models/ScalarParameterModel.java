@@ -28,6 +28,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.scalar.HasUiParameter;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -59,6 +61,10 @@ implements HasUiParameter {
 
     @Override
     public String validate(final @NonNull ManagedObject proposedArg) {
+        // workaround for FileUpload
+        if(proposedArg.getSpecification().getBeanSort().isUnknown()) {
+            return null;
+        }
         proposedValue().getValue().setValue(proposedArg); // updates the pending parameter value
 
         //TODO [CAUSEWAY-3753] for some reason the ParameterModel.isValidationFeedbackActive() flag is not yet active,
