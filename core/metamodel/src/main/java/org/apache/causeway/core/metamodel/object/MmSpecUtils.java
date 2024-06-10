@@ -22,13 +22,19 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.val;
 import lombok.experimental.UtilityClass;
 
@@ -103,5 +109,25 @@ public final class MmSpecUtils {
 
         return sb.toString();
     }
+    
+    /**
+     * Whether given {@link ObjectSpecification} represents a FixtureScript (from testing.fixtures.applib). 
+     */
+    public boolean isFixtureScript(final @Nullable ObjectSpecification spec) {
+        if(spec==null) return false;
+        return getFixtureScriptClass().isAssignableFrom(spec.getCorrespondingClass());
+    }
+    
+    // -- HELPER 
+    
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    private final Class<?> fixtureScriptClass = loadFixtureScriptClass();
+    
+    @SneakyThrows
+    private Class<?> loadFixtureScriptClass() {
+        return _Context.loadClass(
+                "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript");
+    }
+    
 
 }
