@@ -109,25 +109,34 @@ public final class MmSpecUtils {
 
         return sb.toString();
     }
-    
+
     /**
-     * Whether given {@link ObjectSpecification} represents a FixtureScript (from testing.fixtures.applib). 
+     * Whether given {@link ObjectSpecification} represents a Java record
+     * (as supported since 3.0.0, which map to view-models).
+     */
+    public boolean isJavaRecord(final @Nullable ObjectSpecification spec) {
+        if(spec==null) return false;
+        return /*spec.getCorrespondingClass().isRecord();*/ false;
+    }
+
+    /**
+     * Whether given {@link ObjectSpecification} represents a FixtureScript (from testing.fixtures.applib).
      */
     public boolean isFixtureScript(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
         return getFixtureScriptClass().isAssignableFrom(spec.getCorrespondingClass());
     }
-    
-    // -- HELPER 
-    
+
+    // -- HELPER
+
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
     private final Class<?> fixtureScriptClass = loadFixtureScriptClass();
-    
+
     @SneakyThrows
     private Class<?> loadFixtureScriptClass() {
         return _Context.loadClass(
                 "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript");
     }
-    
+
 
 }
