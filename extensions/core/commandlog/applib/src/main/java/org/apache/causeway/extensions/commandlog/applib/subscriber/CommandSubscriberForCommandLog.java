@@ -82,7 +82,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             val commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
-                    // this isn't really expected to happen ... we just log the fact if it does
+                    // this isn't really expected to happen ... we just log the fact if it does and the value is different
                     if(log.isWarnEnabled()) {
                         val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
@@ -91,8 +91,10 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
                         val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
                                 .getValue().orElse("Dto to Xml failure");
 
-                        log.warn("existing: \n{}", existingCommandDtoXml);
-                        log.warn("proposed: \n{}", commandDtoXml);
+                        if(!existingCommandDtoXml.equals(commandDtoXml)) {
+                            log.warn("existing: \n{}", existingCommandDtoXml);
+                            log.warn("proposed: \n{}", commandDtoXml);
+                        }
                     }
                     break;
                 case BACKGROUND:
