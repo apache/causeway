@@ -68,7 +68,7 @@ implements CollectionCountProvider {
 
     @Override
     public Integer getCount() {
-        return getModel().getDataTableModel().getElementCount();
+        return getModel().getDataTableModel().getFilteredElementCount();
     }
 
     @Override

@@ -107,8 +107,11 @@ extends
 
     // -- BASIC PROPERTIES
 
+    /**
+     * Element count after filtering.
+     */
     default int getElementCount() {
-        return getDataTableModel().getElementCount();
+        return getDataTableModel().getFilteredElementCount();
     }
 
     default String getName() {
