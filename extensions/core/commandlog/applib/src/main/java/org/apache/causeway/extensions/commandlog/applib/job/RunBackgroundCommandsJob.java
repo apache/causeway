@@ -18,15 +18,15 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.job;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.ThrowingConsumer;
-import org.apache.causeway.commons.functional.ThrowingFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
@@ -109,14 +109,21 @@ public class RunBackgroundCommandsJob implements Job {
 
         // for each command, we execute within its own transaction.  Failure of one should not impact the next.
         commandDtosIfAny.ifPresent(commandDtos -> {
-            List<CommandAndResult> commandResults = commandDtos
-                    .stream()
-                    .map(commandDto -> {
-                        Try<Void> voidTry = executeCommandWithinTransaction(commandDto, interactionContext);
-                        return CommandAndResult.of(commandDto, voidTry);
-                    })
-                    .collect(Collectors.toList());
+            List<CommandAndResult> commandResults = new ArrayList<>();
+            for (CommandDto dto : commandDtos) {
+                Try<?> attempt = executeCommandWithinTransaction(dto, interactionContext);
+                if(attempt.isFailure()) {
+                    val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+                    if (onFailurePolicy == CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands.OnFailurePolicy.STOP_THE_LINE) {
+                        break;
+                    }
+                }
+                CommandAndResult apply = CommandAndResult.of(dto, attempt);
+                commandResults.add(apply);
+            }
 
+            // an enhancement for the listener interface would be to say whether each interaction succeeded or not
+            // whether his is relevant depends on the onFailurePolicy (if it's set to STOP_THE_LINE, then everything passed on will have succeeded)
             val interactionIds = commandResults.stream()
                     .filter(commandAndResult -> commandAndResult.getExecutionResult().isSuccess())  // only the successes
                     .map(CommandAndResult::getCommandDto)
@@ -132,7 +139,7 @@ public class RunBackgroundCommandsJob implements Job {
     @RequiredArgsConstructor(staticName = "of")
     static class CommandAndResult {
         private final CommandDto commandDto;
-        private final Try<Void> executionResult;
+        private final Try<?> executionResult;
     }
 
     private Optional<List<CommandDto>> pendingCommandDtos(final InteractionContext interactionContext) {
@@ -153,39 +160,41 @@ public class RunBackgroundCommandsJob implements Job {
 
     @Inject TransactionServiceSpring transactionServiceSpring;
 
-    private Try<Void> executeCommandWithinTransaction(
+    private Try<?> executeCommandWithinTransaction(
             final CommandDto commandDto,
             final InteractionContext interactionContext
     ) {
         int remainingAttempts = RETRY_COUNT;
-        Try<Void> result;
+        Try<?> result;
         while(true) {
             result = interactionService.call(interactionContext, () -> {
-                // at this point there is already a transaction.
-                // we suspend it while we attempt to execute the command (with retry) in a different transaction
-                Try<Void> voidTry = executeCommandWithinOwnTransactionElseFail(commandDto);
-                // as we executed the commands in their own transaction, if they failed then they will have rolled back
-                // but they  won't have set the must_abort on the transaction created implicitly for _this_ initial
-                // interaction; we therefore cascade the failure to initial implicit transaction.
-                voidTry.ifFailure(throwable ->
-                        interactionService.currentInteraction()
-                            .filter(CausewayInteraction.class::isInstance)
-                            .map(CausewayInteraction.class::cast)
-                            .ifPresent(currentInteraction -> transactionServiceSpring.requestRollback(currentInteraction)));
-                return voidTry;
+
+                // previously we were creating a new transaction here with REQUIRES_NEW, but this isn't necessary
+                // (and massively complicates things) since each interaction will implictly creates its own transaction
+                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                if(commandLogEntryIfAny.isEmpty()) {
+                    return Try.empty();
+                }
+
+                val commandLogEntry = commandLogEntryIfAny.get();
+                return commandExecutorService.executeCommand(
+                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto)
+                        .ifSuccess(
+                            bookmarkToResultIfAny ->
+                                commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp())
+                        )
+                        .mapFailure(throwable -> new ThrowableWithDetailsOfAttempt(throwable, commandLogEntry.getStartedAt()));
             });
             if(result.isSuccess()) {
                 return result;
             }
-            if (!isEncounteredDeadlock(result)) {
-                // some other sort of failure
+            if (! isEncounteredDeadlock(result)) {
                 break;
             }
             if (--remainingAttempts <= 0) {
                 log.debug("Deadlock occurred too many times, giving up on command: " + CommandDtoUtils.dtoMapper().toString(commandDto));
                 break;
             }
-
             log.debug("Deadlock occurred, retrying command: " + CommandDtoUtils.dtoMapper().toString(commandDto));
             sleep(RETRY_INTERVAL_MILLIS);
         }
@@ -214,33 +223,6 @@ public class RunBackgroundCommandsJob implements Job {
         private final java.sql.Timestamp startedAt;
     }
 
-    private Try<Void> executeCommandWithinOwnTransactionElseFail(CommandDto commandDto) {
-        Try<Void> commandTry = transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            // look up the CommandLogEntry again because we are within a new transaction.
-            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
-
-            // finally, we execute
-            commandLogEntryIfAny.ifPresent(
-                commandLogEntry ->
-                    commandExecutorService.executeCommand(
-                        CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto)
-                    .ifSuccess(
-                        bookmarkToResultIfAny ->
-                            commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp())
-                    )
-                    .mapFailure(throwable -> new ThrowableWithDetailsOfAttempt(throwable, commandLogEntry.getStartedAt()))
-                    // this will result in the transcation being aborted
-                    .ifFailureFail()
-            );
-        });
-
-        // because we used REQUIRES_NEW, we _don't_ propagate any failures; they will already have resulted in the
-        // transaction being completed. however, we do return the Try, so that our caller can find out what happened.
-
-        // at this point the original transaction will have resumed
-        return commandTry;
-    }
-
     /**
      * Update this command as having failed.
      *
@@ -259,25 +241,23 @@ public class RunBackgroundCommandsJob implements Job {
         log.error("Failed to execute command.  As per onFailurePolicy, updating CommandLogEntry with result then continuing; command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
 
         interactionService.run(interactionContext, () -> {
-            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                // look up the CommandLogEntry again because we are within a new transaction.
-                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+            // look up the CommandLogEntry again because we are within a new transaction.
+            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
-                // capture the error
-                commandLogEntryIfAny.ifPresent(
-                    commandLogEntry -> {
-                        // use tunnelled info if available
-                        if (throwable instanceof ThrowableWithDetailsOfAttempt) {
-                            val throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
-                            commandLogEntry.setStartedAt(throwableWithDetailsOfAttempt.getStartedAt());
-                            commandLogEntry.setException(throwableWithDetailsOfAttempt.getOriginal());
-                        } else {
-                            commandLogEntry.setException(throwable);
-                        }
-                        commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+            // capture the error
+            commandLogEntryIfAny.ifPresent(
+                commandLogEntry -> {
+                    // use tunnelled info if available
+                    if (throwable instanceof ThrowableWithDetailsOfAttempt) {
+                        val throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
+                        commandLogEntry.setStartedAt(throwableWithDetailsOfAttempt.getStartedAt());
+                        commandLogEntry.setException(throwableWithDetailsOfAttempt.getOriginal());
+                    } else {
+                        commandLogEntry.setException(throwable);
                     }
-                );
-            });
+                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                }
+            );
         });
     }
 
