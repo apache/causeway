@@ -574,7 +574,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         }
 
-
         public Can<Command> getCapturedCommands() {
             return Can.ofCollection(capturedCommands);
         }
@@ -610,7 +609,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 val actionResult = resultOrVeto.getSuccessElseFail();
 
                 val table = DataTableInteractive
-                        .forAction(managedAction, pendingArgs.getParamValues(), actionResult);
+                        .forAction(managedAction, actionResult);
 
                 return DataTableTester.of(table);
 

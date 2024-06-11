@@ -87,7 +87,6 @@ implements MultiselectChoices {
 
     public static DataTableInteractive forAction(
             final ManagedAction managedAction,
-            final Can<ManagedObject> args,
             final ManagedObject actionResult) {
 
         if(actionResult==null) {

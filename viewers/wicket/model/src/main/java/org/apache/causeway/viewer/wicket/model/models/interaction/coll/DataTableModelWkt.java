@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -56,7 +55,6 @@ implements
     public static DataTableModelWkt forActionModel(
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull ObjectAction actMetaModel,
-            final @NonNull Can<ManagedObject> args,
             final @NonNull ManagedObject actionResult) {
 
         val managedAction = ManagedAction
@@ -64,13 +62,10 @@ implements
 
         val table = DataTableInteractive.forAction(
                 managedAction,
-                args,
                 actionResult);
 
-        val tableMemento = table.getMemento();
-
         val model = new DataTableModelWkt(
-                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableMemento);
+                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), table.getMemento());
 
         model.setObject(table); // memoize
 
@@ -85,10 +80,8 @@ implements
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
 
-        val tableMemento = table.getMemento();
-
         val model = new DataTableModelWkt(
-                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableMemento);
+                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), table.getMemento());
 
         model.setObject(table); // memoize
 
