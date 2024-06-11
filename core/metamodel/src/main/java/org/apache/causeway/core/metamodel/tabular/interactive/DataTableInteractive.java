@@ -24,13 +24,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.search.CollectionSearchService;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
@@ -114,17 +119,26 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
 
+    private final @Nullable BiPredicate<Object, String> searchPredicate;
+
     private DataTableInteractive(
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
             final Where where,
             final Can<ManagedObject> elements) {
 
+        val mmc = MetaModelContext.instanceElseFail();
+
         this.managedMember = managedMember;
         this.where = where;
+        this.searchPredicate = _Casts.uncheckedCast(
+                mmc.lookupService(CollectionSearchService.class)
+                .flatMap(collectionSearchService->collectionSearchService
+                        .searchPredicate(managedMember.getElementType().getCorrespondingClass()))
+                .orElse(null));
 
         dataElements = _Observables.lazy(()->elements.map(
-            MetaModelContext.instanceElseFail()::injectServicesInto));
+            mmc::injectServicesInto));
 
         searchArgument = _Bindables.forValue(null);
         columnSort = _Bindables.forValue(null);
@@ -133,6 +147,7 @@ implements MultiselectChoices {
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
+                .filter(adaptSearchPredicate())
                 .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))
@@ -180,6 +195,10 @@ implements MultiselectChoices {
             .getFriendlyName());
     }
 
+    public boolean isSearchSupported() {
+        return searchPredicate!=null;
+    }
+
     public int getPageSize(final int pageSizeDefault) {
         return getMetaModel().getPageSize().orElse(pageSizeDefault);
     }
@@ -209,6 +228,15 @@ implements MultiselectChoices {
         return dataRowByUuidLookupCache.computeIfAbsent(uuid, __->getDataRowsFiltered().getValue().stream()
                 .filter(dr->dr.getUuid().equals(uuid))
                 .findFirst());
+    }
+
+    // -- SEARCH
+
+    private Predicate<? super ManagedObject> adaptSearchPredicate() {
+        return searchPredicate==null
+                ? managedObject->true
+                : managedObject->searchPredicate
+                    .test(managedObject.getPojo(), searchArgument.getValue());
     }
 
     // -- SORTING
@@ -340,12 +368,17 @@ implements MultiselectChoices {
             return new Memento(
                     tableInteractive.managedMember.getIdentifier(),
                     tableInteractive.where,
-                    tableInteractive.exportAll());
+                    tableInteractive.exportAll(),
+                    tableInteractive.searchArgument.getValue(),
+                    Can.empty() //FIXME - flesh out
+                    );
         }
 
         private final @NonNull Identifier featureId;
         private final @NonNull Where where;
         private final @NonNull DataTable dataTable;
+        private final @Nullable String searchArgument;
+        private final @Nullable Can<Bookmark> selected;
 
         public DataTableInteractive getDataTableModel(final ManagedObject owner) {
 
@@ -362,8 +395,16 @@ implements MultiselectChoices {
                     : ActionInteraction.start(owner, memberId, where)
                         .getManagedActionElseFail();
 
-            return new DataTableInteractive(managedMember, where,
+            var dataTableInteractive = new DataTableInteractive(managedMember, where,
                     dataTable.streamDataElements().collect(Can.toCan()));
+
+            dataTableInteractive.searchArgument.setValue(searchArgument);
+            dataTableInteractive.dataRowsFiltered.getValue()
+                .forEach(dataRow->{
+                    System.err.printf("%s%n", "set toggle");
+                    dataRow.getSelectToggle().setValue(true);
+                });
+            return dataTableInteractive;
         }
     }
 

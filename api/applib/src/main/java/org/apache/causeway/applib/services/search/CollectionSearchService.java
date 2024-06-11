@@ -19,9 +19,7 @@
 package org.apache.causeway.applib.services.search;
 
 import java.util.Optional;
-import java.util.function.Predicate;
-
-import org.springframework.lang.Nullable;
+import java.util.function.BiPredicate;
 
 import lombok.NonNull;
 
@@ -38,19 +36,16 @@ import lombok.NonNull;
 public interface CollectionSearchService {
 
     /**
-     * Optionally returns a {@link Predicate} that filters collections
-     * of given {@code domainType} by a nullable {@code searchString},
+     * Optionally returns a {@link BiPredicate} that filters collections
+     * of given {@code domainType} by a nullable searchString,
      * based on whether the search is supported.
      * <p>
      * For example, the searchString could be parsed into tokens, and then matched against the
      * domain object's title say.
      *
      * @param domainType - entity or view-model type to be rendered as row in a table
-     * @param searchString - nullable, e.g. the searchString could be parsed into tokens, and then matched against the
-     *      domain object's title say
      */
-    <T> Optional<Predicate<T>> searchFilter(
-            @NonNull Class<T> domainType,
-            @Nullable String searchString);
+    <T> Optional<BiPredicate<T, String>> searchPredicate(
+            @NonNull Class<T> domainType);
 
 }
