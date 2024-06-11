@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,6 +53,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -110,6 +112,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFiltered;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
     @Getter private final _BindableAbstract<Boolean> selectAllToggle;
+    @Getter private final _BindableAbstract<ColumnSort> columnSort;
 
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
@@ -128,12 +131,13 @@ implements MultiselectChoices {
             MetaModelContext.instanceElseFail()::injectServicesInto));
 
         searchArgument = _Bindables.forValue(null);
+        columnSort = _Bindables.forValue(null);
 
         dataRowsFiltered = _Observables.lazy(()->
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
-                .sorted(managedMember.getMetaModel().getElementComparator()
+                .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
@@ -161,6 +165,10 @@ implements MultiselectChoices {
         searchArgument.addListener((e,o,n)->{
             dataRowsFiltered.invalidate();
             dataRowsSelected.invalidate();
+        });
+
+        columnSort.addListener((e,o,n)->{
+            dataRowsFiltered.invalidate();
         });
 
         dataColumns = _Observables.lazy(()->
@@ -205,6 +213,30 @@ implements MultiselectChoices {
         return dataRowByUuidLookupCache.computeIfAbsent(uuid, __->getDataRowsFiltered().getValue().stream()
                 .filter(dr->dr.getUuid().equals(uuid))
                 .findFirst());
+    }
+
+    // -- SORTING
+
+    /**
+     * Sorting helper class, that has the column index to be sorted by and the sort direction.
+     */
+    @RequiredArgsConstructor
+    public static class ColumnSort implements Serializable {
+        private static final long serialVersionUID = 1L;
+        final int columnIndex;
+        final MmSortUtils.SortDirection sortDirection;
+        Optional<Comparator<ManagedObject>> asComparator(final Can<DataColumn> columns) {
+            val columnToSort = columns.get(columnIndex).orElse(null);
+            val sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
+            return Optional.ofNullable(sortProperty)
+                    .map(prop->MmSortUtils.orderingBy(sortProperty, sortDirection));
+        }
+    }
+
+    private Optional<Comparator<ManagedObject>> sortingComparator() {
+        return Optional.ofNullable(columnSort.getValue())
+                .flatMap(sort->sort.asComparator(dataColumns.getValue()))
+                .or(()->managedMember.getMetaModel().getElementComparator());
     }
 
     // -- TOGGLE ALL
