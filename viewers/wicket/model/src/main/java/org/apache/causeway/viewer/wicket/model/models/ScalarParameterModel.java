@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.scalar.HasUiParameter;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -61,7 +59,8 @@ implements HasUiParameter {
 
     @Override
     public String validate(final @NonNull ManagedObject proposedArg) {
-        // workaround for FileUpload
+        //TODO[CAUSEWAY-3764] workaround for org.apache.wicket.markup.html.form.upload.FileUpload leaking into the meta-model
+        //  find the root cause then clean-up
         if(proposedArg.getSpecification().getBeanSort().isUnknown()) {
             return null;
         }

@@ -29,10 +29,10 @@ module org.apache.causeway.persistence.commons {
     requires java.sql;
     requires java.xml;
     requires lombok;
-    requires org.apache.causeway.applib;
+    requires transitive org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
+    requires transitive org.apache.causeway.core.metamodel;
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.core.transaction;
     requires org.apache.causeway.schema;

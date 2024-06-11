@@ -247,7 +247,7 @@ implements
     private void enableCommandPublishing() {
         val alreadySet = persistentChangesEncountered.getAndSet(true);
         if(!alreadySet) {
-            val command = currentInteraction().getCommand();
+            currentInteraction().getCommand(); //TODO does this call have side-effects? if so explain, else remove
         }
     }
 
