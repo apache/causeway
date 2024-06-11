@@ -121,6 +121,7 @@ implements
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
+     * @implNote access to this {@link Map} must be thread-safe and the map also should preserves insertion order
      */
     private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
 
@@ -132,6 +133,9 @@ implements
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
 
+    /**
+     * @implNote access to this {@link Map} must be thread-safe and the map also should preserves insertion order
+     */
     @Getter(AccessLevel.PACKAGE)
     private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
@@ -150,9 +154,9 @@ implements
 
     @Override
     public void destroy() throws Exception {
-        enlistedPropertyChangeRecordsById.clear();
+        clearEnlistedPropertyChangeRecordsById();
         entityPropertyChangeRecordsForPublishing.clear();
-        changeKindByEnlistedAdapter.clear();
+        clearChangeKindByEnlistedAdapter();
 
         numberEntitiesLoaded.reset();
         entityChangeEventCount.reset();
@@ -177,10 +181,13 @@ implements
     /**
      * For any enlisted Object Properties collects those, that are meant for publishing,
      * then clears enlisted objects.
+     *
+     * @implNote set a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map} until its drained and cleared
      */
     private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
+        synchronized (enlistedPropertyChangeRecordsById) {
 
-        val records = enlistedPropertyChangeRecordsById.values().stream()
+            val records = enlistedPropertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
                     if(MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
@@ -192,9 +199,10 @@ implements
                 .filter(managedProperty-> shouldPublish(managedProperty.getPreAndPostValue()))
                 .collect(_Sets.toUnmodifiable());
 
-        enlistedPropertyChangeRecordsById.clear();
+            enlistedPropertyChangeRecordsById.clear();
 
-        return records;
+            return records;
+        }
     }
 
     private boolean shouldPublish(final PreAndPostValue preAndPostValue) {
@@ -235,10 +243,10 @@ implements
         } finally {
             log.debug("purging entity change records");
 
-            enlistedPropertyChangeRecordsById.clear();
+            clearEnlistedPropertyChangeRecordsById();
             entityPropertyChangeRecordsForPublishing.clear();
 
-            changeKindByEnlistedAdapter.clear();
+            clearChangeKindByEnlistedAdapter();
             entityChangeEventCount.reset();
             numberEntitiesLoaded.reset();
         }
@@ -288,16 +296,16 @@ implements
 
         val bookmark = ManagedObjects.bookmarkElseFail(entity);
 
-        val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
+        val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark); //FIXME[3770] make thread-safe
         if(previousChangeKind == null) {
-            changeKindByEnlistedAdapter.put(bookmark, changeKind);
+            changeKindByEnlistedAdapter.put(bookmark, changeKind); //FIXME[3770] make thread-safe
             return true;
         }
         switch (previousChangeKind) {
         case CREATE:
             switch (changeKind) {
             case DELETE:
-                changeKindByEnlistedAdapter.remove(bookmark);
+                changeKindByEnlistedAdapter.remove(bookmark); //FIXME[3770] make thread-safe
             case CREATE:
             case UPDATE:
                 return false;
@@ -306,7 +314,7 @@ implements
         case UPDATE:
             switch (changeKind) {
             case DELETE:
-                changeKindByEnlistedAdapter.put(bookmark, changeKind);
+                changeKindByEnlistedAdapter.put(bookmark, changeKind); //FIXME[3770] make thread-safe
                 return true;
             case CREATE:
             case UPDATE:
@@ -321,7 +329,9 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return enlistedPropertyChangeRecordsById.size();
+        synchronized (enlistedPropertyChangeRecordsById) {
+            return enlistedPropertyChangeRecordsById.size();
+        }
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -339,9 +349,10 @@ implements
             log.debug("enlist entity's property changes for publishing {}", entity);
             enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
+            //FIXME[3770] make thread-safe
             MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                    .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
+                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
         });
     }
 
@@ -370,16 +381,18 @@ implements
             if(ormPropertyChangeRecords != null) {
                 // provided by ORM
                 ormPropertyChangeRecords
-                        .stream()
-                        .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
-                        .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
+                    .stream()
+                    //FIXME[3770] make thread-safe
+                    .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
+                    .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
             } else {
                 // home-grown approach
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                        .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                        .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
-                        .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
-                        .forEach(PropertyChangeRecord::withPreValueSetToCurrentElseUnknown);
+                    //FIXME[3770] make thread-safe
+                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                    .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
+                    .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
+                    .forEach(PropertyChangeRecord::withPreValueSetToCurrentElseUnknown);
             }
         });
     }
@@ -399,8 +412,8 @@ implements
                 log.debug("enlist entity's property changes for publishing {}", entity);
 
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                        .forEach(pcrId -> enlistedPropertyChangeRecordsById
-                                .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
+                    .forEach(pcrId -> enlistedPropertyChangeRecordsById
+                        .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
             }
         });
     }
@@ -426,4 +439,19 @@ implements
     public int numberEntitiesDirtied() {
         return changeKindByEnlistedAdapter.size();
     }
+
+    // -- HELPER
+
+    private void clearEnlistedPropertyChangeRecordsById() {
+        synchronized (enlistedPropertyChangeRecordsById) {
+            enlistedPropertyChangeRecordsById.clear();
+        }
+    }
+
+    private void clearChangeKindByEnlistedAdapter() {
+        synchronized (changeKindByEnlistedAdapter) {
+            changeKindByEnlistedAdapter.clear();
+        }
+    }
+
 }
