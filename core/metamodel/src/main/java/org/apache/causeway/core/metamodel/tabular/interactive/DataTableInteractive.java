@@ -123,7 +123,6 @@ implements MultiselectChoices {
         this.managedMember = managedMember;
         this.where = where;
 
-        //dataElements = _Observables.lazy(elementSupplier);
         dataElements = _Observables.lazy(()->elements.map(
             MetaModelContext.instanceElseFail()::injectServicesInto));
 
