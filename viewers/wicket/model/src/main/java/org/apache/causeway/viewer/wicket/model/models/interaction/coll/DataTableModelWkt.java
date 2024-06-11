@@ -60,14 +60,14 @@ implements
         val managedAction = ManagedAction
                 .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
 
-        val table = DataTableInteractive.forAction(
+        val tableInteractive = DataTableInteractive.forAction(
                 managedAction,
                 actionResult);
 
         val model = new DataTableModelWkt(
-                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), table.getMemento());
+                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableInteractive.getMemento());
 
-        model.setObject(table); // memoize
+        model.setObject(tableInteractive); // memoize
 
         return model;
     }
@@ -76,14 +76,14 @@ implements
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull OneToManyAssociation collMetaModel) {
 
-        val table = DataTableInteractive.forCollection(
+        val tableInteractive = DataTableInteractive.forCollection(
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
 
         val model = new DataTableModelWkt(
-                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), table.getMemento());
+                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableInteractive.getMemento());
 
-        model.setObject(table); // memoize
+        model.setObject(tableInteractive); // memoize
 
         return model;
     }
@@ -115,6 +115,12 @@ implements
     protected DataTableInteractive load() {
         val dataTableModel = tableMemento.getDataTableModel(getBookmarkedOwner());
         return dataTableModel;
+    }
+
+    public void setSearchArgument(final String searchArg) {
+        tableMemento.setSearchArgument(searchArg);
+        if(!isAttached()) return;
+        getObject().getSearchArgument().setValue(searchArg);
     }
 
 }

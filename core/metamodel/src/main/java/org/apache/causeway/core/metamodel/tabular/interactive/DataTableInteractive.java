@@ -63,9 +63,11 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 
 public class DataTableInteractive
@@ -173,6 +175,7 @@ implements MultiselectChoices {
         });
 
         searchArgument.addListener((e,o,n)->{
+            System.err.printf("search: %s->%s%n", o, n); //TODO[CAUSEWAY-3772] remove debug line
             dataRowsFiltered.invalidate();
             dataRowsSelected.invalidate();
         });
@@ -358,7 +361,7 @@ implements MultiselectChoices {
      * <p>
      * However, we keep track of the argument list here.
      */
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Memento implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -369,14 +372,19 @@ implements MultiselectChoices {
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
-                    Can.empty() //FIXME - flesh out
+                    Can.empty() //TODO[CAUSEWAY-3772] use model actually
                     );
         }
 
         private final @NonNull Identifier featureId;
         private final @NonNull Where where;
         private final @NonNull DataTable dataTable;
-        private final @Nullable String searchArgument;
+
+        /**
+         * Exposed as setter,
+         * such that we don't need to recreate the entire memento, just because the searchArgument has changed.
+         */
+        @Setter private @Nullable String searchArgument;
         private final @Nullable Can<Bookmark> selected;
 
         public DataTableInteractive getDataTableModel(final ManagedObject owner) {
@@ -400,11 +408,12 @@ implements MultiselectChoices {
             dataTableInteractive.searchArgument.setValue(searchArgument);
             dataTableInteractive.dataRowsFiltered.getValue()
                 .forEach(dataRow->{
-                    System.err.printf("%s%n", "set toggle");
-                    dataRow.getSelectToggle().setValue(true);
+                    System.err.printf("%s%n", "set toggle"); //TODO[CAUSEWAY-3772] remove debug line
+                    dataRow.getSelectToggle().setValue(true); //TODO[CAUSEWAY-3772] use model actually
                 });
             return dataTableInteractive;
         }
+
     }
 
 }

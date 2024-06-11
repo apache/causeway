@@ -70,11 +70,6 @@ implements EntityCollectionModel {
         return getObject();
     }
 
-//XXX experiments from CausewayWicketApplication_experimental
-//    public final void setDataTableModel(final DataTableModel dataTableModel) {
-//        delegate().setObject(dataTableModel);
-//    }
-
     @Override
     public ObjectMember getMetaModel() {
         return getDataTableModel()
@@ -89,6 +84,11 @@ implements EntityCollectionModel {
     @Override
     public final ManagedObject getParentObject() {
         return delegate().getBookmarkedOwner();
+    }
+
+    @Override
+    public final void setSearchArgument(final String searchArg) {
+        delegate().setSearchArgument(searchArg);
     }
 
     // -- VARIANT SUPPORT
