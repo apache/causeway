@@ -3755,6 +3755,34 @@ public class CausewayConfiguration {
             public static class RunBackgroundCommands {
 
                 /**
+                 * If the attempt to execute the command in the background results in failure,
+                 * what should the processing do?
+                 */
+                public enum OnFailurePolicy {
+                    /**
+                     * If a failure has occurred, then capture the exception on the <code>CommandLogEntry</code> and
+                     * then move onto the next command
+                     *
+                     * <p>
+                     *     This policy allows further processing to continue, but runs the risk that the failed command
+                     *     is not noticed by anyone, producing perhaps erroneous results later if it is run
+                     *     out-of-order.
+                     * </p>
+                     */
+                    CONTINUE_WITH_NEXT,
+                    /**
+                     * If a failure has occurred, then leave the <code>CommandLogEntry</code> unchanged, so that it
+                     * is picked up again to be retried.
+                     *
+                     * <p>
+                     *     This policy is in effect a 'stop the line' or 'fail fast' approach.  Because the background
+                     *     command only runs in serial, an exception will result in no other commands being executed.
+                     * </p>
+                     */
+                    STOP_THE_LINE;
+                }
+
+                /**
                  * Limits the number of pending commands that the <code>RunBackgroundCommandsJob</code>
                  * will execute.  After these have been executed, any <code>RunBackgroundCommandsJobListener</code>s are called.
                  *
@@ -3763,6 +3791,11 @@ public class CausewayConfiguration {
                  * </p>
                  */
                 private int batchSize = 25;
+
+                /**
+                 * If there is an exception executing one of the commands, what should be done?
+                 */
+                private OnFailurePolicy onFailurePolicy = OnFailurePolicy.STOP_THE_LINE;
             }
         }
 
