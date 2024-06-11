@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -34,13 +33,11 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
 import lombok.val;
@@ -297,59 +294,14 @@ public final class ManagedObjects {
                     : obj.getPojo();
     }
 
-    // -- COMPARE UTILITIES
+    // -- EQUALITY
 
     public boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
         val aPojo = MmUnwrapUtils.single(a);
         val bPojo = MmUnwrapUtils.single(b);
         return Objects.equals(aPojo, bPojo);
     }
-
-    public int compare(final @Nullable ManagedObject p, final @Nullable ManagedObject q) {
-        return NATURAL_NULL_FIRST.compare(p, q);
-    }
-
-    public Comparator<ManagedObject> orderingBy(final ObjectAssociation sortProperty, final boolean ascending) {
-
-        final Comparator<ManagedObject> comparator = ascending
-                ? NATURAL_NULL_FIRST
-                : NATURAL_NULL_FIRST.reversed();
-
-        return (p, q) -> {
-            val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-            val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
-            return comparator.compare(pSort, qSort);
-        };
-
-    }
-
-    // -- PREDEFINED COMPARATOR
-
-    static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
-        @SuppressWarnings({"rawtypes" })
-        @Override
-        public int compare(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
-            val aPojo = MmUnwrapUtils.single(a);
-            val bPojo = MmUnwrapUtils.single(b);
-            if(Objects.equals(aPojo, bPojo)) {
-                return 0;
-            }
-            if((aPojo==null
-                    || aPojo instanceof Comparable)
-                && (bPojo==null
-                        || bPojo instanceof Comparable)) {
-                return _Objects.compareNullsFirst((Comparable)aPojo, (Comparable)bPojo);
-            }
-            final int hashCompare = Integer.compare(Objects.hashCode(aPojo), Objects.hashCode(bPojo));
-            if(hashCompare!=0) {
-                return hashCompare;
-            }
-            //XXX on hash-collision we return an arbitrary non-equal relation (unspecified behavior)
-            return -1;
-        }
-
-    };
-
+    
     // -- DEFAULTS UTILITIES
 
     public ManagedObject nullToEmpty(

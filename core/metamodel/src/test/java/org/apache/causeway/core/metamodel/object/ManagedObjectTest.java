@@ -242,7 +242,7 @@ class ManagedObjectTest {
                 .collect(Collectors.toList());
 
         // when, then ... if broken throws java.lang.IllegalArgumentException: Comparison method violates its general contract!
-        managedObjects.sort(ManagedObjects.NATURAL_NULL_FIRST);
+        managedObjects.sort(MmSortUtils.NATURAL_NULL_FIRST);
     }
 
 }
