@@ -158,14 +158,6 @@ implements
         persistentChangesEncountered.set(false);
     }
 
-    private void suppressAutoFlushIfRequired(final Runnable runnable) {
-        if (isSuppressAutoFlush) {
-            FlushMgmt.suppressAutoFlush(runnable);
-        } else {
-            runnable.run();
-        }
-    }
-
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
@@ -183,7 +175,7 @@ implements
      * For any enlisted Object Properties collects those, that are meant for publishing,
      * then clears enlisted objects.
      *
-     * @implNote set a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map} until its drained and cleared
+     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map} until its drained and cleared
      */
     private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
         synchronized (enlistedPropertyChangeRecordsById) {
@@ -345,11 +337,11 @@ implements
             return;
         }
 
-        suppressAutoFlushIfRequired(() -> {
-            log.debug("enlist entity's property changes for publishing {}", entity);
+        log.debug("enlist entity's property changes for publishing {}", entity);
+
+        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
             enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
-            //FIXME[3770] make thread-safe
             MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
                 .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
                 .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
@@ -369,7 +361,7 @@ implements
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
-        suppressAutoFlushIfRequired(() -> {
+        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
             // we call this come what may;
             // additional properties may now have been changed, and the changeKind for publishing might also be modified
             enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
@@ -382,13 +374,11 @@ implements
                 // provided by ORM
                 ormPropertyChangeRecords
                     .stream()
-                    //FIXME[3770] make thread-safe
                     .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
                     .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
             } else {
                 // home-grown approach
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    //FIXME[3770] make thread-safe
                     .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
                     .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
                     .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
@@ -402,11 +392,9 @@ implements
 
         _Xray.enlistDeleting(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) {
-            return;
-        }
+        if (isEntityExcludedForChangePublishing(entity)) return;
 
-        suppressAutoFlushIfRequired(() -> {
+        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
             if(enlisted) {
                 log.debug("enlist entity's property changes for publishing {}", entity);
@@ -445,6 +433,25 @@ implements
     private void clearEnlistedPropertyChangeRecordsById() {
         synchronized (enlistedPropertyChangeRecordsById) {
             enlistedPropertyChangeRecordsById.clear();
+        }
+    }
+
+    /**
+     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map}
+     *      until given {@code runnable} completes<p>
+     *      Note: Java supports reentrant locks,
+     *      which allow a thread to acquire the same lock multiple times without deadlocking itself.
+     *      Reentrant locks maintain a count of the number of times a thread has acquired the lock
+     *      and ensure that the lock is released only when the thread exits the synchronized block
+     *      or method the same number of times it entered it.
+     */
+    private void runThreadsafeAndSuppressAutoFlushIfRequired(final Runnable runnable) {
+        synchronized (enlistedPropertyChangeRecordsById) {
+            if (isSuppressAutoFlush) {
+                FlushMgmt.suppressAutoFlush(runnable);
+            } else {
+                runnable.run();
+            }
         }
     }
 
