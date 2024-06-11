@@ -19,11 +19,11 @@
 package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
@@ -47,11 +47,11 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -69,12 +69,12 @@ implements MultiselectChoices {
     // -- FACTORIES
 
     public static DataTableInteractive empty(final ManagedMember managedMember, final Where where) {
-        return new DataTableInteractive(managedMember, where, Can::empty);
+        return new DataTableInteractive(managedMember, where, Can.empty());
     }
 
     public static DataTableInteractive forCollection(
             final ManagedCollection managedCollection) {
-        return new DataTableInteractive(managedCollection, managedCollection.getWhere(), ()->
+        return new DataTableInteractive(managedCollection, managedCollection.getWhere(),
             managedCollection
             .streamElements()
             .collect(Can.toCan()));
@@ -86,7 +86,7 @@ implements MultiselectChoices {
             final ManagedObject actionResult) {
 
         if(actionResult==null) {
-            new DataTableInteractive(managedAction, managedAction.getWhere(), Can::empty);
+            new DataTableInteractive(managedAction, managedAction.getWhere(), Can.empty());
         }
         if(!(actionResult instanceof PackedManagedObject)) {
             throw _Exceptions.unexpectedCodeReach();
@@ -95,8 +95,7 @@ implements MultiselectChoices {
         val elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
 
-        return new DataTableInteractive(managedAction, managedAction.getWhere(),
-                ()->elements);
+        return new DataTableInteractive(managedAction, managedAction.getWhere(), elements);
     }
 
     // -- CONSTRUCTION
@@ -110,6 +109,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFiltered;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
     @Getter private final _BindableAbstract<Boolean> selectAllToggle;
+    @Getter private final _BindableAbstract<ColumnSort> columnSort;
 
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
@@ -118,22 +118,22 @@ implements MultiselectChoices {
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
             final Where where,
-            final Supplier<Can<ManagedObject>> elementSupplier) {
+            final Can<ManagedObject> elements) {
 
         this.managedMember = managedMember;
         this.where = where;
 
-        //dataElements = _Observables.lazy(elementSupplier);
-        dataElements = _Observables.lazy(()->elementSupplier.get().map(
+        dataElements = _Observables.lazy(()->elements.map(
             MetaModelContext.instanceElseFail()::injectServicesInto));
 
         searchArgument = _Bindables.forValue(null);
+        columnSort = _Bindables.forValue(null);
 
         dataRowsFiltered = _Observables.lazy(()->
             dataElements.getValue().stream()
                 //XXX future extension: filter by searchArgument
                 .filter(this::ignoreHidden)
-                .sorted(managedMember.getMetaModel().getElementComparator()
+                .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
@@ -161,6 +161,10 @@ implements MultiselectChoices {
         searchArgument.addListener((e,o,n)->{
             dataRowsFiltered.invalidate();
             dataRowsSelected.invalidate();
+        });
+
+        columnSort.addListener((e,o,n)->{
+            dataRowsFiltered.invalidate();
         });
 
         dataColumns = _Observables.lazy(()->
@@ -205,6 +209,30 @@ implements MultiselectChoices {
         return dataRowByUuidLookupCache.computeIfAbsent(uuid, __->getDataRowsFiltered().getValue().stream()
                 .filter(dr->dr.getUuid().equals(uuid))
                 .findFirst());
+    }
+
+    // -- SORTING
+
+    /**
+     * Sorting helper class, that has the column index to be sorted by and the sort direction.
+     */
+    @RequiredArgsConstructor
+    public static class ColumnSort implements Serializable {
+        private static final long serialVersionUID = 1L;
+        final int columnIndex;
+        final MmSortUtils.SortDirection sortDirection;
+        Optional<Comparator<ManagedObject>> asComparator(final Can<DataColumn> columns) {
+            val columnToSort = columns.get(columnIndex).orElse(null);
+            val sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
+            return Optional.ofNullable(sortProperty)
+                    .map(prop->MmSortUtils.orderingBy(sortProperty, sortDirection));
+        }
+    }
+
+    private Optional<Comparator<ManagedObject>> sortingComparator() {
+        return Optional.ofNullable(columnSort.getValue())
+                .flatMap(sort->sort.asComparator(dataColumns.getValue()))
+                .or(()->managedMember.getMetaModel().getElementComparator());
     }
 
     // -- TOGGLE ALL
@@ -262,7 +290,8 @@ implements MultiselectChoices {
     // -- EXPORT
 
     public DataTable export() {
-        return new DataTable(getElementType(),
+        return new DataTable(
+                getElementType(),
                 getTitle().getValue(),
                 getDataColumns().getValue()
                     .map(DataColumn::getAssociationMetaModel),
@@ -272,10 +301,20 @@ implements MultiselectChoices {
                     .collect(Can.toCan()));
     }
 
+    // used internally for serialization
+    private DataTable exportAll() {
+        return new DataTable(
+                getElementType(),
+                getTitle().getValue(),
+                getDataColumns().getValue()
+                    .map(DataColumn::getAssociationMetaModel),
+                getDataElements().getValue());
+    }
+
     // -- MEMENTO
 
-    public Memento getMemento(final @Nullable ManagedAction.MementoForArgs argsMemento) {
-        return Memento.create(this, argsMemento);
+    public Memento getMemento() {
+        return Memento.create(this);
     }
 
     /**
@@ -297,19 +336,16 @@ implements MultiselectChoices {
         private static final long serialVersionUID = 1L;
 
         static Memento create(
-                final @Nullable DataTableInteractive table,
-                final @Nullable MementoForArgs argsMemento) {
-            val managedMember = table.managedMember;
-
+                final @Nullable DataTableInteractive tableInteractive) {
             return new Memento(
-                    managedMember.getIdentifier(),
-                    table.where,
-                    argsMemento);
+                    tableInteractive.managedMember.getIdentifier(),
+                    tableInteractive.where,
+                    tableInteractive.exportAll());
         }
 
-        private final Identifier featureId;
-        private final Where where;
-        private final MementoForArgs argsMemento;
+        private final @NonNull Identifier featureId;
+        private final @NonNull Where where;
+        private final @NonNull DataTable dataTable;
 
         public DataTableInteractive getDataTableModel(final ManagedObject owner) {
 
@@ -320,21 +356,14 @@ implements MultiselectChoices {
 
             val memberId = featureId.getMemberLogicalName();
 
-            if(featureId.getType().isPropertyOrCollection()) {
-                // bypass domain events
-                val collInteraction = CollectionInteraction.start(owner, memberId, where);
-                val managedColl = collInteraction.getManagedCollection().orElseThrow();
-                // invocation bypassing domain events (pass-through)
-                return new DataTableInteractive(managedColl, where, ()->
-                    managedColl.streamElements(InteractionInitiatedBy.PASS_THROUGH).collect(Can.toCan()));
-            }
-            val actionInteraction = ActionInteraction.start(owner, memberId, where);
-            val managedAction = actionInteraction.getManagedActionElseFail();
-            val args = argsMemento.getArgumentList(managedAction.getMetaModel());
-            // invocation bypassing domain events (pass-through)
-            val actionResult = managedAction.invoke(args, InteractionInitiatedBy.PASS_THROUGH)
-                    .getSuccessElseFail();
-            return forAction(managedAction, args, actionResult);
+            final ManagedMember managedMember = featureId.getType().isPropertyOrCollection()
+                    ? CollectionInteraction.start(owner, memberId, where)
+                        .getManagedCollection().orElseThrow()
+                    : ActionInteraction.start(owner, memberId, where)
+                        .getManagedActionElseFail();
+
+            return new DataTableInteractive(managedMember, where,
+                    dataTable.streamDataElements().collect(Can.toCan()));
         }
     }
 
