@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -159,12 +160,16 @@ public class RunBackgroundCommandsJob implements Job {
                 val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                 // finally, we execute
-                commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                {
-                    commandExecutorService.executeCommand(
-                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
-                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                });
+                commandLogEntryIfAny.ifPresent(
+                    commandLogEntry ->
+                        commandExecutorService.executeCommand(
+                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto)
+                        .ifSuccess(
+                            bookmarkToResultIfAny ->
+                                commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp())
+                        )
+                        .ifFailureFail()
+                );
             })
             .ifFailureFail();
     }
@@ -178,10 +183,12 @@ public class RunBackgroundCommandsJob implements Job {
                 val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                 // capture the error
-                commandLogEntryIfAny.ifPresent(commandLogEntry -> {
-                    commandLogEntry.setException(throwable);
-                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                });
+                commandLogEntryIfAny.ifPresent(
+                    commandLogEntry -> {
+                        commandLogEntry.setException(throwable);
+                        commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
+                    }
+                );
             });
         });
     }
