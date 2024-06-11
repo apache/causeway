@@ -48,4 +48,8 @@ public interface CollectionSearchService {
     <T> Optional<BiPredicate<T, String>> searchPredicate(
             @NonNull Class<T> domainType);
 
+    default String searchPromptPlaceholderText(final @NonNull Class<?> domainType) {
+        return "Search";
+    }
+
 }

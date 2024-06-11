@@ -46,6 +46,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
@@ -135,14 +136,20 @@ implements CollectionCountProvider {
 
     /**
      * If table quick search is supported, adds a search bar on top of the table component.
+     * @param placeholderText
      */
-    private void addSearchBar(final DataTableInteractive dataTable, final CausewayAjaxDataTable dataTableComponent) {
+    private void addSearchBar(
+            final DataTableInteractive dataTable,
+            final CausewayAjaxDataTable dataTableComponent) {
         if(!dataTable.isSearchSupported()) {
             WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_INPUT);
             return;
         }
         // init searchArg from backend
         val searchBar = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTable.getSearchArgument().getValue()));
+
+        Wkt.attributeReplace(searchBar, "placeholder", dataTable.getSearchPromptPlaceholderText());
+
         searchBar.add(new OnChangeAjaxBehavior() {
             private static final long serialVersionUID = 1L;
             @Override

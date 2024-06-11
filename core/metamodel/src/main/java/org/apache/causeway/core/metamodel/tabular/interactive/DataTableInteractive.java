@@ -38,6 +38,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.search.CollectionSearchService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
@@ -126,6 +127,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<String> title;
 
     private final @Nullable BiPredicate<Object, String> searchPredicate;
+    @Getter private final String searchPromptPlaceholderText;
 
     private DataTableInteractive(
             // we need access to the owner in support of imperative title and referenced column detection
@@ -137,11 +139,19 @@ implements MultiselectChoices {
 
         this.managedMember = managedMember;
         this.where = where;
-        this.searchPredicate = _Casts.uncheckedCast(
-                mmc.lookupService(CollectionSearchService.class)
-                .flatMap(collectionSearchService->collectionSearchService
-                        .searchPredicate(managedMember.getElementType().getCorrespondingClass()))
-                .orElse(null));
+
+        { // search stuff
+            var collectionSearchServiceOpt = mmc.lookupService(CollectionSearchService.class);
+            var elementType = managedMember.getElementType().getCorrespondingClass();
+            this.searchPredicate = _Casts.uncheckedCast(
+                collectionSearchServiceOpt
+                    .flatMap(collectionSearchService->collectionSearchService.searchPredicate(elementType))
+                    .orElse(null));
+            this.searchPromptPlaceholderText = _Strings.nullToEmpty(
+                collectionSearchServiceOpt
+                    .map(collectionSearchService->collectionSearchService.searchPromptPlaceholderText(elementType))
+                    .orElse(null));
+        }
 
         dataElements = _Observables.lazy(()->elements.map(
             mmc::injectServicesInto));
@@ -316,6 +326,14 @@ implements MultiselectChoices {
             .map(DataRow::getRowElement);
     }
 
+    private Set<Bookmark> getSelectedAsBookmarks() {
+        return getDataRowsSelected()
+                .getValue()
+                .stream()
+                .map(row->row.getRowElement().getBookmarkElseFail())
+                .collect(Collectors.toSet());
+    }
+
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
         val featureId = managedMember.getIdentifier();
         if(!featureId.getType().isPropertyOrCollection()) {
@@ -374,17 +392,12 @@ implements MultiselectChoices {
         static Memento create(
                 final @NonNull DataTableInteractive tableInteractive) {
 
-            var selectedRowsAsBookmarks = tableInteractive.getDataRowsSelected().getValue()
-                    .stream()
-                    .map(row->row.getRowElement().getBookmarkElseFail())
-                    .collect(Collectors.toSet());
-
             return new Memento(
                     tableInteractive.managedMember.getIdentifier(),
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
-                    selectedRowsAsBookmarks);
+                    tableInteractive.getSelectedAsBookmarks());
         }
 
         private final @NonNull Identifier featureId;
