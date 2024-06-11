@@ -19,6 +19,7 @@
  */
 package org.apache.causeway.persistence.commons.integration.changetracking;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -72,8 +73,6 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -121,7 +120,7 @@ implements
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
-     * @implNote access to this {@link Map} must be thread-safe and the map also should preserves insertion order
+     * @implNote access to this {@link Map} must be thread-safe and the map also should preserve insertion order
      */
     private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
 
@@ -132,31 +131,27 @@ implements
     private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
-
     /**
-     * @implNote access to this {@link Map} must be thread-safe and the map also should preserves insertion order
+     * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
      */
-    @Getter(AccessLevel.PACKAGE)
-    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newConcurrentHashMap();
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
-
-    private boolean suppressAutoFlush;
+    private boolean isSuppressAutoFlush;
 
     @PostConstruct
     public void init() {
-        this.suppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
+        this.isSuppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
     }
-
 
     @Override
     public void destroy() throws Exception {
         clearEnlistedPropertyChangeRecordsById();
         entityPropertyChangeRecordsForPublishing.clear();
-        clearChangeKindByEnlistedAdapter();
+        changeKindByEnlistedAdapter.clear();
 
         numberEntitiesLoaded.reset();
         entityChangeEventCount.reset();
@@ -164,18 +159,24 @@ implements
     }
 
     private void suppressAutoFlushIfRequired(final Runnable runnable) {
-        if (suppressAutoFlush) {
+        if (isSuppressAutoFlush) {
             FlushMgmt.suppressAutoFlush(runnable);
         } else {
             runnable.run();
         }
     }
 
-
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         return entityPropertyChangeRecordsForPublishing.get();
+    }
+
+    /**
+     * Returns a defensive copy of the {@code changeKindByEnlistedAdapter} {@link Map}.
+     */
+    public Map<Bookmark, EntityChangeKind> snapshotChangeKindByEnlistedAdapter() {
+        return new HashMap<>(changeKindByEnlistedAdapter);
     }
 
     /**
@@ -230,7 +231,6 @@ implements
         return false;
     }
 
-
     @Override
     public void beforeCompletion() {
         try {
@@ -246,7 +246,7 @@ implements
             clearEnlistedPropertyChangeRecordsById();
             entityPropertyChangeRecordsForPublishing.clear();
 
-            clearChangeKindByEnlistedAdapter();
+            changeKindByEnlistedAdapter.clear();
             entityChangeEventCount.reset();
             numberEntitiesLoaded.reset();
         }
@@ -296,35 +296,37 @@ implements
 
         val bookmark = ManagedObjects.bookmarkElseFail(entity);
 
-        val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark); //FIXME[3770] make thread-safe
-        if(previousChangeKind == null) {
-            changeKindByEnlistedAdapter.put(bookmark, changeKind); //FIXME[3770] make thread-safe
-            return true;
-        }
-        switch (previousChangeKind) {
-        case CREATE:
-            switch (changeKind) {
-            case DELETE:
-                changeKindByEnlistedAdapter.remove(bookmark); //FIXME[3770] make thread-safe
-            case CREATE:
-            case UPDATE:
-                return false;
-            }
-            break;
-        case UPDATE:
-            switch (changeKind) {
-            case DELETE:
-                changeKindByEnlistedAdapter.put(bookmark, changeKind); //FIXME[3770] make thread-safe
+        synchronized (changeKindByEnlistedAdapter) {
+            val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
+            if(previousChangeKind == null) {
+                changeKindByEnlistedAdapter.put(bookmark, changeKind);
                 return true;
+            }
+            switch (previousChangeKind) {
             case CREATE:
+                switch (changeKind) {
+                case DELETE:
+                    changeKindByEnlistedAdapter.remove(bookmark);
+                case CREATE:
+                case UPDATE:
+                    return false;
+                }
+                break;
             case UPDATE:
+                switch (changeKind) {
+                case DELETE:
+                    changeKindByEnlistedAdapter.put(bookmark, changeKind);
+                    return true;
+                case CREATE:
+                case UPDATE:
+                    return false;
+                }
+                break;
+            case DELETE:
                 return false;
             }
-            break;
-        case DELETE:
             return false;
         }
-        return false;
     }
 
     // side-effect free, used by XRay
@@ -445,12 +447,6 @@ implements
     private void clearEnlistedPropertyChangeRecordsById() {
         synchronized (enlistedPropertyChangeRecordsById) {
             enlistedPropertyChangeRecordsById.clear();
-        }
-    }
-
-    private void clearChangeKindByEnlistedAdapter() {
-        synchronized (changeKindByEnlistedAdapter) {
-            changeKindByEnlistedAdapter.clear();
         }
     }
 
