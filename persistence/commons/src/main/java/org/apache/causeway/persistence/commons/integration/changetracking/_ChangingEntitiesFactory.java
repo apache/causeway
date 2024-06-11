@@ -19,7 +19,6 @@
  */
 package org.apache.causeway.persistence.commons.integration.changetracking;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,15 +42,8 @@ final class _ChangingEntitiesFactory {
             final String userName,
             final EntityChangeTrackerDefault entityChangeTracker) {
 
-        if(entityChangeTracker.getChangeKindByEnlistedAdapter().isEmpty()) {
-            return Optional.empty();
-        }
-
-        // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
-        // creates further entities which would be enlisted;
-        // taking copy of the map avoids ConcurrentModificationException
-        val changeKindByEnlistedAdapter = new HashMap<>(
-                entityChangeTracker.getChangeKindByEnlistedAdapter());
+        val changeKindByEnlistedAdapter = entityChangeTracker.snapshotChangeKindByEnlistedAdapter();
+        if(changeKindByEnlistedAdapter.isEmpty()) return Optional.empty();
 
         val changingEntities = newChangingEntities(
                 completedAt,
