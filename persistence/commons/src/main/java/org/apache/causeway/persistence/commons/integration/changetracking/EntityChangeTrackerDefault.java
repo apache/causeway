@@ -296,37 +296,35 @@ implements
 
         val bookmark = ManagedObjects.bookmarkElseFail(entity);
 
-        synchronized (changeKindByEnlistedAdapter) {
-            val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
-            if(previousChangeKind == null) {
-                changeKindByEnlistedAdapter.put(bookmark, changeKind);
-                return true;
-            }
-            switch (previousChangeKind) {
-            case CREATE:
-                switch (changeKind) {
-                case DELETE:
-                    changeKindByEnlistedAdapter.remove(bookmark);
-                case CREATE:
-                case UPDATE:
-                    return false;
-                }
-                break;
-            case UPDATE:
-                switch (changeKind) {
-                case DELETE:
-                    changeKindByEnlistedAdapter.put(bookmark, changeKind);
-                    return true;
-                case CREATE:
-                case UPDATE:
-                    return false;
-                }
-                break;
+        val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
+        if(previousChangeKind == null) {
+            changeKindByEnlistedAdapter.put(bookmark, changeKind);
+            return true;
+        }
+        switch (previousChangeKind) {
+        case CREATE:
+            switch (changeKind) {
             case DELETE:
+                changeKindByEnlistedAdapter.remove(bookmark);
+            case CREATE:
+            case UPDATE:
                 return false;
             }
+            break;
+        case UPDATE:
+            switch (changeKind) {
+            case DELETE:
+                changeKindByEnlistedAdapter.put(bookmark, changeKind);
+                return true;
+            case CREATE:
+            case UPDATE:
+                return false;
+            }
+            break;
+        case DELETE:
             return false;
         }
+        return false;
     }
 
     // side-effect free, used by XRay
