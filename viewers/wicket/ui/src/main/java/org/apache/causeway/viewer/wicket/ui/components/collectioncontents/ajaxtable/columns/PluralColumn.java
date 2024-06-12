@@ -32,11 +32,11 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataColumn;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Builder;
@@ -74,9 +74,8 @@ extends AssociationColumnAbstract {
     }
 
     @Override
-    protected Component createCellComponent(
-            final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
-
+    protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
+        val dataRow = dataRowWkt.getObject();
         val dataColumn = dataRow.lookupColumnById(memberId).orElseThrow();
         val cellElements = dataRow.getCellElementsForColumn(dataColumn);
 

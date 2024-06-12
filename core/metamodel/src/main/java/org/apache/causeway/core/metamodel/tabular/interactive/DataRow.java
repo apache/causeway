@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
@@ -33,8 +32,6 @@ import lombok.NonNull;
 
 public class DataRow {
 
-    @Deprecated //TODO[CAUSEWAY-3772] deprecation
-    @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
     @Getter private final int rowIndex;
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;

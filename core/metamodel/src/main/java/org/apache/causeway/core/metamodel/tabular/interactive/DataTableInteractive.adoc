@@ -108,7 +108,7 @@ class Memento {
 	where: Where
 	dataTable: DataTable
 	searchArgument: String
-	selectedRowsAsIndexes: IntList
+	selectedRowIndexes: Set<Integer>
 }
 
 @enduml
@@ -125,7 +125,7 @@ Which are all subject to partial page updates (AJAX) and happen in their own req
 Consequently it should be sufficient to serialize the table's state by memoizing the
 
 * *elements* as some equivalent of `List<Bookmark>`
-* *elements selected* as some equivalent of `List<Integer>` that represents indexes into the elements (above)
+* *elements selected* as some equivalent of `Set<Integer>` that represents indexes into the elements (above)
 * *searchArgument* as `String` used for the new table filtering SPI
 * *columnSort* as `ColumnSort` introduced to capture by which column to sort and in what direction/order
 

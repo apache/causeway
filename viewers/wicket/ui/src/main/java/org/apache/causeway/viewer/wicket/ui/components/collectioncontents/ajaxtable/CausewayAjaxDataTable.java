@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.repeater.IItemFactory;
-import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -69,7 +67,8 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
         this.toggleboxColumn = toggleboxColumn;
         setOutputMarkupId(true);
         setVersioned(false);
-        setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
+        //TODO[CAUSEWAY-3772] optimization reinstate?
+        //setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
     }
 
     public void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
@@ -148,13 +147,13 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             final Iterator<IModel<DataRow>> newModels,
             final Iterator<Item<DataRow>> existingItems) {
 
-        //TODO[CAUSEWAY-3772] remove map
-        val itemByUuid = _Maps.<Integer, Item<DataRow>>newHashMap();
+        //TODO[CAUSEWAY-3772] remove map?
+        val itemByRowIndex = _Maps.<Integer, Item<DataRow>>newHashMap();
         existingItems.forEachRemaining(item->{
             val model = item.getModel();
             if(model instanceof DataRowWkt) {
                 val dataRowWkt = (DataRowWkt)item.getModel();
-                itemByUuid.put(dataRowWkt.getRowIndex(), item);
+                itemByRowIndex.put(dataRowWkt.getRowIndex(), item);
             }
         });
 
@@ -169,7 +168,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             @Override
             public Item<DataRow> next() {
                 final DataRowWkt newModel = (DataRowWkt)newModels.next();
-                final Item<DataRow> oldItem = itemByUuid.get(newModel.getRowIndex());
+                final Item<DataRow> oldItem = itemByRowIndex.get(newModel.getRowIndex());
 
                 final IModel<DataRow> model2 = oldItem != null
                         ? oldItem.getModel()

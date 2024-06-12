@@ -25,10 +25,8 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 public class DataRowWkt
 extends ChainingModel<DataRow> {
@@ -42,44 +40,30 @@ extends ChainingModel<DataRow> {
     }
 
     @Getter private final int rowIndex;
-    @Getter private final @NonNull DataRowToggleWkt dataRowToggle;
-
-    private transient DataRow dataRow;
 
     private DataRowWkt(
             final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
         super(dataTableModelHolder);
-        this.dataRow = dataRow;
         this.rowIndex = dataRow.getRowIndex();
-        this.dataRowToggle = new DataRowToggleWkt(this);
     }
 
     @Override
     public final DataRow getObject() {
-        if(dataRow==null) {
-            dataRow = getDataTableModel().lookupDataRow(rowIndex)
-                    .orElse(null);
-            if(dataRow==null) {
-                // [CAUSEWAY-3005] UI out of sync with model: reload page
-                PageUtils.pageReload();
-            }
-        }
-        return dataRow;
+        return dataRow().orElse(null);
     }
 
     public Optional<DataRow> dataRow() {
-        return Optional.ofNullable(getObject());
+        return dataTableModel().lookupDataRow(rowIndex);
     }
 
     public boolean hasMemoizedDataRow() {
-        return dataRow!=null
-                || getDataTableModel().lookupDataRow(rowIndex).isPresent();
+        return ((DataTableModelWkt) super.getTarget()).isAttached();
     }
 
     // -- HELPER
 
-    private DataTableInteractive getDataTableModel() {
+    private DataTableInteractive dataTableModel() {
         return ((DataTableModelWkt) super.getTarget()).getObject();
     }
 

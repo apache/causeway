@@ -140,6 +140,8 @@ implements MultiselectChoices {
             final Where where,
             final Can<ManagedObject> elements) {
 
+        System.err.printf("------------------ new DataTableInteractive %s %d%n", managedMember.getIdentifier(), this.hashCode()); //TODO[CAUSEWAY-3772] debug
+
         val mmc = MetaModelContext.instanceElseFail();
 
         this.managedMember = managedMember;
@@ -186,16 +188,12 @@ implements MultiselectChoices {
         selectAllToggle = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle.addListener((e,o,isAllOn)->{
             //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
-            if(isClearToggleAllEvent.get()) {
-                return;
-            }
+            if(isClearToggleAllEvent.get()) return;
+
             dataRowsSelected.invalidate();
-            try {
-                isToggleAllEvent.set(true);
+            whileToggleAllDo(()->{
                 dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
-            } finally {
-                isToggleAllEvent.set(false);
-            }
+            });
             notifySelectionChangeListeners();
         });
 
@@ -308,19 +306,31 @@ implements MultiselectChoices {
         }
     }
 
+    public void whileToggleAllDo(final @NonNull Runnable runnable) {
+        try {
+            isToggleAllEvent.set(true);
+            System.err.printf("ToggleAll START %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
+            runnable.run();
+        } finally {
+            System.err.printf("ToggleAll END %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
+            isToggleAllEvent.set(false);
+        }
+    }
+
     // -- DATA ROW TOGGLE
 
     void handleRowSelectToggle() {
-        if(isToggleAllEvent.get()) {
-            return;
-        }
+        if(isToggleAllEvent.get()) return;
+
+        System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
+
         getDataRowsSelected().invalidate();
         // in any case, if we have a toggle state change, clear the toggle all bindable
         clearToggleAll();
         notifySelectionChangeListeners();
     }
 
-    private void notifySelectionChangeListeners() {
+    public void notifySelectionChangeListeners() {
         // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
     }
