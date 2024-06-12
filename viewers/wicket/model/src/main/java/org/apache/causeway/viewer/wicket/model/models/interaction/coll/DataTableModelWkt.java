@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -56,43 +55,26 @@ implements
     public static DataTableModelWkt forActionModel(
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull ObjectAction actMetaModel,
-            final @NonNull Can<ManagedObject> args,
             final @NonNull ManagedObject actionResult) {
 
         val managedAction = ManagedAction
                 .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
-
-        val table = DataTableInteractive.forAction(
+        val tableInteractive = DataTableInteractive.forAction(
                 managedAction,
-                args,
                 actionResult);
-
-        val tableMemento = table.getMemento();
-
-        val model = new DataTableModelWkt(
-                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableMemento);
-
-        model.setObject(table); // memoize
-
-        return model;
+        return new DataTableModelWkt(
+                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableInteractive);
     }
 
     public static @NonNull DataTableModelWkt forCollection(
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull OneToManyAssociation collMetaModel) {
 
-        val table = DataTableInteractive.forCollection(
+        val tableInteractive = DataTableInteractive.forCollection(
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
-
-        val tableMemento = table.getMemento();
-
-        val model = new DataTableModelWkt(
-                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableMemento);
-
-        model.setObject(table); // memoize
-
-        return model;
+        return new DataTableModelWkt(
+                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableInteractive);
     }
 
     // -- CONSTRUCTION
@@ -105,10 +87,12 @@ implements
     private DataTableModelWkt(
             final BookmarkedObjectWkt bookmarkedObject,
             final Identifier featureIdentifier,
-            final DataTableInteractive.Memento tableMemento) {
+            final DataTableInteractive tableInteractive) {
         super(bookmarkedObject);
         this.featureIdentifier = featureIdentifier;
-        this.tableMemento = tableMemento;
+        this.tableMemento = tableInteractive.getMemento();
+        setObject(tableInteractive); // memoize
+        setupBindings(tableInteractive);
     }
 
     // --
@@ -120,8 +104,23 @@ implements
 
     @Override
     protected DataTableInteractive load() {
-        val dataTableModel = tableMemento.getDataTableModel(getBookmarkedOwner());
-        return dataTableModel;
+        val tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
+        setupBindings(tableInteractive);
+        return tableInteractive;
+    }
+
+    // -- HELPER
+
+    /**
+     * Feed changes to the {@link DataTableInteractive} model back into our table memento.
+     */
+    private void setupBindings(final @NonNull DataTableInteractive tableInteractive) {
+        tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
+            tableMemento.setSearchArgument(searchArg);
+        });
+        tableInteractive.getSelectionChanges().addListener((e, o, n)->{
+            tableMemento.setSelectedRowIndexes(tableInteractive.getSelectedRowIndexes());
+        });
     }
 
 }

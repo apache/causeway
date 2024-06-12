@@ -52,6 +52,12 @@ implements HasCommonContext {
         return new CausewayAjaxPagingNavigator(navigatorId, table);
     }
 
+    /* if we need to customize the navigation label, that would go here ...
+    @Override
+    protected WebComponent newNavigatorLabel(final String navigatorId, final DataTable<?, ?> table) {
+        return new NavigatorLabel(navigatorId, table);
+    }*/
+
     // -- HELPER
 
     private void addShowAllButton(final DataTable<?, ?> table) {

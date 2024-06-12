@@ -70,11 +70,6 @@ implements EntityCollectionModel {
         return getObject();
     }
 
-//XXX experiments from CausewayWicketApplication_experimental
-//    public final void setDataTableModel(final DataTableModel dataTableModel) {
-//        delegate().setObject(dataTableModel);
-//    }
-
     @Override
     public ObjectMember getMetaModel() {
         return getDataTableModel()

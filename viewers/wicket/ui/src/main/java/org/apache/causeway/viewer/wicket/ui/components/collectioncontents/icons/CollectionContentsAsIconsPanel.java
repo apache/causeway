@@ -48,7 +48,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     private void buildGui() {
         final EntityCollectionModel model = getModel();
 
-        val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
+        val visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
                 .getValue()
                 .map(DataRow::getRowElement)
                 .toList();

@@ -81,7 +81,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
         config.setSelectable(true);
         config.setAllDaySlot(true);
 
-        final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFiltered().getValue()
+        final Iterable<ManagedObject> entityList = model.getDataTableModel().getDataRowsFilteredAndSorted().getValue()
                 .map(DataRow::getRowElement);
         final Iterable<String> calendarNames = getCalendarNames(entityList);
 

@@ -20,22 +20,28 @@ package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.search.CollectionSearchService;
+import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedFunction;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -58,9 +64,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.val;
 
 public class DataTableInteractive
@@ -82,7 +91,6 @@ implements MultiselectChoices {
 
     public static DataTableInteractive forAction(
             final ManagedAction managedAction,
-            final Can<ManagedObject> args,
             final ManagedObject actionResult) {
 
         if(actionResult==null) {
@@ -106,7 +114,9 @@ implements MultiselectChoices {
 
     @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElements;
     @Getter private final @NonNull _BindableAbstract<String> searchArgument; // filter the data rows
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFiltered;
+
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRows;
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSorted;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
     @Getter private final _BindableAbstract<Boolean> selectAllToggle;
     @Getter private final _BindableAbstract<ColumnSort> columnSort;
@@ -114,57 +124,81 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
 
+    private final @Nullable BiPredicate<Object, String> searchPredicate;
+    @Getter private final String searchPromptPlaceholderText;
+
+    /**
+     * On data row selection changes (originating from UI),
+     * the framework updates this {@link Bindable},
+     * such that any listeners do get notified.
+     */
+    @Getter private final _BindableAbstract<Boolean> selectionChanges;
+
     private DataTableInteractive(
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
             final Where where,
             final Can<ManagedObject> elements) {
 
+        val mmc = MetaModelContext.instanceElseFail();
+
         this.managedMember = managedMember;
         this.where = where;
 
-        dataElements = _Observables.lazy(()->elements.map(
-            MetaModelContext.instanceElseFail()::injectServicesInto));
+        { // search stuff
+            var collectionSearchServiceOpt = mmc.lookupService(CollectionSearchService.class);
+            var elementType = managedMember.getElementType().getCorrespondingClass();
+            this.searchPredicate = _Casts.uncheckedCast(
+                collectionSearchServiceOpt
+                    .flatMap(collectionSearchService->collectionSearchService.searchPredicate(elementType))
+                    .orElse(null));
+            this.searchPromptPlaceholderText = _Strings.nullToEmpty(
+                collectionSearchServiceOpt
+                    .map(collectionSearchService->collectionSearchService.searchPromptPlaceholderText(elementType))
+                    .orElse(null));
+        }
 
-        searchArgument = _Bindables.forValue(null);
+        searchArgument = _Bindables.forValue("");
         columnSort = _Bindables.forValue(null);
 
-        dataRowsFiltered = _Observables.lazy(()->
+        dataElements = _Observables.lazy(()->elements
+                .map(mmc::injectServicesInto)
+                .filter(this::ignoreHidden));
+
+        dataRows = _Observables.lazy(()->
             dataElements.getValue().stream()
-                //XXX future extension: filter by searchArgument
-                .filter(this::ignoreHidden)
+                .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element)))
+                .collect(Can.toCan()));
+
+        dataRowsFilteredAndSorted = _Observables.lazy(()->
+            dataRows.getValue().stream()
+                .filter(adaptSearchPredicate())
                 .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
-                .map(domainObject->new DataRow(this, domainObject))
                 .collect(Can.toCan()));
 
         dataRowsSelected = _Observables.lazy(()->
-            dataRowsFiltered.getValue().stream()
-            .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
-            .collect(Can.toCan()));
+            dataRows.getValue().stream()
+                .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
+                .collect(Can.toCan()));
 
+        selectionChanges = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle.addListener((e,o,isAllOn)->{
             //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
-            if(isClearToggleAllEvent.get()) {
-                return;
-            }
-            dataRowsSelected.invalidate();
-            try {
-                isToggleAllEvent.set(true);
-                dataRowsFiltered.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
-            } finally {
-                isToggleAllEvent.set(false);
-            }
+            if(isClearToggleAllEvent.get()) return;
+
+            doProgrammaticToggle(()->{
+                dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
+            });
         });
 
         searchArgument.addListener((e,o,n)->{
-            dataRowsFiltered.invalidate();
-            dataRowsSelected.invalidate();
+            dataRowsFilteredAndSorted.invalidate();
         });
 
         columnSort.addListener((e,o,n)->{
-            dataRowsFiltered.invalidate();
+            dataRowsFilteredAndSorted.invalidate();
         });
 
         dataColumns = _Observables.lazy(()->
@@ -180,6 +214,10 @@ implements MultiselectChoices {
             .getFriendlyName());
     }
 
+    public boolean isSearchSupported() {
+        return searchPredicate!=null;
+    }
+
     public int getPageSize(final int pageSizeDefault) {
         return getMetaModel().getPageSize().orElse(pageSizeDefault);
     }
@@ -189,10 +227,17 @@ implements MultiselectChoices {
     }
 
     /**
+     * Count all data rows (the user is allowed to see).
+     */
+    public int getVisibleElementCount() {
+        return dataElements.getValue().size();
+    }
+
+    /**
      * Count filtered data rows.
      */
-    public int getElementCount() {
-        return dataRowsFiltered.getValue().size();
+    public int getFilteredElementCount() {
+        return dataRowsFilteredAndSorted.getValue().size();
     }
 
     public ObjectMember getMetaModel() {
@@ -203,12 +248,17 @@ implements MultiselectChoices {
         return getMetaModel().getElementType();
     }
 
-    private final Map<UUID, Optional<DataRow>> dataRowByUuidLookupCache = _Maps.newConcurrentHashMap();
-    public Optional<DataRow> lookupDataRow(final @NonNull UUID uuid) {
-        // lookup can be safely cached
-        return dataRowByUuidLookupCache.computeIfAbsent(uuid, __->getDataRowsFiltered().getValue().stream()
-                .filter(dr->dr.getUuid().equals(uuid))
-                .findFirst());
+    public Optional<DataRow> lookupDataRow(final int rowIndex) {
+        return getDataRows().getValue().get(rowIndex);
+    }
+
+    // -- SEARCH
+
+    private Predicate<DataRow> adaptSearchPredicate() {
+        return searchPredicate==null
+                ? dataRow->true
+                : dataRow->searchPredicate
+                    .test(dataRow.getRowElement().getPojo(), searchArgument.getValue());
     }
 
     // -- SORTING
@@ -217,6 +267,7 @@ implements MultiselectChoices {
      * Sorting helper class, that has the column index to be sorted by and the sort direction.
      */
     @RequiredArgsConstructor
+    @EqualsAndHashCode
     public static class ColumnSort implements Serializable {
         private static final long serialVersionUID = 1L;
         final int columnIndex;
@@ -229,15 +280,16 @@ implements MultiselectChoices {
         }
     }
 
-    private Optional<Comparator<ManagedObject>> sortingComparator() {
+    private Optional<Comparator<DataRow>> sortingComparator() {
         return Optional.ofNullable(columnSort.getValue())
                 .flatMap(sort->sort.asComparator(dataColumns.getValue()))
-                .or(()->managedMember.getMetaModel().getElementComparator());
+                .or(()->managedMember.getMetaModel().getElementComparator())
+                .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.getRowElement(), rowB.getRowElement()));
     }
 
     // -- TOGGLE ALL
 
-    final AtomicBoolean isToggleAllEvent = new AtomicBoolean();
+    private final AtomicBoolean isProgrammaticToggle = new AtomicBoolean();
     private final AtomicBoolean isClearToggleAllEvent = new AtomicBoolean();
     public void clearToggleAll() {
         try {
@@ -246,6 +298,31 @@ implements MultiselectChoices {
         } finally {
             isClearToggleAllEvent.set(false);
         }
+    }
+
+    public void doProgrammaticToggle(final @NonNull Runnable runnable) {
+        try {
+            isProgrammaticToggle.set(true);
+            runnable.run();
+        } finally {
+            isProgrammaticToggle.set(false);
+            invalidateSelectionThenNotifyListeners();
+        }
+    }
+
+    // -- DATA ROW TOGGLE
+
+    void handleRowSelectToggle() {
+        if(isProgrammaticToggle.get()) return;
+        // in any case, if we have a toggle state change, clear the toggle all bindable
+        clearToggleAll();
+        invalidateSelectionThenNotifyListeners();
+    }
+
+    private void invalidateSelectionThenNotifyListeners() {
+        dataRowsSelected.invalidate();
+        // simply toggles the boolean value, to trigger any listeners
+        selectionChanges.setValue(!selectionChanges.getValue());
     }
 
     // -- DATA ROW VISIBILITY
@@ -270,9 +347,15 @@ implements MultiselectChoices {
 
     @Override
     public Can<ManagedObject> getSelected() {
-      return getDataRowsSelected()
-                .getValue()
-                .map(DataRow::getRowElement);
+        return dataRowsSelected.getValue()
+            .map(DataRow::getRowElement);
+    }
+
+    public Set<Integer> getSelectedRowIndexes() {
+        return dataRowsSelected.getValue()
+            .stream()
+            .map(DataRow::getRowIndex)
+            .collect(Collectors.toSet());
     }
 
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
@@ -295,7 +378,7 @@ implements MultiselectChoices {
                 getTitle().getValue(),
                 getDataColumns().getValue()
                     .map(DataColumn::getAssociationMetaModel),
-                getDataRowsFiltered().getValue()
+                getDataRowsFilteredAndSorted().getValue()
                     .stream()
                     .map(dr->dr.getRowElement())
                     .collect(Can.toCan()));
@@ -323,29 +406,34 @@ implements MultiselectChoices {
      * Either originates from a <i>Collection</i> or an <i>Action</i>'s
      * non-scalar result.
      * <p>
-     * In the <i>Action</i> case, requires the <i>Action</i>'s arguments
-     * for reconstruction.
-     * <p>
      * Responsibility for recreation of the owner is with the caller
      * to allow for simpler object graph reconstruction (shared owner).
-     * <p>
-     * However, we keep track of the argument list here.
      */
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Memento implements Serializable {
         private static final long serialVersionUID = 1L;
 
         static Memento create(
-                final @Nullable DataTableInteractive tableInteractive) {
+                final @NonNull DataTableInteractive tableInteractive) {
+
             return new Memento(
                     tableInteractive.managedMember.getIdentifier(),
                     tableInteractive.where,
-                    tableInteractive.exportAll());
+                    tableInteractive.exportAll(),
+                    tableInteractive.searchArgument.getValue(),
+                    tableInteractive.getSelectedRowIndexes());
         }
 
         private final @NonNull Identifier featureId;
         private final @NonNull Where where;
         private final @NonNull DataTable dataTable;
+
+        /**
+         * Exposed as setter,
+         * such that we don't need to recreate the entire memento, just because the searchArgument has changed.
+         */
+        @Setter private @Nullable String searchArgument;
+        @Setter private @NonNull Set<Integer> selectedRowIndexes;
 
         public DataTableInteractive getDataTableModel(final ManagedObject owner) {
 
@@ -362,9 +450,18 @@ implements MultiselectChoices {
                     : ActionInteraction.start(owner, memberId, where)
                         .getManagedActionElseFail();
 
-            return new DataTableInteractive(managedMember, where,
+            var dataTableInteractive = new DataTableInteractive(managedMember, where,
                     dataTable.streamDataElements().collect(Can.toCan()));
+
+            dataTableInteractive.searchArgument.setValue(searchArgument);
+            dataTableInteractive.doProgrammaticToggle(()->{
+                dataTableInteractive.dataRows.getValue().stream()
+                    .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
+                    .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
+            });
+            return dataTableInteractive;
         }
+
     }
 
 }
