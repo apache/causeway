@@ -308,10 +308,10 @@ implements MultiselectChoices {
     public void whileToggleAllDo(final @NonNull Runnable runnable) {
         try {
             isToggleAllEvent.set(true);
-            System.err.printf("ToggleAll START %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
+            System.err.printf("ToggleAll START %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug ToggleAll START
             runnable.run();
         } finally {
-            System.err.printf("ToggleAll END %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
+            System.err.printf("ToggleAll END %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug ToggleAll END
             isToggleAllEvent.set(false);
         }
     }
@@ -321,7 +321,7 @@ implements MultiselectChoices {
     void handleRowSelectToggle() {
         if(isToggleAllEvent.get()) return;
 
-        System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
+        System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug handleRowSelectToggle
 
         // in any case, if we have a toggle state change, clear the toggle all bindable
         clearToggleAll();
@@ -358,7 +358,7 @@ implements MultiselectChoices {
     public Can<ManagedObject> getSelected() {
         var selected = dataRowsSelected.getValue()
             .map(DataRow::getRowElement);
-        System.err.printf("getSelected(%d)-> %s%n", this.hashCode(), selected); //TODO[CAUSEWAY-3772] debug
+        System.err.printf("getSelected(%d)-> %s%n", this.hashCode(), selected); //TODO[CAUSEWAY-3772] debug table model getSelected()
         return selected;
     }
 

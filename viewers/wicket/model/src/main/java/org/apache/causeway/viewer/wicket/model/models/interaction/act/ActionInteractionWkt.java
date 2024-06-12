@@ -148,8 +148,6 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         }
 
         if(associatedWithCollectionIfAny!=null) {
-            var table = associatedWithCollectionIfAny.getDataTableModel();
-            System.err.printf("ActionInteraction %s %d%n", "calls load()", table.hashCode()); //TODO[CAUSEWAY-3772] debug
             return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
                     associatedWithCollectionIfAny.getDataTableModel());
         }
@@ -164,7 +162,6 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public final ActionInteraction actionInteraction() {
-        System.err.printf("ActionInteraction %s%n", "calls getObject()"); //TODO[CAUSEWAY-3772] debug
         return getObject();
     }
 
@@ -265,7 +262,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private ParameterNegotiationModel startParameterNegotiationModel() {
         var tableModel = actionInteraction().getManagedAction().map(ManagedAction::getMultiselectChoices);
         if(tableModel!=null) {
-            System.err.printf("possibly uses outdated tableModel - detaching: %d%n", tableModel.hashCode()); //TODO[CAUSEWAY-3772] debug
+            // possibly uses outdated tableModel, if any select toggle, filtering or sorting has happened
+            // hence detach(), so we invalidate the current actionInteraction() and force recreation
             detach();
         }
         this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()

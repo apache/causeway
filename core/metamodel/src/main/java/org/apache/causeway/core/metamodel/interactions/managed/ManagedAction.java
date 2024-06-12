@@ -102,12 +102,6 @@ public final class ManagedAction extends ManagedMember {
         }
         this.action = action;
         this.multiselectChoices = multiselectChoices;
-
-        //TODO[CAUSEWAY-3772] debug outdated param model
-        var tableModel = multiselectChoices;
-        if(tableModel!=null) {
-            System.err.printf("in constructor: use of outdated tableModel: %d%n", tableModel.hashCode());
-        }
     }
 
     //CAUSEWAY-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)

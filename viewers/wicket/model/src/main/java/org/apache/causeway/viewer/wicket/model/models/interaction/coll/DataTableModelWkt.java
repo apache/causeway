@@ -122,7 +122,7 @@ implements
         });
         tableInteractive.getSelectionChanges().addListener((e, o, n)->{
             var idxs = tableInteractive.getSelectedRowIndexes();
-            System.err.printf("memoize selection %s%n", new TreeSet<>(idxs)); //TODO[CAUSEWAY-3772] debug
+            System.err.printf("memoize selection %s%n", new TreeSet<>(idxs)); //TODO[CAUSEWAY-3772] debug memoize selection
             tableMemento.setSelectedRowIndexes(idxs);
         });
     }
