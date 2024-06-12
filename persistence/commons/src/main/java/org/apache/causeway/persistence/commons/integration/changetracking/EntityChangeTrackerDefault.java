@@ -120,7 +120,9 @@ implements
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
-     * @implNote access to this {@link Map} must be thread-safe and the map also should preserve insertion order
+     * @implNote access to this {@link Map} must be thread-safe and the map also should preserve insertion order. We
+     *           cannot use <code>newConcurrentHashMap</code> as this doesn't preserve insertion order; instead we
+     *           make sure that it is only ever accessed within a <code>synchronized</code> block.
      */
     private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
 
