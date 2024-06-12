@@ -190,10 +190,9 @@ implements MultiselectChoices {
             //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
             if(isClearToggleAllEvent.get()) return;
 
-            whileToggleAllDo(()->{
+            doProgrammaticToggle(()->{
                 dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
             });
-            invalidateSelectionThenNotifyListeners();
         });
 
         searchArgument.addListener((e,o,n)->{
@@ -294,7 +293,7 @@ implements MultiselectChoices {
 
     // -- TOGGLE ALL
 
-    private final AtomicBoolean isToggleAllEvent = new AtomicBoolean();
+    private final AtomicBoolean isProgrammaticToggle = new AtomicBoolean();
     private final AtomicBoolean isClearToggleAllEvent = new AtomicBoolean();
     public void clearToggleAll() {
         try {
@@ -305,21 +304,22 @@ implements MultiselectChoices {
         }
     }
 
-    public void whileToggleAllDo(final @NonNull Runnable runnable) {
+    public void doProgrammaticToggle(final @NonNull Runnable runnable) {
         try {
-            isToggleAllEvent.set(true);
-            System.err.printf("ToggleAll START %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug ToggleAll START
+            isProgrammaticToggle.set(true);
+            System.err.printf("Programmatic Toggle START %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug Programmatic Toggle START
             runnable.run();
         } finally {
-            System.err.printf("ToggleAll END %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug ToggleAll END
-            isToggleAllEvent.set(false);
+            System.err.printf("Programmatic Toggle END %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug Programmatic Toggle END
+            isProgrammaticToggle.set(false);
+            invalidateSelectionThenNotifyListeners();
         }
     }
 
     // -- DATA ROW TOGGLE
 
     void handleRowSelectToggle() {
-        if(isToggleAllEvent.get()) return;
+        if(isProgrammaticToggle.get()) return;
 
         System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug handleRowSelectToggle
 
@@ -328,9 +328,9 @@ implements MultiselectChoices {
         invalidateSelectionThenNotifyListeners();
     }
 
-    public void invalidateSelectionThenNotifyListeners() {
-        // simply toggles the boolean value, to trigger any listeners
+    private void invalidateSelectionThenNotifyListeners() {
         dataRowsSelected.invalidate();
+        // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
     }
 
@@ -465,9 +465,11 @@ implements MultiselectChoices {
                     dataTable.streamDataElements().collect(Can.toCan()));
 
             dataTableInteractive.searchArgument.setValue(searchArgument);
-            dataTableInteractive.dataRows.getValue().stream()
-                .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
-                .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
+            dataTableInteractive.doProgrammaticToggle(()->{
+                dataTableInteractive.dataRows.getValue().stream()
+                    .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
+                    .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
+            });
             return dataTableInteractive;
         }
 

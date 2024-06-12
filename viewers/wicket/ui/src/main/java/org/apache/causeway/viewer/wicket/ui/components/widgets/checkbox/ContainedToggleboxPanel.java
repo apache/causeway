@@ -58,7 +58,11 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
         val markupContainer = Wkt.containerAdd(this, ID_CONTAINER);
         val form = Wkt.formAdd(markupContainer, ID_FORM);
         this.checkbox = Wkt.checkboxAdd(
-                form, ID_TOGGLEBOX, model, ajaxTarget->onUpdate.accept(model.getObject(), ajaxTarget));
+                form, ID_TOGGLEBOX, model, ajaxTarget->{
+                    //TODO[CAUSEWAY-3772] debug WKT checkbox
+                    System.err.printf("ContainedToggleboxPanel update %s%n", model.getObject());
+                    onUpdate.accept(model.getObject(), ajaxTarget);
+                });
     }
 
     public void set(

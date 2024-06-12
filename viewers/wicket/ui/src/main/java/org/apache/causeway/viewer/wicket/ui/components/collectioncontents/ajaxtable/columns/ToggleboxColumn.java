@@ -62,6 +62,8 @@ extends GenericColumnAbstract {
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
         var dataRowToggle = new DataRowToggleWkt(dataRowWkt);
+        //TODO[CAUSEWAY-3772] debug createCellComponent
+        System.err.printf("createCellComponent for row %d%n", dataRowWkt.getRowIndex());
         val rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
         rowToggles.add(rowToggle);
         return rowToggle.setOutputMarkupId(true);
@@ -76,20 +78,19 @@ extends GenericColumnAbstract {
         Wkt.cssAppend(bulkToggle, "togglebox-column");
         return bulkToggle;
     }
-    
+
     // -- HELPER
 
     private void onBulkUpdate(final Boolean isChecked, final AjaxRequestTarget target) {
         var dataTableInteractive = dataTableModelHolder.getObject();
 
-        //TODO[CAUSEWAY-3772] don't trample over table model
-        dataTableInteractive.whileToggleAllDo(()->{
+        dataTableInteractive.doProgrammaticToggle(()->{
             val bulkToggle = BulkToggle.valueOf(isChecked);
             for (ContainedToggleboxPanel rowToggle : rowToggles) {
                 rowToggle.set(bulkToggle, target);
             }
         });
-        dataTableInteractive.invalidateSelectionThenNotifyListeners();
+
     }
 
 }
