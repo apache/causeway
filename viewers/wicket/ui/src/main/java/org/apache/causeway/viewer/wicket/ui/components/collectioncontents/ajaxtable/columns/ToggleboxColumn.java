@@ -76,6 +76,8 @@ extends GenericColumnAbstract {
         Wkt.cssAppend(bulkToggle, "togglebox-column");
         return bulkToggle;
     }
+    
+    // -- HELPER
 
     private void onBulkUpdate(final Boolean isChecked, final AjaxRequestTarget target) {
         var dataTableInteractive = dataTableModelHolder.getObject();
@@ -88,7 +90,6 @@ extends GenericColumnAbstract {
             }
         });
         dataTableInteractive.notifySelectionChangeListeners();
-
     }
 
 }

@@ -185,6 +185,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
 
     }
 
+    @SuppressWarnings("unused")
     private static <T> Iterator<Item<T>> itemReuseStrategyWithCast(
             final IItemFactory<T> factory,
             final Iterator<IModel<T>> newModels,

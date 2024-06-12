@@ -324,7 +324,7 @@ implements MultiselectChoices {
 
         System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
 
-        getDataRowsSelected().invalidate();
+        dataRowsSelected.invalidate();
         // in any case, if we have a toggle state change, clear the toggle all bindable
         clearToggleAll();
         notifySelectionChangeListeners();
@@ -357,17 +357,15 @@ implements MultiselectChoices {
 
     @Override
     public Can<ManagedObject> getSelected() {
-        return getDataRowsSelected()
-            .getValue()
+        return dataRowsSelected.getValue()
             .map(DataRow::getRowElement);
     }
 
     public Set<Integer> getSelectedRowIndexes() {
-        return getDataRowsSelected()
-                .getValue()
-                .stream()
-                .map(DataRow::getRowIndex)
-                .collect(Collectors.toSet());
+        return dataRowsSelected.getValue()
+            .stream()
+            .map(DataRow::getRowIndex)
+            .collect(Collectors.toSet());
     }
 
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {

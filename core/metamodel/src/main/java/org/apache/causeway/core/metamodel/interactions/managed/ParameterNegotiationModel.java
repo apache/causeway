@@ -64,7 +64,6 @@ public class ParameterNegotiationModel {
             final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> initialParamValues) {
         return new ParameterNegotiationModel(managedAction, initialParamValues);
-
     }
 
     private final @NonNull ManagedAction managedAction;
