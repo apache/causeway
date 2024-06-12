@@ -142,11 +142,11 @@ implements
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
-    private boolean isSuppressAutoFlush;
+    private boolean suppressAutoFlush;
 
     @PostConstruct
     public void init() {
-        this.isSuppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
+        this.suppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
     }
 
     @Override
