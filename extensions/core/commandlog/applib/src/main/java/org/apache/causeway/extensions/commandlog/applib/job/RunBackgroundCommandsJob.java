@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.extensions.commandlog.applib.job;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +29,8 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
@@ -51,6 +55,8 @@ import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -103,16 +109,37 @@ public class RunBackgroundCommandsJob implements Job {
 
         // for each command, we execute within its own transaction.  Failure of one should not impact the next.
         commandDtosIfAny.ifPresent(commandDtos -> {
-            for (val commandDto : commandDtos) {
-                executeCommandWithinTransaction(commandDto, interactionContext);
+            List<CommandAndResult> commandResults = new ArrayList<>();
+            for (CommandDto dto : commandDtos) {
+                Try<?> attempt = executeCommandWithinTransaction(dto, interactionContext);
+                if(attempt.isFailure()) {
+                    val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+                    if (onFailurePolicy == CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands.OnFailurePolicy.STOP_THE_LINE) {
+                        break;
+                    }
+                }
+                CommandAndResult apply = CommandAndResult.of(dto, attempt);
+                commandResults.add(apply);
             }
 
-            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            // an enhancement for the listener interface would be to say whether each interaction succeeded or not
+            // whether his is relevant depends on the onFailurePolicy (if it's set to STOP_THE_LINE, then everything passed on will have succeeded)
+            val interactionIds = commandResults.stream()
+                    .filter(commandAndResult -> commandAndResult.getExecutionResult().isSuccess())  // only the successes
+                    .map(CommandAndResult::getCommandDto)
+                    .map(CommandDto::getInteractionId)
+                    .collect(Collectors.toList());
             listeners.forEach(listener -> {
                 invokeListenerCallbackWithinTransaction(listener, interactionIds, interactionContext);
             });
         });
+    }
 
+    @Getter
+    @RequiredArgsConstructor(staticName = "of")
+    static class CommandAndResult {
+        private final CommandDto commandDto;
+        private final Try<?> executionResult;
     }
 
     private Optional<List<CommandDto>> pendingCommandDtos(final InteractionContext interactionContext) {
@@ -131,62 +158,113 @@ public class RunBackgroundCommandsJob implements Job {
             .getValue();
     }
 
-    private void executeCommandWithinTransaction(
+    @Inject TransactionServiceSpring transactionServiceSpring;
+
+    private Try<?> executeCommandWithinTransaction(
             final CommandDto commandDto,
             final InteractionContext interactionContext
     ) {
-        int retryCount = RETRY_COUNT;
-        while(retryCount > 0) {
-            Try<?> result = interactionService.runAndCatch(interactionContext, () -> {
-                executeCommandWithinOwnTransactionElseFail(commandDto);
+        int remainingAttempts = RETRY_COUNT;
+        Try<?> result;
+        while(true) {
+            result = interactionService.call(interactionContext, () -> {
+
+                // previously we were creating a new transaction here with REQUIRES_NEW, but this isn't necessary
+                // (and massively complicates things) since each interaction will implictly creates its own transaction
+                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                if(commandLogEntryIfAny.isEmpty()) {
+                    return Try.empty();
+                }
+
+                val commandLogEntry = commandLogEntryIfAny.get();
+                return commandExecutorService.executeCommand(
+                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto)
+                        .ifSuccess(
+                            bookmarkToResultIfAny ->
+                                commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp())
+                        )
+                        .mapFailure(throwable -> new ThrowableWithDetailsOfAttempt(throwable, commandLogEntry.getStartedAt()));
             });
-            if (isEncounteredDeadlock(result)) {
-                retryCount--;
-                log.debug("Deadlock occurred, retrying command: " + CommandDtoUtils.dtoMapper().toString(commandDto));
-                sleep(RETRY_INTERVAL_MILLIS);
-            } else {
-                retryCount=0;   // ie break
-                result.ifFailure(throwable -> {
-                    logAndCaptureFailure(throwable, commandDto, interactionContext);
-                });
+            if(result.isSuccess()) {
+                return result;
             }
+            if (! isEncounteredDeadlock(result)) {
+                break;
+            }
+            if (--remainingAttempts <= 0) {
+                log.debug("Deadlock occurred too many times, giving up on command: " + CommandDtoUtils.dtoMapper().toString(commandDto));
+                break;
+            }
+            log.debug("Deadlock occurred, retrying command: " + CommandDtoUtils.dtoMapper().toString(commandDto));
+            sleep(RETRY_INTERVAL_MILLIS);
         }
+
+        // a failure has occurred
+        val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+        switch (onFailurePolicy) {
+            case CONTINUE_WITH_NEXT:
+                // the result _will_ contain a failure
+                result.ifFailure(throwable -> captureFailure(throwable, commandDto, interactionContext));
+                break;
+            case STOP_THE_LINE:
+                break;
+        }
+        return result;
     }
 
-    private void executeCommandWithinOwnTransactionElseFail(CommandDto commandDto) {
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                // look up the CommandLogEntry again because we are within a new transaction.
-                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
-
-                // finally, we execute
-                commandLogEntryIfAny.ifPresent(commandLogEntry ->
-                {
-                    commandExecutorService.executeCommand(
-                            CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto);
-                    commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                });
-            })
-            .ifFailureFail();
+    /**
+     * Wrap the original throwable so that we can tunnel information from the original failed attempt, to make
+     * it available for subsequent processing.
+     */
+    @Getter
+    @RequiredArgsConstructor(staticName = "of")
+    static class ThrowableWithDetailsOfAttempt extends RuntimeException {
+        private final Throwable original;
+        private final java.sql.Timestamp startedAt;
     }
 
-    private void logAndCaptureFailure(Throwable throwable, CommandDto commandDto, InteractionContext interactionContext) {
-        log.error("Failed to execute command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
-        // update this command as having failed.
-        interactionService.runAndCatch(interactionContext, () -> {
-            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                // look up the CommandLogEntry again because we are within a new transaction.
-                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+    /**
+     * Update this command as having failed.
+     *
+     * <p>
+     * If this in itself fails, we will just ignore, which will be the same as if the
+     * {@link CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands#getOnFailurePolicy() onFailurePolicy}
+     * policy was set to
+     * {@link org.apache.causeway.core.config.CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands.OnFailurePolicy#STOP_THE_LINE}.
+     * </p>
+     *
+     * @param throwable
+     * @param commandDto
+     * @param interactionContext
+     */
+    private void captureFailure(Throwable throwable, CommandDto commandDto, InteractionContext interactionContext) {
+        log.error("Failed to execute command.  As per onFailurePolicy, updating CommandLogEntry with result then continuing; command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
 
-                // capture the error
-                commandLogEntryIfAny.ifPresent(commandLogEntry -> {
-                    commandLogEntry.setException(throwable);
+        interactionService.run(interactionContext, () -> {
+            // look up the CommandLogEntry again because we are within a new transaction.
+            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+
+            // capture the error
+            commandLogEntryIfAny.ifPresent(
+                commandLogEntry -> {
+                    // use tunnelled info if available
+                    if (throwable instanceof ThrowableWithDetailsOfAttempt) {
+                        val throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
+                        commandLogEntry.setStartedAt(throwableWithDetailsOfAttempt.getStartedAt());
+                        commandLogEntry.setException(throwableWithDetailsOfAttempt.getOriginal());
+                    } else {
+                        commandLogEntry.setException(throwable);
+                    }
                     commandLogEntry.setCompletedAt(clockService.getClock().nowAsJavaSqlTimestamp());
-                });
-            });
+                }
+            );
         });
     }
 
-    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds, InteractionContext interactionContext) {
+    private void invokeListenerCallbackWithinTransaction(
+            final RunBackgroundCommandsJobListener listener,
+            final List<String> interactionIds,
+            final InteractionContext interactionContext) {
         interactionService.runAndCatch(interactionContext, () -> {
             transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
                 listener.executed(interactionIds);
