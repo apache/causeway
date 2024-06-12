@@ -157,7 +157,7 @@ implements CollectionCountProvider {
                 // on searchArg update originating from end-user in UI,
                 // update the backend model
                 var searchArg = searchBar.getValue();
-                entityCollectionModel().setSearchArgument(searchArg);
+                entityCollectionModel().getDataTableModel().getSearchArgument().setValue(searchArg);
                 // tells the table component to re-render
                 target.add(dataTableComponent);
             }

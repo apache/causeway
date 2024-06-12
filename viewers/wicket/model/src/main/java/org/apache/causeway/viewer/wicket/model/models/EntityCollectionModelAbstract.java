@@ -86,11 +86,6 @@ implements EntityCollectionModel {
         return delegate().getBookmarkedOwner();
     }
 
-    @Override
-    public final void setSearchArgument(final String searchArg) {
-        delegate().setSearchArgument(searchArg);
-    }
-
     // -- VARIANT SUPPORT
 
     @Override

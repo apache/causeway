@@ -326,9 +326,6 @@ implements MultiselectChoices {
         getDataRowsSelected().invalidate();
         // in any case, if we have a toggle state change, clear the toggle all bindable
         clearToggleAll();
-
-        //TODO[CAUSEWAY-3772] should trigger update of the table memento
-        //memento.setSelectedRowsAsBookmarks(getSelectedRowsAsBookmarks());
     }
 
     // -- ASSOCIATED ACTION WITH MULTI SELECT
@@ -340,7 +337,7 @@ implements MultiselectChoices {
             .map(DataRow::getRowElement);
     }
 
-    private Set<Bookmark> getSelectedRowsAsBookmarks() {
+    public Set<Bookmark> getSelectedRowsAsBookmarks() {
         return getDataRowsSelected()
                 .getValue()
                 .stream()

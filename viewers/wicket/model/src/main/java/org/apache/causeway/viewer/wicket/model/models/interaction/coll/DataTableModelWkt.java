@@ -59,17 +59,11 @@ implements
 
         val managedAction = ManagedAction
                 .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
-
         val tableInteractive = DataTableInteractive.forAction(
                 managedAction,
                 actionResult);
-
-        val model = new DataTableModelWkt(
-                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableInteractive.getMemento());
-
-        model.setObject(tableInteractive); // memoize
-
-        return model;
+        return new DataTableModelWkt(
+                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableInteractive);
     }
 
     public static @NonNull DataTableModelWkt forCollection(
@@ -79,13 +73,8 @@ implements
         val tableInteractive = DataTableInteractive.forCollection(
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
-
-        val model = new DataTableModelWkt(
-                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableInteractive.getMemento());
-
-        model.setObject(tableInteractive); // memoize
-
-        return model;
+        return new DataTableModelWkt(
+                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableInteractive);
     }
 
     // -- CONSTRUCTION
@@ -98,10 +87,12 @@ implements
     private DataTableModelWkt(
             final BookmarkedObjectWkt bookmarkedObject,
             final Identifier featureIdentifier,
-            final DataTableInteractive.Memento tableMemento) {
+            final DataTableInteractive tableInteractive) {
         super(bookmarkedObject);
         this.featureIdentifier = featureIdentifier;
-        this.tableMemento = tableMemento;
+        this.tableMemento = tableInteractive.getMemento();
+        setObject(tableInteractive); // memoize
+        setupBindings(tableInteractive);
     }
 
     // --
@@ -113,14 +104,23 @@ implements
 
     @Override
     protected DataTableInteractive load() {
-        val dataTableModel = tableMemento.getDataTableModel(getBookmarkedOwner());
-        return dataTableModel;
+        val tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
+        setupBindings(tableInteractive);
+        return tableInteractive;
     }
 
-    public void setSearchArgument(final String searchArg) {
-        tableMemento.setSearchArgument(searchArg);
-        if(!isAttached()) return;
-        getObject().getSearchArgument().setValue(searchArg);
+    // -- HELPER
+
+    /**
+     * Feed changes to the {@link DataTableInteractive} model back into our table memento.
+     */
+    private void setupBindings(final @NonNull DataTableInteractive tableInteractive) {
+        tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
+            tableMemento.setSearchArgument(searchArg);
+        });
+        tableInteractive.getDataRowsSelected().addListener((e, o, dataRowsSelected)->{
+            tableMemento.setSelectedRowsAsBookmarks(tableInteractive.getSelectedRowsAsBookmarks());
+        });
     }
 
 }

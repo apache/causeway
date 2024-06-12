@@ -126,12 +126,6 @@ extends
         return getDataTableModel().getTableDecoratorIfAny();
     }
 
-    /**
-     * On end-user searchArgument changes via UI,
-     * update the underlying table memento and propagate to backend models.
-     */
-    void setSearchArgument(final String searchArg);
-
     // -- PARENTED SPECIFICS
 
     @Deprecated // there is no reason to distinguish parented and standalone, I think
