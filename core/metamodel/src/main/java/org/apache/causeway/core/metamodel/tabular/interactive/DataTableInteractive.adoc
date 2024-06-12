@@ -1,0 +1,97 @@
+= Data Table Interactive
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+`DataTableInteractive` is an interactive tabular data model where each row corresponds to a `ManagedObject`,
+which represents either a domain object or value object.
+
+[plantuml,fig-DataTableInteractive-1,svg]
+.Data Table Interactive (simplified diagram)
+----
+@startuml
+
+class DataTableInteractive {
+    managedMember: ManagedMember
+    where: Where
+    title: Observable<String>
+    dataElements: Can<ManagedObject>
+    searchArgument: Bindable<String>
+	selectAllToggle: Bindable<Boolean>
+}
+
+class ColumnSort {
+	columnIndex: int
+}
+
+enum SortDirection {
+	ASCENDING
+	DESCENDING
+}
+
+class DataColumn {
+    columnId: String 
+    associationMetaModel: ObjectAssociation
+    columnFriendlyName: Observable<String>
+    columnDescription: Observable<Optional<String>>
+}
+
+class DataRow {
+	rowElement: ManagedObject
+	selectToggle: Bindable<Boolean> 
+}
+
+DataTableInteractive ..> "*" DataColumn : "dataColumns²"
+DataTableInteractive .> "*" DataRow : "dataRowsVisible²\ndataRowsFilteredAndSorted²\ndataRowsSelected²"
+DataTableInteractive <- DataRow : "parentTable"
+
+DataTableInteractive ..> ColumnSort : "columnSort¹"
+ColumnSort --> SortDirection : "sortDirection"
+
+@enduml
+----
+
+<.> Bindable
+<.> Observable
+
+== Search Argument Interaction
+
+The model supports filtering of data rows based on a given *search argument*.
+
+[plantuml,fig-DataTableInteractive-3,svg]
+.Search Argument Interaction
+----
+@startuml
+
+:UI **search argument** change
+triggers partial page update;
+
+:update table **memento**
+with new search argument; 
+
+:tabular data model gets **recreated** from memento;
+:client's DOM gets updated and table **re-rendered**;
+
+@enduml
+----
+
+== Data Row Select Toggle Interaction
+
+The model supports selection of data rows.
+
+[plantuml,fig-DataTableInteractive-2,svg]
+.Data Row Select Toggle Interaction
+----
+@startuml
+
+:UI **row select toggle**
+triggers partial page update;
+
+:update table **memento**
+with snapshot of 
+currently selected rows;
+
+:tabular data model gets **recreated** from memento;
+:client's DOM gets updated and table **re-rendered**;
+
+@enduml
+----

@@ -46,17 +46,9 @@ public class DataRow {
 
         selectToggle = _Bindables.forBoolean(false);
         selectToggle.addListener((e,o,n)->{
-
             //_ToggleDebug.onSelectRowToggle(rowElement, o, n, parentTable.isToggleAllEvent.get());
-
-            if(parentTable.isToggleAllEvent.get()) {
-                return;
-            }
-            parentTable.getDataRowsSelected().invalidate();
-            // in any case, if we have a toggle state change, clear the toggle all bindable
-            parentTable.clearToggleAll();
+            parentTable.handleRowSelectToggle();
         });
-
     }
 
     public ManagedObject getRowElement() {

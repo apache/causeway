@@ -241,7 +241,7 @@ implements MultiselectChoices {
         return getMetaModel().getElementType();
     }
 
-    //TODO[CAUSEWAY-3772] use Bookmarks instead of UUID
+    //TODO[CAUSEWAY-3772] use Bookmarks instead of UUID? But that will break
     private final Map<UUID, Optional<DataRow>> dataRowByUuidLookupCache = _Maps.newConcurrentHashMap();
     public Optional<DataRow> lookupDataRow(final @NonNull UUID uuid) {
         // lookup can be safely cached
@@ -288,7 +288,7 @@ implements MultiselectChoices {
 
     // -- TOGGLE ALL
 
-    final AtomicBoolean isToggleAllEvent = new AtomicBoolean();
+    private final AtomicBoolean isToggleAllEvent = new AtomicBoolean();
     private final AtomicBoolean isClearToggleAllEvent = new AtomicBoolean();
     public void clearToggleAll() {
         try {
@@ -317,6 +317,20 @@ implements MultiselectChoices {
                 Where.ALL_TABLES);
     }
 
+    // -- DATA ROW TOGGLE
+
+    void handleRowSelectToggle() {
+        if(isToggleAllEvent.get()) {
+            return;
+        }
+        getDataRowsSelected().invalidate();
+        // in any case, if we have a toggle state change, clear the toggle all bindable
+        clearToggleAll();
+
+        //TODO[CAUSEWAY-3772] should trigger update of the table memento
+        //memento.setSelectedRowsAsBookmarks(getSelectedRowsAsBookmarks());
+    }
+
     // -- ASSOCIATED ACTION WITH MULTI SELECT
 
     @Override
@@ -326,7 +340,7 @@ implements MultiselectChoices {
             .map(DataRow::getRowElement);
     }
 
-    private Set<Bookmark> getSelectedAsBookmarks() {
+    private Set<Bookmark> getSelectedRowsAsBookmarks() {
         return getDataRowsSelected()
                 .getValue()
                 .stream()
@@ -397,7 +411,7 @@ implements MultiselectChoices {
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
-                    tableInteractive.getSelectedAsBookmarks());
+                    tableInteractive.getSelectedRowsAsBookmarks());
         }
 
         private final @NonNull Identifier featureId;
