@@ -19,6 +19,7 @@
  */
 package org.apache.causeway.persistence.commons.integration.changetracking;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -72,8 +73,6 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -121,6 +120,9 @@ implements
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
+     * @implNote access to this {@link Map} must be thread-safe and the map also should preserve insertion order. We
+     *           cannot use <code>newConcurrentHashMap</code> as this doesn't preserve insertion order; instead we
+     *           make sure that it is only ever accessed within a <code>synchronized</code> block.
      */
     private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
 
@@ -131,14 +133,14 @@ implements
     private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
         = _Lazy.threadSafe(this::capturePostValuesAndDrain);
 
-
-    @Getter(AccessLevel.PACKAGE)
-    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
+    /**
+     * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
+     */
+    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newConcurrentHashMap();
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
-
 
     private boolean suppressAutoFlush;
 
@@ -147,10 +149,9 @@ implements
         this.suppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
     }
 
-
     @Override
     public void destroy() throws Exception {
-        enlistedPropertyChangeRecordsById.clear();
+        clearEnlistedPropertyChangeRecordsById();
         entityPropertyChangeRecordsForPublishing.clear();
         changeKindByEnlistedAdapter.clear();
 
@@ -159,14 +160,25 @@ implements
         persistentChangesEncountered.set(false);
     }
 
-    private void suppressAutoFlushIfRequired(final Runnable runnable) {
-        if (suppressAutoFlush) {
-            FlushMgmt.suppressAutoFlush(runnable);
-        } else {
-            runnable.run();
+
+    /**
+     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map}
+     *      until given {@code runnable} completes<p>
+     *      Note: Java supports reentrant locks,
+     *      which allow a thread to acquire the same lock multiple times without deadlocking itself.
+     *      Reentrant locks maintain a count of the number of times a thread has acquired the lock
+     *      and ensure that the lock is released only when the thread exits the synchronized block
+     *      or method the same number of times it entered it.
+     */
+    private void runThreadsafeAndSuppressAutoFlushIfRequired(final Runnable runnable) {
+        synchronized (enlistedPropertyChangeRecordsById) {
+            if (suppressAutoFlush) {
+                FlushMgmt.suppressAutoFlush(runnable);
+            } else {
+                runnable.run();
+            }
         }
     }
-
 
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
         // this code path has side-effects, it locks the result for this transaction,
@@ -175,12 +187,22 @@ implements
     }
 
     /**
+     * Returns a defensive copy of the {@code changeKindByEnlistedAdapter} {@link Map}.
+     */
+    public Map<Bookmark, EntityChangeKind> snapshotChangeKindByEnlistedAdapter() {
+        return new HashMap<>(changeKindByEnlistedAdapter);
+    }
+
+    /**
      * For any enlisted Object Properties collects those, that are meant for publishing,
      * then clears enlisted objects.
+     *
+     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map} until its drained and cleared
      */
     private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
+        synchronized (enlistedPropertyChangeRecordsById) {
 
-        val records = enlistedPropertyChangeRecordsById.values().stream()
+            val records = enlistedPropertyChangeRecordsById.values().stream()
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
                     if(MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
@@ -192,9 +214,10 @@ implements
                 .filter(managedProperty-> shouldPublish(managedProperty.getPreAndPostValue()))
                 .collect(_Sets.toUnmodifiable());
 
-        enlistedPropertyChangeRecordsById.clear();
+            enlistedPropertyChangeRecordsById.clear();
 
-        return records;
+            return records;
+        }
     }
 
     private boolean shouldPublish(final PreAndPostValue preAndPostValue) {
@@ -222,7 +245,6 @@ implements
         return false;
     }
 
-
     @Override
     public void beforeCompletion() {
         try {
@@ -235,7 +257,7 @@ implements
         } finally {
             log.debug("purging entity change records");
 
-            enlistedPropertyChangeRecordsById.clear();
+            clearEnlistedPropertyChangeRecordsById();
             entityPropertyChangeRecordsForPublishing.clear();
 
             changeKindByEnlistedAdapter.clear();
@@ -321,7 +343,9 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        return enlistedPropertyChangeRecordsById.size();
+        synchronized (enlistedPropertyChangeRecordsById) {
+            return enlistedPropertyChangeRecordsById.size();
+        }
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -335,13 +359,14 @@ implements
             return;
         }
 
-        suppressAutoFlushIfRequired(() -> {
-            log.debug("enlist entity's property changes for publishing {}", entity);
+        log.debug("enlist entity's property changes for publishing {}", entity);
+
+        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
             enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
             MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                    .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
+                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
         });
     }
 
@@ -358,7 +383,7 @@ implements
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
-        suppressAutoFlushIfRequired(() -> {
+        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
             // we call this come what may;
             // additional properties may now have been changed, and the changeKind for publishing might also be modified
             enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
@@ -370,16 +395,16 @@ implements
             if(ormPropertyChangeRecords != null) {
                 // provided by ORM
                 ormPropertyChangeRecords
-                        .stream()
-                        .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
-                        .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
+                    .stream()
+                    .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
+                    .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
             } else {
                 // home-grown approach
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                        .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                        .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
-                        .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
-                        .forEach(PropertyChangeRecord::withPreValueSetToCurrentElseUnknown);
+                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
+                    .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
+                    .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
+                    .forEach(PropertyChangeRecord::withPreValueSetToCurrentElseUnknown);
             }
         });
     }
@@ -389,18 +414,16 @@ implements
 
         _Xray.enlistDeleting(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) {
-            return;
-        }
+        if (isEntityExcludedForChangePublishing(entity)) return;
 
-        suppressAutoFlushIfRequired(() -> {
+        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
             if(enlisted) {
                 log.debug("enlist entity's property changes for publishing {}", entity);
 
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                        .forEach(pcrId -> enlistedPropertyChangeRecordsById
-                                .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
+                    .forEach(pcrId -> enlistedPropertyChangeRecordsById
+                        .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
             }
         });
     }
@@ -426,4 +449,13 @@ implements
     public int numberEntitiesDirtied() {
         return changeKindByEnlistedAdapter.size();
     }
+
+    // -- HELPER
+
+    private void clearEnlistedPropertyChangeRecordsById() {
+        synchronized (enlistedPropertyChangeRecordsById) {
+            enlistedPropertyChangeRecordsById.clear();
+        }
+    }
+
 }
