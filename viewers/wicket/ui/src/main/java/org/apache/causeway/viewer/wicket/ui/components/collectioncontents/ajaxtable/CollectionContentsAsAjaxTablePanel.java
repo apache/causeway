@@ -61,6 +61,7 @@ implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE = "table";
+    private static final String ID_TABLE_SEARCH_BAR = "table-search-bar";
     private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
@@ -142,9 +143,11 @@ implements CollectionCountProvider {
             final DataTableInteractive dataTable,
             final CausewayAjaxDataTable dataTableComponent) {
         if(!dataTable.isSearchSupported()) {
+            WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_BAR);
             WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_INPUT);
             return;
         }
+
         // init searchArg from backend
         val searchBar = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTable.getSearchArgument().getValue()));
 
@@ -162,7 +165,9 @@ implements CollectionCountProvider {
                 target.add(dataTableComponent);
             }
         });
-        addOrReplace(searchBar);
+
+        Wkt.containerAdd(this, ID_TABLE_SEARCH_BAR)
+            .add(searchBar);
     }
 
     private void prependTitleColumn(
