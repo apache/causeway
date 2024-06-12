@@ -36,6 +36,7 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.search.CollectionSearchService;
+import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -129,6 +130,13 @@ implements MultiselectChoices {
     private final @Nullable BiPredicate<Object, String> searchPredicate;
     @Getter private final String searchPromptPlaceholderText;
 
+    /**
+     * On data row selection changes (originating from UI),
+     * the framework updates this {@link Bindable},
+     * such that any listeners do get notified.
+     */
+    @Getter private final _BindableAbstract<Boolean> selectionChanges;
+
     private DataTableInteractive(
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
@@ -177,19 +185,21 @@ implements MultiselectChoices {
                 .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
                 .collect(Can.toCan()));
 
+        selectionChanges = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle = _Bindables.forValue(Boolean.FALSE);
         selectAllToggle.addListener((e,o,isAllOn)->{
             //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
             if(isClearToggleAllEvent.get()) {
                 return;
             }
-            dataRowsSelected.invalidate();
+            dataRowsSelected.invalidate(); //TODO[CAUSEWAY-3772] could this be moved last in this lambda?
             try {
                 isToggleAllEvent.set(true);
                 dataRowsVisible.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
             } finally {
                 isToggleAllEvent.set(false);
             }
+            selectionChanges.setValue(!selectionChanges.getValue()); // triggers selectionChange listeners
         });
 
         searchArgument.addListener((e,o,n)->{
@@ -227,6 +237,13 @@ implements MultiselectChoices {
     }
 
     /**
+     * Count all data rows (the user is allowed to see).
+     */
+    public int getVisibleElementCount() {
+        return dataRowsVisible.getValue().size();
+    }
+
+    /**
      * Count filtered data rows.
      */
     public int getFilteredElementCount() {
@@ -241,7 +258,7 @@ implements MultiselectChoices {
         return getMetaModel().getElementType();
     }
 
-    //TODO[CAUSEWAY-3772] use Bookmarks instead of UUID? But that will break
+    //TODO[CAUSEWAY-3772] use Bookmarks instead of UUID? But that will break lists; only works with sets so to speak
     private final Map<UUID, Optional<DataRow>> dataRowByUuidLookupCache = _Maps.newConcurrentHashMap();
     public Optional<DataRow> lookupDataRow(final @NonNull UUID uuid) {
         // lookup can be safely cached
@@ -299,6 +316,23 @@ implements MultiselectChoices {
         }
     }
 
+    // -- DATA ROW TOGGLE
+
+    void handleRowSelectToggle() {
+        if(isToggleAllEvent.get()) {
+            return;
+        }
+        getDataRowsSelected().invalidate();
+        // in any case, if we have a toggle state change, clear the toggle all bindable
+        clearToggleAll();
+        notifySelectionChangeListeners();
+    }
+
+    private void notifySelectionChangeListeners() {
+        // simply toggles the boolean value, to trigger any listeners
+        selectionChanges.setValue(!selectionChanges.getValue());
+    }
+
     // -- DATA ROW VISIBILITY
 
     private boolean ignoreHidden(final ManagedObject adapter) {
@@ -315,17 +349,6 @@ implements MultiselectChoices {
                 objectAdapter.getSpecification().getFeatureIdentifier(),
                 InteractionInitiatedBy.USER,
                 Where.ALL_TABLES);
-    }
-
-    // -- DATA ROW TOGGLE
-
-    void handleRowSelectToggle() {
-        if(isToggleAllEvent.get()) {
-            return;
-        }
-        getDataRowsSelected().invalidate();
-        // in any case, if we have a toggle state change, clear the toggle all bindable
-        clearToggleAll();
     }
 
     // -- ASSOCIATED ACTION WITH MULTI SELECT

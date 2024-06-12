@@ -118,7 +118,7 @@ implements
         tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
             tableMemento.setSearchArgument(searchArg);
         });
-        tableInteractive.getDataRowsSelected().addListener((e, o, dataRowsSelected)->{
+        tableInteractive.getSelectionChanges().addListener((e, o, n)->{
             tableMemento.setSelectedRowsAsBookmarks(tableInteractive.getSelectedRowsAsBookmarks());
         });
     }

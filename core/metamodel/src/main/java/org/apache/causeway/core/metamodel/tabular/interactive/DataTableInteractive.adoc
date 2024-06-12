@@ -95,3 +95,21 @@ currently selected rows;
 
 @enduml
 ----
+
+== Table Serialization
+
+For each collection rendered, we create an immutable `Can<ManagedObject>` 
+of elements *visible* to the end-user (based on access rights). 
+
+Lifecycle of this `Can` is for exactly one request-cycle. (This is to avoid any hollow entity state issues.)
+
+*Selection*, *sorting* and *filtering* work on top of this immutable `Can`. 
+Which are all subject to partial page updates (AJAX) and happen in their own request-cycle.
+
+Consequently it should be sufficient to serialize the table's state by memoizing the
+
+* *elements visible* as some equivalent of `List<Bookmark>`
+* *elements selected* as some equivalent of `List<Integer>` that represents indexes into the elements visible above
+* *searchArgument* as `String` used for the new table filtering SPI
+* *columnSort* as `ColumnSort` introduced to capture by which column to sort and in what direction/order
+
