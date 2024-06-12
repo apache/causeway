@@ -33,14 +33,18 @@ import lombok.NonNull;
 
 public class DataRow {
 
+    @Deprecated //TODO[CAUSEWAY-3772] deprecation
     @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
+    @Getter private final int rowIndex;
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
     @Getter private final DataTableInteractive parentTable;
 
     public DataRow(
+            final int rowIndex,
             final @NonNull DataTableInteractive parentTable,
             final @NonNull ManagedObject rowElement) {
+        this.rowIndex = rowIndex;
         this.parentTable = parentTable;
         this.rowElement = rowElement;
 

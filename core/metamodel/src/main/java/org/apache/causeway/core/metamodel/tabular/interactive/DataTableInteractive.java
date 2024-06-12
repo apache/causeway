@@ -20,10 +20,8 @@ package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -34,17 +32,16 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.search.CollectionSearchService;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
@@ -118,7 +115,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElements;
     @Getter private final @NonNull _BindableAbstract<String> searchArgument; // filter the data rows
 
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsVisible;
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRows;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSorted;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
     @Getter private final _BindableAbstract<Boolean> selectAllToggle;
@@ -161,27 +158,27 @@ implements MultiselectChoices {
                     .orElse(null));
         }
 
-        dataElements = _Observables.lazy(()->elements.map(
-            mmc::injectServicesInto));
-
         searchArgument = _Bindables.forValue("");
         columnSort = _Bindables.forValue(null);
 
-        dataRowsVisible = _Observables.lazy(()->
+        dataElements = _Observables.lazy(()->elements
+                .map(mmc::injectServicesInto)
+                .filter(this::ignoreHidden));
+
+        dataRows = _Observables.lazy(()->
             dataElements.getValue().stream()
-                .filter(this::ignoreHidden)
-                .map(domainObject->new DataRow(this, domainObject))
+                .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element)))
                 .collect(Can.toCan()));
 
         dataRowsFilteredAndSorted = _Observables.lazy(()->
-            dataRowsVisible.getValue().stream()
+            dataRows.getValue().stream()
                 .filter(adaptSearchPredicate())
                 .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .collect(Can.toCan()));
 
         dataRowsSelected = _Observables.lazy(()->
-            dataRowsVisible.getValue().stream()
+            dataRows.getValue().stream()
                 .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
                 .collect(Can.toCan()));
 
@@ -192,14 +189,14 @@ implements MultiselectChoices {
             if(isClearToggleAllEvent.get()) {
                 return;
             }
-            dataRowsSelected.invalidate(); //TODO[CAUSEWAY-3772] could this be moved last in this lambda?
+            dataRowsSelected.invalidate();
             try {
                 isToggleAllEvent.set(true);
-                dataRowsVisible.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
+                dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
             } finally {
                 isToggleAllEvent.set(false);
             }
-            selectionChanges.setValue(!selectionChanges.getValue()); // triggers selectionChange listeners
+            notifySelectionChangeListeners();
         });
 
         searchArgument.addListener((e,o,n)->{
@@ -240,7 +237,7 @@ implements MultiselectChoices {
      * Count all data rows (the user is allowed to see).
      */
     public int getVisibleElementCount() {
-        return dataRowsVisible.getValue().size();
+        return dataElements.getValue().size();
     }
 
     /**
@@ -258,13 +255,8 @@ implements MultiselectChoices {
         return getMetaModel().getElementType();
     }
 
-    //TODO[CAUSEWAY-3772] use Bookmarks instead of UUID? But that will break lists; only works with sets so to speak
-    private final Map<UUID, Optional<DataRow>> dataRowByUuidLookupCache = _Maps.newConcurrentHashMap();
-    public Optional<DataRow> lookupDataRow(final @NonNull UUID uuid) {
-        // lookup can be safely cached
-        return dataRowByUuidLookupCache.computeIfAbsent(uuid, __->getDataRowsVisible().getValue().stream()
-                .filter(dr->dr.getUuid().equals(uuid))
-                .findFirst());
+    public Optional<DataRow> lookupDataRow(final int rowIndex) {
+        return getDataRows().getValue().get(rowIndex);
     }
 
     // -- SEARCH
@@ -360,11 +352,11 @@ implements MultiselectChoices {
             .map(DataRow::getRowElement);
     }
 
-    public Set<Bookmark> getSelectedRowsAsBookmarks() {
+    public Set<Integer> getSelectedRowIndexes() {
         return getDataRowsSelected()
                 .getValue()
                 .stream()
-                .map(row->row.getRowElement().getBookmarkElseFail())
+                .map(DataRow::getRowIndex)
                 .collect(Collectors.toSet());
     }
 
@@ -431,7 +423,7 @@ implements MultiselectChoices {
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
-                    tableInteractive.getSelectedRowsAsBookmarks());
+                    tableInteractive.getSelectedRowIndexes());
         }
 
         private final @NonNull Identifier featureId;
@@ -443,7 +435,7 @@ implements MultiselectChoices {
          * such that we don't need to recreate the entire memento, just because the searchArgument has changed.
          */
         @Setter private @Nullable String searchArgument;
-        @Setter private @NonNull Set<Bookmark> selectedRowsAsBookmarks;
+        @Setter private @NonNull Set<Integer> selectedRowIndexes;
 
         public DataTableInteractive getDataTableModel(final ManagedObject owner) {
 
@@ -464,11 +456,9 @@ implements MultiselectChoices {
                     dataTable.streamDataElements().collect(Can.toCan()));
 
             dataTableInteractive.searchArgument.setValue(searchArgument);
-            dataTableInteractive.dataRowsVisible.getValue().stream()
-                .filter(dataRow->selectedRowsAsBookmarks.contains(dataRow.getRowElement().getBookmarkElseFail()))
-                .forEach(dataRow->{
-                    dataRow.getSelectToggle().setValue(true);
-                });
+            dataTableInteractive.dataRows.getValue().stream()
+                .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
+                .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
             return dataTableInteractive;
         }
 

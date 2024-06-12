@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -149,12 +148,13 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             final Iterator<IModel<DataRow>> newModels,
             final Iterator<Item<DataRow>> existingItems) {
 
-        val itemByUuid = _Maps.<UUID, Item<DataRow>>newHashMap();
+        //TODO[CAUSEWAY-3772] remove map
+        val itemByUuid = _Maps.<Integer, Item<DataRow>>newHashMap();
         existingItems.forEachRemaining(item->{
             val model = item.getModel();
             if(model instanceof DataRowWkt) {
                 val dataRowWkt = (DataRowWkt)item.getModel();
-                itemByUuid.put(dataRowWkt.getUuid(), item);
+                itemByUuid.put(dataRowWkt.getRowIndex(), item);
             }
         });
 
@@ -169,7 +169,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             @Override
             public Item<DataRow> next() {
                 final DataRowWkt newModel = (DataRowWkt)newModels.next();
-                final Item<DataRow> oldItem = itemByUuid.get(newModel.getUuid());
+                final Item<DataRow> oldItem = itemByUuid.get(newModel.getRowIndex());
 
                 final IModel<DataRow> model2 = oldItem != null
                         ? oldItem.getModel()

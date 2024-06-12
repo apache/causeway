@@ -119,7 +119,7 @@ implements
             tableMemento.setSearchArgument(searchArg);
         });
         tableInteractive.getSelectionChanges().addListener((e, o, n)->{
-            tableMemento.setSelectedRowsAsBookmarks(tableInteractive.getSelectedRowsAsBookmarks());
+            tableMemento.setSelectedRowIndexes(tableInteractive.getSelectedRowIndexes());
         });
     }
 

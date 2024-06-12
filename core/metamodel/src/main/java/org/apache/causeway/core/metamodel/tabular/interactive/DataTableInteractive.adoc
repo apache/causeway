@@ -57,7 +57,7 @@ ColumnSort --> SortDirection : "sortDirection"
 
 The model supports filtering of data rows based on a given *search argument*.
 
-[plantuml,fig-DataTableInteractive-3,svg]
+[plantuml,fig-DataTableInteractive-2,svg]
 .Search Argument Interaction
 ----
 @startuml
@@ -78,7 +78,7 @@ with new search argument;
 
 The model supports selection of data rows.
 
-[plantuml,fig-DataTableInteractive-2,svg]
+[plantuml,fig-DataTableInteractive-3,svg]
 .Data Row Select Toggle Interaction
 ----
 @startuml
@@ -98,8 +98,24 @@ currently selected rows;
 
 == Table Serialization
 
+[plantuml,fig-DataTableInteractive-4,svg]
+.Table Memento
+----
+@startuml
+
+class Memento {
+	featureId: Identifier
+	where: Where
+	dataTable: DataTable
+	searchArgument: String
+	selectedRowsAsIndexes: IntList
+}
+
+@enduml
+----
+
 For each collection rendered, we create an immutable `Can<ManagedObject>` 
-of elements *visible* to the end-user (based on access rights). 
+of *elements*. If those are entities, these must be live (*attached*). 
 
 Lifecycle of this `Can` is for exactly one request-cycle. (This is to avoid any hollow entity state issues.)
 
@@ -108,8 +124,8 @@ Which are all subject to partial page updates (AJAX) and happen in their own req
 
 Consequently it should be sufficient to serialize the table's state by memoizing the
 
-* *elements visible* as some equivalent of `List<Bookmark>`
-* *elements selected* as some equivalent of `List<Integer>` that represents indexes into the elements visible above
+* *elements* as some equivalent of `List<Bookmark>`
+* *elements selected* as some equivalent of `List<Integer>` that represents indexes into the elements (above)
 * *searchArgument* as `String` used for the new table filtering SPI
 * *columnSort* as `ColumnSort` introduced to capture by which column to sort and in what direction/order
 

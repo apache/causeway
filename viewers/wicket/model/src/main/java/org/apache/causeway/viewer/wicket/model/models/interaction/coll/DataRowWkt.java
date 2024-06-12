@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
@@ -42,7 +41,7 @@ extends ChainingModel<DataRow> {
         return new DataRowWkt(dataTableModelHolder, dataRow);
     }
 
-    @Getter private final @NonNull UUID uuid; // in support of table sorting
+    @Getter private final int rowIndex;
     @Getter private final @NonNull DataRowToggleWkt dataRowToggle;
 
     private transient DataRow dataRow;
@@ -52,14 +51,14 @@ extends ChainingModel<DataRow> {
             final DataRow dataRow) {
         super(dataTableModelHolder);
         this.dataRow = dataRow;
-        this.uuid = dataRow.getUuid();
+        this.rowIndex = dataRow.getRowIndex();
         this.dataRowToggle = new DataRowToggleWkt(this);
     }
 
     @Override
     public final DataRow getObject() {
         if(dataRow==null) {
-            dataRow = getDataTableModel().lookupDataRow(uuid)
+            dataRow = getDataTableModel().lookupDataRow(rowIndex)
                     .orElse(null);
             if(dataRow==null) {
                 // [CAUSEWAY-3005] UI out of sync with model: reload page
@@ -75,7 +74,7 @@ extends ChainingModel<DataRow> {
 
     public boolean hasMemoizedDataRow() {
         return dataRow!=null
-                || getDataTableModel().lookupDataRow(uuid).isPresent();
+                || getDataTableModel().lookupDataRow(rowIndex).isPresent();
     }
 
     // -- HELPER
