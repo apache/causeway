@@ -61,9 +61,7 @@ extends GenericColumnAbstract {
 
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
-        var dataRowToggle = new DataRowToggleWkt(dataRowWkt);
-        //TODO[CAUSEWAY-3772] debug createCellComponent
-        System.err.printf("createCellComponent for row %d%n", dataRowWkt.getRowIndex());
+        val dataRowToggle = new DataRowToggleWkt(dataRowWkt);
         val rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
         rowToggles.add(rowToggle);
         return rowToggle.setOutputMarkupId(true);

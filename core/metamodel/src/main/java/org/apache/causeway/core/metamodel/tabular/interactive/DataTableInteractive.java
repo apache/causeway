@@ -140,8 +140,6 @@ implements MultiselectChoices {
             final Where where,
             final Can<ManagedObject> elements) {
 
-        System.err.printf("------------------ new DataTableInteractive %s %d%n", managedMember.getIdentifier(), this.hashCode()); //TODO[CAUSEWAY-3772] debug
-
         val mmc = MetaModelContext.instanceElseFail();
 
         this.managedMember = managedMember;
@@ -196,7 +194,6 @@ implements MultiselectChoices {
         });
 
         searchArgument.addListener((e,o,n)->{
-            System.err.printf("search: %s->%s%n", o, n); //TODO[CAUSEWAY-3772] remove debug line
             dataRowsFilteredAndSorted.invalidate();
         });
 
@@ -258,7 +255,6 @@ implements MultiselectChoices {
     // -- SEARCH
 
     private Predicate<DataRow> adaptSearchPredicate() {
-        System.err.printf("adaptSearchPredicate (execute search)%n"); //TODO[CAUSEWAY-3772] remove debug line
         return searchPredicate==null
                 ? dataRow->true
                 : dataRow->searchPredicate
@@ -307,10 +303,8 @@ implements MultiselectChoices {
     public void doProgrammaticToggle(final @NonNull Runnable runnable) {
         try {
             isProgrammaticToggle.set(true);
-            System.err.printf("Programmatic Toggle START %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug Programmatic Toggle START
             runnable.run();
         } finally {
-            System.err.printf("Programmatic Toggle END %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug Programmatic Toggle END
             isProgrammaticToggle.set(false);
             invalidateSelectionThenNotifyListeners();
         }
@@ -320,9 +314,6 @@ implements MultiselectChoices {
 
     void handleRowSelectToggle() {
         if(isProgrammaticToggle.get()) return;
-
-        System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug handleRowSelectToggle
-
         // in any case, if we have a toggle state change, clear the toggle all bindable
         clearToggleAll();
         invalidateSelectionThenNotifyListeners();
@@ -356,10 +347,8 @@ implements MultiselectChoices {
 
     @Override
     public Can<ManagedObject> getSelected() {
-        var selected = dataRowsSelected.getValue()
+        return dataRowsSelected.getValue()
             .map(DataRow::getRowElement);
-        System.err.printf("getSelected(%d)-> %s%n", this.hashCode(), selected); //TODO[CAUSEWAY-3772] debug table model getSelected()
-        return selected;
     }
 
     public Set<Integer> getSelectedRowIndexes() {

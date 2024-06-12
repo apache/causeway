@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
-import java.util.TreeSet;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -121,9 +119,7 @@ implements
             tableMemento.setSearchArgument(searchArg);
         });
         tableInteractive.getSelectionChanges().addListener((e, o, n)->{
-            var idxs = tableInteractive.getSelectedRowIndexes();
-            System.err.printf("memoize selection %s%n", new TreeSet<>(idxs)); //TODO[CAUSEWAY-3772] debug memoize selection
-            tableMemento.setSelectedRowIndexes(idxs);
+            tableMemento.setSelectedRowIndexes(tableInteractive.getSelectedRowIndexes());
         });
     }
 

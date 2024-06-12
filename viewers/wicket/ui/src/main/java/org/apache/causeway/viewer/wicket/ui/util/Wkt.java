@@ -471,7 +471,6 @@ public class Wkt {
         return new AjaxCheckBox(id, checkedModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void onUpdate(final AjaxRequestTarget target) {
-                System.err.printf("AjaxCheckBox onUpdate %s%n", id); //TODO[CAUSEWAY-3772] debug AjaxCheckBox
                 onUpdate.accept(target);
             }
             /**
