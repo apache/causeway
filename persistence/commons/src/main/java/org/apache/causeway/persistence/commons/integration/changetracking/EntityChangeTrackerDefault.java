@@ -140,11 +140,11 @@ implements
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
-    private boolean isSuppressAutoFlush;
+    private boolean suppressAutoFlush;
 
     @PostConstruct
     public void init() {
-        this.isSuppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
+        this.suppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
     }
 
     @Override
@@ -156,6 +156,26 @@ implements
         numberEntitiesLoaded.reset();
         entityChangeEventCount.reset();
         persistentChangesEncountered.set(false);
+    }
+
+
+    /**
+     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map}
+     *      until given {@code runnable} completes<p>
+     *      Note: Java supports reentrant locks,
+     *      which allow a thread to acquire the same lock multiple times without deadlocking itself.
+     *      Reentrant locks maintain a count of the number of times a thread has acquired the lock
+     *      and ensure that the lock is released only when the thread exits the synchronized block
+     *      or method the same number of times it entered it.
+     */
+    private void runThreadsafeAndSuppressAutoFlushIfRequired(final Runnable runnable) {
+        synchronized (enlistedPropertyChangeRecordsById) {
+            if (suppressAutoFlush) {
+                FlushMgmt.suppressAutoFlush(runnable);
+            } else {
+                runnable.run();
+            }
+        }
     }
 
     Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
@@ -433,25 +453,6 @@ implements
     private void clearEnlistedPropertyChangeRecordsById() {
         synchronized (enlistedPropertyChangeRecordsById) {
             enlistedPropertyChangeRecordsById.clear();
-        }
-    }
-
-    /**
-     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map}
-     *      until given {@code runnable} completes<p>
-     *      Note: Java supports reentrant locks,
-     *      which allow a thread to acquire the same lock multiple times without deadlocking itself.
-     *      Reentrant locks maintain a count of the number of times a thread has acquired the lock
-     *      and ensure that the lock is released only when the thread exits the synchronized block
-     *      or method the same number of times it entered it.
-     */
-    private void runThreadsafeAndSuppressAutoFlushIfRequired(final Runnable runnable) {
-        synchronized (enlistedPropertyChangeRecordsById) {
-            if (isSuppressAutoFlush) {
-                FlushMgmt.suppressAutoFlush(runnable);
-            } else {
-                runnable.run();
-            }
         }
     }
 
