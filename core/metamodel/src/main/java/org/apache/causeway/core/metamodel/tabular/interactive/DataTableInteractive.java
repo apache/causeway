@@ -190,11 +190,10 @@ implements MultiselectChoices {
             //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
             if(isClearToggleAllEvent.get()) return;
 
-            dataRowsSelected.invalidate();
             whileToggleAllDo(()->{
                 dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
             });
-            notifySelectionChangeListeners();
+            invalidateSelectionThenNotifyListeners();
         });
 
         searchArgument.addListener((e,o,n)->{
@@ -324,14 +323,14 @@ implements MultiselectChoices {
 
         System.err.printf("handleRowSelectToggle %d%n", this.hashCode()); //TODO[CAUSEWAY-3772] debug
 
-        dataRowsSelected.invalidate();
         // in any case, if we have a toggle state change, clear the toggle all bindable
         clearToggleAll();
-        notifySelectionChangeListeners();
+        invalidateSelectionThenNotifyListeners();
     }
 
-    public void notifySelectionChangeListeners() {
+    public void invalidateSelectionThenNotifyListeners() {
         // simply toggles the boolean value, to trigger any listeners
+        dataRowsSelected.invalidate();
         selectionChanges.setValue(!selectionChanges.getValue());
     }
 
@@ -357,8 +356,10 @@ implements MultiselectChoices {
 
     @Override
     public Can<ManagedObject> getSelected() {
-        return dataRowsSelected.getValue()
+        var selected = dataRowsSelected.getValue()
             .map(DataRow::getRowElement);
+        System.err.printf("getSelected(%d)-> %s%n", this.hashCode(), selected); //TODO[CAUSEWAY-3772] debug
+        return selected;
     }
 
     public Set<Integer> getSelectedRowIndexes() {

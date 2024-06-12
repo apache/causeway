@@ -89,7 +89,7 @@ extends GenericColumnAbstract {
                 rowToggle.set(bulkToggle, target);
             }
         });
-        dataTableInteractive.notifySelectionChangeListeners();
+        dataTableInteractive.invalidateSelectionThenNotifyListeners();
     }
 
 }

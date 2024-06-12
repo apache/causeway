@@ -146,9 +146,7 @@ implements HasMetaModel<ObjectAction> {
     private Can<ManagedObject> iterate(
             final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> paramVector) {
-
         val pendingParamModel = ParameterNegotiationModel.of(managedAction, paramVector);
-
         return getMetaModel().getParameters()
             .map(param->param.getDefault(pendingParamModel));
     }

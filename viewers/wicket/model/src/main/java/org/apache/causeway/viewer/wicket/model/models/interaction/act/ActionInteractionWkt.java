@@ -33,6 +33,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -147,6 +148,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         }
 
         if(associatedWithCollectionIfAny!=null) {
+            var table = associatedWithCollectionIfAny.getDataTableModel();
+            System.err.printf("ActionInteraction %s %d%n", "calls load()", table.hashCode()); //TODO[CAUSEWAY-3772] debug
             return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
                     associatedWithCollectionIfAny.getDataTableModel());
         }
@@ -161,6 +164,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public final ActionInteraction actionInteraction() {
+        System.err.printf("ActionInteraction %s%n", "calls getObject()"); //TODO[CAUSEWAY-3772] debug
         return getObject();
     }
 
@@ -259,6 +263,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      * Start and transiently memoize a new {@link ParameterNegotiationModel}.
      */
     private ParameterNegotiationModel startParameterNegotiationModel() {
+        var tableModel = actionInteraction().getManagedAction().map(ManagedAction::getMultiselectChoices);
+        if(tableModel!=null) {
+            System.err.printf("possibly uses outdated tableModel - detaching: %d%n", tableModel.hashCode()); //TODO[CAUSEWAY-3772] debug
+            detach();
+        }
         this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
         this.pendingParamsSnapshot = parameterNegotiationModel.createSnapshotModel();
