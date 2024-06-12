@@ -104,7 +104,7 @@ implements CollectionCountProvider {
             val propertyColumnName = numberAssociation.getCanonicalFriendlyName();
             Wkt.labelAdd(item, ID_PROPERTY_NAME, propertyColumnName);
 
-            val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
+            val visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
                     .getValue()
                     .map(DataRow::getRowElement)
                     .toList();

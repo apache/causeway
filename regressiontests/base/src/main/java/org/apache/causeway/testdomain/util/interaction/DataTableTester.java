@@ -46,7 +46,7 @@ public class DataTableTester {
 
     public void assertFilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
-                dataTable.getDataRowsFiltered().getValue()
+                dataTable.getDataRowsFilteredAndSorted().getValue()
                 .map(DataRow::getRowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
@@ -62,7 +62,7 @@ public class DataTableTester {
             final List<Integer> toggleOnIndices,
             final List<Object> expectedPojoElements) {
         toggleOnIndices.forEach(index->
-            dataTable.getDataRowsFiltered().getValue().getElseFail(index).getSelectToggle().setValue(true));
+            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).getSelectToggle().setValue(true));
         assertSelectedDataElements(expectedPojoElements);
     }
 
@@ -70,13 +70,13 @@ public class DataTableTester {
             final List<Integer> toggleOffIndices,
             final List<Object> expectedPojoElements) {
         toggleOffIndices.forEach(index->
-            dataTable.getDataRowsFiltered().getValue().getElseFail(index).getSelectToggle().setValue(false));
+            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).getSelectToggle().setValue(false));
         assertSelectedDataElements(expectedPojoElements);
     }
 
     public void assertDataRowSelectionIsAll() {
         assertEquals(
-                dataTable.getDataRowsFiltered().getValue()
+                dataTable.getDataRowsFilteredAndSorted().getValue()
                 .map(DataRow::getRowElement)
                 .map(MmUnwrapUtils::single).toList(),
                 dataTable.getDataRowsSelected().getValue()

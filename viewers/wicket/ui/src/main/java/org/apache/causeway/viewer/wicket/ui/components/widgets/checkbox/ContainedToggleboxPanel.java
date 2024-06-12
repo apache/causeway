@@ -58,7 +58,8 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
         val markupContainer = Wkt.containerAdd(this, ID_CONTAINER);
         val form = Wkt.formAdd(markupContainer, ID_FORM);
         this.checkbox = Wkt.checkboxAdd(
-                form, ID_TOGGLEBOX, model, ajaxTarget->onUpdate.accept(model.getObject(), ajaxTarget));
+                form, ID_TOGGLEBOX, model, ajaxTarget->
+                    onUpdate.accept(model.getObject(), ajaxTarget));
     }
 
     public void set(

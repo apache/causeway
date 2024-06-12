@@ -19,17 +19,16 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 import lombok.val;
 
@@ -55,7 +54,8 @@ extends GenericColumnAbstract {
 
     @Override
     protected Component createCellComponent(
-            final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
+            final String componentId, final DataRowWkt dataRowWkt) {
+        val dataRow = dataRowWkt.getObject();
         val rowElement = dataRow.getRowElement();
 
         if(ManagedObjects.isValue(rowElement)) {

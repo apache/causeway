@@ -25,8 +25,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -45,7 +46,8 @@ extends GenericColumnAbstract {
         public boolean isSetAll() { return this == SET_ALL; }
     }
 
-    private IModel<DataTableInteractive> dataTableModelHolder;
+    private final IModel<DataTableInteractive> dataTableModelHolder;
+    private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
 
     public ToggleboxColumn(
             final IModel<DataTableInteractive> dataTableModelHolder) {
@@ -53,9 +55,13 @@ extends GenericColumnAbstract {
         this.dataTableModelHolder = dataTableModelHolder;
     }
 
+    public void removeToggles() {
+        rowToggles.clear();
+    }
+
     @Override
-    protected Component createCellComponent(
-            final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
+    protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
+        val dataRowToggle = new DataRowToggleWkt(dataRowWkt);
         val rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
         rowToggles.add(rowToggle);
         return rowToggle.setOutputMarkupId(true);
@@ -66,22 +72,23 @@ extends GenericColumnAbstract {
         val bulkToggle = new ContainedToggleboxPanel(
                 componentId,
                 new BulkToggleWkt(dataTableModelHolder),
-                this::onBulkUpdate);
+                    this::onBulkUpdate);
         Wkt.cssAppend(bulkToggle, "togglebox-column");
         return bulkToggle;
     }
 
+    // -- HELPER
+
     private void onBulkUpdate(final Boolean isChecked, final AjaxRequestTarget target) {
-        val bulkToggle = BulkToggle.valueOf(isChecked);
-        for (ContainedToggleboxPanel rowToggle : rowToggles) {
-            rowToggle.set(bulkToggle, target);
-        }
-    }
+        var dataTableInteractive = dataTableModelHolder.getObject();
 
-    private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
+        dataTableInteractive.doProgrammaticToggle(()->{
+            val bulkToggle = BulkToggle.valueOf(isChecked);
+            for (ContainedToggleboxPanel rowToggle : rowToggles) {
+                rowToggle.set(bulkToggle, target);
+            }
+        });
 
-    public void removeToggles() {
-        rowToggles.clear();
     }
 
 }

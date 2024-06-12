@@ -74,7 +74,7 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public long size() {
-        return getDataTableModel().getElementCount();
+        return getDataTableModel().getFilteredElementCount();
     }
 
     @Override
@@ -82,7 +82,7 @@ extends SortableDataProvider<DataRow, String> {
         var dataTable = getDataTableModel();
         // honor (single) column sort (if any)
         dataTable.getColumnSort().setValue(columnSort().orElse(null));
-        return dataTable.getDataRowsFiltered().getValue()
+        return dataTable.getDataRowsFilteredAndSorted().getValue()
                 .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 

@@ -33,6 +33,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -259,6 +260,12 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      * Start and transiently memoize a new {@link ParameterNegotiationModel}.
      */
     private ParameterNegotiationModel startParameterNegotiationModel() {
+        var tableModel = actionInteraction().getManagedAction().map(ManagedAction::getMultiselectChoices);
+        if(tableModel!=null) {
+            // possibly uses outdated tableModel, if any select toggle, filtering or sorting has happened
+            // hence detach(), so we invalidate the current actionInteraction() and force recreation
+            detach();
+        }
         this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
         this.pendingParamsSnapshot = parameterNegotiationModel.createSnapshotModel();

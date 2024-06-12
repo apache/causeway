@@ -471,7 +471,8 @@ public class Wkt {
         return new AjaxCheckBox(id, checkedModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void onUpdate(final AjaxRequestTarget target) {
-                onUpdate.accept(target); }
+                onUpdate.accept(target);
+            }
             /**
              * [CAUSEWAY-3005] Any action dialog submission on the same page will
              * result in a new {@link DataTableInteractive}, where any previously rendered check-boxes

@@ -71,7 +71,7 @@ implements GenericColumn, HasMetaModelContext {
             final Item<ICellPopulator<DataRow>> cellItem,
             final String componentId,
             final IModel<DataRow> rowModel) {
-        cellItem.add(createCellComponent(componentId, rowModel.getObject(), ((DataRowWkt)rowModel).getDataRowToggle()));
+        cellItem.add(createCellComponent(componentId, (DataRowWkt)rowModel));
         if(this instanceof TitleColumn) {
             Wkt.cssAppend(cellItem, "title-column");
             if(((TitleColumn)this).isTitleSuppressed()) {
@@ -85,8 +85,7 @@ implements GenericColumn, HasMetaModelContext {
         }
     }
 
-    protected abstract Component createCellComponent(
-            final String componentId, final DataRow dataRow, IModel<Boolean> dataRowToggle);
+    protected abstract Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt);
 
     protected ComponentFactory findComponentFactory(final UiComponentType uiComponentType, final IModel<?> model) {
         return getComponentRegistry().findComponentFactory(uiComponentType, model);

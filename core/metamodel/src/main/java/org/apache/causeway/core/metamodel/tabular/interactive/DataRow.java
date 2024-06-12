@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
@@ -33,30 +32,24 @@ import lombok.NonNull;
 
 public class DataRow {
 
-    @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
+    @Getter private final int rowIndex;
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
     @Getter private final DataTableInteractive parentTable;
 
     public DataRow(
+            final int rowIndex,
             final @NonNull DataTableInteractive parentTable,
             final @NonNull ManagedObject rowElement) {
+        this.rowIndex = rowIndex;
         this.parentTable = parentTable;
         this.rowElement = rowElement;
 
         selectToggle = _Bindables.forBoolean(false);
         selectToggle.addListener((e,o,n)->{
-
             //_ToggleDebug.onSelectRowToggle(rowElement, o, n, parentTable.isToggleAllEvent.get());
-
-            if(parentTable.isToggleAllEvent.get()) {
-                return;
-            }
-            parentTable.getDataRowsSelected().invalidate();
-            // in any case, if we have a toggle state change, clear the toggle all bindable
-            parentTable.clearToggleAll();
+            parentTable.handleRowSelectToggle();
         });
-
     }
 
     public ManagedObject getRowElement() {
