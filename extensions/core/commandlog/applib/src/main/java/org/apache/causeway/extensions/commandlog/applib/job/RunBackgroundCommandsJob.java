@@ -20,20 +20,11 @@ package org.apache.causeway.extensions.commandlog.applib.job;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
-import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-
-import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -52,7 +43,12 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
+import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
@@ -237,7 +233,7 @@ public class RunBackgroundCommandsJob implements Job {
      * @param commandDto
      * @param interactionContext
      */
-    private void captureFailure(Throwable throwable, CommandDto commandDto, InteractionContext interactionContext) {
+    private void captureFailure(final Throwable throwable, final CommandDto commandDto, final InteractionContext interactionContext) {
         log.error("Failed to execute command.  As per onFailurePolicy, updating CommandLogEntry with result then continuing; command: " + CommandDtoUtils.dtoMapper().toString(commandDto), throwable);
 
         interactionService.run(interactionContext, () -> {
@@ -273,7 +269,7 @@ public class RunBackgroundCommandsJob implements Job {
         .ifFailureFail();
     }
 
-    private static boolean isEncounteredDeadlock(Try<?> result) {
+    private static boolean isEncounteredDeadlock(final Try<?> result) {
         if (!result.isFailure()) {
             return false;
         }
@@ -282,7 +278,7 @@ public class RunBackgroundCommandsJob implements Job {
                 .orElse(false);
     }
 
-    private static void sleep(long retryIntervalMs) {
+    private static void sleep(final long retryIntervalMs) {
         try {
             Thread.sleep(retryIntervalMs);
         } catch (InterruptedException e) {
