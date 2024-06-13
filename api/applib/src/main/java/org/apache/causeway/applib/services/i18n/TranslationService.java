@@ -86,5 +86,23 @@ public interface TranslationService {
      * </p>
      */
     Mode getMode();
+        
+    /**
+     * Can be used as fallback in the absence of a {@link TranslationService} implementation.
+     * Acts as a text pass-through, not translating anything.
+     */
+    public static TranslationService identity() {
+        return new TranslationService() {
+            @Override public String translate(TranslationContext context, String text) {
+                return text;
+            }
+            @Override public String translate(TranslationContext context, String singularText, String pluralText, int num) {
+                return num==1 ? singularText : pluralText;
+            }
+            @Override public Mode getMode() { 
+                return Mode.READ; 
+            }
+        };
+    }
 
 }

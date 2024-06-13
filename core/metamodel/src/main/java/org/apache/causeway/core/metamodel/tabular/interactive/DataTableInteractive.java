@@ -23,7 +23,6 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,12 +31,9 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.search.CollectionSearchService;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
@@ -45,7 +41,6 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
@@ -62,6 +57,7 @@ import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.tabular.interactive._SearchUtils.SearchHandler;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
@@ -125,8 +121,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
 
-    private final @Nullable BiPredicate<Object, String> searchPredicate;
-    @Getter private final String searchPromptPlaceholderText;
+    private final Optional<SearchHandler> searchHandler;
 
     /**
      * On data row selection changes (originating from UI),
@@ -141,23 +136,12 @@ implements MultiselectChoices {
             final Where where,
             final Can<ManagedObject> elements) {
 
-        val mmc = MetaModelContext.instanceElseFail();
+        val elementType = managedMember.getElementType();
+        val mmc = elementType.getMetaModelContext();
 
         this.managedMember = managedMember;
         this.where = where;
-
-        { // search stuff
-            var collectionSearchServiceOpt = mmc.lookupService(CollectionSearchService.class);
-            var elementType = managedMember.getElementType().getCorrespondingClass();
-            this.searchPredicate = _Casts.uncheckedCast(
-                collectionSearchServiceOpt
-                    .flatMap(collectionSearchService->collectionSearchService.searchPredicate(elementType))
-                    .orElse(null));
-            this.searchPromptPlaceholderText = _Strings.nullToEmpty(
-                collectionSearchServiceOpt
-                    .map(collectionSearchService->collectionSearchService.searchPromptPlaceholderText(elementType))
-                    .orElse(null));
-        }
+        this.searchHandler = _SearchUtils.createSearchHandler(elementType);
 
         searchArgument = _Bindables.forValue("");
         columnSort = _Bindables.forValue(null);
@@ -216,7 +200,7 @@ implements MultiselectChoices {
     }
 
     public boolean isSearchSupported() {
-        return searchPredicate!=null;
+        return searchHandler.isPresent();
     }
 
     public int getPageSize(final int pageSizeDefault) {
@@ -255,10 +239,15 @@ implements MultiselectChoices {
 
     // -- SEARCH
 
+    public String getSearchPromptPlaceholderText() {
+        return searchHandler.map(handler->handler.searchPromptPlaceholderText)
+                .orElse("");
+    }
+
     private Predicate<DataRow> adaptSearchPredicate() {
-        return searchPredicate==null
+        return searchHandler.isEmpty()
                 ? dataRow->true
-                : dataRow->searchPredicate
+                : dataRow->searchHandler.get().searchPredicate
                     .test(dataRow.getRowElement().getPojo(), searchArgument.getValue());
     }
 
@@ -450,7 +439,7 @@ implements MultiselectChoices {
                         .getManagedCollection().orElseThrow()
                     : ActionInteraction.start(owner, memberId, where)
                         .getManagedActionElseFail();
-            
+
             var dataTableInteractive = new DataTableInteractive(managedMember, where,
                     dataTable.streamDataElements()
                     .peek(obj->{

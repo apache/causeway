@@ -26,6 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TranslatableStringTest {
 
@@ -40,27 +41,37 @@ class TranslatableStringTest {
 
         @Test
         public void pluralFormOne() throws Exception {
-            final TranslatableString ts = TranslatableString.trn("You can't do that because there is a dependent object", "You can't do that because there are dependent objects", 1);
+            final TranslatableString ts = TranslatableString.trn(
+                    "You can't do that because there is a dependent object",
+                    "You can't do that because there are dependent objects", 1);
 
             assertThat(ts.getPattern(), is("You can't do that because there is a dependent object"));
         }
 
         @Test
         public void pluralFormTwo() throws Exception {
-            final TranslatableString ts = TranslatableString.trn("You can't do that because there is a dependent object", "You can't do that because there are dependent objects", 2);
+            final TranslatableString ts = TranslatableString.trn(
+                    "You can't do that because there is a dependent object",
+                    "You can't do that because there are dependent objects", 2);
 
             assertThat(ts.getPattern(), is("You can't do that because there are dependent objects"));
         }
 
     }
 
-    public static class Translated extends TranslatableStringTest {
+    public static class Identity extends TranslatableStringTest {
+
+        final TranslationService tsIdentity = TranslationService.identity();
 
         @Test
         public void singularForm() throws Exception {
-            final TranslatableString ts = TranslatableString.tr("My name is {lastName}, {firstName} {lastName}.", "lastName", "Bond", "firstName", "James");
+            final TranslatableString ts = TranslatableString.tr(
+                    "My name is {lastName}, {firstName} {lastName}.",
+                    "lastName", "Bond", "firstName", "James");
 
-            assertThat(ts.translated("Iche heisse {lastName}, {firstName} {lastName}."), is("Iche heisse Bond, James Bond."));
+            assertEquals(
+                    "My name is Bond, James Bond.",
+                    ts.translate(tsIdentity, TranslationContext.named("someContext")));
         }
 
         @Test
@@ -71,7 +82,33 @@ class TranslatableStringTest {
                     1,
                     "lastName", "Bond", "firstName", "James");
 
-            assertThat(ts.translated("Iche heisse {lastName}, {firstName} {lastName}."), is("Iche heisse Bond, James Bond."));
+            assertThat(ts.translated("Ich heisse {lastName}, {firstName} {lastName}."),
+                    is("Ich heisse Bond, James Bond."));
+        }
+    }
+
+    public static class Translated extends TranslatableStringTest {
+
+        @Test
+        public void singularForm() throws Exception {
+            final TranslatableString ts = TranslatableString.tr(
+                    "My name is {lastName}, {firstName} {lastName}.",
+                    "lastName", "Bond", "firstName", "James");
+
+            assertThat(ts.translated("Ich heisse {lastName}, {firstName} {lastName}."),
+                    is("Ich heisse Bond, James Bond."));
+        }
+
+        @Test
+        public void pluralFormOne() throws Exception {
+            final TranslatableString ts = TranslatableString.trn(
+                    "My name is {lastName}, {firstName} {lastName}.",
+                    "My name is {firstName} {lastName}.",
+                    1,
+                    "lastName", "Bond", "firstName", "James");
+
+            assertThat(ts.translated("Ich heisse {lastName}, {firstName} {lastName}."),
+                    is("Ich heisse Bond, James Bond."));
         }
     }
 
