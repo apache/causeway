@@ -57,6 +57,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -449,9 +450,16 @@ implements MultiselectChoices {
                         .getManagedCollection().orElseThrow()
                     : ActionInteraction.start(owner, memberId, where)
                         .getManagedActionElseFail();
-
+            
             var dataTableInteractive = new DataTableInteractive(managedMember, where,
-                    dataTable.streamDataElements().collect(Can.toCan()));
+                    dataTable.streamDataElements()
+                    .peek(obj->{
+                        if(obj.getSpecialization().isViewmodel()) {
+                            // make sure any referenced entities are made live if currently hollow
+                            ManagedObjects.refreshViewmodel(obj, /*bookmark supplier*/ null);
+                        }
+                    })
+                    .collect(Can.toCan()));
 
             dataTableInteractive.searchArgument.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{
