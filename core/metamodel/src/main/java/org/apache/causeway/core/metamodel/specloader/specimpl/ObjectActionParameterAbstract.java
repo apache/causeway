@@ -25,6 +25,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -315,7 +316,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgVisibilityContext(
-                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy, CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE);
     }
 
     @Override

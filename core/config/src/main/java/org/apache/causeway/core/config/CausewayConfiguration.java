@@ -2232,6 +2232,27 @@ public class CausewayConfiguration {
              */
             private boolean generateRandomWebAdminPassword = true;
         }
+
+        public enum IfHiddenPolicy {
+            /**
+             * The default  behaviour: any properties, collections or actions whose visibility has been vetoed
+             * will not be shown in the UI.
+             */
+            HIDE,
+            /**
+             * The default  behaviour: any properties, collections or actions whose visibility has been vetoed
+             * will not be shown in the UI.
+             */
+            SHOW_AS_DISABLED,
+            /**
+             * To assist with the debugging security and similar: any properties, collections or actions whose
+             * visibility has been vetoed will instead be shown as merely disabled, but there will be additional info
+             * in the tooltips to indicate that this is actually hidden; the vetoing facet/advisor will also be indicated.
+             */
+            SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
+        }
+
+        private IfHiddenPolicy ifHiddenPolicy = IfHiddenPolicy.HIDE;
     }
 
 

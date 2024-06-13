@@ -20,6 +20,11 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import java.util.Optional;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.environment.DeploymentType;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -80,9 +85,9 @@ public final class InteractionUtils {
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReasonString = 
+            val invalidatingReasonString =
                     guardAgainstEmptyReasonString(advisor.invalidates(context), context.getIdentifier());
-            
+
             val invalidatingReason = Optional.ofNullable(invalidatingReasonString)
                     .map(Consent.VetoReason::explicit)
                     .orElse(null);
@@ -91,7 +96,7 @@ public final class InteractionUtils {
 
         return iaResult;
     }
-    
+
     public static InteractionResultSet isValidResultSet(
             final FacetHolder facetHolder,
             final ValidityContext context,
@@ -99,10 +104,10 @@ public final class InteractionUtils {
 
         return resultSet.add(isValidResult(facetHolder, context));
     }
-    
+
     /**
-     * [CAUSEWAY-3554] an empty String most likely is wrong use of the programming model, 
-     * we should generate a message, 
+     * [CAUSEWAY-3554] an empty String most likely is wrong use of the programming model,
+     * we should generate a message,
      * explaining what was going wrong and hinting developers at a possible resolution
      */
     private static String guardAgainstEmptyReasonString(
@@ -125,4 +130,18 @@ public final class InteractionUtils {
         return true;
     }
 
+    public static CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(ManagedObject ownerAdapter) {
+        CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
+        DeploymentType deploymentType = ownerAdapter.getServiceRegistry().lookupServiceElseFail(CausewaySystemEnvironment.class).getDeploymentType();
+        switch (deploymentType) {
+            case PROTOTYPING:
+                ifHiddenPolicy = ownerAdapter.getConfiguration().getPrototyping().getIfHiddenPolicy();
+                break;
+            case PRODUCTION:
+            default:
+                ifHiddenPolicy = CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
+                break;
+        }
+        return ifHiddenPolicy;
+    }
 }
