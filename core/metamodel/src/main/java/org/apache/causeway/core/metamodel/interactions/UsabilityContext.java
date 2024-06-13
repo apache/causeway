@@ -18,9 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
+import lombok.Getter;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
@@ -32,13 +35,18 @@ public abstract class UsabilityContext
 extends InteractionContext
 implements InteractionEventSupplier<UsabilityEvent> {
 
+    @Getter
+    private final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
+
     public UsabilityContext(
             final InteractionContextType interactionType,
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final Where where,
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
         super(interactionType, interactionInitiatedBy, identifier, head, where);
+        this.ifHiddenPolicy = ifHiddenPolicy;
     }
 
 }

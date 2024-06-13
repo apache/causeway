@@ -345,7 +345,8 @@ implements
                 getFeatureIdentifier(),
                 pendingArgs,
                 position,
-                interactionInitiatedBy);
+                interactionInitiatedBy,
+                CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE);
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
@@ -92,7 +93,7 @@ implements OneToManyAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionUsabilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where, InteractionUtils.determineIfHiddenPolicyFrom(ownerAdapter));
     }
 
     // -- get, isEmpty, add, clear

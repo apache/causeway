@@ -316,7 +316,7 @@ implements ObjectAction {
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where);
+                where, InteractionUtils.determineIfHiddenPolicyFrom(target));
     }
 
     // -- VALIDATE
