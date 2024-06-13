@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.interactions;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.CollectionUsabilityEvent;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
@@ -35,8 +36,9 @@ extends UsabilityContext {
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-        super(InteractionContextType.COLLECTION_USABLE, head, identifier, interactionInitiatedBy, where);
+            final Where where,
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
+        super(InteractionContextType.COLLECTION_USABLE, head, identifier, interactionInitiatedBy, where, ifHiddenPolicy);
     }
 
     @Override
