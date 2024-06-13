@@ -47,4 +47,8 @@ extends UsabilityContext {
         return new PropertyUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
+    @Override
+    public PropertyVisibilityContext asVisibilityContext() {
+        return new PropertyVisibilityContext(getHead() ,getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy());
+    }
 }
