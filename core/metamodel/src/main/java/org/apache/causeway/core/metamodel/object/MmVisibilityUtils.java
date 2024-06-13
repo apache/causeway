@@ -124,7 +124,7 @@ public final class MmVisibilityUtils {
                 InteractionHead.regular(objectAdapter),
                 objectAdapter.getSpecification().getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where);
+                where, InteractionUtils.determineIfHiddenPolicyFrom(objectAdapter));
     }
 
 }
