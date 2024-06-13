@@ -58,4 +58,8 @@ implements ActionInteractionContext {
         return new ActionUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
+    @Override
+    public ActionVisibilityContext asVisibilityContext() {
+        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy());
+    }
 }

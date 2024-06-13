@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
  * @see ValidityEvent
  * @since 1.x {@index}
  */
-public abstract class VisibilityEvent extends InteractionEvent {
+public class VisibilityEvent extends InteractionEvent {
 
     public VisibilityEvent(final Object source, final Identifier identifier) {
         super(source, identifier);

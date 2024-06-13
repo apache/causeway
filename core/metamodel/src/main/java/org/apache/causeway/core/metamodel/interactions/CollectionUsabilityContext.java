@@ -46,4 +46,8 @@ extends UsabilityContext {
         return new CollectionUsabilityEvent(getTarget().getPojo(), getIdentifier());
     }
 
+    @Override
+    public CollectionVisibilityContext asVisibilityContext() {
+        return new CollectionVisibilityContext(getHead(), getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy());
+    }
 }

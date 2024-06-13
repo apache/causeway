@@ -73,4 +73,8 @@ implements ActionInteractionContext {
                 getPosition());
     }
 
+    @Override
+    public ActionArgVisibilityContext asVisibilityContext() {
+        return new ActionArgVisibilityContext(getHead(), getObjectAction(), getIdentifier(), args, position, getInitiatedBy(), getIfHiddenPolicy());
+    }
 }

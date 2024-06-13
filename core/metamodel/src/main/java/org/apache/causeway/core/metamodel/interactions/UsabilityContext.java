@@ -49,4 +49,6 @@ implements InteractionEventSupplier<UsabilityEvent> {
         this.ifHiddenPolicy = ifHiddenPolicy;
     }
 
+    public abstract VisibilityContext asVisibilityContext();
+
 }

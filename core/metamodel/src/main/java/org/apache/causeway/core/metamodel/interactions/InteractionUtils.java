@@ -49,16 +49,26 @@ public final class InteractionUtils {
 
         val iaResult = new InteractionResult(context.createInteractionEvent());
 
-        facetHolder.streamFacets(HidingInteractionAdvisor.class)
-        .filter(advisor->compatible(advisor, context))
-        .forEach(advisor->{
-            val hidingReasonString = advisor.hides(context);
-            val hidingReason = Optional.ofNullable(hidingReasonString)
-                    .map(Consent.VetoReason::explicit)
-                    .orElse(null);
+        // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
+        val ifHiddenPolicy = context.getIfHiddenPolicy();
+        switch (ifHiddenPolicy) {
+            case HIDE:
+                facetHolder.streamFacets(HidingInteractionAdvisor.class)
+                .filter(advisor->compatible(advisor, context))
+                .forEach(advisor->{
+                    val hidingReasonString = advisor.hides(context);
+                    val hidingReason = Optional.ofNullable(hidingReasonString)
+                            .map(Consent.VetoReason::explicit)
+                            .orElse(null);
 
-            iaResult.advise(hidingReason, advisor);
-        });
+                    iaResult.advise(hidingReason, advisor);
+                });
+                break;
+            case SHOW_AS_DISABLED:
+            case SHOW_AS_DISABLED_WITH_DIAGNOSTICS:
+            default:
+                break;
+        }
 
         return iaResult;
     }
@@ -67,6 +77,30 @@ public final class InteractionUtils {
     public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
 
         val isResult = new InteractionResult(context.createInteractionEvent());
+
+        // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
+        val ifHiddenPolicy = context.getIfHiddenPolicy();
+        switch (ifHiddenPolicy) {
+            case HIDE:
+                break;
+            case SHOW_AS_DISABLED:
+            case SHOW_AS_DISABLED_WITH_DIAGNOSTICS:
+                val visibilityContext = context.asVisibilityContext();
+                facetHolder.streamFacets(HidingInteractionAdvisor.class)
+                        .filter(advisor->compatible(advisor, context))
+                        .forEach(advisor->{
+                            String hidingReasonString = advisor.hides(visibilityContext);
+                            if (hidingReasonString != null && ifHiddenPolicy == CausewayConfiguration.Prototyping.IfHiddenPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+                                hidingReasonString += " {" + advisor.getClass().getSimpleName() + "} ";
+                            }
+                            val hidingReason = Optional.ofNullable(hidingReasonString)
+                                    .map(Consent.VetoReason::explicit)
+                                    .orElse(null);
+
+                            isResult.advise(hidingReason, advisor);
+                        });
+                break;
+        }
 
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
