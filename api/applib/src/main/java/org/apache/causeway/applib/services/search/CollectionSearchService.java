@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.applib.services.search;
 
-import java.util.Optional;
 import java.util.function.BiPredicate;
+
+import org.apache.causeway.applib.services.i18n.TranslatableString;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
 
 import lombok.NonNull;
 
@@ -36,7 +38,13 @@ import lombok.NonNull;
 public interface CollectionSearchService {
 
     /**
-     * Optionally returns a {@link BiPredicate} that filters collections
+     * Whether this service handles given type.
+     * @param domainType - entity or view-model type to be rendered as row in a table
+     */
+    boolean handles(@NonNull Class<?> domainType);
+
+    /**
+     * Returns a {@link BiPredicate} that filters collections
      * of given {@code domainType} by a nullable searchString,
      * based on whether the search is supported.
      * <p>
@@ -44,12 +52,29 @@ public interface CollectionSearchService {
      * domain object's title say.
      *
      * @param domainType - entity or view-model type to be rendered as row in a table
+     * @apiNote guarded by a call to {@link #handles(Class)}
      */
-    <T> Optional<BiPredicate<T, String>> searchPredicate(
+    <T> BiPredicate<T, String> searchPredicate(
             @NonNull Class<T> domainType);
 
-    default String searchPromptPlaceholderText(final @NonNull Class<?> domainType) {
-        return "Search";
+    /**
+     *
+     * @param domainType - entity or view-model type to be rendered as row in a table
+     * @apiNote guarded by a call to {@link #handles(Class)}
+     */
+    default TranslatableString searchPromptPlaceholderText(
+            final @NonNull Class<?> domainType) {
+        return TranslatableString.tr("Search {domainType}", "domainType", domainType.getSimpleName());
+    }
+
+    /**
+     *
+     * @param domainType - entity or view-model type to be rendered as row in a table
+     * @apiNote guarded by a call to {@link #handles(Class)}
+     */
+    default TranslationContext translationContext(
+            final @NonNull Class<?> domainType) {
+        return TranslationContext.named("Search");
     }
 
 }
