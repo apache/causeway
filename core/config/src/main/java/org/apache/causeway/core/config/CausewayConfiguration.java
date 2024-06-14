@@ -2219,7 +2219,7 @@ public class CausewayConfiguration {
              * Whether to allow remote access to the H2 Web-Console,
              * which is a potential security risk when no web-admin password is set.
              * <p>
-             * Corresponds to Spring Boot's <code>spring.h2.console.settings.web-allow-others</code> config property.
+             * Corresponds to Spring Boot's "spring.h2.console.settings.web-allow-others" config property.
              */
             private boolean webAllowRemoteAccess = false;
 
