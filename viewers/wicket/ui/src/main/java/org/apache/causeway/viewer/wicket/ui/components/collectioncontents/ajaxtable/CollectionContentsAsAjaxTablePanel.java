@@ -86,6 +86,10 @@ implements CollectionCountProvider {
         return getModel();
     }
 
+    private DataTableInteractive dataTableInteractive() {
+        return getModelObject();
+    }
+
     private void buildGui() {
 
         final List<GenericColumn> columns = _Lists.newArrayList();
@@ -117,7 +121,7 @@ implements CollectionCountProvider {
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
 
-        addSearchBar(collectionModel.getDataTableModel(), dataTable);
+        addSearchBar(dataTable);
     }
 
     private MultiselectToggleProvider getMultiselectToggleProvider() {
@@ -136,14 +140,13 @@ implements CollectionCountProvider {
      * @param placeholderText
      */
     private void addSearchBar(
-            final DataTableInteractive dataTable,
             final CausewayAjaxDataTable dataTableComponent) {
-        if(!dataTable.isSearchSupported()) {
+        if(!dataTableInteractive().isSearchSupported()) {
             WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_BAR);
             return;
         }
         Wkt.add(this, new SearchBar(ID_TABLE_SEARCH_BAR, dataTableComponent))
-            .bindSearchField(dataTable, this);
+            .bindSearchField(this);
     }
 
     private void prependTitleColumn(
