@@ -22,14 +22,17 @@ package org.apache.causeway.extensions.secman.delegated.springoauth2.dom;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
-import org.springframework.context.ApplicationListener;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -45,10 +48,19 @@ import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationU
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * This service automatically creates an {@link ApplicationUser} if an end-user successfully logged in via Oauth.
+ *
+ * <p>
+ *     The initial set of rules are as per {@link CausewayConfiguration.Extensions.Secman.DelegatedUsers.AutoCreatePolicy}
+ * </p>
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ApplicationUserAutoCreationService
-        implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
+@Priority(PriorityPrecedence.MIDPOINT)
+public class ApplicationUserAutoCreationService {
 
     private final ApplicationUserRepository applicationUserRepository;
     private final ApplicationRoleRepository applicationRoleRepository;
@@ -56,25 +68,40 @@ public class ApplicationUserAutoCreationService
     private final CausewayConfiguration causewayConfiguration;
     private final FactoryService factoryService;
 
-    @Override
+    @Order(PriorityPrecedence.MIDPOINT)
+    @EventListener(InteractiveAuthenticationSuccessEvent.class)
     public void onApplicationEvent(final InteractiveAuthenticationSuccessEvent event) {
+
         val authentication = event.getAuthentication();
         val principal = authentication.getPrincipal();
-        if (!(principal instanceof DefaultOidcUser)) {
+        if (!(principal instanceof OidcUser)) {
             return;
         }
 
-        val oidcUser = (DefaultOidcUser) principal;
-        val username = oidcUser.getIdToken().getPreferredUsername();
-        val email = oidcUser.getIdToken().getEmail();
+        val oidcUser = (OidcUser) principal;
+        val username = oidcUser.getPreferredUsername();
+        val email = oidcUser.getEmail();
+
+        val secmanConfig = causewayConfiguration.getExtensions().getSecman().getDelegatedUsers();
+        switch (secmanConfig.getAutoCreatePolicy()) {
+            case DO_NOT_AUTO_CREATE:
+                break;
+            case AUTO_CREATE_AS_LOCKED:
+                create(username, email, secmanConfig.getInitialRoleNames(), ApplicationUserStatus.LOCKED);
+                break;
+            case AUTO_CREATE_AS_UNLOCKED:
+                create(username, email, secmanConfig.getInitialRoleNames(), ApplicationUserStatus.UNLOCKED);
+                break;
+        }
+    }
+
+    private void create(String username, String email, List<String> initialRoleNames, ApplicationUserStatus userStatus) {
         interactionService.runAnonymous(() -> {
-            Optional<ApplicationUser> userIfAny = applicationUserRepository.findByUsername(username);
+            val userIfAny = applicationUserRepository.findByUsername(username);
             if (userIfAny.isEmpty()) {
-                val status = ApplicationUserStatus.UNLOCKED;  // locking not supported for spring delegated accounts
-                val applicationUser = applicationUserRepository.newDelegateUser(username, status);
+                val applicationUser = applicationUserRepository.newDelegateUser(username, userStatus);
                 factoryService.mixin(ApplicationUser_updateEmailAddress.class, applicationUser).act(email);
 
-                val initialRoleNames = causewayConfiguration.getExtensions().getSecman().getDelegatedUsers().getInitialRoleNames();
                 if (notEmpty(initialRoleNames)) {
                     for (String initialRoleName : initialRoleNames) {
                         addRoleIfExists(applicationUser, initialRoleName);
