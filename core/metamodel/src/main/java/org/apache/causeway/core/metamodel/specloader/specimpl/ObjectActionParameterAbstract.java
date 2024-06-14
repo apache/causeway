@@ -316,7 +316,9 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgVisibilityContext(
-                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy, CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE);
+                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy,
+                CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
+                CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
     }
 
     @Override
@@ -346,7 +348,8 @@ implements
                 pendingArgs,
                 position,
                 interactionInitiatedBy,
-                CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE);
+                CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
+                CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
     }
 
     @Override

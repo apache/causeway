@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.DeploymentType;
+import org.apache.causeway.core.metamodel.consent.VetoUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import org.springframework.lang.Nullable;
@@ -90,22 +91,25 @@ public final class InteractionUtils {
                         .filter(advisor->compatible(advisor, context))
                         .forEach(advisor->{
                             String hidingReasonString = advisor.hides(visibilityContext);
-                            if (hidingReasonString != null && ifHiddenPolicy == CausewayConfiguration.Prototyping.IfHiddenPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
-                                hidingReasonString += " {" + advisor.getClass().getSimpleName() + "} ";
-                            }
-                            val hidingReason = Optional.ofNullable(hidingReasonString)
+                            Consent.VetoReason hidingReason = Optional.ofNullable(hidingReasonString)
                                     .map(Consent.VetoReason::explicit)
                                     .orElse(null);
-
+                            if(hidingReason != null && ifHiddenPolicy == CausewayConfiguration.Prototyping.IfHiddenPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+                                hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
+                            }
                             isResult.advise(hidingReason, advisor);
                         });
                 break;
         }
 
+        val ifDisabledPolicy = context.getIfDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val disablingReason = advisor.disables(context).orElse(null);
+            Consent.VetoReason disablingReason = advisor.disables(context).orElse(null);
+            if(disablingReason != null && ifDisabledPolicy == CausewayConfiguration.Prototyping.IfDisabledPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+                disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
+            }
             isResult.advise(disablingReason, advisor);
         });
 
@@ -165,17 +169,24 @@ public final class InteractionUtils {
     }
 
     public static CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(ManagedObject ownerAdapter) {
-        CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
         DeploymentType deploymentType = ownerAdapter.getServiceRegistry().lookupServiceElseFail(CausewaySystemEnvironment.class).getDeploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
-                ifHiddenPolicy = ownerAdapter.getConfiguration().getPrototyping().getIfHiddenPolicy();
-                break;
+                return ownerAdapter.getConfiguration().getPrototyping().getIfHiddenPolicy();
             case PRODUCTION:
             default:
-                ifHiddenPolicy = CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
-                break;
+                return CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
         }
-        return ifHiddenPolicy;
+    }
+
+    public static CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(ManagedObject ownerAdapter) {
+        DeploymentType deploymentType = ownerAdapter.getServiceRegistry().lookupServiceElseFail(CausewaySystemEnvironment.class).getDeploymentType();
+        switch (deploymentType) {
+            case PROTOTYPING:
+                return ownerAdapter.getConfiguration().getPrototyping().getIfDisabledPolicy();
+            case PRODUCTION:
+            default:
+                return CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE;
+        }
     }
 }

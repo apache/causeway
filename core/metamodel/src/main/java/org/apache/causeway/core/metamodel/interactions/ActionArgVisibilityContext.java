@@ -51,13 +51,14 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
 
         super(InteractionContextType.ACTION_PARAMETER_VISIBLE,
                 head,
                 id,
                 interactionInitiatedBy,
-                Where.OBJECT_FORMS, ifHiddenPolicy);
+                Where.OBJECT_FORMS, ifHiddenPolicy, ifDisabledPolicy);
 
         this.objectAction = objectAction;
         this.args = args;

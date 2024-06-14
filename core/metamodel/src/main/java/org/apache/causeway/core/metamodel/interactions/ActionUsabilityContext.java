@@ -43,8 +43,9 @@ implements ActionInteractionContext {
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
-        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where, ifHiddenPolicy);
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
+        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
         this.objectAction = objectAction;
     }
 
@@ -60,6 +61,6 @@ implements ActionInteractionContext {
 
     @Override
     public ActionVisibilityContext asVisibilityContext() {
-        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy());
+        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy(), getIfDisabledPolicy());
     }
 }
