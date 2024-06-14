@@ -1,4 +1,4 @@
-= MetaModel Validator
+= Core MetaModel Validator
 :page-role: -toc -narrow
 
 

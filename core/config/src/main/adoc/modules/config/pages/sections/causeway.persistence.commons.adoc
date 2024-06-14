@@ -12,6 +12,17 @@ include::../section-hooks/causeway.persistence.commons~pre.adoc[]
 |Default
 |Description
 |
+[[causeway.persistence.commons.entity-change-tracker.enabled]]
+causeway.persistence.commons. +
+entity-change-tracker.enabled
+
+|  true
+| Provides a mechanism to globally enable or disable this service.
+
+By default this service is enabled (if added to the classpath as a module).
+
+
+|
 [[causeway.persistence.commons.entity-change-tracker.suppress-auto-flush]]
 causeway.persistence.commons. +
 entity-change-tracker. +
