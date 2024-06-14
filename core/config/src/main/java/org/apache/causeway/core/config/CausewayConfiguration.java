@@ -4352,6 +4352,7 @@ public class CausewayConfiguration {
                 public enum AutoCreatePolicy {
                     AUTO_CREATE_AS_LOCKED,
                     AUTO_CREATE_AS_UNLOCKED,
+                    DO_NOT_AUTO_CREATE,
                 }
 
                 /**
