@@ -24,9 +24,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -47,8 +52,8 @@ import lombok.val;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ApplicationUserAutoCreationService
-        implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
+@Priority(PriorityPrecedence.MIDPOINT)
+public class ApplicationUserAutoCreationService {
 
     private final ApplicationUserRepository applicationUserRepository;
     private final ApplicationRoleRepository applicationRoleRepository;
@@ -56,8 +61,10 @@ public class ApplicationUserAutoCreationService
     private final CausewayConfiguration causewayConfiguration;
     private final FactoryService factoryService;
 
-    @Override
+    @Order(PriorityPrecedence.MIDPOINT)
+    @EventListener(InteractiveAuthenticationSuccessEvent.class)
     public void onApplicationEvent(final InteractiveAuthenticationSuccessEvent event) {
+
         val authentication = event.getAuthentication();
         val principal = authentication.getPrincipal();
         if (!(principal instanceof DefaultOidcUser)) {
