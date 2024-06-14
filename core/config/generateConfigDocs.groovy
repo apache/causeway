@@ -125,17 +125,17 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "causeway.prototyping"
-    name = "Core Prototyping"
+    prefix = "causeway.persistence.commons"
+    name = "Core Persistence Commons"
     properties: []
     searchOrder = 100
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "causeway.persistence.commons"
-    name = "Core Persistence Commons"
+    prefix = "causeway.prototyping"
+    name = "Prototyping"
     properties: []
-    searchOrder = 100
+    searchOrder = 200
 }}
 
 groups+= new PropertyGroup() {{

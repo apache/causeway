@@ -2219,16 +2219,20 @@ public class CausewayConfiguration {
              * Whether to allow remote access to the H2 Web-Console,
              * which is a potential security risk when no web-admin password is set.
              * <p>
-             * Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
+             * Corresponds to Spring Boot's <code>spring.h2.console.settings.web-allow-others</code> config property.
              */
             private boolean webAllowRemoteAccess = false;
 
             /**
              * Whether to generate a random password for access to the H2 Web-Console advanced features.
+             *
              * <p>
              * If a password is generated, it is logged to the logging subsystem (Log4j2).
+             * </p>
+             *
              * <p>
              * Recommended (<code>true</code>) when {@link #isWebAllowRemoteAccess()} is also <code>true</code>.
+             * </p>
              */
             private boolean generateRandomWebAdminPassword = true;
         }
@@ -2252,6 +2256,20 @@ public class CausewayConfiguration {
             SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
         }
 
+        /**
+         * Whether and how to display any properties, actions and collections whose visibility has been vetoed.
+         *
+         * <p>
+         *     By default, such object members are of course hidden.  However, this config property can be used to
+         *     instead show these objects as disabled, with the tooltip indicating why the object member has been
+         *     vetoed.  Setting the property to {@link IfHiddenPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows
+         *     additional detail in the tooltip.
+         * </p>
+         *
+         * <p>
+         *     This config property only applies in prototyping mode.
+         * </p>
+         */
         private IfHiddenPolicy ifHiddenPolicy = IfHiddenPolicy.HIDE;
 
 
@@ -2269,6 +2287,19 @@ public class CausewayConfiguration {
             SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
         }
 
+        /**
+         * Whether and how to display any properties, actions and collections whose usability has been vetoed.
+         *
+         * <p>
+         *     By default, such object members are shown as disabled, with the tolipindicating why. Setting the
+         *     property to {@link IfHiddenPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows additional detail in the
+         *     tooltip.
+         * </p>
+         *
+         * <p>
+         *     This config property only applies in prototyping mode.
+         * </p>
+         */
         private IfDisabledPolicy ifDisabledPolicy = IfDisabledPolicy.DISABLE;
     }
 
