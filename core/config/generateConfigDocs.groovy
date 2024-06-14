@@ -99,7 +99,7 @@ groups+= new PropertyGroup() {{
 
 groups+= new PropertyGroup() {{
     prefix = "causeway.core.meta-model.validator"
-    name = "MetaModel Validator"
+    name = "Core MetaModel Validator"
     searchOrder = 101
 }}
 
@@ -120,6 +120,13 @@ groups+= new PropertyGroup() {{
 groups+= new PropertyGroup() {{
     prefix = "causeway.persistence.schema"
     name = "Core Persistence Schema"
+    properties: []
+    searchOrder = 100
+}}
+
+groups+= new PropertyGroup() {{
+    prefix = "causeway.prototyping"
+    name = "Core Prototyping"
     properties: []
     searchOrder = 100
 }}
