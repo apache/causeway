@@ -2262,7 +2262,8 @@ public class CausewayConfiguration {
          * <p>
          *     By default, such object members are of course hidden.  However, this config property can be used to
          *     instead show these objects as disabled, with the tooltip indicating why the object member has been
-         *     vetoed.  Setting the property to {@link IfHiddenPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows
+         *     vetoed.  Setting the property to
+         *     {@link IfHiddenPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows
          *     additional detail in the tooltip.
          * </p>
          *
@@ -2292,7 +2293,7 @@ public class CausewayConfiguration {
          *
          * <p>
          *     By default, such object members are shown as disabled, with the tolipindicating why. Setting the
-         *     property to {@link IfHiddenPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows additional detail in the
+         *     property to {@link IfDisabledPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows additional detail in the
          *     tooltip.
          * </p>
          *
