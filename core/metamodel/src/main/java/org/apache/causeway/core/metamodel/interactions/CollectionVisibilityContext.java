@@ -38,8 +38,9 @@ extends VisibilityContext {
             final Identifier identifierAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
-        super(InteractionContextType.COLLECTION_VISIBLE, head, identifierAdapter, interactionInitiatedBy, where, ifHiddenPolicy);
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
+        super(InteractionContextType.COLLECTION_VISIBLE, head, identifierAdapter, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
     }
 
     @Override

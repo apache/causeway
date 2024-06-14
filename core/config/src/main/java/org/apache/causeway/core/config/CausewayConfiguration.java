@@ -968,26 +968,26 @@ public class CausewayConfiguration {
                      * </p>
                      */
                     private String[] patterns = {
-                                    "add.*:btn-info",
-                                    "remove.*:btn-warning",
+                            "add.*:btn-info",
+                            "remove.*:btn-warning",
 
-                                    "start.*:btn-info",
-                                    "play.*:btn-info",
-                                    "stop.*:btn-warning",
+                            "start.*:btn-info",
+                            "play.*:btn-info",
+                            "stop.*:btn-warning",
 
-                                    "reset.*:btn-warning",
+                            "reset.*:btn-warning",
 
-                                    "new.*:btn-info",
-                                    "create.*:btn-info",
-                                    "delete.*:btn-danger",
+                            "new.*:btn-info",
+                            "create.*:btn-info",
+                            "delete.*:btn-danger",
 
-                                    "verify.*:btn-success",
-                                    "decline.*:btn-danger",
+                            "verify.*:btn-success",
+                            "decline.*:btn-danger",
 
-                                    "save.*:btn-success",
+                            "save.*:btn-success",
 
-                                    "approve.*:btn-success",
-                                    "reject.*:btn-danger",
+                            "approve.*:btn-success",
+                            "reject.*:btn-danger",
 
                     };
 
@@ -1342,7 +1342,7 @@ public class CausewayConfiguration {
                          * Whether to check for inconsistencies between the usage of
                          * {@link org.apache.causeway.applib.annotation.DomainObject} and
                          * {@link org.apache.causeway.applib.annotation.DomainObjectLayout}.
-                          */
+                         */
                         private boolean enable = false;
                     }
                 }
@@ -1575,7 +1575,7 @@ public class CausewayConfiguration {
              * @see ConfigurationPropertyVisibilityPolicy
              */
             private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy
-                = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
+                    = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
 
         }
 
@@ -2240,19 +2240,36 @@ public class CausewayConfiguration {
              */
             HIDE,
             /**
-             * The default  behaviour: any properties, collections or actions whose visibility has been vetoed
-             * will not be shown in the UI.
+             * To assist with the debugging security and similar: any properties, collections or actions whose
+             * visibility has been vetoed will instead be shown as merely disabled.
              */
             SHOW_AS_DISABLED,
             /**
              * To assist with the debugging security and similar: any properties, collections or actions whose
-             * visibility has been vetoed will instead be shown as merely disabled, but there will be additional info
-             * in the tooltips to indicate that this is actually hidden; the vetoing facet/advisor will also be indicated.
+             * visibility has been vetoed will instead be shown as merely disabled, and in addition the tooltips will
+             * indicate the class name of the facet/advisor(s) that did the vetoing.
              */
             SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
         }
 
         private IfHiddenPolicy ifHiddenPolicy = IfHiddenPolicy.HIDE;
+
+
+        public enum IfDisabledPolicy {
+            /**
+             * The default  behaviour: any properties, collections or actions whose usabiliity has been vetoed
+             * will be shown as disabled in the UI.
+             */
+            DISABLE,
+            /**
+             * To assist with the debugging security and similar: any properties, collections or actions whose
+             * usability has been vetoed will continue to be shown as disabled, and in addition the tooltips will
+             * indicate the class name of the facet/advisor(s) that did the vetoing.
+             */
+            SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
+        }
+
+        private IfDisabledPolicy ifDisabledPolicy = IfDisabledPolicy.DISABLE;
     }
 
 
@@ -4403,17 +4420,17 @@ public class CausewayConfiguration {
     }
     private static Map<Pattern, String> asMap(final String... mappings) {
         return new LinkedHashMap<>(_NullSafe.stream(mappings).map(mapping -> {
-            final String[] parts = mapping.split(":");
-            if (parts.length != 2) {
-                return null;
-            }
-            try {
-                return new PatternToString(Pattern.compile(parts[0], Pattern.CASE_INSENSITIVE), parts[1]);
-            } catch(Exception ex) {
-                return null;
-            }
-        }).filter(Objects::nonNull)
-        .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
+                    final String[] parts = mapping.split(":");
+                    if (parts.length != 2) {
+                        return null;
+                    }
+                    try {
+                        return new PatternToString(Pattern.compile(parts[0], Pattern.CASE_INSENSITIVE), parts[1]);
+                    } catch(Exception ex) {
+                        return null;
+                    }
+                }).filter(Objects::nonNull)
+                .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
     }
 
 

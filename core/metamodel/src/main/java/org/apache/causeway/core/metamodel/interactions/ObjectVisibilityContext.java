@@ -40,11 +40,12 @@ implements ProposedHolder {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
 
         super(
                 InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, interactionInitiatedBy, where, ifHiddenPolicy);
+                head, identifier, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
     }
 
     @Override

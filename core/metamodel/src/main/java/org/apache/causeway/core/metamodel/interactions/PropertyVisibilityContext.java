@@ -37,8 +37,9 @@ public class PropertyVisibilityContext extends VisibilityContext {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
-        super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where, ifHiddenPolicy);
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
+        super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
     }
 
     @Override

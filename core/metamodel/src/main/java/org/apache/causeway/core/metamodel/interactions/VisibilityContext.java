@@ -35,8 +35,8 @@ public abstract class VisibilityContext
 extends InteractionContext
 implements InteractionEventSupplier<VisibilityEvent> {
 
-    @Getter
-    private final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
+    @Getter private final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
+    @Getter private final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy;
 
     public VisibilityContext(
             final InteractionContextType interactionType,
@@ -44,9 +44,11 @@ implements InteractionEventSupplier<VisibilityEvent> {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
         super(interactionType, interactionInitiatedBy, identifier, head, where);
         this.ifHiddenPolicy = ifHiddenPolicy;
+        this.ifDisabledPolicy = ifDisabledPolicy;
     }
 
 }

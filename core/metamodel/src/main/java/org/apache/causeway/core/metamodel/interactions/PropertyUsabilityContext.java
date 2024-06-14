@@ -38,8 +38,9 @@ extends UsabilityContext {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy) {
-        super(InteractionContextType.PROPERTY_USABLE, head, identifier, interactionInitiatedBy, where, ifHiddenPolicy);
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
+        super(InteractionContextType.PROPERTY_USABLE, head, identifier, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
     }
 
     @Override
@@ -49,6 +50,6 @@ extends UsabilityContext {
 
     @Override
     public PropertyVisibilityContext asVisibilityContext() {
-        return new PropertyVisibilityContext(getHead() ,getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy());
+        return new PropertyVisibilityContext(getHead() ,getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy(), getIfDisabledPolicy());
     }
 }
