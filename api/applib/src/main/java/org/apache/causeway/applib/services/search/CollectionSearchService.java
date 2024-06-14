@@ -22,6 +22,7 @@ import java.util.function.BiPredicate;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
 
@@ -64,7 +65,9 @@ public interface CollectionSearchService {
      */
     default TranslatableString searchPromptPlaceholderText(
             final @NonNull Class<?> domainType) {
-        return TranslatableString.tr("Search {domainType}", "domainType", domainType.getSimpleName());
+        return TranslatableString.tr("Search {domainType}", "domainType",
+                _Strings.asNaturalName.andThen(_Strings.asLowerCase)
+                    .apply(domainType.getSimpleName()));
     }
 
     /**

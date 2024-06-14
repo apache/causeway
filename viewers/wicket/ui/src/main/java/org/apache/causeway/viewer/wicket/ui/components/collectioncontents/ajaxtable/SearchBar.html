@@ -18,18 +18,12 @@
   under the License.
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-    <body>
-        <wicket:panel>
-            <div class="collectionContentsAsAjaxTablePanel collectionContentsComponentType">
-                <div class="clearfix"></div>
-
-				<div wicket:id="table-search-bar"/>
-				
-                <div class="table-responsive">
-                    <table class="contents table table-striped table-sm table-hover table-bordered" cellspacing="0" 
-						wicket:id="table">[table]</table>
-                </div>
-            </div>
-        </wicket:panel>
-    </body>
+<body>
+	<wicket:panel>
+		<div class="input-group table-search-bar">
+			  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+			  <input wicket:id="table-search-input" class="form-control" type="text" placeholder="Search" />
+		</div>	
+	</wicket:panel>
+</body>
 </html>

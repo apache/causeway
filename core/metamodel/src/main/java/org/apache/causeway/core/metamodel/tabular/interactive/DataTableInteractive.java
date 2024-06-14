@@ -143,33 +143,33 @@ implements MultiselectChoices {
         this.where = where;
         this.searchHandler = _SearchUtils.createSearchHandler(elementType);
 
-        searchArgument = _Bindables.forValue("");
-        columnSort = _Bindables.forValue(null);
+        this.searchArgument = _Bindables.forValue("");
+        this.columnSort = _Bindables.forValue(null);
 
-        dataElements = _Observables.lazy(()->elements
+        this.dataElements = _Observables.lazy(()->elements
                 .map(mmc::injectServicesInto)
                 .filter(this::ignoreHidden));
 
-        dataRows = _Observables.lazy(()->
+        this.dataRows = _Observables.lazy(()->
             dataElements.getValue().stream()
                 .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element)))
                 .collect(Can.toCan()));
 
-        dataRowsFilteredAndSorted = _Observables.lazy(()->
+        this.dataRowsFilteredAndSorted = _Observables.lazy(()->
             dataRows.getValue().stream()
                 .filter(adaptSearchPredicate())
                 .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
                 .collect(Can.toCan()));
 
-        dataRowsSelected = _Observables.lazy(()->
+        this.dataRowsSelected = _Observables.lazy(()->
             dataRows.getValue().stream()
                 .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
                 .collect(Can.toCan()));
 
-        selectionChanges = _Bindables.forValue(Boolean.FALSE);
-        selectAllToggle = _Bindables.forValue(Boolean.FALSE);
-        selectAllToggle.addListener((e,o,isAllOn)->{
+        this.selectionChanges = _Bindables.forValue(Boolean.FALSE);
+        this.selectAllToggle = _Bindables.forValue(Boolean.FALSE);
+        this.selectAllToggle.addListener((e,o,isAllOn)->{
             //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
             if(isClearToggleAllEvent.get()) return;
 
@@ -178,15 +178,15 @@ implements MultiselectChoices {
             });
         });
 
-        searchArgument.addListener((e,o,n)->{
+        this.searchArgument.addListener((e,o,n)->{
             dataRowsFilteredAndSorted.invalidate();
         });
 
-        columnSort.addListener((e,o,n)->{
+        this.columnSort.addListener((e,o,n)->{
             dataRowsFilteredAndSorted.invalidate();
         });
 
-        dataColumns = _Observables.lazy(()->
+        this.dataColumns = _Observables.lazy(()->
             managedMember.getElementType()
             .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
             .map(assoc->new DataColumn(this, assoc))
@@ -194,7 +194,7 @@ implements MultiselectChoices {
 
         //XXX future extension: the title could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
-        title = _Observables.lazy(()->
+        this.title = _Observables.lazy(()->
             managedMember
             .getFriendlyName());
     }
