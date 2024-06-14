@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class SearchBar extends Panel {
 
@@ -50,20 +49,21 @@ public class SearchBar extends Panel {
     }
 
     void bindSearchField(
-            final @NonNull DataTableInteractive dataTable,
-            final @NonNull GenericPanel<DataTableInteractive> interactiveModelSupplier) {
-        // init searchArg from backend
-        val searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTable.getSearchArgument().getValue()));
-        Wkt.attributeReplace(searchField, "placeholder", dataTable.getSearchPromptPlaceholderText());
+            final @NonNull GenericPanel<DataTableInteractive> dataTableInteractiveHolder) {
+        // init searchArg from interactive model
+        var dataTableInteractive = dataTableInteractiveHolder.getModelObject();
+        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
+        Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
 
         searchField.add(new OnChangeAjaxBehavior() {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
                 // on searchArg update originating from end-user in UI,
-                // update the backend model
+                // update the interactive model
                 var searchArg = searchField.getValue();
-                interactiveModelSupplier.getModelObject().getSearchArgument().setValue(searchArg);
+                var dataTableInteractive = dataTableInteractiveHolder.getModelObject();
+                dataTableInteractive.getSearchArgument().setValue(searchArg);
                 // tells the table component to re-render
                 target.add(table);
             }
