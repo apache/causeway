@@ -71,7 +71,7 @@ implements
                 ic.getHead(),
                 Identifier.classIdentifier(navigatedType.getLogicalType()),
                 ic.getInitiatedBy(),
-                ic.getWhere());
+                ic.getWhere(), ic.getIfHiddenPolicy(), ic.getIfDisabledPolicy());
         final String hides = facet.hides(objVisibilityContext);
         return hides;
     }

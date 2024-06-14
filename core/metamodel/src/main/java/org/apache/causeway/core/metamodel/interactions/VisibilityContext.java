@@ -18,9 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
+import lombok.Getter;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
@@ -32,13 +35,20 @@ public abstract class VisibilityContext
 extends InteractionContext
 implements InteractionEventSupplier<VisibilityEvent> {
 
+    @Getter private final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
+    @Getter private final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy;
+
     public VisibilityContext(
             final InteractionContextType interactionType,
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final Where where,
+            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
+            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
         super(interactionType, interactionInitiatedBy, identifier, head, where);
+        this.ifHiddenPolicy = ifHiddenPolicy;
+        this.ifDisabledPolicy = ifDisabledPolicy;
     }
 
 }

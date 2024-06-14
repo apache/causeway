@@ -330,7 +330,9 @@ implements MultiselectChoices {
                 InteractionHead.regular(objectAdapter),
                 objectAdapter.getSpecification().getFeatureIdentifier(),
                 InteractionInitiatedBy.USER,
-                Where.ALL_TABLES);
+                Where.ALL_TABLES,
+                InteractionUtils.determineIfHiddenPolicyFrom(objectAdapter),
+                InteractionUtils.determineIfDisabledPolicyFrom(objectAdapter));
     }
 
     // -- ASSOCIATED ACTION WITH MULTI SELECT

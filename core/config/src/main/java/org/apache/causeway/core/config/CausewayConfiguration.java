@@ -968,26 +968,26 @@ public class CausewayConfiguration {
                      * </p>
                      */
                     private String[] patterns = {
-                                    "add.*:btn-info",
-                                    "remove.*:btn-warning",
+                            "add.*:btn-info",
+                            "remove.*:btn-warning",
 
-                                    "start.*:btn-info",
-                                    "play.*:btn-info",
-                                    "stop.*:btn-warning",
+                            "start.*:btn-info",
+                            "play.*:btn-info",
+                            "stop.*:btn-warning",
 
-                                    "reset.*:btn-warning",
+                            "reset.*:btn-warning",
 
-                                    "new.*:btn-info",
-                                    "create.*:btn-info",
-                                    "delete.*:btn-danger",
+                            "new.*:btn-info",
+                            "create.*:btn-info",
+                            "delete.*:btn-danger",
 
-                                    "verify.*:btn-success",
-                                    "decline.*:btn-danger",
+                            "verify.*:btn-success",
+                            "decline.*:btn-danger",
 
-                                    "save.*:btn-success",
+                            "save.*:btn-success",
 
-                                    "approve.*:btn-success",
-                                    "reject.*:btn-danger",
+                            "approve.*:btn-success",
+                            "reject.*:btn-danger",
 
                     };
 
@@ -1342,7 +1342,7 @@ public class CausewayConfiguration {
                          * Whether to check for inconsistencies between the usage of
                          * {@link org.apache.causeway.applib.annotation.DomainObject} and
                          * {@link org.apache.causeway.applib.annotation.DomainObjectLayout}.
-                          */
+                         */
                         private boolean enable = false;
                     }
                 }
@@ -1575,7 +1575,7 @@ public class CausewayConfiguration {
              * @see ConfigurationPropertyVisibilityPolicy
              */
             private ConfigurationPropertyVisibilityPolicy configurationPropertyVisibilityPolicy
-                = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
+                    = ConfigurationPropertyVisibilityPolicy.SHOW_ONLY_IN_PROTOTYPE;
 
         }
 
@@ -2219,19 +2219,89 @@ public class CausewayConfiguration {
              * Whether to allow remote access to the H2 Web-Console,
              * which is a potential security risk when no web-admin password is set.
              * <p>
-             * Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
+             * Corresponds to Spring Boot's "spring.h2.console.settings.web-allow-others" config property.
              */
             private boolean webAllowRemoteAccess = false;
 
             /**
              * Whether to generate a random password for access to the H2 Web-Console advanced features.
+             *
              * <p>
              * If a password is generated, it is logged to the logging subsystem (Log4j2).
+             * </p>
+             *
              * <p>
              * Recommended (<code>true</code>) when {@link #isWebAllowRemoteAccess()} is also <code>true</code>.
+             * </p>
              */
             private boolean generateRandomWebAdminPassword = true;
         }
+
+        public enum IfHiddenPolicy {
+            /**
+             * The default  behaviour: any properties, collections or actions whose visibility has been vetoed
+             * will not be shown in the UI.
+             */
+            HIDE,
+            /**
+             * To assist with the debugging security and similar: any properties, collections or actions whose
+             * visibility has been vetoed will instead be shown as merely disabled.
+             */
+            SHOW_AS_DISABLED,
+            /**
+             * To assist with the debugging security and similar: any properties, collections or actions whose
+             * visibility has been vetoed will instead be shown as merely disabled, and in addition the tooltips will
+             * indicate the class name of the facet/advisor(s) that did the vetoing.
+             */
+            SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
+        }
+
+        /**
+         * Whether and how to display any properties, actions and collections whose visibility has been vetoed.
+         *
+         * <p>
+         *     By default, such object members are of course hidden.  However, this config property can be used to
+         *     instead show these objects as disabled, with the tooltip indicating why the object member has been
+         *     vetoed.  Setting the property to
+         *     {@link IfHiddenPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows
+         *     additional detail in the tooltip.
+         * </p>
+         *
+         * <p>
+         *     This config property only applies in prototyping mode.
+         * </p>
+         */
+        private IfHiddenPolicy ifHiddenPolicy = IfHiddenPolicy.HIDE;
+
+
+        public enum IfDisabledPolicy {
+            /**
+             * The default  behaviour: any properties, collections or actions whose usabiliity has been vetoed
+             * will be shown as disabled in the UI.
+             */
+            DISABLE,
+            /**
+             * To assist with the debugging security and similar: any properties, collections or actions whose
+             * usability has been vetoed will continue to be shown as disabled, and in addition the tooltips will
+             * indicate the class name of the facet/advisor(s) that did the vetoing.
+             */
+            SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
+        }
+
+        /**
+         * Whether and how to display any properties, actions and collections whose usability has been vetoed.
+         *
+         * <p>
+         *     By default, such object members are shown as disabled, with the tolipindicating why. Setting the
+         *     property to {@link IfDisabledPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows additional detail in the
+         *     tooltip.
+         * </p>
+         *
+         * <p>
+         *     This config property only applies in prototyping mode.
+         * </p>
+         */
+        private IfDisabledPolicy ifDisabledPolicy = IfDisabledPolicy.DISABLE;
     }
 
 
@@ -4382,17 +4452,17 @@ public class CausewayConfiguration {
     }
     private static Map<Pattern, String> asMap(final String... mappings) {
         return new LinkedHashMap<>(_NullSafe.stream(mappings).map(mapping -> {
-            final String[] parts = mapping.split(":");
-            if (parts.length != 2) {
-                return null;
-            }
-            try {
-                return new PatternToString(Pattern.compile(parts[0], Pattern.CASE_INSENSITIVE), parts[1]);
-            } catch(Exception ex) {
-                return null;
-            }
-        }).filter(Objects::nonNull)
-        .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
+                    final String[] parts = mapping.split(":");
+                    if (parts.length != 2) {
+                        return null;
+                    }
+                    try {
+                        return new PatternToString(Pattern.compile(parts[0], Pattern.CASE_INSENSITIVE), parts[1]);
+                    } catch(Exception ex) {
+                        return null;
+                    }
+                }).filter(Objects::nonNull)
+                .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
     }
 
 
