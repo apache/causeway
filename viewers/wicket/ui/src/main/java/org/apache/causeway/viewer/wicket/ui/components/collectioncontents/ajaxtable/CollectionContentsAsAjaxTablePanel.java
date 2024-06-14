@@ -21,10 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -62,7 +59,6 @@ implements CollectionCountProvider {
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE = "table";
     private static final String ID_TABLE_SEARCH_BAR = "table-search-bar";
-    private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
 
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
@@ -144,30 +140,10 @@ implements CollectionCountProvider {
             final CausewayAjaxDataTable dataTableComponent) {
         if(!dataTable.isSearchSupported()) {
             WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_BAR);
-            WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_INPUT);
             return;
         }
-
-        // init searchArg from backend
-        val searchBar = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTable.getSearchArgument().getValue()));
-
-        Wkt.attributeReplace(searchBar, "placeholder", dataTable.getSearchPromptPlaceholderText());
-
-        searchBar.add(new OnChangeAjaxBehavior() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void onUpdate(final AjaxRequestTarget target) {
-                // on searchArg update originating from end-user in UI,
-                // update the backend model
-                var searchArg = searchBar.getValue();
-                entityCollectionModel().getDataTableModel().getSearchArgument().setValue(searchArg);
-                // tells the table component to re-render
-                target.add(dataTableComponent);
-            }
-        });
-
-        Wkt.containerAdd(this, ID_TABLE_SEARCH_BAR)
-            .add(searchBar);
+        Wkt.add(this, new SearchBar(ID_TABLE_SEARCH_BAR, dataTableComponent))
+            .bindSearchField(dataTable, this);
     }
 
     private void prependTitleColumn(
