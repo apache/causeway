@@ -28,7 +28,8 @@ import lombok.NonNull;
 /**
  * EXPERIMENTAL/DRAFT
  * <p>
- * If a {@link CollectionSearchService} is registered with Spring's context,
+ * If at least one {@link CollectionSearchService} is registered with Spring's context
+ * that handles a given domainType,
  * viewer implementations (like Wicket Viewer) should show
  * a quick-search prompt, which is rendered on top of the UI table that
  * presents the collection in question.
@@ -45,8 +46,7 @@ public interface CollectionSearchService {
 
     /**
      * Returns a {@link BiPredicate} that filters collections
-     * of given {@code domainType} by a nullable searchString,
-     * based on whether the search is supported.
+     * of given {@code domainType} by a nullable searchString.
      * <p>
      * For example, the searchString could be parsed into tokens, and then matched against the
      * domain object's title say.
@@ -58,7 +58,7 @@ public interface CollectionSearchService {
             @NonNull Class<T> domainType);
 
     /**
-     *
+     * Placeholder text for the quick-search prompt.
      * @param domainType - entity or view-model type to be rendered as row in a table
      * @apiNote guarded by a call to {@link #handles(Class)}
      */
@@ -68,7 +68,7 @@ public interface CollectionSearchService {
     }
 
     /**
-     *
+     * Provides the {@link TranslationContext} for translating the {@link #searchPromptPlaceholderText(Class)}.
      * @param domainType - entity or view-model type to be rendered as row in a table
      * @apiNote guarded by a call to {@link #handles(Class)}
      */
