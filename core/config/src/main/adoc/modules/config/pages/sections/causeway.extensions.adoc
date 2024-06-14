@@ -45,6 +45,16 @@ By default, quartz runs this command every 10 seconds, so the size should be pro
 
 
 |
+[[causeway.extensions.command-log.run-background-commands.on-failure-policy]]
+causeway.extensions.command-log. +
+run-background-commands. +
+on-failure-policy
+
+| 
+| If there is an exception executing one of the commands, what should be done?
+
+
+|
 [[causeway.extensions.command-replay.analyser.exception.enabled]]
 causeway.extensions.command-replay. +
 analyser.exception.enabled
