@@ -35,6 +35,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -67,13 +68,14 @@ public class ApplicationUserAutoCreationService {
 
         val authentication = event.getAuthentication();
         val principal = authentication.getPrincipal();
-        if (!(principal instanceof DefaultOidcUser)) {
+        if (!(principal instanceof OidcUser)) {
             return;
         }
 
-        val oidcUser = (DefaultOidcUser) principal;
-        val username = oidcUser.getIdToken().getPreferredUsername();
-        val email = oidcUser.getIdToken().getEmail();
+        val oidcUser = (OidcUser) principal;
+        val username = oidcUser.getPreferredUsername();
+        val email = oidcUser.getEmail();
+
         interactionService.runAnonymous(() -> {
             Optional<ApplicationUser> userIfAny = applicationUserRepository.findByUsername(username);
             if (userIfAny.isEmpty()) {
