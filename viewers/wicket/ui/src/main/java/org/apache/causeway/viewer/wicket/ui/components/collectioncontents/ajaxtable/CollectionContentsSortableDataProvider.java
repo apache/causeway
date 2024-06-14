@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.Iterator;
 import java.util.Optional;
 
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
@@ -88,7 +90,19 @@ extends SortableDataProvider<DataRow, String> {
         val sortProperty = lookupPropertyFor(sort).orElse(null);
         if(sortProperty != null) {
             val objComparator = ManagedObjects.orderingBy(sortProperty, sort.isAscending());
-            return dataRows.sorted((a, b)->objComparator.compare(a.getRowElement(), b.getRowElement()));
+            return dataRows.sorted((a, b)-> {
+                ManagedObject managedObjectA = a.getRowElement();
+                if(managedObjectA.getSpecialization().isViewmodel()) {
+                    // make sure any referenced entities are made live if currently hollow
+                    ManagedObjects.refreshViewmodel(managedObjectA, /*bookmark supplier*/ null);
+                }
+                ManagedObject managedObjectB = b.getRowElement();
+                if(managedObjectA.getSpecialization().isViewmodel()) {
+                    // make sure any referenced entities are made live if currently hollow
+                    ManagedObjects.refreshViewmodel(managedObjectB, /*bookmark supplier*/ null);
+                }
+                return objComparator.compare(managedObjectA, managedObjectB);
+            });
         }
         return dataRows;
     }
