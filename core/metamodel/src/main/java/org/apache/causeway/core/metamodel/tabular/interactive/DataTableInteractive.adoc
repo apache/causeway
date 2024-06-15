@@ -53,6 +53,21 @@ ColumnSort --> SortDirection : "sortDirection"
 <.> Bindable
 <.> Observable
 
+== Initial Fetch and Follow-Ups
+
+Elements of a `DataTableInteracive` originate either 
+from an _Action_ *invocation* 
+or the *execution* of an _OneToManyAssociation_. 
+Those elements are 'live' during the request cycle that fetches them.
+
+Any follow-up *selection*, *sorting* or *filtering* on that table (via end-user interaction)
+will result in partial page updates (AJAX) which happen in their own request-cycle.
+
+Consequently elements that were 'live' previously are now hollow. 
+Hence, if the framework were to act on some of those elements, 
+like feeding a selection into an associated action's `ParameterNegotiationModel`, 
+those elements would need to be re-hydrated for the action invocation. 
+
 == Search Argument Interaction
 
 The model supports filtering of data rows based on a given *search argument*.
@@ -116,6 +131,7 @@ class Memento {
 
 For each collection rendered, we create an immutable `Can<ManagedObject>` 
 of *elements*. If those are entities, these must be live (*attached*). 
+If those are viewmodels, these must be *refreshed* to not reference any hollow entities. 
 
 Lifecycle of this `Can` is for exactly one request-cycle. (This is to avoid any hollow entity state issues.)
 
@@ -128,4 +144,20 @@ Consequently it should be sufficient to serialize the table's state by memoizing
 * *elements selected* as some equivalent of `Set<Integer>` that represents indexes into the elements (above)
 * *searchArgument* as `String` used for the new table filtering SPI
 * *columnSort* as `ColumnSort` introduced to capture by which column to sort and in what direction/order
+
+== Performance Optimization
+
+If for a given collection of elements, all information required for 
+
+* rendering of cells and tooltips (text, html) 
+* sorting of rows (list of int to calculate for each column)
+* filtering of rows (generate search tokens for each row using SPI)
+
+is gathered up-front during the initial fetch phase (while all elements are 'live'), 
+then *sorting*, *filtering* and *selection* 
+can be done without refreshing or re-hydrating any elements.
+
+In other words: we could do the information gathering required for *sorting* and *filtering* 
+during the first full page request-cycle, 
+where all elements are 'live' naturally. Such that we don't have to do it again later for the partial page updates.
 
