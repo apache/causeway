@@ -302,8 +302,7 @@ implements ObjectAction {
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where,
-                InteractionUtils.determineIfHiddenPolicyFrom(target),
-                InteractionUtils.determineIfDisabledPolicyFrom(target));
+                InteractionUtils.prototypingAttributes(target));
     }
 
     // -- USABLE
@@ -319,8 +318,7 @@ implements ObjectAction {
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where,
-                InteractionUtils.determineIfHiddenPolicyFrom(target),
-                InteractionUtils.determineIfDisabledPolicyFrom(target));
+                InteractionUtils.prototypingAttributes(target));
     }
 
     // -- VALIDATE

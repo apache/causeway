@@ -23,7 +23,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.ActionArgumentUsabilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,14 +50,13 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
-            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
+            final PrototypingAttributes prototypingAttributes) {
 
         super(InteractionContextType.ACTION_PARAMETER_USABLE,
                 head,
                 id,
                 interactionInitiatedBy,
-                Where.OBJECT_FORMS, ifHiddenPolicy, ifDisabledPolicy);
+                Where.OBJECT_FORMS, prototypingAttributes);
 
         this.objectAction = objectAction;
         this.args = args;
@@ -76,6 +74,7 @@ implements ActionInteractionContext {
 
     @Override
     public ActionArgVisibilityContext asVisibilityContext() {
-        return new ActionArgVisibilityContext(getHead(), getObjectAction(), getIdentifier(), args, position, getInitiatedBy(), getIfHiddenPolicy(), getIfDisabledPolicy());
+        return new ActionArgVisibilityContext(getHead(), getObjectAction(), getIdentifier(),
+                args, position, getInitiatedBy(), getPrototypingAttributes());
     }
 }

@@ -83,8 +83,7 @@ implements OneToManyAssociation {
 
         return new CollectionVisibilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.determineIfHiddenPolicyFrom(ownerAdapter),
-                InteractionUtils.determineIfDisabledPolicyFrom(ownerAdapter));
+                InteractionUtils.prototypingAttributes(ownerAdapter));
     }
 
     @Override
@@ -93,7 +92,8 @@ implements OneToManyAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionUsabilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where, InteractionUtils.determineIfHiddenPolicyFrom(ownerAdapter), InteractionUtils.determineIfDisabledPolicyFrom(ownerAdapter));
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
+                InteractionUtils.prototypingAttributes(ownerAdapter));
     }
 
     // -- get, isEmpty, add, clear

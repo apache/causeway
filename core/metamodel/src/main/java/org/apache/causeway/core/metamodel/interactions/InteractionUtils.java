@@ -20,22 +20,20 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import java.util.Optional;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.config.environment.DeploymentType;
-import org.apache.causeway.core.metamodel.consent.VetoUtil;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
+import org.apache.causeway.core.metamodel.consent.VetoUtil;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
 import lombok.val;
@@ -46,12 +44,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public final class InteractionUtils {
 
-    public static InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
+    public InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
 
         val iaResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
-        val ifHiddenPolicy = context.getIfHiddenPolicy();
+        val ifHiddenPolicy = context.getPrototypingAttributes().getIfHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
@@ -74,13 +72,12 @@ public final class InteractionUtils {
         return iaResult;
     }
 
-
-    public static InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
+    public InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
 
         val isResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
-        val ifHiddenPolicy = context.getIfHiddenPolicy();
+        val ifHiddenPolicy = context.getPrototypingAttributes().getIfHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 break;
@@ -102,7 +99,7 @@ public final class InteractionUtils {
                 break;
         }
 
-        val ifDisabledPolicy = context.getIfDisabledPolicy();
+        val ifDisabledPolicy = context.getPrototypingAttributes().getIfDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
@@ -116,7 +113,7 @@ public final class InteractionUtils {
         return isResult;
     }
 
-    public static InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
+    public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
 
         val iaResult = new InteractionResult(context.createInteractionEvent());
 
@@ -135,7 +132,7 @@ public final class InteractionUtils {
         return iaResult;
     }
 
-    public static InteractionResultSet isValidResultSet(
+    public InteractionResultSet isValidResultSet(
             final FacetHolder facetHolder,
             final ValidityContext context,
             final InteractionResultSet resultSet) {
@@ -143,12 +140,20 @@ public final class InteractionUtils {
         return resultSet.add(isValidResult(facetHolder, context));
     }
 
+    public PrototypingAttributes prototypingAttributes(final ManagedObject ownerAdapter) {
+        return new PrototypingAttributes(
+                determineIfHiddenPolicyFrom(ownerAdapter),
+                determineIfDisabledPolicyFrom(ownerAdapter));
+    }
+
+    // -- HELPER
+
     /**
      * [CAUSEWAY-3554] an empty String most likely is wrong use of the programming model,
      * we should generate a message,
      * explaining what was going wrong and hinting developers at a possible resolution
      */
-    private static String guardAgainstEmptyReasonString(
+    private String guardAgainstEmptyReasonString(
             final @Nullable String reason, final @NonNull Identifier identifier) {
         if("".equals(reason)) {
             val msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
@@ -161,15 +166,15 @@ public final class InteractionUtils {
         return reason;
     }
 
-    private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
+    private boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
         if(advisor instanceof ActionDomainEventFacet) {
             return ic instanceof ActionInteractionContext;
         }
         return true;
     }
 
-    public static CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getServiceRegistry().lookupServiceElseFail(CausewaySystemEnvironment.class).getDeploymentType();
+    private CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(final ManagedObject ownerAdapter) {
+        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
                 return ownerAdapter.getConfiguration().getPrototyping().getIfHiddenPolicy();
@@ -179,8 +184,8 @@ public final class InteractionUtils {
         }
     }
 
-    public static CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getServiceRegistry().lookupServiceElseFail(CausewaySystemEnvironment.class).getDeploymentType();
+    private CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(final ManagedObject ownerAdapter) {
+        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
                 return ownerAdapter.getConfiguration().getPrototyping().getIfDisabledPolicy();

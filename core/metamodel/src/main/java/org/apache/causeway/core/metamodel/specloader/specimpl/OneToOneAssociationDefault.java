@@ -89,8 +89,7 @@ implements OneToOneAssociation {
             final Where where) {
         return new PropertyVisibilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.determineIfHiddenPolicyFrom(ownerAdapter),
-                InteractionUtils.determineIfDisabledPolicyFrom(ownerAdapter));
+                InteractionUtils.prototypingAttributes(ownerAdapter));
     }
 
 
@@ -101,8 +100,7 @@ implements OneToOneAssociation {
             final Where where) {
         return new PropertyUsabilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.determineIfHiddenPolicyFrom(ownerAdapter),
-                InteractionUtils.determineIfDisabledPolicyFrom(ownerAdapter));
+                InteractionUtils.prototypingAttributes(ownerAdapter));
     }
 
     // -- VALIDITY

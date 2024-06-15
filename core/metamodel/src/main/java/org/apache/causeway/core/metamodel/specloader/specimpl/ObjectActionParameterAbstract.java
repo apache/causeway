@@ -25,7 +25,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -43,6 +42,7 @@ import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.PrototypingAttributes;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -317,8 +317,7 @@ implements
 
         return new ActionArgVisibilityContext(
                 head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy,
-                CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
-                CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
+                PrototypingAttributes.forActionParameters());
     }
 
     @Override
@@ -348,8 +347,7 @@ implements
                 pendingArgs,
                 position,
                 interactionInitiatedBy,
-                CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
-                CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
+                PrototypingAttributes.forActionParameters());
     }
 
     @Override

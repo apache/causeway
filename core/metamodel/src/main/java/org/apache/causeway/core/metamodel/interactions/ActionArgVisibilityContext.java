@@ -23,7 +23,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.ActionArgumentVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,14 +50,14 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
-            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
+            final PrototypingAttributes prototypingAttributes) {
 
         super(InteractionContextType.ACTION_PARAMETER_VISIBLE,
                 head,
                 id,
                 interactionInitiatedBy,
-                Where.OBJECT_FORMS, ifHiddenPolicy, ifDisabledPolicy);
+                Where.OBJECT_FORMS,
+                prototypingAttributes);
 
         this.objectAction = objectAction;
         this.args = args;

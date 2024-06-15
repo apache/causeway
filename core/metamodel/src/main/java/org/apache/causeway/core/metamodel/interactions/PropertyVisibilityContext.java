@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.interactions;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
@@ -37,9 +36,8 @@ public class PropertyVisibilityContext extends VisibilityContext {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
-            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
-        super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
+            final PrototypingAttributes prototypingAttributes) {
+        super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
     }
 
     @Override

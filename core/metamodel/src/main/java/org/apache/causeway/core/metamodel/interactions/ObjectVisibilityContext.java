@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.interactions;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ObjectVisibilityEvent;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -35,17 +34,34 @@ public class ObjectVisibilityContext
 extends VisibilityContext
 implements ProposedHolder {
 
+    // -- FACTORIES
+
+    /**
+     * ObjectVisibilityContext for regular objects (not mixins).
+     */
+    public static ObjectVisibilityContext createForRegular(
+            final ManagedObject domainObject,
+            final InteractionInitiatedBy initiatedBy,
+            final Where where) {
+        return new ObjectVisibilityContext(
+                InteractionHead.regular(domainObject),
+                domainObject.getSpecification().getFeatureIdentifier(),
+                initiatedBy,
+                where,
+                InteractionUtils.prototypingAttributes(domainObject));
+    }
+
+    // -- CONSTRUCTION
+
     public ObjectVisibilityContext(
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
-            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
-
+            final PrototypingAttributes prototypingAttributes) {
         super(
                 InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
+                head, identifier, interactionInitiatedBy, where, prototypingAttributes);
     }
 
     @Override

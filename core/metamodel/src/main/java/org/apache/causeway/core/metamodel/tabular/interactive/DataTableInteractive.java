@@ -41,7 +41,6 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
@@ -326,13 +325,8 @@ implements MultiselectChoices {
     }
 
     private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
-        return new ObjectVisibilityContext(
-                InteractionHead.regular(objectAdapter),
-                objectAdapter.getSpecification().getFeatureIdentifier(),
-                InteractionInitiatedBy.USER,
-                Where.ALL_TABLES,
-                InteractionUtils.determineIfHiddenPolicyFrom(objectAdapter),
-                InteractionUtils.determineIfDisabledPolicyFrom(objectAdapter));
+        return ObjectVisibilityContext
+                .createForRegular(objectAdapter, InteractionInitiatedBy.USER, Where.ALL_TABLES);
     }
 
     // -- ASSOCIATED ACTION WITH MULTI SELECT

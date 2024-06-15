@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.interactions;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionUsabilityEvent;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
@@ -43,9 +42,8 @@ implements ActionInteractionContext {
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy,
-            final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy) {
-        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where, ifHiddenPolicy, ifDisabledPolicy);
+            final PrototypingAttributes prototypingAttributes) {
+        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where, prototypingAttributes);
         this.objectAction = objectAction;
     }
 
@@ -61,6 +59,7 @@ implements ActionInteractionContext {
 
     @Override
     public ActionVisibilityContext asVisibilityContext() {
-        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(), getInitiatedBy(), getWhere(), getIfHiddenPolicy(), getIfDisabledPolicy());
+        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(),
+                getInitiatedBy(), getWhere(), getPrototypingAttributes());
     }
 }
