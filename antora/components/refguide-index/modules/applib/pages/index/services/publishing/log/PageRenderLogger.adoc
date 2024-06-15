@@ -10,6 +10,9 @@ Simple implementation of xref:refguide:applib:index/services/publishing/spi/Page
 ----
 class PageRenderLogger {
   boolean isEnabled()
+  void onRenderingDomainObject(Bookmark bookmark)
+  void onRenderingCollection(Supplier<List<Bookmark>> bookmarkSupplier)
+  void onRenderingValue(Object value)
   void onRenderedDomainObject(Bookmark bookmark)
   void onRenderedCollection(Supplier<List<Bookmark>> bookmarkSupplier)
   void onRenderedValue(Object value)

@@ -1,0 +1,25 @@
+[[trouleshooting-visibility-and-usability]]
+= Troubleshooting Visibility and Usability
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+There are many reasons why a given action or property might be hidden or disabled.
+It might be because of the state of the object means that an action's preconditions are not met (eg `toggle` and `untoggle`), or it might be because of security.
+
+Sometimes though the reason why an action or property is hidden is a puzzle; you are pretty sure that it should be shown, and yet for some reason it is not.
+
+To help diagnose these issues, there are two configuration properties you can set.
+They only apply if running in xref:refguide:config:about.adoc#deployment-types[prototype mode]:
+
+* xref:refguide:config:sections/causeway.prototyping.adoc#causeway.prototyping.if-hidden-policy[causeway.prototyping.if-hidden-policy]
++
+If not specified or is set to `HIDE`, then the behaviour is as per normal.
+However, if set to `SHOW_AS_DISABLED` then instead the action or property _will_ be shown, but disabled with the veto providing some explanation as to why.
+And, if set to `SHOW_AS_DISABLED_WITH_DIAGNOSTICS`, then the class name of the xref:refguide:schema:mml.adoc#facetholder-and-facet[metamodel facet] that vetoed the visibility is also shown in the tooltip.
+
+* xref:refguide:config:sections/causeway.prototyping.adoc#causeway.prototyping.if-disabled-policy[causeway.prototyping.if-disabled-policy]
++
+If not specified or is set to `DISABLED`, then the behaviour is as per normal.
+But if set to `SHOW_AS_DISABLED_WITH_DIAGNOSTICS`, then the class name of the xref:refguide:schema:mml.adoc#facetholder-and-facet[metamodel facet] that vetoed the usability is also shown in the tooltip.
+

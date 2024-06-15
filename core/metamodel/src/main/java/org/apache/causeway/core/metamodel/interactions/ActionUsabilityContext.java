@@ -41,8 +41,9 @@ implements ActionInteractionContext {
             final ObjectAction objectAction,
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where);
+            final Where where,
+            final PrototypingAttributes prototypingAttributes) {
+        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where, prototypingAttributes);
         this.objectAction = objectAction;
     }
 
@@ -56,4 +57,9 @@ implements ActionInteractionContext {
         return new ActionUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
+    @Override
+    public ActionVisibilityContext asVisibilityContext() {
+        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(),
+                getInitiatedBy(), getWhere(), getPrototypingAttributes());
+    }
 }

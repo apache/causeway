@@ -42,6 +42,7 @@ import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.PrototypingAttributes;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -315,7 +316,8 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         return new ActionArgVisibilityContext(
-                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy,
+                PrototypingAttributes.forActionParameters());
     }
 
     @Override
@@ -344,7 +346,8 @@ implements
                 getFeatureIdentifier(),
                 pendingArgs,
                 position,
-                interactionInitiatedBy);
+                interactionInitiatedBy,
+                PrototypingAttributes.forActionParameters());
     }
 
     @Override

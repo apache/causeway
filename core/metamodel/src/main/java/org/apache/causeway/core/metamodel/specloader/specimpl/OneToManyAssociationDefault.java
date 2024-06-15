@@ -33,6 +33,7 @@ import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.interactions.CollectionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.CollectionVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -79,8 +80,10 @@ implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
+
         return new CollectionVisibilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
+                InteractionUtils.prototypingAttributes(ownerAdapter));
     }
 
     @Override
@@ -89,7 +92,8 @@ implements OneToManyAssociation {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return new CollectionUsabilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where);
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
+                InteractionUtils.prototypingAttributes(ownerAdapter));
     }
 
     // -- get, isEmpty, add, clear

@@ -1,0 +1,67 @@
+= Prototyping
+:page-role: -toc -narrow
+
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+include::../section-hooks/causeway.prototyping~pre.adoc[]
+
+[cols="3a,2a,5a", options="header"]
+|===
+|Property
+|Default
+|Description
+|
+[[causeway.prototyping.h2-console.generate-random-web-admin-password]]
+causeway.prototyping.h2-console. +
+generate-random-web-admin-password
+
+|  true
+| Whether to generate a random password for access to the H2 Web-Console advanced features.
+
+If a password is generated, it is logged to the logging subsystem (Log4j2).
+
+Recommended (``true``) when ``#isWebAllowRemoteAccess()`` is also ``true``.
+
+
+|
+[[causeway.prototyping.h2-console.web-allow-remote-access]]
+causeway.prototyping.h2-console. +
+web-allow-remote-access
+
+| 
+| Whether to allow remote access to the H2 Web-Console, which is a potential security risk when no web-admin password is set.
+
+Corresponds to Spring Boot's "spring.h2.console.settings.web-allow-others" config property.
+
+
+|
+[[causeway.prototyping.if-disabled-policy]]
+causeway.prototyping. +
+if-disabled-policy
+
+| 
+| Whether and how to display any properties, actions and collections whose usability has been vetoed.
+
+By default, such object members are shown as disabled, with the tolipindicating why. Setting the property to SHOW_AS_DISABLED_WITH_DIAGNOSTICS shows additional detail in the tooltip.
+
+This config property only applies in prototyping mode.
+
+
+|
+[[causeway.prototyping.if-hidden-policy]]
+causeway.prototyping. +
+if-hidden-policy
+
+| 
+| Whether and how to display any properties, actions and collections whose visibility has been vetoed.
+
+By default, such object members are of course hidden. However, this config property can be used to instead show these objects as disabled, with the tooltip indicating why the object member has been vetoed. Setting the property to SHOW_AS_DISABLED_WITH_DIAGNOSTICS shows additional detail in the tooltip.
+
+This config property only applies in prototyping mode.
+
+
+
+|===
+
+include::../section-hooks/causeway.prototyping~post.adoc[]

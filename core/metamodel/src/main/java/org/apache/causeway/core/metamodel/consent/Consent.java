@@ -38,6 +38,7 @@ public interface Consent {
     @lombok.Value @Accessors(fluent=true)
     public static class VetoReason implements Serializable {
         private static final long serialVersionUID = 1L;
+
         /**
          * Introduced to help pick a winner when merging 2 {@link VetoReason}(s).
          * <p>
@@ -105,6 +106,11 @@ public interface Consent {
         private static VetoReason inferred(final String reason) {
             return of(VetoOriging.PROGRAMMING_MODEL, UiHint.NO_ICON_UNLESS_PROTOTYPING, reason);
         }
+
+        VetoReason withAdvisorAsDiagnostic(Object advisor) {
+            return new VetoReason(this.vetoOriging, this.uiHint, this.string + " {" + advisor.getClass().getSimpleName() + "} ");
+        }
+
         public Optional<VetoReason> toOptional() {
             return Optional.of(this);
         }

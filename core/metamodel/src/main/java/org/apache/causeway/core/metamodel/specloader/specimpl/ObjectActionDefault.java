@@ -301,7 +301,8 @@ implements ObjectAction {
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where);
+                where,
+                InteractionUtils.prototypingAttributes(target));
     }
 
     // -- USABLE
@@ -316,7 +317,8 @@ implements ObjectAction {
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where);
+                where,
+                InteractionUtils.prototypingAttributes(target));
     }
 
     // -- VALIDATE

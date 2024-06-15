@@ -25,7 +25,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
@@ -120,11 +119,8 @@ public final class MmVisibilityUtils {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        return new ObjectVisibilityContext(
-                InteractionHead.regular(objectAdapter),
-                objectAdapter.getSpecification().getFeatureIdentifier(),
-                interactionInitiatedBy,
-                where);
+        return ObjectVisibilityContext
+                .createForRegular(objectAdapter, interactionInitiatedBy, where);
     }
 
 }

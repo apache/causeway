@@ -49,13 +49,15 @@ implements ActionInteractionContext {
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final PrototypingAttributes prototypingAttributes) {
 
         super(InteractionContextType.ACTION_PARAMETER_VISIBLE,
                 head,
                 id,
                 interactionInitiatedBy,
-                Where.OBJECT_FORMS);
+                Where.OBJECT_FORMS,
+                prototypingAttributes);
 
         this.objectAction = objectAction;
         this.args = args;

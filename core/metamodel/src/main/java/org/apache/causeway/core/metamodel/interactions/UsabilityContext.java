@@ -24,6 +24,8 @@ import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
+import lombok.Getter;
+
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link UsabilityEvent}.
@@ -32,13 +34,19 @@ public abstract class UsabilityContext
 extends InteractionContext
 implements InteractionEventSupplier<UsabilityEvent> {
 
+    @Getter private final PrototypingAttributes prototypingAttributes;
+
     public UsabilityContext(
             final InteractionContextType interactionType,
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final Where where,
+            final PrototypingAttributes prototypingAttributes) {
         super(interactionType, interactionInitiatedBy, identifier, head, where);
+        this.prototypingAttributes = prototypingAttributes;
     }
+
+    public abstract VisibilityContext asVisibilityContext();
 
 }

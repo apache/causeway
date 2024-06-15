@@ -34,15 +34,34 @@ public class ObjectVisibilityContext
 extends VisibilityContext
 implements ProposedHolder {
 
+    // -- FACTORIES
+
+    /**
+     * ObjectVisibilityContext for regular objects (not mixins).
+     */
+    public static ObjectVisibilityContext createForRegular(
+            final ManagedObject domainObject,
+            final InteractionInitiatedBy initiatedBy,
+            final Where where) {
+        return new ObjectVisibilityContext(
+                InteractionHead.regular(domainObject),
+                domainObject.getSpecification().getFeatureIdentifier(),
+                initiatedBy,
+                where,
+                InteractionUtils.prototypingAttributes(domainObject));
+    }
+
+    // -- CONSTRUCTION
+
     public ObjectVisibilityContext(
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
+            final Where where,
+            final PrototypingAttributes prototypingAttributes) {
         super(
                 InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, interactionInitiatedBy, where);
+                head, identifier, interactionInitiatedBy, where, prototypingAttributes);
     }
 
     @Override

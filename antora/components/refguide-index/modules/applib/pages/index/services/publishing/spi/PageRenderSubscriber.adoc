@@ -10,6 +10,9 @@ Part of the _Publishing SPI_ . A component to receive notifaction that a domain 
 ----
 interface PageRenderSubscriber {
   void onRendering(PageType pageType)     // <.>
+  void onRenderingDomainObject(Bookmark bookmark)     // <.>
+  void onRenderingCollection(Supplier<List<Bookmark>> bookmarkSupplier)     // <.>
+  void onRenderingValue(Object value)     // <.>
   void onRenderedDomainObject(Bookmark bookmark)     // <.>
   void onRenderedCollection(Supplier<List<Bookmark>> bookmarkSupplier)     // <.>
   void onRenderedValue(Object value)     // <.>
@@ -20,6 +23,21 @@ interface PageRenderSubscriber {
 +
 --
 Called just before the rendering process starts.However, if _PageType#OTHER_ , then *NO*  `onRenderedXxx` method will be called.
+--
+<.> xref:#onRenderingDomainObject_Bookmark[onRenderingDomainObject(Bookmark)]
++
+--
+Indicates that the domain object represented by the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is about to be rendered.
+--
+<.> xref:#onRenderingCollection_Supplier[onRenderingCollection(Supplier)]
++
+--
+Indicates that a standalone list of domain objects (each represented by a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is about to be rendered.
+--
+<.> xref:#onRenderingValue_Object[onRenderingValue(Object)]
++
+--
+Indicates that a value is about to be rendered.
 --
 <.> xref:#onRenderedDomainObject_Bookmark[onRenderedDomainObject(Bookmark)]
 +
@@ -46,13 +64,28 @@ Called just before the rendering process starts.However, if _PageType#OTHER_ , t
 
 Determines which of the `onRenderedXxx` callbacks (if any) will next be called:
 
-* if _PageType#DOMAIN_OBJECT_ , then will call _#onRenderedDomainObject(Bookmark)_ next
+* if _PageType#DOMAIN_OBJECT_ , then will call _#onRenderingDomainObject(Bookmark)_ next, and afterwards _#onRenderedDomainObject(Bookmark)_ next
 * if _PageType#COLLECTION_ , then will call _#onRenderedCollection(Supplier)_ next
 * if _PageType#VALUE_ , then will call _#onRenderedValue(Object)_ next
 
 Also, if any of the pages fail to render (eg due to an authorization exception), then - again - *NO*  `onRenderedXxx` method will be called
 
 Implementations could use this to start a stopwatch, for example, or to reset caches.
+
+[#onRenderingDomainObject_Bookmark]
+=== onRenderingDomainObject(Bookmark)
+
+Indicates that the domain object represented by the xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is about to be rendered.
+
+[#onRenderingCollection_Supplier]
+=== onRenderingCollection(Supplier)
+
+Indicates that a standalone list of domain objects (each represented by a xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark] is about to be rendered.
+
+[#onRenderingValue_Object]
+=== onRenderingValue(Object)
+
+Indicates that a value is about to be rendered.
 
 [#onRenderedDomainObject_Bookmark]
 === onRenderedDomainObject(Bookmark)

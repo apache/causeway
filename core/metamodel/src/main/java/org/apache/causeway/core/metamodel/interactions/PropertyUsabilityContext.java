@@ -36,8 +36,9 @@ extends UsabilityContext {
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-        super(InteractionContextType.PROPERTY_USABLE, head, identifier, interactionInitiatedBy, where);
+            final Where where,
+            final PrototypingAttributes prototypingAttributes) {
+        super(InteractionContextType.PROPERTY_USABLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
     }
 
     @Override
@@ -45,4 +46,9 @@ extends UsabilityContext {
         return new PropertyUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
     }
 
+    @Override
+    public PropertyVisibilityContext asVisibilityContext() {
+        return new PropertyVisibilityContext(getHead() ,getIdentifier(),
+                getInitiatedBy(), getWhere(), getPrototypingAttributes());
+    }
 }

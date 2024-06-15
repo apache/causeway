@@ -12,30 +12,6 @@ include::../section-hooks/Other~pre.adoc[]
 |Default
 |Description
 |
-[[causeway.prototyping.h2-console.generate-random-web-admin-password]]
-causeway.prototyping.h2-console. +
-generate-random-web-admin-password
-
-|  true
-| Whether to generate a random password for access to the H2 Web-Console advanced features.
-
-If a password is generated, it is logged to the logging subsystem (Log4j2).
-
-Recommended (``true``) when ``#isWebAllowRemoteAccess()`` is also ``true``.
-
-
-|
-[[causeway.prototyping.h2-console.web-allow-remote-access]]
-causeway.prototyping.h2-console. +
-web-allow-remote-access
-
-| 
-| Whether to allow remote access to the H2 Web-Console, which is a potential security risk when no web-admin password is set.
-
-Corresponds to Spring Boot 'spring.h2.console.settings.web-allow-others'.
-
-
-|
 [[causeway.schema.command.param-identifier-strategy]]
 causeway.schema.command. +
 param-identifier-strategy

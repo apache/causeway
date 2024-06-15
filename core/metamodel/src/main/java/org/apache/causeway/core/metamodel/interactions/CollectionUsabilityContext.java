@@ -35,8 +35,9 @@ extends UsabilityContext {
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-        super(InteractionContextType.COLLECTION_USABLE, head, identifier, interactionInitiatedBy, where);
+            final Where where,
+            final PrototypingAttributes prototypingAttributes) {
+        super(InteractionContextType.COLLECTION_USABLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
     }
 
     @Override
@@ -44,4 +45,9 @@ extends UsabilityContext {
         return new CollectionUsabilityEvent(getTarget().getPojo(), getIdentifier());
     }
 
+    @Override
+    public CollectionVisibilityContext asVisibilityContext() {
+        return new CollectionVisibilityContext(getHead(), getIdentifier(),
+                getInitiatedBy(), getWhere(), getPrototypingAttributes());
+    }
 }
