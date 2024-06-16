@@ -25,6 +25,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -34,7 +35,7 @@ public abstract class UsabilityContext
 extends InteractionContext
 implements InteractionEventSupplier<UsabilityEvent> {
 
-    @Getter private final PrototypingAttributes prototypingAttributes;
+    @Getter private final @NonNull PrototypingAttributes prototypingAttributes;
 
     public UsabilityContext(
             final InteractionContextType interactionType,

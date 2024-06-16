@@ -91,7 +91,8 @@ public final class InteractionUtils {
                             Consent.VetoReason hidingReason = Optional.ofNullable(hidingReasonString)
                                     .map(Consent.VetoReason::explicit)
                                     .orElse(null);
-                            if(hidingReason != null && ifHiddenPolicy == CausewayConfiguration.Prototyping.IfHiddenPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+                            if(hidingReason != null
+                                    && ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
                                 hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
                             }
                             isResult.advise(hidingReason, advisor);
@@ -104,7 +105,8 @@ public final class InteractionUtils {
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             Consent.VetoReason disablingReason = advisor.disables(context).orElse(null);
-            if(disablingReason != null && ifDisabledPolicy == CausewayConfiguration.Prototyping.IfDisabledPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+            if(disablingReason != null
+                    && ifDisabledPolicy.isShowAsDisabledWithDiagnostics()) {
                 disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
             }
             isResult.advise(disablingReason, advisor);
