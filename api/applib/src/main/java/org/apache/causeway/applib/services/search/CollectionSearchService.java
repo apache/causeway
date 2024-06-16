@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.applib.services.search;
 
+import java.io.Serializable;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -39,24 +41,44 @@ import lombok.NonNull;
  */
 public interface CollectionSearchService {
 
+    public static interface Tokens extends Serializable {
+
+    }
+
     /**
      * Whether this service handles given type.
      * @param domainType - entity or view-model type to be rendered as row in a table
      */
     boolean handles(@NonNull Class<?> domainType);
 
+    // -- SEARCH ARGUMENT
+
     /**
-     * Returns a {@link BiPredicate} that filters collections
-     * of given {@code domainType} by a nullable searchString.
+     * For given {@code domainType} returns a {@link BiPredicate}
+     * that matches {@link Tokens} against a nullable searchString.
      * <p>
-     * For example, the searchString could be parsed into tokens, and then matched against the
-     * domain object's title say.
+     * For example, the searchString could be tokenized (parsed into tokens),
+     * and then matched against the {@link Tokens} using either OR or AND semantics.
      *
      * @param domainType - entity or view-model type to be rendered as row in a table
      * @apiNote guarded by a call to {@link #handles(Class)}
      */
-    <T> BiPredicate<T, String> searchPredicate(
+    <T> BiPredicate<Tokens, String> matcher(
             @NonNull Class<T> domainType);
+
+    /**
+     * Returns a function that for a given domainObject returns {@link Tokens} (words),
+     * that are then matchable by {@link #matcher(Class)}.
+     * <p>
+     * For example the domain object's title could be tokenized (parsed into tokens).
+     *
+     * @param domainType - entity or view-model type to be rendered as row in a table
+     * @apiNote guarded by a call to {@link #handles(Class)}
+     */
+    <T> Function<T, Tokens> tokenizer(
+            @NonNull Class<T> domainType);
+
+    // -- SEARCH PROMT
 
     /**
      * Placeholder text for the quick-search prompt.

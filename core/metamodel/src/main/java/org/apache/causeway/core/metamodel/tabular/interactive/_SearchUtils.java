@@ -20,10 +20,12 @@ package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.search.CollectionSearchService;
+import org.apache.causeway.applib.services.search.CollectionSearchService.Tokens;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -36,8 +38,18 @@ class _SearchUtils {
 
     @AllArgsConstructor
     static class SearchHandler {
-        @NonNull final BiPredicate<Object, String> searchPredicate;
+
+        @NonNull final Function<Object, Tokens> tokenizer;
+        @NonNull final BiPredicate<Tokens, String> matcher;
         @NonNull final String searchPromptPlaceholderText;
+
+        @Deprecated
+        @NonNull final BiPredicate<Object, String> searchPredicate() {
+            return (pojo, searchArg) -> {
+                var tokens = tokenizer.apply(pojo);
+                return matcher.test(tokens, searchArg);
+            };
+        }
     }
 
     Optional<SearchHandler> createSearchHandler(final @NonNull ObjectSpecification elementType) {
@@ -49,8 +61,15 @@ class _SearchUtils {
             return Optional.empty();
         }
         var collectionSearchService = collectionSearchServiceOpt.get();
-        var searchPredicate = collectionSearchService.searchPredicate(elementType.getCorrespondingClass());
-        if(searchPredicate==null) {
+
+        var tokenizer =
+                collectionSearchService.tokenizer(elementType.getCorrespondingClass());
+        if(tokenizer==null) {
+            return Optional.empty();
+        }
+
+        var matcher = collectionSearchService.matcher(elementType.getCorrespondingClass());
+        if(matcher==null) {
             return Optional.empty();
         }
 
@@ -65,7 +84,8 @@ class _SearchUtils {
                 : "";
 
         return Optional.of(new SearchHandler(
-                _Casts.uncheckedCast(searchPredicate),
+                _Casts.uncheckedCast(tokenizer),
+                matcher,
                 searchPromptPlaceholderText));
     }
 
