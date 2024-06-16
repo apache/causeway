@@ -49,7 +49,7 @@ public final class InteractionUtils {
         val iaResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
-        val ifHiddenPolicy = context.getPrototypingAttributes().getIfHiddenPolicy();
+        val ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
@@ -77,7 +77,7 @@ public final class InteractionUtils {
         val isResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
-        val ifHiddenPolicy = context.getPrototypingAttributes().getIfHiddenPolicy();
+        val ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 break;
@@ -91,7 +91,8 @@ public final class InteractionUtils {
                             Consent.VetoReason hidingReason = Optional.ofNullable(hidingReasonString)
                                     .map(Consent.VetoReason::explicit)
                                     .orElse(null);
-                            if(hidingReason != null && ifHiddenPolicy == CausewayConfiguration.Prototyping.IfHiddenPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+                            if(hidingReason != null
+                                    && ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
                                 hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
                             }
                             isResult.advise(hidingReason, advisor);
@@ -99,12 +100,13 @@ public final class InteractionUtils {
                 break;
         }
 
-        val ifDisabledPolicy = context.getPrototypingAttributes().getIfDisabledPolicy();
+        val ifDisabledPolicy = context.getRenderPolicy().getIfDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             Consent.VetoReason disablingReason = advisor.disables(context).orElse(null);
-            if(disablingReason != null && ifDisabledPolicy == CausewayConfiguration.Prototyping.IfDisabledPolicy.SHOW_AS_DISABLED_WITH_DIAGNOSTICS) {
+            if(disablingReason != null
+                    && ifDisabledPolicy.isShowAsDisabledWithDiagnostics()) {
                 disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
             }
             isResult.advise(disablingReason, advisor);
@@ -140,8 +142,8 @@ public final class InteractionUtils {
         return resultSet.add(isValidResult(facetHolder, context));
     }
 
-    public PrototypingAttributes prototypingAttributes(final ManagedObject ownerAdapter) {
-        return new PrototypingAttributes(
+    public RenderPolicy renderPolicy(final ManagedObject ownerAdapter) {
+        return new RenderPolicy(
                 determineIfHiddenPolicyFrom(ownerAdapter),
                 determineIfDisabledPolicyFrom(ownerAdapter));
     }

@@ -37,8 +37,9 @@ extends UsabilityContext {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
-        super(InteractionContextType.PROPERTY_USABLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
+            final RenderPolicy renderPolicy) {
+        super(InteractionContextType.PROPERTY_USABLE,
+                head, identifier, interactionInitiatedBy, where, renderPolicy);
     }
 
     @Override
@@ -49,6 +50,6 @@ extends UsabilityContext {
     @Override
     public PropertyVisibilityContext asVisibilityContext() {
         return new PropertyVisibilityContext(getHead() ,getIdentifier(),
-                getInitiatedBy(), getWhere(), getPrototypingAttributes());
+                getInitiatedBy(), getWhere(), getRenderPolicy());
     }
 }

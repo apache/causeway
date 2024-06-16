@@ -72,7 +72,7 @@ implements
                 Identifier.classIdentifier(navigatedType.getLogicalType()),
                 ic.getInitiatedBy(),
                 ic.getWhere(),
-                ic.getPrototypingAttributes());
+                ic.getRenderPolicy());
         final String hides = facet.hides(objVisibilityContext);
         return hides;
     }

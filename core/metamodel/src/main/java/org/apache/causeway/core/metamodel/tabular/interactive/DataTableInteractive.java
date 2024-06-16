@@ -246,7 +246,7 @@ implements MultiselectChoices {
     private Predicate<DataRow> adaptSearchPredicate() {
         return searchHandler.isEmpty()
                 ? dataRow->true
-                : dataRow->searchHandler.get().searchPredicate
+                : dataRow->searchHandler.get().searchPredicate()
                     .test(dataRow.getRowElement().getPojo(), searchArgument.getValue());
     }
 

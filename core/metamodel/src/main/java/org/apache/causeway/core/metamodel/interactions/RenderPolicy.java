@@ -22,6 +22,8 @@ import java.io.Serializable;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
+import lombok.NonNull;
+
 /**
  * <h1>Troubleshooting Visibility and Usability</h1>
  * <p>
@@ -49,15 +51,15 @@ import org.apache.causeway.core.config.CausewayConfiguration;
  * </ol>
  */
 @lombok.Value
-public class PrototypingAttributes implements Serializable {
+public class RenderPolicy implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Always HIDE and DISABLE.
      */
-    public static PrototypingAttributes forActionParameters() {
-        return new PrototypingAttributes(
+    public static RenderPolicy forActionParameters() {
+        return new RenderPolicy(
                 CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
                 CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
     }
@@ -68,13 +70,13 @@ public class PrototypingAttributes implements Serializable {
      * but disabled with the veto providing some explanation as to why. And, if set to SHOW_AS_DISABLED_WITH_DIAGNOSTICS,
      * then the class name of the metamodel facet that vetoed the visibility is also shown in the tooltip.
      */
-    private final CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
+    private final @NonNull CausewayConfiguration.Prototyping.IfHiddenPolicy ifHiddenPolicy;
 
     /**
      * If not specified or is set to DISABLED, then the behaviour is as per normal.
      * But if set to SHOW_AS_DISABLED_WITH_DIAGNOSTICS, then the class name of the metamodel facet that vetoed
      * the usability is also shown in the tooltip.
      */
-    private final CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy;
+    private final @NonNull CausewayConfiguration.Prototyping.IfDisabledPolicy ifDisabledPolicy;
 
 }

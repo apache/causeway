@@ -37,8 +37,8 @@ extends VisibilityContext {
             final Identifier identifierAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
-        super(InteractionContextType.COLLECTION_VISIBLE, head, identifierAdapter, interactionInitiatedBy, where, prototypingAttributes);
+            final RenderPolicy renderPolicy) {
+        super(InteractionContextType.COLLECTION_VISIBLE, head, identifierAdapter, interactionInitiatedBy, where, renderPolicy);
     }
 
     @Override

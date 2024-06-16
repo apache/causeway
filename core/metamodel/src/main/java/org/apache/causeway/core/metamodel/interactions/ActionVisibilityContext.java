@@ -42,8 +42,8 @@ implements ActionInteractionContext  {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
-        super(InteractionContextType.ACTION_VISIBLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
+            final RenderPolicy renderPolicy) {
+        super(InteractionContextType.ACTION_VISIBLE, head, identifier, interactionInitiatedBy, where, renderPolicy);
         this.objectAction = objectAction;
     }
 

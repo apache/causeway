@@ -50,14 +50,14 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final PrototypingAttributes prototypingAttributes) {
+            final RenderPolicy renderPolicy) {
 
         super(InteractionContextType.ACTION_PARAMETER_VISIBLE,
                 head,
                 id,
                 interactionInitiatedBy,
                 Where.OBJECT_FORMS,
-                prototypingAttributes);
+                renderPolicy);
 
         this.objectAction = objectAction;
         this.args = args;

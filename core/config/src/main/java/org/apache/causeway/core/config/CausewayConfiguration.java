@@ -2253,6 +2253,9 @@ public class CausewayConfiguration {
              * indicate the class name of the facet/advisor(s) that did the vetoing.
              */
             SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
+            public boolean isHide() { return this == HIDE; }
+            public boolean isShowAsDisabled() { return this == SHOW_AS_DISABLED; }
+            public boolean isShowAsDisabledWithDiagnostics() { return this == SHOW_AS_DISABLED_WITH_DIAGNOSTICS; }
         }
 
         /**
@@ -2285,6 +2288,8 @@ public class CausewayConfiguration {
              * indicate the class name of the facet/advisor(s) that did the vetoing.
              */
             SHOW_AS_DISABLED_WITH_DIAGNOSTICS;
+            public boolean isDisabled() { return this == DISABLE; }
+            public boolean isShowAsDisabledWithDiagnostics() { return this == SHOW_AS_DISABLED_WITH_DIAGNOSTICS; }
         }
 
         /**

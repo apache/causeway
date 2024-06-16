@@ -42,8 +42,9 @@ implements ActionInteractionContext {
             final Identifier id,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
-        super(InteractionContextType.ACTION_USABLE, head, id, interactionInitiatedBy, where, prototypingAttributes);
+            final RenderPolicy renderPolicy) {
+        super(InteractionContextType.ACTION_USABLE,
+                head, id, interactionInitiatedBy, where, renderPolicy);
         this.objectAction = objectAction;
     }
 
@@ -60,6 +61,6 @@ implements ActionInteractionContext {
     @Override
     public ActionVisibilityContext asVisibilityContext() {
         return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(),
-                getInitiatedBy(), getWhere(), getPrototypingAttributes());
+                getInitiatedBy(), getWhere(), getRenderPolicy());
     }
 }
