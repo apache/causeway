@@ -43,6 +43,11 @@ class _SearchUtils {
         @NonNull final BiPredicate<Tokens, String> matcher;
         @NonNull final String searchPromptPlaceholderText;
 
+        /**
+         * @deprecated {@link Tokens} could be stored with the {@link DataRow}
+         *      on first request-cycle, such we don't need to re-hydrate pojos
+         *      on follow-up partial page updates
+         */
         @Deprecated
         @NonNull final BiPredicate<Object, String> searchPredicate() {
             return (pojo, searchArg) -> {

@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -42,7 +44,12 @@ import lombok.NonNull;
 public interface CollectionSearchService {
 
     public static interface Tokens extends Serializable {
-
+        /**
+         * @apiNote for convenience, the searchArg can be pre-processed by
+         *      by the {@link CollectionSearchService#matcher(Class)};
+         *      The default implementation already handles the empty searchArg case.
+         */
+        boolean match(@Nullable String searchArg);
     }
 
     /**
@@ -51,20 +58,7 @@ public interface CollectionSearchService {
      */
     boolean handles(@NonNull Class<?> domainType);
 
-    // -- SEARCH ARGUMENT
-
-    /**
-     * For given {@code domainType} returns a {@link BiPredicate}
-     * that matches {@link Tokens} against a nullable searchString.
-     * <p>
-     * For example, the searchString could be tokenized (parsed into tokens),
-     * and then matched against the {@link Tokens} using either OR or AND semantics.
-     *
-     * @param domainType - entity or view-model type to be rendered as row in a table
-     * @apiNote guarded by a call to {@link #handles(Class)}
-     */
-    <T> BiPredicate<Tokens, String> matcher(
-            @NonNull Class<T> domainType);
+    // -- TOKENIZER
 
     /**
      * Returns a function that for a given domainObject returns {@link Tokens} (words),
@@ -77,6 +71,42 @@ public interface CollectionSearchService {
      */
     <T> Function<T, Tokens> tokenizer(
             @NonNull Class<T> domainType);
+
+    // -- MATCHER
+
+    /**
+     * For given {@code domainType} returns a {@link BiPredicate}
+     * that matches {@link Tokens} against a nullable searchString.
+     * <p>
+     * For example, the searchString could be tokenized (parsed into tokens),
+     * and then matched against the {@link Tokens} using either OR or AND semantics.
+     * <p>
+     * The default implementation sanitizes the user input (searchArg)
+     * then strips any leading or trailing blanks and handles the empty searchArg case.
+     *
+     * @param domainType - entity or view-model type to be rendered as row in a table
+     * @apiNote guarded by a call to {@link #handles(Class)}
+     */
+    default <T> BiPredicate<Tokens, String> matcher(
+            final @NonNull Class<T> domainType) {
+        return (tokens, searchArg) -> {
+            var sanitized = _Strings.blankToNullOrTrim(searchArg);
+            return _Strings.isNotEmpty(sanitized)
+                ? tokens.match(sanitized)
+                : true; // empty searchArg means 'unfiltered'
+        };
+    }
+
+    // -- SEARCH ARG SANITIZER
+
+    /**
+     * Pre-process user input before passing it to the matcher.
+     * <p>
+     * Default behavior is to strip leading or trailing blanks (if any).
+     */
+    default String sanitzeSearchArgument(final @Nullable String searchArg) {
+        return _Strings.blankToNullOrTrim(searchArg);
+    }
 
     // -- SEARCH PROMT
 
