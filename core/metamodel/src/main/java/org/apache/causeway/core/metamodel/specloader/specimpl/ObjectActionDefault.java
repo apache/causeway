@@ -302,7 +302,7 @@ implements ObjectAction {
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where,
-                InteractionUtils.prototypingAttributes(target));
+                InteractionUtils.renderPolicy(target));
     }
 
     // -- USABLE
@@ -318,7 +318,7 @@ implements ObjectAction {
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where,
-                InteractionUtils.prototypingAttributes(target));
+                InteractionUtils.renderPolicy(target));
     }
 
     // -- VALIDATE

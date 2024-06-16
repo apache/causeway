@@ -48,7 +48,7 @@ implements ProposedHolder {
                 domainObject.getSpecification().getFeatureIdentifier(),
                 initiatedBy,
                 where,
-                InteractionUtils.prototypingAttributes(domainObject));
+                InteractionUtils.renderPolicy(domainObject));
     }
 
     // -- CONSTRUCTION
@@ -58,10 +58,10 @@ implements ProposedHolder {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
+            final RenderPolicy renderPolicy) {
         super(
                 InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, interactionInitiatedBy, where, prototypingAttributes);
+                head, identifier, interactionInitiatedBy, where, renderPolicy);
     }
 
     @Override

@@ -51,15 +51,15 @@ import lombok.NonNull;
  * </ol>
  */
 @lombok.Value
-public class PrototypingAttributes implements Serializable {
+public class RenderPolicy implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Always HIDE and DISABLE.
      */
-    public static PrototypingAttributes forActionParameters() {
-        return new PrototypingAttributes(
+    public static RenderPolicy forActionParameters() {
+        return new RenderPolicy(
                 CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
                 CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
     }

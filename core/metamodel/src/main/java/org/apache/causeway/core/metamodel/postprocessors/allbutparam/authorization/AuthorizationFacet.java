@@ -54,7 +54,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 property.getFeatureIdentifier(),
                                 vc.getInitiatedBy(),
                                 vc.getWhere(),
-                                vc.getPrototypingAttributes())) != null)
+                                vc.getRenderPolicy())) != null)
                 .orElse(false);
     }
 
@@ -69,7 +69,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 collection.getFeatureIdentifier(),
                                 vc.getInitiatedBy(),
                                 vc.getWhere(),
-                                vc.getPrototypingAttributes())) != null)
+                                vc.getRenderPolicy())) != null)
                 .orElse(false);
     }
 
@@ -85,7 +85,7 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 action.getFeatureIdentifier(),
                                 vc.getInitiatedBy(),
                                 vc.getWhere(),
-                                vc.getPrototypingAttributes())) != null)
+                                vc.getRenderPolicy())) != null)
                 .orElse(false);
     }
 

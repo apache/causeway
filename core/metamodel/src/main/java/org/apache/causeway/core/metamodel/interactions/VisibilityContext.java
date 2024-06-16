@@ -34,7 +34,7 @@ public abstract class VisibilityContext
 extends InteractionContext
 implements InteractionEventSupplier<VisibilityEvent> {
 
-    @Getter private final PrototypingAttributes prototypingAttributes;
+    @Getter private final RenderPolicy renderPolicy;
 
     public VisibilityContext(
             final InteractionContextType interactionType,
@@ -42,9 +42,9 @@ implements InteractionEventSupplier<VisibilityEvent> {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
+            final RenderPolicy renderPolicy) {
         super(interactionType, interactionInitiatedBy, identifier, head, where);
-        this.prototypingAttributes = prototypingAttributes;
+        this.renderPolicy = renderPolicy;
     }
 
 }

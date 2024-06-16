@@ -50,13 +50,10 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final PrototypingAttributes prototypingAttributes) {
+            final RenderPolicy renderPolicy) {
 
         super(InteractionContextType.ACTION_PARAMETER_USABLE,
-                head,
-                id,
-                interactionInitiatedBy,
-                Where.OBJECT_FORMS, prototypingAttributes);
+                head, id, interactionInitiatedBy, Where.OBJECT_FORMS, renderPolicy);
 
         this.objectAction = objectAction;
         this.args = args;
@@ -75,6 +72,6 @@ implements ActionInteractionContext {
     @Override
     public ActionArgVisibilityContext asVisibilityContext() {
         return new ActionArgVisibilityContext(getHead(), getObjectAction(), getIdentifier(),
-                args, position, getInitiatedBy(), getPrototypingAttributes());
+                args, position, getInitiatedBy(), getRenderPolicy());
     }
 }

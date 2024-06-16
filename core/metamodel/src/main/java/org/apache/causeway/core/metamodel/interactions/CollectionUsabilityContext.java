@@ -36,8 +36,9 @@ extends UsabilityContext {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
-        super(InteractionContextType.COLLECTION_USABLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
+            final RenderPolicy renderPolicy) {
+        super(InteractionContextType.COLLECTION_USABLE,
+                head, identifier, interactionInitiatedBy, where, renderPolicy);
     }
 
     @Override
@@ -48,6 +49,6 @@ extends UsabilityContext {
     @Override
     public CollectionVisibilityContext asVisibilityContext() {
         return new CollectionVisibilityContext(getHead(), getIdentifier(),
-                getInitiatedBy(), getWhere(), getPrototypingAttributes());
+                getInitiatedBy(), getWhere(), getRenderPolicy());
     }
 }

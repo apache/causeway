@@ -36,8 +36,8 @@ public class PropertyVisibilityContext extends VisibilityContext {
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
-            final PrototypingAttributes prototypingAttributes) {
-        super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where, prototypingAttributes);
+            final RenderPolicy renderPolicy) {
+        super(InteractionContextType.PROPERTY_VISIBLE, head, identifier, interactionInitiatedBy, where, renderPolicy);
     }
 
     @Override
