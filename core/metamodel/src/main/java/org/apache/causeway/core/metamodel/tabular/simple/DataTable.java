@@ -41,6 +41,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader.Request;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -348,9 +349,20 @@ public class DataTable implements Serializable {
             var elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(elementTypeClass);
             var dataTable = new DataTable(elementType, columnIds
                     .map(columnId->elementType.getAssociationElseFail(columnId, MixedIn.INCLUDED)));
-            var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
-            dataTable.setDataElements(rowElements);
-            dataTable.tableFriendlyName = tableFriendlyName;
+
+            if(elementType.isEntity()) {
+                //TODO[CAUSEWAY-3779] instead of using the common element type we need to use to actual types
+                //(use a multivalued map by type)
+                final Can<String> idsStringified = rowElementBookmarks.map(Bookmark::getIdentifier);
+                var rowElements = objectManager.getObjectBulkLoader()
+                        .loadObject(Request.of(elementType,
+                                Query.selectByIdQuery(elementType.getCorrespondingClass(), idsStringified)));
+                dataTable.setDataElements(rowElements);
+            } else {
+                var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
+                dataTable.setDataElements(rowElements);
+            }
+            dataTable.tableFriendlyName = this.tableFriendlyName;
             return dataTable;
         }
     }

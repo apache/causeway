@@ -18,30 +18,13 @@
  */
 package org.apache.causeway.applib.query;
 
-import lombok.NonNull;
+import org.apache.causeway.commons.collections.Can;
 
-final class _AllInstancesQueryDefault<T>
-extends _QueryAbstract<T>
-implements AllInstancesQuery<T> {
+/**
+ * @since 2.1, 3.1 {@index}
+ */
+public interface SelectByIdQuery<T> extends Query<T> {
 
-    private static final long serialVersionUID = 1L;
-
-    protected _AllInstancesQueryDefault(
-            final @NonNull Class<T> type,
-            final @NonNull QueryRange range) {
-        super(type, range);
-    }
-
-    @Override
-    public String getDescription() {
-        return getResultType().getName() + " (all instances)";
-    }
-
-    // -- WITHERS
-
-    @Override
-    public _AllInstancesQueryDefault<T> withRange(final @NonNull QueryRange range) {
-        return new _AllInstancesQueryDefault<>(getResultType(), range);
-    }
+    Can<String> getIdsStringified();
 
 }

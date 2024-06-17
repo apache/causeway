@@ -40,6 +40,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
+import org.apache.causeway.applib.query.SelectByIdQuery;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
@@ -248,6 +249,24 @@ implements EntityFacet {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
             }
 
+            return resultList;
+
+        } else if(query instanceof SelectByIdQuery) {
+
+            //TODO[CAUSEWAY-3779] implement select by
+
+            val queryById = (SelectByIdQuery<?>) query;
+            val queryEntityType = queryById.getResultType();
+            val idsStringified = queryById.getIdsStringified();
+
+            // guard against misuse
+            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
+
+            val pm = getPersistenceManager();
+
+            val q = pm.newQuery(queryEntityType, ":p.contains(id)");
+
+            val resultList = fetchWithinTransaction(()->(List)q.execute(idsStringified.toList()));
             return resultList;
 
         } else if(query instanceof NamedQuery) {

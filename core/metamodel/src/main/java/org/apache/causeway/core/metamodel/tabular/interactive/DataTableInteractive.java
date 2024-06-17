@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,6 +36,7 @@ import org.apache.causeway.applib.services.filter.CollectionFilterService;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
+import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
@@ -146,22 +148,22 @@ implements MultiselectChoices {
                 //.filter(this::ignoreHidden) // I believe is redundant, has major performance impact
                 );
 
-        this.dataRows = _Observables.lazy(()->
+        this.dataRows = _Observables.lazy(()->_Timing.callVerbose("dataRows.get()", ()->
             dataElements.getValue().stream()
                 .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element, tokens(element))))
-                .collect(Can.toCan()));
+                .collect(Can.toCan())));
 
-        this.dataRowsFilteredAndSorted = _Observables.lazy(()->
+        this.dataRowsFilteredAndSorted = _Observables.lazy(()->_Timing.callVerbose("dataRowsFilteredAndSorted.get()", ()->
             dataRows.getValue().stream()
                 .filter(adaptSearchPredicate())
                 .sorted(sortingComparator()
                         .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
-                .collect(Can.toCan()));
+                .collect(Can.toCan())));
 
-        this.dataRowsSelected = _Observables.lazy(()->
+        this.dataRowsSelected = _Observables.lazy(()->_Timing.callVerbose("dataRowsSelected.get()", ()->
             dataRows.getValue().stream()
                 .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
-                .collect(Can.toCan()));
+                .collect(Can.toCan())));
 
         this.selectionChanges = _Bindables.forValue(Boolean.FALSE);
         this.selectAllToggle = _Bindables.forValue(Boolean.FALSE);
@@ -374,6 +376,16 @@ implements MultiselectChoices {
                     .collect(Can.toCan()));
     }
 
+    @NonNull
+    public Iterator<DataRow> getDataRowsFilteredAndSorted(final long skip, final long limit) {
+        var stopWatch = _Timing.now();
+        var iterator = dataRowsFilteredAndSorted.getValue()
+                .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
+        System.err.printf("get iterator took %s%n", stopWatch);
+        stopWatch.stop();
+        return iterator;
+    }
+
     // used internally for serialization
     private DataTable exportAll() {
         return new DataTable(
@@ -406,12 +418,19 @@ implements MultiselectChoices {
         static Memento create(
                 final @NonNull DataTableInteractive tableInteractive) {
 
-            return new Memento(
+            var stopWatch = _Timing.now();
+
+            var memento = new Memento(
                     tableInteractive.managedMember.getIdentifier(),
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
                     tableInteractive.getSelectedRowIndexes());
+
+            stopWatch.stop();
+            System.err.printf("table memento created, took %s%n", stopWatch);
+
+            return memento;
         }
 
         private final @NonNull Identifier featureId;
@@ -431,6 +450,8 @@ implements MultiselectChoices {
                 // owner (if entity) might have been deleted
                 throw _Exceptions.illegalArgument("cannot recreate from memento for deleted object");
             }
+
+            var stopWatch = _Timing.now();
 
             val memberId = featureId.getMemberLogicalName();
 
@@ -456,6 +477,10 @@ implements MultiselectChoices {
                     .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
                     .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
             });
+
+            stopWatch.stop();
+            System.err.printf("table restored from memento, took %s%n", stopWatch);
+
             return dataTableInteractive;
         }
 
