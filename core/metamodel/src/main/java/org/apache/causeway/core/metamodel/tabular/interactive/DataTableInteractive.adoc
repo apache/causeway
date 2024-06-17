@@ -68,12 +68,12 @@ Hence, if the framework were to act on some of those elements,
 like feeding a selection into an associated action's `ParameterNegotiationModel`, 
 those elements would need to be re-hydrated for the action invocation. 
 
-== Search Argument Interaction
+== Search Argument Interaction (Filtering)
 
 The model supports filtering of data rows based on a given *search argument*.
 
 [plantuml,fig-DataTableInteractive-2,svg]
-.Search Argument Interaction
+.Search Argument Interaction (Filtering)
 ----
 @startuml
 
@@ -89,12 +89,12 @@ with new search argument;
 @enduml
 ----
 
-== Data Row Select Toggle Interaction
+== Data Row Select Toggle Interaction (Selection)
 
 The model supports selection of data rows.
 
 [plantuml,fig-DataTableInteractive-3,svg]
-.Data Row Select Toggle Interaction
+.Data Row Select Toggle Interaction (Selection)
 ----
 @startuml
 
@@ -111,9 +111,30 @@ currently selected rows;
 @enduml
 ----
 
-== Table Serialization
+== Data Column Sort Interaction (Sorting)
+
+The model supports sorting by single columns.
 
 [plantuml,fig-DataTableInteractive-4,svg]
+.Data Column Sort Interaction (Sorting)
+----
+@startuml
+
+:UI **column sort select toggle**
+triggers partial page update;
+
+:update table **memento**
+with new ColumnSort;
+
+:tabular data model gets **recreated** from memento;
+:client's DOM gets updated and table **re-rendered**;
+
+@enduml
+----
+
+== Table Serialization
+
+[plantuml,fig-DataTableInteractive-5,svg]
 .Table Memento
 ----
 @startuml
