@@ -28,14 +28,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -116,7 +118,6 @@ implements
     private final EntityChangesPublisher entityChangesPublisher;
     private final Provider<InteractionProvider> interactionProviderProvider;
     private final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
-    private final CausewayConfiguration causewayConfiguration;
 
     /**
      * Contains a record for every objectId/propertyId that was changed.
@@ -142,12 +143,6 @@ implements
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
 
-    private boolean suppressAutoFlush;
-
-    @PostConstruct
-    public void init() {
-        this.suppressAutoFlush = causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
-    }
 
     @Override
     public void destroy() throws Exception {
@@ -172,7 +167,7 @@ implements
      */
     private void runThreadsafeAndSuppressAutoFlushIfRequired(final Runnable runnable) {
         synchronized (enlistedPropertyChangeRecordsById) {
-            if (suppressAutoFlush) {
+            if (configuration.isSuppressAutoFlush()) {
                 FlushMgmt.suppressAutoFlush(runnable);
             } else {
                 runnable.run();
@@ -226,7 +221,7 @@ implements
 
     private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
 
-        if (!causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isEnabled()) {
+        if (!configuration.isEnabled()) {
             return true;
         }
 
@@ -458,4 +453,33 @@ implements
         }
     }
 
+    /**
+     * SPI to allow this service to be configured through different mechanisms.
+     */
+    public interface Configuration {
+
+        boolean isSuppressAutoFlush();
+
+        boolean isEnabled();
+    }
+
+    @Inject private Configuration configuration;
+
+    @Component
+    @Priority(PriorityPrecedence.LATE)
+    @ConditionalOnMissingBean(Configuration.class)
+    @RequiredArgsConstructor(onConstructor_ = {@Inject})
+    public static class ConfigurationDefault implements Configuration {
+        private final CausewayConfiguration causewayConfiguration;
+
+        @Override
+        public boolean isSuppressAutoFlush() {
+            return causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isEnabled();
+        }
+    }
 }
