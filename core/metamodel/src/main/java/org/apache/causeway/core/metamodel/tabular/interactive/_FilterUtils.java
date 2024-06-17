@@ -22,10 +22,10 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+import org.apache.causeway.applib.services.filter.CollectionFilterService;
+import org.apache.causeway.applib.services.filter.CollectionFilterService.Tokens;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.search.CollectionSearchService;
-import org.apache.causeway.applib.services.search.CollectionSearchService.Tokens;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -34,63 +34,55 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class _SearchUtils {
+class _FilterUtils {
 
     @AllArgsConstructor
-    static class SearchHandler {
+    static class FilterHandler {
 
         @NonNull final Function<Object, Tokens> tokenizer;
-        @NonNull final BiPredicate<Tokens, String> matcher;
+        @NonNull final BiPredicate<Tokens, String> tokenFilter;
         @NonNull final String searchPromptPlaceholderText;
 
-        /**
-         * @deprecated {@link Tokens} could be stored with the {@link DataRow}
-         *      on first request-cycle, such we don't need to re-hydrate pojos
-         *      on follow-up partial page updates
-         */
-        @Deprecated
-        @NonNull final BiPredicate<Object, String> searchPredicate() {
-            return (pojo, searchArg) -> {
-                var tokens = tokenizer.apply(pojo);
-                return matcher.test(tokens, searchArg);
-            };
+        @NonNull final BiPredicate<DataRow, String> getDataRowFilter() {
+            return (dataRow, searchArg) ->
+                tokenFilter.test(dataRow.getFilterTokens().orElse(null), searchArg);
         }
     }
 
-    Optional<SearchHandler> createSearchHandler(final @NonNull ObjectSpecification elementType) {
+    Optional<FilterHandler> createFilterHandler(final @NonNull ObjectSpecification elementType) {
         var mmc = elementType.getMetaModelContext();
-        var collectionSearchServiceOpt = mmc.getServiceRegistry().select(CollectionSearchService.class).stream()
+        var collectionFilterServiceOpt = mmc.getServiceRegistry().select(CollectionFilterService.class).stream()
                 .filter(service->service.handles(elementType.getCorrespondingClass()))
                 .findFirst();
-        if(!collectionSearchServiceOpt.isPresent()) {
+        if(!collectionFilterServiceOpt.isPresent()) {
             return Optional.empty();
         }
-        var collectionSearchService = collectionSearchServiceOpt.get();
+        var collectionFilterService = collectionFilterServiceOpt.get();
 
         var tokenizer =
-                collectionSearchService.tokenizer(elementType.getCorrespondingClass());
+                collectionFilterService.tokenizer(elementType.getCorrespondingClass());
         if(tokenizer==null) {
             return Optional.empty();
         }
 
-        var matcher = collectionSearchService.matcher(elementType.getCorrespondingClass());
-        if(matcher==null) {
+        var tokenFilter = collectionFilterService.tokenFilter(elementType.getCorrespondingClass());
+        if(tokenFilter==null) {
             return Optional.empty();
         }
 
         var translationService = mmc.lookupService(TranslationService.class)
                 .orElseGet(TranslationService::identity);
-        var translationContext = Optional.ofNullable(collectionSearchService.translationContext(elementType.getCorrespondingClass()))
+        var translationContext = Optional.ofNullable(collectionFilterService.translationContext(elementType.getCorrespondingClass()))
                 .orElseGet(()->TranslationContext.named("Search"));
-        var translatableString = collectionSearchService.searchPromptPlaceholderText(elementType.getCorrespondingClass());
+        var translatableString = collectionFilterService.searchPromptPlaceholderText(elementType.getCorrespondingClass());
 
         var searchPromptPlaceholderText = translatableString!=null
                 ? translatableString.translate(translationService, translationContext)
                 : "";
 
-        return Optional.of(new SearchHandler(
+        return Optional.of(new FilterHandler(
                 _Casts.uncheckedCast(tokenizer),
-                matcher,
+                tokenFilter,
                 searchPromptPlaceholderText));
     }
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.search;
+package org.apache.causeway.applib.services.filter;
 
 import java.io.Serializable;
 import java.util.function.BiPredicate;
@@ -33,7 +33,7 @@ import lombok.NonNull;
 /**
  * EXPERIMENTAL/DRAFT
  * <p>
- * If at least one {@link CollectionSearchService} is registered with Spring's context
+ * If at least one {@link CollectionFilterService} is registered with Spring's context
  * that handles a given domainType,
  * viewer implementations (like Wicket Viewer) should show
  * a quick-search prompt, which is rendered on top of the UI table that
@@ -41,12 +41,12 @@ import lombok.NonNull;
  *
  * @since 2.1, 3.1 {@index}
  */
-public interface CollectionSearchService {
+public interface CollectionFilterService {
 
     public static interface Tokens extends Serializable {
         /**
          * @apiNote for convenience, the searchArg can be pre-processed by
-         *      by the {@link CollectionSearchService#matcher(Class)};
+         *      by the {@link CollectionFilterService#tokenFilter(Class)};
          *      The default implementation already handles the empty searchArg case.
          */
         boolean match(@Nullable String searchArg);
@@ -62,7 +62,7 @@ public interface CollectionSearchService {
 
     /**
      * Returns a function that for a given domainObject returns {@link Tokens} (words),
-     * that are then matchable by {@link #matcher(Class)}.
+     * that are then matchable by {@link #tokenFilter(Class)}.
      * <p>
      * For example the domain object's title could be tokenized (parsed into tokens).
      *
@@ -87,12 +87,14 @@ public interface CollectionSearchService {
      * @param domainType - entity or view-model type to be rendered as row in a table
      * @apiNote guarded by a call to {@link #handles(Class)}
      */
-    default <T> BiPredicate<Tokens, String> matcher(
+    default <T> BiPredicate<Tokens, String> tokenFilter(
             final @NonNull Class<T> domainType) {
         return (tokens, searchArg) -> {
             var sanitized = _Strings.blankToNullOrTrim(searchArg);
             return _Strings.isNotEmpty(sanitized)
-                ? tokens.match(sanitized)
+                ? tokens!=null
+                    ? tokens.match(sanitized)
+                    : false // if an element has no tokens, it cannot be found by any search
                 : true; // empty searchArg means 'unfiltered'
         };
     }

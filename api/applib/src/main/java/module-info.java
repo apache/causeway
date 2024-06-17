@@ -97,7 +97,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.repository;
     exports org.apache.causeway.applib.services.routing;
     exports org.apache.causeway.applib.services.scratchpad;
-    exports org.apache.causeway.applib.services.search;
+    exports org.apache.causeway.applib.services.filter;
     exports org.apache.causeway.applib.services.session;
     exports org.apache.causeway.applib.services.sitemap;
     exports org.apache.causeway.applib.services.sudo;
