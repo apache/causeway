@@ -40,11 +40,6 @@ import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.InteractionResult;
-import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -147,8 +142,9 @@ implements MultiselectChoices {
         this.columnSort = _Bindables.forValue(null);
 
         this.dataElements = _Observables.lazy(()->elements
-                .map(mmc::injectServicesInto)
-                .filter(this::ignoreHidden));
+                //.map(mmc::injectServicesInto) // I believe is redundant, has major performance impact
+                //.filter(this::ignoreHidden) // I believe is redundant, has major performance impact
+                );
 
         this.dataRows = _Observables.lazy(()->
             dataElements.getValue().stream()
@@ -322,20 +318,20 @@ implements MultiselectChoices {
         selectionChanges.setValue(!selectionChanges.getValue());
     }
 
-    // -- DATA ROW VISIBILITY
-
-    private boolean ignoreHidden(final ManagedObject adapter) {
-        final InteractionResult visibleResult =
-                InteractionUtils.isVisibleResult(
-                        adapter.getSpecification(),
-                        createVisibleInteractionContext(adapter));
-        return visibleResult.isNotVetoing();
-    }
-
-    private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
-        return ObjectVisibilityContext
-                .createForRegular(objectAdapter, InteractionInitiatedBy.USER, Where.ALL_TABLES);
-    }
+//    // -- DATA ROW VISIBILITY
+//
+//    private boolean ignoreHidden(final ManagedObject adapter) {
+//        final InteractionResult visibleResult =
+//                InteractionUtils.isVisibleResult(
+//                        adapter.getSpecification(),
+//                        createVisibleInteractionContext(adapter));
+//        return visibleResult.isNotVetoing();
+//    }
+//
+//    private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
+//        return ObjectVisibilityContext
+//                .createForRegular(objectAdapter, InteractionInitiatedBy.USER, Where.ALL_TABLES);
+//    }
 
     // -- ASSOCIATED ACTION WITH MULTI SELECT
 

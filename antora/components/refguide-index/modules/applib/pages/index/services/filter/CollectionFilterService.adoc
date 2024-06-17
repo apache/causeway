@@ -1,0 +1,92 @@
+= CollectionFilterService
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+EXPERIMENTAL/DRAFT
+
+If at least one xref:refguide:applib:index/services/filter/CollectionFilterService.adoc[CollectionFilterService] is registered with Spring's context that handles a given domainType, viewer implementations (like Wicket Viewer) should show a quick-search prompt, which is rendered on top of the UI table that presents the collection in question.
+
+== API
+
+[source,java]
+.CollectionFilterService.java
+----
+interface CollectionFilterService {
+  boolean handles(Class<?> domainType)     // <.>
+  Function<T, Tokens> tokenizer(Class<T> domainType)     // <.>
+  BiPredicate<Tokens, String> tokenFilter(Class<T> domainType)     // <.>
+  String sanitzeSearchArgument(String searchArg)     // <.>
+  TranslatableString searchPromptPlaceholderText(Class<?> domainType)     // <.>
+  TranslationContext translationContext(Class<?> domainType)     // <.>
+}
+----
+
+<.> xref:#handles_Class[handles(Class)]
++
+--
+Whether this service handles given type.
+--
+<.> xref:#tokenizer_Class[tokenizer(Class)]
++
+--
+Returns a function that for a given domainObject returns _Tokens_ (words), that are then matchable by _#tokenFilter(Class)_ .
+--
+<.> xref:#tokenFilter_Class[tokenFilter(Class)]
++
+--
+For given _domainType_ returns a _BiPredicate_ that matches _Tokens_ against a nullable searchString.
+--
+<.> xref:#sanitzeSearchArgument_String[sanitzeSearchArgument(String)]
++
+--
+Pre-process user input before passing it to the matcher.
+--
+<.> xref:#searchPromptPlaceholderText_Class[searchPromptPlaceholderText(Class)]
++
+--
+Placeholder text for the quick-search prompt.
+--
+<.> xref:#translationContext_Class[translationContext(Class)]
++
+--
+Provides the xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext] for translating the _#searchPromptPlaceholderText(Class)_ .
+--
+
+== Members
+
+[#handles_Class]
+=== handles(Class)
+
+Whether this service handles given type.
+
+[#tokenizer_Class]
+=== tokenizer(Class)
+
+Returns a function that for a given domainObject returns _Tokens_ (words), that are then matchable by _#tokenFilter(Class)_ .
+
+For example the domain object's title could be tokenized (parsed into tokens).
+
+[#tokenFilter_Class]
+=== tokenFilter(Class)
+
+For given _domainType_ returns a _BiPredicate_ that matches _Tokens_ against a nullable searchString.
+
+For example, the searchString could be tokenized (parsed into tokens), and then matched against the _Tokens_ using either OR or AND semantics.
+
+The default implementation sanitizes the user input (searchArg) then strips any leading or trailing blanks and handles the empty searchArg case.
+
+[#sanitzeSearchArgument_String]
+=== sanitzeSearchArgument(String)
+
+Pre-process user input before passing it to the matcher.
+
+Default behavior is to strip leading or trailing blanks (if any).
+
+[#searchPromptPlaceholderText_Class]
+=== searchPromptPlaceholderText(Class)
+
+Placeholder text for the quick-search prompt.
+
+[#translationContext_Class]
+=== translationContext(Class)
+
+Provides the xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext] for translating the _#searchPromptPlaceholderText(Class)_ .
