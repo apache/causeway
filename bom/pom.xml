@@ -158,7 +158,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <lombok.version>1.18.32</lombok.version> <!-- overriding Spring -->
 
         <maven-release-plugin.version>3.1.0</maven-release-plugin.version>
-        <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
+        <momentjs.version>2.30.0</momentjs.version> <!-- keep in sync: org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
         <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
 		<node.version>v18.12.0</node.version>
