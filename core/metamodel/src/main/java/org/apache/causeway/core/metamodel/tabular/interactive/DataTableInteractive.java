@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.filter.CollectionFilterService;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
@@ -56,7 +57,7 @@ import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.tabular.interactive._SearchUtils.SearchHandler;
+import org.apache.causeway.core.metamodel.tabular.interactive._FilterUtils.FilterHandler;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
@@ -120,7 +121,7 @@ implements MultiselectChoices {
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
     @Getter private final @NonNull LazyObservable<String> title;
 
-    private final Optional<SearchHandler> searchHandler;
+    private final Optional<FilterHandler> filterHandler;
 
     /**
      * On data row selection changes (originating from UI),
@@ -140,7 +141,7 @@ implements MultiselectChoices {
 
         this.managedMember = managedMember;
         this.where = where;
-        this.searchHandler = _SearchUtils.createSearchHandler(elementType);
+        this.filterHandler = _FilterUtils.createFilterHandler(elementType);
 
         this.searchArgument = _Bindables.forValue("");
         this.columnSort = _Bindables.forValue(null);
@@ -151,7 +152,7 @@ implements MultiselectChoices {
 
         this.dataRows = _Observables.lazy(()->
             dataElements.getValue().stream()
-                .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element)))
+                .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element, tokens(element))))
                 .collect(Can.toCan()));
 
         this.dataRowsFilteredAndSorted = _Observables.lazy(()->
@@ -199,7 +200,7 @@ implements MultiselectChoices {
     }
 
     public boolean isSearchSupported() {
-        return searchHandler.isPresent();
+        return filterHandler.isPresent();
     }
 
     public int getPageSize(final int pageSizeDefault) {
@@ -236,18 +237,25 @@ implements MultiselectChoices {
         return getDataRows().getValue().get(rowIndex);
     }
 
-    // -- SEARCH
+    // -- FILTER
 
     public String getSearchPromptPlaceholderText() {
-        return searchHandler.map(handler->handler.searchPromptPlaceholderText)
+        return filterHandler.map(handler->handler.searchPromptPlaceholderText)
                 .orElse("");
     }
 
     private Predicate<DataRow> adaptSearchPredicate() {
-        return searchHandler.isEmpty()
+        return filterHandler.isEmpty()
                 ? dataRow->true
-                : dataRow->searchHandler.get().searchPredicate()
-                    .test(dataRow.getRowElement().getPojo(), searchArgument.getValue());
+                : dataRow->filterHandler.get().getDataRowFilter()
+                    .test(dataRow, searchArgument.getValue());
+    }
+
+    @Nullable
+    private CollectionFilterService.Tokens tokens(final ManagedObject element){
+        return filterHandler.isEmpty()
+                ? null
+                : filterHandler.get().tokenizer.apply(element.getPojo());
     }
 
     // -- SORTING

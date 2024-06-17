@@ -20,6 +20,9 @@ package org.apache.causeway.core.metamodel.tabular.interactive;
 
 import java.util.Optional;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.services.filter.CollectionFilterService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
@@ -36,11 +39,13 @@ public class DataRow {
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
     @Getter private final DataTableInteractive parentTable;
+    @Getter final Optional<CollectionFilterService.Tokens> filterTokens;
 
     public DataRow(
             final int rowIndex,
             final @NonNull DataTableInteractive parentTable,
-            final @NonNull ManagedObject rowElement) {
+            final @NonNull ManagedObject rowElement,
+            final @Nullable CollectionFilterService.Tokens filterTokens) {
         this.rowIndex = rowIndex;
         this.parentTable = parentTable;
         this.rowElement = rowElement;
@@ -50,6 +55,7 @@ public class DataRow {
             //_ToggleDebug.onSelectRowToggle(rowElement, o, n, parentTable.isToggleAllEvent.get());
             parentTable.handleRowSelectToggle();
         });
+        this.filterTokens = Optional.ofNullable(filterTokens);
     }
 
     public ManagedObject getRowElement() {
