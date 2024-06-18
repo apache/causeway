@@ -143,6 +143,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.grid.spi;
     exports org.apache.causeway.core.metamodel.facets.object.layout;
     exports org.apache.causeway.core.metamodel.facets.all.hide;
+    exports org.apache.causeway.core.metamodel.services.dlogger;
 
     requires jakarta.activation;
     requires java.annotation;

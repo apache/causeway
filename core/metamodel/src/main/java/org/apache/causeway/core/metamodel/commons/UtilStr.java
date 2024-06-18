@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 public class UtilStr {
 
     /**
-     * String representation of bookmark for entities (otherwise only the logical type name).
+     * String representation of bookmark for entities (otherwise empty string is returned).
      */
     public static String entityAsStr(Bookmark bookmark, SpecificationLoader specificationLoader) {
         val logicalTypeName = bookmark.getLogicalTypeName();
@@ -40,6 +40,6 @@ public class UtilStr {
                             .orElse(false);
         return isEntity
                     ? bookmark.stringify()
-                    : logicalTypeName;
+                    : "";
     }
 }

@@ -30,6 +30,8 @@ import javax.inject.Provider;
 
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 
+import org.apache.causeway.core.metamodel.services.dlogger.LogWriter;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -95,6 +97,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final InteractionLayerTracker interactionLayerTracker;
     @Inject final SchemaValueMarshaller valueMarshaller;
     @Inject final MetaModelService metaModelService;
+    @Inject final LogWriter logWriter;
     @Inject Provider<CommandPublisher> commandPublisherProvider;
 
     @Inject @Getter final SpecificationLoader specificationLoader;
@@ -175,10 +178,11 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private Bookmark doExecuteCommand(final CommandDto dto) {
 
         if(log.isInfoEnabled()) {
-            log.info("Executing: {} {} {} {}",
+
+            logWriter.info(log, "Executing: {} {} {} {}",
                     dto.getMember().getLogicalMemberIdentifier(),
                     dto.getInteractionId(),
-                    targetBookmarkStrFor(dto, specificationLoader),
+                    targetBookmarkStrFor(dto),
                     argStrFor(dto));
         }
 
@@ -247,7 +251,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return null;
     }
 
-    private String targetBookmarkStrFor(CommandDto dto, SpecificationLoader specificationLoader) {
+    private String targetBookmarkStrFor(CommandDto dto) {
         return dto.getTargets().getOid().stream()
                 .map(oidDto -> UtilStr.entityAsStr(Bookmark.forOidDto(oidDto), specificationLoader))
                 .collect(Collectors.joining(";"));
