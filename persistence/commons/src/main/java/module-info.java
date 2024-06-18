@@ -42,4 +42,5 @@ module org.apache.causeway.persistence.commons {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires spring.boot.autoconfigure;
 }
