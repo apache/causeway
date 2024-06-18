@@ -46,6 +46,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
@@ -377,6 +378,10 @@ implements
                     PageExpiredException.class,
                     __->"Requested page is no longer available.");
 
+    private static final ExceptionRecognizerForType exceptionRecognizerForBookmarkNotFoundException =
+            new ExceptionRecognizerForType(
+                    BookmarkNotFoundException.class, __ -> "Bookmark is not found.");
+
     protected IRequestablePage errorPageFor(final Exception ex) {
 
         val mmc = getMetaModelContext();
@@ -399,8 +404,10 @@ implements
 
         final Optional<Recognition> recognition = exceptionRecognizerService
                 .recognizeFromSelected(
-                        Can.<ExceptionRecognizer>ofSingleton(pageExpiredExceptionRecognizer)
-                        .addAll(exceptionRecognizerService.getExceptionRecognizers()),
+                        Can.<ExceptionRecognizer>of(
+                                        pageExpiredExceptionRecognizer,
+                                        exceptionRecognizerForBookmarkNotFoundException)
+                                .addAll(exceptionRecognizerService.getExceptionRecognizers()),
                         ex);
 
         val exceptionModel = ExceptionModel.create(mmc, recognition, ex);
