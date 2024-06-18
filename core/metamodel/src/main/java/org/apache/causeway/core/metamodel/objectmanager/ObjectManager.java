@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -139,8 +140,7 @@ public interface ObjectManager extends HasMetaModelContext {
      */
     default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
         val adapter = loadObject(bookmark)
-                .orElseThrow(()->
-                    _Exceptions.unrecoverable("failed to restore object from bookmark %s", bookmark));
+                .orElseThrow(() -> new BookmarkNotFoundException(String.format("failed to restore object from bookmark %s", bookmark)));
         if(adapter.getSpecialization().isEntity()) {
             _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
                     ()->"object loaded from bookmark must itself return an equal bookmark");
