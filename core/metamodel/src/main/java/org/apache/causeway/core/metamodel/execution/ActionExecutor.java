@@ -149,12 +149,6 @@ implements
             val invocationDto =
                     getInteractionDtoServiceInternal().asActionInvocationDto(owningAction, head, arguments);
             currentExecution.setDto(invocationDto);
-
-            if(log.isInfoEnabled()) {
-                log.info("Executing: {} {} {} {}",
-                        invocationDto.getLogicalMemberIdentifier(),
-                        currentExecution.getInteraction().getInteractionId(), ownerBookmarkIfAny.get().toString(), argsFor(owningAction.getParameters(), arguments));
-            }
         }
 
         if(!isPostable()) {
@@ -204,28 +198,6 @@ implements
         } else {
             return resultPojo;
         }
-    }
-
-    private String argsFor(Can<ObjectActionParameter> parameters, Can<ManagedObject> arguments) {
-        if(parameters.size() != arguments.size()) {
-            return "???"; // shouldn't happen
-        }
-        return parameters.stream().map(IndexedFunction.zeroBased((i, param) -> {
-            val id = param.getId();
-            val argStr = argStr(id, arguments, i);
-            return id + "=" + argStr;
-        })).collect(Collectors.joining(","));
-    }
-
-    private static String argStr(String paramId, Can<ManagedObject> arguments, int i) {
-        return isSensitiveName(paramId) ? "********" : arguments.get(i).map(ManagedObject::getTitle).orElse(null);
-    }
-
-    private static boolean isSensitiveName(String name) {
-        return name.equalsIgnoreCase("password") ||
-                name.equalsIgnoreCase("secret") ||
-                name.equalsIgnoreCase("apikey") ||
-                name.equalsIgnoreCase("token");
     }
 
     @SneakyThrows

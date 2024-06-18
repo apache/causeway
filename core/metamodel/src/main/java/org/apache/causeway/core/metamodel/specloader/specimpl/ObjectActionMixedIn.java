@@ -22,8 +22,10 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
+import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -36,11 +38,16 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.util.stream.Collectors;
+
+@Log4j2
 public class ObjectActionMixedIn
 extends ObjectActionDefault
 implements MixedInMember {
@@ -164,7 +171,7 @@ implements MixedInMember {
     @Override
     public ManagedObject execute(
             final InteractionHead head,
-            final Can<ManagedObject> arguments,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject owner = head.getOwner();
@@ -174,12 +181,20 @@ implements MixedInMember {
 
         if(!interactionInitiatedBy.isPassThrough()) {
             // skip if is PASS_THROUGH
-            setupCommand(head, arguments);
+            setupCommand(head, argumentAdapters);
+            if(log.isInfoEnabled()) {
+                log.info("Executing: {} {} {}",
+                        getFeatureIdentifier(),
+                        owner.getBookmark().map(Bookmark::toString).orElse(null),
+                        argsFor(getParameters(), argumentAdapters));
+            }
         }
+
         return mixinAction.executeInternal(
-                head, arguments,
+                head, argumentAdapters,
                 interactionInitiatedBy);
     }
+
 
     @Override
     public ObjectSpecification getMixinType() {
