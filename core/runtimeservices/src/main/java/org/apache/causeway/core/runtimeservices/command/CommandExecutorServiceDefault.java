@@ -20,12 +20,15 @@ package org.apache.causeway.core.runtimeservices.command;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+
+import org.apache.causeway.applib.Identifier;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -168,9 +171,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Bookmark doExecuteCommand(final CommandDto dto) {
 
-        log.info("Executing: {} {} {}",
+        log.info("Executing: {} {} {} {} {}",
                 dto.getMember().getLogicalMemberIdentifier(),
-                dto.getTimestamp(), dto.getInteractionId());
+                dto.getTimestamp(), dto.getInteractionId(), oidFor(dto), argsFor(dto));
 
         val memberDto = dto.getMember();
         val logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();
@@ -232,13 +235,30 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
             // there is no return value for property modifications.
-
         }
 
         return null;
     }
 
+    private static String oidFor(CommandDto dto) {
+        Stream<String> bookmarkStrings = dto.getTargets().getOid().stream().map(Bookmark::forOidDto).map(Bookmark::stringify);
+        return bookmarkStrings.collect(Collectors.joining(","));
+    }
 
+    private String argsFor(CommandDto dto) {
+        val memberDto = dto.getMember();
+        if(memberDto instanceof ActionDto) {
+            val actionDto = (ActionDto) memberDto;
+            return paramNameArgValuesFor(actionDto);
+        }
+        if(memberDto instanceof PropertyDto) {
+            val propertyDto = (PropertyDto) memberDto;
+            val proposedValue = valueMarshaller.recoverPropertyFrom(propertyDto);
+            return proposedValue.getTitle();
+        }
+        // shouldn't happen
+        return "";
+    }
 
 
     private static ObjectAction findObjectAction(
@@ -301,14 +321,36 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 .orElse(null);
     }
 
-    private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
-
+    private String paramNameArgValuesFor(ActionDto actionDto) {
         val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
-
         return streamParamDtosFrom(actionDto)
-                .map(IndexedFunction.zeroBased((i, paramDto)->
-                    valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto)))
-                .collect(Can.toCan());
+                .map(IndexedFunction.zeroBased((i, paramDto) -> {
+                    val argStr = argStr(actionIdentifier, i, paramDto);
+                    return paramDto.getName() + "=" + argStr;
+                })).collect(Collectors.joining(","));
+    }
+
+    private String argStr(Identifier actionIdentifier, int i, ParamDto paramDto) {
+        if(isSensitiveName(paramDto.getName())) {
+            return "********";
+        }
+        val argValue = valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
+        return argValue.getTitle();
+    }
+
+    private static boolean isSensitiveName(String name) {
+        return name.equalsIgnoreCase("password") ||
+               name.equalsIgnoreCase("secret") ||
+               name.equalsIgnoreCase("apikey") ||
+               name.equalsIgnoreCase("token");
+    }
+
+    private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
+        val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
+        IndexedFunction<ParamDto, ManagedObject> paramDtoManagedObjectIndexedFunction = (i, paramDto) ->
+                valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
+        return streamParamDtosFrom(actionDto)
+                .map(IndexedFunction.zeroBased(paramDtoManagedObjectIndexedFunction)).collect(Can.toCan());
     }
 
     private static Stream<ParamDto> streamParamDtosFrom(final ActionDto actionDto) {
@@ -317,6 +359,5 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 .map(_NullSafe::stream)
                 .orElseGet(Stream::empty);
     }
-
 
 }
