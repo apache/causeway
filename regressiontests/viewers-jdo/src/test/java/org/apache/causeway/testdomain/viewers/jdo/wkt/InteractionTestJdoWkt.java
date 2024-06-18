@@ -20,6 +20,9 @@ package org.apache.causeway.testdomain.viewers.jdo.wkt;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
+import org.apache.causeway.testdomain.jpa.entities.JpaBook;
+
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
@@ -322,4 +325,16 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     }
 
+    @Test
+    void loadNonExistentBookBookmark_shouldRender_BookmarkNotFoundException() {
+        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+                Bookmark.forLogicalTypeAndIdentifier(
+                        LogicalType.eager(JpaBook.class, "simple.SimpleObject"),
+                        "999"));
+        assertThrows(BookmarkNotFoundException.class, ()->{
+            run(()->{
+                wktTester.startEntityPage(pageParameters);
+            });
+        });
+    }
 }
