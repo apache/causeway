@@ -28,11 +28,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.metamodel.commons.UtilStr;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -40,6 +41,7 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
@@ -92,6 +94,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final TransactionService transactionService;
     @Inject final InteractionLayerTracker interactionLayerTracker;
     @Inject final SchemaValueMarshaller valueMarshaller;
+    @Inject final MetaModelService metaModelService;
     @Inject Provider<CommandPublisher> commandPublisherProvider;
 
     @Inject @Getter final SpecificationLoader specificationLoader;
@@ -172,9 +175,11 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private Bookmark doExecuteCommand(final CommandDto dto) {
 
         if(log.isInfoEnabled()) {
-            log.info("Executing: {} {} {} {} {}",
+            log.info("Executing: {} {} {} {}",
                     dto.getMember().getLogicalMemberIdentifier(),
-                    dto.getTimestamp(), dto.getInteractionId(), oidFor(dto), argsFor(dto));
+                    dto.getInteractionId(),
+                    targetBookmarkStrFor(dto, specificationLoader),
+                    argStrFor(dto));
         }
 
         val memberDto = dto.getMember();
@@ -242,12 +247,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return null;
     }
 
-    private static String oidFor(CommandDto dto) {
-        Stream<String> bookmarkStrings = dto.getTargets().getOid().stream().map(Bookmark::forOidDto).map(Bookmark::stringify);
-        return bookmarkStrings.collect(Collectors.joining(","));
+    private String targetBookmarkStrFor(CommandDto dto, SpecificationLoader specificationLoader) {
+        return dto.getTargets().getOid().stream()
+                .map(oidDto -> UtilStr.entityAsStr(Bookmark.forOidDto(oidDto), specificationLoader))
+                .collect(Collectors.joining(";"));
     }
 
-    private String argsFor(CommandDto dto) {
+    private String argStrFor(CommandDto dto) {
         val memberDto = dto.getMember();
         if(memberDto instanceof ActionDto) {
             val actionDto = (ActionDto) memberDto;

@@ -38,6 +38,7 @@ import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
@@ -462,13 +463,16 @@ implements ObjectAction {
 
         if(!interactionInitiatedBy.isPassThrough()) {
             setupCommand(head, argumentAdapters);
-            if(log.isInfoEnabled()) {
-                log.info("Executing: {} {} {}",
-                        getFeatureIdentifier(),
-                        owner.getBookmark().map(Bookmark::toString).orElse(null),
-                        argsFor(getParameters(), argumentAdapters));
-            }
 
+            if(log.isInfoEnabled()) {
+                Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
+                bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
+                    log.info("Executing: {} {} {}",
+                        getFeatureIdentifier(),
+                        UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
+                        argsFor(getParameters(), argumentAdapters));
+                });
+            }
         }
 
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);

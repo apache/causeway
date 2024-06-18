@@ -27,6 +27,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -45,6 +46,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -180,13 +182,16 @@ implements MixedInMember {
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
         if(!interactionInitiatedBy.isPassThrough()) {
-            // skip if is PASS_THROUGH
             setupCommand(head, argumentAdapters);
+
             if(log.isInfoEnabled()) {
-                log.info("Executing: {} {} {}",
-                        getFeatureIdentifier(),
-                        owner.getBookmark().map(Bookmark::toString).orElse(null),
-                        argsFor(getParameters(), argumentAdapters));
+                Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
+                bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
+                    log.info("Executing: {} {} {}",
+                            getFeatureIdentifier(),
+                            UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
+                            argsFor(getParameters(), argumentAdapters));
+                });
             }
         }
 
