@@ -171,9 +171,11 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Bookmark doExecuteCommand(final CommandDto dto) {
 
-        log.info("Executing: {} {} {} {} {}",
-                dto.getMember().getLogicalMemberIdentifier(),
-                dto.getTimestamp(), dto.getInteractionId(), oidFor(dto), argsFor(dto));
+        if(log.isInfoEnabled()) {
+            log.info("Executing: {} {} {} {} {}",
+                    dto.getMember().getLogicalMemberIdentifier(),
+                    dto.getTimestamp(), dto.getInteractionId(), oidFor(dto), argsFor(dto));
+        }
 
         val memberDto = dto.getMember();
         val logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();

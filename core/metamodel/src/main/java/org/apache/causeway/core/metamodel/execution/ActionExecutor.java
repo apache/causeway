@@ -21,12 +21,17 @@ package org.apache.causeway.core.metamodel.execution;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -46,6 +51,8 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
@@ -53,9 +60,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @RequiredArgsConstructor
+@Log4j2
 public final class ActionExecutor
 implements
     HasMetaModelContext,
@@ -131,14 +140,21 @@ implements
         // update the current execution with the DTO (memento)
         //
         // but ... no point in attempting this if no bookmark is yet available.
-        // this logic is for symmetric with PropertyModifier, which has a scenario where this might occur.
+        // this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
         //
         val ownerAdapter = head.getOwner();
-        val ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
+        Optional<Bookmark> ownerBookmarkIfAny = ManagedObjects.bookmark(ownerAdapter);
+        val ownerHasBookmark = ownerBookmarkIfAny.isPresent();
         if (ownerHasBookmark) {
             val invocationDto =
                     getInteractionDtoServiceInternal().asActionInvocationDto(owningAction, head, arguments);
             currentExecution.setDto(invocationDto);
+
+            if(log.isInfoEnabled()) {
+                log.info("Executing: {} {} {} {}",
+                        invocationDto.getLogicalMemberIdentifier(),
+                        currentExecution.getInteraction().getInteractionId(), ownerBookmarkIfAny.get().toString(), argsFor(owningAction.getParameters(), arguments));
+            }
         }
 
         if(!isPostable()) {
@@ -188,6 +204,28 @@ implements
         } else {
             return resultPojo;
         }
+    }
+
+    private String argsFor(Can<ObjectActionParameter> parameters, Can<ManagedObject> arguments) {
+        if(parameters.size() != arguments.size()) {
+            return "???"; // shouldn't happen
+        }
+        return parameters.stream().map(IndexedFunction.zeroBased((i, param) -> {
+            val id = param.getId();
+            val argStr = argStr(id, arguments, i);
+            return id + "=" + argStr;
+        })).collect(Collectors.joining(","));
+    }
+
+    private static String argStr(String paramId, Can<ManagedObject> arguments, int i) {
+        return isSensitiveName(paramId) ? "********" : arguments.get(i).map(ManagedObject::getTitle).orElse(null);
+    }
+
+    private static boolean isSensitiveName(String name) {
+        return name.equalsIgnoreCase("password") ||
+                name.equalsIgnoreCase("secret") ||
+                name.equalsIgnoreCase("apikey") ||
+                name.equalsIgnoreCase("token");
     }
 
     @SneakyThrows
