@@ -71,11 +71,11 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.value.semantics;
 
     exports org.apache.causeway.core.metamodel.facets.object.parented
-        to org.apache.causeway.persistence.jdo.metamodel;
+            to org.apache.causeway.persistence.jdo.metamodel;
     exports org.apache.causeway.core.metamodel.facets.object.ignore.datanucleus
-        to org.apache.causeway.persistence.jdo.metamodel;
+            to org.apache.causeway.persistence.jdo.metamodel;
     exports org.apache.causeway.core.metamodel.facets.object.ignore.jdo
-        to org.apache.causeway.persistence.jdo.metamodel;
+            to org.apache.causeway.persistence.jdo.metamodel;
 
     exports org.apache.causeway.core.metamodel.interactions;
     exports org.apache.causeway.core.metamodel.interactions.managed;
@@ -113,37 +113,36 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.spec;
     exports org.apache.causeway.core.metamodel.spec.feature;
     exports org.apache.causeway.core.metamodel.spec.feature.memento
-        //TODO don't expose impl. details
-        to org.apache.causeway.viewer.wicket.model;
+            //TODO don't expose impl. details
+            to org.apache.causeway.viewer.wicket.model;
 
     exports org.apache.causeway.core.metamodel.specloader
-        to org.apache.causeway.core.runtimeservices,
-        org.apache.causeway.persistence.commons,
-        //TODO probably don't expose SpecificationLoader to persistence
-        org.apache.causeway.persistence.jdo.metamodel,
-        //TODO probably don't expose SpecificationLoader to viewers
-        org.apache.causeway.viewer.restfulobjects.rendering,
-        org.apache.causeway.viewer.restfulobjects.viewer,
-        org.apache.causeway.viewer.wicket.model,
-        org.apache.causeway.viewer.wicket.ui,
-        org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model;
+            to org.apache.causeway.core.runtimeservices,
+            org.apache.causeway.persistence.commons,
+            //TODO probably don't expose SpecificationLoader to persistence
+            org.apache.causeway.persistence.jdo.metamodel,
+            //TODO probably don't expose SpecificationLoader to viewers
+            org.apache.causeway.viewer.restfulobjects.rendering,
+            org.apache.causeway.viewer.restfulobjects.viewer,
+            org.apache.causeway.viewer.wicket.model,
+            org.apache.causeway.viewer.wicket.ui,
+            org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model;
 
+
+    exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
+    exports org.apache.causeway.core.metamodel.facets.object.layout;
+    exports org.apache.causeway.core.metamodel.facets.all.hide;
+    exports org.apache.causeway.core.metamodel.services.grid.spi;
+    exports org.apache.causeway.core.metamodel.services.logwriter;
     exports org.apache.causeway.core.metamodel.specloader.validator;
-
     exports org.apache.causeway.core.metamodel.util;
     exports org.apache.causeway.core.metamodel.util.pchain;
     exports org.apache.causeway.core.metamodel.util.snapshot;
-
     exports org.apache.causeway.core.metamodel.valuesemantics;
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal;
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
-
     exports org.apache.causeway.core.metamodel.valuetypes;
-    exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
-    exports org.apache.causeway.core.metamodel.services.grid.spi;
-    exports org.apache.causeway.core.metamodel.facets.object.layout;
-    exports org.apache.causeway.core.metamodel.facets.all.hide;
-    exports org.apache.causeway.core.metamodel.services.dlogger;
+
 
     requires jakarta.activation;
     requires java.annotation;

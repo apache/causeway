@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.metamodel.services.dlogger.LogWriter;
+import org.apache.causeway.core.metamodel.services.logwriter.LogWriter;
 
 import org.springframework.lang.Nullable;
 

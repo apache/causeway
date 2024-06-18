@@ -30,7 +30,7 @@ import javax.inject.Provider;
 
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 
-import org.apache.causeway.core.metamodel.services.dlogger.LogWriter;
+import org.apache.causeway.core.metamodel.services.logwriter.LogWriter;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

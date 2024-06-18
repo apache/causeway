@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel;
 
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.services.logwriter.LogWriter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -189,6 +191,7 @@ import lombok.NonNull;
         IdStringifierLookupService.class,
         LayoutResourceLoaderDefault.class,
         LayoutServiceDefault.class,
+        LogWriter.UsingLog4j2.class,
         MetamodelEventService.class,
         MetaModelServiceDefault.class,
         ObjectManagerDefault.class,
