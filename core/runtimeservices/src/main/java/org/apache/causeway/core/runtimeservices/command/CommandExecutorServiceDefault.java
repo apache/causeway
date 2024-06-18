@@ -30,8 +30,6 @@ import javax.inject.Provider;
 
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 
-import org.apache.causeway.core.metamodel.services.logwriter.LogWriter;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +95,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     @Inject final InteractionLayerTracker interactionLayerTracker;
     @Inject final SchemaValueMarshaller valueMarshaller;
     @Inject final MetaModelService metaModelService;
-    @Inject final LogWriter logWriter;
     @Inject Provider<CommandPublisher> commandPublisherProvider;
 
     @Inject @Getter final SpecificationLoader specificationLoader;
@@ -179,7 +176,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         if(log.isInfoEnabled()) {
 
-            logWriter.info(log, "Executing: {} {} {} {}",
+            log.info("Executing: {} {} {} {}",
                     dto.getMember().getLogicalMemberIdentifier(),
                     dto.getInteractionId(),
                     targetBookmarkStrFor(dto),

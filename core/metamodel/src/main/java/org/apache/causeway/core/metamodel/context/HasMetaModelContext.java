@@ -22,8 +22,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.metamodel.services.logwriter.LogWriter;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.locale.UserLocale;
@@ -146,10 +144,6 @@ public interface HasMetaModelContext {
 
     default MenuBarsService getMenuBarsService() {
         return getMetaModelContext().getMenuBarsService();
-    }
-
-    default LogWriter getLogWriter() {
-        return getMetaModelContext().getLogWriter();
     }
 
     default InteractionService getInteractionService() {

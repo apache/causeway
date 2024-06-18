@@ -187,7 +187,7 @@ implements MixedInMember {
             if(log.isInfoEnabled()) {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
-                    getLogWriter().info(log, "Executing: {} {} {}",
+                    log.info("Executing: {} {} {}",
                             getFeatureIdentifier(),
                             UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                             argsFor(getParameters(), argumentAdapters));

@@ -133,7 +133,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.object.layout;
     exports org.apache.causeway.core.metamodel.facets.all.hide;
     exports org.apache.causeway.core.metamodel.services.grid.spi;
-    exports org.apache.causeway.core.metamodel.services.logwriter;
     exports org.apache.causeway.core.metamodel.specloader.validator;
     exports org.apache.causeway.core.metamodel.util;
     exports org.apache.causeway.core.metamodel.util.pchain;

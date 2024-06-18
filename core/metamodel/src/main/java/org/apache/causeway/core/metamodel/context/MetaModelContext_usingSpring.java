@@ -48,7 +48,6 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.services.logwriter.LogWriter;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
@@ -160,10 +159,6 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     @Getter(lazy = true)
     private final InteractionService interactionService =
     getSingletonElseFail(InteractionService.class);
-
-    @Getter(lazy = true)
-    private final LogWriter logWriter =
-    getSingletonElseFail(LogWriter.class);
 
     @Override
     public final ManagedObject getHomePageAdapter() {

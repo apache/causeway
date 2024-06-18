@@ -145,6 +145,7 @@ module org.apache.causeway.applib {
     requires transitive spring.context;
     requires transitive spring.core;
     requires spring.tx;
+    requires org.apache.logging.log4j.core;
 
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;
