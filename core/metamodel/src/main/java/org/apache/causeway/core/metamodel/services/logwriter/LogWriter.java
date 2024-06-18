@@ -56,33 +56,11 @@ public interface LogWriter {
 
         static final int MAX_ARG_LENGTH_AS_STR = 128;
 
-        private int repeating = 0;
-        private LogMessage previous = null;
-
-        @Value(staticConstructor = "of")
-        static class LogMessage {
-            String template;
-            Object[] args;
-        }
-
         @Override
         public void info(Logger log, String template, Object... args) {
             if(log.isInfoEnabled()) {
                 val argArray = Arrays.stream(args).map(this::asStrTruncateIfTooLong).toArray();
-                val logMessage = LogMessage.of(template, argArray);
-
-                if (logMessage.equals(previous)) {
-                    repeating++;
-                } else {
-                    if (repeating > 0) {
-                        log.info("... repeated {} time{}", repeating, (repeating > 1 ? "s" : ""));
-                    }
-
-                    repeating = 0;
-                    log.info(template, argArray);
-                }
-
-                previous = logMessage;
+                log.info(template, argArray);
             }
         }
 
