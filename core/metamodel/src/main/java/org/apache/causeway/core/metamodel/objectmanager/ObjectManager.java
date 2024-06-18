@@ -140,7 +140,7 @@ public interface ObjectManager extends HasMetaModelContext {
      */
     default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
         val adapter = loadObject(bookmark)
-                .orElseThrow(() -> new BookmarkNotFoundException(String.format("failed to restore object from bookmark %s", bookmark)));
+                .orElseThrow(() -> new BookmarkNotFoundException(String.format("Bookmark %s was not found.", bookmark)));
         if(adapter.getSpecialization().isEntity()) {
             _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
                     ()->"object loaded from bookmark must itself return an equal bookmark");
