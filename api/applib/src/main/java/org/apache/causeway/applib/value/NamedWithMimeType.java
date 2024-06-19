@@ -134,7 +134,7 @@ extends
         XML("application/xml"), /*alias*/ XSD("application/xml"),
 
         XUL("application/vnd.mozilla.xul+xml"),
-        YAML("text/vnd.yaml", "yml"),
+        YAML("text/vnd.yaml", "yaml", "yml"),
         ZIP("application/zip"),
         _7Z("application/x-7z-compressed"),
 

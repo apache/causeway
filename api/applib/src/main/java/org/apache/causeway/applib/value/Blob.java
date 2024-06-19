@@ -103,8 +103,7 @@ public final class Blob implements NamedWithMimeType {
      * @return new {@link Blob}
      */
     public static Blob of(final String name, final CommonMimeType mimeType, final byte[] content) {
-        val proposedFileExtension = mimeType.getProposedFileExtensions().getFirst().orElse("");
-        val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
+        val fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
         return new Blob(fileName, mimeType.getMimeType(), content);
     }
 

@@ -47,6 +47,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Bytes.BytesOperator;
@@ -893,6 +894,31 @@ public final class _Strings {
 
     public static final String asFileNameWithExtension(final @NonNull String fileName, final @NonNull String fileExtension) {
         return suffix(fileName, prefix(fileExtension, "."));
+    }
+
+    /**
+     * Checks whether given fileName is already extended by any of the proposedFileExtensions.
+     * If not, appends the first proposedFileExtension, otherwise acts as identity operation.
+     */
+    public static final String asFileNameWithExtension(
+            final @NonNull String fileName,
+            final @NonNull Can<String> proposedFileExtensions) {
+
+        switch(proposedFileExtensions.getCardinality()) {
+        case ZERO: return fileName;
+        case ONE: return asFileNameWithExtension(fileName, proposedFileExtensions.getFirst().orElse(""));
+        case MULTIPLE:
+            break; // fall through
+        }
+
+        var fileNameLower = fileName.toLowerCase();
+        var isAlreadyExended = proposedFileExtensions.stream()
+            .map(ext->ext.toLowerCase())
+            .anyMatch(ext->fileNameLower.endsWith(""));
+
+        return isAlreadyExended
+                ? fileName
+                : asFileNameWithExtension(fileName, proposedFileExtensions.getFirst().orElse(""));
     }
 
     /**
