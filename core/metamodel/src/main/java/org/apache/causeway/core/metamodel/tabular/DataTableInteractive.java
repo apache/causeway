@@ -80,42 +80,66 @@ public interface DataTableInteractive extends MultiselectChoices {
         }
     }
 
-    // --
+    // -- TITLE, ROWS AND COLUMNS
 
+    Observable<String> getTitle();
+    Observable<Can<DataColumn>> getDataColumns();
     Observable<Can<ManagedObject>> getDataElements();
     Observable<Can<DataRow>> getDataRowsFilteredAndSorted();
-    Observable<Can<DataRow>> getDataRowsSelected();
-    Observable<Can<DataColumn>> getDataColumns();
-    Observable<String> getTitle();
 
-    Bindable<String> getSearchArgument(); // filter the data rows
-    Bindable<Boolean> getSelectAllToggle();
-    Bindable<ColumnSort> getColumnSort();
+    // -- META DATA
+
+    ObjectMember getMetaModel();
+    Optional<TableDecorator> getTableDecoratorIfAny();
+
+    // -- ASSOCIATED ACTION
 
     ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where);
 
+    // -- ROW COUNT
+
+    /**
+     * Counts number of rows in {@link #getDataRowsFilteredAndSorted()}.
+     */
     int getFilteredElementCount();
 
-    Optional<TableDecorator> getTableDecoratorIfAny();
+    // -- ROW LOOKUP
+
+    /**
+     * Lookup {@link DataRow} by its immutable zero-based index.
+     */
+    Optional<DataRow> lookupDataRow(int rowIndex);
+
+    // -- PAGING
 
     int getPageSize(int pageSizeDefault);
 
-    Optional<DataRow> lookupDataRow(int rowIndex);
+    // -- SORTING
 
-    boolean isSearchSupported();
+    Bindable<ColumnSort> getColumnSort();
+
+    // -- SELECTION
+
+    Bindable<Boolean> getSelectAllToggle();
+    void doProgrammaticToggle(Runnable runnable);
+    Set<Integer> getSelectedRowIndexes();
+    Observable<Can<DataRow>> getDataRowsSelected();
+
+    // -- EXPORTING
 
     DataTable export();
 
-    ObjectMember getMetaModel();
+    // -- SERIALIZATION
 
+    DataTableMemento createMemento();
+
+    // -- FILTER SUPPORT
+
+    Bindable<String> getSearchArgument();
+    boolean isSearchSupported();
+    /**
+     * @apiNote never called when not {@link #isSearchSupported()}
+     */
     String getSearchPromptPlaceholderText();
-
-    void doProgrammaticToggle(Runnable runnable);
-
-    DataTableMemento getMemento();
-
-    Observable<Boolean> getSelectionChanges();
-
-    Set<Integer> getSelectedRowIndexes();
 
 }

@@ -121,7 +121,7 @@ implements DataTableInteractive {
      * the framework updates this {@link Bindable},
      * such that any listeners do get notified.
      */
-    @Getter private final _BindableAbstract<Boolean> selectionChanges;
+    private final _BindableAbstract<Boolean> selectionChanges;
 
     private DataTableInternal(
             // we need access to the owner in support of imperative title and referenced column detection
@@ -233,9 +233,9 @@ implements DataTableInteractive {
     }
 
     @Override
-    public Optional<org.apache.causeway.core.metamodel.tabular.DataRow> lookupDataRow(final int rowIndex) {
+    public Optional<DataRow> lookupDataRow(final int rowIndex) {
         return getDataRows().getValue().get(rowIndex)
-                .map(org.apache.causeway.core.metamodel.tabular.DataRow.class::cast);
+                .map(DataRow.class::cast);
     }
 
     // -- FILTER
@@ -246,7 +246,7 @@ implements DataTableInteractive {
                 .orElse("");
     }
 
-    private Predicate<org.apache.causeway.core.metamodel.tabular.DataRow> adaptSearchPredicate() {
+    private Predicate<DataRow> adaptSearchPredicate() {
         return filterHandler.isEmpty()
                 ? dataRow->true
                 : dataRow->filterHandler.get().getDataRowFilter()
@@ -262,7 +262,7 @@ implements DataTableInteractive {
 
     // -- SORTING
 
-    private Optional<Comparator<org.apache.causeway.core.metamodel.tabular.DataRow>> sortingComparator() {
+    private Optional<Comparator<DataRow>> sortingComparator() {
         return Optional.ofNullable(columnSort.getValue())
                 .flatMap(sort->sort.asComparator(dataColumns.getValue()))
                 .or(()->managedMember.getMetaModel().getElementComparator())
@@ -380,7 +380,7 @@ implements DataTableInteractive {
     // -- MEMENTO
 
     @Override
-    public Memento getMemento() {
+    public Memento createMemento() {
         return Memento.create(this);
     }
 
@@ -451,11 +451,11 @@ implements DataTableInteractive {
         }
 
         @Override
-        public void setupBindings(final org.apache.causeway.core.metamodel.tabular.DataTableInteractive tableInteractive) {
+        public void setupBindings(final DataTableInteractive tableInteractive) {
             tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
                 this.searchArgument = searchArg;
             });
-            tableInteractive.getSelectionChanges().addListener((e, o, n)->{
+            ((DataTableInternal)tableInteractive).selectionChanges.addListener((e, o, n)->{
                 this.selectedRowIndexes = tableInteractive.getSelectedRowIndexes();
             });
         }

@@ -25,6 +25,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 public interface DataColumn {
 
+    /**
+     * Corresponds to the association's id.
+     */
     String getColumnId();
     ObjectAssociation getAssociationMetaModel();
     Observable<String> getColumnFriendlyName();

@@ -29,17 +29,35 @@ import lombok.NonNull;
 
 public interface DataRow {
 
+    /**
+     * The underlying domain object or value object this {@link DataRow} is associated with.
+     */
     ManagedObject getRowElement();
+
+    /**
+     * If the table supports row selection, represents the bindable row selection status for this {@link DataRow}.
+     */
     Bindable<Boolean> getSelectToggle();
+
+    /**
+     * Absolute zero-based index of this row, invariant with respect to sorting.
+     */
     int getRowIndex();
+
+    /**
+     * Table model this {@link DataRow} is a part of.
+     */
     DataTableInteractive getParentTable();
 
-    Optional<? extends org.apache.causeway.core.metamodel.tabular.DataColumn> lookupColumnById(@NonNull String columnId);
+    /**
+     * Lookup the {@link DataColumn} given its id.
+     */
+    Optional<DataColumn> lookupColumnById(@NonNull String columnId);
 
     /**
      * Can be none, one or many per table cell.
      */
-    Can<ManagedObject> getCellElementsForColumn(@NonNull org.apache.causeway.core.metamodel.tabular.DataColumn column);
+    Can<ManagedObject> getCellElementsForColumn(@NonNull DataColumn column);
 
     /**
      * Can be none, one or many per table cell. (returns empty Can if column not found)

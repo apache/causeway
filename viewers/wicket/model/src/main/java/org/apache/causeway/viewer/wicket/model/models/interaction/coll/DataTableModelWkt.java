@@ -91,7 +91,7 @@ implements
             final DataTableInteractive tableInteractive) {
         super(bookmarkedObject);
         this.featureIdentifier = featureIdentifier;
-        this.tableMemento = tableInteractive.getMemento();
+        this.tableMemento = tableInteractive.createMemento();
         setObject(tableInteractive); // memoize
         tableMemento.setupBindings(tableInteractive);
     }
