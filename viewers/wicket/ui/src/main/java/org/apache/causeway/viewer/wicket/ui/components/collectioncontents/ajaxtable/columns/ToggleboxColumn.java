@@ -26,8 +26,10 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive.TableImplementation;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWktO;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -61,7 +63,9 @@ extends GenericColumnAbstract {
 
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
-        val dataRowToggle = new DataRowToggleWkt(dataRowWkt);
+        final IModel<Boolean> dataRowToggle = TableImplementation.getSelected().isOptimistic()
+                ? ((DataRowWktO)dataRowWkt).getDataRowToggle()
+                : new DataRowToggleWkt(dataRowWkt);
         val rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
         rowToggles.add(rowToggle);
         return rowToggle.setOutputMarkupId(true);
@@ -72,7 +76,9 @@ extends GenericColumnAbstract {
         val bulkToggle = new ContainedToggleboxPanel(
                 componentId,
                 new BulkToggleWkt(dataTableModelHolder),
-                    this::onBulkUpdate);
+                TableImplementation.getSelected().isOptimistic()
+                ? this::onBulkUpdateOptimistic
+                : this::onBulkUpdate);
         Wkt.cssAppend(bulkToggle, "togglebox-column");
         return bulkToggle;
     }
@@ -89,6 +95,13 @@ extends GenericColumnAbstract {
             }
         });
 
+    }
+
+    private void onBulkUpdateOptimistic(final Boolean isChecked, final AjaxRequestTarget target) {
+        val bulkToggle = BulkToggle.valueOf(isChecked);
+        for (ContainedToggleboxPanel rowToggle : rowToggles) {
+            rowToggle.set(bulkToggle, target);
+        }
     }
 
 }

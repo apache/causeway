@@ -22,43 +22,98 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction.MementoForArgs;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.internal.DataTableInternal;
+import org.apache.causeway.core.metamodel.tabular.optimistic.DataTableO;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 public interface DataTableInteractive extends MultiselectChoices {
 
+    public enum TableImplementation {
+        DEFAULT,
+        OPTIMISTIC;
+
+        public boolean isOptimistic() { return this == OPTIMISTIC;}
+
+        private final static String PROPERTY_NAME_MODEL_SELECT = "causeway.metamodel.dataTableModelSelect";
+        private static boolean isOptimisticSelected() {
+            return "OPTIMISTIC".equalsIgnoreCase(System.getenv(PROPERTY_NAME_MODEL_SELECT))
+                    || "OPTIMISTIC".equalsIgnoreCase(System.getProperty(PROPERTY_NAME_MODEL_SELECT));
+        }
+
+        @Getter(lazy=true)
+        private final static TableImplementation selected = isOptimisticSelected() ? OPTIMISTIC : DEFAULT;
+    }
+
     // -- FACTORIES
 
     public static DataTableInteractive empty(final ManagedMember managedMember, final Where where) {
-        return DataTableInternal.empty(managedMember, where);
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            return DataTableO.empty(managedMember, where);
+        case DEFAULT:
+        default:
+            return DataTableInternal.empty(managedMember, where);
+        }
     }
 
     public static DataTableInteractive forCollection(final ManagedCollection managedCollection) {
-        return DataTableInternal.forCollection(managedCollection);
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            return DataTableO.forCollection(managedCollection);
+        case DEFAULT:
+        default:
+            return DataTableInternal.forCollection(managedCollection);
+        }
     }
 
     public static DataTableInteractive forAction(
             final ManagedAction managedAction,
             final ManagedObject actionResult) {
-        return DataTableInternal.forAction(managedAction, actionResult);
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            throw _Exceptions.unexpectedCodeReach();
+        case DEFAULT:
+        default:
+            return DataTableInternal.forAction(managedAction, actionResult);
+        }
+    }
+
+    @Deprecated // args only required for TableImplementation.OPTIMISTIC
+    public static DataTableInteractive forAction(
+            final ManagedAction managedAction,
+            final @NonNull Can<ManagedObject> args,
+            final ManagedObject actionResult) {
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            return DataTableO.forAction(managedAction, args, actionResult);
+        case DEFAULT:
+        default:
+            return DataTableInternal.forAction(managedAction, actionResult);
+        }
     }
 
     // --
@@ -91,6 +146,9 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     ObjectMember getMetaModel();
     Optional<TableDecorator> getTableDecoratorIfAny();
+    default ObjectSpecification getElementType() {
+        return getMetaModel().getElementType();
+    }
 
     // -- ASSOCIATED ACTION
 
@@ -109,6 +167,11 @@ public interface DataTableInteractive extends MultiselectChoices {
      * Lookup {@link DataRow} by its immutable zero-based index.
      */
     Optional<DataRow> lookupDataRow(int rowIndex);
+
+    @Deprecated // used by OPTIMISTIC data table
+    default Optional<? extends DataRow> lookupDataRow(final @NonNull UUID uuid) {
+        throw _Exceptions.unsupportedOperation();
+    }
 
     // -- PAGING
 
@@ -132,6 +195,11 @@ public interface DataTableInteractive extends MultiselectChoices {
     // -- SERIALIZATION
 
     DataTableMemento createMemento();
+
+    @Deprecated // used by OPTIMISTIC data table
+    default DataTableMemento createMemento(final MementoForArgs mementoForArgs) {
+        throw _Exceptions.unsupportedOperation();
+    }
 
     // -- FILTER SUPPORT
 

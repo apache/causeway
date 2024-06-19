@@ -19,10 +19,12 @@
 package org.apache.causeway.core.metamodel.tabular;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.causeway.applib.services.filter.CollectionFilterService.Tokens;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
@@ -65,5 +67,9 @@ public interface DataRow {
     Can<ManagedObject> getCellElementsForColumn(@NonNull String columnId);
     Optional<Tokens> getFilterTokens();
 
+    @Deprecated // used by OPTIMISTIC data table
+    default UUID getUuid() {
+        throw _Exceptions.unsupportedOperation();
+    }
 
 }

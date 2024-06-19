@@ -38,7 +38,18 @@ public class MmSortUtils {
         DESCENDING;
     }
 
-    public Comparator<ManagedObject> orderingBy(final ObjectAssociation sortProperty, final SortDirection sortDirection) {
+    @Deprecated // use the enum variant instead
+    public Comparator<ManagedObject> orderingBy(
+            final ObjectAssociation sortProperty,
+            final boolean isAscending) {
+        return orderingBy(sortProperty, isAscending
+                ? SortDirection.ASCENDING
+                : SortDirection.DESCENDING);
+    }
+
+    public Comparator<ManagedObject> orderingBy(
+            final ObjectAssociation sortProperty,
+            final SortDirection sortDirection) {
         final Comparator<ManagedObject> comparator = (sortDirection != SortDirection.DESCENDING)
                 ? NATURAL_NULL_FIRST
                 : NATURAL_NULL_FIRST.reversed();

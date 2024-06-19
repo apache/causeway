@@ -19,46 +19,55 @@
 package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
 import java.util.Optional;
-import java.util.UUID;
 
+import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.core.metamodel.tabular.DataTableInteractive.TableImplementation;
 
-public interface DataRowWkt extends IModel<DataRow>{
+import lombok.Getter;
 
-    static DataRowWkt chain(
+public class DataRowWktD
+extends ChainingModel<DataRow>
+implements DataRowWkt {
+
+    private static final long serialVersionUID = 1L;
+
+    public static DataRowWktD chain(
             final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
-
-        switch (TableImplementation.getSelected()) {
-        case OPTIMISTIC:
-            return DataRowWktO.chain(dataTableModelHolder, dataRow);
-        case DEFAULT:
-        default:
-            return DataRowWktD.chain(dataTableModelHolder, dataRow);
-        }
+        return new DataRowWktD(dataTableModelHolder, dataRow);
     }
 
-    int getRowIndex();
+    @Getter private final int rowIndex;
+
+    private DataRowWktD(
+            final IModel<DataTableInteractive> dataTableModelHolder,
+            final DataRow dataRow) {
+        super(dataTableModelHolder);
+        this.rowIndex = dataRow.getRowIndex();
+    }
 
     @Override
-    DataRow getObject();
-
-    Optional<DataRow> dataRow();
-
-    boolean hasMemoizedDataRow();
-
-    @Deprecated // used by OPTIMISTIC data table
-    default UUID getUuid() {
-        throw _Exceptions.unsupportedOperation();
+    public final DataRow getObject() {
+        return dataRow().orElse(null);
     }
-    @Deprecated // used by OPTIMISTIC data table
-    default DataRowToggleWkt getDataRowToggle() {
-        throw _Exceptions.unsupportedOperation();
+
+    @Override
+    public Optional<DataRow> dataRow() {
+        return dataTableModel().lookupDataRow(rowIndex);
+    }
+
+    @Override
+    public boolean hasMemoizedDataRow() {
+        return ((DataTableModelWkt) super.getTarget()).isAttached();
+    }
+
+    // -- HELPER
+
+    private DataTableInteractive dataTableModel() {
+        return ((DataTableModelWkt) super.getTarget()).getObject();
     }
 
 }

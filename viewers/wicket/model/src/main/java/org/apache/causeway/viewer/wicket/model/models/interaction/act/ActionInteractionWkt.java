@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnap
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive.TableImplementation;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
@@ -256,21 +257,30 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      */
     private transient ParameterNegotiationModel parameterNegotiationModel;
     private PendingParamsSnapshot pendingParamsSnapshot;
+
     /**
      * Start and transiently memoize a new {@link ParameterNegotiationModel}.
      */
     private ParameterNegotiationModel startParameterNegotiationModel() {
-        var tableModel = actionInteraction().getManagedAction().map(ManagedAction::getMultiselectChoices);
-        if(tableModel!=null) {
-            // possibly uses outdated tableModel, if any select toggle, filtering or sorting has happened
-            // hence detach(), so we invalidate the current actionInteraction() and force recreation
-            detach();
+        switch (TableImplementation.getSelected()) {
+        case DEFAULT: {
+            var tableModel = actionInteraction().getManagedAction().map(ManagedAction::getMultiselectChoices);
+            if(tableModel!=null) {
+                // possibly uses outdated tableModel, if any select toggle, filtering or sorting has happened
+                // hence detach(), so we invalidate the current actionInteraction() and force recreation
+                detach();
+            }
+            break;
+        }
+        default:
+            break;
         }
         this.parameterNegotiationModel = actionInteraction().startParameterNegotiation()
                 .orElseThrow(()->_Exceptions.noSuchElement(memberId));
         this.pendingParamsSnapshot = parameterNegotiationModel.createSnapshotModel();
         return parameterNegotiationModel;
     }
+
     /**
      * [CAUSEWAY-3649] safe guard against access to the model while it is not attached
      */

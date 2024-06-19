@@ -18,21 +18,30 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
+import org.apache.wicket.markup.repeater.IItemFactory;
+import org.apache.wicket.markup.repeater.IItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -62,8 +71,9 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
         this.toggleboxColumn = toggleboxColumn;
         setOutputMarkupId(true);
         setVersioned(false);
-        //[CAUSEWAY-3772] optimization reinstate? though I have no clue what that is doing
-        //setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
+        if(DataTableInteractive.TableImplementation.getSelected().isOptimistic()) {
+            setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
+        }
     }
 
     public void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
@@ -137,58 +147,57 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
         return rowElement.getSpecification().getCssClass(rowElement);
     }
 
-//    private static Iterator<Item<DataRow>> itemReuseStrategy(
-//            final IItemFactory<DataRow> factory,
-//            final Iterator<IModel<DataRow>> newModels,
-//            final Iterator<Item<DataRow>> existingItems) {
-//
-//        val itemByRowIndex = _Maps.<Integer, Item<DataRow>>newHashMap();
-//        existingItems.forEachRemaining(item->{
-//            val model = item.getModel();
-//            if(model instanceof DataRowWkt) {
-//                val dataRowWkt = (DataRowWkt)item.getModel();
-//                itemByRowIndex.put(dataRowWkt.getRowIndex(), item);
-//            }
-//        });
-//
-//        return new Iterator<Item<DataRow>>() {
-//            private int index = 0;
-//
-//            @Override
-//            public boolean hasNext() {
-//                return newModels.hasNext();
-//            }
-//
-//            @Override
-//            public Item<DataRow> next() {
-//                final DataRowWkt newModel = (DataRowWkt)newModels.next();
-//                final Item<DataRow> oldItem = itemByRowIndex.get(newModel.getRowIndex());
-//
-//                final IModel<DataRow> model2 = oldItem != null
-//                        ? oldItem.getModel()
-//                        : newModel;
-//                return factory.newItem(index++, model2);
-//            }
-//
-//            @Override
-//            public void remove() {
-//                throw new UnsupportedOperationException();
-//            }
-//
-//        };
-//
-//    }
-//
-//    @SuppressWarnings("unused")
-//    private static <T> Iterator<Item<T>> itemReuseStrategyWithCast(
-//            final IItemFactory<T> factory,
-//            final Iterator<IModel<T>> newModels,
-//            final Iterator<Item<T>> existingItems) {
-//        return _Casts.uncheckedCast(itemReuseStrategy(
-//                _Casts.uncheckedCast(factory),
-//                _Casts.uncheckedCast(newModels),
-//                _Casts.uncheckedCast(existingItems)));
-//    }
+    private static Iterator<Item<DataRow>> itemReuseStrategy(
+            final IItemFactory<DataRow> factory,
+            final Iterator<IModel<DataRow>> newModels,
+            final Iterator<Item<DataRow>> existingItems) {
+
+        val itemByUuid = _Maps.<UUID, Item<DataRow>>newHashMap();
+        existingItems.forEachRemaining(item->{
+            val model = item.getModel();
+            if(model instanceof DataRowWkt) {
+                val dataRowWkt = (DataRowWkt)item.getModel();
+                itemByUuid.put(dataRowWkt.getUuid(), item);
+            }
+        });
+
+        return new Iterator<Item<DataRow>>() {
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return newModels.hasNext();
+            }
+
+            @Override
+            public Item<DataRow> next() {
+                final DataRowWkt newModel = (DataRowWkt)newModels.next();
+                final Item<DataRow> oldItem = itemByUuid.get(newModel.getUuid());
+
+                final IModel<DataRow> model2 = oldItem != null
+                        ? oldItem.getModel()
+                        : newModel;
+                return factory.newItem(index++, model2);
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+
+        };
+
+    }
+
+    private static <T> Iterator<Item<T>> itemReuseStrategyWithCast(
+            final IItemFactory<T> factory,
+            final Iterator<IModel<T>> newModels,
+            final Iterator<Item<T>> existingItems) {
+        return _Casts.uncheckedCast(itemReuseStrategy(
+                _Casts.uncheckedCast(factory),
+                _Casts.uncheckedCast(newModels),
+                _Casts.uncheckedCast(existingItems)));
+    }
 
     private void honorHints() {
         headersToolbar.honourSortOrderHints();
