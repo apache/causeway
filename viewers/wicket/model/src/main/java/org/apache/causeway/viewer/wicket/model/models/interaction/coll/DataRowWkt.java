@@ -23,8 +23,8 @@ import java.util.Optional;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
 

@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.tabular.interactive;
+package org.apache.causeway.core.metamodel.tabular.internal;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
@@ -45,48 +44,47 @@ import org.apache.causeway.core.metamodel.interactions.managed.CollectionInterac
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
-import org.apache.causeway.core.metamodel.interactions.managed.MultiselectChoices;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.tabular.interactive._FilterUtils.FilterHandler;
+import org.apache.causeway.core.metamodel.tabular.DataColumn;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
+import org.apache.causeway.core.metamodel.tabular.internal._FilterUtils.FilterHandler;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.val;
 
-public class DataTableInteractive
-implements MultiselectChoices {
+public class DataTableInternal
+implements DataTableInteractive {
 
     // -- FACTORIES
 
-    public static DataTableInteractive empty(final ManagedMember managedMember, final Where where) {
-        return new DataTableInteractive(managedMember, where, Can.empty());
+    public static DataTableInternal empty(final ManagedMember managedMember, final Where where) {
+        return new DataTableInternal(managedMember, where, Can.empty());
     }
 
-    public static DataTableInteractive forCollection(
+    public static DataTableInternal forCollection(
             final ManagedCollection managedCollection) {
-        return new DataTableInteractive(managedCollection, managedCollection.getWhere(),
+        return new DataTableInternal(managedCollection, managedCollection.getWhere(),
             managedCollection
             .streamElements()
             .collect(Can.toCan()));
     }
 
-    public static DataTableInteractive forAction(
+    public static DataTableInternal forAction(
             final ManagedAction managedAction,
             final ManagedObject actionResult) {
 
         if(actionResult==null) {
-            new DataTableInteractive(managedAction, managedAction.getWhere(), Can.empty());
+            new DataTableInternal(managedAction, managedAction.getWhere(), Can.empty());
         }
         if(!(actionResult instanceof PackedManagedObject)) {
             throw _Exceptions.unexpectedCodeReach();
@@ -95,7 +93,7 @@ implements MultiselectChoices {
         val elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
 
-        return new DataTableInteractive(managedAction, managedAction.getWhere(), elements);
+        return new DataTableInternal(managedAction, managedAction.getWhere(), elements);
     }
 
     // -- CONSTRUCTION
@@ -123,16 +121,16 @@ implements MultiselectChoices {
      * the framework updates this {@link Bindable},
      * such that any listeners do get notified.
      */
-    @Getter private final _BindableAbstract<Boolean> selectionChanges;
+    private final _BindableAbstract<Boolean> selectionChanges;
 
-    private DataTableInteractive(
+    private DataTableInternal(
             // we need access to the owner in support of imperative title and referenced column detection
             final ManagedMember managedMember,
             final Where where,
             final Can<ManagedObject> elements) {
 
         val elementType = managedMember.getElementType();
-        val mmc = elementType.getMetaModelContext();
+        //val mmc = elementType.getMetaModelContext();
 
         this.managedMember = managedMember;
         this.where = where;
@@ -148,7 +146,7 @@ implements MultiselectChoices {
 
         this.dataRows = _Observables.lazy(()->
             dataElements.getValue().stream()
-                .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRow(rowIndex, this, element, tokens(element))))
+                .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRowInternal(rowIndex, this, element, tokens(element))))
                 .collect(Can.toCan()));
 
         this.dataRowsFilteredAndSorted = _Observables.lazy(()->
@@ -185,7 +183,7 @@ implements MultiselectChoices {
         this.dataColumns = _Observables.lazy(()->
             managedMember.getElementType()
             .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
-            .map(assoc->new DataColumn(this, assoc))
+            .map(assoc->new DataColumnInternal(this, assoc))
             .collect(Can.toCan()));
 
         //XXX future extension: the title could dynamically reflect the number of elements selected
@@ -195,14 +193,17 @@ implements MultiselectChoices {
             .getFriendlyName());
     }
 
+    @Override
     public boolean isSearchSupported() {
         return filterHandler.isPresent();
     }
 
+    @Override
     public int getPageSize(final int pageSizeDefault) {
         return getMetaModel().getPageSize().orElse(pageSizeDefault);
     }
 
+    @Override
     public Optional<TableDecorator> getTableDecoratorIfAny() {
         return getMetaModel().getTableDecorator();
     }
@@ -217,10 +218,12 @@ implements MultiselectChoices {
     /**
      * Count filtered data rows.
      */
+    @Override
     public int getFilteredElementCount() {
         return dataRowsFilteredAndSorted.getValue().size();
     }
 
+    @Override
     public ObjectMember getMetaModel() {
         return managedMember.getMetaModel();
     }
@@ -229,12 +232,15 @@ implements MultiselectChoices {
         return getMetaModel().getElementType();
     }
 
+    @Override
     public Optional<DataRow> lookupDataRow(final int rowIndex) {
-        return getDataRows().getValue().get(rowIndex);
+        return getDataRows().getValue().get(rowIndex)
+                .map(DataRow.class::cast);
     }
 
     // -- FILTER
 
+    @Override
     public String getSearchPromptPlaceholderText() {
         return filterHandler.map(handler->handler.searchPromptPlaceholderText)
                 .orElse("");
@@ -256,23 +262,6 @@ implements MultiselectChoices {
 
     // -- SORTING
 
-    /**
-     * Sorting helper class, that has the column index to be sorted by and the sort direction.
-     */
-    @RequiredArgsConstructor
-    @EqualsAndHashCode
-    public static class ColumnSort implements Serializable {
-        private static final long serialVersionUID = 1L;
-        final int columnIndex;
-        final MmSortUtils.SortDirection sortDirection;
-        Optional<Comparator<ManagedObject>> asComparator(final Can<DataColumn> columns) {
-            val columnToSort = columns.get(columnIndex).orElse(null);
-            val sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
-            return Optional.ofNullable(sortProperty)
-                    .map(prop->MmSortUtils.orderingBy(sortProperty, sortDirection));
-        }
-    }
-
     private Optional<Comparator<DataRow>> sortingComparator() {
         return Optional.ofNullable(columnSort.getValue())
                 .flatMap(sort->sort.asComparator(dataColumns.getValue()))
@@ -293,6 +282,7 @@ implements MultiselectChoices {
         }
     }
 
+    @Override
     public void doProgrammaticToggle(final @NonNull Runnable runnable) {
         try {
             isProgrammaticToggle.set(true);
@@ -341,6 +331,7 @@ implements MultiselectChoices {
             .map(DataRow::getRowElement);
     }
 
+    @Override
     public Set<Integer> getSelectedRowIndexes() {
         return dataRowsSelected.getValue()
             .stream()
@@ -348,6 +339,7 @@ implements MultiselectChoices {
             .collect(Collectors.toSet());
     }
 
+    @Override
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
         val featureId = managedMember.getIdentifier();
         if(!featureId.getType().isPropertyOrCollection()) {
@@ -362,6 +354,7 @@ implements MultiselectChoices {
 
     // -- EXPORT
 
+    @Override
     public DataTable export() {
         return new DataTable(
                 getElementType(),
@@ -386,7 +379,8 @@ implements MultiselectChoices {
 
     // -- MEMENTO
 
-    public Memento getMemento() {
+    @Override
+    public Memento createMemento() {
         return Memento.create(this);
     }
 
@@ -400,11 +394,11 @@ implements MultiselectChoices {
      * to allow for simpler object graph reconstruction (shared owner).
      */
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Memento implements Serializable {
+    public static class Memento implements DataTableMemento {
         private static final long serialVersionUID = 1L;
 
         static Memento create(
-                final @NonNull DataTableInteractive tableInteractive) {
+                final @NonNull DataTableInternal tableInteractive) {
 
             return new Memento(
                     tableInteractive.managedMember.getIdentifier(),
@@ -418,14 +412,11 @@ implements MultiselectChoices {
         private final @NonNull Where where;
         private final @NonNull DataTable dataTable;
 
-        /**
-         * Exposed as setter,
-         * such that we don't need to recreate the entire memento, just because the searchArgument has changed.
-         */
-        @Setter private @Nullable String searchArgument;
-        @Setter private @NonNull Set<Integer> selectedRowIndexes;
+        private @Nullable String searchArgument;
+        private @NonNull Set<Integer> selectedRowIndexes;
 
-        public DataTableInteractive getDataTableModel(final ManagedObject owner) {
+        @Override
+        public DataTableInternal getDataTableModel(final ManagedObject owner) {
 
             if(owner.getPojo()==null) {
                 // owner (if entity) might have been deleted
@@ -440,7 +431,7 @@ implements MultiselectChoices {
                     : ActionInteraction.start(owner, memberId, where)
                         .getManagedActionElseFail();
 
-            var dataTableInteractive = new DataTableInteractive(managedMember, where,
+            var dataTableInteractive = new DataTableInternal(managedMember, where,
                     dataTable.streamDataElements()
                     .peek(obj->{
                         if(obj.getSpecialization().isViewmodel()) {
@@ -457,6 +448,16 @@ implements MultiselectChoices {
                     .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
             });
             return dataTableInteractive;
+        }
+
+        @Override
+        public void setupBindings(final DataTableInteractive tableInteractive) {
+            tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
+                this.searchArgument = searchArg;
+            });
+            ((DataTableInternal)tableInteractive).selectionChanges.addListener((e, o, n)->{
+                this.selectedRowIndexes = tableInteractive.getSelectedRowIndexes();
+            });
         }
 
     }

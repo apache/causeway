@@ -24,8 +24,8 @@ import org.apache.wicket.model.IModel;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.binding._BindableAbstract;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.commons.binding.Bindable;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.binding.BooleanBinding;
 
 /**
@@ -42,7 +42,7 @@ extends BooleanBinding<DataTableInteractive> {
     }
 
     @Override
-    protected Optional<_BindableAbstract<Boolean>> getBindable(
+    protected Optional<Bindable<Boolean>> getBindable(
             final @Nullable DataTableInteractive dataTable) {
         return dataTable!=null
                 ? Optional.ofNullable(dataTable.getSelectAllToggle())

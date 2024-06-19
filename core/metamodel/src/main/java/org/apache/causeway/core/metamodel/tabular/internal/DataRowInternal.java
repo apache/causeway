@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.tabular.interactive;
+package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
@@ -29,21 +29,24 @@ import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.tabular.DataColumn;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
 
 import lombok.Getter;
 import lombok.NonNull;
 
-public class DataRow {
+class DataRowInternal
+implements DataRow {
 
     @Getter private final int rowIndex;
     private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
-    @Getter private final DataTableInteractive parentTable;
+    @Getter private final DataTableInternal parentTable;
     @Getter final Optional<CollectionFilterService.Tokens> filterTokens;
 
-    public DataRow(
+    DataRowInternal(
             final int rowIndex,
-            final @NonNull DataTableInteractive parentTable,
+            final @NonNull DataTableInternal parentTable,
             final @NonNull ManagedObject rowElement,
             final @Nullable CollectionFilterService.Tokens filterTokens) {
         this.rowIndex = rowIndex;
@@ -58,10 +61,12 @@ public class DataRow {
         this.filterTokens = Optional.ofNullable(filterTokens);
     }
 
+    @Override
     public ManagedObject getRowElement() {
         return rowElement;
     }
 
+    @Override
     public Optional<DataColumn> lookupColumnById(final @NonNull String columnId) {
         return parentTable.getDataColumns().getValue().stream()
                 .filter(dataColumn->dataColumn.getColumnId().equals(columnId))
@@ -71,6 +76,7 @@ public class DataRow {
     /**
      * Can be none, one or many per table cell.
      */
+    @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
         final ObjectAssociation assoc = column.getAssociationMetaModel();
         return assoc.getSpecialization().fold(
@@ -81,6 +87,7 @@ public class DataRow {
     /**
      * Can be none, one or many per table cell. (returns empty Can if column not found)
      */
+    @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull String columnId) {
         return lookupColumnById(columnId)
                 .map(this::getCellElementsForColumn)

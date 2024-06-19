@@ -25,8 +25,8 @@ import org.apache.wicket.model.IModel;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.binding._BindableAbstract;
 
 import lombok.val;
 
@@ -46,7 +46,7 @@ extends ChainingModel<Boolean> {
     @Override
     public final Boolean getObject() {
         return getBindable(modelObject())
-                .map(_BindableAbstract::getValue)
+                .map(Bindable::getValue)
                 .orElse(null);
     }
 
@@ -56,7 +56,7 @@ extends ChainingModel<Boolean> {
         .ifPresent(bindable->bindable.setValue(value));
     }
 
-    protected abstract Optional<_BindableAbstract<Boolean>> getBindable(@Nullable T model);
+    protected abstract Optional<Bindable<Boolean>> getBindable(@Nullable T model);
 
     /**
      * For BulkToggleWkt returns its DataTableModel.<br>
