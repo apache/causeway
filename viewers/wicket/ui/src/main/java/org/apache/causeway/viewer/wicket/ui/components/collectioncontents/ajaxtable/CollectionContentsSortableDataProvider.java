@@ -86,6 +86,15 @@ extends SortableDataProvider<DataRow, String> {
                 .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 
+    //TODO[CAUSEWAY-3779] idea
+//    @Override
+//    public Iterator<DataRow> iterator(final long skip, final long limit) {
+//        var dataTable = getDataTableModel();
+//        // honor (single) column sort (if any)
+//        dataTable.getColumnSort().setValue(columnSort().orElse(null));
+//        return dataTable.getDataRowsFilteredAndSorted(Math.toIntExact(skip), Math.toIntExact(limit));
+//    }
+
     // -- HELPER
 
     private Optional<DataTableInteractive.ColumnSort> columnSort() {

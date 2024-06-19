@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
 import org.apache.causeway.applib.query.Query;
+import org.apache.causeway.applib.query.SelectByIdQuery;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
@@ -154,7 +155,12 @@ public class JpaEntityFacet
                     typedQuery.getResultStream()
                             .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
 
-        } else if (query instanceof NamedQuery) {
+        } else if(query instanceof SelectByIdQuery) {
+
+            //TODO[CAUSEWAY-3779] implement select by
+
+        } else if(query instanceof NamedQuery) {
+
 
             val applibNamedQuery = (NamedQuery<?>) query;
             val queryResultType = applibNamedQuery.getResultType();

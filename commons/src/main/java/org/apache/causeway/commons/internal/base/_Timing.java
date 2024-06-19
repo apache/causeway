@@ -134,6 +134,21 @@ public final class _Timing {
         return watch.stop();
     }
 
+    public static void runVerbose(final String label, final Runnable runnable) {
+        System.out.println(String.format(Locale.US, "Entering call '%s'", label));
+        final StopWatch watch = run(runnable);
+        System.out.println(String.format(Locale.US, "Running '%s' took %d ms", label, watch.getMillis()));
+    }
+
+    public static <T> T callVerbose(final String label, final Supplier<T> callable) {
+        System.out.println(String.format(Locale.US, "Entering call '%s'", label));
+        final StopWatch watch = now();
+        T result = callable.get();
+        watch.stop();
+        System.out.println(String.format(Locale.US, "Calling '%s' took %d ms", label, watch.getMillis()));
+        return result;
+    }
+
     public static void runVerbose(final Logger log, final String label, final Runnable runnable) {
         final StopWatch watch = run(runnable);
         log.info(String.format(Locale.US, "Running '%s' took %d ms", label, watch.getMillis()));
@@ -146,8 +161,5 @@ public final class _Timing {
         log.info(String.format(Locale.US, "Calling '%s' took %d ms", label, watch.getMillis()));
         return result;
     }
-
-
-
 
 }

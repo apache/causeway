@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.function.Predicate;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.collections.Can;
 
 import lombok.NonNull;
 
@@ -69,15 +70,15 @@ public interface Query<T> extends Serializable {
 
     Query<T> withRange(@NonNull QueryRange range);
 
-    default Query<T> withRange(long ...range) {
+    default Query<T> withRange(final long ...range) {
         return withRange(QueryRange.of(range));
     }
 
-    default Query<T> withStart(long start) {
+    default Query<T> withStart(final long start) {
         return withRange(start);
     }
 
-    default Query<T> withLimit(long limit) {
+    default Query<T> withLimit(final long limit) {
         return withRange(0L, limit);
     }
 
@@ -92,6 +93,18 @@ public interface Query<T> extends Serializable {
             final @NonNull Class<T> resultType,
             final @NonNull String queryName) {
         return new _NamedQueryDefault<>(resultType, queryName, QueryRange.unconstrained(), null);
+    }
+
+    static <T> SelectByIdQuery<T> selectByIdQuery(
+            final @NonNull Class<T> resultType,
+            final @NonNull String ... idsStringified) {
+        return selectByIdQuery(resultType, Can.ofArray(idsStringified));
+    }
+
+    static <T> SelectByIdQuery<T> selectByIdQuery(
+            final @NonNull Class<T> resultType,
+            final @NonNull Can<String> idsStringified) {
+        return new _SelectByIdQueryDefault<>(resultType, idsStringified, QueryRange.unconstrained());
     }
 
 }
