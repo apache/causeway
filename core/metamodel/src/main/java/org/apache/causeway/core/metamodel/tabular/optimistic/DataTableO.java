@@ -348,51 +348,43 @@ implements DataTableInteractive {
 
         @Override
         public void setupBindings(final DataTableInteractive tableInteractive) {
-            // TODO Auto-generated method stub
-
+            throw _Exceptions.unsupportedOperation();
         }
     }
 
     @Override
     public Observable<Can<DataRow>> getDataRowsFilteredAndSorted() {
-        // TODO Auto-generated method stub
-        return null;
+        return getDataRowsFiltered();
     }
 
     @Override
     public int getFilteredElementCount() {
-        // TODO Auto-generated method stub
-        return 0;
+        return getElementCount();
     }
 
     @Override
     public Optional<DataRow> lookupDataRow(final int rowIndex) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
+        throw _Exceptions.unsupportedOperation("this impl. does lookup by UUID");
     }
 
     @Override
     public Bindable<ColumnSort> getColumnSort() {
-        // TODO Auto-generated method stub
-        return null;
+        throw _Exceptions.unsupportedOperation();
     }
 
     @Override
     public void doProgrammaticToggle(final Runnable runnable) {
-        // TODO Auto-generated method stub
-
+        throw _Exceptions.unsupportedOperation();
     }
 
     @Override
     public Set<Integer> getSelectedRowIndexes() {
-        // TODO Auto-generated method stub
-        return null;
+        throw _Exceptions.unsupportedOperation();
     }
 
     @Override
     public DataTableMemento createMemento() {
-        // TODO Auto-generated method stub
-        return null;
+        throw _Exceptions.unsupportedOperation("this impl. takes an nullable arg");
     }
 
     @Override
