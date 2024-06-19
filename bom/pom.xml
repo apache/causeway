@@ -1004,6 +1004,29 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <scope>compile</scope>
             </dependency>
 
+            <!-- org.apache.causeway.extensions (titlecache) -->
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-titlecache</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-titlecache-applib</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+           <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-titlecache-jcache</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
             <!-- org.apache.causeway.extensions (audittrail) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
