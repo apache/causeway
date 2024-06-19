@@ -12,6 +12,7 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Node;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
+import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
@@ -44,13 +45,16 @@ import org.apache.logging.log4j.message.Message;
  * </pre>
  */
 @Plugin(name = "DuplicateMessageFilter", category = Node.CATEGORY, elementType = Filter.ELEMENT_TYPE, printObject = true)
-@RequiredArgsConstructor
 public class DuplicateMessageFilter extends AbstractFilter {
 
     private static final Logger log = LogManager.getLogger(DuplicateMessageFilter.class);
 
     private volatile Message lastMessage = null;
     private final AtomicInteger repeatCount = new AtomicInteger(0);
+
+    public DuplicateMessageFilter(Result onMatch, Result onMismatch) {
+        super(onMatch, onMismatch);
+    }
 
     @Override
     public Result filter(org.apache.logging.log4j.core.Logger logger, Level level, Marker marker, Message msg, Throwable t) {
@@ -87,7 +91,10 @@ public class DuplicateMessageFilter extends AbstractFilter {
     }
 
     @PluginFactory
-    public static DuplicateMessageFilter createFilter() {
-        return new DuplicateMessageFilter();
+    public static DuplicateMessageFilter createFilter(
+            @PluginAttribute(value = "onMatch", defaultString = "NEUTRAL") Result onMatch,
+            @PluginAttribute(value = "onMismatch", defaultString = "DENY") Result onMismatch
+    ) {
+        return new DuplicateMessageFilter(onMatch, onMatch);
     }
 }
