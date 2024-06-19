@@ -914,7 +914,7 @@ public final class _Strings {
         var fileNameLower = fileName.toLowerCase();
         var isAlreadyExended = proposedFileExtensions.stream()
             .map(ext->ext.toLowerCase())
-            .anyMatch(ext->fileNameLower.endsWith(""));
+            .anyMatch(ext->fileNameLower.endsWith("." + ext));
 
         return isAlreadyExended
                 ? fileName
