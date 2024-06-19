@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
@@ -42,8 +43,8 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
             final CollectionContentsSortableDataProvider singleSortStateLocator) {
         super(table, _Casts.uncheckedCast(singleSortStateLocator));
         this.table = table;
-        table.setOutputMarkupId(true);
         this.singleSortStateLocator = singleSortStateLocator;
+        Wkt.ajaxEnable(table);
     }
 
     @Override
@@ -51,31 +52,15 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
         super.onInitialize();
     }
 
-    // //////////////////////////////////////
-
     @Override
     protected WebMarkupContainer newSortableHeader(final String borderId, final String property,
             final ISortStateLocator<String> locator) {
-        return new CausewayAjaxFallbackOrderByBorder<String>(borderId, table, property, locator/*, getAjaxCallListener()*/);
+        return new CausewayAjaxFallbackOrderByBorder<String>(borderId, table, property, locator);
     }
 
-    //    /**
-    //     * Returns a decorator that will be used to decorate ajax links used in sortable headers
-    //     *
-    //     * @return decorator or null for none
-    //     */
-    //    protected IAjaxCallListener getAjaxCallListener()
-    //    {
-    //        return null;
-    //    }
-
-    // //////////////////////////////////////
-
     void honourSortOrderHints() {
-        UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
+        var uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
 
         for (SortOrder sortOrder : SortOrder.values()) {
             String property = uiHintContainer.getHint(table, sortOrder.name());
