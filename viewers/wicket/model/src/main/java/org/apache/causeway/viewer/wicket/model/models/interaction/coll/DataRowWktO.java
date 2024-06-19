@@ -54,7 +54,7 @@ implements DataRowWkt {
             final DataRow dataRow) {
         super(dataTableModelHolder);
         this.dataRow = dataRow;
-        this.rowIndex = dataRow.getRowIndex();
+        this.rowIndex = -1;
         this.uuid = dataRow.getUuid();
         this.dataRowToggle = new DataRowToggleWkt(this);
     }

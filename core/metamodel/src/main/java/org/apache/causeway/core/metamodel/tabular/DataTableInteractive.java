@@ -60,8 +60,12 @@ public interface DataTableInteractive extends MultiselectChoices {
 
         private final static String PROPERTY_NAME_MODEL_SELECT = "causeway.metamodel.dataTableModelSelect";
         private static boolean isOptimisticSelected() {
-            return "OPTIMISTIC".equalsIgnoreCase(System.getenv(PROPERTY_NAME_MODEL_SELECT))
+            var isOptimisticSelected =  "OPTIMISTIC".equalsIgnoreCase(System.getenv(PROPERTY_NAME_MODEL_SELECT))
                     || "OPTIMISTIC".equalsIgnoreCase(System.getProperty(PROPERTY_NAME_MODEL_SELECT));
+            if(isOptimisticSelected) {
+                System.err.println("WARN: Running TableImplementation OPTIMISTIC");
+            }
+            return isOptimisticSelected;
         }
 
         @Getter(lazy=true)

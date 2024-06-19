@@ -282,7 +282,8 @@ implements DataTableInteractive {
 
     // -- MEMENTO
 
-    public Memento getMemento(final @Nullable ManagedAction.MementoForArgs argsMemento) {
+    @Override
+    public Memento createMemento(final @Nullable ManagedAction.MementoForArgs argsMemento) {
         return Memento.create(this, argsMemento);
     }
 

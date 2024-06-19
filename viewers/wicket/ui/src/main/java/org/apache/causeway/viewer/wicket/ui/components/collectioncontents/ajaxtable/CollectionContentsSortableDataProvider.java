@@ -89,13 +89,19 @@ extends SortableDataProvider<DataRow, String> {
             return iteratorO(skip, limit);
         case DEFAULT:
         default:
-            break;
+            return iteratorD(skip, limit);
         }
-        val visibleRows = getDataTableModel().getDataRowsFilteredAndSorted().getValue();
-        return sorted(visibleRows).iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 
     // -- HELPER FOR DEFAULT
+
+    private Iterator<DataRow> iteratorD(final long skip, final long limit) {
+        var dataTable = getDataTableModel();
+        // honor (single) column sort (if any)
+        dataTable.getColumnSort().setValue(columnSort().orElse(null));
+        return dataTable.getDataRowsFilteredAndSorted().getValue()
+                .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
+    }
 
     private Optional<DataTableInteractive.ColumnSort> columnSort() {
         val sortParam = getSort();
@@ -126,11 +132,8 @@ extends SortableDataProvider<DataRow, String> {
     // -- HELPER FOR OPTIMISTIC
 
     private Iterator<DataRow> iteratorO(final long skip, final long limit) {
-        var dataTable = getDataTableModel();
-        // honor (single) column sort (if any)
-        dataTable.getColumnSort().setValue(columnSort().orElse(null));
-        return dataTable.getDataRowsFilteredAndSorted().getValue()
-                .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
+        val visibleRows = getDataTableModel().getDataRowsFilteredAndSorted().getValue();
+        return sorted(visibleRows).iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 
     private Can<DataRow> sorted(final Can<DataRow> dataRows) {
