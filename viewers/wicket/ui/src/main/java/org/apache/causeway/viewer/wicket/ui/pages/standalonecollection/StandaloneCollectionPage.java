@@ -30,8 +30,8 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
@@ -88,7 +88,7 @@ public class StandaloneCollectionPage extends PageAbstract {
         Supplier<List<Bookmark>> listSupplier = () -> {
 
             final var dataTableInteractive = collectionModel.getObject();
-            _Observables.LazyObservable<Can<ManagedObject>> dataElements = dataTableInteractive.getDataElements();
+            Observable<Can<ManagedObject>> dataElements = dataTableInteractive.getDataElements();
             Can<ManagedObject> managedObjects = dataElements.getValue();
 
             final var bookmarks =

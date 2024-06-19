@@ -25,7 +25,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;

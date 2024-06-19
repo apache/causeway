@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.tabular.interactive;
+package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
@@ -28,6 +28,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;

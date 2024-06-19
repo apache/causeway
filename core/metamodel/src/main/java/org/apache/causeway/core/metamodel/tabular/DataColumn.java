@@ -16,13 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
+package org.apache.causeway.core.metamodel.tabular;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import java.util.Optional;
 
-import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.commons.binding.Observable;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-public interface GenericColumn
-extends IColumn<DataRow, String> {
+public interface DataColumn {
+
+    String getColumnId();
+    ObjectAssociation getAssociationMetaModel();
+    Observable<String> getColumnFriendlyName();
+    Observable<Optional<String>> getColumnDescription();
 
 }

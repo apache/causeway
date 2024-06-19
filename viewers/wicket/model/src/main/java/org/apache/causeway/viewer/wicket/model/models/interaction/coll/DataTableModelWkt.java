@@ -25,7 +25,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
@@ -82,7 +83,7 @@ implements
     private static final long serialVersionUID = 1L;
 
     @Getter private final Identifier featureIdentifier;
-    private final DataTableInteractive.Memento tableMemento;
+    private final DataTableMemento tableMemento;
 
     private DataTableModelWkt(
             final BookmarkedObjectWkt bookmarkedObject,
@@ -92,7 +93,7 @@ implements
         this.featureIdentifier = featureIdentifier;
         this.tableMemento = tableInteractive.getMemento();
         setObject(tableInteractive); // memoize
-        setupBindings(tableInteractive);
+        tableMemento.setupBindings(tableInteractive);
     }
 
     // --
@@ -105,22 +106,8 @@ implements
     @Override
     protected DataTableInteractive load() {
         val tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
-        setupBindings(tableInteractive);
+        tableMemento.setupBindings(tableInteractive);
         return tableInteractive;
-    }
-
-    // -- HELPER
-
-    /**
-     * Feed changes to the {@link DataTableInteractive} model back into our table memento.
-     */
-    private void setupBindings(final @NonNull DataTableInteractive tableInteractive) {
-        tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
-            tableMemento.setSearchArgument(searchArg);
-        });
-        tableInteractive.getSelectionChanges().addListener((e, o, n)->{
-            tableMemento.setSelectedRowIndexes(tableInteractive.getSelectedRowIndexes());
-        });
     }
 
 }
