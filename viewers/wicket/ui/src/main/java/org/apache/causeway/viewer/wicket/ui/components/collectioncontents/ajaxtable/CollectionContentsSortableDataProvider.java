@@ -32,8 +32,8 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 

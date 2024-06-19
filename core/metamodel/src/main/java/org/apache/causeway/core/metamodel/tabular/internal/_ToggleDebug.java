@@ -16,13 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
+package org.apache.causeway.core.metamodel.tabular.internal;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import org.apache.causeway.core.metamodel.tabular.DataRow;
+class _ToggleDebug {
 
-public interface GenericColumn
-extends IColumn<DataRow, String> {
+    public static void onSelectRowToggle(
+            final ManagedObject rowElement,
+            final Boolean old,
+            final Boolean _new,
+            final boolean isToggleAllEvent) {
+
+        System.err.printf("onSelectRowToggle: %s %b->%b (toggle-all: %b)%n",
+                ""+rowElement.getPojo(), old, _new, isToggleAllEvent);
+    }
+
+    public static void onClearToggleAll(
+            final Boolean old,
+            final Boolean isAllOn,
+            final boolean isClearToggleAllEvent) {
+
+        System.err.printf("clear-all: %b->%b (clear-all: %b)%n",
+                old, isAllOn, isClearToggleAllEvent);
+    }
 
 }

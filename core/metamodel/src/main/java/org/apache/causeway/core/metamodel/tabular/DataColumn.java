@@ -16,29 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.tabular.interactive;
+package org.apache.causeway.core.metamodel.tabular;
 
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import java.util.Optional;
 
-class _ToggleDebug {
+import org.apache.causeway.commons.binding.Observable;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-    public static void onSelectRowToggle(
-            final ManagedObject rowElement,
-            final Boolean old,
-            final Boolean _new,
-            final boolean isToggleAllEvent) {
+public interface DataColumn {
 
-        System.err.printf("onSelectRowToggle: %s %b->%b (toggle-all: %b)%n",
-                ""+rowElement.getPojo(), old, _new, isToggleAllEvent);
-    }
-
-    public static void onClearToggleAll(
-            final Boolean old,
-            final Boolean isAllOn,
-            final boolean isClearToggleAllEvent) {
-
-        System.err.printf("clear-all: %b->%b (clear-all: %b)%n",
-                old, isAllOn, isClearToggleAllEvent);
-    }
+    /**
+     * Corresponds to the association's id.
+     */
+    String getColumnId();
+    ObjectAssociation getAssociationMetaModel();
+    Observable<String> getColumnFriendlyName();
+    Observable<Optional<String>> getColumnDescription();
 
 }

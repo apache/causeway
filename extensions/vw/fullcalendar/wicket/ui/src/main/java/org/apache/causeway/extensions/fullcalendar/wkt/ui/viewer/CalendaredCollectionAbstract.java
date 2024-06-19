@@ -24,8 +24,8 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFal
 import org.apache.wicket.markup.head.IHeaderResponse;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarConfig;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSource;

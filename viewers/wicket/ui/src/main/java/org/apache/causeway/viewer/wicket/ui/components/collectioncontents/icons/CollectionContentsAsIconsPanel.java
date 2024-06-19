@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.icons
 
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;

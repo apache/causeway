@@ -16,13 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
+package org.apache.causeway.core.metamodel.tabular;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import java.io.Serializable;
 
-import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public interface GenericColumn
-extends IColumn<DataRow, String> {
+public interface DataTableMemento extends Serializable {
+
+    DataTableInteractive getDataTableModel(ManagedObject bookmarkedOwner);
+    void setupBindings(DataTableInteractive tableInteractive);
 
 }

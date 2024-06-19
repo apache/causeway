@@ -16,25 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.tabular.interactive;
+package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.tabular.DataColumn;
 
 import lombok.Getter;
 import lombok.NonNull;
 
-public class DataColumn {
+class DataColumnInternal
+implements DataColumn {
 
     @Getter private final @NonNull String columnId;
     @Getter private final @NonNull ObjectAssociation associationMetaModel;
     @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
     @Getter private final @NonNull LazyObservable<Optional<String>> columnDescription;
 
-    public DataColumn(final DataTableInteractive parentTable, final ObjectAssociation associationMetaModel) {
+    DataColumnInternal(final DataTableInternal parentTable, final ObjectAssociation associationMetaModel) {
         this.associationMetaModel = associationMetaModel;
         this.columnId = associationMetaModel.getId();
 
