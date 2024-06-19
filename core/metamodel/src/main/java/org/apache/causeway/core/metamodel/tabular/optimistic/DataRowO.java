@@ -25,6 +25,7 @@ import org.apache.causeway.applib.services.filter.CollectionFilterService.Tokens
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -96,19 +97,16 @@ public class DataRowO implements DataRow {
 
     @Override
     public int getRowIndex() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw _Exceptions.unsupportedOperation();
     }
 
     @Override
     public Can<ManagedObject> getCellElementsForColumn(@NonNull final DataColumn column) {
-        // TODO Auto-generated method stub
-        return null;
+        throw _Exceptions.unsupportedOperation();
     }
 
     @Override
     public Optional<Tokens> getFilterTokens() {
-        // TODO Auto-generated method stub
         return Optional.empty();
     }
 

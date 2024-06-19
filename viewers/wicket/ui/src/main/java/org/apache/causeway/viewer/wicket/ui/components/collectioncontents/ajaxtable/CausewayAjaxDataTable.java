@@ -71,6 +71,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
         this.toggleboxColumn = toggleboxColumn;
         setOutputMarkupId(true);
         setVersioned(false);
+        //TODO [CAUSEWAY-3772] optimization reinstate for the default TableImplementation?
         if(DataTableInteractive.TableImplementation.getSelected().isOptimistic()) {
             setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
         }

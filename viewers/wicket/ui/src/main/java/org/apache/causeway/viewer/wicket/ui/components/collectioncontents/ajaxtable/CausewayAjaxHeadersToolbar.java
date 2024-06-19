@@ -34,16 +34,16 @@ public class CausewayAjaxHeadersToolbar
 extends CausewayAjaxHeadersToolbarAbstract<String> {
 
     private static final long serialVersionUID = 1L;
-    private final CollectionContentsSortableDataProvider stateLocator;
+    private final CollectionContentsSortableDataProvider singleSortStateLocator;
     private CausewayAjaxDataTable table;
 
     public CausewayAjaxHeadersToolbar(
             final CausewayAjaxDataTable table,
-            final CollectionContentsSortableDataProvider stateLocator) {
-        super(table, _Casts.uncheckedCast(stateLocator));
+            final CollectionContentsSortableDataProvider singleSortStateLocator) {
+        super(table, _Casts.uncheckedCast(singleSortStateLocator));
         this.table = table;
         table.setOutputMarkupId(true);
-        this.stateLocator = stateLocator;
+        this.singleSortStateLocator = singleSortStateLocator;
     }
 
     @Override
@@ -80,7 +80,7 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
         for (SortOrder sortOrder : SortOrder.values()) {
             String property = uiHintContainer.getHint(table, sortOrder.name());
             if(property != null) {
-                stateLocator.getSortState().setPropertySortOrder(property, sortOrder);
+                singleSortStateLocator.getSortState().setPropertySortOrder(property, sortOrder);
             }
         }
     }
