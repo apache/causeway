@@ -101,8 +101,7 @@ public final class Clob implements NamedWithMimeType {
      * @return new {@link Clob}
      */
     public static Clob of(final String name, final CommonMimeType mimeType, final CharSequence content) {
-        val proposedFileExtension = mimeType.getProposedFileExtensions().getFirst().orElse("");
-        val fileName = _Strings.asFileNameWithExtension(name, proposedFileExtension);
+        val fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
         return new Clob(fileName, mimeType.getMimeType(), content);
     }
 
