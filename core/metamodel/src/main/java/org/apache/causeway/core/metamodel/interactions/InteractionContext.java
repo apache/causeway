@@ -121,13 +121,4 @@ public abstract class InteractionContext {
     }
 
 
-    /**
-     * Convenience method that indicates whether the
-     * {@link #getInitiatedBy() interaction was invoked} by the framework.
-     */
-    public boolean isFrameworkInitiated() {
-        return initiatedBy == InteractionInitiatedBy.FRAMEWORK;
-    }
-
-
 }
