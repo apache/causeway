@@ -499,7 +499,7 @@ public class XmlSnapshot implements Snapshot {
                 return false;
             }
             final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
-                    InteractionInitiatedBy.FRAMEWORK);
+                    InteractionInitiatedBy.PASS_THROUGH);
 
             if (referencedObject == null) {
                 return true; // not a failure if the reference was null
@@ -520,7 +520,7 @@ public class XmlSnapshot implements Snapshot {
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
             final ManagedObject collection = oneToManyAssociation.get(fieldPlace.getObject(),
-                    InteractionInitiatedBy.FRAMEWORK);
+                    InteractionInitiatedBy.PASS_THROUGH);
 
             if (log.isDebugEnabled()) {
                 log.debug("includeField(Pl, Vec, Str): 1->M: {}",
@@ -700,7 +700,7 @@ public class XmlSnapshot implements Snapshot {
 
                 ManagedObject value;
                 try {
-                    value = valueAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+                    value = valueAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
                     val valueSpec = value.getSpecification();
 
@@ -740,7 +740,7 @@ public class XmlSnapshot implements Snapshot {
                 ManagedObject referencedObjectAdapter;
 
                 try {
-                    referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+                    referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
                     // XML
                     causewayMetaModel.setAttributesForReference(xmlReferenceElement, schema.getPrefix(),
@@ -773,7 +773,7 @@ public class XmlSnapshot implements Snapshot {
 
                 ManagedObject collection;
                 try {
-                    collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+                    collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getElementType();
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 

@@ -159,7 +159,7 @@ public final class PropertyChangeRecord {
     // -- HELPER
 
     private Object getPropertyValue() {
-        val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.FRAMEWORK);
+        val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.PASS_THROUGH);
         return MmUnwrapUtils.single(referencedAdapter);
     }
 
