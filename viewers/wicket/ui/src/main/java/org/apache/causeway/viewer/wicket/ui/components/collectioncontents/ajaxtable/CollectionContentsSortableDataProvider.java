@@ -30,10 +30,15 @@ import org.apache.wicket.model.IModel;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive.TableImplementation;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
@@ -79,14 +84,24 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public Iterator<DataRow> iterator(final long skip, final long limit) {
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            return iteratorO(skip, limit);
+        case DEFAULT:
+        default:
+            return iteratorD(skip, limit);
+        }
+    }
+
+    // -- HELPER FOR DEFAULT
+
+    private Iterator<DataRow> iteratorD(final long skip, final long limit) {
         var dataTable = getDataTableModel();
         // honor (single) column sort (if any)
         dataTable.getColumnSort().setValue(columnSort().orElse(null));
         return dataTable.getDataRowsFilteredAndSorted().getValue()
                 .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
-
-    // -- HELPER
 
     private Optional<DataTableInteractive.ColumnSort> columnSort() {
         val sortParam = getSort();
@@ -112,6 +127,41 @@ extends SortableDataProvider<DataRow, String> {
         return sortParam.isAscending()
                 ? MmSortUtils.SortDirection.ASCENDING
                 : MmSortUtils.SortDirection.DESCENDING;
+    }
+
+    // -- HELPER FOR OPTIMISTIC
+
+    private Iterator<DataRow> iteratorO(final long skip, final long limit) {
+        val visibleRows = getDataTableModel().getDataRowsFilteredAndSorted().getValue();
+        return sorted(visibleRows).iterator(Math.toIntExact(skip), Math.toIntExact(limit));
+    }
+
+    private Can<DataRow> sorted(final Can<DataRow> dataRows) {
+        val sort = getSort();
+        val sortProperty = lookupPropertyFor(sort).orElse(null);
+        if(sortProperty != null) {
+            val objComparator = MmSortUtils.orderingBy(sortProperty, sortDirection(sort));
+            return dataRows.sorted((a, b)-> {
+                ManagedObject managedObjectA = a.getRowElement();
+                if(managedObjectA.getSpecialization().isViewmodel()) {
+                    // make sure any referenced entities are made live if currently hollow
+                    ManagedObjects.refreshViewmodel(managedObjectA, /*bookmark supplier*/ null);
+                }
+                ManagedObject managedObjectB = b.getRowElement();
+                if(managedObjectA.getSpecialization().isViewmodel()) {
+                    // make sure any referenced entities are made live if currently hollow
+                    ManagedObjects.refreshViewmodel(managedObjectB, /*bookmark supplier*/ null);
+                }
+                return objComparator.compare(managedObjectA, managedObjectB);
+            });
+        }
+        return dataRows;
+    }
+
+    private Optional<OneToOneAssociation> lookupPropertyFor(final SortParam<String> sort) {
+        return Optional.ofNullable(sort)
+        .map(SortParam::getProperty)
+        .flatMap(getDataTableModel().getElementType()::getProperty);
     }
 
 }

@@ -38,7 +38,9 @@ public class MmSortUtils {
         DESCENDING;
     }
 
-    public Comparator<ManagedObject> orderingBy(final ObjectAssociation sortProperty, final SortDirection sortDirection) {
+    public Comparator<ManagedObject> orderingBy(
+            final ObjectAssociation sortProperty,
+            final SortDirection sortDirection) {
         final Comparator<ManagedObject> comparator = (sortDirection != SortDirection.DESCENDING)
                 ? NATURAL_NULL_FIRST
                 : NATURAL_NULL_FIRST.reversed();

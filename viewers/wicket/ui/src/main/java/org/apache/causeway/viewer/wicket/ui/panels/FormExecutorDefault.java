@@ -161,7 +161,7 @@ implements FormExecutor, HasCommonContext {
             //XXX triggers ManagedObject.getBookmarkRefreshed()
             val resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
-                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
+                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
                     prop->ActionResultResponseType
                             .toEntityPage(resultAdapter));
 

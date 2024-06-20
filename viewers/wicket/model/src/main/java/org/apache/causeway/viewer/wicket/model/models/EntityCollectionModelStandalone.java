@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
@@ -34,7 +36,8 @@ extends EntityCollectionModelAbstract {
 
     public static EntityCollectionModelStandalone forActionModel(
             final @NonNull PackedManagedObject collectionAsAdapter,
-            final @NonNull ActionModel actionModel) {
+            final @NonNull ActionModel actionModel,
+            final @NonNull Can<ManagedObject> args) {
 
         val action = actionModel.getAction();
 
@@ -43,6 +46,7 @@ extends EntityCollectionModelAbstract {
                         BookmarkedObjectWkt
                             .ofAdapter(actionModel.getParentObject()),
                         action,
+                        args,
                         collectionAsAdapter));
     }
 

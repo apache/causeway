@@ -47,7 +47,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
@@ -226,10 +225,6 @@ implements DataTableInteractive {
     @Override
     public ObjectMember getMetaModel() {
         return managedMember.getMetaModel();
-    }
-
-    public ObjectSpecification getElementType() {
-        return getMetaModel().getElementType();
     }
 
     @Override

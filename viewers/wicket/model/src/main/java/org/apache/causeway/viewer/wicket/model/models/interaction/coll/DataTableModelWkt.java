@@ -18,23 +18,22 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 
+import org.apache.wicket.model.IModel;
+
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive.TableImplementation;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Bound to a BookmarkedObjectWkt, with the {@link DataTableInteractive}
@@ -46,9 +45,9 @@ import lombok.val;
  *
  * @see HasBookmarkedOwnerAbstract
  */
-public class DataTableModelWkt
-extends HasBookmarkedOwnerAbstract<DataTableInteractive>
-implements
+public interface DataTableModelWkt
+extends
+    IModel<DataTableInteractive>,
     HasUiParentObject<UiObject> {
 
     // -- FACTORIES
@@ -57,57 +56,43 @@ implements
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull ObjectAction actMetaModel,
             final @NonNull ManagedObject actionResult) {
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            throw _Exceptions.unexpectedCodeReach();
+        case DEFAULT:
+        default:
+            return DataTableModelWktD.forActionModel(bookmarkedObjectModel, actMetaModel, actionResult);
+        }
+    }
 
-        val managedAction = ManagedAction
-                .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
-        val tableInteractive = DataTableInteractive.forAction(
-                managedAction,
-                actionResult);
-        return new DataTableModelWkt(
-                bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableInteractive);
+    public static DataTableModelWkt forActionModel(
+            final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
+            final @NonNull ObjectAction actMetaModel,
+            final @NonNull Can<ManagedObject> args,
+            final @NonNull ManagedObject actionResult) {
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            return DataTableModelWktO.forActionModel(bookmarkedObjectModel, actMetaModel, args, actionResult);
+        case DEFAULT:
+        default:
+            return DataTableModelWktD.forActionModel(bookmarkedObjectModel, actMetaModel, actionResult);
+        }
     }
 
     public static @NonNull DataTableModelWkt forCollection(
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull OneToManyAssociation collMetaModel) {
-
-        val tableInteractive = DataTableInteractive.forCollection(
-                ManagedCollection
-                .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
-        return new DataTableModelWkt(
-                bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableInteractive);
+        switch (TableImplementation.getSelected()) {
+        case OPTIMISTIC:
+            return DataTableModelWktO.forCollection(bookmarkedObjectModel, collMetaModel);
+        case DEFAULT:
+        default:
+            return DataTableModelWktD.forCollection(bookmarkedObjectModel, collMetaModel);
+        }
     }
 
-    // -- CONSTRUCTION
-
-    private static final long serialVersionUID = 1L;
-
-    @Getter private final Identifier featureIdentifier;
-    private final DataTableMemento tableMemento;
-
-    private DataTableModelWkt(
-            final BookmarkedObjectWkt bookmarkedObject,
-            final Identifier featureIdentifier,
-            final DataTableInteractive tableInteractive) {
-        super(bookmarkedObject);
-        this.featureIdentifier = featureIdentifier;
-        this.tableMemento = tableInteractive.createMemento();
-        setObject(tableInteractive); // memoize
-        tableMemento.setupBindings(tableInteractive);
-    }
-
-    // --
-
-    @Override
-    public UiObject getParentUiModel() {
-        return ()->super.getBookmarkedOwner();
-    }
-
-    @Override
-    protected DataTableInteractive load() {
-        val tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
-        tableMemento.setupBindings(tableInteractive);
-        return tableInteractive;
-    }
+    Identifier getFeatureIdentifier();
+    boolean isAttached();
+    ManagedObject getBookmarkedOwner();
 
 }
