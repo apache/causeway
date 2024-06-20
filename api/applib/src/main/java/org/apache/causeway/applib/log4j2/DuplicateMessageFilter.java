@@ -1,7 +1,5 @@
 package org.apache.causeway.applib.log4j2;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.logging.log4j.Level;
@@ -12,35 +10,35 @@ import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Node;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.filter.AbstractFilter;
 import org.apache.logging.log4j.message.Message;
 
 /**
  * <pre>
- * &lt;Configuration status=&quot;WARN&quot;&gt;
+ * &lt;Configuration status=&quot;WARN&quot; packages=&quot;org.apache.causeway.applib.log4j2&quot; &gt;
  *
- *     &lt;Appenders&gt;
- *         &lt;Console name=&quot;Console&quot; target=&quot;SYSTEM_OUT&quot; follow=&quot;true&quot;&gt;
- *             &lt;DuplicateMessageFilter onMatch=&quot;NEUTRAL&quot; onMismatch=&quot;DENY&quot;/&gt;
- *             &lt;PatternLayout pattern=&quot;${sys:CONSOLE_LOG_PATTERN}&quot; /&gt;
- *         &lt;/Console&gt;
- *         &lt;Console name=&quot;DuplicateMessages&quot; target=&quot;SYSTEM_OUT&quot; follow=&quot;true&quot;&gt;
- *             &lt;PatternLayout pattern=&quot;${sys:CONSOLE_LOG_PATTERN}&quot; /&gt;
- *         &lt;/Console&gt;
- *     &lt;/Appenders&gt;
+ *   &lt;Appenders&gt;
+ *     &lt;Console name=&quot;Console&quot;
+ *         target=&quot;SYSTEM_OUT&quot; follow=&quot;true&quot;&gt;
+ *       &lt;DuplicateMessageFilter/&gt;
+ *       &lt;PatternLayout pattern=&quot;${sys:CONSOLE_LOG_PATTERN}&quot; /&gt;
+ *     &lt;/Console&gt;
+ *     &lt;Console name=&quot;DuplicateMessages&quot;
+ *         target=&quot;SYSTEM_OUT&quot; follow=&quot;true&quot;&gt;
+ *       &lt;PatternLayout pattern=&quot;${sys:CONSOLE_LOG_PATTERN}&quot; /&gt;
+ *     &lt;/Console&gt;
+ *   &lt;/Appenders&gt;
  *
- *     &lt;Loggers&gt;
- *
- *         &lt;Logger name=&quot;org.apache.causeway.applib.log4j2.DuplicateMessageFilter&quot; level=&quot;info&quot; additivity=&quot;false&quot;&gt;
- *             &lt;AppenderRef ref=&quot;DuplicateMessages&quot;/&gt;
- *         &lt;/Logger&gt;
- *
- *         &lt;Root level=&quot;info&quot;&gt;
- *             &lt;AppenderRef ref=&quot;Console&quot; /&gt;
- *         &lt;/Root&gt;
- *     &lt;/Loggers&gt;
+ *   &lt;Loggers&gt;
+ *     &lt;Logger name=&quot;org.apache.causeway.applib.log4j2.DuplicateMessageFilter&quot;
+ *         level=&quot;info&quot; additivity=&quot;false&quot;&gt;
+ *       &lt;AppenderRef ref=&quot;DuplicateMessages&quot;/&gt;
+ *     &lt;/Logger&gt;
+ *     &lt;Root level=&quot;info&quot;&gt;
+ *       &lt;AppenderRef ref=&quot;Console&quot; /&gt;
+ *     &lt;/Root&gt;
+ *   &lt;/Loggers&gt;
  * &lt;/Configuration&gt;
  * </pre>
  */
@@ -52,8 +50,8 @@ public class DuplicateMessageFilter extends AbstractFilter {
     private volatile Message lastMessage = null;
     private final AtomicInteger repeatCount = new AtomicInteger(0);
 
-    public DuplicateMessageFilter(Result onMatch, Result onMismatch) {
-        super(onMatch, onMismatch);
+    public DuplicateMessageFilter() {
+        super(Result.DENY, Result.NEUTRAL);
     }
 
     @Override
@@ -91,10 +89,7 @@ public class DuplicateMessageFilter extends AbstractFilter {
     }
 
     @PluginFactory
-    public static DuplicateMessageFilter createFilter(
-            @PluginAttribute(value = "onMatch", defaultString = "NEUTRAL") Result onMatch,
-            @PluginAttribute(value = "onMismatch", defaultString = "DENY") Result onMismatch
-    ) {
-        return new DuplicateMessageFilter(onMatch, onMatch);
+    public static DuplicateMessageFilter createFilter() {
+        return new DuplicateMessageFilter();
     }
 }

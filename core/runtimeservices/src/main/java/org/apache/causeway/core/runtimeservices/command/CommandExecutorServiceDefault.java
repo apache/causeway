@@ -340,11 +340,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private String argStr(Identifier actionIdentifier, int i, ParamDto paramDto) {
-        if(isSensitiveName(paramDto.getName())) {
-            return "********";
-        }
+        String paramName = paramDto.getName();
         val argValue = valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
-        return argValue.getTitle();
+        return UtilStr.namedArgStr(paramName, argValue);
     }
 
     private static boolean isSensitiveName(String name) {

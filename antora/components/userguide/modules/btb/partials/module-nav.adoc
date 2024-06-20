@@ -6,5 +6,6 @@
 ** xref:userguide:btb:headless-access.adoc[Headless Access]
 ** xref:userguide:btb:programming-model.adoc[Programming Model]
 ** xref:userguide:btb:hints-and-tips.adoc[Hints-n-Tips]
+** xref:userguide:btb:logging.adoc[Logging]
 ** xref:userguide:btb:troubleshooting-visibility-and-usability.adoc[]
 ** xref:userguide:btb:i18n.adoc[Internationalization (i18n)]

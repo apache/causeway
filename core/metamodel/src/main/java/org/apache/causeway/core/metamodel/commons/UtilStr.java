@@ -21,7 +21,10 @@ package org.apache.causeway.core.metamodel.commons;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
@@ -42,4 +45,35 @@ public class UtilStr {
                     ? bookmark.stringify()
                     : "";
     }
+
+    public static String namedArgStr(
+            final String paramName,
+            final Optional<ManagedObject> managedObjectIfany) {
+        if (isSensitiveName(paramName)) {
+            return "********";
+        }
+        if(managedObjectIfany.isEmpty()) {
+            return "<none>";
+        }
+        val managedObject = managedObjectIfany.get();
+        return namedArgStr(paramName, managedObject);
+    }
+
+    public static String namedArgStr(String paramName, ManagedObject managedObject) {
+        if (isSensitiveName(paramName)) {
+            return "********";
+        }
+        if(managedObject.getSpecialization().isEmpty()) {
+            return "<none>";
+        }
+        return managedObject.getTitle();
+    }
+
+    private static boolean isSensitiveName(String name) {
+        return name.equalsIgnoreCase("password") ||
+                name.equalsIgnoreCase("secret") ||
+                name.equalsIgnoreCase("apikey") ||
+                name.equalsIgnoreCase("token");
+    }
+
 }

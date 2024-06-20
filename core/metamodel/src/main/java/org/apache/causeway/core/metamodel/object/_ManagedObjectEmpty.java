@@ -38,4 +38,9 @@ implements Bookmarkable.NoBookmark {
         return null;
     }
 
+    @Override
+    public String getTitle() {
+        return "empty " + getSpecification().getLogicalTypeName();
+    }
+
 }

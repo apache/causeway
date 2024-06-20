@@ -601,17 +601,12 @@ implements ObjectAction {
         })).collect(Collectors.joining(","));
     }
 
-    private static String argStr(String paramId, Can<ManagedObject> arguments, int i) {
-        return isSensitiveName(paramId) ? "********" : arguments.get(i).map(ManagedObject::getTitle).orElse(null);
+    private static String argStr(
+            final String paramId,
+            final Can<ManagedObject> arguments,
+            final int i) {
+        return UtilStr.namedArgStr(paramId, arguments.get(i));
     }
-
-    private static boolean isSensitiveName(String name) {
-        return name.equalsIgnoreCase("password") ||
-                name.equalsIgnoreCase("secret") ||
-                name.equalsIgnoreCase("apikey") ||
-                name.equalsIgnoreCase("token");
-    }
-
 
     private CommandDto commandDtoFor(
             final UUID interactionId,
