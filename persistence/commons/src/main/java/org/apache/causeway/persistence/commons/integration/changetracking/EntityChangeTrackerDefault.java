@@ -24,7 +24,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
@@ -97,7 +99,6 @@ import lombok.extern.log4j.Log4j2;
 @TransactionScope
 @Named(CausewayModulePersistenceCommons.NAMESPACE + ".EntityChangeTrackerDefault")
 @Qualifier("default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityChangeTrackerDefault
 implements
@@ -107,6 +108,26 @@ implements
     HasEnlistedEntityChanges,
     TransactionSynchronization,
     Ordered {
+
+    static AtomicInteger transactionCounter = new AtomicInteger(0);
+
+    @Inject
+    public EntityChangeTrackerDefault(
+            EntityPropertyChangePublisher entityPropertyChangePublisher,
+            EntityChangesPublisher entityChangesPublisher,
+            Provider<InteractionProvider> interactionProviderProvider,
+            PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
+
+        if(log.isInfoEnabled()) {
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            log.info("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
+        }
+
+        this.entityPropertyChangePublisher = entityPropertyChangePublisher;
+        this.entityChangesPublisher = entityChangesPublisher;
+        this.interactionProviderProvider = interactionProviderProvider;
+        this.preAndPostValueEvaluatorService = preAndPostValueEvaluatorService;
+    }
 
     @Programmatic
     @Override
@@ -146,6 +167,12 @@ implements
 
     @Override
     public void destroy() throws Exception {
+
+        if(log.isInfoEnabled()) {
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            log.info("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
+        }
+
         clearEnlistedPropertyChangeRecordsById();
         entityPropertyChangeRecordsForPublishing.clear();
         changeKindByEnlistedAdapter.clear();
