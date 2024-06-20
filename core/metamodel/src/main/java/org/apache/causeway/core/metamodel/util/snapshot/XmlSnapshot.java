@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.util.snapshot;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -539,7 +540,7 @@ public class XmlSnapshot implements Snapshot {
                 allFieldsNavigated[0] = allFieldsNavigated[0] && appendedXml;
             });
 
-            log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
+            log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + Arrays.toString(allFieldsNavigated)));
             return allFieldsNavigated[0];
         }
 
