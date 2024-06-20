@@ -316,8 +316,8 @@ public final class ManagedObjects {
                 : NATURAL_NULL_FIRST.reversed();
 
         return (p, q) -> {
-            val pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
-            val qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
+            val pSort = sortProperty.get(p, InteractionInitiatedBy.PASS_THROUGH);
+            val qSort = sortProperty.get(q, InteractionInitiatedBy.PASS_THROUGH);
             return comparator.compare(pSort, qSort);
         };
 
@@ -325,29 +325,25 @@ public final class ManagedObjects {
 
     // -- PREDEFINED COMPARATOR
 
-    static final Comparator<ManagedObject> NATURAL_NULL_FIRST = new Comparator<ManagedObject>(){
-        @SuppressWarnings({"rawtypes" })
-        @Override
-        public int compare(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
-            val aPojo = MmUnwrapUtils.single(a);
-            val bPojo = MmUnwrapUtils.single(b);
-            if(Objects.equals(aPojo, bPojo)) {
-                return 0;
-            }
-            if((aPojo==null
-                    || aPojo instanceof Comparable)
-                && (bPojo==null
-                        || bPojo instanceof Comparable)) {
-                return _Objects.compareNullsFirst((Comparable)aPojo, (Comparable)bPojo);
-            }
-            final int hashCompare = Integer.compare(Objects.hashCode(aPojo), Objects.hashCode(bPojo));
-            if(hashCompare!=0) {
-                return hashCompare;
-            }
-            //XXX on hash-collision we return an arbitrary non-equal relation (unspecified behavior)
-            return -1;
-        }
+    static final Comparator<ManagedObject> NATURAL_NULL_FIRST = (a, b) -> {
 
+        val aPojo = MmUnwrapUtils.single(a);
+        val bPojo = MmUnwrapUtils.single(b);
+        if (Objects.equals(aPojo, bPojo)) {
+            return 0;
+        }
+        if ((aPojo == null
+                || aPojo instanceof Comparable)
+                && (bPojo == null
+                || bPojo instanceof Comparable)) {
+            return _Objects.compareNullsFirst((Comparable) aPojo, (Comparable) bPojo);
+        }
+        final int hashCompare = Integer.compare(Objects.hashCode(aPojo), Objects.hashCode(bPojo));
+        if (hashCompare != 0) {
+            return hashCompare;
+        }
+        //XXX on hash-collision we return an arbitrary non-equal relation (unspecified behavior)
+        return -1;
     };
 
     // -- DEFAULTS UTILITIES
