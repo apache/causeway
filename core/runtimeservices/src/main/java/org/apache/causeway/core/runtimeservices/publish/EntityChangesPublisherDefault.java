@@ -92,11 +92,14 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     // -- HELPER
 
     private Optional<EntityChanges> getPayload(final @NonNull HasEnlistedEntityChanges hasEnlistedEntityChanges) {
-        return enabledSubscribers.isEmpty()
-                ? Optional.empty()
-                : hasEnlistedEntityChanges.getEntityChanges(
-                        clockService.getClock().nowAsJavaSqlTimestamp(), // current time
-                        userService.currentUserNameElseNobody()); // current user
+        if (enabledSubscribers.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return hasEnlistedEntityChanges.getEntityChanges(
+                clockService.getClock().nowAsJavaSqlTimestamp(), // current time
+                userService.currentUserNameElseNobody()          // current user
+        );
     }
 
     // x-ray support
