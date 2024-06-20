@@ -1,0 +1,92 @@
+[[logging]]
+= Logging
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Apache Causeway uses link:https://logging.apache.org/log4j/2.x/index.html[log4j2] as its logging framework, link:https://logging.apache.org/log4j/2.x/manual/configuration.html[configured] using the `log42j-spring.xml` file.
+
+The applib provides a couple of plugins that you might wish to use in your own applications.
+
+== `DuplicateMessageFilter`
+
+If you use an extension such as the xref:executionoutbox:about.adoc[] then you might find repeating log messages.
+The `DuplicateMessageFilter` detects these and only logs the first of them, continuing to count any duplicates.
+When a different log message needs to be printed, the filter it prints out a repeat count, and then logs the new message.
+
+For example:
+
+[source,txt]
+----
+... 07:37:09.992 ...ObjectActionDefault   : Executing: org.apache.isis.extensions.executionoutbox.applib.restapi.OutboxRestApi#pending()
+... 07:37:47.865 ...DuplicateMessageFilter: ... repeated 3 times
+... 07:37:47.865 ...ObjectActionMixedIn   : Executing: org.apache.isis.extensions.secman.applib.user.menu.MeService#me()
+... 07:37:49.984 ...ObjectActionDefault   : Executing: org.apache.isis.extensions.executionoutbox.applib.restapi.OutboxRestApi#pending()
+----
+
+To configure:
+
+[source,xml]
+.log4j-spring.xml
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="org.apache.causeway.applib.log4j2">  <!--.-->
+
+</Configuration>
+  ...
+  <Appenders>
+      <Console name="Console" target="SYSTEM_OUT" follow="true">
+          <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
+          <DuplicateMessageFilter/>                                         <!--.-->
+      </Console>
+      <Console name="DuplicateMessages" target="SYSTEM_OUT" follow="true">  <!--.-->
+          <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" />
+      </Console>
+  </Appenders>
+
+  <Loggers>
+    <Logger                                                                 <!--.-->
+      name="org.apache.causeway.applib.log4j2.DuplicateMessageFilter"
+      level="info"
+      additivity="false">
+        <AppenderRef ref="DuplicateMessages"/>                              <!--3-->
+    </Logger>
+    ...
+  </Loggers>
+  ...
+</Configuration>
+----
+<.> add `org.apache.causeway.applib.log4j2` to the `packages` attribute
+<.> log messages send to the `Console` appender will have the filter applied to them
+<.> defines an appender for the filter's own messages (cannot use `Console`)
+<.> instruct the filter's own messages to use the `DuplicateMessages` appender.
+Note that `additivity=false`.
+
+
+== `TruncatingMessageFactory`
+
+Most log messages use placeholders: `log.info("Executing {} {}", foo, bar);
+The values of the arguments to these placeholders (`foo`, `bar`) are evaluated using `toString()` if required.
+
+If this `toString()` representation is very large, then this could make the log difficult to read.
+The `TruncatingMessageFactory` automatically trims all arguments to no more than 128 characters.
+
+[TIP]
+====
+Only the arguments for the placeholder are truncated, not the original message.
+If you want to prevent truncation, simply log a single string, eg `log.info(xmlStr)`
+====
+To use, either specify the `-Dlog4j2.messageFactory` system property or the `LOG4J_MESSAGE_FACTORY` environment variable:
+
+    -Dlog4j2.messageFactory=org.apache.causeway.applib.log4j2.TruncatingMessageFactory
+
+See link:https://logging.apache.org/log4j/2.x/manual/configuration.html#system-properties[log4j docs] for further details.
+
+
+[WARNING]
+====
+The implementation is not the most efficient.
+If your application logs many messages, you may want to consider refining it.
+====
+
+

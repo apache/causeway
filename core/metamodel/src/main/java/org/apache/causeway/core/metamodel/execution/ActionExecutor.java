@@ -21,12 +21,17 @@ package org.apache.causeway.core.metamodel.execution;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -46,6 +51,8 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.schema.cmd.v2.ActionDto;
+import org.apache.causeway.schema.cmd.v2.ParamDto;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
@@ -53,9 +60,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 @RequiredArgsConstructor
+@Log4j2
 public final class ActionExecutor
 implements
     HasMetaModelContext,
@@ -131,10 +140,11 @@ implements
         // update the current execution with the DTO (memento)
         //
         // but ... no point in attempting this if no bookmark is yet available.
-        // this logic is for symmetric with PropertyModifier, which has a scenario where this might occur.
+        // this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
         //
         val ownerAdapter = head.getOwner();
-        val ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
+        Optional<Bookmark> ownerBookmarkIfAny = ManagedObjects.bookmark(ownerAdapter);
+        val ownerHasBookmark = ownerBookmarkIfAny.isPresent();
         if (ownerHasBookmark) {
             val invocationDto =
                     getInteractionDtoServiceInternal().asActionInvocationDto(owningAction, head, arguments);

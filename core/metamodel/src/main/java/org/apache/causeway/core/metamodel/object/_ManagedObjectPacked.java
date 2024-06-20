@@ -50,6 +50,13 @@ implements
     }
 
     @Override
+    public String getTitle() {
+        return nonScalar.stream()
+                    .map(ManagedObject::getTitle)
+                    .collect(Collectors.joining(","));
+    }
+
+    @Override
     public Object getPojo() {
         // this algorithm preserves null pojos ...
         return Collections.unmodifiableList(
