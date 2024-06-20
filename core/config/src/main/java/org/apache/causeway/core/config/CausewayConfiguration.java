@@ -1558,6 +1558,9 @@ public class CausewayConfiguration {
                 public enum Level {
                     COUNTERS_ONLY,
                     COUNTERS_AND_DETAIL;
+
+                    public boolean isCountersOnly() { return this == COUNTERS_ONLY; }
+                    public boolean isCountersAndDetail() { return this == COUNTERS_AND_DETAIL; }
                 }
 
                 /**
