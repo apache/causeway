@@ -19,6 +19,9 @@
  */
 package org.apache.causeway.persistence.commons.integration.changetracking;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -124,9 +128,9 @@ implements
             Provider<InteractionProvider> interactionProviderProvider,
             PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
 
-        if(log.isInfoEnabled()) {
+        if(log.isDebugEnabled()) {
             val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
-            log.info("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
+            log.debug("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
         }
 
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
@@ -158,19 +162,13 @@ implements
      * As used when {@link #enlistCreated(ManagedObject)} or {@link #enlistUpdating(ManagedObject, Function)}
      */
     private void addPropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, PropertyChangeRecord pcr) {
-        if(containsPropertyChangeRecord(pcrId)) {
-            return;
-        }
-        enlistedPropertyChangeRecordsById.put(pcrId, pcr);
+        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> pcr);
     }
     /**
      * As used when {@link #enlistDeleting(ManagedObject)}.
      */
-    private void computePropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, Function<PropertyChangeRecordId, PropertyChangeRecord> propertyChangeRecordIdPropertyChangeRecordFunction) {
-        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, propertyChangeRecordIdPropertyChangeRecordFunction);
-    }
-    private boolean containsPropertyChangeRecord(PropertyChangeRecordId pcrId) {
-        return enlistedPropertyChangeRecordsById.containsKey(pcrId);
+    private void addPropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, Function<PropertyChangeRecordId, PropertyChangeRecord> func) {
+        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
     }
 
     /**
@@ -178,22 +176,48 @@ implements
      */
     private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
         = _Lazy.of(() -> {
-        val records = enlistedPropertyChangeRecordsById.values().stream()
+            Set<PropertyChangeRecord> records;
+            try {
+                records = changedRecords(enlistedPropertyChangeRecordsById.values());
+            } catch(ConcurrentModificationException ex) {
+                log.warn(
+                        "A concurrent modification exception, one of these properties seemed to change as we looked at it :\n" +
+                        enlistedPropertyChangeRecordsById.keySet()
+                                .stream()
+                                .map(PropertyChangeRecordId::toString)
+                                .collect(Collectors.joining("\n"))
+                );
+                // instead, we take a copy
+                records = changedRecords(new ArrayList<PropertyChangeRecord>(enlistedPropertyChangeRecordsById.values()));
+            }
+
+        enlistedPropertyChangeRecordsById.clear();
+
+        return records;
+    });
+
+    /**
+     * when iterating over the original value set, if any of the properties causes the entity to change state as it is
+     * evaluated then a ConcurrentModificationException will be thrown because an enlist will occur.
+     */
+    private Set<PropertyChangeRecord> changedRecords(Collection<PropertyChangeRecord> propertyChangeRecords)
+            throws ConcurrentModificationException {
+        return propertyChangeRecords.stream()
                 // set post values, which have been left empty up to now
                 .peek(rec -> {
-                    if(MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
+                    if (MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
                         rec.withPostValueSetToDeleted();
                     } else {
                         rec.withPostValueSetToCurrentElseUnknown();
                     }
                 })
-                .filter(managedProperty-> shouldPublish(managedProperty.getPreAndPostValue()))
+                .filter(managedProperty -> shouldPublish(managedProperty.getPreAndPostValue()))
                 .collect(_Sets.toUnmodifiable());
+    }
 
-        enlistedPropertyChangeRecordsById.clear();
-
-        return records;
-        });
+    private Set<PropertyChangeRecord> memoizePropertyChangeRecordsIfRequired() {
+        return entityPropertyChangeRecordsForPublishing.get();
+    }
 
 
 
@@ -210,9 +234,9 @@ implements
     @Override
     public void destroy() throws Exception {
 
-        if(log.isInfoEnabled()) {
+        if(log.isDebugEnabled()) {
             val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
-            log.info("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
+            log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
         resetState();
@@ -272,6 +296,7 @@ implements
 
             log.debug("about to publish entity changes");
 
+            // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
             memoizePropertyChangeRecordsIfRequired();
 
             entityPropertyChangePublisher.publishChangedProperties();
@@ -340,9 +365,6 @@ implements
         return Optional.of(changingEntities);
     }
 
-    private Set<PropertyChangeRecord> memoizePropertyChangeRecordsIfRequired() {
-        return entityPropertyChangeRecordsForPublishing.get();
-    }
 
     private static ChangesDto newDto(
             final UUID interactionId, final int transactionSequenceNum,
@@ -540,7 +562,7 @@ implements
 
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
                     .forEach(pcrId -> {
-                        computePropertyChangeRecordIfAbsent(pcrId, PropertyChangeRecord::ofDeleting);
+                        addPropertyChangeRecordIfAbsent(pcrId, PropertyChangeRecord::ofDeleting);
                     });
             }
         });
