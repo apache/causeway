@@ -18,7 +18,11 @@
  */
 package org.apache.causeway.applib.services.metrics;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
@@ -45,6 +49,17 @@ public interface MetricsService {
     int numberEntitiesLoaded();
 
     /**
+     * Returns the bookmarks of the entities loaded within the transaction.
+     *
+     * <p>
+     *     Only returns a value if the service is configured to return detailed metrics.
+     * </p>
+     */
+    default List<Bookmark> entitiesLoaded() {
+        return Collections.emptyList();
+    }
+
+    /**
      * The number of objects that have, so far in this request, been dirtied/will need updating in the database); a
      * good measure of the footprint of the interaction.
      * <p>
@@ -53,6 +68,18 @@ public interface MetricsService {
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionProvider#currentInteraction()}.
      */
     int numberEntitiesDirtied();
+
+    /**
+     * Returns the bookmarks of the entities that were modified within the transaction.
+     *
+     * <p>
+     *     Only returns a value if the service is configured to return detailed metrics.
+     * </p>
+     */
+    default List<Bookmark> entitiesDirtied() {
+        return Collections.emptyList();
+    }
+
 
 }
 

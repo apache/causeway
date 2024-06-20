@@ -87,6 +87,7 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -171,10 +172,15 @@ implements
         enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
     }
 
+    @RequiredArgsConstructor
+    static class Changes {
+        @Getter private final Set<PropertyChangeRecord> propertyChangeRecords;
+    }
+
     /**
      * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot.
      */
-    private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
+    private final _Lazy<Changes> changes
         = _Lazy.of(() -> {
             Set<PropertyChangeRecord> records;
             try {
@@ -188,12 +194,12 @@ implements
                                 .collect(Collectors.joining("\n"))
                 );
                 // instead, we take a copy
-                records = changedRecords(new ArrayList<PropertyChangeRecord>(enlistedPropertyChangeRecordsById.values()));
+                records = changedRecords(new ArrayList<>(enlistedPropertyChangeRecordsById.values()));
             }
 
         enlistedPropertyChangeRecordsById.clear();
 
-        return records;
+        return new Changes(records);
     });
 
     /**
@@ -215,10 +221,9 @@ implements
                 .collect(_Sets.toUnmodifiable());
     }
 
-    private Set<PropertyChangeRecord> memoizePropertyChangeRecordsIfRequired() {
-        return entityPropertyChangeRecordsForPublishing.get();
+    private Changes memoizeChangesIfRequired() {
+        return changes.get();
     }
-
 
 
     /**
@@ -232,10 +237,10 @@ implements
 
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
 
         if(log.isDebugEnabled()) {
-            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -281,7 +286,7 @@ implements
         // guard against transient
         if(ManagedObjects.bookmark(entity).isEmpty()) return true;
 
-        if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
+        if(changes.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
@@ -297,7 +302,7 @@ implements
             log.debug("about to publish entity changes");
 
             // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
-            memoizePropertyChangeRecordsIfRequired();
+            memoizeChangesIfRequired();
 
             entityPropertyChangePublisher.publishChangedProperties();
             entityChangesPublisher.publishChangingEntities(this);
@@ -311,7 +316,7 @@ implements
 
     private void resetState(LongAdder entityChangeEventCount, LongAdder numberEntitiesLoaded) {
         enlistedPropertyChangeRecordsById.clear();
-        entityPropertyChangeRecordsForPublishing.clear();
+        changes.clear();
 
         changeKindByEnlistedAdapter.clear();
         entityChangeEventCount.reset();
@@ -323,6 +328,7 @@ implements
     private void enableCommandPublishing() {
         val alreadySet = persistentChangesEncountered.getAndSet(true);
         if(!alreadySet) {
+            // has side effects
             val command = currentInteraction().getCommand();
         }
     }
@@ -343,7 +349,7 @@ implements
 
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
-        final int numberEntityPropertiesModified = memoizePropertyChangeRecordsIfRequired().size();
+        final int numberEntityPropertiesModified = memoizeChangesIfRequired().propertyChangeRecords.size();
 
         val interactionId = interaction.getInteractionId();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
@@ -423,7 +429,7 @@ implements
 
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
-        Set<PropertyChangeRecord> propertyChangeRecords = memoizePropertyChangeRecordsIfRequired();
+        Set<PropertyChangeRecord> propertyChangeRecords = memoizeChangesIfRequired().getPropertyChangeRecords();
 
         return propertyChangeRecords.stream()
                 .map(propertyChangeRecord -> propertyChangeRecord.toEntityPropertyChange(timestamp, userName, txId))
