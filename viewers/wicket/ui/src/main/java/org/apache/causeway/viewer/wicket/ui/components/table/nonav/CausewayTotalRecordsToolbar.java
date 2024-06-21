@@ -20,15 +20,15 @@ package org.apache.causeway.viewer.wicket.ui.components.table.nonav;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
-import org.apache.wicket.model.Model;
 
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
@@ -41,22 +41,12 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 public class CausewayTotalRecordsToolbar extends AbstractToolbar
 implements HasCommonContext {
     private static final long serialVersionUID = 1L;
-    private static final String navigatorContainerId = "navigatorContainer";
+    private static final String ID_NAVIGATOR_CONTAINER = "navigatorContainer";
+    private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
 
-    public CausewayTotalRecordsToolbar(final DataTable<?, ?> table) {
-
-        this(table, new Model<String>() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return String.format("Showing all of %d",
-                        table.getRowCount());
-            }
-
-        });
-
+    public CausewayTotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table) {
+        this(table, LambdaModel.of(()->
+                String.format("Showing all of %d", table.getRowCount())));
     }
 
     /**
@@ -65,17 +55,19 @@ implements HasCommonContext {
      * @param messageModel
      *            model that will be used to display the "total records" message
      */
-    protected CausewayTotalRecordsToolbar(final DataTable<?, ?> table, final IModel<String> messageModel) {
+    protected CausewayTotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table, final IModel<String> messageModel) {
         super(table);
 
-        WebMarkupContainer container = new WebMarkupContainer(navigatorContainerId);
-        add(container);
+        var navigatorContainer = Wkt.add(this, new WebMarkupContainer(ID_NAVIGATOR_CONTAINER));
 
-        container.add(AttributeModifier.replace("colspan", LambdaModel.of(()->
+        Wkt.add(navigatorContainer,
+                new PagesizeChooser(ID_PAGESIZE_CHOOSER, table));
+
+        navigatorContainer.add(AttributeModifier.replace("colspan", LambdaModel.of(()->
             String.valueOf(table.getColumns().size()).intern())));
 
-        Wkt.labelAdd(container, "navigatorLabel", messageModel);
-        Wkt.labelAdd(container, "prototypingLabel",
+        Wkt.labelAdd(navigatorContainer, "navigatorLabel", messageModel);
+        Wkt.labelAdd(navigatorContainer, "prototypingLabel",
                 TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }
 
@@ -87,12 +79,10 @@ implements HasCommonContext {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
         if(getTable().getRowCount() <= 5) {
             setVisible(false);
             return;
         }
-
         setVisible(getTable().getPageCount() == 1);
     }
 }

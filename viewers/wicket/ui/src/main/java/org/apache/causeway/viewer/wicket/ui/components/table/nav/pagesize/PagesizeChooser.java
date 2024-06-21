@@ -44,8 +44,7 @@ public class PagesizeChooser extends Panel {
     private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
     private static final String ID_VIEW_ITEM_CHECKMARK = "viewItemCheckmark"; // indicator for the selected item
 
-    @Getter
-    final DataTableWithPagesAndFilter<?, ?> table;
+    @Getter final DataTableWithPagesAndFilter<?, ?> table;
 
     public PagesizeChooser(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
         super(id);
