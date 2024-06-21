@@ -1,41 +1,92 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.causeway.viewer.wicket.ui.components.table;
 
 import java.util.List;
+import java.util.OptionalLong;
 
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.OddEvenItem;
-import org.apache.wicket.model.IModel;
+
+import org.apache.causeway.commons.internal.primitives._Longs;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> {
     private static final long serialVersionUID = 1L;
 
-    public DataTableWithPagesAndFilter(final String id, final List<? extends IColumn<T, S>> columns,
-        final ISortableDataProvider<T, S> dataProvider, final int rowsPerPage) {
+    private static final String UIHINT_PAGE_NUMBER = "pageNumber";
+
+    public DataTableWithPagesAndFilter(
+                    final String id,
+                    final List<? extends IColumn<T, S>> columns,
+                    final ISortableDataProvider<T, S> dataProvider,
+                    final int rowsPerPage) {
         super(id, columns, dataProvider, rowsPerPage);
         setOutputMarkupId(true);
         setVersioned(false);
-        addToolBars(dataProvider);
     }
 
-    /**
-     * Factory method for toolbars
-     * @param dataProvider {@link org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider}
-     */
-    protected void addToolBars(final ISortableDataProvider<T, S> dataProvider) {
-        addTopToolbar(new AjaxNavigationToolbar(this));
-        addTopToolbar(new AjaxFallbackHeadersToolbar<>(this, dataProvider));
-        addBottomToolbar(new NoRecordsToolbar(this));
+    public final void setSortOrderHintAndBroadcast(final SortOrder order, final String property, final AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
+
+        // first clear all SortOrder hints...
+        for (SortOrder eachSortOrder : SortOrder.values()) {
+            uiHintContainer.clearHint(this, eachSortOrder.name());
+        }
+        // .. then set this one
+        uiHintContainer.setHint(this, order.name(), property);
     }
 
-    @Override
-    protected Item<T> newRowItem(final String id, final int index, final IModel<T> model) {
-        return new OddEvenItem<>(id, index, model);
+    public final void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) {
+            return;
+        }
+        uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
+    }
+
+    //TODO[CAUSEWAY-3794] encapsulate
+    protected final void honourPageNumberHint() {
+        var uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
+        parseZeroBasedPageNr(uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER))
+            .ifPresent(this::setCurrentPage);
+        uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
+        // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
+    }
+
+    // -- HELPER
+
+    private UiHintContainer getUiHintContainer() {
+        return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
+    }
+
+    private OptionalLong parseZeroBasedPageNr(final String string) {
+        final long zeroBasedPageNr = _Longs.parseLong(string, 10).orElse(-1);
+        return zeroBasedPageNr>=0L
+                ? OptionalLong.of(zeroBasedPageNr)
+                : OptionalLong.empty();
     }
 
 }

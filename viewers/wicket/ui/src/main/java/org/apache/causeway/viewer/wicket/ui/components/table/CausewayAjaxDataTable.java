@@ -20,9 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.table;
 
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.repeater.Item;
@@ -32,8 +29,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.head.CausewayAjaxHeadersToolbar;
@@ -43,11 +38,9 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
+public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, String> {
 
     private static final long serialVersionUID = 1L;
-
-    static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
     private final CollectionContentsSortableDataProvider dataProvider;
     private final ToggleboxColumn toggleboxColumn;
@@ -61,36 +54,11 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             final CollectionContentsSortableDataProvider dataProvider,
             final int rowsPerPage,
             final ToggleboxColumn toggleboxColumn) {
-
         super(id, columns, dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
         this.toggleboxColumn = toggleboxColumn;
-        setOutputMarkupId(true);
-        setVersioned(false);
         //[CAUSEWAY-3772] optimization reinstate? though I have no clue what that is doing
         //setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
-    }
-
-    public void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
-        uiHintContainer.setHint(this, CausewayAjaxDataTable.UIHINT_PAGE_NUMBER, ""+getCurrentPage());
-    }
-
-    public void setSortOrderHintAndBroadcast(final SortOrder order, final String property, final AjaxRequestTarget target) {
-        final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
-
-        // first clear all SortOrder hints...
-        for (SortOrder eachSortOrder : SortOrder.values()) {
-            uiHintContainer.clearHint(this, eachSortOrder.name());
-        }
-        // .. then set this one
-        uiHintContainer.setHint(this, order.name(), property);
     }
 
     @Override
@@ -195,31 +163,6 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
         headersToolbar.honourSortOrderHints();
         navigationToolbar.honourHints();
         honourPageNumberHint();
-    }
-
-    private void honourPageNumberHint() {
-        UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
-        final String pageNumberStr = uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER);
-        if(pageNumberStr != null) {
-            try {
-                long pageNumber = Long.parseLong(pageNumberStr);
-                if(pageNumber >= 0) {
-                    // dataTable is clever enough to deal with too-large numbers
-                    this.setCurrentPage(pageNumber);
-                }
-            } catch(Exception ex) {
-                // ignore.
-            }
-        }
-        uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, ""+getCurrentPage());
-        // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
-    }
-
-    private UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
     }
 
 }
