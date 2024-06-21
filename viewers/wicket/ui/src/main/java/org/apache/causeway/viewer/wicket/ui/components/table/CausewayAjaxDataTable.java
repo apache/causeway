@@ -65,7 +65,6 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     protected void onInitialize() {
         super.onInitialize();
         buildGui();
-        honorHints();
     }
 
     private void buildGui() {
@@ -159,10 +158,6 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
 //                _Casts.uncheckedCast(existingItems)));
 //    }
 
-    private void honorHints() {
-        headersToolbar.honourSortOrderHints();
-        navigationToolbar.honourHints();
-        honourPageNumberHint();
-    }
+
 
 }

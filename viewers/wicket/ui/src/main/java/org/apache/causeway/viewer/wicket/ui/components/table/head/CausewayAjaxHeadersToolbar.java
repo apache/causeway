@@ -62,8 +62,15 @@ extends HeadersToolbarAbstract<String> {
         return new OrderByBorder<String>(borderId, table, property, locator);
     }
 
-    @Deprecated //TODO[CAUSEWAY-3794] encapsulate
-    public void honourSortOrderHints() {
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        honorSortOrderHints();
+    }
+
+    // -- HELPER
+
+    private void honorSortOrderHints() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 

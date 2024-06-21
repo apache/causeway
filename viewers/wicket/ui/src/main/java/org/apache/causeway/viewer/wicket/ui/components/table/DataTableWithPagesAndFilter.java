@@ -66,8 +66,15 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
     }
 
-    //TODO[CAUSEWAY-3794] encapsulate
-    protected final void honourPageNumberHint() {
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        honorPageNumberHint();
+    }
+
+    // -- HELPER
+
+    private final void honorPageNumberHint() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
         parseZeroBasedPageNr(uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER))
@@ -75,8 +82,6 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
         // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
     }
-
-    // -- HELPER
 
     private UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);

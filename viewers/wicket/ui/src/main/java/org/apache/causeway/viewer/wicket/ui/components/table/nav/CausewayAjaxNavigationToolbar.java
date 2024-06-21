@@ -55,6 +55,12 @@ implements HasCommonContext {
         return new CausewayAjaxPagingNavigator(navigatorId, table);
     }
 
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        honorShowAllHints();
+    }
+
     /* if we need to customize the navigation label, that would go here ...
     @Override
     protected WebComponent newNavigatorLabel(final String navigatorId, final DataTable<?, ?> table) {
@@ -97,12 +103,9 @@ implements HasCommonContext {
         return ((MarkupContainer)get(navigatorContainerId));
     }
 
-    @Deprecated //TODO[CAUSEWAY-3794] encapsulate
-    public void honourHints() {
+    private void honorShowAllHints() {
         UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
+        if(uiHintContainer == null) return;
 
         final DataTable<?, ?> table = getTable();
         final String showAll = uiHintContainer.getHint(table, HINT_KEY_SHOW_ALL);
@@ -111,7 +114,7 @@ implements HasCommonContext {
         }
     }
 
-    static void showAllItemsOn(final DataTable<?, ?> table) {
+    private static void showAllItemsOn(final DataTable<?, ?> table) {
         table.setItemsPerPage(Long.MAX_VALUE);
     }
 
