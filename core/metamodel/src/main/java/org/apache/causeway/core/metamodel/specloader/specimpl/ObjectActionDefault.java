@@ -467,8 +467,9 @@ implements ObjectAction {
             if(log.isInfoEnabled()) {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
-                    log.info("Executing: {} {} {}",
-                        getFeatureIdentifier(),
+                    log.info("Executing: {}#{} {} {}",
+                        getFeatureIdentifier().getLogicalTypeName(),
+                        getFeatureIdentifier().getMemberLogicalName(),
                         UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                         argsFor(getParameters(), argumentAdapters));
                 });
