@@ -228,7 +228,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
                     return wns;
                 }
             }
-            throw new IllegalStateException("require an init-param of '" + WHEN_NO_SESSION_KEY + "', taking a value of " + WhenNoSession.values());
+            throw new IllegalStateException("require an init-param of '" + WHEN_NO_SESSION_KEY + "', taking a value of " + Arrays.toString(WhenNoSession.values()));
         }
 
         public abstract void handle(CausewayRestfulObjectsInteractionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException;

@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
@@ -29,12 +30,15 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
+import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
@@ -453,8 +457,20 @@ implements ObjectAction {
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
+        final ManagedObject owner = head.getOwner();
+
         if(!interactionInitiatedBy.isPassThrough()) {
             setupCommand(head, argumentAdapters);
+
+            if(log.isInfoEnabled()) {
+                Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
+                bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
+                    log.info("Executing: {} {} {}",
+                        getFeatureIdentifier(),
+                        UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
+                        argsFor(getParameters(), argumentAdapters));
+                });
+            }
         }
 
         return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
@@ -571,6 +587,24 @@ implements ObjectAction {
     }
 
     // -- HELPER
+
+    protected String argsFor(Can<ObjectActionParameter> parameters, Can<ManagedObject> arguments) {
+        if(parameters.size() != arguments.size()) {
+            return "???"; // shouldn't happen
+        }
+        return parameters.stream().map(IndexedFunction.zeroBased((i, param) -> {
+            val id = param.getId();
+            val argStr = argStr(id, arguments, i);
+            return id + "=" + argStr;
+        })).collect(Collectors.joining(","));
+    }
+
+    private static String argStr(
+            final String paramId,
+            final Can<ManagedObject> arguments,
+            final int i) {
+        return UtilStr.namedArgStr(paramId, arguments.get(i));
+    }
 
     private CommandDto commandDtoFor(
             final UUID interactionId,

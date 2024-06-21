@@ -499,7 +499,7 @@ public class XmlSnapshot implements Snapshot {
                 return false;
             }
             final ManagedObject referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
-                    InteractionInitiatedBy.FRAMEWORK);
+                    InteractionInitiatedBy.PASS_THROUGH);
 
             if (referencedObject == null) {
                 return true; // not a failure if the reference was null
@@ -520,27 +520,28 @@ public class XmlSnapshot implements Snapshot {
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
             final ManagedObject collection = oneToManyAssociation.get(fieldPlace.getObject(),
-                    InteractionInitiatedBy.FRAMEWORK);
+                    InteractionInitiatedBy.PASS_THROUGH);
 
             if (log.isDebugEnabled()) {
                 log.debug("includeField(Pl, Vec, Str): 1->M: {}",
                         log("collection.size", "" + CollectionFacet.elementCount(collection)));
             }
 
-            final boolean[] allFieldsNavigated = { true }; // fast non-thread-safe value reference
+            final boolean allFieldsNavigated = CollectionFacet.streamAdapters(collection)
+                .map(referencedObject -> {
+                    final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
+                            annotation);
+                    if (log.isDebugEnabled()) {
+                        log.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for {}{}",
+                                log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
+                    }
+                    return appendedXml;
+                })
+                .allMatch(appendedXml->appendedXml);
 
-            CollectionFacet.streamAdapters(collection).forEach(referencedObject -> {
-                final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
-                        annotation);
-                if (log.isDebugEnabled()) {
-                    log.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for {}{}",
-                            log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
-                }
-                allFieldsNavigated[0] = allFieldsNavigated[0] && appendedXml;
-            });
 
             log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
-            return allFieldsNavigated[0];
+            return allFieldsNavigated;
         }
 
         return false; // fall through, shouldn't get here but just in
@@ -700,7 +701,7 @@ public class XmlSnapshot implements Snapshot {
 
                 ManagedObject value;
                 try {
-                    value = valueAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+                    value = valueAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
                     val valueSpec = value.getSpecification();
 
@@ -740,7 +741,7 @@ public class XmlSnapshot implements Snapshot {
                 ManagedObject referencedObjectAdapter;
 
                 try {
-                    referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+                    referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
                     // XML
                     causewayMetaModel.setAttributesForReference(xmlReferenceElement, schema.getPrefix(),
@@ -773,7 +774,7 @@ public class XmlSnapshot implements Snapshot {
 
                 ManagedObject collection;
                 try {
-                    collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+                    collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getElementType();
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 

@@ -18,13 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -40,7 +44,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class ObjectActionMixedIn
 extends ObjectActionDefault
 implements MixedInMember {
@@ -164,7 +170,7 @@ implements MixedInMember {
     @Override
     public ManagedObject execute(
             final InteractionHead head,
-            final Can<ManagedObject> arguments,
+            final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject owner = head.getOwner();
@@ -173,13 +179,24 @@ implements MixedInMember {
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
         if(!interactionInitiatedBy.isPassThrough()) {
-            // skip if is PASS_THROUGH
-            setupCommand(head, arguments);
+            setupCommand(head, argumentAdapters);
+
+            if(log.isInfoEnabled()) {
+                Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
+                bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
+                    log.info("Executing: {} {} {}",
+                            getFeatureIdentifier(),
+                            UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
+                            argsFor(getParameters(), argumentAdapters));
+                });
+            }
         }
+
         return mixinAction.executeInternal(
-                head, arguments,
+                head, argumentAdapters,
                 interactionInitiatedBy);
     }
+
 
     @Override
     public ObjectSpecification getMixinType() {

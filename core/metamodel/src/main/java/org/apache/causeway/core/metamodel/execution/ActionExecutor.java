@@ -21,9 +21,11 @@ package org.apache.causeway.core.metamodel.execution;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.collections.Can;
@@ -56,6 +58,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 @RequiredArgsConstructor
+//@Log4j2
 public final class ActionExecutor
 implements
     HasMetaModelContext,
@@ -131,10 +134,11 @@ implements
         // update the current execution with the DTO (memento)
         //
         // but ... no point in attempting this if no bookmark is yet available.
-        // this logic is for symmetric with PropertyModifier, which has a scenario where this might occur.
+        // this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
         //
         val ownerAdapter = head.getOwner();
-        val ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
+        Optional<Bookmark> ownerBookmarkIfAny = ManagedObjects.bookmark(ownerAdapter);
+        val ownerHasBookmark = ownerBookmarkIfAny.isPresent();
         if (ownerHasBookmark) {
             val invocationDto =
                     getInteractionDtoServiceInternal().asActionInvocationDto(owningAction, head, arguments);

@@ -19,19 +19,31 @@
  */
 package org.apache.causeway.persistence.commons.integration.changetracking;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
+
+import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
+import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+
+import org.apache.causeway.schema.chg.v2.ChangesDto;
+import org.apache.causeway.schema.chg.v2.ObjectsDto;
+import org.apache.causeway.schema.common.v2.OidsDto;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -97,7 +109,6 @@ import lombok.extern.log4j.Log4j2;
 @TransactionScope
 @Named(CausewayModulePersistenceCommons.NAMESPACE + ".EntityChangeTrackerDefault")
 @Qualifier("default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class EntityChangeTrackerDefault
 implements
@@ -107,6 +118,26 @@ implements
     HasEnlistedEntityChanges,
     TransactionSynchronization,
     Ordered {
+
+    static AtomicInteger transactionCounter = new AtomicInteger(0);
+
+    @Inject
+    public EntityChangeTrackerDefault(
+            EntityPropertyChangePublisher entityPropertyChangePublisher,
+            EntityChangesPublisher entityChangesPublisher,
+            Provider<InteractionProvider> interactionProviderProvider,
+            PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
+
+        if(log.isDebugEnabled()) {
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            log.debug("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
+        }
+
+        this.entityPropertyChangePublisher = entityPropertyChangePublisher;
+        this.entityChangesPublisher = entityChangesPublisher;
+        this.interactionProviderProvider = interactionProviderProvider;
+        this.preAndPostValueEvaluatorService = preAndPostValueEvaluatorService;
+    }
 
     @Programmatic
     @Override
@@ -128,16 +159,72 @@ implements
     private final Map<PropertyChangeRecordId, PropertyChangeRecord> enlistedPropertyChangeRecordsById = _Maps.newLinkedHashMap();
 
     /**
-     * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot,
-     * triggered by internal call to {@link #snapshotPropertyChangeRecords()}.
+     * As used when {@link #enlistCreated(ManagedObject)} or {@link #enlistUpdating(ManagedObject, Function)}
+     */
+    private void addPropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, PropertyChangeRecord pcr) {
+        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> pcr);
+    }
+    /**
+     * As used when {@link #enlistDeleting(ManagedObject)}.
+     */
+    private void addPropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, Function<PropertyChangeRecordId, PropertyChangeRecord> func) {
+        enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
+    }
+
+    /**
+     * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot.
      */
     private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
-        = _Lazy.threadSafe(this::capturePostValuesAndDrain);
+        = _Lazy.of(() -> {
+            Set<PropertyChangeRecord> records;
+            try {
+                records = changedRecords(enlistedPropertyChangeRecordsById.values());
+            } catch(ConcurrentModificationException ex) {
+                log.warn(
+                        "A concurrent modification exception, one of these properties seemed to change as we looked at it :\n" +
+                        enlistedPropertyChangeRecordsById.keySet()
+                                .stream()
+                                .map(PropertyChangeRecordId::toString)
+                                .collect(Collectors.joining("\n"))
+                );
+                // instead, we take a copy
+                records = changedRecords(new ArrayList<PropertyChangeRecord>(enlistedPropertyChangeRecordsById.values()));
+            }
+
+        enlistedPropertyChangeRecordsById.clear();
+
+        return records;
+    });
+
+    /**
+     * when iterating over the original value set, if any of the properties causes the entity to change state as it is
+     * evaluated then a ConcurrentModificationException will be thrown because an enlist will occur.
+     */
+    private Set<PropertyChangeRecord> changedRecords(Collection<PropertyChangeRecord> propertyChangeRecords)
+            throws ConcurrentModificationException {
+        return propertyChangeRecords.stream()
+                // set post values, which have been left empty up to now
+                .peek(rec -> {
+                    if (MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
+                        rec.withPostValueSetToDeleted();
+                    } else {
+                        rec.withPostValueSetToCurrentElseUnknown();
+                    }
+                })
+                .filter(managedProperty -> shouldPublish(managedProperty.getPreAndPostValue()))
+                .collect(_Sets.toUnmodifiable());
+    }
+
+    private Set<PropertyChangeRecord> memoizePropertyChangeRecordsIfRequired() {
+        return entityPropertyChangeRecordsForPublishing.get();
+    }
+
+
 
     /**
      * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
      */
-    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newConcurrentHashMap();
+    private final Map<Bookmark, EntityChangeKind> changeKindByEnlistedAdapter = _Maps.newHashMap();
 
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
@@ -146,13 +233,17 @@ implements
 
     @Override
     public void destroy() throws Exception {
-        clearEnlistedPropertyChangeRecordsById();
-        entityPropertyChangeRecordsForPublishing.clear();
-        changeKindByEnlistedAdapter.clear();
 
-        numberEntitiesLoaded.reset();
-        entityChangeEventCount.reset();
-        persistentChangesEncountered.set(false);
+        if(log.isDebugEnabled()) {
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
+        }
+
+        resetState();
+    }
+
+    private void resetState() {
+        resetState(numberEntitiesLoaded, entityChangeEventCount);
     }
 
 
@@ -165,53 +256,11 @@ implements
      *      and ensure that the lock is released only when the thread exits the synchronized block
      *      or method the same number of times it entered it.
      */
-    private void runThreadsafeAndSuppressAutoFlushIfRequired(final Runnable runnable) {
-        synchronized (enlistedPropertyChangeRecordsById) {
-            if (configuration.isSuppressAutoFlush()) {
-                FlushMgmt.suppressAutoFlush(runnable);
-            } else {
-                runnable.run();
-            }
-        }
-    }
-
-    Set<PropertyChangeRecord> snapshotPropertyChangeRecords() {
-        // this code path has side-effects, it locks the result for this transaction,
-        // such that cannot enlist on top of it
-        return entityPropertyChangeRecordsForPublishing.get();
-    }
-
-    /**
-     * Returns a defensive copy of the {@code changeKindByEnlistedAdapter} {@link Map}.
-     */
-    public Map<Bookmark, EntityChangeKind> snapshotChangeKindByEnlistedAdapter() {
-        return new HashMap<>(changeKindByEnlistedAdapter);
-    }
-
-    /**
-     * For any enlisted Object Properties collects those, that are meant for publishing,
-     * then clears enlisted objects.
-     *
-     * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map} until its drained and cleared
-     */
-    private Set<PropertyChangeRecord> capturePostValuesAndDrain() {
-        synchronized (enlistedPropertyChangeRecordsById) {
-
-            val records = enlistedPropertyChangeRecordsById.values().stream()
-                // set post values, which have been left empty up to now
-                .peek(rec -> {
-                    if(MmEntityUtils.getEntityState(rec.getEntity()).isTransientOrRemoved()) {
-                        rec.withPostValueSetToDeleted();
-                    } else {
-                        rec.withPostValueSetToCurrentElseUnknown();
-                    }
-                })
-                .filter(managedProperty-> shouldPublish(managedProperty.getPreAndPostValue()))
-                .collect(_Sets.toUnmodifiable());
-
-            enlistedPropertyChangeRecordsById.clear();
-
-            return records;
+    private void suppressAutoFlushIfRequired(final Runnable runnable) {
+        if (configuration.isSuppressAutoFlush()) {
+            FlushMgmt.suppressAutoFlush(runnable);
+        } else {
+            runnable.run();
         }
     }
 
@@ -246,19 +295,29 @@ implements
             _Xray.publish(this, interactionProviderProvider);
 
             log.debug("about to publish entity changes");
+
+            // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
+            memoizePropertyChangeRecordsIfRequired();
+
             entityPropertyChangePublisher.publishChangedProperties();
             entityChangesPublisher.publishChangingEntities(this);
 
         } finally {
             log.debug("purging entity change records");
 
-            clearEnlistedPropertyChangeRecordsById();
-            entityPropertyChangeRecordsForPublishing.clear();
-
-            changeKindByEnlistedAdapter.clear();
-            entityChangeEventCount.reset();
-            numberEntitiesLoaded.reset();
+            resetState(entityChangeEventCount, numberEntitiesLoaded);
         }
+    }
+
+    private void resetState(LongAdder entityChangeEventCount, LongAdder numberEntitiesLoaded) {
+        enlistedPropertyChangeRecordsById.clear();
+        entityPropertyChangeRecordsForPublishing.clear();
+
+        changeKindByEnlistedAdapter.clear();
+        entityChangeEventCount.reset();
+        numberEntitiesLoaded.reset();
+
+        persistentChangesEncountered.set(false);
     }
 
     private void enableCommandPublishing() {
@@ -272,15 +331,101 @@ implements
     public Optional<EntityChanges> getEntityChanges(
             final java.sql.Timestamp timestamp,
             final String userName) {
-        return _ChangingEntitiesFactory.createChangingEntities(timestamp, userName, this);
+
+        // a defensive copy of
+        val changeKindByEnlistedAdapter = (Map<Bookmark, EntityChangeKind>) new HashMap<>(this.changeKindByEnlistedAdapter);
+        if(changeKindByEnlistedAdapter.isEmpty()) {
+            return Optional.empty();
+        }
+
+        final Interaction interaction = currentInteraction();
+        final int numberEntitiesLoaded1 = numberEntitiesLoaded();
+
+        // this code path has side-effects, it locks the result for this transaction,
+        // such that cannot enlist on top of it
+        final int numberEntityPropertiesModified = memoizePropertyChangeRecordsIfRequired().size();
+
+        val interactionId = interaction.getInteractionId();
+        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
+
+        // side-effect: it locks the result for this transaction,
+        // such that cannot enlist on top of it
+        val changingEntities = (EntityChanges) new _SimpleChangingEntities(
+                interactionId, nextEventSequence,
+                userName, timestamp,
+                numberEntitiesLoaded1,
+                numberEntityPropertiesModified,
+                () -> newDto(
+                        interactionId, nextEventSequence,
+                        userName, timestamp,
+                        numberEntitiesLoaded1,
+                        numberEntityPropertiesModified,
+                        changeKindByEnlistedAdapter));
+
+        return Optional.of(changingEntities);
     }
+
+
+    private static ChangesDto newDto(
+            final UUID interactionId, final int transactionSequenceNum,
+            final String userName, final java.sql.Timestamp completedAt,
+            final int numberEntitiesLoaded,
+            final int numberEntityPropertiesModified,
+            final Map<Bookmark, EntityChangeKind> changeKindByEnlistedEntity) {
+
+        val objectsDto = new ObjectsDto();
+        objectsDto.setCreated(new OidsDto());
+        objectsDto.setUpdated(new OidsDto());
+        objectsDto.setDeleted(new OidsDto());
+
+        changeKindByEnlistedEntity.forEach((bookmark, kind)->{
+            val oidDto = bookmark.toOidDto();
+            if(oidDto==null) {
+                return;
+            }
+            switch(kind) {
+                case CREATE:
+                    objectsDto.getCreated().getOid().add(oidDto);
+                    return;
+                case UPDATE:
+                    objectsDto.getUpdated().getOid().add(oidDto);
+                    return;
+                case DELETE:
+                    objectsDto.getDeleted().getOid().add(oidDto);
+                    return;
+            }
+        });
+
+        objectsDto.setLoaded(numberEntitiesLoaded);
+        objectsDto.setPropertiesModified(numberEntityPropertiesModified);
+
+        val changesDto = new ChangesDto();
+
+        changesDto.setMajorVersion("2");
+        changesDto.setMinorVersion("0");
+
+        changesDto.setInteractionId(interactionId.toString());
+        changesDto.setSequence(transactionSequenceNum);
+
+        changesDto.setUsername(userName);
+        changesDto.setCompletedAt(JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(completedAt));
+
+        changesDto.setObjects(objectsDto);
+        return changesDto;
+    }
+
 
     @Override
     public Can<EntityPropertyChange> getPropertyChanges(
             final java.sql.Timestamp timestamp,
             final String userName,
             final TransactionId txId) {
-        return snapshotPropertyChangeRecords().stream()
+
+        // this code path has side-effects, it locks the result for this transaction,
+        // such that cannot enlist on top of it
+        Set<PropertyChangeRecord> propertyChangeRecords = memoizePropertyChangeRecordsIfRequired();
+
+        return propertyChangeRecords.stream()
                 .map(propertyChangeRecord -> propertyChangeRecord.toEntityPropertyChange(timestamp, userName, txId))
                 .collect(Can.toCan());
     }
@@ -338,9 +483,7 @@ implements
 
     // side-effect free, used by XRay
     long countPotentialPropertyChangeRecords() {
-        synchronized (enlistedPropertyChangeRecordsById) {
-            return enlistedPropertyChangeRecordsById.size();
-        }
+        return enlistedPropertyChangeRecordsById.size();
     }
 
     // -- ENTITY CHANGE TRACKING
@@ -356,14 +499,14 @@ implements
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
-        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
+        suppressAutoFlushIfRequired(() -> {
             enlistForChangeKindPublishing(entity, EntityChangeKind.CREATE);
 
             MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                .forEach(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofNew(pcrId)));
+                .forEach(pcrId -> addPropertyChangeRecordIfAbsent(pcrId, PropertyChangeRecord.ofNew(pcrId)));
         });
     }
+
 
     @Override
     public void enlistUpdating(
@@ -376,9 +519,11 @@ implements
             return;
         }
 
-        log.debug("enlist entity's property changes for publishing {}", entity);
+        if(log.isDebugEnabled()) {
+            log.debug("enlist entity's property changes for publishing {}", entity);
+        }
 
-        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
+        suppressAutoFlushIfRequired(() -> {
             // we call this come what may;
             // additional properties may now have been changed, and the changeKind for publishing might also be modified
             enlistForChangeKindPublishing(entity, EntityChangeKind.UPDATE);
@@ -391,18 +536,15 @@ implements
                 // provided by ORM
                 ormPropertyChangeRecords
                     .stream()
-                    .filter(pcr -> ! enlistedPropertyChangeRecordsById.containsKey(pcr.getId())) // only if not previously seen
-                    .forEach(pcr -> enlistedPropertyChangeRecordsById.put(pcr.getId(), pcr));
+                    .forEach(pcr -> addPropertyChangeRecordIfAbsent(pcr.getId(), pcr));
             } else {
                 // home-grown approach
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    .filter(pcrId -> ! enlistedPropertyChangeRecordsById.containsKey(pcrId)) // only if not previously seen
-                    .map(pcrId -> enlistedPropertyChangeRecordsById.put(pcrId, PropertyChangeRecord.ofCurrent(pcrId)))
-                    .filter(Objects::nonNull)   // shouldn't happen, just keeping compiler happy
-                    .forEach(PropertyChangeRecord::withPreValueSetToCurrentElseUnknown);
+                    .forEach(pcrId -> addPropertyChangeRecordIfAbsent(pcrId, PropertyChangeRecord.ofCurrent(pcrId)));
             }
         });
     }
+
 
     @Override
     public void enlistDeleting(final ManagedObject entity) {
@@ -411,14 +553,17 @@ implements
 
         if (isEntityExcludedForChangePublishing(entity)) return;
 
-        runThreadsafeAndSuppressAutoFlushIfRequired(() -> {
+        suppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
             if(enlisted) {
-                log.debug("enlist entity's property changes for publishing {}", entity);
+                if(log.isDebugEnabled()) {
+                    log.debug("enlist entity's property changes for publishing {}", entity);
+                }
 
                 MmEntityUtils.streamPropertyChangeRecordIdsForChangePublishing(entity)
-                    .forEach(pcrId -> enlistedPropertyChangeRecordsById
-                        .computeIfAbsent(pcrId, id -> PropertyChangeRecord.ofDeleting(id)));
+                    .forEach(pcrId -> {
+                        addPropertyChangeRecordIfAbsent(pcrId, PropertyChangeRecord::ofDeleting);
+                    });
             }
         });
     }
@@ -446,12 +591,6 @@ implements
     }
 
     // -- HELPER
-
-    private void clearEnlistedPropertyChangeRecordsById() {
-        synchronized (enlistedPropertyChangeRecordsById) {
-            enlistedPropertyChangeRecordsById.clear();
-        }
-    }
 
     /**
      * SPI to allow this service to be configured through different mechanisms.
