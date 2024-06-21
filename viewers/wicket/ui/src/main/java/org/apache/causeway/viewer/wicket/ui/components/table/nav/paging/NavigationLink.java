@@ -24,7 +24,7 @@ import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
-import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
 import de.agilecoders.wicket.core.util.Attributes;
@@ -40,7 +40,7 @@ class NavigationLink extends AjaxPagingNavigationLink {
     @Override
     public void onClick(final AjaxRequestTarget target) {
         super.onClick(target);
-        ((CausewayAjaxDataTable)super.pageable).setPageNumberHintAndBroadcast(target);
+        ((DataTableWithPagesAndFilter<?, ?>)super.pageable).setPageNumberHintAndBroadcast(target);
     }
 
     @Override

@@ -25,20 +25,20 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLoc
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 
 class OrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
 
     private static final long serialVersionUID = 1L;
 
     private final T sortProperty;
-    private final CausewayAjaxDataTable dataTable;
+    private final DataTableWithPagesAndFilter<?, ?> dataTable;
 
     private final ISortStateLocator<T> stateLocator;
 
     public OrderByBorder(
             final String id,
-            final CausewayAjaxDataTable dataTable,
+            final DataTableWithPagesAndFilter<?, ?> dataTable,
             final T sortProperty,
             final ISortStateLocator<T> stateLocator
             /* removed in wicket 8, IAjaxCallListener ajaxCallListener*/) {

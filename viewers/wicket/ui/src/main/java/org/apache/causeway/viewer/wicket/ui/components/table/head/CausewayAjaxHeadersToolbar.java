@@ -28,7 +28,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
-import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
@@ -39,10 +39,10 @@ extends HeadersToolbarAbstract<String> {
 
     private static final long serialVersionUID = 1L;
     private final CollectionContentsSortableDataProvider singleSortStateLocator;
-    private CausewayAjaxDataTable table;
+    private DataTableWithPagesAndFilter<?, String> table;
 
     public CausewayAjaxHeadersToolbar(
-            final CausewayAjaxDataTable table,
+            final DataTableWithPagesAndFilter<?, String> table,
             final CollectionContentsSortableDataProvider singleSortStateLocator,
             final CausewayConfiguration.Viewer.Wicket wicketConfig) {
         super(table, _Casts.uncheckedCast(singleSortStateLocator), wicketConfig);
