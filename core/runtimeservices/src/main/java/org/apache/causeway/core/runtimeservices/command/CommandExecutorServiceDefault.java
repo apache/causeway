@@ -28,8 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import org.apache.causeway.core.metamodel.commons.UtilStr;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +48,7 @@ import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -248,13 +247,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return null;
     }
 
-    private String targetBookmarkStrFor(CommandDto dto) {
+    private String targetBookmarkStrFor(final CommandDto dto) {
         return dto.getTargets().getOid().stream()
                 .map(oidDto -> UtilStr.entityAsStr(Bookmark.forOidDto(oidDto), specificationLoader))
                 .collect(Collectors.joining(";"));
     }
 
-    private String argStrFor(CommandDto dto) {
+    private String argStrFor(final CommandDto dto) {
         val memberDto = dto.getMember();
         if(memberDto instanceof ActionDto) {
             val actionDto = (ActionDto) memberDto;
@@ -330,7 +329,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 .orElse(null);
     }
 
-    private String paramNameArgValuesFor(ActionDto actionDto) {
+    private String paramNameArgValuesFor(final ActionDto actionDto) {
         val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
         return streamParamDtosFrom(actionDto)
                 .map(IndexedFunction.zeroBased((i, paramDto) -> {
@@ -339,18 +338,18 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 })).collect(Collectors.joining(","));
     }
 
-    private String argStr(Identifier actionIdentifier, int i, ParamDto paramDto) {
+    private String argStr(final Identifier actionIdentifier, final int i, final ParamDto paramDto) {
         String paramName = paramDto.getName();
         val argValue = valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
         return UtilStr.namedArgStr(paramName, argValue);
     }
 
-    private static boolean isSensitiveName(String name) {
-        return name.equalsIgnoreCase("password") ||
-               name.equalsIgnoreCase("secret") ||
-               name.equalsIgnoreCase("apikey") ||
-               name.equalsIgnoreCase("token");
-    }
+//    private static boolean isSensitiveName(String name) {
+//        return name.equalsIgnoreCase("password") ||
+//               name.equalsIgnoreCase("secret") ||
+//               name.equalsIgnoreCase("apikey") ||
+//               name.equalsIgnoreCase("token");
+//    }
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);

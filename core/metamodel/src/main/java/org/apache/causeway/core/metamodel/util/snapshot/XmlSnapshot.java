@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.util.snapshot;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -528,20 +527,21 @@ public class XmlSnapshot implements Snapshot {
                         log("collection.size", "" + CollectionFacet.elementCount(collection)));
             }
 
-            final boolean[] allFieldsNavigated = { true }; // fast non-thread-safe value reference
+            final boolean allFieldsNavigated = CollectionFacet.streamAdapters(collection)
+                .map(referencedObject -> {
+                    final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
+                            annotation);
+                    if (log.isDebugEnabled()) {
+                        log.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for {}{}",
+                                log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
+                    }
+                    return appendedXml;
+                })
+                .allMatch(appendedXml->appendedXml);
 
-            CollectionFacet.streamAdapters(collection).forEach(referencedObject -> {
-                final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
-                        annotation);
-                if (log.isDebugEnabled()) {
-                    log.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for {}{}",
-                            log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
-                }
-                allFieldsNavigated[0] = allFieldsNavigated[0] && appendedXml;
-            });
 
-            log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + Arrays.toString(allFieldsNavigated)));
-            return allFieldsNavigated[0];
+            log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
+            return allFieldsNavigated;
         }
 
         return false; // fall through, shouldn't get here but just in

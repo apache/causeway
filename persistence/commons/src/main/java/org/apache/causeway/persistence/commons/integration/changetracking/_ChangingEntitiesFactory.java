@@ -19,26 +19,8 @@
  */
 package org.apache.causeway.persistence.commons.integration.changetracking;
 
-import java.util.Map;
-import java.util.UUID;
-
-import org.apache.causeway.applib.annotation.EntityChangeKind;
-import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
-import org.apache.causeway.schema.chg.v2.ChangesDto;
-import org.apache.causeway.schema.chg.v2.ObjectsDto;
-import org.apache.causeway.schema.common.v2.OidsDto;
-
-import lombok.val;
-
 final class _ChangingEntitiesFactory {
 
     // -- HELPER
-
-
-
 
 }
