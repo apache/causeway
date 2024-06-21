@@ -1547,6 +1547,28 @@ public class CausewayConfiguration {
             }
 
         }
+
+        private final Service service = new Service();
+        @Data
+        public static class Service {
+
+            private final MetricsService metricsService = new MetricsService();
+            @Data
+            public static class MetricsService {
+                public enum Level {
+                    COUNTERS_ONLY,
+                    COUNTERS_AND_DETAIL;
+
+                    public boolean isCountersOnly() { return this == COUNTERS_ONLY; }
+                    public boolean isCountersAndDetail() { return this == COUNTERS_AND_DETAIL; }
+                }
+
+                /**
+                 * What level of detail the MetricsService should capture.
+                 */
+                private Level level = Level.COUNTERS_ONLY;
+            }
+        }
     }
 
     private final Core core = new Core();
