@@ -270,12 +270,16 @@ implements
             log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
-        resetState();
+        enlistedPropertyChangeRecordsById.clear();
+        changes.clear();
+
+        changeKindByEnlistedAdapter.clear();
+        numberEntitiesLoaded.reset();
+        entityChangeEventCount.reset();
+
+        persistentChangesEncountered.set(false);
     }
 
-    private void resetState() {
-        resetState(numberEntitiesLoaded, entityChangeEventCount);
-    }
 
 
     /**
@@ -322,33 +326,15 @@ implements
 
     @Override
     public void beforeCompletion() {
-        try {
-            _Xray.publish(this, interactionProviderProvider);
+        _Xray.publish(this, interactionProviderProvider);
 
-            log.debug("about to publish entity changes");
+        log.debug("about to publish entity changes");
 
-            // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
-            memoizeChangesIfRequired();
+        // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
+        memoizeChangesIfRequired();
 
-            entityPropertyChangePublisher.publishChangedProperties();
-            entityChangesPublisher.publishChangingEntities(this);
-
-        } finally {
-            log.debug("purging entity change records");
-
-            resetState(entityChangeEventCount, numberEntitiesLoaded);
-        }
-    }
-
-    private void resetState(LongAdder entityChangeEventCount, LongAdder numberEntitiesLoaded) {
-        enlistedPropertyChangeRecordsById.clear();
-        changes.clear();
-
-        changeKindByEnlistedAdapter.clear();
-        entityChangeEventCount.reset();
-        numberEntitiesLoaded.reset();
-
-        persistentChangesEncountered.set(false);
+        entityPropertyChangePublisher.publishChangedProperties();
+        entityChangesPublisher.publishChangingEntities(this);
     }
 
     private void enableCommandPublishing() {

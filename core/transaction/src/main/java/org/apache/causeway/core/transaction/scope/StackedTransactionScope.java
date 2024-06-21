@@ -15,10 +15,13 @@
  */
 package org.apache.causeway.core.transaction.scope;
 
+import lombok.val;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.UUID;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
@@ -32,11 +35,11 @@ public class StackedTransactionScope implements Scope {
     @Override
     public Object get(final String name, final ObjectFactory<?> objectFactory) {
 
-        Object key = currentKeyOnTransactionStack();
+        val transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
 
-        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(key);
+        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevelForThisThread());
         if (scopedObjects == null) {
-            scopedObjects = new ScopedObjectsHolder();
+            scopedObjects = new ScopedObjectsHolder(transactionNestingLevelForThisThread);
             if (TransactionSynchronizationManager.isSynchronizationActive()) {
                 // this happen when TransactionSynchronization#afterCompletion is called.
                 // it's a catch-22 : we use TransactionSynchronization as a resource to hold the scoped objects,
@@ -48,7 +51,7 @@ public class StackedTransactionScope implements Scope {
             } else {
                 scopedObjects.registered = false;
             }
-            TransactionSynchronizationManager.bindResource(key, scopedObjects);
+            TransactionSynchronizationManager.bindResource(transactionNestingLevelForThisThread, scopedObjects);
         } else {
             if (TransactionSynchronizationManager.isSynchronizationActive()) {
                 // it's possible that this already-existing scopedObject was added when a synchronization wasn't active
@@ -76,8 +79,8 @@ public class StackedTransactionScope implements Scope {
     @Override
     @Nullable
     public Object remove(final String name) {
-        Object key = currentKeyOnTransactionStack();
-        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(key);
+        val currentTransactionNestingLevel = currentTransactionNestingLevelForThisThread();
+        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevel);
         if (scopedObjects != null) {
             scopedObjects.destructionCallbacks.remove(name);
             return scopedObjects.scopedInstances.remove(name);
@@ -88,21 +91,34 @@ public class StackedTransactionScope implements Scope {
 
     @Override
     public void registerDestructionCallback(final String name, final Runnable callback) {
-        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(this);
+        ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevelForThisThread());
         if (scopedObjects != null) {
             scopedObjects.destructionCallbacks.put(name, callback);
         }
     }
 
-    private static final ThreadLocal<Stack<Object>> transactionStackThreadLocal = ThreadLocal.withInitial(() -> {
-        Stack<Object> stack = new Stack<>();
-        stack.push(new Object());
+    /**
+     * Holds a unique id for each nested transaction within the current thread.
+     *
+     * <p>
+     * We chose to use a UUID rather than a integer, say, because an integer might be mis-interpreted as having a
+     * sequence. All we really need is a unique object, and a UUID is a little easier to work with (debug with) than
+     * using an anonymous <code>new Object()</code>.
+     * </p>
+     */
+    private static final ThreadLocal<Stack<UUID>> transactionNestingLevelThreadLocal = ThreadLocal.withInitial(() -> {
+        Stack<UUID> stack = new Stack<>();
+        stack.push(UUID.randomUUID());
         return stack;
     });
 
     /**
-     * Maintains a stack of keys, where the top-most is the key managed by {@link TransactionSynchronizationManager}
-     * holding the {@link ScopedObjectsHolder} for the current transaction.
+     * Maintains a stack of keys representing nested transactions, where the top-most is the key managed by
+     * {@link TransactionSynchronizationManager} holding the {@link ScopedObjectsHolder} for the current transaction.
+     *
+     * <p>
+     * The keys themselves are {@link UUID}s, having no meaning in themselves other than their identity as the key
+     * into a hashmap.
      *
      * <p>
      * If a transaction is suspended, then the {@link CleanupSynchronization#suspend() suspend} callback is used
@@ -110,42 +126,40 @@ public class StackedTransactionScope implements Scope {
      * {@link org.apache.causeway.applib.annotation.TransactionScope transaction-scope}d beans of the suspended
      * transaction) from {@link TransactionSynchronizationManager}.  As transaction-scoped beans are then resolved,
      * they will be associated with the new key.
-     * </p>
      *
      * <p>
      * Conversely, when a transaction is resumed, then the process is reversed; the old key is popped, and the previous
      * key is rebound to the {@link TransactionSynchronizationManager}, meaning that the previous transaction's
      * {@link org.apache.causeway.applib.annotation.TransactionScope transaction-scope}d beans are brought back.
-     * </p>
      *
-     * @see #currentKeyOnTransactionStack()
-     * @see #pushNewKeyOntoTransactionStack()
-     * @see #popOldKeyFromTransactionStack()
-     * @see #transactionStackThreadLocal
+     * @see #currentTransactionNestingLevelForThisThread()
+     * @see #pushToNewTransactionNestingLevelForThisThread()
+     * @see #popToPreviousTransactionNestingLevelForThisThread()
+     * @see #transactionNestingLevelThreadLocal
      */
-    private static Stack<Object> transactionStack() {
-        return transactionStackThreadLocal.get();
+    private static Stack<UUID> transactionNestingLevelForThread() {
+        return transactionNestingLevelThreadLocal.get();
     }
 
     /**
-     * @see #transactionStack()
+     * @see #transactionNestingLevelForThread()
      */
-    private Object currentKeyOnTransactionStack() {
-        return transactionStack().peek();
+    private UUID currentTransactionNestingLevelForThisThread() {
+        return transactionNestingLevelForThread().peek();
     }
 
     /**
-     * @see #transactionStack()
+     * @see #transactionNestingLevelForThread()
      */
-    private static void pushNewKeyOntoTransactionStack() {
-        transactionStack().push(new Object());
+    private static void pushToNewTransactionNestingLevelForThisThread() {
+        transactionNestingLevelForThread().push(UUID.randomUUID());
     }
 
     /**
-     * @see #transactionStack()
+     * @see #transactionNestingLevelForThread()
      */
-    private static void popOldKeyFromTransactionStack() {
-        transactionStack().pop();
+    private static void popToPreviousTransactionNestingLevelForThisThread() {
+        transactionNestingLevelForThread().pop();
     }
 
 
@@ -167,6 +181,13 @@ public class StackedTransactionScope implements Scope {
      */
     static class ScopedObjectsHolder {
 
+        private final UUID transactionUuid;
+
+        ScopedObjectsHolder(UUID transactionUuid) {
+            this.transactionUuid = transactionUuid;
+        }
+
+
         final Map<String, Object> scopedInstances = new HashMap<>();
         final Map<String, Runnable> destructionCallbacks = new LinkedHashMap<>();
 
@@ -182,6 +203,12 @@ public class StackedTransactionScope implements Scope {
          * </p>
          */
         private boolean registered = false;
+
+        public String toString() {
+            return String.format(
+                    "uuid: %s, registered: %s, scopedInstances.size(): %d, destructionCallbacks.size(): %d",
+                    transactionUuid, registered, scopedInstances.size(), destructionCallbacks.size());
+        }
     }
 
 
@@ -195,19 +222,20 @@ public class StackedTransactionScope implements Scope {
 
         @Override
         public void suspend() {
-            TransactionSynchronizationManager.unbindResource(currentKeyOnTransactionStack());
-            pushNewKeyOntoTransactionStack();  // subsequent calls to obtain a @TransactionScope'd bean will be against this key
+            val transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
+            TransactionSynchronizationManager.unbindResource(transactionNestingLevelForThisThread);
+            pushToNewTransactionNestingLevelForThisThread();  // subsequent calls to obtain a @TransactionScope'd bean will be against this key
         }
 
         @Override
         public void resume() {
-            popOldKeyFromTransactionStack(); // the now-completed transaction's @TransactionScope'd beans are no longer required, and will be GC'd.
-            TransactionSynchronizationManager.bindResource(currentKeyOnTransactionStack(), this.scopedObjects);
+            popToPreviousTransactionNestingLevelForThisThread(); // the now-completed transaction's @TransactionScope'd beans are no longer required, and will be GC'd.
+            TransactionSynchronizationManager.bindResource(currentTransactionNestingLevelForThisThread(), this.scopedObjects);
         }
 
         @Override
         public void afterCompletion(final int status) {
-            TransactionSynchronizationManager.unbindResourceIfPossible(StackedTransactionScope.this.currentKeyOnTransactionStack());
+            TransactionSynchronizationManager.unbindResourceIfPossible(StackedTransactionScope.this.currentTransactionNestingLevelForThisThread());
             for (Runnable callback : this.scopedObjects.destructionCallbacks.values()) {
                 callback.run();
             }
