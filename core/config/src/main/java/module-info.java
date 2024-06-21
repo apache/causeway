@@ -50,7 +50,7 @@ module org.apache.causeway.core.config {
     requires org.hibernate.validator;
     requires spring.aop;
     requires spring.beans;
-    requires spring.boot;
+    requires transitive spring.boot;
     requires spring.context;
     requires spring.core;
     requires spring.tx;

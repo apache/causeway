@@ -29,6 +29,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
@@ -96,7 +97,9 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
     }
 
     private void buildGui() {
-        headersToolbar = new CausewayAjaxHeadersToolbar(this, this.dataProvider);
+        var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
+
+        headersToolbar = new CausewayAjaxHeadersToolbar(this, this.dataProvider, wicketConfig);
         addTopToolbar(headersToolbar);
 
         navigationToolbar = new CausewayAjaxNavigationToolbar(this, this.toggleboxColumn);
@@ -113,12 +116,6 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
         IDataProvider<?> dataProvider = getDataProvider();
         return dataProvider instanceof CollectionContentsSortableDataProvider &&
                 ((CollectionContentsSortableDataProvider) dataProvider).isDecoratedWithDataTablesNet();
-    }
-
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
     }
 
     @Override

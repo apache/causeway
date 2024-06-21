@@ -24,6 +24,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -40,8 +41,9 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
 
     public CausewayAjaxHeadersToolbar(
             final CausewayAjaxDataTable table,
-            final CollectionContentsSortableDataProvider singleSortStateLocator) {
-        super(table, _Casts.uncheckedCast(singleSortStateLocator));
+            final CollectionContentsSortableDataProvider singleSortStateLocator,
+            final CausewayConfiguration.Viewer.Wicket wicketConfig) {
+        super(table, _Casts.uncheckedCast(singleSortStateLocator), wicketConfig);
         this.table = table;
         this.singleSortStateLocator = singleSortStateLocator;
         Wkt.ajaxEnable(table);
