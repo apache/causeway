@@ -30,6 +30,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.CausewayAjaxPagingNavigator;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -38,6 +39,8 @@ implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
     private static final String NAVIGATOR_CONTAINER_ID = "span";
+
+    private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
     private static final String ID_SHOW_ALL = "showAll";
     private static final String HINT_KEY_SHOW_ALL = "showAll";
     private final ToggleboxColumn toggleboxColumn;
@@ -62,16 +65,14 @@ implements HasCommonContext {
         honorShowAllHints();
     }
 
-    /* if we need to customize the navigation label, that would go here ...
-    @Override
-    protected WebComponent newNavigatorLabel(final String navigatorId, final DataTable<?, ?> table) {
-        return new NavigatorLabel(navigatorId, table);
-    }*/
 
     // -- HELPER
 
     private void buildGui() {
         var navigatorContainer = navigatorContainer();
+
+        Wkt.add(navigatorContainer,
+                new PagesizeChooser(ID_PAGESIZE_CHOOSER, getTable()));
 
         addShowAllButton(navigatorContainer);
 

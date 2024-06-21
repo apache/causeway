@@ -36,7 +36,6 @@ public class CausewayAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
 
     public CausewayAjaxPagingNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
         super(id, pageable, labelProvider);
-
         setSize(Size.Small);
     }
 
@@ -58,7 +57,6 @@ public class CausewayAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
     @Override
     protected void onComponentTag(final ComponentTag tag) {
         tag.setName("ul");
-
         super.onComponentTag(tag);
     }
 }

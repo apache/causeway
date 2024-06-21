@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table.nav.paging;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
@@ -34,19 +32,15 @@ import de.agilecoders.wicket.core.util.Attributes;
 class NavigationLink extends AjaxPagingNavigationLink {
 
     private static final long serialVersionUID = 1L;
-    private final CausewayAjaxDataTable dataTable;
-    private final Component component;
 
     public NavigationLink(final String id, final IPageable pageable, final long pageNumber) {
         super(id, pageable, pageNumber);
-        dataTable = (CausewayAjaxDataTable) pageable;
-        component = pageable instanceof Component ? (Component) pageable : null;
     }
 
     @Override
     public void onClick(final AjaxRequestTarget target) {
         super.onClick(target);
-        dataTable.setPageNumberHintAndBroadcast(target);
+        ((CausewayAjaxDataTable)super.pageable).setPageNumberHintAndBroadcast(target);
     }
 
     @Override
@@ -54,18 +48,10 @@ class NavigationLink extends AjaxPagingNavigationLink {
         return new BootstrapAjaxPagingNavigationBehavior(this, pageable, event);
     }
 
-    // seemes to be unused
-    public UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(component);
-    }
-
 	@Override
 	protected void onComponentTag(final ComponentTag tag) {
 		super.onComponentTag(tag);
-
 		Attributes.addClass(tag, "page-link");
 	}
-
-
 
 }

@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table.nav.paging;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationBehavior;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
@@ -33,19 +31,14 @@ class NavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 
     private static final long serialVersionUID = 1L;
 
-    private final CausewayAjaxDataTable dataTable;
-    private final Component component;
-
     public NavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
         super(id, pageable, increment);
-        dataTable = (CausewayAjaxDataTable) pageable;
-        component = pageable instanceof Component ? (Component) pageable : null;
     }
 
     @Override
     public void onClick(final AjaxRequestTarget target) {
         super.onClick(target);
-        dataTable.setPageNumberHintAndBroadcast(target);
+        ((CausewayAjaxDataTable)super.pageable).setPageNumberHintAndBroadcast(target);
     }
 
     @Override
@@ -53,7 +46,4 @@ class NavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
         return new BootstrapAjaxPagingNavigationBehavior(this, pageable, event);
     }
 
-    public UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(component);
-    }
 }
