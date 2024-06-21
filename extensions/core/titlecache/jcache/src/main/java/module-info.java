@@ -16,12 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.titlecache.applib;
-
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-public class CausewayModuleExtTitlecacheApplib {
-
-
+module org.apache.causeway.extensions.titlecache.jcache {
+    requires spring.context;
+    requires spring.boot.autoconfigure;
+    requires org.apache.causeway.extensions.titlecache.applib;
+    requires cache.api;
+    requires java.inject;
+    requires spring.beans;
+    requires java.annotation;
+    requires org.apache.causeway.applib;
 }

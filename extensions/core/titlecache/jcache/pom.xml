@@ -29,6 +29,11 @@
 	</properties>
 
 	<dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-titlecache-applib</artifactId>
+        </dependency>
+
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-config</artifactId>
@@ -47,6 +52,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>
