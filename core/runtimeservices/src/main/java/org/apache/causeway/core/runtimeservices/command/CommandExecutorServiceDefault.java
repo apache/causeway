@@ -174,9 +174,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private Bookmark doExecuteCommand(final CommandDto dto) {
 
-        if(log.isInfoEnabled()) {
-
-            log.info("Executing: {} {} {} {}",
+        if(log.isDebugEnabled()) {
+            log.debug("Executing: {} {} {} {}",
                     dto.getMember().getLogicalMemberIdentifier(),
                     dto.getInteractionId(),
                     targetBookmarkStrFor(dto),
