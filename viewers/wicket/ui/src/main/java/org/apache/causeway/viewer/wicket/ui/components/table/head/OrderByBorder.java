@@ -53,9 +53,7 @@ class OrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
         target.add(dataTable);
 
         final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
+        if(uiHintContainer == null) return;
 
         final ISortState<T> state = stateLocator.getSortState();
         final SortOrder order = state.getPropertySortOrder(sortProperty);
@@ -71,7 +69,9 @@ class OrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
         dataTable.setCurrentPage(0);
     }
 
-    public UiHintContainer getUiHintContainer() {
+    // -- HELPER
+
+    private UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(dataTable);
     }
 }

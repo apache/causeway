@@ -35,6 +35,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     private static final long serialVersionUID = 1L;
 
     private static final String UIHINT_PAGE_NUMBER = "pageNumber";
+    private static final String UIHINT_PAGE_SIZE = "pageSize";
 
     protected DataTableWithPagesAndFilter(
                     final String id,
@@ -58,25 +59,43 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         uiHintContainer.setHint(this, order.name(), property);
     }
 
+    public final void setPageSizeHintAndBroadcast(final AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
+
+        uiHintContainer.setHint(this, UIHINT_PAGE_SIZE, "" + getCurrentPage());
+    }
+
     public final void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
         final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
+        if(uiHintContainer == null) return;
+
         uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
+        honorPageSizeHint();
         honorPageNumberHint();
     }
 
     // -- HELPER
 
+    private final void honorPageSizeHint() {
+        var uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
+
+        parsePageSize(uiHintContainer.getHint(this, UIHINT_PAGE_SIZE))
+            .ifPresent(this::setItemsPerPage);
+        uiHintContainer.setHint(this, UIHINT_PAGE_SIZE, "" + getCurrentPage());
+        // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
+    }
+
     private final void honorPageNumberHint() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
+
         parseZeroBasedPageNr(uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER))
             .ifPresent(this::setCurrentPage);
         uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
@@ -87,11 +106,19 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
     }
 
+    private OptionalLong parsePageSize(final String string) {
+        final long pageSize = _Longs.parseLong(string, 10).orElse(-1);
+        return pageSize>=1L
+                ? OptionalLong.of(pageSize)
+                : OptionalLong.empty();
+    }
+
     private OptionalLong parseZeroBasedPageNr(final String string) {
         final long zeroBasedPageNr = _Longs.parseLong(string, 10).orElse(-1);
         return zeroBasedPageNr>=0L
                 ? OptionalLong.of(zeroBasedPageNr)
                 : OptionalLong.empty();
     }
+
 
 }

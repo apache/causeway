@@ -42,6 +42,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
@@ -111,7 +112,9 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
                 final IColumn<T, S> column = item.getModelObject();
                 WebMarkupContainer header;
 
-                if (!isDecoratedWithDataTablesNet() && column.isSortable()) {
+                if (!isDecoratedWithDataTablesNet()
+                        && column.isSortable()) {
+
                     header = newSortableHeader("header", column.getSortProperty(), stateLocator);
 
                     if (column instanceof IStyledColumn) {
@@ -146,8 +149,9 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
     }
 
     private boolean isDecoratedWithDataTablesNet() {
-        return getTable() instanceof CausewayAjaxDataTable
-                && ((CausewayAjaxDataTable) getTable()).isDecoratedWithDataTablesNet();
+        return _Casts.castTo(CausewayAjaxDataTable.class, getTable())
+            .map(CausewayAjaxDataTable::isDecoratedWithDataTablesNet)
+            .orElse(false);
     }
 
     private final boolean useIndicatorForSortableColumn;

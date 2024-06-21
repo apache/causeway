@@ -29,6 +29,7 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.CausewayAjaxPagingNavigator;
@@ -39,14 +40,14 @@ implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
     private static final String NAVIGATOR_CONTAINER_ID = "span";
-
     private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
     private static final String ID_SHOW_ALL = "showAll";
     private static final String HINT_KEY_SHOW_ALL = "showAll";
+
     private final ToggleboxColumn toggleboxColumn;
 
     public CausewayAjaxNavigationToolbar(
-            final DataTable<?, ?> table,
+            final DataTableWithPagesAndFilter<?, ?> table,
             final ToggleboxColumn toggleboxColumn) {
 
         super(table);
@@ -65,6 +66,10 @@ implements HasCommonContext {
         honorShowAllHints();
     }
 
+    @Override
+    protected DataTableWithPagesAndFilter<?, ?> getTable() {
+        return (DataTableWithPagesAndFilter<?, ?>) super.getTable();
+    }
 
     // -- HELPER
 
