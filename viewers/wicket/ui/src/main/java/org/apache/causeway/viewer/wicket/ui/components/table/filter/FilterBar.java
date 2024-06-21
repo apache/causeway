@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.filter;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class SearchBar extends Panel {
+public class FilterBar extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
@@ -43,12 +43,13 @@ public class SearchBar extends Panel {
     @Getter
     private final DataTable<?, ?> table;
 
-    public SearchBar(final String id, final DataTable<?, ?> table) {
+    public FilterBar(final String id, final DataTable<?, ?> table) {
         super(id);
         this.table = table;
     }
 
-    void bindSearchField(
+    @Deprecated //TODO[CAUSEWAY-3794] can we make it private
+    public void bindSearchField(
             final @NonNull GenericPanel<DataTableInteractive> dataTableInteractiveHolder) {
         // init searchArg from interactive model
         var dataTableInteractive = dataTableInteractiveHolder.getModelObject();

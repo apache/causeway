@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.nav.paging;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigation;

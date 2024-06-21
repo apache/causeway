@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.head;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
@@ -25,8 +25,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLoc
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 
-public class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
+class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
 
     private static final long serialVersionUID = 1L;
 

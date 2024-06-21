@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.nav;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
@@ -26,7 +26,10 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.CausewayAjaxPagingNavigator;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class CausewayAjaxNavigationToolbar extends AjaxNavigationToolbar
@@ -94,7 +97,8 @@ implements HasCommonContext {
         return ((MarkupContainer)get(navigatorContainerId));
     }
 
-    void honourHints() {
+    @Deprecated //TODO[CAUSEWAY-3794] encapsulate
+    public void honourHints() {
         UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;

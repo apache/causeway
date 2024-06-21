@@ -45,6 +45,8 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.SingularColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
+import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterBar;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -61,7 +63,7 @@ implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE = "table";
-    private static final String ID_TABLE_SEARCH_BAR = "table-search-bar";
+    private static final String ID_TABLE_FILTER_BAR = "table-search-bar";
 
     private static final CssResourceReference TABLE_CSS =
             new CssResourceReference(CollectionContentsAsAjaxTablePanel.class, "CollectionContentsAsAjaxTablePanel.css");
@@ -133,7 +135,7 @@ implements CollectionCountProvider {
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
 
-        addSearchBar(dataTable);
+        addFilterBar(dataTable);
     }
 
     private MultiselectToggleProvider getMultiselectToggleProvider() {
@@ -151,13 +153,13 @@ implements CollectionCountProvider {
      * If table quick search is supported, adds a search bar on top of the table component.
      * @param placeholderText
      */
-    private void addSearchBar(
+    private void addFilterBar(
             final CausewayAjaxDataTable dataTableComponent) {
         if(!dataTableInteractive().isSearchSupported()) {
-            WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_BAR);
+            WktComponents.permanentlyHide(this, ID_TABLE_FILTER_BAR);
             return;
         }
-        Wkt.add(this, new SearchBar(ID_TABLE_SEARCH_BAR, dataTableComponent))
+        Wkt.add(this, new FilterBar(ID_TABLE_FILTER_BAR, dataTableComponent))
             .bindSearchField(this);
     }
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table;
 
 import java.util.List;
 
@@ -34,7 +34,11 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.table.head.CausewayAjaxHeadersToolbar;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.CausewayAjaxNavigationToolbar;
+import org.apache.causeway.viewer.wicket.ui.components.table.nonav.CausewayTotalRecordsToolbar;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;

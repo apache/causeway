@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.head;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
@@ -27,6 +27,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
+import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
@@ -60,7 +62,8 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
         return new CausewayAjaxFallbackOrderByBorder<String>(borderId, table, property, locator);
     }
 
-    void honourSortOrderHints() {
+    @Deprecated //TODO[CAUSEWAY-3794] encapsulate
+    public void honourSortOrderHints() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 
