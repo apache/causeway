@@ -173,16 +173,16 @@ public class _Longs {
 
         if (s == null) {
             onFailure.accept("null");
-            OptionalLong.empty();
+            return OptionalLong.empty();
         }
 
         if (radix < Character.MIN_RADIX) {
             onFailure.accept("radix " + radix + " less than Character.MIN_RADIX");
-            OptionalLong.empty();
+            return OptionalLong.empty();
         }
         if (radix > Character.MAX_RADIX) {
             onFailure.accept("radix " + radix + " greater than Character.MAX_RADIX");
-            OptionalLong.empty();
+            return OptionalLong.empty();
         }
 
         long result = 0;
@@ -200,11 +200,11 @@ public class _Longs {
                     limit = Long.MIN_VALUE;
                 } else if (firstChar != '+') {
                     onFailure.accept(s);
-                    OptionalLong.empty();
+                    return OptionalLong.empty();
                 }
                 if (len == 1) {// Cannot have lone "+" or "-"
                     onFailure.accept(s);
-                    OptionalLong.empty();
+                    return OptionalLong.empty();
                 }
                 i++;
             }
@@ -214,22 +214,22 @@ public class _Longs {
                 digit = Character.digit(s.charAt(i++),radix);
                 if (digit < 0) {
                     onFailure.accept(s);
-                    OptionalLong.empty();
+                    return OptionalLong.empty();
                 }
                 if (result < multmin) {
                     onFailure.accept(s);
-                    OptionalLong.empty();
+                    return OptionalLong.empty();
                 }
                 result *= radix;
                 if (result < limit + digit) {
                     onFailure.accept(s);
-                    OptionalLong.empty();
+                    return OptionalLong.empty();
                 }
                 result -= digit;
             }
         } else {
             onFailure.accept(s);
-            OptionalLong.empty();
+            return OptionalLong.empty();
         }
         return OptionalLong.of(negative ? result : -result);
     }
