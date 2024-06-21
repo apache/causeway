@@ -22,7 +22,10 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
@@ -60,6 +63,9 @@ implements CollectionCountProvider {
     private static final String ID_TABLE = "table";
     private static final String ID_TABLE_SEARCH_BAR = "table-search-bar";
 
+    private static final CssResourceReference TABLE_CSS =
+            new CssResourceReference(CollectionContentsAsAjaxTablePanel.class, "CollectionContentsAsAjaxTablePanel.css");
+
     public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
         super(id, model);
     }
@@ -73,6 +79,12 @@ implements CollectionCountProvider {
     protected void onInitialize() {
         super.onInitialize();
         buildGui();
+    }
+
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(TABLE_CSS));
     }
 
     @Override
