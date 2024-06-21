@@ -22,3 +22,7 @@
  .table-header-sortIcon {
  	color: grey;
  }
+ 
+ .collectionContentsAsAjaxTablePanel .pagesizeChooser {
+ 	float: left;
+}

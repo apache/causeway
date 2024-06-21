@@ -37,6 +37,7 @@ import lombok.NonNull;
 public class PagesizeChooser extends Panel {
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_ENTRIES_PER_PAGE_LABEL = "entriesPerPageLabel";
     private static final String ID_PAGESIZE_CHOICE = "pagesizeChoice";
     private static final String ID_PAGESIZE_CHOICES = "pagesizeChoices";
 
@@ -60,6 +61,12 @@ public class PagesizeChooser extends Panel {
     // -- HELPER
 
     private void buildGui() {
+
+        Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, ()->
+                String.format("%s", table.getItemsPerPage()<=1000
+                        ? "" + table.getItemsPerPage()
+                        : "All"));
+
         var choices = List.of(
                 new LinkEntry("10", 10L),
                 new LinkEntry("25", 25L),

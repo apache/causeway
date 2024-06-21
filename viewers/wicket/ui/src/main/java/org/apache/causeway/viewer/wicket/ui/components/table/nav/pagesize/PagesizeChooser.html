@@ -20,14 +20,15 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-        	<div class="btn-group dropup">
-	            <a href="#" tabindex="-1" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
-	            	Change page-size <span class="caret"></span>
-	            </a>
+        	<div class="dropdown">
+	            <button class="btn btn-sm btn-light dropdown-toggle" 
+							type="button"
+							data-bs-toggle="dropdown" 
+							aria-expanded="false">
+	            	<span wicket:id="entriesPerPageLabel"></span>
+	            </button>
 	            <ul class="dropdown-menu" role="menu">
 	                <li wicket:id="pagesizeChoices">
-<!--	                    <a class="dropdown-item" tabindex="-1" wicket:id="pagesizeChoice"></a>-->
-						
 						<!-- link entry -->
 						<a href="#" wicket:id="pagesizeChoice" class="dropdown-item">
 						    <span wicket:id="viewItemIcon" class="ViewLinkItem"></span>
