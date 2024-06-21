@@ -25,4 +25,5 @@
  
  .collectionContentsAsAjaxTablePanel .pagesizeChooser {
  	float: left;
+	margin-right: 1rem;
 }
