@@ -140,12 +140,14 @@ import de.agilecoders.wicket.jquery.Key;
 @UtilityClass
 public class Wkt {
 
-    public <T extends Component> T add(final MarkupContainer container, final T component) {
+    public <T extends Component> T add(final @NonNull MarkupContainer container, final @Nullable T component) {
+        if(component==null) return null;
         container.addOrReplace((Component)component);
         return component;
     }
 
-    public <T extends Behavior> T add(final Component component, final T behavior) {
+    public <T extends Behavior> T add(final @NonNull Component component, final @Nullable T behavior) {
+        if(behavior==null) return null;
         component.add((Behavior)behavior);
         return behavior;
     }
@@ -154,18 +156,22 @@ public class Wkt {
      * If condition is true, adds a new {@link Component} to the {@link MarkupContainer},
      * using given componentFactory. Otherwise permanently hide the corresponding tag
      * that is mapped by given id.
+     * <p>
+     * Regardless, if given componentFactory is null or returns null, the tag is hidden as well.
      */
     public <T extends Component> Optional<T> addIfElseHide(
             final boolean condition,
             final @NonNull MarkupContainer container,
             final @NonNull String id,
-            final @NonNull Function<String, T> componentFactory) {
-        if(condition) {
-            return Optional.ofNullable(add(container, componentFactory.apply(id)));
-        }
-        WktComponents.permanentlyHide(container, id);
-        return Optional.empty();
-
+            final @Nullable Function<String, T> componentFactory) {
+        final Optional<T> componentOpt = condition
+                ? Optional.ofNullable(componentFactory)
+                    .map(factory->factory.apply(id))
+                : Optional.empty();
+        componentOpt.ifPresentOrElse(
+                component->add(container, component),
+                ()->WktComponents.permanentlyHide(container, id));
+        return componentOpt;
     }
 
     // -- AJAX ENABLER
