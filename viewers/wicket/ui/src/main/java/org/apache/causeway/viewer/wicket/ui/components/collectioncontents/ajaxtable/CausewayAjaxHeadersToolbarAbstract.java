@@ -42,6 +42,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -53,9 +54,9 @@ import de.agilecoders.wicket.core.util.Attributes;
 public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractToolbar {
     private static final long serialVersionUID = 1L;
 
-    private static final String CLASS_SORT_NONE = "fa fa-fw fa-sort";
-    private static final String CLASS_SORT_UP = "fa fa-fw fa-sort-up";
-    private static final String CLASS_SORT_DOWN = "fa fa-fw fa-sort-down";
+    private static final String CLASS_SORT_NONE = "fa fa-sort";
+    private static final String CLASS_SORT_UP = "fa fa-sort-up";
+    private static final String CLASS_SORT_DOWN = "fa fa-sort-down";
 
     static abstract class CssAttributeBehavior extends Behavior {
         private static final long serialVersionUID = 1L;
@@ -85,8 +86,12 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
      *            locator for the ISortState implementation used by sortable headers
      */
     public <T> CausewayAjaxHeadersToolbarAbstract(
-            final DataTable<T, S> table, final ISortStateLocator<S> stateLocator) {
+            final DataTable<T, S> table,
+            final ISortStateLocator<S> stateLocator,
+            final CausewayConfiguration.Viewer.Wicket wicketConfig) {
         super(table);
+
+        this.useIndicatorForSortableColumn = wicketConfig.isUseIndicatorForSortableColumn();
 
         RefreshingView<IColumn<T, S>> headers = new RefreshingView<IColumn<T, S>>("headers") {
             private static final long serialVersionUID = 1L;
@@ -144,6 +149,8 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
                 && ((CausewayAjaxDataTable) getTable()).isDecoratedWithDataTablesNet();
     }
 
+    private final boolean useIndicatorForSortableColumn;
+
     /**
      * Factory method for the sort icon
      *
@@ -173,8 +180,10 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
                         Attributes.addClass(tag, CLASS_SORT_UP);
                     } else if (sortOrder == SortOrder.DESCENDING) {
                         Attributes.addClass(tag, CLASS_SORT_DOWN);
-                    } else {
+                    } else if (useIndicatorForSortableColumn){
                         Attributes.addClass(tag, CLASS_SORT_NONE);
+                    } else {
+                        // add nothing
                     }
                 }
             }

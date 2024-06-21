@@ -3217,10 +3217,19 @@ public class CausewayConfiguration {
             private boolean useIndicatorForNoArgAction = true;
 
             /**
+             * Whether to show an indicator for a sortable column (that is an up-down arrow icon).
+             *
+             * <p>
+             * This behaviour is disabled by default.
+             * </p>
+             */
+            private boolean useIndicatorForSortableColumn = false;
+
+            /**
              * Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
              *
              * <p>
-             *     This behaviour is disabled by default.  Please be aware that enabloing it can substantially impact
+             *     This behaviour is disabled by default.  Please be aware that enabling it can substantially impact
              *     performance.
              * </p>
              */
