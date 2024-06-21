@@ -36,7 +36,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
 
     private static final String UIHINT_PAGE_NUMBER = "pageNumber";
 
-    public DataTableWithPagesAndFilter(
+    protected DataTableWithPagesAndFilter(
                     final String id,
                     final List<? extends IColumn<T, S>> columns,
                     final ISortableDataProvider<T, S> dataProvider,

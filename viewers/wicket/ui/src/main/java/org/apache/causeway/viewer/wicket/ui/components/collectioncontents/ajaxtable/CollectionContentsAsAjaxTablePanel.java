@@ -154,12 +154,9 @@ implements CollectionCountProvider {
      */
     private void addFilterBar(
             final CausewayAjaxDataTable dataTableComponent) {
-
         Wkt.addIfElseHide(dataTableInteractive().isSearchSupported(),
                 this, ID_TABLE_FILTER_BAR,
-                id -> new FilterBar(id, dataTableComponent))
-            .ifPresent(filterBar->
-                filterBar.bindSearchField(this));
+                id -> new FilterBar(id, dataTableComponent));
     }
 
     private void prependTitleColumn(

@@ -22,15 +22,13 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 public class FilterBar extends Panel {
 
@@ -48,11 +46,21 @@ public class FilterBar extends Panel {
         this.table = table;
     }
 
-    @Deprecated //TODO[CAUSEWAY-3794] can we make it private
-    public void bindSearchField(
-            final @NonNull GenericPanel<DataTableInteractive> dataTableInteractiveHolder) {
-        // init searchArg from interactive model
-        var dataTableInteractive = dataTableInteractiveHolder.getModelObject();
+    /**
+     * Only shows this search bar when there are more than 1 rows.
+     */
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        bindSearchField();
+        setVisible(getTable().getRowCount() > 1);
+    }
+
+    // -- HELPER
+
+    private void bindSearchField() {
+
+        var dataTableInteractive = _TableUtils.interactive(table);
         var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
         Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
 
@@ -63,7 +71,7 @@ public class FilterBar extends Panel {
                 // on searchArg update originating from end-user in UI,
                 // update the interactive model
                 var searchArg = searchField.getValue();
-                var dataTableInteractive = dataTableInteractiveHolder.getModelObject();
+                var dataTableInteractive = _TableUtils.interactive(table);
                 dataTableInteractive.getSearchArgument().setValue(searchArg);
                 // tells the table component to re-render
                 target.add(table);
@@ -71,15 +79,6 @@ public class FilterBar extends Panel {
         });
 
         add(searchField);
-    }
-
-    /**
-     * Only shows this search bar when there are more than 1 rows.
-     */
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        setVisible(getTable().getRowCount() > 1);
     }
 
 }
