@@ -27,7 +27,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 
-class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
+class OrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> 
 
     private final ISortStateLocator<T> stateLocator;
 
-    public CausewayAjaxFallbackOrderByBorder(
+    public OrderByBorder(
             final String id,
             final CausewayAjaxDataTable dataTable,
             final T sortProperty,

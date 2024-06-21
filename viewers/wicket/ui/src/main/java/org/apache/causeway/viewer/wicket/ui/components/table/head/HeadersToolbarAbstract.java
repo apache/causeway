@@ -52,7 +52,7 @@ import de.agilecoders.wicket.core.util.Attributes;
 /**
  * Adapted from Wicket's own {@link HeadersToolbar}.
  */
-abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractToolbar {
+abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
     private static final long serialVersionUID = 1L;
 
     private static final String CLASS_SORT_NONE = "fa fa-sort";
@@ -86,7 +86,7 @@ abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractToolbar {
      * @param stateLocator
      *            locator for the ISortState implementation used by sortable headers
      */
-    public <T> CausewayAjaxHeadersToolbarAbstract(
+    public <T> HeadersToolbarAbstract(
             final DataTable<T, S> table,
             final ISortStateLocator<S> stateLocator,
             final CausewayConfiguration.Viewer.Wicket wicketConfig) {

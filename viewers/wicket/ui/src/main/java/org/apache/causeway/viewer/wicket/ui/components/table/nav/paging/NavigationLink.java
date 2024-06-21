@@ -31,13 +31,13 @@ import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTab
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
 import de.agilecoders.wicket.core.util.Attributes;
 
-public class CausewayAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
+class NavigationLink extends AjaxPagingNavigationLink {
 
     private static final long serialVersionUID = 1L;
     private final CausewayAjaxDataTable dataTable;
     private final Component component;
 
-    public CausewayAjaxPagingNavigationLink(final String id, final IPageable pageable, final long pageNumber) {
+    public NavigationLink(final String id, final IPageable pageable, final long pageNumber) {
         super(id, pageable, pageNumber);
         dataTable = (CausewayAjaxDataTable) pageable;
         component = pageable instanceof Component ? (Component) pageable : null;

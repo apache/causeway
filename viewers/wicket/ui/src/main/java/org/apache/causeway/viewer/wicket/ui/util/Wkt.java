@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -147,6 +148,24 @@ public class Wkt {
     public <T extends Behavior> T add(final Component component, final T behavior) {
         component.add((Behavior)behavior);
         return behavior;
+    }
+
+    /**
+     * If condition is true, adds a new {@link Component} to the {@link MarkupContainer},
+     * using given componentFactory. Otherwise permanently hide the corresponding tag
+     * that is mapped by given id.
+     */
+    public <T extends Component> Optional<T> addIfElseHide(
+            final boolean condition,
+            final @NonNull MarkupContainer container,
+            final @NonNull String id,
+            final @NonNull Function<String, T> componentFactory) {
+        if(condition) {
+            return Optional.ofNullable(add(container, componentFactory.apply(id)));
+        }
+        WktComponents.permanentlyHide(container, id);
+        return Optional.empty();
+
     }
 
     // -- AJAX ENABLER

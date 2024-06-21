@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
  */
 public class CausewayAjaxHeadersToolbar
-extends CausewayAjaxHeadersToolbarAbstract<String> {
+extends HeadersToolbarAbstract<String> {
 
     private static final long serialVersionUID = 1L;
     private final CollectionContentsSortableDataProvider singleSortStateLocator;
@@ -59,7 +59,7 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
     @Override
     protected WebMarkupContainer newSortableHeader(final String borderId, final String property,
             final ISortStateLocator<String> locator) {
-        return new CausewayAjaxFallbackOrderByBorder<String>(borderId, table, property, locator);
+        return new OrderByBorder<String>(borderId, table, property, locator);
     }
 
     @Deprecated //TODO[CAUSEWAY-3794] encapsulate

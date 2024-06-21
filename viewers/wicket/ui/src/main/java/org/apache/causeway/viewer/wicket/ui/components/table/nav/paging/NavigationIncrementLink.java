@@ -29,14 +29,14 @@ import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTab
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
 
-public class CausewayAjaxPagingNavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
+class NavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 
     private static final long serialVersionUID = 1L;
 
     private final CausewayAjaxDataTable dataTable;
     private final Component component;
 
-    public CausewayAjaxPagingNavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
+    public NavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
         super(id, pageable, increment);
         dataTable = (CausewayAjaxDataTable) pageable;
         component = pageable instanceof Component ? (Component) pageable : null;

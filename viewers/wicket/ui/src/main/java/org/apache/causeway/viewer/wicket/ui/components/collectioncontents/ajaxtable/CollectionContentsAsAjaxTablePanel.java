@@ -49,7 +49,6 @@ import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTab
 import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterBar;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -63,7 +62,7 @@ implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE = "table";
-    private static final String ID_TABLE_FILTER_BAR = "table-search-bar";
+    private static final String ID_TABLE_FILTER_BAR = "table-filter-bar";
 
     private static final CssResourceReference TABLE_CSS =
             new CssResourceReference(CollectionContentsAsAjaxTablePanel.class, "CollectionContentsAsAjaxTablePanel.css");
@@ -155,12 +154,12 @@ implements CollectionCountProvider {
      */
     private void addFilterBar(
             final CausewayAjaxDataTable dataTableComponent) {
-        if(!dataTableInteractive().isSearchSupported()) {
-            WktComponents.permanentlyHide(this, ID_TABLE_FILTER_BAR);
-            return;
-        }
-        Wkt.add(this, new FilterBar(ID_TABLE_FILTER_BAR, dataTableComponent))
-            .bindSearchField(this);
+
+        Wkt.addIfElseHide(dataTableInteractive().isSearchSupported(),
+                this, ID_TABLE_FILTER_BAR,
+                id -> new FilterBar(id, dataTableComponent))
+            .ifPresent(filterBar->
+                filterBar.bindSearchField(this));
     }
 
     private void prependTitleColumn(

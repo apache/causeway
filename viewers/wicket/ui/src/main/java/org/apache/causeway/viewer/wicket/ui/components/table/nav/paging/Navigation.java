@@ -25,25 +25,24 @@ import org.apache.wicket.markup.html.list.LoopItem;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 
-
-public class CausewayAjaxPagingNavigation extends AjaxPagingNavigation {
+class Navigation extends AjaxPagingNavigation {
 
     private static final long serialVersionUID = 1L;
 
     /** Attribute for active state */
     private final AttributeModifier activeAttribute = AttributeModifier.append("class", "active");
 
-    public CausewayAjaxPagingNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
+    public Navigation(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
         super(id, pageable, labelProvider);
     }
 
-    public CausewayAjaxPagingNavigation(String id, IPageable pageable) {
+    public Navigation(final String id, final IPageable pageable) {
         super(id, pageable);
     }
 
     @Override
-    protected Link<?> newPagingNavigationLink(String id, IPageable pageable, long pageIndex) {
-        return new CausewayAjaxPagingNavigationLink(id, pageable, pageIndex);
+    protected Link<?> newPagingNavigationLink(final String id, final IPageable pageable, final long pageIndex) {
+        return new NavigationLink(id, pageable, pageIndex);
     }
 
     @Override
