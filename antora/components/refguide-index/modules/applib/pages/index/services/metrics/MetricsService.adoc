@@ -3,7 +3,7 @@
 
 Hooks into the transaction nechanism to provide a counters relating to numbers of object loaded, dirtied etc.
 
-Only entities with _DomainObject#entityChangePublishing()_ enabled are counted.
+Only entities with _DomainObject#entityChangePublishing()_ enabled (in other words, auditing) are counted.
 
 == API
 
@@ -12,19 +12,31 @@ Only entities with _DomainObject#entityChangePublishing()_ enabled are counted.
 ----
 interface MetricsService {
   int numberEntitiesLoaded()     // <.>
+  Set<Bookmark> entitiesLoaded()     // <.>
   int numberEntitiesDirtied()     // <.>
+  Set<Bookmark> entitiesDirtied()     // <.>
 }
 ----
 
 <.> xref:#numberEntitiesLoaded_[numberEntitiesLoaded()]
 +
 --
-The number of entities that have, so far in this request, been loaded from the database.
+The number of entities that were loaded (but not necessarily modified) from the database.
+--
+<.> xref:#entitiesLoaded_[entitiesLoaded()]
++
+--
+Returns the bookmarks of the entities loaded within the transaction.
 --
 <.> xref:#numberEntitiesDirtied_[numberEntitiesDirtied()]
 +
 --
-The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
+The number of entities that were modified within the transaction.
+--
+<.> xref:#entitiesDirtied_[entitiesDirtied()]
++
+--
+Returns the bookmarks of the entities that were modified within the transaction.
 --
 
 == Members
@@ -32,20 +44,30 @@ The number of objects that have, so far in this request, been dirtied/will need 
 [#numberEntitiesLoaded_]
 === numberEntitiesLoaded()
 
-The number of entities that have, so far in this request, been loaded from the database.
-
-Corresponds to the number of times that `javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)` (or equivalent) is fired.
+The number of entities that were loaded (but not necessarily modified) from the database.
 
 Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionProvider#currentInteraction()_ ).
+
+[#entitiesLoaded_]
+=== entitiesLoaded()
+
+Returns the bookmarks of the entities loaded within the transaction.
+
+Requires detailed metrics to be enabled using config param.
 
 [#numberEntitiesDirtied_]
 === numberEntitiesDirtied()
 
-The number of objects that have, so far in this request, been dirtied/will need updating in the database); a good measure of the footprint of the interaction.
-
-Corresponds to the number of times that `javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)` (or equivalent) callback is fired.
+The number of entities that were modified within the transaction.
 
 Is captured within _MemberExecutionDto#getMetrics()_ (accessible from _InteractionProvider#currentInteraction()_ .
+
+[#entitiesDirtied_]
+=== entitiesDirtied()
+
+Returns the bookmarks of the entities that were modified within the transaction.
+
+Requires detailed metrics to be enabled using config param.
 
 include::hooks/MetricsService_010-implementation.adoc[]
 

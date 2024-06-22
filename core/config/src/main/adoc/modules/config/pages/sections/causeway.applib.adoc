@@ -675,6 +675,15 @@ semantic-checking.enable
 | Whether to check for inconsistencies between the usage of ``DomainObject`` and ``DomainObjectLayout``.
 
 
+|
+[[causeway.applib.service.metrics-service.level]]
+causeway.applib.service. +
+metrics-service.level
+
+| 
+| What level of detail the MetricsService should capture.
+
+
 
 |===
 
