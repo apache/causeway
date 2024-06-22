@@ -44,6 +44,9 @@ implements HasCommonContext {
     private static final String ID_NAVIGATOR_CONTAINER = "navigatorContainer";
     private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
 
+    /**
+     * @param table data-table this tool-bar is attached to
+     */
     public TotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table) {
         this(table, LambdaModel.of(()->
                 String.format("Showing all of %d", table.getRowCount())));

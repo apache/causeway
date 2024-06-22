@@ -46,6 +46,9 @@ implements HasCommonContext {
 
     private final ToggleboxColumn toggleboxColumn;
 
+    /**
+     * @param table data-table this tool-bar is attached to
+     */
     public NavigationToolbar(
             final DataTableWithPagesAndFilter<?, ?> table,
             final ToggleboxColumn toggleboxColumn) {

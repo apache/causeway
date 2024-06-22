@@ -27,3 +27,10 @@
  	float: left;
 	margin-right: 1rem;
 }
+
+/* table search bar is present only optionally on tables, so if present, 
+	it needs a bit of top spacing (but only in parented tables, 
+	standalone tables don't have the 'padding-top: 0px' CSS hack) */
+.collection.card-body .table-filter-bar{
+    padding-top: calc(.5 * var(--bs-card-spacer-y));
+}

@@ -27,15 +27,20 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 
 public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> {
     private static final long serialVersionUID = 1L;
 
     private static final String UIHINT_PAGE_NUMBER = "pageNumber";
     private static final String UIHINT_PAGE_SIZE = "pageSize";
+    private static final String UIHINT_SEARCH_ARG = "searchArg";
+
+    protected String searchArg;
 
     protected DataTableWithPagesAndFilter(
                     final String id,
@@ -73,11 +78,26 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
     }
 
+    public void setSearchHintAndBroadcast(final AjaxRequestTarget target) {
+        final UiHintContainer uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
+
+        uiHintContainer.setHint(this, UIHINT_SEARCH_ARG, "" + getCurrentPage());
+    }
+
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        honorPageSizeHint();
+        //honorSearchArgHint(); //TODO[CAUSEWAY-3794] honorSearchArgHint does not work
+        honorPageSizeHint(); //TODO[CAUSEWAY-3794] honorPageSizeHint does not work (resets to default)
         honorPageNumberHint();
+    }
+
+    public void setSearchArg(final String value) {
+        if(_Strings.nullToEmpty(this.searchArg).equals(_Strings.nullToEmpty(value))) return;
+        this.searchArg = value;
+        // update the interactive model
+        _TableUtils.interactive(this).getSearchArgument().setValue(searchArg);
     }
 
     // -- HELPER
@@ -88,8 +108,6 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
 
         parsePageSize(uiHintContainer.getHint(this, UIHINT_PAGE_SIZE))
             .ifPresent(this::setItemsPerPage);
-        uiHintContainer.setHint(this, UIHINT_PAGE_SIZE, "" + getCurrentPage());
-        // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
     }
 
     private final void honorPageNumberHint() {
@@ -98,8 +116,13 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
 
         parseZeroBasedPageNr(uiHintContainer.getHint(this, UIHINT_PAGE_NUMBER))
             .ifPresent(this::setCurrentPage);
-        uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
-        // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
+    }
+
+    private final void honorSearchArgHint() {
+        var uiHintContainer = getUiHintContainer();
+        if(uiHintContainer == null) return;
+
+        setSearchArg(uiHintContainer.getHint(this, UIHINT_SEARCH_ARG));
     }
 
     private UiHintContainer getUiHintContainer() {
@@ -119,6 +142,5 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
                 ? OptionalLong.of(zeroBasedPageNr)
                 : OptionalLong.empty();
     }
-
 
 }

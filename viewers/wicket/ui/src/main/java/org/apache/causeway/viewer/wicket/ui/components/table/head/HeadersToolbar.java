@@ -41,6 +41,9 @@ extends HeadersToolbarAbstract<String> {
     private final CollectionContentsSortableDataProvider singleSortStateLocator;
     private DataTableWithPagesAndFilter<?, String> table;
 
+    /**
+     * @param table data-table this tool-bar is attached to
+     */
     public HeadersToolbar(
             final DataTableWithPagesAndFilter<?, String> table,
             final CollectionContentsSortableDataProvider singleSortStateLocator,

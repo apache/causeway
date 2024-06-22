@@ -46,7 +46,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
-import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterBar;
+import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterToolbar;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -134,7 +134,7 @@ implements CollectionCountProvider {
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
 
-        addFilterBar(dataTable);
+        addFilterToolbar(dataTable);
     }
 
     private MultiselectToggleProvider getMultiselectToggleProvider() {
@@ -152,11 +152,11 @@ implements CollectionCountProvider {
      * If table quick search is supported, adds a search bar on top of the table component.
      * @param placeholderText
      */
-    private void addFilterBar(
+    private void addFilterToolbar(
             final CausewayAjaxDataTable dataTableComponent) {
         Wkt.addIfElseHide(dataTableInteractive().isSearchSupported(),
                 this, ID_TABLE_FILTER_BAR,
-                id -> new FilterBar(id, dataTableComponent));
+                id -> new FilterToolbar(id, dataTableComponent));
     }
 
     private void prependTitleColumn(

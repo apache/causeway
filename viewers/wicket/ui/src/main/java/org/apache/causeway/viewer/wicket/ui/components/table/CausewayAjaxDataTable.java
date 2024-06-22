@@ -45,9 +45,6 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     private final CollectionContentsSortableDataProvider dataProvider;
     private final ToggleboxColumn toggleboxColumn;
 
-    private HeadersToolbar headersToolbar;
-    private NavigationToolbar navigationToolbar;
-
     public CausewayAjaxDataTable(
             final String id,
             final List<? extends IColumn<DataRow, String>> columns,
@@ -70,14 +67,11 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     private void buildGui() {
         var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
 
-        headersToolbar = new HeadersToolbar(this, this.dataProvider, wicketConfig);
-        addTopToolbar(headersToolbar);
-
-        navigationToolbar = new NavigationToolbar(this, this.toggleboxColumn);
+        addTopToolbar(new HeadersToolbar(this, this.dataProvider, wicketConfig));
 
         if (!isDecoratedWithDataTablesNet()) {
-            // implementation note: toolbars do decide for themselves, whether they are visible
-            addBottomToolbar(navigationToolbar);
+            // toolbars do decide for themselves, whether they are visible
+            addBottomToolbar(new NavigationToolbar(this, this.toggleboxColumn));
             addBottomToolbar(new NoRecordsToolbar(this));
             addBottomToolbar(new TotalRecordsToolbar(this));
         }

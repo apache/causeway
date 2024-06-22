@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 
-public class FilterBar extends Panel {
+public class FilterToolbar extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
@@ -41,7 +41,7 @@ public class FilterBar extends Panel {
     @Getter
     private final DataTableWithPagesAndFilter<?, ?> table;
 
-    public FilterBar(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
+    public FilterToolbar(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
         super(id);
         this.table = table;
     }
@@ -52,13 +52,13 @@ public class FilterBar extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        bindSearchField();
+        buildGui();
         setVisible(getTable().getRowCount() > 1);
     }
 
     // -- HELPER
 
-    private void bindSearchField() {
+    private void buildGui() {
 
         var dataTableInteractive = _TableUtils.interactive(table);
         var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
@@ -69,10 +69,7 @@ public class FilterBar extends Panel {
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
                 // on searchArg update originating from end-user in UI,
-                // update the interactive model
-                var searchArg = searchField.getValue();
-                var dataTableInteractive = _TableUtils.interactive(table);
-                dataTableInteractive.getSearchArgument().setValue(searchArg);
+                table.setSearchArg(searchField.getValue());
                 // tells the table component to re-render
                 target.add(table);
             }
