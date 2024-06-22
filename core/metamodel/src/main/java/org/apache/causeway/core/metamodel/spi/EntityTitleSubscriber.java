@@ -16,18 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.extensions.titlecache.jcache {
-    requires spring.beans;
-    requires spring.context;
-    requires spring.context.support;
-    requires spring.boot.autoconfigure;
+package org.apache.causeway.core.metamodel.spi;
 
-    requires cache.api;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 
-    requires java.inject;
-    requires java.annotation;
+public interface EntityTitleSubscriber {
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.extensions.titlecache.applib;
+    /**
+     * @param bookmark
+     * @param title (untranslated)
+     */
+    void entityTitleIs(Bookmark bookmark, String title);
+
 }

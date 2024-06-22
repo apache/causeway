@@ -126,7 +126,7 @@ open module org.apache.causeway.core.metamodel {
             org.apache.causeway.viewer.restfulobjects.viewer,
             org.apache.causeway.viewer.wicket.model,
             org.apache.causeway.viewer.wicket.ui,
-            org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model;
+            org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model, org.apache.causeway.extensions.titlecache.jcache;
 
 
     exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
@@ -141,6 +141,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal;
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
     exports org.apache.causeway.core.metamodel.valuetypes;
+    exports org.apache.causeway.core.metamodel.spi;
 
 
     requires jakarta.activation;

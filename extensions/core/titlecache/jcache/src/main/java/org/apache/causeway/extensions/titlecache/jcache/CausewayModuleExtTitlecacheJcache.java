@@ -22,11 +22,8 @@ import lombok.val;
 
 import java.util.Arrays;
 
-import javax.cache.configuration.MutableConfiguration;
-
 import org.apache.causeway.extensions.titlecache.jcache.dom.TitleCacheSubscriber;
 
-import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -49,12 +46,14 @@ import org.apache.causeway.extensions.titlecache.applib.CausewayModuleExtTitleca
 public class CausewayModuleExtTitlecacheJcache {
 
     public static final String NAMESPACE = "causeway.ext.titlecache.jcache";
-    public static final String CACHE_NAME_TITLES = "titles";
+    static final String CACHE_NAME_PREFIX = NAMESPACE + ".";
+
+    public static final String TITLES_CACHE = CACHE_NAME_PREFIX + "titles";
 
     @Bean
     public CacheManager cacheManager() {
         val cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache(CACHE_NAME_TITLES)));
+        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache(TITLES_CACHE)));
         return cacheManager;
     }
 
