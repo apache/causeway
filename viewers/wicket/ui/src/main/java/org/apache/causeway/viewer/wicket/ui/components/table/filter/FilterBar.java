@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.table.filter;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -39,9 +39,9 @@ public class FilterBar extends Panel {
      * DataTable this search bar is attached to.
      */
     @Getter
-    private final DataTable<?, ?> table;
+    private final DataTableWithPagesAndFilter<?, ?> table;
 
-    public FilterBar(final String id, final DataTable<?, ?> table) {
+    public FilterBar(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
         super(id);
         this.table = table;
     }
@@ -78,7 +78,7 @@ public class FilterBar extends Panel {
             }
         });
 
-        add(searchField);
+        addOrReplace(searchField);
     }
 
 }

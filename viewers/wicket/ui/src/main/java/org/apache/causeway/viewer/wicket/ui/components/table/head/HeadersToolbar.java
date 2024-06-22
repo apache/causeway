@@ -34,14 +34,14 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
  */
-public class CausewayAjaxHeadersToolbar
+public class HeadersToolbar
 extends HeadersToolbarAbstract<String> {
 
     private static final long serialVersionUID = 1L;
     private final CollectionContentsSortableDataProvider singleSortStateLocator;
     private DataTableWithPagesAndFilter<?, String> table;
 
-    public CausewayAjaxHeadersToolbar(
+    public HeadersToolbar(
             final DataTableWithPagesAndFilter<?, String> table,
             final CollectionContentsSortableDataProvider singleSortStateLocator,
             final CausewayConfiguration.Viewer.Wicket wicketConfig) {

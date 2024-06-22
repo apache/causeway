@@ -26,15 +26,15 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 
-public class CausewayAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
+public class PageNavigator extends BootstrapAjaxPagingNavigator {
 
     private static final long serialVersionUID = 1L;
 
-    public CausewayAjaxPagingNavigator(final String id, final IPageable pageable) {
+    public PageNavigator(final String id, final IPageable pageable) {
         this(id, pageable, null);
     }
 
-    public CausewayAjaxPagingNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
+    public PageNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
         super(id, pageable, labelProvider);
         setSize(Size.Small);
     }

@@ -38,13 +38,13 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  *
  * @since 2.0
  */
-public class CausewayTotalRecordsToolbar extends AbstractToolbar
+public class TotalRecordsToolbar extends AbstractToolbar
 implements HasCommonContext {
     private static final long serialVersionUID = 1L;
     private static final String ID_NAVIGATOR_CONTAINER = "navigatorContainer";
     private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
 
-    public CausewayTotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table) {
+    public TotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table) {
         this(table, LambdaModel.of(()->
                 String.format("Showing all of %d", table.getRowCount())));
     }
@@ -55,7 +55,7 @@ implements HasCommonContext {
      * @param messageModel
      *            model that will be used to display the "total records" message
      */
-    protected CausewayTotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table, final IModel<String> messageModel) {
+    protected TotalRecordsToolbar(final DataTableWithPagesAndFilter<?, ?> table, final IModel<String> messageModel) {
         super(table);
 
         var navigatorContainer = Wkt.add(this, new WebMarkupContainer(ID_NAVIGATOR_CONTAINER));

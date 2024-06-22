@@ -32,10 +32,10 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
-import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.CausewayAjaxPagingNavigator;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.PageNavigator;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-public class CausewayAjaxNavigationToolbar extends AjaxNavigationToolbar
+public class NavigationToolbar extends AjaxNavigationToolbar
 implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ implements HasCommonContext {
 
     private final ToggleboxColumn toggleboxColumn;
 
-    public CausewayAjaxNavigationToolbar(
+    public NavigationToolbar(
             final DataTableWithPagesAndFilter<?, ?> table,
             final ToggleboxColumn toggleboxColumn) {
 
@@ -57,7 +57,7 @@ implements HasCommonContext {
 
     @Override
     protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
-        return new CausewayAjaxPagingNavigator(navigatorId, table);
+        return new PageNavigator(navigatorId, table);
     }
 
     @Override

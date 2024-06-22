@@ -31,9 +31,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
-import org.apache.causeway.viewer.wicket.ui.components.table.head.CausewayAjaxHeadersToolbar;
-import org.apache.causeway.viewer.wicket.ui.components.table.nav.CausewayAjaxNavigationToolbar;
-import org.apache.causeway.viewer.wicket.ui.components.table.nonav.CausewayTotalRecordsToolbar;
+import org.apache.causeway.viewer.wicket.ui.components.table.head.HeadersToolbar;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.NavigationToolbar;
+import org.apache.causeway.viewer.wicket.ui.components.table.nonav.TotalRecordsToolbar;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
@@ -45,8 +45,8 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     private final CollectionContentsSortableDataProvider dataProvider;
     private final ToggleboxColumn toggleboxColumn;
 
-    private CausewayAjaxHeadersToolbar headersToolbar;
-    private CausewayAjaxNavigationToolbar navigationToolbar;
+    private HeadersToolbar headersToolbar;
+    private NavigationToolbar navigationToolbar;
 
     public CausewayAjaxDataTable(
             final String id,
@@ -70,16 +70,16 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     private void buildGui() {
         var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
 
-        headersToolbar = new CausewayAjaxHeadersToolbar(this, this.dataProvider, wicketConfig);
+        headersToolbar = new HeadersToolbar(this, this.dataProvider, wicketConfig);
         addTopToolbar(headersToolbar);
 
-        navigationToolbar = new CausewayAjaxNavigationToolbar(this, this.toggleboxColumn);
+        navigationToolbar = new NavigationToolbar(this, this.toggleboxColumn);
 
         if (!isDecoratedWithDataTablesNet()) {
             // implementation note: toolbars do decide for themselves, whether they are visible
             addBottomToolbar(navigationToolbar);
             addBottomToolbar(new NoRecordsToolbar(this));
-            addBottomToolbar(new CausewayTotalRecordsToolbar(this));
+            addBottomToolbar(new TotalRecordsToolbar(this));
         }
     }
 
