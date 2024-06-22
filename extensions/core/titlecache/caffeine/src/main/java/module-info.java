@@ -16,10 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.extensions.titlecache.applib {
-    exports org.apache.causeway.extensions.titlecache.applib;
-    exports org.apache.causeway.extensions.titlecache.applib.event;
+module org.apache.causeway.extensions.titlecache.caffeine {
+    requires spring.beans;
     requires spring.context;
-    requires org.apache.causeway.applib;
+    requires spring.context.support;
+    requires spring.boot.autoconfigure;
 
+    requires cache.api;
+
+    requires java.inject;
+    requires java.annotation;
+
+    requires org.apache.causeway.applib;
+    requires org.apache.causeway.core.metamodel;
+    requires org.apache.causeway.extensions.titlecache.applib;
+    requires com.github.benmanes.caffeine;
 }

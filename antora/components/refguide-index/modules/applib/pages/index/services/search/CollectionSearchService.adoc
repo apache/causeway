@@ -3,7 +3,7 @@
 
 EXPERIMENTAL/DRAFT
 
-If at least one xref:refguide:applib:index/services/search/CollectionSearchService.adoc[CollectionSearchService] is registered with Spring's context that handles a given domainType, viewer implementations (like Wicket Viewer) should show a quick-search prompt, which is rendered on top of the UI table that presents the collection in question.
+If a xref:refguide:applib:index/services/search/CollectionSearchService.adoc[CollectionSearchService] is registered with Spring's context, viewer implementations (like Wicket Viewer) should show a quick-search prompt, which is rendered on top of the UI table that presents the collection in question.
 
 == API
 
@@ -11,54 +11,21 @@ If at least one xref:refguide:applib:index/services/search/CollectionSearchServi
 .CollectionSearchService.java
 ----
 interface CollectionSearchService {
-  boolean handles(Class<?> domainType)     // <.>
-  BiPredicate<T, String> searchPredicate(Class<T> domainType)     // <.>
-  TranslatableString searchPromptPlaceholderText(Class<?> domainType)     // <.>
-  TranslationContext translationContext(Class<?> domainType)     // <.>
+  Optional<Predicate<T>> searchFilter(Class<T> domainType, String searchString)     // <.>
 }
 ----
 
-<.> xref:#handles_Class[handles(Class)]
+<.> xref:#searchFilter_Class_String[searchFilter(Class, String)]
 +
 --
-Whether this service handles given type.
---
-<.> xref:#searchPredicate_Class[searchPredicate(Class)]
-+
---
-Returns a _BiPredicate_ that filters collections of given _domainType_ by a nullable searchString.
---
-<.> xref:#searchPromptPlaceholderText_Class[searchPromptPlaceholderText(Class)]
-+
---
-Placeholder text for the quick-search prompt.
---
-<.> xref:#translationContext_Class[translationContext(Class)]
-+
---
-Provides the xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext] for translating the _#searchPromptPlaceholderText(Class)_ .
+Optionally returns a _Predicate_ that filters collections of given _domainType_ by a nullable _searchString_ , based on whether the search is supported.
 --
 
 == Members
 
-[#handles_Class]
-=== handles(Class)
+[#searchFilter_Class_String]
+=== searchFilter(Class, String)
 
-Whether this service handles given type.
-
-[#searchPredicate_Class]
-=== searchPredicate(Class)
-
-Returns a _BiPredicate_ that filters collections of given _domainType_ by a nullable searchString.
+Optionally returns a _Predicate_ that filters collections of given _domainType_ by a nullable _searchString_ , based on whether the search is supported.
 
 For example, the searchString could be parsed into tokens, and then matched against the domain object's title say.
-
-[#searchPromptPlaceholderText_Class]
-=== searchPromptPlaceholderText(Class)
-
-Placeholder text for the quick-search prompt.
-
-[#translationContext_Class]
-=== translationContext(Class)
-
-Provides the xref:refguide:applib:index/services/i18n/TranslationContext.adoc[TranslationContext] for translating the _#searchPromptPlaceholderText(Class)_ .

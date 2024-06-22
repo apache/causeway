@@ -11,11 +11,9 @@ The service is xref:refguide:applib:index/annotation/TransactionScope.adoc[Trans
 .EntityChangeTrackerDefault.java
 ----
 class EntityChangeTrackerDefault {
+  EntityChangeTrackerDefault(EntityPropertyChangePublisher entityPropertyChangePublisher, EntityChangesPublisher entityChangesPublisher, Provider<InteractionProvider> interactionProviderProvider, PreAndPostValueEvaluatorService preAndPostValueEvaluatorService)
   int getOrder()
-  void init()
   void destroy()
-  Set<PropertyChangeRecord> snapshotPropertyChangeRecords()
-  Map<Bookmark, EntityChangeKind> snapshotChangeKindByEnlistedAdapter()     // <.>
   void beforeCompletion()
   Optional<EntityChanges> getEntityChanges(java.sql.Timestamp timestamp, String userName)
   Can<EntityPropertyChange> getPropertyChanges(java.sql.Timestamp timestamp, String userName, TransactionId txId)
@@ -27,14 +25,11 @@ class EntityChangeTrackerDefault {
   void incrementLoaded(ManagedObject entity)     // <.>
   int numberEntitiesLoaded()
   int numberEntitiesDirtied()
+  Set<Bookmark> entitiesLoaded()
+  Set<Bookmark> entitiesDirtied()
 }
 ----
 
-<.> xref:#snapshotChangeKindByEnlistedAdapter_[snapshotChangeKindByEnlistedAdapter()]
-+
---
-Returns a defensive copy of the _changeKindByEnlistedAdapter_ _Map_ .
---
 <.> xref:#incrementLoaded_ManagedObject[incrementLoaded(ManagedObject)]
 +
 --
@@ -42,11 +37,6 @@ Used only for the implementation of xref:refguide:applib:index/services/metrics/
 --
 
 == Members
-
-[#snapshotChangeKindByEnlistedAdapter_]
-=== snapshotChangeKindByEnlistedAdapter()
-
-Returns a defensive copy of the _changeKindByEnlistedAdapter_ _Map_ .
 
 [#incrementLoaded_ManagedObject]
 === incrementLoaded(ManagedObject)

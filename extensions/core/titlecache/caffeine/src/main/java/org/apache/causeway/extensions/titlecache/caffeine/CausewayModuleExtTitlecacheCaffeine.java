@@ -16,23 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.titlecache.jcache;
+package org.apache.causeway.extensions.titlecache.caffeine;
 
-import lombok.val;
+import java.util.concurrent.TimeUnit;
 
-import java.util.Arrays;
+import org.apache.causeway.extensions.titlecache.caffeine.dom.TitleCacheSubscriber;
 
-import org.apache.causeway.extensions.titlecache.jcache.dom.TitleCacheSubscriber;
-
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.extensions.titlecache.applib.CausewayModuleExtTitlecacheApplib;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 @Configuration
 @Import({
@@ -43,35 +42,20 @@ import org.apache.causeway.extensions.titlecache.applib.CausewayModuleExtTitleca
         TitleCacheSubscriber.class
 })
 @EnableCaching
-public class CausewayModuleExtTitlecacheJcache {
+public class CausewayModuleExtTitlecacheCaffeine extends CachingConfigurerSupport {
 
     public static final String NAMESPACE = "causeway.ext.titlecache.jcache";
     static final String CACHE_NAME_PREFIX = NAMESPACE + ".";
 
-    public static final String TITLES_CACHE = CACHE_NAME_PREFIX + "titles";
-
     @Bean
-    public CacheManager cacheManager() {
-        val cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache(TITLES_CACHE)));
+    @Override
+    public CaffeineCacheManager cacheManager() {
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager();
+        cacheManager.setCaffeine(
+                Caffeine.newBuilder()
+                        .expireAfterWrite(10, TimeUnit.MINUTES)
+                        .maximumSize(100)
+        );
         return cacheManager;
     }
-
-//    @Bean
-//    public JCacheManagerCustomizer cacheConfigurationCustomizer() {
-//        return cm -> cm.createCache(CACHE_NAME_TITLES, cacheConfiguration());
-//    }
-//
-//    /**
-//     * Create a simple configuration that enable statistics via the JCache programmatic
-//     * configuration API.
-//     * <p>
-//     * Within the configuration object that is provided by the JCache API standard, there
-//     * is only a very limited set of configuration options. The really relevant
-//     * configuration options (like the size limit) must be set via a configuration
-//     * mechanism that is provided by the selected JCache implementation.
-//     */
-//    private javax.cache.configuration.Configuration<Object, Object> cacheConfiguration() {
-//        return new MutableConfiguration<>().setStatisticsEnabled(true);
-//    }
 }

@@ -20,12 +20,12 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-extensions-titlecache-jcache</artifactId>
-	<name>Apache Causeway Ext - Titlecache Jcache</name>
+	<artifactId>causeway-extensions-titlecache-caffeine</artifactId>
+	<name>Apache Causeway Ext - Titlecache Caffeine</name>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.titlecache.jcache</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/extensions/titlecache/jcache</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.extensions.titlecache.caffeine</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/extensions/titlecache/caffeine</git-plugin.propertiesDir>
 	</properties>
 
 	<dependencies>
@@ -56,6 +56,10 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.causeway.core</groupId>

@@ -480,6 +480,29 @@ auto-logout-on-restart
 | null
 
 
+|
+[[causeway.extensions.titlecache.caffeine.expiry-duration-in-minutes]]
+causeway.extensions.titlecache. +
+caffeine. +
+expiry-duration-in-minutes
+
+|  20
+| Default duration that entries remain in the cache (for a given logical type name), in minutes.
+
+Default is 20 mins.
+
+
+|
+[[causeway.extensions.titlecache.caffeine.max-size-in-entries]]
+causeway.extensions.titlecache. +
+caffeine.max-size-in-entries
+
+|  1000
+| Default maximum number of entries in the cache (for a given logical type name)
+
+Default is 1000
+
+
 
 |===
 

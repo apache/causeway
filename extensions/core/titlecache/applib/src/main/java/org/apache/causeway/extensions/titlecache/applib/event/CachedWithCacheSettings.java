@@ -16,18 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.extensions.titlecache.jcache {
-    requires spring.beans;
-    requires spring.context;
-    requires spring.context.support;
-    requires spring.boot.autoconfigure;
+package org.apache.causeway.extensions.titlecache.applib.event;
 
-    requires cache.api;
+/**
+ * For classes whose title is to be cached, additionally fine-tune the settings of the
+ * cache (of a given logical type name).
+ *
+ * @since 2.1 {@index}
+ */
+public interface CachedWithCacheSettings extends Cached {
 
-    requires java.inject;
-    requires java.annotation;
+    /**
+     * The number of minutes that a title should stay in the cache (of a given logical type name)
+     */
+    int expiryDurationInMinutes();
 
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.causeway.extensions.titlecache.applib;
+    /**
+     * The maximum number of entries that can reside in the cache (of a given logical type name).
+     */
+    int maxSizeInEntries();
+
 }
