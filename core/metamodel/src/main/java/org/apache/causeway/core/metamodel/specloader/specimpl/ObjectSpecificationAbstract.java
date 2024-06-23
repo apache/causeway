@@ -26,6 +26,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
@@ -451,6 +453,7 @@ implements ObjectSpecification {
         if (titleFacet != null) {
             val titleString = titleFacet.title(titleRenderRequest);
             if (!_Strings.isEmpty(titleString)) {
+                notifySubscribersIfEntity(titleRenderRequest, titleString);
                 return titleString;
             }
         }
@@ -458,6 +461,18 @@ implements ObjectSpecification {
                 ? ""
                 : "Untitled ";
         return prefix + getSingularName();
+    }
+
+    private void notifySubscribersIfEntity(
+            final TitleRenderRequest titleRenderRequest,
+            final String titleString) {
+        if (!isEntity()) {
+            return;
+        }
+        val managedObject = titleRenderRequest.getObject();
+        managedObject.getBookmark().ifPresent(bookmark -> {
+            getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
+        });
     }
 
     @Override
@@ -940,5 +955,9 @@ implements ObjectSpecification {
     private final CausewayBeanTypeRegistry causewayBeanTypeRegistry =
         getServiceRegistry()
                 .lookupServiceElseFail(CausewayBeanTypeRegistry.class);
+
+    @Getter(lazy = true)
+    private final Can<EntityTitleSubscriber> titleSubscribers =
+        getServiceRegistry().select(EntityTitleSubscriber.class);
 
 }

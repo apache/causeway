@@ -1,0 +1,46 @@
+= TitleCacheSubscriber
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Holds a cache for each entity type that indicates its title should be cached.
+
+Uses the _EntityTitleSubscriber_ to populate the cache, and listens on the _org.apache.causeway.applib.CausewayModuleApplib.TitleUiEvent_ events to provide the cache values.
+
+== API
+
+[source,java]
+.TitleCacheSubscriber.java
+----
+class TitleCacheSubscriber {
+  TitleCacheSubscriber(CaffeineCacheManager cacheManager, BookmarkService bookmarkService, SpecificationLoader specificationLoader, CausewayConfiguration causewayConfiguration)
+  void entityTitleIs(Bookmark bookmark, String title)     // <.>
+  void on(CausewayModuleApplib.TitleUiEvent<?> ev)     // <.>
+  Cache addCache(String cacheName, int expiryDurationInMinutes, int maxSizeInEntries)
+}
+----
+
+<.> xref:#entityTitleIs_Bookmark_String[entityTitleIs(Bookmark, String)]
++
+--
+Implementation of _EntityTitleSubscriber_ , listens to any computed titles and puts them into the relevant cache.
+--
+<.> xref:#on_CausewayModuleApplib_TitleUiEvent[on(CausewayModuleApplib_TitleUiEvent)]
++
+--
+Listens on _org.apache.causeway.applib.CausewayModuleApplib.TitleUiEvent_ s, and obtains a previously computed title for the bookmark, if any.
+--
+
+== Members
+
+[#entityTitleIs_Bookmark_String]
+=== entityTitleIs(Bookmark, String)
+
+Implementation of _EntityTitleSubscriber_ , listens to any computed titles and puts them into the relevant cache.
+
+Note that the cache is only lazily created when the first request to lookup an entry (in _#on(CausewayModuleApplib.TitleUiEvent)_ ) is called, so there will always be at least one cache miss per logical type name). (An alternative design would have been to scan for all implementations of xref:refguide:extensions:index/titlecache/applib/event/CachedWithCacheSettings.adoc[CachedWithCacheSettings] during bootstrap).
+
+[#on_CausewayModuleApplib_TitleUiEvent]
+=== on(CausewayModuleApplib_TitleUiEvent)
+
+Listens on _org.apache.causeway.applib.CausewayModuleApplib.TitleUiEvent_ s, and obtains a previously computed title for the bookmark, if any.
+
+If there is not cache, then one is created. If possible, the configuration of that cache is obtained from the event itself (if the event class implements xref:refguide:extensions:index/titlecache/applib/event/CachedWithCacheSettings.adoc[CachedWithCacheSettings] ) otherwise using default settings obtained from _org.apache.causeway.core.config.CausewayConfiguration.Extensions.Titlecache_ .

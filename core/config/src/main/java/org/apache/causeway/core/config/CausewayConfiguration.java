@@ -4476,6 +4476,33 @@ public class CausewayConfiguration {
             boolean autoLogoutOnRestart = true;
         }
 
+        private final Titlecache titlecache = new Titlecache();
+        @Data
+        public static class Titlecache {
+
+            private final Caffeine caffeine = new Caffeine();
+            @Data
+            public static class Caffeine {
+                /**
+                 * Default duration that entries remain in the cache (for a given logical type name),
+                 * in minutes.
+                 *
+                 * <p>
+                 *     Default is 20 mins.
+                 * </p>
+                 */
+                private int expiryDurationInMinutes = 20;
+
+                /**
+                 * Default maximum number of entries in the cache (for a given logical type name)
+                 *
+                 * <p>
+                 *     Default is 1000
+                 * </p>
+                 */
+                private int maxSizeInEntries = 1000;
+            }
+        }
     }
 
     private static List<String> listOf(final String ...values) {
