@@ -75,7 +75,7 @@ public class AppManifest {
 
 == Usage
 
-For each entity class whose title is to be cached, create a subclass of xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[] that also implements the xref:refguide:extensions:index/titlecache/applib/event/Cached.adoc[Cached] marker interface:
+For each entity class whose title is to be cached, create a subclass of xref:refguide:applib:index/events/ui/TitleUiEvent.adoc[] that also implements the xref:refguide:extensions:index/titlecache/applib/event/Cached.adoc[Cached] marker interface, and mark it as the event class fpr xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#titleUiEvent[@DomainObjectLayout#titleUiEvent]:
 
 [source,java]
 ----
