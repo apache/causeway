@@ -166,7 +166,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
 
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
-        <resteasy-spring.version>3.1.2.Final</resteasy-spring.version>
+        <resteasy-spring.version>3.1.3.Final</resteasy-spring.version>
         <resteasy.version>6.2.9.Final</resteasy.version> <!-- be awre of potential clashes with https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
         <resteasy-jaxb-provider.version>6.2.2.Final</resteasy-jaxb-provider.version>
 
