@@ -18,7 +18,11 @@
  */
 package org.apache.causeway.applib.services.metrics;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
@@ -27,33 +31,61 @@ import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
  * numbers of object loaded, dirtied etc.
  *
  * <p>
- *     Only entities with {@link DomainObject#entityChangePublishing()} enabled
+ *     Only entities with {@link DomainObject#entityChangePublishing()} enabled (in other words, auditing)
  *     are counted.
  * </p>
  *
+ * @implNote Implementation depends upon ORM callbacks.
  * @since 1.x {@index}
  */
 public interface MetricsService {
 
     /**
-     * The number of entities that have, so far in this request, been loaded from the database.
-     * <p>
-     * Corresponds to the number of times that <code>javax.jdo.listener.LoadLifecycleListener#postLoad(InstanceLifecycleEvent)</code> (or equivalent) is fired.
+     * The number of entities that were loaded (but not necessarily modified) from the database.
+     *
      * <p>
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionProvider#currentInteraction()}).
+     *
+     * @see #entitiesLoaded()
+     * @see #numberEntitiesDirtied()
      */
     int numberEntitiesLoaded();
 
     /**
-     * The number of objects that have, so far in this request, been dirtied/will need updating in the database); a
-     * good measure of the footprint of the interaction.
+     * Returns the bookmarks of the entities loaded within the transaction.
+     *
      * <p>
-     * Corresponds to the number of times that <code>javax.jdo.listener.DirtyLifecycleListener#preDirty(InstanceLifecycleEvent)</code> (or equivalent) callback is fired.
+     * Requires detailed metrics to be enabled using config param.
+     *
+     * @see #numberEntitiesLoaded()
+     * @see #entitiesDirtied()
+     */
+    default Set<Bookmark> entitiesLoaded() {
+        return Collections.emptySet();
+    }
+
+    /**
+     * The number of entities that were modified within the transaction.
+     *
      * <p>
      * Is captured within {@link MemberExecutionDto#getMetrics()} (accessible from {@link InteractionProvider#currentInteraction()}.
+     *
+     * @see #numberEntitiesLoaded()
+     * @see #entitiesDirtied()
      */
     int numberEntitiesDirtied();
 
+    /**
+     * Returns the bookmarks of the entities that were modified within the transaction.
+     *
+     * <p>
+     * Requires detailed metrics to be enabled using config param.
+     *
+     * @see #numberEntitiesDirtied()
+     * @see #entitiesLoaded()
+     */
+    default Set<Bookmark> entitiesDirtied() {
+        return Collections.emptySet();
+    }
 }
-
 

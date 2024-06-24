@@ -109,6 +109,7 @@
 		<module>core/executionrepublisher</module>
 		<module>core/flyway</module>
 		<module>core/layoutloaders</module>
+		<module>core/titlecache</module>
 
 		<module>security/audittrail</module>
 

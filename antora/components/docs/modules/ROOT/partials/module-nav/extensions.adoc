@@ -14,6 +14,7 @@
 *** xref:userguide:excel:about.adoc[]
 *** xref:userguide:flyway:about.adoc[]
 *** xref:userguide:layoutloaders:about.adoc[]
+*** xref:userguide:titlecache:about.adoc[]
 
 
 ** Security

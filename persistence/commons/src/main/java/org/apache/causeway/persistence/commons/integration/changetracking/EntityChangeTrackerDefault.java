@@ -21,6 +21,7 @@ package org.apache.causeway.persistence.commons.integration.changetracking;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +88,7 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -171,30 +173,60 @@ implements
         enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
     }
 
-    /**
-     * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot.
-     */
-    private final _Lazy<Set<PropertyChangeRecord>> entityPropertyChangeRecordsForPublishing
-        = _Lazy.of(() -> {
-            Set<PropertyChangeRecord> records;
-            try {
-                records = changedRecords(enlistedPropertyChangeRecordsById.values());
-            } catch(ConcurrentModificationException ex) {
-                log.warn(
-                        "A concurrent modification exception, one of these properties seemed to change as we looked at it :\n" +
-                        enlistedPropertyChangeRecordsById.keySet()
+    private Changes evaluateChanges() {
+        val changedProperties = evaluateChangedProperties();
+
+        val isCountersAndDetail = causewayConfiguration.getApplib().getService().getMetricsService().getLevel().isCountersAndDetail();
+        Set<Bookmark> loadedBookmarks =
+                isCountersAndDetail
+                        ? enlistedPropertyChangeRecordsById.keySet()
                                 .stream()
-                                .map(PropertyChangeRecordId::toString)
-                                .collect(Collectors.joining("\n"))
-                );
-                // instead, we take a copy
-                records = changedRecords(new ArrayList<PropertyChangeRecord>(enlistedPropertyChangeRecordsById.values()));
-            }
+                                .map(PropertyChangeRecordId::getBookmark)
+                                .collect(Collectors.<Bookmark>toSet())
+                        : Collections.emptySet();
+
+        Set<Bookmark> dirtiedBookmarks =
+                isCountersAndDetail
+                        ? changedProperties
+                                .stream()
+                                .map(PropertyChangeRecord::getBookmark)
+                                .collect(Collectors.<Bookmark>toSet())
+                        :  Collections.emptySet();
 
         enlistedPropertyChangeRecordsById.clear();
 
-        return records;
-    });
+        return new Changes(changedProperties, loadedBookmarks, dirtiedBookmarks);
+    }
+
+    private Set<PropertyChangeRecord> evaluateChangedProperties() {
+        Set<PropertyChangeRecord> dirtiedProperties;
+        try {
+            dirtiedProperties = changedRecords(enlistedPropertyChangeRecordsById.values());
+        } catch (ConcurrentModificationException ex) {
+            log.warn(
+                    "A concurrent modification exception, one of these properties seemed to change as we looked at it :\n" +
+                            enlistedPropertyChangeRecordsById.keySet()
+                                    .stream()
+                                    .map(PropertyChangeRecordId::toString)
+                                    .collect(Collectors.joining("\n"))
+            );
+            // instead, we take a copy
+            dirtiedProperties = changedRecords(new ArrayList<>(enlistedPropertyChangeRecordsById.values()));
+        }
+        return dirtiedProperties;
+    }
+
+    @RequiredArgsConstructor
+    static class Changes {
+        @Getter private final Set<PropertyChangeRecord> dirtiedProperties;
+        @Getter private final Set<Bookmark> loadedBookmarks;
+        @Getter private final Set<Bookmark> dirtiedBookmarks;
+    }
+
+    /**
+     * Contains pre- and post- values of every property of every object that actually changed. A lazy snapshot.
+     */
+    private final _Lazy<Changes> changes = _Lazy.of(this::evaluateChanges);
 
     /**
      * when iterating over the original value set, if any of the properties causes the entity to change state as it is
@@ -215,10 +247,9 @@ implements
                 .collect(_Sets.toUnmodifiable());
     }
 
-    private Set<PropertyChangeRecord> memoizePropertyChangeRecordsIfRequired() {
-        return entityPropertyChangeRecordsForPublishing.get();
+    private Changes memoizeChangesIfRequired() {
+        return changes.get();
     }
-
 
 
     /**
@@ -232,19 +263,23 @@ implements
 
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
 
         if(log.isDebugEnabled()) {
-            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
-        resetState();
+        enlistedPropertyChangeRecordsById.clear();
+        changes.clear();
+
+        changeKindByEnlistedAdapter.clear();
+        numberEntitiesLoaded.reset();
+        entityChangeEventCount.reset();
+
+        persistentChangesEncountered.set(false);
     }
 
-    private void resetState() {
-        resetState(numberEntitiesLoaded, entityChangeEventCount);
-    }
 
 
     /**
@@ -281,7 +316,7 @@ implements
         // guard against transient
         if(ManagedObjects.bookmark(entity).isEmpty()) return true;
 
-        if(entityPropertyChangeRecordsForPublishing.isMemoized()) {
+        if(changes.isMemoized()) {
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
         }
@@ -291,39 +326,22 @@ implements
 
     @Override
     public void beforeCompletion() {
-        try {
-            _Xray.publish(this, interactionProviderProvider);
+        _Xray.publish(this, interactionProviderProvider);
 
-            log.debug("about to publish entity changes");
+        log.debug("about to publish entity changes");
 
-            // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
-            memoizePropertyChangeRecordsIfRequired();
+        // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
+        memoizeChangesIfRequired();
 
-            entityPropertyChangePublisher.publishChangedProperties();
-            entityChangesPublisher.publishChangingEntities(this);
-
-        } finally {
-            log.debug("purging entity change records");
-
-            resetState(entityChangeEventCount, numberEntitiesLoaded);
-        }
-    }
-
-    private void resetState(LongAdder entityChangeEventCount, LongAdder numberEntitiesLoaded) {
-        enlistedPropertyChangeRecordsById.clear();
-        entityPropertyChangeRecordsForPublishing.clear();
-
-        changeKindByEnlistedAdapter.clear();
-        entityChangeEventCount.reset();
-        numberEntitiesLoaded.reset();
-
-        persistentChangesEncountered.set(false);
+        entityPropertyChangePublisher.publishChangedProperties();
+        entityChangesPublisher.publishChangingEntities(this);
     }
 
     private void enableCommandPublishing() {
         val alreadySet = persistentChangesEncountered.getAndSet(true);
         if(!alreadySet) {
-            currentInteraction().getCommand(); //TODO does this call have side-effects? if so explain, else remove
+            // has side effects
+            val command = currentInteraction().getCommand();
         }
     }
 
@@ -343,7 +361,7 @@ implements
 
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
-        final int numberEntityPropertiesModified = memoizePropertyChangeRecordsIfRequired().size();
+        final int numberEntityPropertiesModified = memoizeChangesIfRequired().dirtiedProperties.size();
 
         val interactionId = interaction.getInteractionId();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
@@ -423,7 +441,7 @@ implements
 
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
-        Set<PropertyChangeRecord> propertyChangeRecords = memoizePropertyChangeRecordsIfRequired();
+        Set<PropertyChangeRecord> propertyChangeRecords = memoizeChangesIfRequired().getDirtiedProperties();
 
         return propertyChangeRecords.stream()
                 .map(propertyChangeRecord -> propertyChangeRecord.toEntityPropertyChange(timestamp, userName, txId))
@@ -590,6 +608,16 @@ implements
         return changeKindByEnlistedAdapter.size();
     }
 
+    @Override
+    public Set<Bookmark> entitiesLoaded() {
+        return memoizeChangesIfRequired().getLoadedBookmarks();
+    }
+
+    @Override
+    public Set<Bookmark> entitiesDirtied() {
+        return memoizeChangesIfRequired().getDirtiedBookmarks();
+    }
+
     // -- HELPER
 
     /**
@@ -602,7 +630,6 @@ implements
         boolean isEnabled();
     }
 
-    @Inject private Configuration configuration;
 
     @Component
     @Priority(PriorityPrecedence.LATE)
@@ -621,4 +648,8 @@ implements
             return causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isEnabled();
         }
     }
+
+    @Inject private Configuration configuration;
+    @Inject private CausewayConfiguration causewayConfiguration;
+
 }
