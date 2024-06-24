@@ -984,7 +984,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-            <!-- org.apache.causeway.extensions (layoutgithub) -->
+            <!-- org.apache.causeway.extensions (layoutloaders) -->
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders</artifactId>
@@ -995,6 +995,29 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders-github</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- org.apache.causeway.extensions (titlecache) -->
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-titlecache</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-titlecache-applib</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-titlecache-caffeine</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
@@ -1037,7 +1060,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (secman) -->
+            <!-- org.apache.causeway.extensions (secman) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman</artifactId>
@@ -1109,7 +1132,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (sessionlog) -->
+            <!-- org.apache.causeway.extensions (sessionlog) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog</artifactId>
@@ -1146,7 +1169,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (spring security) -->
+            <!-- org.apache.causeway.extensions (spring security) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-spring-security-oauth2</artifactId>
@@ -1155,7 +1178,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (restful objects viewer) -->
+            <!-- org.apache.causeway.extensions (restful objects viewer) -->
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-cors</artifactId>
@@ -1171,7 +1194,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<scope>compile</scope>
 			</dependency>
 
-			<!-- org.apache.causeway.extensions (wicket viewer) -->
+            <!-- org.apache.causeway.extensions (wicket viewer) -->
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular</artifactId>
@@ -1307,7 +1330,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 
-			<!-- org.apache.causeway.valuetypes -->
+            <!-- org.apache.causeway.valuetypes -->
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime</artifactId>
@@ -1481,7 +1504,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 
-			<!-- org.apache.causeway.incubator.viewer -->
+            <!-- org.apache.causeway.incubator.viewer -->
 			<dependency>
 				<groupId>org.apache.causeway.incubator.viewer</groupId>
 				<artifactId>causeway-viewer-graphql</artifactId>
@@ -1512,8 +1535,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 
-
-			<!-- other dependencies -->
+            <!-- other dependencies -->
 
 			<dependency>
                 <groupId>org.apache.maven.plugin-tools</groupId>
@@ -1627,7 +1649,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${error_prone_annotations.version}</version>
 			</dependency>
 
-			<!-- provides @Nullable that's required by Spring 5.x -->
+            <!-- provides @Nullable that's required by Spring 5.x -->
 			<dependency>
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>jsr305</artifactId>
@@ -1740,7 +1762,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			    <version>${jakarta.servlet-api.version}</version>
 			</dependency>
 
-			<!-- 3.2 not available yet, instead use org.datanucleus:javax.jdo
+            <!-- 3.2 not available yet, instead use org.datanucleus:javax.jdo
 			<dependency>
 				<groupId>javax.jdo</groupId>
 				<artifactId>jdo-api</artifactId>
@@ -1754,7 +1776,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${jopt-simple.version}</version>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
+            <!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>ognl</groupId>
 				<artifactId>ognl</artifactId>
@@ -1813,7 +1835,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${wicket.version}</version>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
+            <!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-request</artifactId>
@@ -1826,7 +1848,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				</exclusions>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
+            <!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-util</artifactId>
@@ -1845,7 +1867,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${wicket.version}</version>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
+            <!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
@@ -1928,7 +1950,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${easymock.version}</version>
 			</dependency>
 
-			<!-- TODO: when used, move exclusions down -->
+            <!-- TODO: when used, move exclusions down -->
 			<dependency>
 				<groupId>org.htmlparser</groupId>
 				<artifactId>htmlparser</artifactId>

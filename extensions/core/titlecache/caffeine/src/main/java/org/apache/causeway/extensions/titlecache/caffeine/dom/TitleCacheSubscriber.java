@@ -18,19 +18,25 @@
  */
 package org.apache.causeway.extensions.titlecache.caffeine.dom;
 
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.Cache;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -41,15 +47,8 @@ import org.apache.causeway.extensions.titlecache.applib.event.Cached;
 import org.apache.causeway.extensions.titlecache.applib.event.CachedWithCacheSettings;
 import org.apache.causeway.extensions.titlecache.caffeine.CausewayModuleExtTitlecacheCaffeine;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.Cache;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-
-import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Holds a cache for each entity type that indicates its title should be cached.
@@ -63,7 +62,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 @Service
 @Named(TitleCacheSubscriber.LOGICAL_TYPE_NAME)
-@javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @Log4j2
 public class TitleCacheSubscriber implements EntityTitleSubscriber {
@@ -106,7 +105,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
      * @param title (untranslated)
      */
     @Override
-    public void entityTitleIs(Bookmark bookmark, String title) {
+    public void entityTitleIs(final Bookmark bookmark, final String title) {
         val cache = cacheByLogicalTypeName.get(bookmark.getLogicalTypeName());
         if(cache == null) {
             return;
@@ -128,7 +127,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
      * @param ev
      */
     @EventListener(CausewayModuleApplib.TitleUiEvent.class)
-    public void on(CausewayModuleApplib.TitleUiEvent<?> ev) {
+    public void on(final CausewayModuleApplib.TitleUiEvent<?> ev) {
         val domainObject = ev.getSource();
         if(domainObject == null) {
             return;
@@ -186,12 +185,12 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
         return cacheManager.getCache(cacheName);
     }
 
-    private Boolean isCached(Bookmark bookmark, CausewayModuleApplib.TitleUiEvent<?> ev) {
+    private Boolean isCached(final Bookmark bookmark, final CausewayModuleApplib.TitleUiEvent<?> ev) {
         return isCached(bookmark.getLogicalTypeName(), ev);
     }
 
     private Boolean isCached(
-            String logicalTypeName, CausewayModuleApplib.TitleUiEvent<?> ev) {
+            final String logicalTypeName, final CausewayModuleApplib.TitleUiEvent<?> ev) {
         return isCachedByLogicalTypeName.computeIfAbsent(logicalTypeName, ltn -> {
             if (!(ev instanceof Cached)) {
                 return false;

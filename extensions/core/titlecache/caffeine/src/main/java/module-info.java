@@ -24,8 +24,8 @@ module org.apache.causeway.extensions.titlecache.caffeine {
 
     requires cache.api;
 
-    requires java.inject;
-    requires java.annotation;
+    requires jakarta.inject;
+    requires jakarta.annotation;
 
     requires org.apache.causeway.applib;
     requires org.apache.causeway.core.metamodel;
