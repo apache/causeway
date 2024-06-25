@@ -27,8 +27,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.causeway.applib.services.metrics.MetricsService;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -36,86 +34,62 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
- * logs to a debug log.
+ * logs the rendering of any collections to a debug log.
  *
- * @since 2.0 {@index}
+ * @since 2.1 {@index}
  */
 @Service
-@Named(PageRenderLogger.LOGICAL_TYPE_NAME)
+@Named(PageRenderCollectionLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class PageRenderLogger implements PageRenderSubscriber {
+public class PageRenderCollectionLogger implements PageRenderSubscriber {
 
     private final MetricsService metricsService;
+    private final UserService userService;
 
-    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderLogger";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderCollectionLogger";
 
     @Override
     public boolean isEnabled() {
         return log.isDebugEnabled();
     }
 
-    @Override
-    public void onRenderingDomainObject(final Bookmark bookmark) {
-        if(log.isDebugEnabled()) {
-            log.debug("rendering object: [ {} ]", doubleQuoted(bookmark.stringify()));
-        }
-    }
+
+    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
 
     @Override
     public void onRenderingCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
-
         final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
-
         if (log.isDebugEnabled()) {
-            log.debug("rendering collection: [ {} ]", bookmarksStringified);
+            log.debug("rendering collection: [ {} ]  user: {}", bookmarksStringified, userService.currentUserNameElseNobody());
         }
+        timings.set(new Timing());
     }
 
-
-    @Override
-    public void onRenderingValue(final Object value) {
-        if(log.isDebugEnabled()) {
-            log.debug("rendering value: [ {} ]", doubleQuoted(value));
-        }
-    }
-
-    @Override
-    public void onRenderedDomainObject(final Bookmark bookmark) {
-        if(log.isDebugEnabled()) {
-            // until @ActionLayout#redirectPolicy is reintroduced (if it ever is), there's no point in querying for the numberEntitiesDirtied,
-            // because (for Wicket viewer at least), the rendering is in a separate request to any modifying action.
-            log.debug("rendered object: [ {} ]  numEntitiesLoaded: {}", doubleQuoted(bookmark.stringify()), metricsService.numberEntitiesLoaded());
-        }
-    }
 
     @Override
     public void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
-
         final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
 
+        val timing = timings.get();
         if (log.isDebugEnabled()) {
-            log.debug("rendered collection: [ {} ]", bookmarksStringified);
+            log.debug("rendered collection: [ {} ]  user: {}  took: {}ms", bookmarksStringified, userService.currentUserNameElseNobody(), timing.took());
         }
     }
 
-
-    @Override
-    public void onRenderedValue(final Object value) {
-        if(log.isDebugEnabled()) {
-            log.debug("rendered value: [ {} ]", doubleQuoted(value));
-        }
-    }
 
     // -- HELPER
 
@@ -123,7 +97,7 @@ public class PageRenderLogger implements PageRenderSubscriber {
         return _NullSafe.stream(bookmarkSupplier.get())
                 .filter(Objects::nonNull)
                 .map(Bookmark::stringify)
-                .map(PageRenderLogger::doubleQuoted)
+                .map(PageRenderCollectionLogger::doubleQuoted)
                 .collect(Collectors.joining(", "));
     }
 
