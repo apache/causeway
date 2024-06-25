@@ -40,8 +40,8 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just

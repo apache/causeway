@@ -18,30 +18,21 @@
  */
 package org.apache.causeway.applib.services.publishing.log;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
