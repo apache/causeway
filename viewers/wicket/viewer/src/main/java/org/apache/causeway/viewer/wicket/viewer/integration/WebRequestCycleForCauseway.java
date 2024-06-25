@@ -25,6 +25,9 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.publishing.log.Timing;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -121,10 +124,14 @@ implements
     @Setter
     private PageClassRegistry pageClassRegistry;
 
+    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
+
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
 
-        log.debug("onBeginRequest in");
+        if(log.isDebugEnabled()) {
+            log.debug("onBeginRequest in");
+        }
 
         if (!Session.exists()) {
             // Track if session was created from an expired one to notify user of the refresh.
@@ -174,7 +181,11 @@ implements
         // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
         interactionService.openInteraction(interactionContext1);
 
-        log.debug("onBeginRequest out - session was opened");
+        if(log.isDebugEnabled()) {
+            timings.set(new Timing());
+            log.debug("onBeginRequest out - session was opened");
+        }
+
     }
 
     @Override
@@ -249,7 +260,15 @@ implements
     @Override
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
 
-        log.debug("onEndRequest");
+        if(log.isDebugEnabled()) {
+            val metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
+            if(metricsServiceIfAny.isPresent()) {
+                val metricsService = metricsServiceIfAny.get();
+                log.debug("onEndRequest  took: {}ms  numberEntitiesLoaded: {}, numberEntitiesDirtied: {}", timings.get().took(), metricsService.numberEntitiesLoaded(), metricsService.numberEntitiesDirtied());
+            } else {
+                log.debug("onEndRequest  took: {}ms", timings.get().took());
+            }
+        }
 
         getMetaModelContext().lookupService(InteractionService.class).ifPresent(
             InteractionService::closeInteractionLayers
@@ -267,7 +286,10 @@ implements
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
 
-        log.debug("onException {}", ex.getClass().getSimpleName());
+        if(log.isDebugEnabled()) {
+            log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().took());
+        }
+
 
         // using side-effect free access to MM validation result
         val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
