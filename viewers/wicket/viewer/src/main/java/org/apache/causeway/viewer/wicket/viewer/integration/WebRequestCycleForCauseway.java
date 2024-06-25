@@ -190,7 +190,6 @@ implements
 
         if(log.isDebugEnabled()) {
             timings.set(new Timing());
-            log.debug("onBeginRequest ...");
         }
     }
 
@@ -278,11 +277,18 @@ implements
 
         if(log.isDebugEnabled()) {
             val metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
-            if(metricsServiceIfAny.isPresent()) {
-                val metricsService = metricsServiceIfAny.get();
-                log.debug("onEndRequest  took: {}ms  numberEntitiesLoaded: {}, numberEntitiesDirtied: {}", timings.get().took(), metricsService.numberEntitiesLoaded(), metricsService.numberEntitiesDirtied());
-            } else {
-                log.debug("onEndRequest  took: {}ms", timings.get().took());
+            long took = timings.get().took();
+            if(took > 50) {  // avoid too much clutter
+                if(metricsServiceIfAny.isPresent()) {
+                    val metricsService = metricsServiceIfAny.get();
+                    int numberEntitiesLoaded = metricsService.numberEntitiesLoaded();
+                    int numberEntitiesDirtied = metricsService.numberEntitiesDirtied();
+                    if(numberEntitiesLoaded > 0 || numberEntitiesDirtied > 0) {
+                        log.debug("onEndRequest  took: {}ms  numberEntitiesLoaded: {}, numberEntitiesDirtied: {}", took, numberEntitiesLoaded, numberEntitiesDirtied);
+                    }
+                } else {
+                    log.debug("onEndRequest  took: {}ms", took);
+                }
             }
         }
 
