@@ -41,6 +41,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
