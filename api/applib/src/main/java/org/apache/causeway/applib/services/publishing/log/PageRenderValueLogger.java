@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.services.publishing.log;
 
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,39 +27,51 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
-import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
-import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.applib.services.user.UserService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Simple implementation of {@link EntityPropertyChangeSubscriber} that just logs out the {@link EntityPropertyChange}
- * to a debug log.
+ * Simple implementation of {@link PageRenderSubscriber} that just
+ * logs to a debug log.
  *
- * @since 2.0 {@index}
+ * @since 2.1 {@index}
  */
 @Service
-@Named(EntityPropertyChangeLogger.LOGICAL_TYPE_NAME)
+@Named(PageRenderValueLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
-@Qualifier("logging")
+@Qualifier("Logging")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class EntityPropertyChangeLogger implements EntityPropertyChangeSubscriber {
+public class PageRenderValueLogger implements PageRenderSubscriber {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".EntityPropertyChangeLogger";
+    private final UserService userService;
+
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderValueLogger";
 
     @Override
     public boolean isEnabled() {
         return log.isDebugEnabled();
     }
 
+    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
+
     @Override
-    public void onChanging(final EntityPropertyChange entityPropertyChange) {
-        log.debug(entityPropertyChange.toString());
+    public void onRenderingValue(final Object value) {
+        if(log.isDebugEnabled()) {
+            log.debug("rendering value: [ \"{}\" ]  user: {}", value, userService.currentUserNameElseNobody());
+        }
+        timings.set(new Timing());
     }
 
     @Override
-    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
-        entityPropertyChanges.stream().map(EntityPropertyChange::toString).forEach(log::debug);
+    public void onRenderedValue(final Object value) {
+        if(log.isDebugEnabled()) {
+            val timing = timings.get();
+            log.debug("rendered value: [ \"{}\" ]  user: {}  took: {}ms", value, userService.currentUserNameElseNobody(), timing.took());
+        }
     }
 }
