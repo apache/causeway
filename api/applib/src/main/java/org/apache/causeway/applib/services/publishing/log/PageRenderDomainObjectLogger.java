@@ -29,6 +29,8 @@ import javax.inject.Named;
 
 import org.apache.causeway.applib.services.metrics.MetricsService;
 
+import org.apache.causeway.applib.services.user.UserService;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -41,93 +43,52 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
  * logs to a debug log.
  *
- * @since 2.0 {@index}
+ * @since 2.1 {@index}
  */
 @Service
-@Named(PageRenderLogger.LOGICAL_TYPE_NAME)
+@Named(PageRenderDomainObjectLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class PageRenderLogger implements PageRenderSubscriber {
+public class PageRenderDomainObjectLogger implements PageRenderSubscriber {
 
     private final MetricsService metricsService;
+    private final UserService userService;
 
-    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderLogger";
+    static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderDomainObjectLogger";
 
     @Override
     public boolean isEnabled() {
         return log.isDebugEnabled();
     }
 
+
+    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
+
     @Override
     public void onRenderingDomainObject(final Bookmark bookmark) {
         if(log.isDebugEnabled()) {
-            log.debug("rendering object: [ {} ]", doubleQuoted(bookmark.stringify()));
+            log.debug("rendering object: [ \"{}\" ]  user: {}", bookmark.stringify(), userService.currentUserNameElseNobody());
         }
-    }
-
-    @Override
-    public void onRenderingCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
-
-        final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
-
-        if (log.isDebugEnabled()) {
-            log.debug("rendering collection: [ {} ]", bookmarksStringified);
-        }
-    }
-
-
-    @Override
-    public void onRenderingValue(final Object value) {
-        if(log.isDebugEnabled()) {
-            log.debug("rendering value: [ {} ]", doubleQuoted(value));
-        }
+        timings.set(new Timing());
     }
 
     @Override
     public void onRenderedDomainObject(final Bookmark bookmark) {
-        if(log.isDebugEnabled()) {
+        if(log.isInfoEnabled()) {
+            val timing = timings.get();
             // until @ActionLayout#redirectPolicy is reintroduced (if it ever is), there's no point in querying for the numberEntitiesDirtied,
             // because (for Wicket viewer at least), the rendering is in a separate request to any modifying action.
-            log.debug("rendered object: [ {} ]  numEntitiesLoaded: {}", doubleQuoted(bookmark.stringify()), metricsService.numberEntitiesLoaded());
-        }
-    }
-
-    @Override
-    public void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
-
-        final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
-
-        if (log.isDebugEnabled()) {
-            log.debug("rendered collection: [ {} ]", bookmarksStringified);
+            log.info("rendered object: [ \"{}\" ]  user: {}  took: {}ms  numEntitiesLoaded: {}", bookmark.stringify(), userService.currentUserNameElseNobody(), timing.took(), metricsService.numberEntitiesLoaded());
         }
     }
 
 
-    @Override
-    public void onRenderedValue(final Object value) {
-        if(log.isDebugEnabled()) {
-            log.debug("rendered value: [ {} ]", doubleQuoted(value));
-        }
-    }
-
-    // -- HELPER
-
-    private static String bookmarksStringified(Supplier<List<Bookmark>> bookmarkSupplier) {
-        return _NullSafe.stream(bookmarkSupplier.get())
-                .filter(Objects::nonNull)
-                .map(Bookmark::stringify)
-                .map(PageRenderLogger::doubleQuoted)
-                .collect(Collectors.joining(", "));
-    }
-
-    private static String doubleQuoted(final @Nullable Object obj) {
-        return "\"" + obj + "\"";
-    }
 }
