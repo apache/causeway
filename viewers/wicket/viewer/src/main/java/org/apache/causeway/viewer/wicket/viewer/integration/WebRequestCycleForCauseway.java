@@ -25,6 +25,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.causeway.applib.services.metrics.MetricsService;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.MetaDataKey;
@@ -121,19 +123,27 @@ implements
     @Setter
     private PageClassRegistry pageClassRegistry;
 
+    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
+
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
 
-        log.debug("onBeginRequest in");
+        if(log.isTraceEnabled()) {
+            log.trace("onBeginRequest in");
+        }
 
         if (!Session.exists()) {
             // Track if session was created from an expired one to notify user of the refresh.
             // If there is no remember me cookie, user will be redirected to sign in and no need to notify.
             if (userHasSessionWithRememberMe(requestCycle)) {
                 requestCycle.setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.EXPIRED);
-                log.debug("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
+                if(log.isTraceEnabled()) {
+                    log.trace("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
+                }
             }
-            log.debug("onBeginRequest out - session was not opened (because no Session)");
+            if(log.isTraceEnabled()) {
+                log.trace("onBeginRequest out - session was not opened (because no Session)");
+            }
             return;
         }
 
@@ -174,22 +184,32 @@ implements
         // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
         interactionService.openInteraction(interactionContext1);
 
-        log.debug("onBeginRequest out - session was opened");
+        if(log.isTraceEnabled()) {
+            log.trace("onBeginRequest out - session was opened");
+        }
+
+        if(log.isDebugEnabled()) {
+            timings.set(new Timing());
+        }
     }
 
     @Override
     public void onRequestHandlerResolved(final RequestCycle requestCycle, final IRequestHandler handler) {
 
-        log.debug("onRequestHandlerResolved in (handler: {}, hasSession: {})",
-                ()->handler.getClass().getName(),
-                ()->Session.exists() ? Session.get().hashCode() : "false");
+        if(log.isTraceEnabled()) {
+            log.trace("onRequestHandlerResolved in (handler: {}, hasSession: {})",
+                    ()->handler.getClass().getName(),
+                    ()->Session.exists() ? Session.get().hashCode() : "false");
+        }
 
         // this nested class is hidden; it seems it is always used to create a new session after one has expired
         if("org.apache.wicket.request.flow.ResetResponseException$ResponseResettingDecorator"
                     .equals(handler.getClass().getName())
                 && SessionLifecyclePhase.isExpired(requestCycle)) {
 
-            log.debug("Transferring the 'expired' flag into the current session.");
+            if(log.isTraceEnabled()) {
+                log.trace("Transferring the 'expired' flag into the current session.");
+            }
             SessionLifecyclePhase.transferExpiredFlagToSession();
 
         } else if(handler instanceof RenderPageRequestHandler) {
@@ -216,11 +236,15 @@ implements
                 // has gone by, could result in the message displayed too often,
                 // but thats better than no message displayed at all
                 if(SessionLifecyclePhase.isExpiryMessageTimeframeExpired()) {
-                    log.debug("clear the session's active-after-expired flag (expiry-message timeframe has expired");
+                    if(log.isTraceEnabled()) {
+                        log.trace("clear the session's active-after-expired flag (expiry-message timeframe has expired");
+                    }
                     SessionLifecyclePhase.clearExpiredFlag();
                 } else {
                     getMessageBroker().ifPresent(broker -> {
-                        log.debug("render 'expired' message");
+                        if(log.isTraceEnabled()) {
+                            log.trace("render 'expired' message");
+                        }
                         broker.addMessage(translate("You have been redirected to the home page "
                                 + "as your session expired (no recent activity)."));
                     });
@@ -228,8 +252,9 @@ implements
             }
         }
 
-        log.debug("onRequestHandlerResolved out");
-
+        if(log.isTraceEnabled()) {
+            log.trace("onRequestHandlerResolved out");
+        }
     }
 
 
@@ -239,8 +264,9 @@ implements
      */
     @Override
     public void onRequestHandlerExecuted(final RequestCycle requestCycle, final IRequestHandler handler) {
-        log.debug("onRequestHandlerExecuted: handler: {}", handler.getClass().getName());
-
+        if(log.isTraceEnabled()) {
+            log.trace("onRequestHandlerExecuted: handler: {}", handler.getClass().getName());
+        }
     }
 
     /**
@@ -249,12 +275,26 @@ implements
     @Override
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
 
-        log.debug("onEndRequest");
+        if(log.isDebugEnabled()) {
+            val metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
+            long took = timings.get().took();
+            if(took > 50) {  // avoid too much clutter
+                if(metricsServiceIfAny.isPresent()) {
+                    val metricsService = metricsServiceIfAny.get();
+                    int numberEntitiesLoaded = metricsService.numberEntitiesLoaded();
+                    int numberEntitiesDirtied = metricsService.numberEntitiesDirtied();
+                    if(numberEntitiesLoaded > 0 || numberEntitiesDirtied > 0) {
+                        log.debug("onEndRequest  took: {}ms  numberEntitiesLoaded: {}, numberEntitiesDirtied: {}", took, numberEntitiesLoaded, numberEntitiesDirtied);
+                    }
+                } else {
+                    log.debug("onEndRequest  took: {}ms", took);
+                }
+            }
+        }
 
         getMetaModelContext().lookupService(InteractionService.class).ifPresent(
             InteractionService::closeInteractionLayers
         );
-
     }
 
     @Override
@@ -267,7 +307,10 @@ implements
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
 
-        log.debug("onException {}", ex.getClass().getSimpleName());
+        if(log.isDebugEnabled()) {
+            log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().took());
+        }
+
 
         // using side-effect free access to MM validation result
         val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
