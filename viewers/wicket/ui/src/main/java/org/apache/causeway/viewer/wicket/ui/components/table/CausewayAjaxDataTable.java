@@ -29,6 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
+import org.apache.causeway.viewer.wicket.model.itemreuse.ReuseIfRowIndexEqualsStrategy;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.head.HeadersToolbar;
@@ -54,8 +55,8 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
         super(id, columns, dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
         this.toggleboxColumn = toggleboxColumn;
-        //[CAUSEWAY-3772] optimization reinstate? though I have no clue what that is doing
-        //setItemReuseStrategy((IItemReuseStrategy & Serializable) CausewayAjaxDataTable::itemReuseStrategyWithCast);
+        // optimization
+        setItemReuseStrategy(ReuseIfRowIndexEqualsStrategy.getInstance());
     }
 
     @Override

@@ -21,6 +21,7 @@ module org.apache.causeway.viewer.wicket.model {
     exports org.apache.causeway.viewer.wicket.model.models.interaction.prop;
     exports org.apache.causeway.viewer.wicket.model.modelhelpers;
     exports org.apache.causeway.viewer.wicket.model.hints;
+    exports org.apache.causeway.viewer.wicket.model.itemreuse;
     exports org.apache.causeway.viewer.wicket.model.models;
     exports org.apache.causeway.viewer.wicket.model.models.binding;
     exports org.apache.causeway.viewer.wicket.model;
@@ -48,7 +49,7 @@ module org.apache.causeway.viewer.wicket.model {
     requires spring.context;
     requires spring.core;
     //as of 9.11.0 only works when used as automatic named modules ...
-    requires org.apache.wicket.core;
+    requires transitive org.apache.wicket.core;
     requires org.apache.wicket.request;
     requires org.apache.wicket.util;
 }
