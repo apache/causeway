@@ -26,12 +26,16 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LambdaModel;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.pagesize.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 
 public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> {
     private static final long serialVersionUID = 1L;
@@ -93,11 +97,37 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         honorPageNumberHint();
     }
 
+    // -- FILTER
+
     public void setSearchArg(final String value) {
         if(_Strings.nullToEmpty(this.searchArg).equals(_Strings.nullToEmpty(value))) return;
         this.searchArg = value;
         // update the interactive model
         _TableUtils.interactive(this).getSearchArgument().setValue(searchArg);
+    }
+
+    // -- PAGESIZE
+
+    /** Used by the {@link PagesizeChooser}, to indicate the currently set page-size. */
+    public IModel<String> getEntriesPerPageAsLiteral() {
+        return LambdaModel.of(()->
+            String.format("%s", getItemsPerPage()<=1000
+                    ? "" + getItemsPerPage()
+                    : "All"));
+    }
+
+    /**
+     * Used by the {@link PagesizeChooser}, to offer page-size choices to the end user.
+     * (Typically a drop-down select.)
+     */
+    public List<PagesizeChoice> getPagesizeChoices() {
+        var choices = List.of(
+                new PagesizeChoice("All", Long.MAX_VALUE),
+                new PagesizeChoice("10", 10L),
+                new PagesizeChoice("25", 25L),
+                new PagesizeChoice("100", 100L),
+                new PagesizeChoice("1000", 1000L));
+        return choices;
     }
 
     // -- HELPER

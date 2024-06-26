@@ -18,15 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.viewer.wicket.model.pagesize.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
@@ -62,55 +59,31 @@ public class PagesizeChooser extends Panel {
 
     private void buildGui() {
 
-        Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, ()->
-                String.format("%s", table.getItemsPerPage()<=1000
-                        ? "" + table.getItemsPerPage()
-                        : "All"));
+        Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, table.getEntriesPerPageAsLiteral());
 
-        var choices = List.of(
-                new LinkEntry("10", 10L),
-                new LinkEntry("25", 25L),
-                new LinkEntry("100", 100L),
-                new LinkEntry("1000", 1000L),
-                new LinkEntry("All", Long.MAX_VALUE));
+        var choices = table.getPagesizeChoices();
 
         Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, choices, item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
-                var linkItem = item.getModelObject();
-                table.setItemsPerPage(linkItem.getItemsPerPage());
+                var pagesizeChoice = item.getModelObject();
+                table.setItemsPerPage(pagesizeChoice.getItemsPerPage());
                 table.setPageSizeHintAndBroadcast(target);
                 target.add(table);
             });
             // add title and icon to the link
-            LinkEntry.addIconAndTitle(item, link);
+            addIconAndTitle(item, link);
             Wkt.ajaxEnable(link);
         });
 
     }
 
-    @lombok.Value
-    static class LinkEntry implements Serializable {
-        private static final long serialVersionUID = 1L;
-        // -- CONSTRUCTION
-        final String title;
-        final long itemsPerPage;
-        final String cssClass = ""; // for future use
-        // -- UTILITY
-        static void addIconAndTitle(
-                final @NonNull ListItem<LinkEntry> item,
-                final @NonNull MarkupContainer link) {
-            WktLinks.listItemAsDropdownLink(item, link,
-                    ID_VIEW_ITEM_TITLE, LinkEntry::nameFor,
-                    ID_VIEW_ITEM_ICON, LinkEntry::cssClassFor,
-                    null);
-        }
-        // -- HELPER
-        private static IModel<String> nameFor(final LinkEntry linkEntry) {
-            return Model.of(linkEntry.getTitle());
-        }
-        private static IModel<String> cssClassFor(final LinkEntry linkEntry) {
-            return Model.of(linkEntry.getCssClass());
-        }
+    static void addIconAndTitle(
+            final @NonNull ListItem<PagesizeChoice> item,
+            final @NonNull MarkupContainer link) {
+        WktLinks.listItemAsDropdownLink(item, link,
+                ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.getTitle()),
+                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.getCssClass()),
+                null);
     }
 
 }

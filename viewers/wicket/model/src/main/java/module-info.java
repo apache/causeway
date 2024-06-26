@@ -28,6 +28,7 @@ module org.apache.causeway.viewer.wicket.model {
     exports org.apache.causeway.viewer.wicket.model.links;
     exports org.apache.causeway.viewer.wicket.model.models.interaction.act;
     exports org.apache.causeway.viewer.wicket.model.models.interaction;
+    exports org.apache.causeway.viewer.wicket.model.pagesize;
     exports org.apache.causeway.viewer.wicket.model.util;
     exports org.apache.causeway.viewer.wicket.model.mementos;
     exports org.apache.causeway.viewer.wicket.model.models.interaction.coll;

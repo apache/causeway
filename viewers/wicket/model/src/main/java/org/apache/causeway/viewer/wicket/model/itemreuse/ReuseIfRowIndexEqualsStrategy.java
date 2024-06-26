@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.itemreuse;
 
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import org.apache.wicket.markup.repeater.IItemFactory;
@@ -68,12 +69,9 @@ public class ReuseIfRowIndexEqualsStrategy implements IItemReuseStrategy {
             @Override
             public Item<T> next() {
                 final IModel<T> model = newModels.next();
-                final Item<T> oldItem = itemByRowIndex.getItem(model);
-
-                final Item<T> item = (oldItem == null)
-                    ? factory.newItem(index, model)
-                    : withIndex(oldItem, index);
-
+                final Item<T> item = itemByRowIndex.getItem(model)
+                        .map(oldItem->withIndex(index, oldItem))
+                        .orElseGet(()->factory.newItem(index, model));
                 index++;
                 return item;
             }
@@ -87,7 +85,7 @@ public class ReuseIfRowIndexEqualsStrategy implements IItemReuseStrategy {
 
     // -- HELPER
 
-    private static <T> Item<T> withIndex(final Item<T> item, final int index) {
+    private static <T> Item<T> withIndex(final int index, final Item<T> item) {
         item.setIndex(index);
         return item;
     }
@@ -102,11 +100,11 @@ public class ReuseIfRowIndexEqualsStrategy implements IItemReuseStrategy {
             }
         }
 
-        Item<T> getItem(final IModel<T> model) {
+        Optional<Item<T>> getItem(final IModel<T> model) {
             final int rowIndex = rowIndex(model);
             return rowIndex > -1
-                 ? get(rowIndex)
-                 : null;
+                 ? Optional.ofNullable(get(rowIndex))
+                 : Optional.empty();
         }
 
         private static int rowIndex(final IModel<?> model) {
