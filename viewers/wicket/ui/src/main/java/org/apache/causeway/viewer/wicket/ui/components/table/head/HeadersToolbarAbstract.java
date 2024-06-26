@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.head;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -42,8 +42,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import de.agilecoders.wicket.core.util.Attributes;
@@ -51,7 +53,7 @@ import de.agilecoders.wicket.core.util.Attributes;
 /**
  * Adapted from Wicket's own {@link HeadersToolbar}.
  */
-public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractToolbar {
+abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
     private static final long serialVersionUID = 1L;
 
     private static final String CLASS_SORT_NONE = "fa fa-sort";
@@ -85,7 +87,7 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
      * @param stateLocator
      *            locator for the ISortState implementation used by sortable headers
      */
-    public <T> CausewayAjaxHeadersToolbarAbstract(
+    public <T> HeadersToolbarAbstract(
             final DataTable<T, S> table,
             final ISortStateLocator<S> stateLocator,
             final CausewayConfiguration.Viewer.Wicket wicketConfig) {
@@ -110,7 +112,9 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
                 final IColumn<T, S> column = item.getModelObject();
                 WebMarkupContainer header;
 
-                if (!isDecoratedWithDataTablesNet() && column.isSortable()) {
+                if (!isDecoratedWithDataTablesNet()
+                        && column.isSortable()) {
+
                     header = newSortableHeader("header", column.getSortProperty(), stateLocator);
 
                     if (column instanceof IStyledColumn) {
@@ -145,8 +149,9 @@ public abstract class CausewayAjaxHeadersToolbarAbstract<S> extends AbstractTool
     }
 
     private boolean isDecoratedWithDataTablesNet() {
-        return getTable() instanceof CausewayAjaxDataTable
-                && ((CausewayAjaxDataTable) getTable()).isDecoratedWithDataTablesNet();
+        return _Casts.castTo(CausewayAjaxDataTable.class, getTable())
+            .map(CausewayAjaxDataTable::isDecoratedWithDataTablesNet)
+            .orElse(false);
     }
 
     private final boolean useIndicatorForSortableColumn;

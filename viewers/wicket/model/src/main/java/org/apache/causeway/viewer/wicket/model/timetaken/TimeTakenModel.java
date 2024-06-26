@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.model.timetaken;
 
 import java.util.Locale;
 
@@ -35,11 +35,11 @@ import lombok.val;
  *
  * @since 2.0
  */
-class TimeTakenModel
+public class TimeTakenModel
 implements IModel<String> {
     private static final long serialVersionUID = 1L;
 
-    static IModel<String> createForPrototypingElseBlank(final MetaModelContext mmc) {
+    public static IModel<String> createForPrototypingElseBlank(final MetaModelContext mmc) {
         return mmc.getSystemEnvironment().isPrototyping()
             ? new TimeTakenModel()
             : Model.of("");
