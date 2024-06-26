@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize;
 
+import java.util.Optional;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -62,6 +64,7 @@ public class PagesizeChooser extends Panel {
         Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, table.getEntriesPerPageAsLiteral());
 
         var choices = table.getPagesizeChoices();
+        var currentPagesizeChoice = table.getCurrentPagesizeChoice();
 
         Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, choices, item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
@@ -72,18 +75,35 @@ public class PagesizeChooser extends Panel {
             });
             // add title and icon to the link
             addIconAndTitle(item, link);
+            // add checkmark to the link
+            addCheckmark(item, link, currentPagesizeChoice);
+
             Wkt.ajaxEnable(link);
         });
 
     }
 
-    static void addIconAndTitle(
+    private static void addIconAndTitle(
             final @NonNull ListItem<PagesizeChoice> item,
             final @NonNull MarkupContainer link) {
         WktLinks.listItemAsDropdownLink(item, link,
                 ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.getTitle()),
                 ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.getCssClass()),
                 null);
+    }
+
+    private static void addCheckmark(
+            final @NonNull ListItem<PagesizeChoice> item,
+            final @NonNull MarkupContainer link,
+            final @NonNull Optional<PagesizeChoice> currentPagesizeChoice) {
+        var checkmarkForChoice = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
+
+        // whether the item in this loop is also the currently selected one (is to receive the checkmark)
+        var isSelected = currentPagesizeChoice
+                .map(currentChoice->
+                    currentChoice.equals(item.getModelObject()))
+                .orElse(false);
+        checkmarkForChoice.setVisible(isSelected);
     }
 
 }

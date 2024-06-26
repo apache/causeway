@@ -29,28 +29,3 @@ public class PagesizeChoice implements Serializable {
     final long itemsPerPage;
     final String cssClass = ""; // for future use
 }
-
-//@lombok.Value
-//static class LinkEntry implements Serializable {
-//    private static final long serialVersionUID = 1L;
-//    // -- CONSTRUCTION
-//    final String title;
-//    final long itemsPerPage;
-//    final String cssClass = ""; // for future use
-//    // -- UTILITY
-//    static void addIconAndTitle(
-//            final @NonNull ListItem<LinkEntry> item,
-//            final @NonNull MarkupContainer link) {
-//        WktLinks.listItemAsDropdownLink(item, link,
-//                ID_VIEW_ITEM_TITLE, LinkEntry::nameFor,
-//                ID_VIEW_ITEM_ICON, LinkEntry::cssClassFor,
-//                null);
-//    }
-//    // -- HELPER
-//    private static IModel<String> nameFor(final LinkEntry linkEntry) {
-//        return Model.of(linkEntry.getTitle());
-//    }
-//    private static IModel<String> cssClassFor(final LinkEntry linkEntry) {
-//        return Model.of(linkEntry.getCssClass());
-//    }
-//}

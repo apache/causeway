@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.table;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalLong;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -128,6 +129,16 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
                 new PagesizeChoice("100", 100L),
                 new PagesizeChoice("1000", 1000L));
         return choices;
+    }
+
+    /**
+     * Used by the {@link PagesizeChooser}, to indicate the currently selected page-size choice.
+     * (Typically a checkmark for the active choice within the drop-down select, also disabling the choice's link.)
+     */
+    public Optional<PagesizeChoice> getCurrentPagesizeChoice() {
+        return getPagesizeChoices().stream()
+                .filter(c->c.getItemsPerPage() == getItemsPerPage())
+                .findFirst();
     }
 
     // -- HELPER
