@@ -16,55 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.nav.paging;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationBehavior;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
-import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationIncrementLink;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigationBehavior;
-import de.agilecoders.wicket.core.util.Attributes;
 
-public class CausewayAjaxPagingNavigationLink extends AjaxPagingNavigationLink {
+class NavigationIncrementLink extends AjaxPagingNavigationIncrementLink {
 
     private static final long serialVersionUID = 1L;
-    private final CausewayAjaxDataTable dataTable;
-    private final Component component;
 
-    public CausewayAjaxPagingNavigationLink(final String id, final IPageable pageable, final long pageNumber) {
-        super(id, pageable, pageNumber);
-        dataTable = (CausewayAjaxDataTable) pageable;
-        component = pageable instanceof Component ? (Component) pageable : null;
+    public NavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
+        super(id, pageable, increment);
     }
 
     @Override
     public void onClick(final AjaxRequestTarget target) {
         super.onClick(target);
-        dataTable.setPageNumberHintAndBroadcast(target);
+        ((DataTableWithPagesAndFilter<?, ?>)super.pageable).setPageNumberHintAndBroadcast(target);
     }
 
     @Override
     protected AjaxPagingNavigationBehavior newAjaxPagingNavigationBehavior(final IPageable pageable, final String event) {
         return new BootstrapAjaxPagingNavigationBehavior(this, pageable, event);
     }
-
-    // seemes to be unused
-    public UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(component);
-    }
-
-	@Override
-	protected void onComponentTag(final ComponentTag tag) {
-		super.onComponentTag(tag);
-
-		Attributes.addClass(tag, "page-link");
-	}
-
-
 
 }

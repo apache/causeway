@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -57,7 +56,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PageRenderCollectionLogger implements PageRenderSubscriber {
 
-    private final MetricsService metricsService;
     private final UserService userService;
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderCollectionLogger";
