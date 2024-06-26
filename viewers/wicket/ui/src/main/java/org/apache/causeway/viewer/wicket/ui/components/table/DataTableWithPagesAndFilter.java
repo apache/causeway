@@ -83,7 +83,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         uiHintContainer.setHint(this, UIHINT_PAGE_NUMBER, "" + getCurrentPage());
     }
 
-    public void setSearchHintAndBroadcast(final AjaxRequestTarget target) {
+    public final void setSearchHintAndBroadcast(final AjaxRequestTarget target) {
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 
@@ -93,8 +93,8 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        //honorSearchArgHint(); //TODO[CAUSEWAY-3794] honorSearchArgHint does not work
-        honorPageSizeHint(); //TODO[CAUSEWAY-3794] honorPageSizeHint does not work (resets to default)
+        honorSearchArgHint();
+        honorPageSizeHint();
         honorPageNumberHint();
     }
 
@@ -135,7 +135,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      * Used by the {@link PagesizeChooser}, to indicate the currently selected page-size choice.
      * (Typically a checkmark for the active choice within the drop-down select, also disabling the choice's link.)
      */
-    public Optional<PagesizeChoice> getCurrentPagesizeChoice() {
+    public final Optional<PagesizeChoice> getCurrentPagesizeChoice() {
         return getPagesizeChoices().stream()
                 .filter(c->c.getItemsPerPage() == getItemsPerPage())
                 .findFirst();
@@ -143,7 +143,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
 
     // -- HELPER
 
-    private final void honorPageSizeHint() {
+    private void honorPageSizeHint() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 
@@ -151,7 +151,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
             .ifPresent(this::setItemsPerPage);
     }
 
-    private final void honorPageNumberHint() {
+    private void honorPageNumberHint() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 
@@ -159,7 +159,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
             .ifPresent(this::setCurrentPage);
     }
 
-    private final void honorSearchArgHint() {
+    private void honorSearchArgHint() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 

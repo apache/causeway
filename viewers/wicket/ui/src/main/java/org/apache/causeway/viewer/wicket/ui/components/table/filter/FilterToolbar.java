@@ -68,8 +68,9 @@ public class FilterToolbar extends Panel {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-                // on searchArg update originating from end-user in UI,
+                // on searchArg update originating from end-user in UI
                 table.setSearchArg(searchField.getValue());
+                table.setSearchHintAndBroadcast(target);
                 // tells the table component to re-render
                 target.add(table);
             }
