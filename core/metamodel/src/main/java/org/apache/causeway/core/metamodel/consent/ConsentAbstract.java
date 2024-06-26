@@ -23,6 +23,8 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.commons.internal.base._Strings;
+
 public abstract class ConsentAbstract implements Serializable, Consent {
 
     private static final long serialVersionUID = 1L;
@@ -108,7 +110,8 @@ public abstract class ConsentAbstract implements Serializable, Consent {
      */
     @Override
     public boolean isAllowed() {
-        return this.reason == null || this.reason.equals("");
+        return this.reason == null
+                || _Strings.isEmpty(this.reason.string());
     }
 
     /**
