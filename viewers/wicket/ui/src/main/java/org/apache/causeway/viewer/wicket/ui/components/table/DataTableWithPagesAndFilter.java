@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -74,7 +73,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 
-        uiHintContainer.setHint(this, UIHINT_PAGE_SIZE, "" + getCurrentPage());
+        uiHintContainer.setHint(this, UIHINT_PAGE_SIZE, "" + getItemsPerPage());
     }
 
     public final void setPageNumberHintAndBroadcast(final AjaxRequestTarget target) {
@@ -88,7 +87,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         final UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 
-        uiHintContainer.setHint(this, UIHINT_SEARCH_ARG, "" + getCurrentPage());
+        uiHintContainer.setHint(this, UIHINT_SEARCH_ARG, "" + searchArg);
     }
 
     @Override
@@ -113,7 +112,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     /** Used by the {@link PagesizeChooser}, to indicate the currently set page-size. */
     public IModel<String> getEntriesPerPageAsLiteral() {
         return LambdaModel.of(()->
-            String.format("%s", getItemsPerPage()<=1000
+            String.format("%s", getItemsPerPage()<=1000 // highest choice lower than ALL
                     ? "" + getItemsPerPage()
                     : "All"));
     }
@@ -183,55 +182,6 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         return zeroBasedPageNr>=0L
                 ? OptionalLong.of(zeroBasedPageNr)
                 : OptionalLong.empty();
-    }
-
-    /**
-     * Was called on configure of component.
-     * @param component
-     */
-    @Deprecated
-    public void honorShowAllHints(final Component component) {
-        final String HINT_KEY_SHOW_ALL = "showAll";
-        var uiHintContainer = UiHintContainer.Util.hintContainerOf(component, UiObjectWkt.class);
-
-        if(uiHintContainer == null) return;
-
-        var table = this;
-        final String showAll = uiHintContainer.getHint(table, HINT_KEY_SHOW_ALL);
-        if(showAll != null) {
-            table.setItemsPerPage(Long.MAX_VALUE);
-        }
-    }
-
-//  private void addShowAllButton(final MarkupContainer container) {
-//  Wkt.linkAdd(container, null, target->{
-//
-//      var table = getTable();
-//
-//      showAllItemsOn(table);
-//
-//      if(toggleboxColumn != null) {
-//          // clear the underlying backend selection model
-//          _TableUtils.interactive(table).getSelectAllToggle().setValue(false);
-//          // remove toggle UI components
-//          toggleboxColumn.removeToggles();
-//      }
-//
-//      table.setShowAllHintActive(NavigationToolbar.this);
-//      target.add(table);
-//  });
-//}
-    /**
-     * Was called from onClick.
-     * @param component
-     */
-    @Deprecated
-    public void setShowAllHintActive(final Component component) {
-        final String HINT_KEY_SHOW_ALL = "showAll";
-        var uiHintContainer = UiHintContainer.Util.hintContainerOf(component, UiObjectWkt.class);
-        if(uiHintContainer != null) {
-            uiHintContainer.setHint(this, HINT_KEY_SHOW_ALL, "true");
-        }
     }
 
 }
