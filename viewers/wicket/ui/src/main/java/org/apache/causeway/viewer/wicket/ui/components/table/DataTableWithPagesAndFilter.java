@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
@@ -182,6 +183,55 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         return zeroBasedPageNr>=0L
                 ? OptionalLong.of(zeroBasedPageNr)
                 : OptionalLong.empty();
+    }
+
+    /**
+     * Was called on configure of component.
+     * @param component
+     */
+    @Deprecated
+    public void honorShowAllHints(final Component component) {
+        final String HINT_KEY_SHOW_ALL = "showAll";
+        var uiHintContainer = UiHintContainer.Util.hintContainerOf(component, UiObjectWkt.class);
+
+        if(uiHintContainer == null) return;
+
+        var table = this;
+        final String showAll = uiHintContainer.getHint(table, HINT_KEY_SHOW_ALL);
+        if(showAll != null) {
+            table.setItemsPerPage(Long.MAX_VALUE);
+        }
+    }
+
+//  private void addShowAllButton(final MarkupContainer container) {
+//  Wkt.linkAdd(container, null, target->{
+//
+//      var table = getTable();
+//
+//      showAllItemsOn(table);
+//
+//      if(toggleboxColumn != null) {
+//          // clear the underlying backend selection model
+//          _TableUtils.interactive(table).getSelectAllToggle().setValue(false);
+//          // remove toggle UI components
+//          toggleboxColumn.removeToggles();
+//      }
+//
+//      table.setShowAllHintActive(NavigationToolbar.this);
+//      target.add(table);
+//  });
+//}
+    /**
+     * Was called from onClick.
+     * @param component
+     */
+    @Deprecated
+    public void setShowAllHintActive(final Component component) {
+        final String HINT_KEY_SHOW_ALL = "showAll";
+        var uiHintContainer = UiHintContainer.Util.hintContainerOf(component, UiObjectWkt.class);
+        if(uiHintContainer != null) {
+            uiHintContainer.setHint(this, HINT_KEY_SHOW_ALL, "true");
+        }
     }
 
 }

@@ -18,19 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table.nav;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
-import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.PageNavigator;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -41,10 +37,6 @@ implements HasCommonContext {
 
     private static final String NAVIGATOR_CONTAINER_ID = "span";
     private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
-    private static final String ID_SHOW_ALL = "showAll";
-    private static final String HINT_KEY_SHOW_ALL = "showAll";
-
-    private final ToggleboxColumn toggleboxColumn;
 
     /**
      * @param table data-table this tool-bar is attached to
@@ -54,19 +46,12 @@ implements HasCommonContext {
             final ToggleboxColumn toggleboxColumn) {
 
         super(table);
-        this.toggleboxColumn = toggleboxColumn;
         buildGui();
     }
 
     @Override
     protected PagingNavigator newPagingNavigator(final String navigatorId, final DataTable<?, ?> table) {
         return new PageNavigator(navigatorId, table);
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        honorShowAllHints();
     }
 
     @Override
@@ -82,59 +67,12 @@ implements HasCommonContext {
         Wkt.add(navigatorContainer,
                 new PagesizeChooser(ID_PAGESIZE_CHOOSER, getTable()));
 
-        addShowAllButton(navigatorContainer);
-
         Wkt.labelAdd(navigatorContainer, "prototypingLabel",
                 TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }
 
-    private void addShowAllButton(final MarkupContainer container) {
-        Wkt.linkAdd(container, ID_SHOW_ALL, target->{
-
-            var table = getTable();
-
-            showAllItemsOn(table);
-
-            if(toggleboxColumn != null) {
-                // clear the underlying backend selection model
-                _TableUtils.interactive(table).getSelectAllToggle().setValue(false);
-                // remove toggle UI components
-                toggleboxColumn.removeToggles();
-            }
-
-            setShowAllHintActive(table);
-            target.add(table);
-        });
-    }
-
     private MarkupContainer navigatorContainer() {
         return ((MarkupContainer)get(NAVIGATOR_CONTAINER_ID));
-    }
-
-    private void honorShowAllHints() {
-        var uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) return;
-
-        var table = getTable();
-        final String showAll = uiHintContainer.getHint(table, HINT_KEY_SHOW_ALL);
-        if(showAll != null) {
-            showAllItemsOn(table);
-        }
-    }
-
-    private static void showAllItemsOn(final DataTable<?, ?> table) {
-        table.setItemsPerPage(Long.MAX_VALUE);
-    }
-
-    private UiHintContainer getUiHintContainer() {
-        return UiHintContainer.Util.hintContainerOf(this, UiObjectWkt.class);
-    }
-
-    private void setShowAllHintActive(final Component table) {
-        final UiHintContainer hintContainer = getUiHintContainer();
-        if(hintContainer != null) {
-            hintContainer.setHint(table, HINT_KEY_SHOW_ALL, "true");
-        }
     }
 
 }
