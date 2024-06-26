@@ -20,13 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize;
 
 import java.util.Optional;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.viewer.wicket.model.pagesize.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
@@ -63,10 +63,7 @@ public class PagesizeChooser extends Panel {
 
         Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, table.getEntriesPerPageAsLiteral());
 
-        var choices = table.getPagesizeChoices();
-        var currentPagesizeChoice = table.getCurrentPagesizeChoice();
-
-        Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, choices, item->{
+        Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
                 var pagesizeChoice = item.getModelObject();
                 table.setItemsPerPage(pagesizeChoice.getItemsPerPage());
@@ -76,7 +73,7 @@ public class PagesizeChooser extends Panel {
             // add title and icon to the link
             addIconAndTitle(item, link);
             // add checkmark to the link
-            addCheckmark(item, link, currentPagesizeChoice);
+            addCheckmark(item, link, table.getCurrentPagesizeChoice());
 
             Wkt.ajaxEnable(link);
         });
@@ -85,7 +82,7 @@ public class PagesizeChooser extends Panel {
 
     private static void addIconAndTitle(
             final @NonNull ListItem<PagesizeChoice> item,
-            final @NonNull MarkupContainer link) {
+            final @NonNull AjaxLinkNoPropagate link) {
         WktLinks.listItemAsDropdownLink(item, link,
                 ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.getTitle()),
                 ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.getCssClass()),
@@ -94,7 +91,7 @@ public class PagesizeChooser extends Panel {
 
     private static void addCheckmark(
             final @NonNull ListItem<PagesizeChoice> item,
-            final @NonNull MarkupContainer link,
+            final @NonNull AjaxLinkNoPropagate link,
             final @NonNull Optional<PagesizeChoice> currentPagesizeChoice) {
         var checkmarkForChoice = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
 
@@ -104,6 +101,11 @@ public class PagesizeChooser extends Panel {
                     currentChoice.equals(item.getModelObject()))
                 .orElse(false);
         checkmarkForChoice.setVisible(isSelected);
+
+        // disable the link when selected
+        if(isSelected) {
+            link.setEnabled(false);
+        }
     }
 
 }
