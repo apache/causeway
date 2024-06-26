@@ -34,14 +34,13 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
@@ -57,7 +56,6 @@ import lombok.val;
 @Log4j2
 public class PageRenderCollectionLogger implements PageRenderSubscriber {
 
-    private final MetricsService metricsService;
     private final UserService userService;
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".PageRenderCollectionLogger";
@@ -93,7 +91,7 @@ public class PageRenderCollectionLogger implements PageRenderSubscriber {
 
     // -- HELPER
 
-    private static String bookmarksStringified(Supplier<List<Bookmark>> bookmarkSupplier) {
+    private static String bookmarksStringified(final Supplier<List<Bookmark>> bookmarkSupplier) {
         return _NullSafe.stream(bookmarkSupplier.get())
                 .filter(Objects::nonNull)
                 .map(Bookmark::stringify)
