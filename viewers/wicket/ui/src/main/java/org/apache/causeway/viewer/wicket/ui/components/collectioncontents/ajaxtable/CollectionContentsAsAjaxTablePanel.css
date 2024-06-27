@@ -19,13 +19,25 @@
 
  /* CSS for the Table Panel and all its child components, toolbars, search-bar etc. */
  
- .table-header-sortIcon {
+ .collectionContentsAsAjaxTablePanel .table-header-sortIcon {
  	color: grey;
  }
  
  .collectionContentsAsAjaxTablePanel .pagesizeChooser {
  	float: left;
 	margin-right: 1rem;
+}
+
+.collectionContentsAsAjaxTablePanel th.column-sortable .column-header-label {
+  color:var(--link-color);
+  opacity:0.75;
+  vertical-align: middle;
+}
+.collectionContentsAsAjaxTablePanel th.column-sortable a:hover .column-header-label,
+.collectionContentsAsAjaxTablePanel th.column-nonsortable .column-header-label {
+  color:var(--link-color-hover);
+  opacity:0.75;
+  vertical-align: middle;
 }
 
 /* table search bar is present only optionally on tables, so if present, 
@@ -54,21 +66,10 @@
     margin-top:10px;
 }
 
-.collectionContentsAsAjaxTablePanel table.contents caption { text-align: left; }
-/*
-.collectionContentsAsAjaxTablePanel table.contents tr {
-}
-*/
-
-.collectionContentsAsAjaxTablePanel table.contents tr th,
-.collectionContentsAsAjaxTablePanel table.contents tr th a span {
-    text-align: left;
-    font-weight: bold;
+.collectionContentsAsAjaxTablePanel table.contents caption { 
+    text-align: left; 
 }
 
-.collectionContentsAsAjaxTablePanel table.contents tr th a {
-    font-weight: normal;
-}
 .collectionContentsAsAjaxTablePanel table.contents #message {
     padding-left: 3px;
 }

@@ -40,7 +40,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -70,10 +69,7 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
          */
         @Override
         public void onComponentTag(final Component component, final ComponentTag tag) {
-            String className = getCssClass();
-            if (!Strings.isEmpty(className)) {
-                tag.append("class", className, " ");
-            }
+            Wkt.cssAppend(tag, getCssClass());
         }
     }
 
@@ -118,17 +114,13 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
                     header = newSortableHeader("header", column.getSortProperty(), stateLocator);
 
                     if (column instanceof IStyledColumn) {
-                        CssAttributeBehavior cssAttributeBehavior = new CssAttributeBehavior() {
+                        header.add(new CssAttributeBehavior() {
                             private static final long serialVersionUID = 1L;
-
                             @Override
-                            protected String getCssClass()
-                            {
+                            protected String getCssClass() {
                                 return ((IStyledColumn<?, S>)column).getCssClass();
                             }
-                        };
-
-                        header.add(cssAttributeBehavior);
+                        });
                     }
                 } else {
                     header = new WebMarkupContainer("header");
@@ -143,6 +135,9 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
                 if(column instanceof TitleColumn) {
                     Wkt.cssAppend(header, "title-column");
                 }
+                Wkt.cssAppend(header, column.isSortable()
+                        ? "column-sortable"
+                        : "column-nonsortable");
             }
         };
         add(headers);
