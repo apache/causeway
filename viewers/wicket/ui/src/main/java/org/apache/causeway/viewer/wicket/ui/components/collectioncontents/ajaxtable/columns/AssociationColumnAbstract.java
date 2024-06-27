@@ -58,7 +58,7 @@ extends GenericColumnAbstract {
             /**
              * If empty, sorting is disabled for this column.
              * <p>
-             * Not every column (e.g. as mapped to on association) is sortable.
+             * Not every column (e.g. as mapped to an association) is sortable.
              * The referenced type must implement {@link Comparable}.
              */
             final Optional<String> sortProperty,

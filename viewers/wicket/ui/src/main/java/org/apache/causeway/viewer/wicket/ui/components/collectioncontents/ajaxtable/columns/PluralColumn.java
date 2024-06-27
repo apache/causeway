@@ -69,8 +69,7 @@ extends AssociationColumnAbstract {
             final Optional<String> describedAs,
             final RenderOptions opts) {
         super(collectionVariant, columnNameModel,
-                null // sortProperty .. never sortable
-                ,
+                Optional.empty(), // empty sortProperty (hence never sortable)
                 propertyId, parentTypeName, describedAs);
         this.opts = opts;
     }
