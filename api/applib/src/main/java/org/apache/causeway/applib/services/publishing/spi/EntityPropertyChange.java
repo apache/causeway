@@ -19,40 +19,82 @@
 package org.apache.causeway.applib.services.publishing.spi;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.UUID;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
-import lombok.Value;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * Immutable data record for {@link EntityPropertyChangeSubscriber}s.
  *
  * @since 2.0 {@index}
  */
-@Value(staticConstructor = "of")
-public class EntityPropertyChange {
 
-    private final UUID interactionId;
-    private final int sequence;
-    private final Bookmark target;
-    private final String logicalMemberIdentifier;
-    private final String propertyId;
-    private final String preValue;
-    private final String postValue;
-    private final String username;
-    private final Timestamp timestamp;
+@EqualsAndHashCode(of = {"interactionId", "sequence", "targetStr", "propertyId"})
+public final class EntityPropertyChange implements Comparable<EntityPropertyChange> {
+
+    @Getter private final UUID interactionId;
+    @Getter private final int sequence;
+    @Getter private final Bookmark target;
+    @Getter private final String logicalMemberIdentifier;
+    @Getter private final String propertyId;
+    @Getter private final String preValue;
+    @Getter private final String postValue;
+    @Getter private final String username;
+    @Getter private final Timestamp timestamp;
+
+    @Getter(AccessLevel.PRIVATE) private final String targetStr;
+
+    public static EntityPropertyChange of(UUID interactionId, int sequence, Bookmark target, String logicalMemberIdentifier, String propertyId, String preValue, String postValue, String username, Timestamp timestamp) {
+        return new EntityPropertyChange(interactionId, sequence, target, logicalMemberIdentifier, propertyId, preValue, postValue, username, timestamp);
+    }
+
+    private EntityPropertyChange(
+            final UUID interactionId,
+            final int sequence,
+            final Bookmark target,
+            final String logicalMemberIdentifier,
+            final String propertyId,
+            final String preValue,
+            final String postValue,
+            final String username,
+            final Timestamp timestamp) {
+        this.interactionId = interactionId;
+        this.sequence = sequence;
+        this.target = target;
+        this.logicalMemberIdentifier = logicalMemberIdentifier;
+        this.propertyId = propertyId;
+        this.preValue = preValue;
+        this.postValue = postValue;
+        this.username = username;
+        this.timestamp = timestamp;
+
+        this.targetStr = target.toString();
+    }
 
     @Override
     public String toString() {
         return String.format("%s,%d: %s by %s, %s: %s -> %s",
-        getInteractionId(),
-        getSequence(),
-        getTarget().toString(),
-        getUsername(),
-        getPropertyId(),
-        getPreValue(),
-        getPostValue());
+                getInteractionId(),
+                getSequence(),
+                getTargetStr(),
+                getUsername(),
+                getPropertyId(),
+                getPreValue(),
+                getPostValue());
     }
 
+    @Override
+    public int compareTo(EntityPropertyChange o) {
+        return Comparator
+                .comparing(EntityPropertyChange::getInteractionId)
+                .thenComparing(EntityPropertyChange::getSequence)
+                .thenComparing(EntityPropertyChange::getTargetStr)
+                .thenComparing(EntityPropertyChange::getPropertyId)
+                .compare(this, o);
+    }
 }
