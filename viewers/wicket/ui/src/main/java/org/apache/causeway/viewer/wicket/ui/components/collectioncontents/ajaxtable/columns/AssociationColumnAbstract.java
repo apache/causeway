@@ -55,12 +55,18 @@ extends GenericColumnAbstract {
     public AssociationColumnAbstract(
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
-            final String sortProperty,
+            /**
+             * If empty, sorting is disabled for this column.
+             * <p>
+             * Not every column (e.g. as mapped to on association) is sortable.
+             * The referenced type must implement {@link Comparable}.
+             */
+            final Optional<String> sortProperty,
             final String memberId,
             final String parentTypeName,
             final Optional<String> describedAs) {
 
-        super(columnNameModel, sortProperty);
+        super(columnNameModel, sortProperty.orElse(null));
         this.collectionVariant = collectionVariant;
         this.memberId = memberId;
         this.parentTypeName = parentTypeName;

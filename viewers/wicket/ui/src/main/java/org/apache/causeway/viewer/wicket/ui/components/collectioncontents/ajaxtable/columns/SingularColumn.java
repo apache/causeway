@@ -39,7 +39,7 @@ extends AssociationColumnAbstract {
     public SingularColumn(
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
-            final String sortProperty,
+            final Optional<String> sortProperty,
             final String propertyId,
             final String parentTypeName,
             final Optional<String> describedAs) {

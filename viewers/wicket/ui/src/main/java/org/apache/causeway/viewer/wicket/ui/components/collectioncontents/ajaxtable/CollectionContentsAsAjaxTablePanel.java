@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -203,11 +204,14 @@ implements CollectionCountProvider {
     private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
+        final Optional<String> sortability = property.getElementType().isComparable()
+                ? Optional.of(property.getId())
+                : Optional.empty();
 
         return new SingularColumn(
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
-                property.getId(),
+                sortability,
                 property.getId(),
                 parentTypeName,
                 property.getCanonicalDescription());
@@ -220,7 +224,6 @@ implements CollectionCountProvider {
         return new PluralColumn(
                 collectionModel.getVariant(),
                 Model.of(collection.getCanonicalFriendlyName()),
-                collection.getId(),
                 collection.getId(),
                 parentTypeName,
                 collection.getCanonicalDescription(),

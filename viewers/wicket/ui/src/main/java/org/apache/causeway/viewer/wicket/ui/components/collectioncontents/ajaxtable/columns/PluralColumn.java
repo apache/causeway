@@ -64,12 +64,14 @@ extends AssociationColumnAbstract {
     public PluralColumn(
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
-            final String sortProperty,
             final String propertyId,
             final String parentTypeName,
             final Optional<String> describedAs,
             final RenderOptions opts) {
-        super(collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
+        super(collectionVariant, columnNameModel,
+                null // sortProperty .. never sortable
+                ,
+                propertyId, parentTypeName, describedAs);
         this.opts = opts;
     }
 
