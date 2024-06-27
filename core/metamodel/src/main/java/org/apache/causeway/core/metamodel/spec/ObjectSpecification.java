@@ -459,6 +459,13 @@ extends
     }
 
     /**
+    * Whether {@link #getCorrespondingClass()} implements {@link Comparable}.
+    */
+    default boolean isComparable() {
+        return Comparable.class.isAssignableFrom(getCorrespondingClass());
+    }
+
+    /**
      * Includes abstract types that have {@link EntityFacet}.
      */
     default boolean isEntity() {

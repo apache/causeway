@@ -55,11 +55,6 @@ extends HeadersToolbarAbstract<String> {
     }
 
     @Override
-    protected void onInitialize() {
-        super.onInitialize();
-    }
-
-    @Override
     protected WebMarkupContainer newSortableHeader(final String borderId, final String property,
             final ISortStateLocator<String> locator) {
         return new OrderByBorder<String>(borderId, table, property, locator);
