@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.objectlifecycle;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
@@ -36,7 +37,7 @@ import lombok.val;
 
 @EqualsAndHashCode(of = {"id"})
 @ToString(of = {"id"})
-public final class PropertyChangeRecord {
+public final class PropertyChangeRecord implements Comparable<PropertyChangeRecord> {
 
     @Getter private final PropertyChangeRecordId id;
     @Getter private PreAndPostValue preAndPostValue;
@@ -164,5 +165,11 @@ public final class PropertyChangeRecord {
     }
 
 
+    @Override
+    public int compareTo(PropertyChangeRecord o) {
+        return Comparator
+                .comparing(PropertyChangeRecord::getId)
+                .compare(this, o);
+    }
 }
 
