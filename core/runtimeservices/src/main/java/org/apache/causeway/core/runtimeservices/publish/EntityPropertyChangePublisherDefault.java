@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.publish;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -98,7 +99,10 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         val propertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
                 currentTime,
                 currentUser,
-                currentTransactionId);
+                currentTransactionId)
+                .toSet() // ensure uniqueness
+                .stream()
+                .collect(Can.toCan());
 
         XrayUtil.SequenceHandle xrayHandle = null;
         try {
