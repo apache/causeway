@@ -204,7 +204,7 @@ implements CollectionCountProvider {
     private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
-        final Optional<String> sortability = property.getElementType().isComparable()
+        final Optional<String> sortability = property.getElementType().isComparableOrOrdered()
                 ? Optional.of(property.getId())
                 : Optional.empty();
 
