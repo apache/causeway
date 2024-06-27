@@ -45,9 +45,4 @@ extends EntityCollectionModelAbstract {
         return "hidden";
     }
 
-    @Override
-    public int getPageSize() {
-        return 1;
-    }
-
 }
