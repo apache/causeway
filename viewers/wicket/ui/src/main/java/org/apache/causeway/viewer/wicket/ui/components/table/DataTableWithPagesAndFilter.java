@@ -124,10 +124,11 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     public List<PagesizeChoice> getPagesizeChoices() {
         var choices = List.of(
                 new PagesizeChoice("All", Long.MAX_VALUE),
-                new PagesizeChoice("10", 10L),
-                new PagesizeChoice("25", 25L),
+                new PagesizeChoice("1000", 1000L),
                 new PagesizeChoice("100", 100L),
-                new PagesizeChoice("1000", 1000L));
+                new PagesizeChoice("25", 25L), // in line with standalone table default size
+                new PagesizeChoice("12", 12L)  // in line with parented table default size
+                );
         return choices;
     }
 
