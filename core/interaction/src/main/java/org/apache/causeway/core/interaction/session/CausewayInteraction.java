@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
-import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -51,7 +50,9 @@ implements InteractionInternal {
     public CausewayInteraction(final @NonNull UUID interactionId) {
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.command = new Command(interactionId);
-        log.debug("new CausewayInteraction id={}", interactionId);
+        if(log.isDebugEnabled()) {
+            log.debug("new CausewayInteraction id={}", interactionId);
+        }
     }
 
     @Getter(onMethod_ = {@Override})
@@ -98,16 +99,14 @@ implements InteractionInternal {
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
             final ActionInvocation actionInvocation,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final CommandPublisher commandPublisher) {
+            final Context context) {
 
         push(actionInvocation);
-        start(actionInvocation, clockService, metricsService, commandPublisher);
+        start(actionInvocation, context);
         try {
-            return executeInternal(memberExecutor, actionInvocation);
+            return executeInternal(memberExecutor, actionInvocation, context);
         } finally {
-            popAndComplete(clockService, metricsService);
+            popAndComplete(context.getClockService(), context.getMetricsService());
         }
     }
 
@@ -115,21 +114,21 @@ implements InteractionInternal {
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
             final PropertyEdit propertyEdit,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command) {
+            final Context context) {
 
         push(propertyEdit);
-        start(propertyEdit, clockService, metricsService, commandPublisher);
+        start(propertyEdit, context);
         try {
-            return executeInternal(memberExecutor, propertyEdit);
+            return executeInternal(memberExecutor, propertyEdit, context);
         } finally {
-            popAndComplete(clockService, metricsService);
+            popAndComplete(context.getClockService(), context.getMetricsService());
         }
     }
 
-    private <T extends Execution<?,?>> Object executeInternal(final MemberExecutor<T> memberExecutor, final T execution) {
+    private <T extends Execution<?,?>> Object executeInternal(
+            final MemberExecutor<T> memberExecutor,
+            final T execution,
+            final Context context) {
 
         try {
             Object result = memberExecutor.execute(execution);
@@ -142,7 +141,17 @@ implements InteractionInternal {
             // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
             // WrapperFactory utilizing async calls
 
-            log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
+            if(context.getDeadlockRecognizer().isDeadlock(ex)) {
+                if(log.isDebugEnabled()) {
+                    log.debug("failed to execute an interaction due to a deadlock", ex);
+                } else if(log.isInfoEnabled()) {
+                    log.info("failed to execute an interaction due to a deadlock");
+                }
+            } else {
+                if(log.isErrorEnabled()) {
+                    log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
+                }
+            }
 
             // just because an exception has thrown, does not mean it is that significant;
             // it could be that it is recognized by an ExceptionRecognizer and is not severe
@@ -183,18 +192,16 @@ implements InteractionInternal {
 
     private void start(
             final Execution<?,?> execution,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final CommandPublisher commandPublisher) {
+            final Context context) {
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
         // to have been set on the current execution).
-        val startedAt = execution.start(clockService, metricsService);
+        val startedAt = execution.start(context.getClockService(), context.getMetricsService());
         if(getCommand().getStartedAt() == null) {
             getCommand().updater().setStartedAt(startedAt);
             getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
-        commandPublisher.start(getCommand());
+        context.getCommandPublisher().start(getCommand());
     }
 
     /**
