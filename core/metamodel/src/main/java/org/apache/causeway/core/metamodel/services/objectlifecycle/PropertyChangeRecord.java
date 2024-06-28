@@ -27,6 +27,7 @@ import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.EqualsAndHashCode;
@@ -55,9 +56,10 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     }
 
     public static PropertyChangeRecord ofCurrent(
-            final @NonNull PropertyChangeRecordId pcrId) {
+            final @NonNull PropertyChangeRecordId pcrId,
+            final DeadlockRecognizer deadlockRecognizer) {
         return new PropertyChangeRecord(pcrId)
-                        .withPreValueSetToCurrentElseUnknown();
+                        .withPreValueSetToCurrentElseUnknown(deadlockRecognizer);
     }
 
     public static PropertyChangeRecord ofCurrent(
@@ -68,9 +70,10 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     }
 
     public static PropertyChangeRecord ofDeleting(
-            final @NonNull PropertyChangeRecordId id) {
+            final @NonNull PropertyChangeRecordId id,
+            final DeadlockRecognizer deadlockRecognizer) {
         return new PropertyChangeRecord(id)
-                .withPreValueSetToCurrentElseUnknown()
+                .withPreValueSetToCurrentElseUnknown(deadlockRecognizer)
                 .withPostValueSetToDeleted();
     }
 
@@ -84,10 +87,11 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
         return target.getLogicalTypeName() + "#" + propertyId;
     }
 
-    public PropertyChangeRecord withPreValueSetToCurrentElseUnknown() {
+    public PropertyChangeRecord withPreValueSetToCurrentElseUnknown(DeadlockRecognizer deadlockRecognizer) {
         try {
             return withPreValueSetToCurrent();
         } catch (Exception ex) {
+            deadlockRecognizer.rethrowIfDeadlock(ex);
             return withPreValueSetToUnknown();
         }
     }
@@ -109,10 +113,11 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
         return this;
     }
 
-    public PropertyChangeRecord withPostValueSetToCurrentElseUnknown() {
+    public PropertyChangeRecord withPostValueSetToCurrentElseUnknown(DeadlockRecognizer deadlockRecognizer) {
         try {
             return withPostValueSetToCurrent();
         } catch (Exception ex) {
+            deadlockRecognizer.rethrowIfDeadlock(ex);
             return withPostValueSetToUnknown();
         }
     }
@@ -121,11 +126,11 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
         return withPostValueSetTo(PropertyValuePlaceholder.DELETED);
     }
 
-    private PropertyChangeRecord withPostValueSetToCurrent() {
+    public PropertyChangeRecord withPostValueSetToCurrent() {
         return withPostValueSetTo(getPropertyValue());
     }
 
-    private PropertyChangeRecord withPostValueSetToUnknown() {
+    public PropertyChangeRecord withPostValueSetToUnknown() {
         return withPostValueSetTo(PropertyValuePlaceholder.UNKNOWN);
     }
 

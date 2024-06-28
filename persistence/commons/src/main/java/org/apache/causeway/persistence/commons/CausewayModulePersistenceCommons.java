@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.persistence.commons;
 
+import org.apache.causeway.persistence.commons.integration.deadlock.DeadlockRecognizerDefault;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -34,6 +36,9 @@ import org.apache.causeway.persistence.commons.integration.repository.Repository
         // @Service's
         EntityChangeTrackerDefault.class,
         PreAndPostValueEvaluatorServiceDefault.class,
+
+        // @Component's
+        DeadlockRecognizerDefault.class,
 
         // @Repository's
         RepositoryServiceDefault.class,
