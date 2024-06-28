@@ -270,6 +270,10 @@ implements
             log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
+        clearAndReset();
+    }
+
+    private void clearAndReset() {
         enlistedPropertyChangeRecordsById.clear();
         changes.clear();
 
@@ -279,7 +283,6 @@ implements
 
         persistentChangesEncountered.set(false);
     }
-
 
 
     /**
@@ -325,16 +328,37 @@ implements
     }
 
     @Override
-    public void beforeCompletion() {
+    public void beforeCommit(boolean readOnly) {
         _Xray.publish(this, interactionProviderProvider);
 
-        log.debug("about to publish entity changes");
+        if(log.isDebugEnabled()) {
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            log.debug("EntityChangeTrackerDefault.beforeCommit(readOnly={}) xactn={} interactionId={} thread={}", readOnly, transactionCounter.get(), interactionId, Thread.currentThread().getName());
+        }
 
         // we memoize the property changes to (hopefully) avoid ConcurrentModificationExceptions with ourselves later
         memoizeChangesIfRequired();
 
         entityPropertyChangePublisher.publishChangedProperties();
         entityChangesPublisher.publishChangingEntities(this);
+    }
+
+    @Override
+    public void afterCompletion(int status) {
+
+        if(log.isDebugEnabled()) {
+            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            log.debug("EntityChangeTrackerDefault.afterCompletion(status={}) xactn={} interactionId={} thread={}", decodeStatus(status), transactionCounter.get(), interactionId, Thread.currentThread().getName());
+        }
+
+        clearAndReset();
+    }
+
+    private static String decodeStatus(int status) {
+        if (status == STATUS_COMMITTED) return "STATUS_COMMITTED";
+        if (status == STATUS_ROLLED_BACK) return "STATUS_ROLLED_BACK";
+        if (status == STATUS_UNKNOWN) return "STATUS_UNKNOWN";
+        return status + " [not recognised]";
     }
 
     private void enableCommandPublishing() {
