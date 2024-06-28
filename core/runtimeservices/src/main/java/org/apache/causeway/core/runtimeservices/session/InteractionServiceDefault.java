@@ -363,19 +363,39 @@ implements
     @SneakyThrows
     private void preInteractionClosed(final CausewayInteraction interaction) {
 
+        // a bit of a hacky guard
+        //
+        // the suspicion is that if a background command execution encounters a deadlock then (in
+        // CommandExecutorServiceDefault) the top-level xactn will end up being rolled back.
+        //
+        // we've seen additional changes being made in a new/implicit (?) xactn which furthermore are never committed;
+        // we end up with a connection back in Hikari's conn pool with open locks.  If those changes are as a
+        // result of the transaction having completed, then this original method would have resulted in a command
+        // being persisted
+        //
+        if(transactionServiceSpring.currentTransactionState().isComplete()) {
+            // hmm... someone went and completed (rolled back/committed) our transaction from us
+            //
+            log.warn("preInteractionClosed: skipping as a precaution because current transaction has been completed already");
+            return;
+        }
+
         Throwable flushException = null;
-        try {
-            val mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
-            if(!mustAbort) {
+        val mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
+        if(!mustAbort) {
+            try {
                 transactionServiceSpring.flushTransaction();
                 // publish only when flush was successful
                 completeAndPublishCurrentCommand();
+            } catch (Throwable e) {
+                //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
+                flushException = e;
+                transactionServiceSpring.requestRollback(interaction);
             }
-        } catch (Throwable e) {
-            //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
-            flushException = e;
         }
 
+        // will either rollback or commit the actual transaction depending upon whether
+        // anything has called setRollbackOnly so far.
         transactionServiceSpring.onClose(interaction);
 
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
