@@ -150,9 +150,8 @@ implements MemberExecutorService {
         }
 
         val interaction = getInteractionElseFail();
-        val command = interaction.getCommand();
 
-        prepareCommandForPublishing(command, head, owningAction, facetHolder);
+        prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -170,7 +169,7 @@ implements MemberExecutorService {
                         interaction, actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(actionExecutor, actionInvocation, clockService, metricsService(), commandPublisherProvider.get(), command);
+        interaction.execute(actionExecutor, actionInvocation, clockService, metricsService(), commandPublisherProvider.get());
 
         // handle any exceptions
         val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -205,7 +204,7 @@ implements MemberExecutorService {
         .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
-        setCommandResultIfEntity(command, returnedAdapter);
+        setCommandResultIfEntity(interaction.getCommand(), returnedAdapter);
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {

@@ -100,11 +100,10 @@ implements InteractionInternal {
             final ActionInvocation actionInvocation,
             final ClockService clockService,
             final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command) {
+            final CommandPublisher commandPublisher) {
 
         push(actionInvocation);
-        start(actionInvocation, clockService, metricsService, commandPublisher, command);
+        start(actionInvocation, clockService, metricsService, commandPublisher);
         try {
             return executeInternal(memberExecutor, actionInvocation);
         } finally {
@@ -122,7 +121,7 @@ implements InteractionInternal {
             final Command command) {
 
         push(propertyEdit);
-        start(propertyEdit, clockService, metricsService, commandPublisher, command);
+        start(propertyEdit, clockService, metricsService, commandPublisher);
         try {
             return executeInternal(memberExecutor, propertyEdit);
         } finally {
@@ -142,6 +141,7 @@ implements InteractionInternal {
             // we rather print all of them, no matter whether recognized or not later on
             // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
             // WrapperFactory utilizing async calls
+
             log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
 
             // just because an exception has thrown, does not mean it is that significant;
@@ -185,17 +185,16 @@ implements InteractionInternal {
             final Execution<?,?> execution,
             final ClockService clockService,
             final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command) {
+            final CommandPublisher commandPublisher) {
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
         // to have been set on the current execution).
         val startedAt = execution.start(clockService, metricsService);
-        if(command.getStartedAt() == null) {
-            command.updater().setStartedAt(startedAt);
-            command.updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
+        if(getCommand().getStartedAt() == null) {
+            getCommand().updater().setStartedAt(startedAt);
+            getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
-        commandPublisher.start(command);
+        commandPublisher.start(getCommand());
     }
 
     /**

@@ -48,6 +48,9 @@ extends Interaction {
         Object execute(final T currentExecution);
     }
 
+    static class Context {
+
+    }
     /**
      * Use the provided {@link MemberExecutor} to invoke an action, with the provided
      * {@link ActionInvocation} capturing
@@ -62,8 +65,7 @@ extends Interaction {
             final ActionInvocation actionInvocation,
             final ClockService clockService,
             final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command);
+            final CommandPublisher commandPublisher);
 
     /**
      * Use the provided {@link MemberExecutor} to edit a property, with the provided
