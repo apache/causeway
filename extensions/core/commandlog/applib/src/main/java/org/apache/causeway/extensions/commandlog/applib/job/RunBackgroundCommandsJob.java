@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
@@ -89,6 +90,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
+    @Inject DeadlockRecognizer deadlockRecognizer;
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Autowired private CausewayConfiguration causewayConfiguration;
@@ -273,12 +275,12 @@ public class RunBackgroundCommandsJob implements Job {
         .ifFailureFail();
     }
 
-    private static boolean isEncounteredDeadlock(Try<?> result) {
+    private boolean isEncounteredDeadlock(Try<?> result) {
         if (!result.isFailure()) {
             return false;
         }
         return result.getFailure()
-                .map(throwable -> throwable instanceof DeadlockLoserDataAccessException)
+                .map(throwable -> deadlockRecognizer.isDeadlock(throwable))
                 .orElse(false);
     }
 
@@ -289,5 +291,4 @@ public class RunBackgroundCommandsJob implements Job {
             // do nothing - continue
         }
     }
-
 }
