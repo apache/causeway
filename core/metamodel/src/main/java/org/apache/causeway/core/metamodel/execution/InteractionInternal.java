@@ -22,16 +22,17 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
+import lombok.Value;
 import lombok.val;
 
 /**
@@ -44,8 +45,16 @@ extends Interaction {
      * (Modeled after {@link Callable}), is the implementation
      * by which the framework actually performs the interaction.
      */
-    public interface MemberExecutor<T extends Execution<?,?>> {
+    interface MemberExecutor<T extends Execution<?,?>> {
         Object execute(final T currentExecution);
+    }
+
+    @Value(staticConstructor = "of")
+    class Context {
+        ClockService clockService;
+        MetricsService metricsService;
+        CommandPublisher commandPublisher;
+        DeadlockRecognizer deadlockRecognizer;
     }
 
     /**
@@ -60,10 +69,7 @@ extends Interaction {
     Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
             final ActionInvocation actionInvocation,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command);
+            final Context context);
 
     /**
      * Use the provided {@link MemberExecutor} to edit a property, with the provided
@@ -77,10 +83,7 @@ extends Interaction {
     Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
             final PropertyEdit propertyEdit,
-            final ClockService clockService,
-            final MetricsService metricsService,
-            final CommandPublisher commandPublisher,
-            final Command command);
+            final Context context);
 
 
     /**

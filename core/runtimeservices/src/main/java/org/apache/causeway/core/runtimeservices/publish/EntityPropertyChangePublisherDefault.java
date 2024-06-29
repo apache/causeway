@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.core.runtimeservices.publish;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -48,6 +51,7 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -59,7 +63,7 @@ import lombok.val;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+@Log4j2
 public class EntityPropertyChangePublisherDefault implements EntityPropertyChangePublisher {
 
     private final List<EntityPropertyChangeSubscriber> subscribers;
@@ -95,29 +99,37 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         val currentUser = userService.currentUserNameElseNobody();
         val currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
 
-        val propertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
+        val enlistedPropertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
                 currentTime,
                 currentUser,
                 currentTransactionId);
+        val duplicates = new ArrayList<EntityPropertyChange>();
+        val uniquePropertyChanges = enlistedPropertyChanges
+                .toSet(duplicates::add) // ensure uniqueness
+                .stream()
+                .collect(Can.toCan());
+        if(log.isWarnEnabled() && ! duplicates.isEmpty()) {
+            log.warn("Duplicate enlisted property changes discovered\n{}", duplicates);
+        }
 
         XrayUtil.SequenceHandle xrayHandle = null;
         try {
             xrayHandle = _Xray.enterEntityPropertyChangePublishing(
                     iaTracker,
-                    propertyChanges,
+                    uniquePropertyChanges,
                     enabledSubscribers,
-                    () -> getCannotPublishReason(propertyChanges)
+                    () -> getCannotPublishReason(uniquePropertyChanges)
             );
 
-            if (propertyChanges.size() <= causewayConfiguration.getCore().getRuntimeServices().getEntityPropertyChangePublisher().getBulk().getThreshold()) {
-                propertyChanges.forEach(propertyChange -> {
+            if (uniquePropertyChanges.size() <= causewayConfiguration.getCore().getRuntimeServices().getEntityPropertyChangePublisher().getBulk().getThreshold()) {
+                uniquePropertyChanges.forEach(propertyChange -> {
                     for (val subscriber : enabledSubscribers) {
                         subscriber.onChanging(propertyChange);
                     }
                 });
             } else {
                 for (val subscriber : enabledSubscribers) {
-                    subscriber.onChanging(propertyChanges);
+                    subscriber.onChanging(uniquePropertyChanges);
                 }
             }
         } finally {

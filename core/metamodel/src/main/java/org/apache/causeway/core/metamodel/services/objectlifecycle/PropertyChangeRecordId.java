@@ -28,9 +28,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
+import java.util.Comparator;
+
 @EqualsAndHashCode(of = {"bookmarkStr", "propertyId"})
 @ToString(of = {"bookmarkStr", "propertyId"})
-public final class PropertyChangeRecordId {
+public final class PropertyChangeRecordId implements Comparable<PropertyChangeRecordId> {
 
     @Getter private final String bookmarkStr;
     @Getter private final String propertyId;
@@ -59,5 +61,12 @@ public final class PropertyChangeRecordId {
 
     }
 
+    @Override
+    public int compareTo(PropertyChangeRecordId o) {
+        return Comparator
+                .comparing(PropertyChangeRecordId::getBookmarkStr)
+                .thenComparing(PropertyChangeRecordId::getPropertyId)
+                .compare(this, o);
+    }
 }
 
