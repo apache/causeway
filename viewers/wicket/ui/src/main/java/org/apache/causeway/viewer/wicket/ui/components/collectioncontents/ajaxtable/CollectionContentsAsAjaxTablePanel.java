@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -45,9 +46,10 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.SingularColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
+import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterToolbar;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.val;
 
@@ -61,7 +63,7 @@ implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE = "table";
-    private static final String ID_TABLE_SEARCH_BAR = "table-search-bar";
+    private static final String ID_TABLE_FILTER_BAR = "table-filter-bar";
 
     private static final CssResourceReference TABLE_CSS =
             new CssResourceReference(CollectionContentsAsAjaxTablePanel.class, "CollectionContentsAsAjaxTablePanel.css");
@@ -133,7 +135,7 @@ implements CollectionCountProvider {
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
 
-        addSearchBar(dataTable);
+        addFilterToolbar(dataTable);
     }
 
     private MultiselectToggleProvider getMultiselectToggleProvider() {
@@ -151,14 +153,11 @@ implements CollectionCountProvider {
      * If table quick search is supported, adds a search bar on top of the table component.
      * @param placeholderText
      */
-    private void addSearchBar(
+    private void addFilterToolbar(
             final CausewayAjaxDataTable dataTableComponent) {
-        if(!dataTableInteractive().isSearchSupported()) {
-            WktComponents.permanentlyHide(this, ID_TABLE_SEARCH_BAR);
-            return;
-        }
-        Wkt.add(this, new SearchBar(ID_TABLE_SEARCH_BAR, dataTableComponent))
-            .bindSearchField(this);
+        Wkt.addIfElseHide(dataTableInteractive().isSearchSupported(),
+                this, ID_TABLE_FILTER_BAR,
+                id -> new FilterToolbar(id, dataTableComponent));
     }
 
     private void prependTitleColumn(
@@ -205,11 +204,14 @@ implements CollectionCountProvider {
     private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
+        final Optional<String> sortability = property.getElementType().isComparableOrOrdered()
+                ? Optional.of(property.getId())
+                : Optional.empty();
 
         return new SingularColumn(
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
-                property.getId(),
+                sortability,
                 property.getId(),
                 parentTypeName,
                 property.getCanonicalDescription());
@@ -222,7 +224,6 @@ implements CollectionCountProvider {
         return new PluralColumn(
                 collectionModel.getVariant(),
                 Model.of(collection.getCanonicalFriendlyName()),
-                collection.getId(),
                 collection.getId(),
                 parentTypeName,
                 collection.getCanonicalDescription(),

@@ -16,33 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.ui.components.table.internal;
 
-import lombok.NonNull;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 
-public class EntityCollectionModelHidden
-extends EntityCollectionModelAbstract {
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 
-    private static final long serialVersionUID = 1L;
+import lombok.experimental.UtilityClass;
 
-    public static EntityCollectionModelHidden forCollectionModel(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        return new EntityCollectionModelHidden(collectionModel);
-    }
+@UtilityClass
+public class _TableUtils {
 
-    protected EntityCollectionModelHidden(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        super(collectionModel.delegate(), collectionModel.getVariant());
-    }
-
-    @Override
-    public int getElementCount() {
-        return 0;
-    }
-
-    @Override
-    public String getName() {
-        return "hidden";
+    public DataTableInteractive interactive(final DataTable<?, ?> dataTable) {
+        var dataProvider =
+                (CollectionContentsSortableDataProvider) dataTable.getDataProvider();
+        return dataProvider.getDataTableModel();
     }
 
 }

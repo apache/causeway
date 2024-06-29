@@ -86,6 +86,15 @@ implements EntityCollectionModel {
         return delegate().getBookmarkedOwner();
     }
 
+    /* XXX[CAUSEWAY-3798] do not override (as it was for the hidden table)
+     * Otherwise would store 1 as pags-size hint when table is initially hidden.
+     * We also do want to keep pags-size hints,
+     * even when switching back and forth between presentations ('table', 'hidden'). */
+    @Override
+    public final int getPageSize() {
+        return EntityCollectionModel.super.getPageSize();
+    }
+
     // -- VARIANT SUPPORT
 
     @Override

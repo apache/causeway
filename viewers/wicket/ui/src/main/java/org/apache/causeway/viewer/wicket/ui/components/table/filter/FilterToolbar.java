@@ -16,23 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.filter;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
+import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
-import lombok.NonNull;
 
-public class SearchBar extends Panel {
+public class FilterToolbar extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
@@ -41,35 +39,11 @@ public class SearchBar extends Panel {
      * DataTable this search bar is attached to.
      */
     @Getter
-    private final DataTable<?, ?> table;
+    private final DataTableWithPagesAndFilter<?, ?> table;
 
-    public SearchBar(final String id, final DataTable<?, ?> table) {
+    public FilterToolbar(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
         super(id);
         this.table = table;
-    }
-
-    void bindSearchField(
-            final @NonNull GenericPanel<DataTableInteractive> dataTableInteractiveHolder) {
-        // init searchArg from interactive model
-        var dataTableInteractive = dataTableInteractiveHolder.getModelObject();
-        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
-        Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
-
-        searchField.add(new OnChangeAjaxBehavior() {
-            private static final long serialVersionUID = 1L;
-            @Override
-            protected void onUpdate(final AjaxRequestTarget target) {
-                // on searchArg update originating from end-user in UI,
-                // update the interactive model
-                var searchArg = searchField.getValue();
-                var dataTableInteractive = dataTableInteractiveHolder.getModelObject();
-                dataTableInteractive.getSearchArgument().setValue(searchArg);
-                // tells the table component to re-render
-                target.add(table);
-            }
-        });
-
-        add(searchField);
     }
 
     /**
@@ -78,7 +52,31 @@ public class SearchBar extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
+        buildGui();
         setVisible(getTable().getRowCount() > 1);
+    }
+
+    // -- HELPER
+
+    private void buildGui() {
+
+        var dataTableInteractive = _TableUtils.interactive(table);
+        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
+        Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
+
+        searchField.add(new OnChangeAjaxBehavior() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                // on searchArg update originating from end-user in UI
+                table.setSearchArg(searchField.getValue());
+                table.setSearchHintAndBroadcast(target);
+                // tells the table component to re-render
+                target.add(table);
+            }
+        });
+
+        addOrReplace(searchField);
     }
 
 }

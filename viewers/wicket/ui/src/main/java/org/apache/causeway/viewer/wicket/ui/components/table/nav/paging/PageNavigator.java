@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.nav.paging;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -26,40 +26,37 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
 
-
-public class CausewayAjaxPagingNavigator extends BootstrapAjaxPagingNavigator {
+public class PageNavigator extends BootstrapAjaxPagingNavigator {
 
     private static final long serialVersionUID = 1L;
 
-    public CausewayAjaxPagingNavigator(String id, IPageable pageable) {
+    public PageNavigator(final String id, final IPageable pageable) {
         this(id, pageable, null);
     }
 
-    public CausewayAjaxPagingNavigator(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
+    public PageNavigator(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
         super(id, pageable, labelProvider);
-
         setSize(Size.Small);
     }
 
     @Override
-    protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
-        return new CausewayAjaxPagingNavigationLink(id, pageable, pageNumber);
+    protected AbstractLink newPagingNavigationLink(final String id, final IPageable pageable, final int pageNumber) {
+        return new NavigationLink(id, pageable, pageNumber);
     }
 
     @Override
-    protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
-        return new CausewayAjaxPagingNavigationIncrementLink(id, pageable, increment);
+    protected AbstractLink newPagingNavigationIncrementLink(final String id, final IPageable pageable, final int increment) {
+        return new NavigationIncrementLink(id, pageable, increment);
     }
 
     @Override
-    protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
-        return new CausewayAjaxPagingNavigation(id, pageable, labelProvider);
+    protected PagingNavigation newNavigation(final String id, final IPageable pageable, final IPagingLabelProvider labelProvider) {
+        return new Navigation(id, pageable, labelProvider);
     }
 
     @Override
-    protected void onComponentTag(ComponentTag tag) {
+    protected void onComponentTag(final ComponentTag tag) {
         tag.setName("ul");
-
         super.onComponentTag(tag);
     }
 }

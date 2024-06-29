@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.head;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackHeadersToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
@@ -27,20 +27,25 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
  * Adapted from Wicket's own {@link AjaxFallbackHeadersToolbar}.
  */
-public class CausewayAjaxHeadersToolbar
-extends CausewayAjaxHeadersToolbarAbstract<String> {
+public class HeadersToolbar
+extends HeadersToolbarAbstract<String> {
 
     private static final long serialVersionUID = 1L;
     private final CollectionContentsSortableDataProvider singleSortStateLocator;
-    private CausewayAjaxDataTable table;
+    private DataTableWithPagesAndFilter<?, String> table;
 
-    public CausewayAjaxHeadersToolbar(
-            final CausewayAjaxDataTable table,
+    /**
+     * @param table data-table this tool-bar is attached to
+     */
+    public HeadersToolbar(
+            final DataTableWithPagesAndFilter<?, String> table,
             final CollectionContentsSortableDataProvider singleSortStateLocator,
             final CausewayConfiguration.Viewer.Wicket wicketConfig) {
         super(table, _Casts.uncheckedCast(singleSortStateLocator), wicketConfig);
@@ -50,17 +55,20 @@ extends CausewayAjaxHeadersToolbarAbstract<String> {
     }
 
     @Override
-    protected void onInitialize() {
-        super.onInitialize();
+    protected WebMarkupContainer newSortableHeader(final String borderId, final String property,
+            final ISortStateLocator<String> locator) {
+        return new OrderByBorder<String>(borderId, table, property, locator);
     }
 
     @Override
-    protected WebMarkupContainer newSortableHeader(final String borderId, final String property,
-            final ISortStateLocator<String> locator) {
-        return new CausewayAjaxFallbackOrderByBorder<String>(borderId, table, property, locator);
+    protected void onConfigure() {
+        super.onConfigure();
+        honorSortOrderHints();
     }
 
-    void honourSortOrderHints() {
+    // -- HELPER
+
+    private void honorSortOrderHints() {
         var uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) return;
 

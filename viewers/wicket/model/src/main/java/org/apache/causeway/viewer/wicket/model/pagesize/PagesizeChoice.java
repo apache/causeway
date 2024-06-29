@@ -16,33 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.model.pagesize;
 
-import lombok.NonNull;
+import java.io.Serializable;
 
-public class EntityCollectionModelHidden
-extends EntityCollectionModelAbstract {
+@lombok.Value
+public class PagesizeChoice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static EntityCollectionModelHidden forCollectionModel(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        return new EntityCollectionModelHidden(collectionModel);
-    }
-
-    protected EntityCollectionModelHidden(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        super(collectionModel.delegate(), collectionModel.getVariant());
-    }
-
-    @Override
-    public int getElementCount() {
-        return 0;
-    }
-
-    @Override
-    public String getName() {
-        return "hidden";
-    }
-
+    final String title;
+    final long itemsPerPage;
+    final String cssClass = ""; // for future use
 }

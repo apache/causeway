@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
+package org.apache.causeway.viewer.wicket.ui.components.table.head;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
@@ -25,19 +25,20 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLoc
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 
-public class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
+class OrderByBorder<T> extends AjaxFallbackOrderByBorder<T> {
 
     private static final long serialVersionUID = 1L;
 
     private final T sortProperty;
-    private final CausewayAjaxDataTable dataTable;
+    private final DataTableWithPagesAndFilter<?, ?> dataTable;
 
     private final ISortStateLocator<T> stateLocator;
 
-    public CausewayAjaxFallbackOrderByBorder(
+    public OrderByBorder(
             final String id,
-            final CausewayAjaxDataTable dataTable,
+            final DataTableWithPagesAndFilter<?, ?> dataTable,
             final T sortProperty,
             final ISortStateLocator<T> stateLocator
             /* removed in wicket 8, IAjaxCallListener ajaxCallListener*/) {
@@ -52,9 +53,7 @@ public class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBor
         target.add(dataTable);
 
         final UiHintContainer uiHintContainer = getUiHintContainer();
-        if(uiHintContainer == null) {
-            return;
-        }
+        if(uiHintContainer == null) return;
 
         final ISortState<T> state = stateLocator.getSortState();
         final SortOrder order = state.getPropertySortOrder(sortProperty);
@@ -70,7 +69,9 @@ public class CausewayAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBor
         dataTable.setCurrentPage(0);
     }
 
-    public UiHintContainer getUiHintContainer() {
+    // -- HELPER
+
+    private UiHintContainer getUiHintContainer() {
         return UiHintContainer.Util.hintContainerOf(dataTable);
     }
 }
