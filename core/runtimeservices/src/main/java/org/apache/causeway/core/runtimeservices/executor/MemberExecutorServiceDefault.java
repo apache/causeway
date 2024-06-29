@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -96,6 +98,7 @@ implements MemberExecutorService {
     private final @Getter CausewayConfiguration configuration;
     private final @Getter ObjectManager objectManager;
     private final @Getter ClockService clockService;
+    private final @Getter DeadlockRecognizer deadlockRecognizer;
     private final @Getter ServiceInjector serviceInjector;
     private final @Getter Provider<MetricsService> metricsServiceProvider;
     private final @Getter InteractionDtoFactory interactionDtoFactory;
@@ -150,9 +153,8 @@ implements MemberExecutorService {
         }
 
         val interaction = getInteractionElseFail();
-        val command = interaction.getCommand();
 
-        prepareCommandForPublishing(command, head, owningAction, facetHolder);
+        prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
 
         val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
@@ -170,7 +172,7 @@ implements MemberExecutorService {
                         interaction, actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(actionExecutor, actionInvocation, clockService, metricsService(), commandPublisherProvider.get(), command);
+        interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
 
         // handle any exceptions
         val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -205,7 +207,7 @@ implements MemberExecutorService {
         .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
-        setCommandResultIfEntity(command, returnedAdapter);
+        setCommandResultIfEntity(interaction.getCommand(), returnedAdapter);
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {
@@ -267,8 +269,8 @@ implements MemberExecutorService {
         val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(propertyModifier, propertyEdit, clockService, metricsService(),
-                commandPublisherProvider.get(), command);
+        val targetPojo = interaction.execute(propertyModifier, propertyEdit,
+                InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
