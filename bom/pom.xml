@@ -151,7 +151,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <jsr305.version>3.0.2</jsr305.version>
         <jsoup.version>1.17.2</jsoup.version>
         <junit-jupiter.version>5.10.3</junit-jupiter.version> <!-- overrides spring -->
-        <junit-platform.version>1.10.2</junit-platform.version>
+        <junit-platform.version>1.10.3</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.34</lombok.version> <!-- overriding Spring -->
