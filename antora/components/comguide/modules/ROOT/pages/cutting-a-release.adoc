@@ -160,13 +160,7 @@ Locate this property in `bom/pom.xml` and update to the current date/time.
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
 
-* Make sure the tooling is built:
-+
-[source,bash,subs="attributes+"]
-----
-#TODO this is outdated info
-mvnd -D module-tooling -D skip.essential install -DskipTests -T1C
-----
+* Make sure doc-tooling is set up, as per xref:release-process-prereqs.adoc#doc-tooling[these procedures]
 
 * Then, generate the website:
 +
