@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions</artifactId>
-        <version>3.1.0</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -43,22 +43,22 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-applib</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-testing</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-fixtures</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-excel-integtests</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

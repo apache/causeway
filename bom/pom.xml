@@ -39,7 +39,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     </parent>
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-bom</artifactId>
-    <version>3.1.0</version>
+    <version>3.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -66,7 +66,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <causeway.skipTests>false</causeway.skipTests>
 		<maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2024-07-02T11:55:40Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-07-02T12:45:04Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -233,7 +233,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.commons</groupId>
 				<artifactId>causeway-commons</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -244,7 +244,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
@@ -252,14 +252,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-schema</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -267,70 +267,70 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-codegen-bytebuddy</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-config</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-interaction</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-internaltestsupport</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-runtime</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-runtimeservices</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-security</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-transaction</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.core</groupId>
 				<artifactId>causeway-core-webapp</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -341,7 +341,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-commons</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -349,49 +349,49 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-provider</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-integration</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jdo-spring</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -399,35 +399,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-integration</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -438,35 +438,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-bypass</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-keycloak</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-shiro</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-simple</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.security</groupId>
 				<artifactId>causeway-security-spring</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -477,35 +477,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-model</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-prism</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-commons-services</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -513,87 +513,87 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-applib</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-model</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-testsupport</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-test</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-test2</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-graphql-viewer</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-client</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-test</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-testing</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -601,35 +601,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-model</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-ui</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.viewer</groupId>
 				<artifactId>causeway-viewer-wicket-viewer</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -640,21 +640,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -662,14 +662,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-unittestsupport</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-unittestsupport-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -677,14 +677,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-integtestsupport</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-integtestsupport-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -692,14 +692,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-specsupport</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-specsupport-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -707,14 +707,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-archtestsupport</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-archtestsupport-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -722,28 +722,28 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-fixtures</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fakedata-integtests</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -751,14 +751,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-h2console</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-h2console-ui</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -766,14 +766,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-hsqldbmgr</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-hsqldbmgr-ui</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -783,7 +783,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.mavendeps</groupId>
 				<artifactId>causeway-mavendeps-webapp</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
@@ -793,35 +793,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -830,13 +830,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-docgen</artifactId>
-				<version>3.1.0</version><type>pom</type>
+				<version>3.0.0-SNAPSHOT</version><type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-docgen-help</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -845,35 +845,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-fixtures</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-integtests</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-excel-testing</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -882,35 +882,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -919,35 +919,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -956,7 +956,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionrepublisher</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
@@ -972,14 +972,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-flyway</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-flyway-impl</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -988,14 +988,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-layoutloaders-github</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1004,21 +1004,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-titlecache</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-titlecache-applib</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-titlecache-caffeine</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1027,35 +1027,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1064,70 +1064,70 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-delegated-springoauth2</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-encryption-spring</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-integration</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1136,35 +1136,35 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sessionlog-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1173,7 +1173,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-spring-security-oauth2</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1182,14 +1182,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-cors</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-cors-impl</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1198,70 +1198,70 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 			    <groupId>org.apache.causeway.extensions</groupId>
 			    <artifactId>causeway-extensions-tabular-excel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-wicket</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-wicket-integration</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-fullcalendar-wicket-ui</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1275,56 +1275,56 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-wicket</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-sse-wicket</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1334,21 +1334,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-jodatime-integration</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1356,28 +1356,28 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1391,21 +1391,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-ui-wkt</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-asciidoc-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1413,42 +1413,42 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-ui-wkt</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1456,21 +1456,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-applib</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-metamodel</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
@@ -1484,21 +1484,21 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-ui-wkt</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-persistence-jdo</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.valuetypes</groupId>
 				<artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
-				<version>3.1.0</version>
+				<version>3.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>

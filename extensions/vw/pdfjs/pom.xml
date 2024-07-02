@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions</artifactId>
-        <version>3.1.0</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -40,7 +40,7 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-applib</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
@@ -50,23 +50,23 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-metamodel</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-wicket</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-wicket-integration</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-pdfjs-wicket-ui</artifactId>
-                <version>3.1.0</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
