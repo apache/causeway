@@ -19,12 +19,12 @@ interface EntityPropertyChangeSubscriber {
 <.> xref:#onChanging_EntityPropertyChange[onChanging(EntityPropertyChange)]
 +
 --
-Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
+Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of _EntityPropertyChange_ .
 --
 <.> xref:#onChanging_Can[onChanging(Can)]
 +
 --
-Receives a collection of xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] s for the changing entities.
+Receives a collection of _EntityPropertyChange property change event_ s for the changing entities.
 --
 
 == Members
@@ -32,14 +32,14 @@ Receives a collection of xref:refguide:applib:index/services/publishing/spi/Enti
 [#onChanging_EntityPropertyChange]
 === onChanging(EntityPropertyChange)
 
-Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] .
+Receives a single property change event for changing entities (with publishing enabled using _DomainObject#entityChangePublishing()_ ) as an instance of _EntityPropertyChange_ .
 
 The callback is called (multiple times) at the end of the transaction, during the pre-commit phase.
 
 [#onChanging_Can]
 === onChanging(Can)
 
-Receives a collection of xref:refguide:applib:index/services/publishing/spi/EntityPropertyChange.adoc[EntityPropertyChange] s for the changing entities.
+Receives a collection of _EntityPropertyChange property change event_ s for the changing entities.
 
 The default implementation simply delegates to _#onChanging(EntityPropertyChange)_ for each, but subclasses could override in order to perform work in bulk.
 
