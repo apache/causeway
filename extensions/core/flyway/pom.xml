@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.extensions</groupId>
 		<artifactId>causeway-extensions</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.1.0</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
@@ -41,7 +41,7 @@
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-flyway-impl</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.1.0</version>
 			</dependency>
 
 			<dependency>
