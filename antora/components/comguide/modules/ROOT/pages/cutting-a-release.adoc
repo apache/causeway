@@ -150,12 +150,6 @@ The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each s
 
 Check to see if there has been a new version of `org.apache:apache`; if so, merge in the changes.
 
-=== Update the project build timestamp
-
-For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
-
-Locate this property in `bom/pom.xml` and update to the current date/time.
-
 === Update and preview website
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
@@ -238,6 +232,11 @@ git checkout -b $CAUSEWAYBRANCH
 git push origin $CAUSEWAYBRANCH -u
 ----
 
+=== Update the project build timestamp
+
+For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
+
+Locate this property in `bom/pom.xml` and update to the current date/time.
 
 
 === Switch to the `bom` directory
