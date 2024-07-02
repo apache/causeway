@@ -251,8 +251,6 @@ cd bom
 
 === Bump projects to `$CAUSEWAYREL`
 
-IMPORTANT: make sure you have switched back to Java 11 to perform the build.
-
 We use `mvnd versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
 
