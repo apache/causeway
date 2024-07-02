@@ -37,7 +37,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -117,10 +116,8 @@ implements
         Try<T> result = null;
 
         try {
-
             TransactionStatus txStatus = platformTransactionManager.getTransaction(def);
             registerTransactionSynchronizations(txStatus);
-
 
             result = Try.call(() -> {
                         final T callResult = callable.call();
@@ -135,22 +132,27 @@ implements
                     .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
             if(result.isFailure()) {
+                // if this is a nested transaction, then the javadoc says it will actually be just a call to
+                // setRollbackOnly.
                 platformTransactionManager.rollback(txStatus);
             } else {
                 platformTransactionManager.commit(txStatus);
             }
         } catch (Exception ex) {
 
-            return result!=null
-                    && result.isFailure()
+            // return the original failure cause (originating from calling the callable)
+            // (so we don't shadow the original failure)
+            // return the failure we just caught
+            if (result != null && result.isFailure()) {
+                return result;
+            }
 
-                    // return the original failure cause (originating from calling the callable)
-                    // (so we don't shadow the original failure)
-                    ? result
+            // otherwise, we thought we had a success, but now we have an exception thrown by either ,
+            // the call to rollback or commit above.  We don't need to do anything though; if either of
+            // rollback or commit encountered an exception, they will have implicitly called setRollbackOnly (if nested)
+            // or just rolled-back if top-level.
 
-                    // return the failure we just caught
-                    : Try.failure(translateExceptionIfPossible(ex, platformTransactionManager));
-
+            return Try.failure(translateExceptionIfPossible(ex, platformTransactionManager));
         }
 
         return result;
@@ -159,17 +161,10 @@ implements
 
     private void registerTransactionSynchronizations(final TransactionStatus txStatus) {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            if (txStatus instanceof DefaultTransactionStatus) {
-                configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
-                        .values()
-                        .stream().filter(AopUtils::isAopProxy)  // only the proxies
-                        .forEach(TransactionSynchronizationManager::registerSynchronization);
-            } else {
-                configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
-                        .values()
-                        .stream().filter(AopUtils::isAopProxy)  // only the proxies
-                        .forEach(TransactionSynchronizationManager::registerSynchronization);
-            }
+            configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
+                    .values()
+                    .stream().filter(AopUtils::isAopProxy)  // only the proxies
+                    .forEach(TransactionSynchronizationManager::registerSynchronization);
         }
     }
 

@@ -32,7 +32,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -45,6 +44,7 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -85,6 +85,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;
     @Inject BackgroundCommandsJobControl backgroundCommandsJobControl;
+    @Inject DeadlockRecognizer deadlockRecognizer;
 
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Autowired private CausewayConfiguration causewayConfiguration;
@@ -269,12 +270,12 @@ public class RunBackgroundCommandsJob implements Job {
         .ifFailureFail();
     }
 
-    private static boolean isEncounteredDeadlock(final Try<?> result) {
+    private boolean isEncounteredDeadlock(final Try<?> result) {
         if (!result.isFailure()) {
             return false;
         }
         return result.getFailure()
-                .map(throwable -> throwable instanceof PessimisticLockingFailureException)
+                .map(throwable -> deadlockRecognizer.isDeadlock(throwable))
                 .orElse(false);
     }
 
@@ -285,5 +286,4 @@ public class RunBackgroundCommandsJob implements Job {
             // do nothing - continue
         }
     }
-
 }

@@ -237,6 +237,10 @@ implements
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
+        //
+        // TODO: Be aware that this method could theoretically throw an exception, if the flush fails in
+        //  preInteractionClosed.  Elsewhere where we make this call it's not clear that this is correct
+        //
         closeInteractionLayerStackDownToStackSize(0);
     }
 
@@ -266,6 +270,12 @@ implements
         try {
             return callInternal(callable);
         } finally {
+            //
+            // TODO: this method could theoretically throw an exception, if the flush fails in
+            //  preInteractionClosed.  It]m uncertain what to do here.  The callable executed in the try block
+            //  may be returning a Try, which could encode a failure that way.  Having this method also possibly
+            //  throw an exception seems incorrect.
+            //
             closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
     }
@@ -281,6 +291,12 @@ implements
         try {
             runInternal(runnable);
         } finally {
+            //
+            // TODO: this method could theoretically throw an exception, if the flush fails in
+            //  preInteractionClosed.  It]m uncertain what to do here.  The callable executed in the try block
+            //  may be returning a Try, which could encode a failure that way.  Having this method also possibly
+            //  throw an exception seems incorrect.
+            //
             closeInteractionLayerStackDownToStackSize(stackSizeWhenEntering);
         }
     }
@@ -364,22 +380,56 @@ implements
     private void preInteractionClosed(final CausewayInteraction interaction) {
 
         Throwable flushException = null;
-        try {
+
+        // a bit of a hacky guard
+        //
+        //
+        // we check if the transaction is already completed (rolled back/committed).  This isn't meant to be the case,
+        // but the suspicion is that if a background command execution encounters a deadlock then (in
+        // CommandExecutorServiceDefault) then it might be resulting in top-level xactn will end up being rolled back.
+        //
+        // The relevant code is in TransactionService#callWithinCurrentTransactionElseCreateNew(...), used by
+        // CommandExecutorServiceDefault but also used quite heavily elsewhere.  In normal circumstances I suspect
+        // everything works out fine, but if there's a deadlock then perhaps we get this different flow
+        //
+        // the consequences of an incorrect design can be SEVERE.  In previous versions of the code base we've seen
+        // additional changes being made in a new/implicit (?) xactn which furthermore are never committed; we end up
+        // with a connection back in Hikari's conn pool with open locks, blocking the entire system as those locks are
+        // on CommandLogEntry.  Or, another problem found was seemingly polluting the threadLocals, resulting in an
+        // nio-http-exec thread always failing with an error of: "No JDO PersistenceManager bound to thread, and
+        // configuration does not allow creation of non-transactional one here" (see PersistenceManagerFactoryUtils).
+        // Both of these errors require the app to be restarted.
+        //
+        // To be clear, it's not yet certain that we've found the underlying issue, but if the following warning is
+        // detected in the logs, then that might be a good thing.
+        //
+        if(transactionServiceSpring.currentTransactionState().isComplete()) {
+
+            // something completed the transaction under our feet; was it a deadlock perhaps?
+            log.warn("preInteractionClosed: skipping as a precaution because current transaction has been completed already");
+
+        } else {
             val mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
             if(!mustAbort) {
-                transactionServiceSpring.flushTransaction();
-                // publish only when flush was successful
-                completeAndPublishCurrentCommand();
+                try {
+                    transactionServiceSpring.flushTransaction();
+                    // publish only when flush was successful
+                    completeAndPublishCurrentCommand();
+                } catch (Throwable e) {
+                    //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
+                    flushException = e;
+                    transactionServiceSpring.requestRollback(interaction);
+                }
             }
-        } catch (Throwable e) {
-            //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
-            flushException = e;
+            // the net effect of this is to call either txManager.rollback(txStatus) or txManager.commit(txStatus) depending upon
+            // whether txStatus.setRollbackOnly(...) was ever called.
+            // anything has called setRollbackOnly so far.
+            transactionServiceSpring.onClose(interaction);
         }
 
-        transactionServiceSpring.onClose(interaction);
-
-        interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy(); // cleanup the InteractionScope (Spring scope)
-        interactionScopeLifecycleHandler.onTopLevelInteractionClosed(); // cleanup the InteractionScope (Spring scope)
+        // cleanup the InteractionScope (Spring scope)
+        interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy();
+        interactionScopeLifecycleHandler.onTopLevelInteractionClosed();
         interaction.close(); // do this last
 
         if(flushException!=null) {
@@ -399,17 +449,23 @@ implements
                 _Probe.currentThreadId());
 
         val stack = interactionLayerStack.get();
-        while(stack.size()>downToStackSize) {
-        	if(isAtTopLevel()) {
-        		// keep the stack unmodified yet, to allow for callbacks to properly operate
-        		preInteractionClosed(_Casts.uncheckedCast(stack.peek().getInteraction()));
-        	}
-        	_Xray.closeInteractionLayer(stack);
-            stack.pop();
-        }
-        if(downToStackSize == 0) {
-            // cleanup thread-local
-            interactionLayerStack.remove();
+        try {
+            while(stack.size()>downToStackSize) {
+                if(isAtTopLevel()) {
+                    // keep the stack unmodified yet, to allow for callbacks to properly operate
+
+                    preInteractionClosed(_Casts.uncheckedCast(stack.peek().getInteraction()));
+                }
+                _Xray.closeInteractionLayer(stack);
+                stack.pop();
+            }
+        } finally {
+            // preInteractionClosed above could conceivably throw an exception, so we'll tidy up our threadlocal
+            // here to ensure everything is cleaned up
+            if(downToStackSize == 0) {
+                // cleanup thread-local
+                interactionLayerStack.remove();
+            }
         }
     }
 

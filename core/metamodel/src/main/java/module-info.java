@@ -142,6 +142,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy;
     exports org.apache.causeway.core.metamodel.valuetypes;
     exports org.apache.causeway.core.metamodel.spi;
+    exports org.apache.causeway.core.metamodel.services.deadlock;
 
 
     requires jakarta.activation;

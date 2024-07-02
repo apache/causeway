@@ -102,6 +102,7 @@ type RICHSchema {
   causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
+  java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
   java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
   java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
   java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
@@ -112,6 +113,7 @@ type RICHSchema {
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
   org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  org_springframework_data_web_config_SpringDataWebSettings(object: rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input): rich__org_springframework_data_web_config_SpringDataWebSettings
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
@@ -153,6 +155,7 @@ type SIMPLESchema {
   causeway_security_LoginRedirect(object: simple__causeway_security_LoginRedirect__gqlv_input): simple__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: simple__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: simple__causeway_testing_fixtures_FixtureResult__gqlv_input): simple__causeway_testing_fixtures_FixtureResult
+  java_lang_Record(object: simple__java_lang_Record__gqlv_input): simple__java_lang_Record
   java_lang_Runnable(object: simple__java_lang_Runnable__gqlv_input): simple__java_lang_Runnable
   java_util_Map(object: simple__java_util_Map__gqlv_input): simple__java_util_Map
   java_util_SortedMap(object: simple__java_util_SortedMap__gqlv_input): simple__java_util_SortedMap
@@ -163,6 +166,7 @@ type SIMPLESchema {
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode
   org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  org_springframework_data_web_config_SpringDataWebSettings(object: simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input): simple__org_springframework_data_web_config_SpringDataWebSettings
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
   university_calc_I18nCalculator: simple__university_calc_I18nCalculator
@@ -214,6 +218,7 @@ type ScenarioStep {
   causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
+  java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
   java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
   java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
   java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
@@ -224,6 +229,7 @@ type ScenarioStep {
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
   org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
+  org_springframework_data_web_config_SpringDataWebSettings(object: rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input): rich__org_springframework_data_web_config_SpringDataWebSettings
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
@@ -1765,6 +1771,22 @@ type rich__causeway_testing_fixtures_FixtureResult__object__gqlv_property {
   validate(object: String): String
 }
 
+type rich__java_lang_Record {
+  "Object metadata"
+  _meta: rich__java_lang_Record__gqlv_meta
+}
+
+type rich__java_lang_Record__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
 type rich__java_lang_Runnable {
   "Object metadata"
   _meta: rich__java_lang_Runnable__gqlv_meta
@@ -1993,6 +2015,22 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
   hidden: Boolean
   set(qualifiedName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   validate(qualifiedName: String): String
+}
+
+type rich__org_springframework_data_web_config_SpringDataWebSettings {
+  "Object metadata"
+  _meta: rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta
+}
+
+type rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
 }
 
 type rich__university_admin_AdminMenu {
@@ -5844,6 +5882,22 @@ type simple__causeway_testing_fixtures_FixtureResult__gqlv_meta {
   title: String!
 }
 
+type simple__java_lang_Record {
+  "Object metadata"
+  _meta: simple__java_lang_Record__gqlv_meta
+}
+
+type simple__java_lang_Record__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
 type simple__java_lang_Runnable {
   "Object metadata"
   _meta: simple__java_lang_Runnable__gqlv_meta
@@ -5998,6 +6052,22 @@ type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureS
 }
 
 type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__org_springframework_data_web_config_SpringDataWebSettings {
+  "Object metadata"
+  _meta: simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta
+}
+
+type simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -6323,6 +6393,8 @@ enum logicalTypeNames__gqlv_enum {
   causeway_security_LoginRedirect
   "causeway.testing.fixtures.FixtureResult"
   causeway_testing_fixtures_FixtureResult
+  "org.springframework.data.web.config.SpringDataWebSettings"
+  org_springframework_data_web_config_SpringDataWebSettings
   "university.dept.Department"
   university_dept_Department
   "university.dept.DeptHead"
@@ -6591,6 +6663,15 @@ input rich__causeway_testing_fixtures_FixtureResult__gqlv_input {
   ref: String
 }
 
+input rich__java_lang_Record__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
 input rich__java_lang_Runnable__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -6673,6 +6754,15 @@ input rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_in
 }
 
 input rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6924,6 +7014,15 @@ input simple__causeway_testing_fixtures_FixtureResult__gqlv_input {
   ref: String
 }
 
+input simple__java_lang_Record__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
 input simple__java_lang_Runnable__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -7006,6 +7105,15 @@ input simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_
 }
 
 input simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
