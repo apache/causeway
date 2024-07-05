@@ -22,7 +22,7 @@ Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Causeway Core release {page-causewayrelv3}
+[RESULT] [VOTE] Apache Causeway Core release {page-causewayrelv2}
 ----
 
 using the body (alter last line as appropriate):
@@ -60,7 +60,7 @@ As we did for the cutting of the release, we set environment variables to parame
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-causewayrelv3}                           # <.>
+export CAUSEWAYREL={page-causewayrelv2}                           # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -234,7 +234,7 @@ done
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh {page-causewayrelv3}
+sh upd.sh {page-causewayrelv2}
 ----
 
 The script downloads the artifacts from the Nexus release repository and adds the artifacts to subversion.
@@ -320,11 +320,11 @@ git checkout -b {page-causewayrelv2}
 git reset --hard rel/causeway-{page-causewayrelv2}
 ----
 
-* update all `antora.yml` files to use the latest branch ({page-causewayrelv3}):
+* update all `antora.yml` files to use the latest branch ({page-causewayrelv2}):
 +
 [source,bash,subs="attributes+"]
 ----
-find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv3}/g' {} \;
+find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv2}/g' {} \;
 ----
 
 * build framework
@@ -460,11 +460,11 @@ content:
   sources:
     - url: .
       start_path: antora/components/docs # docs
-      branches: [{page-causewayrelv3}, {page-causewayrelv3}]
+      branches: [{page-causewayrelv2}, {page-causewayrelv3}]
       # ...
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [{page-causewayrelv3}, {page-causewayrelv3}]
+      branches: [{page-causewayrelv2}, {page-causewayrelv3}]
 ----
 
 
@@ -525,10 +525,10 @@ In the `causeway` repo:
 RC=RC1                                                <.>
 git checkout master
 git pull
-git merge release-{page-causewayrelv3}-$RC
+git merge release-{page-causewayrelv2}-$RC
 git push origin master
-git branch -d release-{page-causewayrelv3}-$RC
-git push origin release-{page-causewayrelv3}-$RC --delete
+git branch -d release-{page-causewayrelv2}-$RC
+git push origin release-{page-causewayrelv2}-$RC --delete
 ----
 <.> adjust RC number as required
 
@@ -547,7 +547,7 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayrelv3}
+      BASELINE: {page-causewayrelv2}
 ----
 
 * in `ci-build-site-no-push.yml`:
@@ -559,7 +559,7 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayrelv3}
+      BASELINE: {page-causewayrelv2}
 ----
 
 * commit and push:
@@ -594,7 +594,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE_MAIN: {page-causewayrelv3}
+      BASELINE_MAIN: {page-causewayrelv2}
       BASELINE_EDGE: {page-causewayrelv3}
 ----
 
@@ -650,14 +650,14 @@ For example, for a release of Apache Causeway Core, use the following subject:
 
 [source,subs="attributes+"]
 ----
-[ANN] Apache Causeway version {page-causewayrelv3} Released
+[ANN] Apache Causeway version {page-causewayrelv2} Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source,subs="attributes+"]
 ----
-The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrelv3}.
+The Apache Causeway team is pleased to announce the release of Apache Causeway {page-causewayrelv2}.
 
 New features in this release include:
 
