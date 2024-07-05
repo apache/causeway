@@ -16,7 +16,7 @@
 #  under the License.
 
 name: docs
-version: latest
+version: 2.1.0
 
 asciidoc:
   attributes:
