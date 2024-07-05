@@ -4,7 +4,6 @@
 
 
 
-
 .Comparing v2.0.0 and v3.0.0
 [cols=">2a,^1m,^1m,2a", options="header"]
 |===
@@ -86,7 +85,9 @@ In particular, "encapsulated" mode mean that the properties and collections of e
 
 ** supported custom scalar value types and composite types
 +
-This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc], xref:valuetypes:markdown:about.adoc[Markdown], xref:valuetypes:jodatime:about.adoc[] and xref:valuetypes:vega:about.adoc[Vega] (link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
+This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc], xref:valuetypes:markdown:about.adoc[Markdown], xref:valuetypes:jodatime:about.adoc[Jodatime] and xref:valuetypes:vega:about.adoc[Vega]
+(link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
+
 
 ** mixin classes annotated as `@Action`, `@Property` or `@Collection`
 
