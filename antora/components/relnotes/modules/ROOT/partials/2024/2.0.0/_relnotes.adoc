@@ -4,7 +4,6 @@
 
 
 
-
 .Comparing v2.0.0 and v3.0.0
 [cols=">2a,^1m,^1m,2a", options="header"]
 |===
