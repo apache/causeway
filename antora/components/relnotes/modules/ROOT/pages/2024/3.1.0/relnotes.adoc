@@ -1,0 +1,26 @@
+[[r3.1.0]]
+= 3.1.0
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+v2.1.0 and v3.1.0 are being released at the same time, and are broadly equivalent in terms of the features.
+However, they have different baseline dependencies:
+
+include::partial$2024/2.1.0/_relnotes.adoc[]
+
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+Version `3.1.0` also has these additional changes not present in the `2.1.0`:
+
+== New Feature (1)
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3690[CAUSEWAY-3690] - [Programming Model] Support for Java Record as ViewModel
+
+
+== Won't Fix
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2991[CAUSEWAY-2991] - [WON'T DO] Replace Spring's Nullable with Jakarta's
+

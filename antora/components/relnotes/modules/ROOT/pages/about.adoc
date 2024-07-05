@@ -6,36 +6,61 @@
 
 This table summarises all releases of Apache Causeway to date.
 
-[cols="2,2,4a,>1,>1,>1,3a"]
+[cols="3,2,3a,>1,>1,>1,3a"]
 |===
-| Version
 | Date
+| Version
 | Summary
 | Features
 | Improves
 | Bugs
 | Detail
 
+.2+| 5th Jul 2024
+| 3.1.0
+a| Apache Causeway 3.1.0
+|14 +
++1
+| 22
+| 30
+|
+* xref:relnotes:ROOT:2024/3.1.0/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2024/3.1.0/mignotes.adoc[Migration Notes]
+
+| 2.1.0
+| Apache Causeway 2.1.0
+>| 14
+| 22
+| 30
+<a|
+* xref:relnotes:ROOT:2024/2.1.0/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2024/2.1.0/mignotes.adoc[Migration Notes]
+
+.2+| 3rd Apr 2024
 | 3.0.0
-| 3rd Apr 2024
-| Release of Apache Causeway 3.0.0
-| 7
-| 28
-| 14
-.2+|
+| Apache Causeway 3.0.0
+|5 +
++2
+| 25 +
++3
+| 12 +
++2
+|
 * xref:relnotes:ROOT:2024/3.0.0/relnotes.adoc[Release Notes]
-* xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc[3.0.0 Migration Notes]
-* xref:relnotes:ROOT:2024/2.0.0/mignotes.adoc[2.0.0 Migration Notes]
+* xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc[Migration Notes]
 
 | 2.0.0
-| 3rd Apr 2024
-| Release of Apache Causeway 2.0.0
-| 5
+| Apache Causeway 2.0.0
+>| 5
 | 25
 | 12
+<a|
+* xref:relnotes:ROOT:2024/2.0.0/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2024/2.0.0/mignotes.adoc[Migration Notes]
 
-| 2.0.0-RC4
+
 | 2nd Jan 2024
+| 2.0.0-RC4
 | Fourth release candidate for Apache Causeway 2.0.0
 | 4
 | 11
@@ -44,8 +69,8 @@ This table summarises all releases of Apache Causeway to date.
 * xref:relnotes:ROOT:2024/2.0.0-RC4/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2024/2.0.0-RC4/mignotes.adoc[Migration Notes]
 
-| 2.0.0-RC3
 | 9th Oct 2023
+| 2.0.0-RC3
 | Third release candidate for Apache Causeway 2.0.0
 | 19
 | 40
@@ -54,8 +79,8 @@ This table summarises all releases of Apache Causeway to date.
 * xref:relnotes:ROOT:2023/2.0.0-RC3/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2023/2.0.0-RC3/mignotes.adoc[Migration Notes]
 
-| 2.0.0-RC2
 | 13-Jul-2023
+| 2.0.0-RC2
 | Second release candidate for Apache Causeway 2.0.0
 | 6
 | 17
@@ -64,8 +89,8 @@ This table summarises all releases of Apache Causeway to date.
 * xref:relnotes:ROOT:2023/2.0.0-RC2/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2023/2.0.0-RC2/mignotes.adoc[Migration Notes]
 
-| 2.0.0-RC1
 | 25-Mar-2023
+| 2.0.0-RC1
 | First release candidate for Apache Causeway 2.0.0
 Project renamed.
 | 16
@@ -75,8 +100,8 @@ Project renamed.
 * xref:relnotes:ROOT:2023/2.0.0-RC1/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2023/2.0.0-RC1/mignotes.adoc[Migration Notes]
 
-| 2.0.0-M9
 | 18-Oct-2022
+| 2.0.0-M9
 |
 Ninth milestone release +
 Fixes CVE-2022-42466.
@@ -86,8 +111,8 @@ Fixes CVE-2022-42466.
 |
 * xref:relnotes:ROOT:2022/2.0.0-M9/relnotes.adoc[Release Notes]
 
-| 2.0.0-M8
 | 06-Oct-2022
+| 2.0.0-M8
 | Eighth milestone release +
 Fixes CVE-2022-42467.
 | 26
@@ -97,8 +122,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2022/2.0.0-M8/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2022/2.0.0-M8/mignotes.adoc[Migration Notes]
 
-| 2.0.0-M7
 | 28-Feb-2022
+| 2.0.0-M7
 | Seventh milestone release for Apache Causeway 2.0.0
 | 9
 | 17
@@ -107,8 +132,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2022/2.0.0-M7/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2022/2.0.0-M7/mignotes.adoc[Migration Notes]
 
-| 2.0.0-M6
 | 26-Aug-2021
+| 2.0.0-M6
 | Sixth milestone release; now JDK11+
 | 23
 | 92
@@ -117,8 +142,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2021/2.0.0-M6/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2021/2.0.0-M6/mignotes.adoc[Migration Notes]
 
-| 2.0.0-M5
 | 28-Mar-2021
+| 2.0.0-M5
 | Fifth milestone release
 | 4
 | 68
@@ -127,8 +152,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2021/2.0.0-M5/relnotes.adoc[Release Notes]
 * xref:relnotes:ROOT:2021/2.0.0-M5/mignotes.adoc[Migration Notes]
 
-| 2.0.0-M4
 | 17-Oct-2020
+| 2.0.0-M4
 | Fourth milestone release
 | 14
 | 28
@@ -138,8 +163,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2020/2.0.0-M4/mignotes.adoc[Migration Notes]
 * link:https://issues.apache.org/jira/projects/CAUSEWAY/versions/12347808[JIRA Rel Notes]
 
-| 2.0.0-M3
 | 27-Mar-2020
+| 2.0.0-M3
 | Third milestone release; now re-platformed on top of Spring Boot.
 | 24
 | 149
@@ -149,8 +174,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2020/2.0.0-M3/mignotes.adoc[Migration Notes]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12344784[JIRA Rel Notes]
 
-| 2.0.0-M2
 | 22-Jan-2019
+| 2.0.0-M2
 | Second milestone release; tree support, initial work on simplifying bootstrapping and configuration, removing dependencies
 | 2
 | 36
@@ -159,8 +184,8 @@ Fixes CVE-2022-42467.
 * xref:relnotes:ROOT:2019/2.0.0-M2/relnotes.adoc[Release Notes]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342393[JIRA Rel Notes]
 
-|2.0.0-M1
 | 31-Jul-2018
+| 2.0.0-M1
 | First milestone release; Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
 | 6
 | 55
@@ -173,8 +198,6 @@ Fixes CVE-2022-42467.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[JIRA Rel Notes]
 
 |===
-
-
 
 
 
