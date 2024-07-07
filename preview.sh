@@ -175,7 +175,7 @@ fi
 if [[ "$BUILD_CONFIGS" == "skip" ]]; then
   echo "skipping mvn -pl core/config"
 else
-  mvn clean install -pl core/config -DskipTests
+  mvn install -pl core/config -DskipTests
 fi
 
 if [[ "$CLEAR_CACHE" == "skip" ]]; then
