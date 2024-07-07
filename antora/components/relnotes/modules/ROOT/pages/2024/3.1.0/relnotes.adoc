@@ -13,14 +13,16 @@ include::partial$2024/2.1.0/_relnotes.adoc[]
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+== Version 3.1.0
+
 Version `3.1.0` also has these additional changes not present in the `2.1.0`:
 
-== New Feature (1)
+=== New Feature (1)
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3690[CAUSEWAY-3690] - [Programming Model] Support for Java Record as ViewModel
 
 
-== Won't Fix
+=== Won't Fix
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-2991[CAUSEWAY-2991] - [WON'T DO] Replace Spring's Nullable with Jakarta's
 
