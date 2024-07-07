@@ -60,12 +60,7 @@ mvn clean install
 +
 [NOTE]
 ====
-The code at this tag was created by copying the `v2-jpa` tag of xref:docs:starters:simpleapp.adoc[SimpleApp]:
-
-[source,bash,subs="attributes+"]
-----
-curl https://codeload.github.com/apache/causeway-app-simpleapp/zip/v2-jpa | jar xv
-----
+The code at this tag was created from xref:docs:starters:simpleapp.adoc[SimpleApp] starter app.
 ====
 
 * run the app:
