@@ -327,6 +327,18 @@ git reset --hard rel/causeway-{page-causewayrelv2}
 find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv2}/g' {} \;
 ----
 
+
+* update the version for the petclinic tutorial:
++
+[source,bash,subs="attributes+"]
+.antora/components/tutorials/antora.yml
+----
+asciidoc:
+  attributes:
+    tag-version: '{page-causewayrelv2}'
+    jdk-version: '{page-causewayjdkv2}'
+----
+
 * build framework
 +
 [source,bash,subs="attributes+"]
@@ -336,7 +348,7 @@ mvnd clean install -T1C -DskipTests -Dgithub
 popd
 ----
 
-* if necessary, build the module tooling, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process.
+* build and link to the module tooling jar, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process
 
 * generate the website:
 +
