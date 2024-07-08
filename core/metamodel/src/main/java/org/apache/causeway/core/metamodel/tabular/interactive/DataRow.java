@@ -21,9 +21,11 @@ package org.apache.causeway.core.metamodel.tabular.interactive;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -75,8 +77,16 @@ public class DataRow {
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
         final ObjectAssociation assoc = column.getAssociationMetaModel();
         return assoc.getSpecialization().fold(
-                property->Can.of(property.get(getRowElement())),
-                collection->ManagedObjects.unpack(collection.get(getRowElement())));
+                property-> Can.of(
+                        // similar to ManagedProperty#reassessPropertyValue
+                        property.isVisible(getRowElement(), InteractionInitiatedBy.PASS_THROUGH, Where.ALL_TABLES).isAllowed()
+                                ? property.get(getRowElement(), InteractionInitiatedBy.PASS_THROUGH)
+                                : ManagedObject.empty(property.getElementType())),
+                collection-> ManagedObjects.unpack(
+                        collection.isVisible(getRowElement(), InteractionInitiatedBy.PASS_THROUGH, Where.ALL_TABLES).isAllowed()
+                                ? collection.get(getRowElement(), InteractionInitiatedBy.PASS_THROUGH)
+                                : null
+                ));
     }
 
     /**
