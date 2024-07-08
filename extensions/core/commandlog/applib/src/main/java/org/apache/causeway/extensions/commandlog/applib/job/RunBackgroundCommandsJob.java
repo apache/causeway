@@ -216,6 +216,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Getter
     @RequiredArgsConstructor(staticName = "of")
     static class ThrowableWithDetailsOfAttempt extends RuntimeException {
+        private static final long serialVersionUID = 1L;
         private final Throwable original;
         private final java.sql.Timestamp startedAt;
     }
