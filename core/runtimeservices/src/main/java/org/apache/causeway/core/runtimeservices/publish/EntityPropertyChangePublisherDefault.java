@@ -20,8 +20,6 @@ package org.apache.causeway.core.runtimeservices.publish;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
@@ -51,8 +49,8 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import lombok.extern.log4j.Log4j2;
 
 /**
  *
