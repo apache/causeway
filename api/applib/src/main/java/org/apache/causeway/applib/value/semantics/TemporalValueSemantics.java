@@ -24,6 +24,8 @@ import java.time.temporal.Temporal;
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
+import org.springframework.lang.Nullable;
+
 import lombok.Data;
 import lombok.NonNull;
 
@@ -55,6 +57,29 @@ extends
 
         public boolean isInput() {return this == INPUT;}
         public boolean isOutput() {return this == OUTPUT;}
+    }
+
+
+    @Data
+    public static class TemporalDisplayPattern {
+
+        /**
+         * The locale-independent (canonical) pattern used for displaying dates in the UI.
+         *
+         * <p>
+         *     By default, a locale-specific date pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format).
+         * </p>
+         */
+        private String datePattern;
+
+        /**
+         * The locale-independent (canonical) pattern used for displaying date/times in the UI.
+         *
+         * <p>
+         *     By default, a locale-specific date/time pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format) for both the date and time parts.
+         * </p>
+         */
+        private String dateTimePattern;
     }
 
 
