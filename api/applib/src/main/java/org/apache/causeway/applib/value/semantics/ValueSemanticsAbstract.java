@@ -299,20 +299,28 @@ ValueSemanticsProvider<T> {
     // -- TEMPORAL RENDERING
 
     protected DateTimeFormatter getTemporalNoZoneRenderingFormat(
-            final @Nullable ValueSemanticsProvider.Context context,
+            final @Nullable Context context,
             final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
             final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
             final @NonNull FormatStyle dateFormatStyle,
-            final @NonNull FormatStyle timeFormatStyle) {
+            final @NonNull FormatStyle timeFormatStyle,
+            final @Nullable String datePattern,
+            final @Nullable String dateTimePattern) {
 
         final DateTimeFormatter noZoneOutputFormat;
 
         switch (temporalCharacteristic) {
         case DATE_TIME:
-            noZoneOutputFormat = DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
+            noZoneOutputFormat =
+                    dateTimePattern != null
+                    ? DateTimeFormatter.ofPattern(dateTimePattern)
+                    : DateTimeFormatter.ofLocalizedDateTime(dateFormatStyle, timeFormatStyle);
             break;
         case DATE_ONLY:
-            noZoneOutputFormat = DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
+            noZoneOutputFormat =
+                    datePattern != null
+                    ? DateTimeFormatter.ofPattern(datePattern)
+                    : DateTimeFormatter.ofLocalizedDate(dateFormatStyle);
             break;
         case TIME_ONLY:
             noZoneOutputFormat = DateTimeFormatter.ofLocalizedTime(timeFormatStyle);

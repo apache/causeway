@@ -205,10 +205,13 @@ implements TemporalValueSemantics<T> {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
+        val datePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern();
+        val dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
         val temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic,
                 dateAndTimeFormatStyle.getDateFormatStyle(),
-                dateAndTimeFormatStyle.getTimeFormatStyle());
+                dateAndTimeFormatStyle.getTimeFormatStyle(),
+                datePattern, dateTimePattern);
 
         val temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic).orElse(null);
@@ -378,6 +381,7 @@ implements TemporalValueSemantics<T> {
                             .map(ValueSemanticsProvider.Context::getFeatureIdentifier)
                             .orElse(null)));
 
+            // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern());
             val dateFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
                     .map(DateFormatStyleFacet::getDateFormatStyle)
