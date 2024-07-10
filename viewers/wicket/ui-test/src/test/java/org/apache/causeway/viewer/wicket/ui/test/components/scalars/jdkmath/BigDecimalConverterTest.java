@@ -102,7 +102,7 @@ class BigDecimalConverterTest {
     @Test
     void scale2_english_withoutThousandSeparators() {
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
-        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45");
+        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45", "789,123.45");
     }
 
     @Test
