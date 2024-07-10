@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantic
 class BigDecimalValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
-    private final CausewayConfiguration causewayConfiguration = new CausewayConfiguration(null, null);
     private BigDecimalValueSemantics value;
     private BigDecimal bigDecimal;
 

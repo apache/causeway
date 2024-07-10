@@ -92,6 +92,17 @@ implements TemporalValueSemantics<T> {
             final int typicalLength,
             final int maxLength,
             final TemporalQuery<T> query,
+            final BiFunction<TemporalAdjust, T, T> adjuster,
+            final MetaModelContext mmc) {
+        this(temporalCharacteristic, offsetCharacteristic, typicalLength, maxLength, query, adjuster);
+        this.mmc = mmc;
+    }
+    protected TemporalValueSemanticsProvider(
+            final TemporalCharacteristic temporalCharacteristic,
+            final OffsetCharacteristic offsetCharacteristic,
+            final int typicalLength,
+            final int maxLength,
+            final TemporalQuery<T> query,
             final BiFunction<TemporalAdjust, T, T> adjuster) {
 
         super();
