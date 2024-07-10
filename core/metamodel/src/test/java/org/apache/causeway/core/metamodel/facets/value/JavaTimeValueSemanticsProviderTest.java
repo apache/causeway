@@ -124,7 +124,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     private JavaUtilDateValueSemantics createValueSemantics(final TimePrecision timePrecision) {
 
         final ValueSemanticsAbstract<LocalDateTime> delegate =
-                new LocalDateTimeValueSemantics() {
+                new LocalDateTimeValueSemantics(metaModelContext) {
             @Override protected DateTimeFormatter getTemporalEditingFormat(final Context context,
                     @NonNull final TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
                     @NonNull final TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,

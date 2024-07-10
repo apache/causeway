@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.value;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.apache.causeway.core.config.CausewayConfiguration;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,12 +51,15 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializerDef
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
 
+import org.springframework.boot.info.BuildProperties;
+
 import lombok.Getter;
 
 abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     protected InteractionService mockInteractionService;
     protected ManagedObject mockAdapter;
+    protected CausewayConfiguration causewayConfiguration;
 
     protected MetaModelContext metaModelContext;
 
@@ -68,9 +73,11 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
         mockInteractionService = Mockito.mock(InteractionService.class);
         mockAdapter = Mockito.mock(ManagedObject.class);
+        causewayConfiguration = new CausewayConfiguration(null, Optional.empty());
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .interactionService(mockInteractionService)
+                .configuration(causewayConfiguration)
                 .build();
     }
 
@@ -80,6 +87,7 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
     protected void setSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
         this.semantics = valueSemantics;
+
         this.valueSerializer = ValueSerializerDefault
                 .forSemantics(valueSemantics);
     }

@@ -24,6 +24,8 @@ import java.util.Optional;
 
 import javax.inject.Named;
 
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -53,10 +55,15 @@ implements OrderRelation<LocalDate, Duration> {
     }
 
     public LocalDateValueSemantics() {
+        this(null);
+    }
+
+    public LocalDateValueSemantics(MetaModelContext metaModelContext) {
         super(TemporalCharacteristic.DATE_ONLY, OffsetCharacteristic.LOCAL,
                 TYPICAL_LENGTH, MAX_LENGTH,
                 LocalDate::from,
-                TemporalAdjust::adjustLocalDate);
+                TemporalAdjust::adjustLocalDate,
+                metaModelContext);
     }
 
     // -- TEMPORAL DECOMPOSITION
