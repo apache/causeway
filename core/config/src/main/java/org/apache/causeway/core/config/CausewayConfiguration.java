@@ -58,6 +58,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
+
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
@@ -3523,6 +3527,7 @@ public class CausewayConfiguration {
         @Data
         public static class Temporal {
             private final TemporalEditingPattern editing = new TemporalEditingPattern();
+            private final TemporalDisplayPattern display = new TemporalDisplayPattern();
         }
 
         private final BigDecimal bigDecimal = new BigDecimal();

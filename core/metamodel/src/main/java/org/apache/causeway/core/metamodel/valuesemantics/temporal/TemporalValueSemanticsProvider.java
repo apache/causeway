@@ -92,6 +92,17 @@ implements TemporalValueSemantics<T> {
             final int typicalLength,
             final int maxLength,
             final TemporalQuery<T> query,
+            final BiFunction<TemporalAdjust, T, T> adjuster,
+            final MetaModelContext mmc) {
+        this(temporalCharacteristic, offsetCharacteristic, typicalLength, maxLength, query, adjuster);
+        this.mmc = mmc;
+    }
+    protected TemporalValueSemanticsProvider(
+            final TemporalCharacteristic temporalCharacteristic,
+            final OffsetCharacteristic offsetCharacteristic,
+            final int typicalLength,
+            final int maxLength,
+            final TemporalQuery<T> query,
             final BiFunction<TemporalAdjust, T, T> adjuster) {
 
         super();
@@ -205,10 +216,13 @@ implements TemporalValueSemantics<T> {
 
         val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
+        val datePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern();
+        val dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
         val temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic,
                 dateAndTimeFormatStyle.getDateFormatStyle(),
-                dateAndTimeFormatStyle.getTimeFormatStyle());
+                dateAndTimeFormatStyle.getTimeFormatStyle(),
+                datePattern, dateTimePattern);
 
         val temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic).orElse(null);
@@ -378,6 +392,7 @@ implements TemporalValueSemantics<T> {
                             .map(ValueSemanticsProvider.Context::getFeatureIdentifier)
                             .orElse(null)));
 
+            // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern());
             val dateFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
                     .map(DateFormatStyleFacet::getDateFormatStyle)
