@@ -129,11 +129,15 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val parsePolicy = causewayConfiguration.getValueTypes().getBigDecimal().isUseGroupingSeparator()
+        val parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.getValueTypes().getBigDecimal())
                                 ? GroupingSeparatorPolicy.ALLOW
                                 : GroupingSeparatorPolicy.DISALLOW;
         return super.parseDecimal(context, text, parsePolicy)
                 .orElse(null);
+    }
+
+    private boolean isUseGroupingSeparatorFrom(CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
+        return bigDecimalConfig.getEditing().isUseGroupingSeparator() || bigDecimalConfig.isUseGroupingSeparator();
     }
 
     @Override
@@ -145,7 +149,7 @@ implements
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
-        format.setGroupingUsed(causewayConfiguration.getValueTypes().getBigDecimal().isUseGroupingSeparator());
+        format.setGroupingUsed(causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().isUseGroupingSeparator());
 
         if(context==null) {
             return;
@@ -172,10 +176,15 @@ implements
                 format.setMinimumFractionDigits(optionalInt.getAsInt());
             } else {
                 // otherwise, apply a minScale if configured.
-                Optional.ofNullable(causewayConfiguration.getValueTypes().getBigDecimal().getMinScale())
+                minScaleFrom(causewayConfiguration.getValueTypes().getBigDecimal())
                         .ifPresent(format::setMinimumFractionDigits);
             }
         }
+    }
+
+    private static Optional<Integer> minScaleFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
+        return Optional.ofNullable(bigDecimalConfig.getDisplay().getMinScale())
+                       .or(() -> Optional.ofNullable(bigDecimalConfig.getMinScale()));
     }
 
     @Override

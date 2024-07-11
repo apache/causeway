@@ -62,7 +62,8 @@ import lombok.val;
                 Configuration_usingValueTypes.class,
         },
         properties = {
-                "causeway.core.meta-model.introspector.mode=FULL"
+                "causeway.core.meta-model.introspector.mode=FULL",
+                "causeway.value-types.big-decimal.display.use-grouping-separator=false"
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,

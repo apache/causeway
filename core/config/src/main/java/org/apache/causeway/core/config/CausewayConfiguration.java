@@ -58,6 +58,10 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
+
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
@@ -3522,6 +3526,7 @@ public class CausewayConfiguration {
         @Data
         public static class Temporal {
             private final TemporalEditingPattern editing = new TemporalEditingPattern();
+            private final TemporalDisplayPattern display = new TemporalDisplayPattern();
         }
 
         private final BigDecimal bigDecimal = new BigDecimal();
@@ -3562,8 +3567,71 @@ public class CausewayConfiguration {
              * <p>
              * Is only used if the minimum scale has not been specified explicitly by some other means, typically
              * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
+             *
+             * @deprecated - use {@link Display#getMinScale()} instead
              */
+            @Deprecated(since = "2.2.0")
             private Integer minScale = null;
+
+            @DeprecatedConfigurationProperty(replacement = "causeway.value-types.big-decimal.display.min-scale", reason = "Moved")
+            public Integer getMinScale() {
+                return minScale;
+            }
+
+            private final Editing editing = new Editing();
+            @Data
+            public static class Editing {
+                /**
+                 * A common use of {@link java.math.BigDecimal} is as a money value.  In some locales (eg English), the
+                 * &quot;,&quot; (comma) is the grouping (thousands) separator wihle the &quot;.&quot; (period) acts as a
+                 * decimal point, but in others (eg France, Italy) it is the other way around.
+                 *
+                 * <p>
+                 *     Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
+                 *     in an English locale, is not rejected but instead is evaluated as the value 12399L.  That's almost
+                 *     certainly not what the end-user would have expected, and results in a money value 100x too large.
+                 * </p>
+                 *
+                 * <p>
+                 *     The purpose of this configuration property is to remove the confusion by simply disallowing the
+                 *     thousands separator from being part of the input string.
+                 * </p>
+                 *
+                 * <p>
+                 *     For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
+                 *     behaviour can be reinstated by setting this config property back to <code>true</code>.
+                 * </p>
+                 *
+                 * <p>
+                 *     The same configuration property is also used for rendering the value.
+                 * </p>
+                 *
+                 * @see Display#isUseGroupingSeparator()
+                 */
+                private boolean useGroupingSeparator = false;
+            }
+
+            private final Display display = new Display();
+            @Data
+            public static class Display {
+
+                /**
+                 * The minimum scale to use for all {@link java.math.BigDecimal}s.
+                 *
+                 * <p>
+                 * Is only used if the minimum scale has not been specified explicitly by some other means, typically
+                 * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
+                 */
+                private Integer minScale = null;
+
+                /**
+                 * Whether to use a grouping (thousands) separator (eg the &quot;,&quot; (comma) in the English locale)
+                 * when rendering a big decimal.
+                 *
+                 * @see Editing#isUseGroupingSeparator()
+                 */
+                private boolean useGroupingSeparator = true;
+            }
 
             /**
              * A common use of {@link java.math.BigDecimal} is as a money value.  In some locales (eg English), the
@@ -3589,8 +3657,16 @@ public class CausewayConfiguration {
              * <p>
              *     The same configuration property is also used for rendering the value.
              * </p>
+             *
+             * @deprecated - use {@link Editing#isUseGroupingSeparator()} instead.
              */
+            @Deprecated(since = "2.2.0")
             private boolean useGroupingSeparator = false;
+
+            @DeprecatedConfigurationProperty(replacement = "causeway.value-types.big-decimal.editing.use-grouping-separator")
+            public boolean isUseGroupingSeparator() {
+                return useGroupingSeparator;
+            }
         }
 
         private final Kroki kroki = new Kroki();
