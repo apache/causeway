@@ -58,8 +58,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics;
-
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
