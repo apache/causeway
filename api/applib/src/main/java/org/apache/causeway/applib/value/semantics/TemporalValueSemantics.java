@@ -24,8 +24,6 @@ import java.time.temporal.Temporal;
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import org.springframework.lang.Nullable;
-
 import lombok.Data;
 import lombok.NonNull;
 
