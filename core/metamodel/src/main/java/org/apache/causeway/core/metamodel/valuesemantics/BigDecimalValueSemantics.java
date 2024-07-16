@@ -50,6 +50,7 @@ import lombok.Setter;
 import lombok.val;
 
 import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
+import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.RENDERING;
 
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
@@ -170,12 +171,12 @@ implements
 
         // evaluate any facets that provide the MaximumFractionDigits
         Facets.maxFractionalDigits(feature)
-            .ifPresent(format::setMaximumFractionDigits);
+                .ifPresent(newValue -> format.setMaximumFractionDigits(newValue));
 
         // we skip this when PARSING,
         // because we want to firstly parse any number value into a BigDecimal,
         // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(usedFor.isRendering()) {
+        if(usedFor.isRendering() || bigDecimalConfig.getEditing().isPreserveScale()) {
 
             // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
             OptionalInt optionalInt = Facets.minFractionalDigits(feature);

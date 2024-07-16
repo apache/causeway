@@ -19,11 +19,13 @@
 package org.apache.causeway.core.metamodel.facets.value;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -73,9 +75,11 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void parseValidStringWithGroupingSeparatorIfConfiguredToAllow() throws Exception {
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getEditing().setUseGroupingSeparator(true);
 
-        value.parseTextRepresentation(null, "123,999.01");
+        BigDecimal bd = value.parseTextRepresentation(null, "123,999.01");
+
+        assertThat(bd).isEqualTo(new BigDecimal("123999.01").setScale(2, RoundingMode.HALF_EVEN));
     }
 
     @Test
@@ -89,10 +93,10 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
         }
 
         // but if we allow it...
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getEditing().setUseGroupingSeparator(true);
 
         BigDecimal bigDecimal = value.parseTextRepresentation(null, "1239,99");
-        Assertions.assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
+        assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
     }
 
     @Test
