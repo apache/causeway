@@ -150,23 +150,11 @@ The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each s
 
 Check to see if there has been a new version of `org.apache:apache`; if so, merge in the changes.
 
-=== Update the project build timestamp
-
-For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
-
-Locate this property in `bom/pom.xml` and update to the current date/time.
-
 === Update and preview website
 
 The next step is to generate the website, ensuring that the config, examples, projdoc (system overview and global index) are all updated.
 
-* Make sure the tooling is built:
-+
-[source,bash,subs="attributes+"]
-----
-#TODO this is outdated info
-mvnd -D module-tooling -D skip.essential install -DskipTests -T1C
-----
+* Make sure doc-tooling is set up, as per xref:release-process-prereqs.adoc#doc-tooling[these procedures]
 
 * Then, generate the website:
 +
@@ -244,6 +232,11 @@ git checkout -b $CAUSEWAYBRANCH
 git push origin $CAUSEWAYBRANCH -u
 ----
 
+=== Update the project build timestamp
+
+For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
+
+Locate this property in `bom/pom.xml` and update to the current date/time.
 
 
 === Switch to the `bom` directory
@@ -256,8 +249,6 @@ cd bom
 ----
 
 === Bump projects to `$CAUSEWAYREL`
-
-IMPORTANT: make sure you have switched back to Java 11 to perform the build.
 
 We use `mvnd versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).

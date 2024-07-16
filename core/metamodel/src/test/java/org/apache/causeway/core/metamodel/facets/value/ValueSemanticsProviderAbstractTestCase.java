@@ -51,8 +51,6 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializerDef
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
 
-import org.springframework.boot.info.BuildProperties;
-
 import lombok.Getter;
 
 abstract class ValueSemanticsProviderAbstractTestCase<T> {

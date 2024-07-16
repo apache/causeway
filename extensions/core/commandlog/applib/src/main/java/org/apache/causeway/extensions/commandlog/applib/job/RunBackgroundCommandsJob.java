@@ -26,22 +26,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
-import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
-import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
-import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
-
-import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
-
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.PersistJobDataAfterExecution;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -54,6 +44,7 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
@@ -225,6 +216,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Getter
     @RequiredArgsConstructor(staticName = "of")
     static class ThrowableWithDetailsOfAttempt extends RuntimeException {
+        private static final long serialVersionUID = 1L;
         private final Throwable original;
         private final java.sql.Timestamp startedAt;
     }

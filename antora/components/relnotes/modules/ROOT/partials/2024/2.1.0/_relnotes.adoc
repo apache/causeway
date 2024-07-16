@@ -1,0 +1,192 @@
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+
+
+.Comparing v2.1.0 and v3.1.0
+[cols=">2a,^1m,^1m,2a", options="header"]
+|===
+
+|
+| v2.1.0
+| v3.1.0
+| Notes
+
+| Java
+| 11
+| 17
+|
+
+| Spring Boot
+| v2.7.18
+| v3.3.1
+| Spring Boot 2.7 is EOL.
+
+| Namespace
+| javax.*
+| jakarta.*
+|
+
+| Wicket
+| v9.18.0
+| v10.1.0
+.2+| xref:vw:ROOT:about.adoc[Wicket viewer]
+
+| Bootstrap
+| 5.3.3
+| 5.3.3
+
+| RestEasy
+| 5.0.0.Final
+| 6.2.9.Final
+| xref:vro:ROOT:about.adoc[Restful Objects viewer]
+
+| EclipseLink
+| 2.7.15
+| 4.0.3
+| xref:pjpa::about.adoc[]
+
+| DataNucleus
+| 6.0.7
+| 6.0.7
+| xref:pjdo::about.adoc[]
+
+| Shiro
+| 1.13.0
+a| (dropped)
+| xref:security:shiro:about.adoc[]
+
+|===
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+Features, improvements and bugs made since the previous release, common to both `2.1.0` and `3.1.0`:
+
+== New Feature (14)
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3794[CAUSEWAY-3794] - [Wicket Viewer] With tables, replace 'showAll' link with a page-size select dropdown.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3793[CAUSEWAY-3793] - [Wicket Viewer] Allow Sortable Column Indicator to be turned off
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3788[CAUSEWAY-3788] - Extend metrics provided by MetricsService
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3780[CAUSEWAY-3780] - Make SPI for EntityTrackchangesDefault's configuration
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3778[CAUSEWAY-3778] - secman's ApplicationUserCreationService should be configurable, and specify its precedence.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3774[CAUSEWAY-3774] - Add flag so that in prototype mode, the tooltip of disabled/invisible members indicates which facet did the veto'ing.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3773[CAUSEWAY-3773] - Add flag so that in prototype mode, invisible actions/prop/coll are still shown, but only as disabled. Change the tooltip message to indicate this (or perhaps leverage the little 'T' icon that we see)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3755[CAUSEWAY-3755] - Provide SPI hook for RunBackgroundCommandsJob
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3751[CAUSEWAY-3751] - Extend PageRenderSubscriber API, to include onRendering(...) as a pre-hook.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3745[CAUSEWAY-3745] - Bulk persisting of audit entries
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3743[CAUSEWAY-3743] - TimeZoneChoiceProvider SPI to customize Zone Choices for Wicket Viewer Login
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3705[CAUSEWAY-3705] - [Perf] Introduce a TitleCachingService SPI
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3680[CAUSEWAY-3680] - General purpose graph data structure.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3642[CAUSEWAY-3642] - [Wicket Viewer] Search Field for Tables
+
+
+
+== Improvement (22)
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3785[CAUSEWAY-3785] - Implement getTitle for packed ManagedObjcets (in other words, collections)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3784[CAUSEWAY-3784] - Refactoring: Extract interfaces of the TableDataInteractive model
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3782[CAUSEWAY-3782] - Blob/Clob support for ambiguous file extensions based on MIME type
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3781[CAUSEWAY-3781] - Improve CommandExecutorServiceDefault's logging, show also the target and param/arg values
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3771[CAUSEWAY-3771] - Reduce logging on CommandSubscriberForCommandLog
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3754[CAUSEWAY-3754] - CSS fix for autocomplete dropdowns, use full width of prompt (same as choices)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3748[CAUSEWAY-3748] - [Commons] Json/YamlUtils support for Optional
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3741[CAUSEWAY-3741] - Graphql Viewer to support Namespaces with a Hyphen
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3738[CAUSEWAY-3738] - If RunBackgroundCommandsJob encounters a deadlock,then automatically retry.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3723[CAUSEWAY-3723] - Provide a default impl of PasswordEncoder.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3722[CAUSEWAY-3722] - [Commons] Json/YamlUtils support for XmlAdapter
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3719[CAUSEWAY-3719] - Enable value semantics to be substituted if required.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3718[CAUSEWAY-3718] - Add Blob/Clob support to the RestClient Argument Builder (API)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3711[CAUSEWAY-3711] - [Programming Model] Remove TreeAdapter<T>#parentOf(T)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3710[CAUSEWAY-3710] - Simpifiy MetaModelRefiner Testing
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3668[CAUSEWAY-3668] - Reimplement EmailServiceDefault to use spring boot's JavaMailSender
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3630[CAUSEWAY-3630] - [Wicket Viewer] Simplified Tabular Data Integration
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3567[CAUSEWAY-3567] - UI - for menu, if missing fontawesome annotation, then is mis-aligned.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3548[CAUSEWAY-3548] - More polite error message if bookmark objectType not recognised.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3484[CAUSEWAY-3484] - [Wicket Viewer] Usability checks (and also visibility checks) should be cached.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2667[CAUSEWAY-2667] - [JUnit] Parameters syntax for dependent params seems to trip MM validation for non-mixins of a domain service.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2533[CAUSEWAY-2533] - [Wish] Hitting a non-existent end point renders a page that looks like an exception page rather than a 404 page.
+
+
+== Bug (30)
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3799[CAUSEWAY-3799] - Audit trail somehow can write duplicate entries
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3798[CAUSEWAY-3798] - [Wicket Viewer] When table defaultView="hide", page-size resets to 1.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3797[CAUSEWAY-3797] - [Wicket Viewer] Not every table column is sortable, yet always offers sorting.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3795[CAUSEWAY-3795] - Transaction-scoped destroy not being called.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3792[CAUSEWAY-3792] - [Commons] Internal Long Parsing implemented wrong
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3791[CAUSEWAY-3791] - Non-ascii char in the name of variable in class _Images
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3790[CAUSEWAY-3790] - Comparison of incompatible types in ConsentAbstract
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3789[CAUSEWAY-3789] - Array is output as it's memory address and not as it's content
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3775[CAUSEWAY-3775] - Improve background commands job failure handling
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3772[CAUSEWAY-3772] - Sorting on a collection of view models, hitting hollow exception
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3770[CAUSEWAY-3770] - ConcurrentModificationException in EntityChangeTrackerDefault
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3769[CAUSEWAY-3769] - Unable to file upload Blobs due to param validation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3768[CAUSEWAY-3768] - global property to disable EntityChangeTrackerDefault
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3767[CAUSEWAY-3767] - [Validation] MM logical type name explicity-check is potentially too strict
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3756[CAUSEWAY-3756] - FileUploadModel for clob is not serializable.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3753[CAUSEWAY-3753] - Per-param validation errors show in wrong slot, for all params
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3746[CAUSEWAY-3746] - [Configuration] illformated additional-spring-configuration-metadata.json
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3739[CAUSEWAY-3739] - Fix security perms so that secman-admin can once more add roles to users.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3735[CAUSEWAY-3735] - Global configuration of property executionPublishing is not honoured.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3731[CAUSEWAY-3731] - Parameters as Tuple (PAT) fails when one non-scalar Param is a Collection other than List (e.g. a Set)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3730[CAUSEWAY-3730] - Sporadic Issues initializing AuthorizorSecman
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3727[CAUSEWAY-3727] - [Wicket Viewer] Scalar-Select2 rendered for editing when editing is disabled
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3726[CAUSEWAY-3726] - [Wicket Viewer] Clear-Field-Button is shown even when editing is disabled
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3725[CAUSEWAY-3725] - [Wicket Viewer] Regression: Some Action Dialog Components are not dynamically enabled (for editing)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3724[CAUSEWAY-3724] - [Validation] False Posititves on Choices or AutoComplete Checks (when abstract)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3717[CAUSEWAY-3717] - NPE from null execution if set property via excel import
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3713[CAUSEWAY-3713] - o.a.c.core.config.EclipselinkConfiguration deviates from Specification
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3702[CAUSEWAY-3702] - Blob#md5Hex() format is broken
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3641[CAUSEWAY-3641] - [Wicket Viewer] Cannot simply use Action Mementos to recreate Table Data
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3539[CAUSEWAY-3539] - [Wicket Viewer] Incorrect Rendering of Trees
+
+
+== Duplicate
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3783[CAUSEWAY-3783] - [DUPLICATE] Improved table rendering performance.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3480[CAUSEWAY-3480] - [duplicate] [Wicket Viewer] parameter#mustSatisfy is evaluated when hit OK, rather than when tab out (ie action scoped, not parameter scoped)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3457[CAUSEWAY-3457] - [DUPLICATE] [Wicket Viewer] Extra space in UI between field and warning message.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3438[CAUSEWAY-3438] - [duplicate] [Wicket Viewer] @Property#optionality, when editing, extra space required between field and message.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3436[CAUSEWAY-3436] - [duplicate] [demo app] @Parameter#maxLength seems to be evaluated at the action level rather than param level.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2556[CAUSEWAY-2556] - [DUPLICATE] Provide an EntityPropertyChangesSubscriber to receive all property changes for an entity in a single callback.
+
+
+== Not a Problem / Won't Do
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3796[CAUSEWAY-3796] - [NOT A PROBLEM] Returned value ignored in ServiceRegistry_forTesting
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3786[CAUSEWAY-3786] - [WON'T DO] Add switch to activate 2.0.0 data table implementation (experimental)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3762[CAUSEWAY-3762] - [Duplicate] Table Quick Search Bar
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3740[CAUSEWAY-3740] - [NOT A PROBLEM] Fix security perms to prevent users from adding themselves to a role just by guessing the role.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3732[CAUSEWAY-3732] - [invalid] Cache CommandLogEntry#findByInteractionId(...)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3728[CAUSEWAY-3728] - [WON'T FIX] Extend eventphase context with viewer name
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3512[CAUSEWAY-3512] - [NOT A PROBLEM] Show whether user has access to each MM feature as per their permissions.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3511[CAUSEWAY-3511] - [not a problem] Secman admin should be able to add roles to user (can add users to role already)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3396[CAUSEWAY-3396] - [won't fix] COMDEV-530 : reporter.apache.org hasn't copied over isis release data; mailing list stats are wrong
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2654[CAUSEWAY-2654] - [not a problem] ImpersonateMenu's items does not automatically slot onto tertiary menu bar.
+
+
+== Documentation
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3758[CAUSEWAY-3758] - improve docs for EmailService - highlight requirement to include impl of JavaMailSender
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-2873[CAUSEWAY-2873] - petclinic tutorial (documentation)
+
+== Dependency Upgrades
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3766[CAUSEWAY-3766] - Bump Wicket 9.17.0. -> 9.18.0 and 10.0.0 -> 10.1.0
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3733[CAUSEWAY-3733] - Migrate from PDFJS 3.x to 4.x
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3715[CAUSEWAY-3715] - Release activities for 2.1.0 / 3.1.0
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3712[CAUSEWAY-3712] - Relocate Tooling to Causewaystuff
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3305[CAUSEWAY-3305] - [DISCUSS] Re-platform on top of Spring security.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3439[CAUSEWAY-3439] - WHIMSY-399 whimsy hasn't consolidated isis and causeway meeting minutes into one.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3398[CAUSEWAY-3398] - Further Causeway rename activities
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3145[CAUSEWAY-3145] - Issue press release about name change.
+
+
+
+

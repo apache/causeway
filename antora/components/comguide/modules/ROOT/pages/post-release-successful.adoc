@@ -270,7 +270,7 @@ Apply any remaining documentation updates:
 
 ** copy the new schema(s) from
 +
-`api/schema/src/main/resources/o.a.i.s.xxx`
+`api/schema/src/main/resources/o.a.c.s.xxx`
 +
 to its versioned:
 +
@@ -293,62 +293,50 @@ We are now ready to xref:#generate-website[generate the website].
 [#generate-website]
 == Generate website
 
-We use Antora to generate the site, setting up a document maintenance branch to allow the website to be updated in the future if required.
-The `site.yml` references this documentation branch.
+We use Antora to generate the site, setting up a document maintenance branches `{page-causewayrelv2}` and `{page-causewayrelv3}`.
+These mirror the "rel/causeway-{page-causewayrelv2}" and "rel/causeway-{page-causewayrelv3}" (immutable) release tags, but are branches because they allow us to update the docs outside of formal releases.
 
-We therefore temporarily modify all of the `antora.yml` files (and update `index.html`) file and create a branch for this change; then we update `site.yml` with a reference to that new branch.
-All of this is changed after.
+The `site.yml` (which can be in any branch) references these documentation branches, but uses the link:https://docs.antora.org/antora/latest/playbook/urls-latest-version-segment/[latest version] support of Antora 3.x to reference the `{page-causewayrelv3}` version as "latest":
 
-NOTE: Previously we built a site with the current version and all previous versions.
-For the moment, though, we've simplified to just publish the current version.
+[source,yml]
+.site.yml
+----
+urls:
+    latest_version_segment: latest
+----
 
-We also use the link:https://docs.antora.org/antora/latest/playbook/urls-latest-version-segment/[latest version] support of Antora 3.x so that the most recent version is made available as "latest".
-This has two benefits: first, the top-level `index.html` (in `supplemental-ui`) does not need to be updated, and secondly, this improves search engine results as there will always be a `latest` version.
+This approach also means that the top-level `index.html` (from the Antora template) does not need to be modified; it can simply refer to "latest".
+To avoid duplicates in the Algolia search index, we also only index the "latest" directory.
 
 
-[#create-doc-branch]
-=== Create doc branch
+[#create-2.x.0-doc-branch]
+=== Create 2.x.0 doc branch
 
-NOTE: At the time of writing we support two branches, `master` (for v2) and `v3`.
-Adjust these instructions if necessary.
+* We create the `{page-causewayrelv2}` branch, at the rel/causeway-{page-causewayrelv2} release tag.
++
+[source,bash,subs="attributes+"]
+----
+git checkout -b {page-causewayrelv2}
+git reset --hard rel/causeway-{page-causewayrelv2}
+----
 
-First, we update all versions in `antora.yml`:
-
-* Update all `antora.yml` files to use the latest branch ({page-causewayrelv2}):
+* update all `antora.yml` files to use the latest branch ({page-causewayrelv2}):
 +
 [source,bash,subs="attributes+"]
 ----
 find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv2}/g' {} \;
 ----
 
-* Commit all these changes:
+
+* update the version for the petclinic tutorial:
 +
 [source,bash,subs="attributes+"]
+.antora/components/tutorials/antora.yml
 ----
-git add .
-git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
-----
-
-We now create a branch which can be referenced in the `site.yml`, later on.
-
-* We create the `{page-causewayrelv2}` branch.
-+
-This mirrors the "rel/causeway-{page-causewayrelv2}" used for the formal (immutable) release tag, but is a branch because it allows us to move it, and must have this simplified name as it is used in the "edit page" link of the site template.
-+
-[source,bash,subs="attributes+"]
-----
-git branch {page-causewayrelv2}
-git push origin {page-causewayrelv2}
-----
-
-Now we make sure that the docs in the new doc branch are actually up-to-date.
-(There is no need to update `site.yml`, because at this stage it continues to refer to the `HEAD` branch):
-
-* checkout the branch:
-+
-[source,bash,subs="attributes+"]
-----
-git checkout {page-causewayrelv2}
+asciidoc:
+  attributes:
+    tag-version: '{page-causewayrelv2}'
+    jdk-version: '{page-causewayjdkv2}'
 ----
 
 * build framework
@@ -360,7 +348,7 @@ mvnd clean install -T1C -DskipTests -Dgithub
 popd
 ----
 
-* if necessary, build the module tooling, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process.
+* build and link to the module tooling jar, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process
 
 * generate the website:
 +
@@ -377,33 +365,105 @@ git add .
 git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
 ----
 
-
-* push the updated doc branch:
+* Commit all these changes:
 +
 [source,bash,subs="attributes+"]
 ----
-git push origin {page-causewayrelv2}
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 ----
+
+* Push the documentation branch:
++
+[source,bash,subs="attributes+"]
+----
+git push origin {page-causewayrelv2} -u
+----
+
+
+[#create-3.x.0-doc-branch]
+=== Create 3.x.0 doc branch
+
+* We create the `{page-causewayrelv3}` branch, at the rel/causeway-{page-causewayrelv3} release tag.
++
+[source,bash,subs="attributes+"]
+----
+git checkout -b {page-causewayrelv3}
+git reset --hard rel/causeway-{page-causewayrelv3}
+----
+
+* update all `antora.yml` files to use the latest branch ({page-causewayrelv3}):
++
+[source,bash,subs="attributes+"]
+----
+find . -name antora.yml -exec sed -i 's/latest/{page-causewayrelv3}/g' {} \;
+----
+
+
+* update the version for the petclinic tutorial:
++
+[source,bash,subs="attributes+"]
+.antora/components/tutorials/antora.yml
+----
+asciidoc:
+  attributes:
+    tag-version: '{page-causewayrelv3}'
+    jdk-version: '{page-causewayjdkv3}'
+----
+
+* build framework
++
+[source,bash,subs="attributes+"]
+----
+pushd bom
+mvnd clean install -T1C -DskipTests -Dgithub
+popd
+----
+
+* build and link to the module tooling jar, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process
+
+* generate the website:
++
+[source,bash,subs="attributes+"]
+----
+sh preview.sh
+----
+
+* if any files have changed, then commit:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
+----
+
+* Commit all these changes:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
+----
+
+* Push the documentation branch:
++
+[source,bash,subs="attributes+"]
+----
+git push origin {page-causewayrelv3} -u
+----
+
+
 
 
 [#generate-the-site]
 === Generate the site
 
-To build the site , we need to update the `site.yml`.
-This is done in the release branch (`$CAUSEWAYBRANCH`), _not_ in the documentation branch for the current release ({page-causewayrelv2}).
+To build the site, we need to update the `site.yml`.
 
-* Recreate the `website` branch off of `master`.
-+
-All that will be picked up from this branch is the `supplementary-ui` files (top-level index) and the `site.yml` playbook that identifies which branch(es) to include in the website.
-+
-[source,bash,subs="attributes+"]
-----
-git checkout master
-git branch -D website     #<.>
-git checkout -b website   #<.>
-----
-<.> delete the branch if necessary
-<.> recreate the branch
+This can be done from any branch, normally the release branch (`$CAUSEWAYBRANCH`) or `master`.
+
+NOTE: All that will be picked up from this branch is the `supplementary-ui` files (top-level index) and the `site.yml` playbook that identifies which branch(es) to include in the website.
+
 
 * Update `site.yml` using `site.NEXT.yml`:
 
@@ -460,7 +520,6 @@ git commit -m "$CAUSEWAYJIRA: updates site.yml in readiness for website generati
 ----
 
 
-We are ready to actually generate the Antora website.
 
 * generate the website:
 +
@@ -472,11 +531,9 @@ sh preview.sh -AS
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
 
 
-=== Revert site.yml
-
-Optionally, restore the original `site.yml` file.
-However, you might want to leave it as is in case there is a requirement to regenerate the website.
-In any case, when the next release comes around, we will delete this branch anyway.
+* Revert `site.yml`
++
+Restore the original `site.yml` file.
 
 
 include::partial$publish-and-index-website.adoc[]

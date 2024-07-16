@@ -4,7 +4,6 @@
 
 
 
-
 .Comparing v2.0.0 and v3.0.0
 [cols=">2a,^1m,^1m,2a", options="header"]
 |===
@@ -86,7 +85,9 @@ In particular, "encapsulated" mode mean that the properties and collections of e
 
 ** supported custom scalar value types and composite types
 +
-This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc], xref:valuetypes:markdown:about.adoc[Markdown], xref:valuetypes:jodatime:about.adoc[] and xref:valuetypes:vega:about.adoc[Vega] (link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
+This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc], xref:valuetypes:markdown:about.adoc[Markdown], xref:valuetypes:jodatime:about.adoc[Jodatime] and xref:valuetypes:vega:about.adoc[Vega]
+(link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
+
 
 ** mixin classes annotated as `@Action`, `@Property` or `@Collection`
 
@@ -120,7 +121,7 @@ For `2.0.0` and `3.0.0`, below lists the features, improvements and bugs made si
 
 
 
-== New Feature
+== New Feature (5)
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3698[CAUSEWAY-3698] -  Security Integration Replacement for Shiro INI based Realm (xref:security:simple:about.adoc[])
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3676[CAUSEWAY-3676] - GraphQL viewer (xref:gqlv:ROOT:about.adoc[])
@@ -129,7 +130,7 @@ For `2.0.0` and `3.0.0`, below lists the features, improvements and bugs made si
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3669[CAUSEWAY-3669] - Extend `CausewayConfiguration` to return all config keys and their value
 
 
-== Improvement
+== Improvement (26)
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3700[CAUSEWAY-3700] - Include the secman authenticator auto-configuration...
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3697[CAUSEWAY-3697] - Deprecate `@DomainService(nature=NatureOfService..)` for Removal (to be replaced by some SPI)
@@ -158,7 +159,7 @@ For `2.0.0` and `3.0.0`, below lists the features, improvements and bugs made si
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-2085[CAUSEWAY-2085] - [archunit rule] Every entity should be annotated with `@XmlJavaTypeAdapter(PersistentEntityAdapter.class)`
 
 
-== Bug
+== Bug (12)
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3701[CAUSEWAY-3701] - Enable h2 ui console for v3
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3679[CAUSEWAY-3679] - Downloaded Excel spreadsheet shows header rows as black on black.
@@ -175,6 +176,7 @@ For `2.0.0` and `3.0.0`, below lists the features, improvements and bugs made si
 
 
 == Duplicate
+
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3695[CAUSEWAY-3695] - [DUPLICATE] Joda DateTime not being handled correctly - treated as a ZonedDateTime
 
 == Documentation
