@@ -73,7 +73,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void parseValidStringWithGroupingSeparatorIfConfiguredToAllow() throws Exception {
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getEditing().setUseGroupingSeparator(true);
 
         value.parseTextRepresentation(null, "123,999.01");
     }
@@ -89,7 +89,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
         }
 
         // but if we allow it...
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getEditing().setUseGroupingSeparator(true);
 
         BigDecimal bigDecimal = value.parseTextRepresentation(null, "1239,99");
         Assertions.assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
