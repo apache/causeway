@@ -3608,6 +3608,11 @@ public class CausewayConfiguration {
                  * @see Display#isUseGroupingSeparator()
                  */
                 private boolean useGroupingSeparator = false;
+                /**
+                 * When a BigDecimal is presented for editing, whether it should enforce the scale, possibly meaning
+                 * trailing '0's to pad).  This is probably appropriate for BigDecimals that represent a money amount.
+                 */
+                private boolean preserveScale = false;
             }
 
             private final Display display = new Display();
