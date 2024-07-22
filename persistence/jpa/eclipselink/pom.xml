@@ -95,7 +95,7 @@
         	<!-- provides jakarta.el.* -->
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
-		    <version>6.0.0</version>
+		    <version>6.0.1</version>
 		</dependency>
 		<!-- provides EL Impl -->        
         <dependency>
