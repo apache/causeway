@@ -36,18 +36,4 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
  * @since 2.1 {@index}
  */
 public interface Cached {
-
-    /**
-     * The number of minutes that a title should stay in the cache (of a given logical type name)
-     *
-     * @return
-     */
-    int expiryDurationInMinutes();
-
-    /**
-     * The maximum number of entries that can reside in the cache (of a given logical type name).
-     * @return
-     */
-    int maxSizeInEntries();
-
 }
