@@ -2923,7 +2923,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <dependency>
                                 <groupId>org.apache.apache.resources</groupId>
                                 <artifactId>apache-source-release-assembly-descriptor</artifactId>
-                                <version>1.5</version>
+                                <version>1.7</version>
                             </dependency>
                         </dependencies>
                         <executions>
