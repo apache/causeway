@@ -50,7 +50,6 @@ import lombok.Setter;
 import lombok.val;
 
 import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
-import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.RENDERING;
 
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")

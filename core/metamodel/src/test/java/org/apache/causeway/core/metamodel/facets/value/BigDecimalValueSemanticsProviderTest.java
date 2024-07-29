@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.value;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
