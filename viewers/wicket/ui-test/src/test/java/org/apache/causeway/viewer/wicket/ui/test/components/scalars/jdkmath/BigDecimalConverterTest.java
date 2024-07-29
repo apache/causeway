@@ -64,6 +64,13 @@ class BigDecimalConverterTest {
     @Test
     void scale4_english() {
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale4.class));
+        converterTester.assertRoundtrip(bd_123_45_scale4, "123.4500", "123.45");    // the 2nd value is the bigdecimal as rendered for parsing; by default we do not preserve fractional digits/scale
+    }
+
+    @Test
+    void scale4_english_preserve_scale() {
+        converterTester.getConfigurationForBigDecimalValueType().getEditing().setPreserveScale(true);
+        converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale4.class));
         converterTester.assertRoundtrip(bd_123_45_scale4, "123.4500", "123.4500");
     }
 
@@ -96,13 +103,13 @@ class BigDecimalConverterTest {
         assertThat(converterTester.getConfigurationForBigDecimalValueType().isUseGroupingSeparator()).isTrue();
 
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
-        converterTester.assertRoundtrip(bd_789123_45_scale2, "789,123.45");
+        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45");
     }
 
     @Test
     void scale2_english_withoutThousandSeparators() {
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
-        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45", "789,123.45");
+        converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45", "789123.45");
     }
 
     @Test

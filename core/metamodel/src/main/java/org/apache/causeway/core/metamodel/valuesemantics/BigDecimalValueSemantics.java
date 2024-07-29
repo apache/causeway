@@ -49,6 +49,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
 
+import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
+
 @Component
 @Named("causeway.metamodel.value.BigDecimalValueSemantics")
 @Priority(PriorityPrecedence.LATE)
@@ -123,7 +125,7 @@ implements
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final BigDecimal value) {
         return value==null
                 ? null
-                : getNumberFormat(context)
+                : getNumberFormat(context, PARSING)
                     .format(value);
     }
 
@@ -149,7 +151,12 @@ implements
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
-        format.setGroupingUsed(causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().isUseGroupingSeparator());
+        val bigDecimalConfig = causewayConfiguration.getValueTypes().getBigDecimal();
+        format.setGroupingUsed(
+                usedFor == PARSING
+                    ? bigDecimalConfig.getEditing().isUseGroupingSeparator()
+                    : bigDecimalConfig.getDisplay().isUseGroupingSeparator()
+        );
 
         if(context==null) {
             return;
@@ -163,12 +170,12 @@ implements
 
         // evaluate any facets that provide the MaximumFractionDigits
         Facets.maxFractionalDigits(feature)
-            .ifPresent(format::setMaximumFractionDigits);
+                .ifPresent(newValue -> format.setMaximumFractionDigits(newValue));
 
         // we skip this when PARSING,
         // because we want to firstly parse any number value into a BigDecimal,
         // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(usedFor.isRendering()) {
+        if(usedFor.isRendering() || bigDecimalConfig.getEditing().isPreserveScale()) {
 
             // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
             OptionalInt optionalInt = Facets.minFractionalDigits(feature);
@@ -176,7 +183,7 @@ implements
                 format.setMinimumFractionDigits(optionalInt.getAsInt());
             } else {
                 // otherwise, apply a minScale if configured.
-                minScaleFrom(causewayConfiguration.getValueTypes().getBigDecimal())
+                minScaleFrom(bigDecimalConfig)
                         .ifPresent(format::setMinimumFractionDigits);
             }
         }
