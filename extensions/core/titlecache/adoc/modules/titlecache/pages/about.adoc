@@ -85,7 +85,7 @@ For each entity class whose title is to be cached, create a subclass of xref:ref
 )
 public class Customer /*...*/ {
 
-    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<SimpleObject> implements Cached { }
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<Customer> implements Cached { }
 
     // ...
 }
@@ -103,7 +103,7 @@ Or, for more control on an given entity, implement the xref:refguide:extensions:
 )
 public class Customer /*...*/ {
 
-    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<SimpleObject> implements CachedWithCacheSettings {
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<Customer> implements CachedWithCacheSettings {
         @Override public int expiryDurationInMinutes() { return 1;}
         @Override public int maxSizeInEntries() {return 50;}
     }
