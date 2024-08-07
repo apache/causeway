@@ -145,7 +145,7 @@ public class ZipUtils {
         var tempFile = File.createTempFile("causeway", "zip-utils");
         try {
             zippedSource.tryReadAndWrite(DataSink.ofFile(tempFile), 4096);
-            try (FileSystem fs = FileSystems.newFileSystem(tempFile.toPath(), null)) {
+            try (FileSystem fs = FileSystems.newFileSystem(tempFile.toPath())) {
                 try (Stream<Path> entries = Files.walk(fs.getPath("/"))) {
                     final List<Path> filesInZip = entries.filter(Files::isRegularFile).collect(Collectors.toList());
                     for(Path path : filesInZip) {
