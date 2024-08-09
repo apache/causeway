@@ -20,7 +20,6 @@ package org.apache.causeway.commons.io;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -141,11 +140,9 @@ public class ZipUtils {
             final @NonNull ZipOptions zipOptions) {
 
         val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
-
-        var tempFile = File.createTempFile("causeway", "zip-utils");
-        try {
-            zippedSource.tryReadAndWrite(DataSink.ofFile(tempFile), 4096);
-            try (FileSystem fs = FileSystems.newFileSystem(tempFile.toPath())) {
+       
+        zippedSource.consumeAsFile(zipFile->{
+            try (FileSystem fs = FileSystems.newFileSystem(zipFile.toPath())) {
                 try (Stream<Path> entries = Files.walk(fs.getPath("/"))) {
                     final List<Path> filesInZip = entries.filter(Files::isRegularFile).collect(Collectors.toList());
                     for(Path path : filesInZip) {
@@ -156,10 +153,8 @@ public class ZipUtils {
                     }
                 }
             }
-        } finally {
-            Files.deleteIfExists(tempFile.toPath()); // cleanup
-        }
-
+        });
+        
         return zipEntryDataSources.stream();
     }
 
