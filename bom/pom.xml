@@ -2415,7 +2415,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.12.1</version>    <!--bumped-->
+                    <version>3.20.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
 					<!-- Packaging: source jars of main and test code -->
