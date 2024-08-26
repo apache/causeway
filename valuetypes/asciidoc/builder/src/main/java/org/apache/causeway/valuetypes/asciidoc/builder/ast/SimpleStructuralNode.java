@@ -42,32 +42,8 @@ public class SimpleStructuralNode extends ContentNodeAbstract implements Structu
     @Getter @Setter private String convert;
 
     @Override
-    @Deprecated
-    public String title() {
-        return getTitle();
-    }
-
-    @Override
-    @Deprecated
-    public String style() {
-        return getStyle();
-    }
-
-    @Override
-    @Deprecated
-    public List<StructuralNode> blocks() {
-        return getBlocks();
-    }
-
-    @Override
     public void append(StructuralNode block) {
         getBlocks().add(block);
-    }
-
-    @Override
-    @Deprecated
-    public Object content() {
-        return getContent();
     }
 
     @Override

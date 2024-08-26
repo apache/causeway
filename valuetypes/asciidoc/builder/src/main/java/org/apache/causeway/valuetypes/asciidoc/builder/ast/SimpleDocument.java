@@ -41,20 +41,20 @@ public class SimpleDocument extends SimpleStructuralNode implements Document {
     @Getter private final Map<Object, Object> options = new HashMap<>();
     @Getter @Setter private boolean sourcemap;
 
-    @Override
-    public String doctitle() {
-        return getDoctitle();
-    }
+//    @Override
+//    public String doctitle() {
+//        return getDoctitle();
+//    }
 
     @Override
     public boolean isBasebackend(String backend) {
         return false;
     }
 
-    @Override
-    public boolean basebackend(String backend) {
-        return false;
-    }
+//    @Override
+//    public boolean basebackend(String backend) {
+//        return false;
+//    }
 
     @Override
     public int getAndIncrementCounter(String name) {
@@ -78,6 +78,18 @@ public class SimpleDocument extends SimpleStructuralNode implements Document {
 
     @Override
     public RevisionInfo getRevisionInfo() {
+        return null;
+    }
+
+    @Override
+    public String getSource() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<String> getSourceLines() {
+        // TODO Auto-generated method stub
         return null;
     }
 

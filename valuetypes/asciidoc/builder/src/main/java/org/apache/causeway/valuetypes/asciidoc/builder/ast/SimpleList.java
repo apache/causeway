@@ -22,8 +22,6 @@ import java.util.List;
 
 import org.asciidoctor.ast.StructuralNode;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import lombok.ToString;
 
 @ToString(callSuper = true)
@@ -37,11 +35,6 @@ public class SimpleList extends SimpleStructuralNode implements org.asciidoctor.
     @Override
     public boolean hasItems() {
         return !getItems().isEmpty();
-    }
-
-    @Override
-    public String render() {
-        throw _Exceptions.notImplemented();
     }
 
 }
