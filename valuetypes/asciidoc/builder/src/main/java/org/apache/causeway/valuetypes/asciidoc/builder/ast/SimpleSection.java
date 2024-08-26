@@ -25,18 +25,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class SimpleSection extends SimpleStructuralNode implements Section {
 
-    @Override public int index() {
-        return getIndex();
-    }
     @Override public int getIndex() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override public int number() {
-        return getNumber();
-    }
-    @Override public int getNumber() {
         // TODO Auto-generated method stub
         return 0;
     }
@@ -46,24 +35,27 @@ public class SimpleSection extends SimpleStructuralNode implements Section {
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override public String sectname() {
-        return getSectionName();
+    
+    @Override
+    public String getSectnum() {
+        // TODO Auto-generated method stub
+        return null;
     }
+
+    @Override
+    public String getSectnum(String delimiter) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     @Override public String getSectionName() {
         return "section";
     }
 
-    @Override public boolean special() {
-        return isSpecial();
-    }
     @Override public boolean isSpecial() {
         return false;
     }
 
-    @Override public boolean numbered() {
-        return isNumbered();
-    }
     @Override public boolean isNumbered() {
         return false;
     }
