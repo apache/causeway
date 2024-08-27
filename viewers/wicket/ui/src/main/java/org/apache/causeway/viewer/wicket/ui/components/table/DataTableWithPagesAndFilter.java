@@ -30,11 +30,14 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDat
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 
+import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Longs;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.pagesize.PagesizeChoice;
+import org.apache.causeway.viewer.wicket.model.tableoption.PageActionChoice;
+import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 
@@ -131,6 +134,16 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
                 );
         return choices;
     }
+    
+    // -- PAGE ACTIONS
+
+    public List<PageActionChoice> getPageActionChoices() {
+        var choices = List.of(
+                new PageActionChoice("PAGE_SEL", translate("select all rows of this page")),
+                new PageActionChoice("PAGE_UNSEL", translate("unselect all rows of this page"))
+                );
+        return choices;
+    }
 
     /**
      * Used by the {@link PagesizeChooser}, to indicate the currently selected page-size choice.
@@ -183,6 +196,11 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         return zeroBasedPageNr>=0L
                 ? OptionalLong.of(zeroBasedPageNr)
                 : OptionalLong.empty();
+    }
+    
+    private String translate(String text) {
+        return MetaModelContext.translationServiceOrFallback()
+                .translate(TranslationContext.named("Table"), text);
     }
 
 }

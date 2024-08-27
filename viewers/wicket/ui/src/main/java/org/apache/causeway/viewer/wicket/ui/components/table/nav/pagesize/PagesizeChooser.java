@@ -24,11 +24,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.viewer.wicket.model.pagesize.PagesizeChoice;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
+import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -77,7 +80,15 @@ public class PagesizeChooser extends Panel {
 
             Wkt.ajaxEnable(link);
         });
+        
+        WktTooltips.addTooltip(this, translate("Select your desired page size "
+                + "(how many rows to display per page)."));
 
+    }
+    
+    private String translate(String text) {
+        return MetaModelContext.translationServiceOrFallback()
+                .translate(TranslationContext.named("Table"), text);
     }
 
     private static void addIconAndTitle(
