@@ -60,7 +60,9 @@ public class PageActionChooser extends Panel {
 
     private void buildGui() {
 
-        Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, table.getPageActionChoices(), item->{
+        var pageActionChoices = table.getPageActionChoices();
+
+        var listView = Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, pageActionChoices, item->{
             var link = Wkt.linkAdd(item, ID_PAGE_ACTION_CHOICE, target->{
                 var pageActionChoice = item.getModelObject();
                 if(table.executePageAction(pageActionChoice)) {
@@ -72,12 +74,15 @@ public class PageActionChooser extends Panel {
 
             Wkt.ajaxEnable(link);
         });
-        
-        WktTooltips.addTooltip(this, translate("Page actions"));
+
+        // hide the drop-down menu, if empty
+        listView.setVisible(!pageActionChoices.isEmpty());
+
+        WktTooltips.addTooltip(listView, translate("Page actions"));
 
     }
-    
-    private String translate(String text) {
+
+    private String translate(final String text) {
         return MetaModelContext.translationServiceOrFallback()
                 .translate(TranslationContext.named("Table"), text);
     }

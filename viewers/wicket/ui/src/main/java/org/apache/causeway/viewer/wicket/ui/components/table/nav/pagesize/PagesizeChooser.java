@@ -66,7 +66,7 @@ public class PagesizeChooser extends Panel {
 
         Wkt.labelAdd(this, ID_PAGESIZE_LABEL, table.getEntriesPerPageAsLiteral());
 
-        Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
+        var listView = Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
                 var pagesizeChoice = item.getModelObject();
                 table.setItemsPerPage(pagesizeChoice.getItemsPerPage());
@@ -80,12 +80,12 @@ public class PagesizeChooser extends Panel {
 
             Wkt.ajaxEnable(link);
         });
-        
-        WktTooltips.addTooltip(this, translate("How many rows to display per page"));
+
+        WktTooltips.addTooltip(listView, translate("How many rows to display per page"));
 
     }
-    
-    private String translate(String text) {
+
+    private String translate(final String text) {
         return MetaModelContext.translationServiceOrFallback()
                 .translate(TranslationContext.named("Table"), text);
     }

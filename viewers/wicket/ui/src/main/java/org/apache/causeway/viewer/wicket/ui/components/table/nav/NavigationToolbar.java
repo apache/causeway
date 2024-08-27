@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pageact.PageActionChooser;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
@@ -44,9 +43,7 @@ implements HasCommonContext {
      * @param table data-table this tool-bar is attached to
      */
     public NavigationToolbar(
-            final DataTableWithPagesAndFilter<?, ?> table,
-            final ToggleboxColumn toggleboxColumn) {
-
+            final DataTableWithPagesAndFilter<?, ?> table) {
         super(table);
         buildGui();
     }
@@ -68,10 +65,10 @@ implements HasCommonContext {
 
         Wkt.add(navigatorContainer,
                 new PageActionChooser(ID_PAGE_ACTION_CHOOSER, getTable()));
-        
+
         Wkt.add(navigatorContainer,
                 new PagesizeChooser(ID_PAGESIZE_CHOOSER, getTable()));
-        
+
         Wkt.labelAdd(navigatorContainer, "prototypingLabel",
                 TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }

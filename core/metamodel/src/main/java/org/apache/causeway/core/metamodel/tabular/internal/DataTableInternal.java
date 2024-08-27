@@ -308,16 +308,16 @@ implements DataTableInteractive {
         // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
     }
-    
+
     @Override
-    public void selectRangeOfRowsByIndex(IntStream range, boolean select) {
+    public void selectRangeOfRowsByIndex(final IntStream range, final boolean select) {
         doProgrammaticToggle(()->{
-            dataRows.getValue()
+            dataRowsFilteredAndSorted.getValue()
                 .pickByIndex(range)
                 .forEach(dataRow->dataRow.getSelectToggle().setValue(select));
-        });        
+        });
     }
-    
+
 //    // -- DATA ROW VISIBILITY
 //
 //    private boolean ignoreHidden(final ManagedObject adapter) {

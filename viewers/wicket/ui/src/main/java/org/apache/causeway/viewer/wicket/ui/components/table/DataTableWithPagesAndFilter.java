@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
@@ -32,6 +33,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -39,6 +41,7 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.tableoption.PageActionChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 
@@ -102,6 +105,19 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         honorPageNumberHint();
     }
 
+    // -- SELECTABLE
+
+    /**
+     * Whether this table has a toggle-box column.
+     * @implNote assuming this is always the first column, if any
+     */
+    public boolean isRowSelectionEnabled() {
+        return Can.ofCollection(getColumns())
+                .getFirst()
+                .map(col->col instanceof ToggleboxColumn)
+                .orElse(false);
+    }
+
     // -- FILTER
 
     public void setSearchArg(final String value) {
@@ -135,42 +151,42 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
                 );
         return choices;
     }
-    
+
     // -- PAGE ACTIONS
 
     /**
      * Provides the page actions as presented in the table view's footer bar (drop-down menu).
-     * @see #executePageAction(PageActionChoice) 
+     * @see #executePageAction(PageActionChoice)
      */
     public List<PageActionChoice> getPageActionChoices() {
-        var choices = List.of(
-                new PageActionChoice("PAGE_SEL", translate("select all rows of this page")),
-                new PageActionChoice("PAGE_UNSEL", translate("unselect all rows of this page"))
-                );
-        return choices;
+        return isRowSelectionEnabled()
+                ? List.of(
+                    new PageActionChoice("PAGE_SEL", translate("select all rows of this page")),
+                    new PageActionChoice("PAGE_UNSEL", translate("unselect all rows of this page")))
+                : Collections.emptyList();
     }
-    
+
     /**
      * Executes a page action from the table view's footer bar (drop-down menu).
      * <p>
      * @return whether the action was executed.
      * @see #getPageActionChoices
      */
-    public boolean executePageAction(PageActionChoice pageActionChoice) {
+    public boolean executePageAction(final PageActionChoice pageActionChoice) {
         switch(pageActionChoice.getKey()) {
         case "PAGE_SEL": {
             _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
             return true;
         }
-        case "PAGE_UNSEL": { 
+        case "PAGE_UNSEL": {
             _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
             return true;
         }
-        default: 
+        default:
             return false; // ignore, bale out
         }
     }
-    
+
     public IntStream getCurrentPageRowIndexes() {
         final int pageIndex = Math.toIntExact(getCurrentPage());
         final int pageSize = Math.toIntExact(getItemsPerPage());
@@ -178,7 +194,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         final int toRowIndexExclusive = Math.toIntExact(fromRowIndexInclusive + pageSize);
         return IntStream.range(fromRowIndexInclusive, toRowIndexExclusive);
     }
-    
+
     /**
      * Used by the {@link PagesizeChooser}, to indicate the currently selected page-size choice.
      * (Typically a checkmark for the active choice within the drop-down select, also disabling the choice's link.)
@@ -231,8 +247,8 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
                 ? OptionalLong.of(zeroBasedPageNr)
                 : OptionalLong.empty();
     }
-    
-    private String translate(String text) {
+
+    private String translate(final String text) {
         return MetaModelContext.translationServiceOrFallback()
                 .translate(TranslationContext.named("Table"), text);
     }
