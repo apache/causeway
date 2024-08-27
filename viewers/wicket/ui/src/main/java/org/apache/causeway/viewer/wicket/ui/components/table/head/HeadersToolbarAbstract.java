@@ -41,11 +41,16 @@ import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import de.agilecoders.wicket.core.util.Attributes;
 
@@ -132,6 +137,10 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
                 Component sortIcon = newSortIcon("sortIcon", column, stateLocator);
                 header.add(label, sortIcon);
 
+                if(column instanceof ToggleboxColumn) {
+                    WktTooltips.addTooltip(header, 
+                            translate("Toggle select/unselect all rows across all pages."));
+                }
                 if(column instanceof TitleColumn) {
                     Wkt.cssAppend(header, "title-column");
                 }
@@ -139,6 +148,14 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
                         ? "column-sortable"
                         : "column-nonsortable");
             }
+            
+            private String translate(String text) {
+                var translationService = MetaModelContext.instance()
+                    .map(MetaModelContext::getTranslationService)
+                    .orElseGet(TranslationService::identity);
+                return translationService.translate(TranslationContext.named("Table"), text);
+            }
+            
         };
         add(headers);
     }
