@@ -37,7 +37,6 @@ import lombok.NonNull;
 public class PageActionChooser extends Panel {
     private static final long serialVersionUID = 1L;
 
-    //private static final String ID_ENTRIES_PER_PAGE_LABEL = "entriesPerPageLabel";
     private static final String ID_PAGE_ACTION_CHOICE = "pageActionChoice";
     private static final String ID_PAGE_ACTION_CHOICES = "pageActionChoices";
 
@@ -66,26 +65,12 @@ public class PageActionChooser extends Panel {
         Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, table.getPageActionChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGE_ACTION_CHOICE, target->{
                 var pageActionChoice = item.getModelObject();
-                //FIXME just a mockup
-                switch(pageActionChoice.getKey()) {
-                case "PAGE_SEL": { 
-                    break;
+                if(table.executePageAction(pageActionChoice)) {
+                    target.add(table);
                 }
-                case "PAGE_UNSEL": { 
-                    break;
-                }
-                default: 
-                    return; // ignore
-                }
-                System.err.printf("pageActionChoice: %s%n", pageActionChoice.getKey());
-                //table.setItemsPerPage(pagesizeChoice.getItemsPerPage());
-                //table.setPageSizeHintAndBroadcast(target);
-                target.add(table);
             });
             // add title and icon to the link
             addIconAndTitle(item, link);
-            // add checkmark to the link
-            //addCheckmark(item, link, table.getCurrentPagesizeChoice());
 
             Wkt.ajaxEnable(link);
         });
@@ -107,24 +92,5 @@ public class PageActionChooser extends Panel {
                 ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.getCssClass()),
                 null);
     }
-
-//    private static void addCheckmark(
-//            final @NonNull ListItem<PagesizeChoice> item,
-//            final @NonNull AjaxLinkNoPropagate link,
-//            final @NonNull Optional<PagesizeChoice> currentPagesizeChoice) {
-//        var checkmarkForChoice = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
-//
-//        // whether the item in this loop is also the currently selected one (is to receive the checkmark)
-//        var isSelected = currentPagesizeChoice
-//                .map(currentChoice->
-//                    currentChoice.equals(item.getModelObject()))
-//                .orElse(false);
-//        checkmarkForChoice.setVisible(isSelected);
-//
-//        // disable the link when selected
-//        if(isSelected) {
-//            link.setEnabled(false);
-//        }
-//    }
 
 }

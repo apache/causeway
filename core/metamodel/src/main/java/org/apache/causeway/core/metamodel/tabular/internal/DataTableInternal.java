@@ -307,6 +307,22 @@ implements DataTableInteractive {
         // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
     }
+    
+    @Override
+    public void selectCurrentPageRows() {
+        //FIXME limit to page
+        doProgrammaticToggle(()->{
+            dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(true));
+        });
+    }
+
+    @Override
+    public void unselectCurrentPageRows() {
+        //FIXME limit to page
+        doProgrammaticToggle(()->{
+            dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(false));
+        });
+    }
 
 //    // -- DATA ROW VISIBILITY
 //

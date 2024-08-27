@@ -124,6 +124,11 @@ public interface DataTableInteractive extends MultiselectChoices {
     void doProgrammaticToggle(Runnable runnable);
     Set<Integer> getSelectedRowIndexes();
     Observable<Can<DataRow>> getDataRowsSelected();
+    
+    // -- PAGE SPECIFIC SELECTION
+    
+    void selectCurrentPageRows();
+    void unselectCurrentPageRows();
 
     // -- EXPORTING
 

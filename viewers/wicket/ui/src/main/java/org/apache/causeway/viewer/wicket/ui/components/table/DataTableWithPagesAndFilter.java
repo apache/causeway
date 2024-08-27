@@ -137,6 +137,10 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     
     // -- PAGE ACTIONS
 
+    /**
+     * Provides the page actions as provided in the table view's footer bar (drop-down menu).
+     * @see #executePageAction(PageActionChoice) 
+     */
     public List<PageActionChoice> getPageActionChoices() {
         var choices = List.of(
                 new PageActionChoice("PAGE_SEL", translate("select all rows of this page")),
@@ -144,7 +148,28 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
                 );
         return choices;
     }
-
+    
+    /**
+     * Executes a page action from the table view's footer bar (drop-down menu).
+     * <p>
+     * @return whether the action was executed.
+     * @see #getPageActionChoices
+     */
+    public boolean executePageAction(PageActionChoice pageActionChoice) {
+        switch(pageActionChoice.getKey()) {
+        case "PAGE_SEL": {
+            _TableUtils.interactive(this).selectCurrentPageRows();
+            return true;
+        }
+        case "PAGE_UNSEL": { 
+            _TableUtils.interactive(this).unselectCurrentPageRows();
+            return true;
+        }
+        default: 
+            return false; // ignore, bale out
+        }
+    }
+    
     /**
      * Used by the {@link PagesizeChooser}, to indicate the currently selected page-size choice.
      * (Typically a checkmark for the active choice within the drop-down select, also disabling the choice's link.)
