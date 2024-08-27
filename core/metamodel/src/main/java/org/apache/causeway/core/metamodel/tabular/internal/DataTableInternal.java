@@ -312,9 +312,6 @@ implements DataTableInteractive {
     @Override
     public void selectRangeOfRowsByIndex(final IntStream range, final boolean select) {
         doProgrammaticToggle(()->{
-
-            System.err.printf("columnSort %s%n", columnSort.getValue());
-
             dataRowsFilteredAndSorted.getValue()
                 .pickByIndex(range)
                 .forEach(dataRow->{
