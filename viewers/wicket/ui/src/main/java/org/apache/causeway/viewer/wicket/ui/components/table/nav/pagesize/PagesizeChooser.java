@@ -68,7 +68,7 @@ public class PagesizeChooser extends Panel {
 
         var button = Wkt.add(this, new Button(ID_PAGESIZE_BUTTON));
 
-        Wkt.labelAdd(this, ID_PAGESIZE_LABEL, table.getEntriesPerPageAsLiteral());
+        Wkt.labelAdd(button, ID_PAGESIZE_LABEL, table.getEntriesPerPageAsLiteral());
 
         Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
