@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.viewer.wicket.model.itemreuse.ReuseIfRowIndexEqualsStrategy;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.head.HeadersToolbar;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.NavigationToolbar;
 import org.apache.causeway.viewer.wicket.ui.components.table.nonav.TotalRecordsToolbar;
@@ -44,17 +43,14 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     private static final long serialVersionUID = 1L;
 
     private final CollectionContentsSortableDataProvider dataProvider;
-    private final ToggleboxColumn toggleboxColumn;
 
     public CausewayAjaxDataTable(
             final String id,
             final List<? extends IColumn<DataRow, String>> columns,
             final CollectionContentsSortableDataProvider dataProvider,
-            final int rowsPerPage,
-            final ToggleboxColumn toggleboxColumn) {
+            final int rowsPerPage) {
         super(id, columns, dataProvider, rowsPerPage);
         this.dataProvider = dataProvider;
-        this.toggleboxColumn = toggleboxColumn;
         // optimization
         setItemReuseStrategy(ReuseIfRowIndexEqualsStrategy.getInstance());
     }
@@ -72,7 +68,7 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
 
         if (!isDecoratedWithDataTablesNet()) {
             // toolbars do decide for themselves, whether they are visible
-            addBottomToolbar(new NavigationToolbar(this, this.toggleboxColumn));
+            addBottomToolbar(new NavigationToolbar(this));
             addBottomToolbar(new NoRecordsToolbar(this));
             addBottomToolbar(new TotalRecordsToolbar(this));
         }
