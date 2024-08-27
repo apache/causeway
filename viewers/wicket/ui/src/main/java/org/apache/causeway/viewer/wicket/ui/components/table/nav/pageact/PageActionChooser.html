@@ -21,20 +21,19 @@
     <body>
         <wicket:panel>
         	<div class="dropdown">
-	            <button wicket:id="pagesizeButton"
+	            <button wicket:id="pageActionButton" 
 						class="btn btn-sm btn-light dropdown-toggle" 
 						type="button"
 						data-bs-toggle="dropdown" 
 						aria-expanded="false">
-	            	<span wicket:id="pagesizeLabel"></span>
+	            	<i class="fa-regular fa-square"></i>
 	            </button>
 	            <ul class="dropdown-menu" role="menu">
-	                <li wicket:id="pagesizeChoices">
+	                <li wicket:id="pageActionChoices">
 						<!-- link entry -->
-						<a href="#" wicket:id="pagesizeChoice" class="dropdown-item">
+						<a href="#" wicket:id="pageActionChoice" class="dropdown-item">
 						    <span wicket:id="viewItemIcon" class="ViewLinkItem"></span>
 						    <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
-						    <i wicket:id="viewItemCheckmark" class="fa-solid fa-check"></i>
 						</a>
 					</li>
 	            </ul>

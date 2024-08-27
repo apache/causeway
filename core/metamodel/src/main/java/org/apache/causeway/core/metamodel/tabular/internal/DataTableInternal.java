@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
 
@@ -308,6 +309,17 @@ implements DataTableInteractive {
         selectionChanges.setValue(!selectionChanges.getValue());
     }
 
+    @Override
+    public void selectRangeOfRowsByIndex(final IntStream range, final boolean select) {
+        doProgrammaticToggle(()->{
+            dataRowsFilteredAndSorted.getValue()
+                .pickByIndex(range)
+                .forEach(dataRow->{
+                    dataRow.getSelectToggle().setValue(select);
+                });
+        });
+    }
+
 //    // -- DATA ROW VISIBILITY
 //
 //    private boolean ignoreHidden(final ManagedObject adapter) {
@@ -405,7 +417,8 @@ implements DataTableInteractive {
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
-                    tableInteractive.getSelectedRowIndexes());
+                    tableInteractive.getSelectedRowIndexes(),
+                    tableInteractive.getColumnSort().getValue());
         }
 
         private final @NonNull Identifier featureId;
@@ -414,6 +427,7 @@ implements DataTableInteractive {
 
         private @Nullable String searchArgument;
         private @NonNull Set<Integer> selectedRowIndexes;
+        private @Nullable DataTableInteractive.ColumnSort columnSort;
 
         @Override
         public DataTableInternal getDataTableModel(final ManagedObject owner) {
@@ -441,6 +455,9 @@ implements DataTableInteractive {
                     })
                     .collect(Can.toCan()));
 
+            if(columnSort!=null)  {
+                dataTableInteractive.columnSort.setValue(columnSort);
+            }
             dataTableInteractive.searchArgument.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{
                 dataTableInteractive.dataRows.getValue().stream()

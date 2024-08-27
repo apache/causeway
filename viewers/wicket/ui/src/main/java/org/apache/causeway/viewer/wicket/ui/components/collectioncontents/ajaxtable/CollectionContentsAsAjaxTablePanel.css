@@ -19,13 +19,14 @@
 
  /* CSS for the Table Panel and all its child components, toolbars, search-bar etc. */
  
- .collectionContentsAsAjaxTablePanel .table-header-sortIcon {
+.collectionContentsAsAjaxTablePanel .table-header-sortIcon {
  	color: grey;
  }
  
- .collectionContentsAsAjaxTablePanel .pagesizeChooser {
+.collectionContentsAsAjaxTablePanel .pagesizeChooser,
+.collectionContentsAsAjaxTablePanel .pageActionChooser {
  	float: left;
-	margin-right: 1rem;
+	margin-right: 0.75rem;
 }
 
 .collectionContentsAsAjaxTablePanel th.column-sortable .column-header-label {
