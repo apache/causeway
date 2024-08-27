@@ -60,8 +60,6 @@ public class PageActionChooser extends Panel {
 
     private void buildGui() {
 
-        //Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, table.getEntriesPerPageAsLiteral());
-
         Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, table.getPageActionChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGE_ACTION_CHOICE, target->{
                 var pageActionChoice = item.getModelObject();
@@ -75,7 +73,7 @@ public class PageActionChooser extends Panel {
             Wkt.ajaxEnable(link);
         });
         
-        WktTooltips.addTooltip(this, translate("Execute a page specific action."));
+        WktTooltips.addTooltip(this, translate("Page actions"));
 
     }
     

@@ -39,7 +39,7 @@ import lombok.NonNull;
 public class PagesizeChooser extends Panel {
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTRIES_PER_PAGE_LABEL = "entriesPerPageLabel";
+    private static final String ID_PAGESIZE_LABEL = "pagesizeLabel";
     private static final String ID_PAGESIZE_CHOICE = "pagesizeChoice";
     private static final String ID_PAGESIZE_CHOICES = "pagesizeChoices";
 
@@ -64,7 +64,7 @@ public class PagesizeChooser extends Panel {
 
     private void buildGui() {
 
-        Wkt.labelAdd(this, ID_ENTRIES_PER_PAGE_LABEL, table.getEntriesPerPageAsLiteral());
+        Wkt.labelAdd(this, ID_PAGESIZE_LABEL, table.getEntriesPerPageAsLiteral());
 
         Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
@@ -81,8 +81,7 @@ public class PagesizeChooser extends Panel {
             Wkt.ajaxEnable(link);
         });
         
-        WktTooltips.addTooltip(this, translate("Select your desired page size "
-                + "(how many rows to display per page)."));
+        WktTooltips.addTooltip(this, translate("How many rows to display per page"));
 
     }
     

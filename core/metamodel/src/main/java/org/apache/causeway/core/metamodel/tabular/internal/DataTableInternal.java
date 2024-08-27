@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.lang.Nullable;
 
@@ -309,21 +310,14 @@ implements DataTableInteractive {
     }
     
     @Override
-    public void selectCurrentPageRows() {
-        //FIXME limit to page
+    public void selectRangeOfRowsByIndex(IntStream range, boolean select) {
         doProgrammaticToggle(()->{
-            dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(true));
-        });
+            dataRows.getValue()
+                .pickByIndex(range)
+                .forEach(dataRow->dataRow.getSelectToggle().setValue(select));
+        });        
     }
-
-    @Override
-    public void unselectCurrentPageRows() {
-        //FIXME limit to page
-        doProgrammaticToggle(()->{
-            dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(false));
-        });
-    }
-
+    
 //    // -- DATA ROW VISIBILITY
 //
 //    private boolean ignoreHidden(final ManagedObject adapter) {

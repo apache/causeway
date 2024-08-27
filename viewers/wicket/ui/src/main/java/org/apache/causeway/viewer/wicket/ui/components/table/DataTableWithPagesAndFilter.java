@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.table;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
+import java.util.stream.IntStream;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -138,7 +139,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     // -- PAGE ACTIONS
 
     /**
-     * Provides the page actions as provided in the table view's footer bar (drop-down menu).
+     * Provides the page actions as presented in the table view's footer bar (drop-down menu).
      * @see #executePageAction(PageActionChoice) 
      */
     public List<PageActionChoice> getPageActionChoices() {
@@ -158,16 +159,24 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     public boolean executePageAction(PageActionChoice pageActionChoice) {
         switch(pageActionChoice.getKey()) {
         case "PAGE_SEL": {
-            _TableUtils.interactive(this).selectCurrentPageRows();
+            _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
             return true;
         }
         case "PAGE_UNSEL": { 
-            _TableUtils.interactive(this).unselectCurrentPageRows();
+            _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
             return true;
         }
         default: 
             return false; // ignore, bale out
         }
+    }
+    
+    public IntStream getCurrentPageRowIndexes() {
+        final int pageIndex = Math.toIntExact(getCurrentPage());
+        final int pageSize = Math.toIntExact(getItemsPerPage());
+        final int fromRowIndexInclusive = Math.toIntExact(pageIndex * pageSize);
+        final int toRowIndexExclusive = Math.toIntExact(fromRowIndexInclusive + pageSize);
+        return IntStream.range(fromRowIndexInclusive, toRowIndexExclusive);
     }
     
     /**

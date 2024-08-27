@@ -37,8 +37,8 @@ implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
     private static final String NAVIGATOR_CONTAINER_ID = "span";
-    private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
     private static final String ID_PAGE_ACTION_CHOOSER = "pageActionChooser";
+    private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
 
     /**
      * @param table data-table this tool-bar is attached to
@@ -67,11 +67,11 @@ implements HasCommonContext {
         var navigatorContainer = navigatorContainer();
 
         Wkt.add(navigatorContainer,
-                new PagesizeChooser(ID_PAGESIZE_CHOOSER, getTable()));
+                new PageActionChooser(ID_PAGE_ACTION_CHOOSER, getTable()));
         
         Wkt.add(navigatorContainer,
-                new PageActionChooser(ID_PAGE_ACTION_CHOOSER, getTable()));
-
+                new PagesizeChooser(ID_PAGESIZE_CHOOSER, getTable()));
+        
         Wkt.labelAdd(navigatorContainer, "prototypingLabel",
                 TimeTakenModel.createForPrototypingElseBlank(getMetaModelContext()));
     }
