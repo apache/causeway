@@ -312,9 +312,14 @@ implements DataTableInteractive {
     @Override
     public void selectRangeOfRowsByIndex(final IntStream range, final boolean select) {
         doProgrammaticToggle(()->{
+
+            System.err.printf("columnSort %s%n", columnSort.getValue());
+
             dataRowsFilteredAndSorted.getValue()
                 .pickByIndex(range)
-                .forEach(dataRow->dataRow.getSelectToggle().setValue(select));
+                .forEach(dataRow->{
+                    dataRow.getSelectToggle().setValue(select);
+                });
         });
     }
 
@@ -415,7 +420,8 @@ implements DataTableInteractive {
                     tableInteractive.where,
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
-                    tableInteractive.getSelectedRowIndexes());
+                    tableInteractive.getSelectedRowIndexes(),
+                    tableInteractive.getColumnSort().getValue());
         }
 
         private final @NonNull Identifier featureId;
@@ -424,6 +430,7 @@ implements DataTableInteractive {
 
         private @Nullable String searchArgument;
         private @NonNull Set<Integer> selectedRowIndexes;
+        private @Nullable DataTableInteractive.ColumnSort columnSort;
 
         @Override
         public DataTableInternal getDataTableModel(final ManagedObject owner) {
@@ -451,6 +458,9 @@ implements DataTableInteractive {
                     })
                     .collect(Can.toCan()));
 
+            if(columnSort!=null)  {
+                dataTableInteractive.columnSort.setValue(columnSort);
+            }
             dataTableInteractive.searchArgument.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{
                 dataTableInteractive.dataRows.getValue().stream()

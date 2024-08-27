@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -64,7 +65,7 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     public DataTableInteractive getDataTableModel() {
-        return dataTableModelHolder.getObject();
+        return applyColumnSortTo(dataTableModelInternal());
     }
 
     @Override
@@ -80,13 +81,26 @@ extends SortableDataProvider<DataRow, String> {
     @Override
     public Iterator<DataRow> iterator(final long skip, final long limit) {
         var dataTable = getDataTableModel();
-        // honor (single) column sort (if any)
-        dataTable.getColumnSort().setValue(columnSort().orElse(null));
         return dataTable.getDataRowsFilteredAndSorted().getValue()
                 .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 
     // -- HELPER
+
+    private DataTableInteractive dataTableModelInternal() {
+        return dataTableModelHolder.getObject();
+    }
+
+    private DataTableInteractive applyColumnSortTo(final DataTableInteractive dataTableInteractive) {
+        // honor (single) column sort (if any)
+        // optimization: set only, if value actually changes
+        var oldColumnSort = dataTableInteractive.getColumnSort().getValue();
+        var newColumnSort = columnSort().orElse(null);
+        if(!Objects.equals(oldColumnSort, newColumnSort)) {
+            dataTableInteractive.getColumnSort().setValue(newColumnSort);
+        }
+        return dataTableInteractive;
+    }
 
     private Optional<DataTableInteractive.ColumnSort> columnSort() {
         val sortParam = getSort();
@@ -99,7 +113,7 @@ extends SortableDataProvider<DataRow, String> {
     private OptionalInt lookupColumnIndexFor(final @Nullable SortParam<String> sortParam) {
         if(sortParam==null) return OptionalInt.empty();
         int columnIndex = 0;
-        for(var column : getDataTableModel().getDataColumns().getValue()) {
+        for(var column : dataTableModelInternal().getDataColumns().getValue()) {
             if(column.getAssociationMetaModel().getId().equals(sortParam.getProperty())) {
                 return OptionalInt.of(columnIndex);
             }
