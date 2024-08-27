@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.table.nav.pageact;
 
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -37,6 +38,7 @@ import lombok.NonNull;
 public class PageActionChooser extends Panel {
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_PAGE_ACTION_BUTTON = "pageActionButton";
     private static final String ID_PAGE_ACTION_CHOICE = "pageActionChoice";
     private static final String ID_PAGE_ACTION_CHOICES = "pageActionChoices";
 
@@ -62,7 +64,9 @@ public class PageActionChooser extends Panel {
 
         var pageActionChoices = table.getPageActionChoices();
 
-        var listView = Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, pageActionChoices, item->{
+        var button = Wkt.add(this, new Button(ID_PAGE_ACTION_BUTTON));
+
+        Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, pageActionChoices, item->{
             var link = Wkt.linkAdd(item, ID_PAGE_ACTION_CHOICE, target->{
                 var pageActionChoice = item.getModelObject();
                 if(table.executePageAction(pageActionChoice)) {
@@ -76,9 +80,11 @@ public class PageActionChooser extends Panel {
         });
 
         // hide the drop-down menu, if empty
-        listView.setVisible(!pageActionChoices.isEmpty());
-
-        WktTooltips.addTooltip(listView, translate("Page actions"));
+        if(pageActionChoices.isEmpty()) {
+            this.setVisible(false);
+        } else {
+            WktTooltips.addTooltip(button, translate("Select actions"));
+        }
 
     }
 

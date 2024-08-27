@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize;
 
 import java.util.Optional;
 
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -39,6 +40,7 @@ import lombok.NonNull;
 public class PagesizeChooser extends Panel {
     private static final long serialVersionUID = 1L;
 
+    private static final String ID_PAGESIZE_BUTTON = "pagesizeButton";
     private static final String ID_PAGESIZE_LABEL = "pagesizeLabel";
     private static final String ID_PAGESIZE_CHOICE = "pagesizeChoice";
     private static final String ID_PAGESIZE_CHOICES = "pagesizeChoices";
@@ -64,9 +66,11 @@ public class PagesizeChooser extends Panel {
 
     private void buildGui() {
 
+        var button = Wkt.add(this, new Button(ID_PAGESIZE_BUTTON));
+
         Wkt.labelAdd(this, ID_PAGESIZE_LABEL, table.getEntriesPerPageAsLiteral());
 
-        var listView = Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
+        Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
                 var pagesizeChoice = item.getModelObject();
                 table.setItemsPerPage(pagesizeChoice.getItemsPerPage());
@@ -81,7 +85,7 @@ public class PagesizeChooser extends Panel {
             Wkt.ajaxEnable(link);
         });
 
-        WktTooltips.addTooltip(listView, translate("How many rows to display per page"));
+        WktTooltips.addTooltip(button, translate("How many rows to display per page"));
 
     }
 
