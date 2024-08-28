@@ -192,7 +192,6 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         final int pageSize = Math.toIntExact(getItemsPerPage());
         final int fromRowIndexInclusive = Math.toIntExact(pageIndex * pageSize);
         final int toRowIndexExclusive = Math.toIntExact(fromRowIndexInclusive + pageSize);
-        System.err.printf("getCurrentPageRowIndexes %d->%d%n", fromRowIndexInclusive, toRowIndexExclusive);
         return IntStream.range(fromRowIndexInclusive, toRowIndexExclusive);
     }
 
