@@ -106,7 +106,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
-        <datanucleus-rdbms.version>6.0.7</datanucleus-rdbms.version>
+        <datanucleus-rdbms.version>6.0.8</datanucleus-rdbms.version>
 
         <datasource-proxy-spring-boot-starter.version>1.9.2</datasource-proxy-spring-boot-starter.version>
 
