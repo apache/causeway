@@ -131,7 +131,7 @@
 			<properties>
 
 				<!-- IMPORTANT: keep in sync with versions used in Apache Causeway, see causeway-bom -->
-				<datanucleus-api-jdo.version>6.0.2</datanucleus-api-jdo.version>
+				<datanucleus-api-jdo.version>6.0.3</datanucleus-api-jdo.version>
 				<datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
 				<datanucleus-core.version>6.0.7</datanucleus-core.version>
 				<datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
