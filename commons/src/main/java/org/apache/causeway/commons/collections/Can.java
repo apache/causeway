@@ -785,13 +785,21 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     /**
      * Return a {@link Collector},
-     * that delegates {@link Map} creation to {@link Collectors#toUnmodifiableMap(Function, Function)}.
+     * that delegates {@link Map} creation to {@link Collectors#toMap(Function, Function, BinaryOperator, Supplier)}.
      * @param keyExtractor a mapping function to produce keys, must be non-null
+     * @param mergeFunction a merge function, used to resolve collisions between
+     *                      values associated with the same key, as supplied
+     *                      to {@link Map#merge(Object, Object, BiFunction)}
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *                   into which the results will be inserted
      * @return an unmodifiable (hash) {@link Map}
      */
-    public static <T, K>
-    Collector<T, ?, Map<K, T>> toMapCollector(final @NonNull Function<? super T, ? extends K> keyExtractor) {
-        return Collectors.toUnmodifiableMap(keyExtractor, UnaryOperator.identity());
+    public static <T, K, M extends Map<K, T>>
+    Collector<T, ?, M> toMapCollector(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final BinaryOperator<T> mergeFunction,
+            final Supplier<M> mapFactory) {
+        return Collectors.toMap(keyExtractor, UnaryOperator.identity(), mergeFunction, mapFactory);
     }
 
     // -- CONVERSIONS
@@ -844,10 +852,45 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     T[] toArray(Class<T> elementType);
 
+    // -- TO MAP
+
     /**
-     * Returns am unmodifiable (hash) {@link Map}, mapping
+     * Returns an unmodifiable (hash) {@link Map}, with values from this {@link Can},
+     * and keys as produced by given {@code keyExtractor}.
+     * <p>
+     * On duplicate keys, behavior is unspecified.
      * @param keyExtractor a mapping function to produce keys, must be non-null
      */
     <K> Map<K, T> toMap(@NonNull Function<? super T, ? extends K> keyExtractor);
+
+    /**
+     * Variant of {@link #toMap(Function)}, that protects the resulting {@link Map} from modification.
+     * @see #toMap(Function)
+     */
+    <K> Map<K, T> toUnmodifiableMap(@NonNull Function<? super T, ? extends K> keyExtractor);
+
+    /**
+     * Returns an unmodifiable (hash) {@link Map}, with values from this {@link Can},
+     * and keys as produced by given {@code keyExtractor}.
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     * @param mergeFunction a merge function, used to resolve collisions between
+     *                      values associated with the same key, as supplied
+     *                      to {@link Map#merge(Object, Object, BiFunction)}
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *                   into which the results will be inserted
+     */
+    <K, M extends Map<K, T>> M toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory);
+
+    /**
+     * Variant of {@link #toMap(Function, BinaryOperator, Supplier)}, that protects the resulting {@link Map} from modification.
+     * @see #toMap(Function, BinaryOperator, Supplier)
+     */
+    <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory);
 
 }

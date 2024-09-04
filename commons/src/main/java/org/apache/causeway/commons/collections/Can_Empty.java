@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -303,7 +304,21 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public <K> Map<K, T> toMap(final @NonNull Function<? super T, ? extends K> keyExtractor) {
-       return Collections.emptyMap();
+       return new HashMap<>();
+    }
+    @Override
+    public <K> Map<K, T> toUnmodifiableMap(@NonNull final Function<? super T, ? extends K> keyExtractor) {
+        return Collections.emptyMap();
+    }
+    @Override
+    public <K, M extends Map<K, T>> M toMap(@NonNull final Function<? super T, ? extends K> keyExtractor,
+            @NonNull final BinaryOperator<T> mergeFunction, @NonNull final Supplier<M> mapFactory) {
+        return mapFactory.get();
+    }
+    @Override
+    public <K, M extends Map<K, T>> M toUnmodifiableMap(@NonNull final Function<? super T, ? extends K> keyExtractor,
+            @NonNull final BinaryOperator<T> mergeFunction, @NonNull final Supplier<M> mapFactory) {
+        return _Casts.uncheckedCast(Collections.emptyMap());
     }
 
 }

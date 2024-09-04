@@ -37,6 +37,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -468,9 +469,31 @@ final class Can_Multiple<T> implements Can<T> {
     }
 
     @Override
-    public <K> Map<K, T> toMap(final @NonNull Function<? super T, ? extends K> keyExtractor) {
+    public <K> Map<K, T> toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
         return stream()
-                .collect(Can.toMapCollector(keyExtractor));
+                .collect(Collectors.toMap(keyExtractor, UnaryOperator.identity()));
+    }
+    @Override
+    public <K> Map<K, T> toUnmodifiableMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
+        return stream()
+                .collect(Collectors.toUnmodifiableMap(keyExtractor, UnaryOperator.identity()));
+    }
+    @Override
+    public <K, M extends Map<K, T>> M toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
+        return stream()
+                .collect(Can.toMapCollector(keyExtractor, mergeFunction, mapFactory));
+    }
+    @Override
+    public <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
+        return Collections.unmodifiableMap(toMap(keyExtractor, mergeFunction, mapFactory));
     }
 
 }

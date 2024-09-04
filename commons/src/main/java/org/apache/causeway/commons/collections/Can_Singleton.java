@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -400,8 +401,32 @@ final class Can_Singleton<T> implements Can<T> {
     }
 
     @Override
-    public <K> Map<K, T> toMap(final @NonNull Function<? super T, ? extends K> keyExtractor) {
+    public <K> Map<K, T> toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
+        var map = new HashMap<K, T>();
+        map.put(keyExtractor.apply(element), element);
+        return map;
+    }
+    @Override
+    public <K> Map<K, T> toUnmodifiableMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
         return Map.of(keyExtractor.apply(element), element);
+    }
+    @Override
+    public <K, M extends Map<K, T>> M toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
+        var map = mapFactory.get();
+        map.put(keyExtractor.apply(element), element);
+        return map;
+    }
+    @Override
+    public <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
+        return Collections.unmodifiableMap(toMap(keyExtractor, mergeFunction, mapFactory));
     }
 
 }
