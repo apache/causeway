@@ -855,7 +855,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     // -- TO MAP
 
     /**
-     * Returns an unmodifiable (hash) {@link Map}, with values from this {@link Can},
+     * Returns a modifiable (hash) {@link Map}, with values from this {@link Can},
      * and keys as produced by given {@code keyExtractor}.
      * <p>
      * On duplicate keys, behavior is unspecified.
@@ -870,7 +870,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     <K> Map<K, T> toUnmodifiableMap(@NonNull Function<? super T, ? extends K> keyExtractor);
 
     /**
-     * Returns an unmodifiable (hash) {@link Map}, with values from this {@link Can},
+     * Returns a modifiable {@link Map}, with values from this {@link Can},
      * and keys as produced by given {@code keyExtractor}.
      * @param keyExtractor a mapping function to produce keys, must be non-null
      * @param mergeFunction a merge function, used to resolve collisions between
@@ -885,7 +885,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             final @NonNull Supplier<M> mapFactory);
 
     /**
-     * Variant of {@link #toMap(Function, BinaryOperator, Supplier)}, that protects the resulting {@link Map} from modification.
+     * Variant of {@link #toMap(Function, BinaryOperator, Supplier)},
+     * that protects the resulting {@link Map} from modification.
      * @see #toMap(Function, BinaryOperator, Supplier)
      */
     <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
