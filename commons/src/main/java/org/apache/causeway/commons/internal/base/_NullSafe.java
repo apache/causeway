@@ -184,6 +184,12 @@ public final class _NullSafe {
         };
     }
 
+    /**
+     * Returns a stream of elements contained by given pojo.
+     * Supports {@link Collection}, arrays, {@link Map}, etc.
+     * <p>
+     * In case of a {@link Map} traverses the map's values.
+     */
     public static Stream<?> streamAutodetect(final @Nullable Object pojo) {
         if(pojo==null) {
             return Stream.empty();
@@ -205,6 +211,9 @@ public final class _NullSafe {
             if(pojo instanceof int[]) return primitiveStream((int[]) pojo);
             if(pojo instanceof long[]) return primitiveStream((long[]) pojo);
             if(pojo instanceof short[]) return primitiveStream((short[]) pojo);
+        }
+        if(pojo instanceof Map) {
+            return ((Map<?, ?>)pojo).values().stream();
         }
         if(pojo instanceof Iterable) {
             return stream((Iterable<?>)pojo);
