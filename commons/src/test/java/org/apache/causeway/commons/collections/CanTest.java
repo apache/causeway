@@ -27,11 +27,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
+import lombok.Value;
 import lombok.val;
 
 class CanTest {
@@ -388,6 +391,49 @@ class CanTest {
         assertEquals(Can.empty(), origin.subCan(4, 4));
     }
 
+    // -- TO MAP
+
+    @Value
+    static class Customer {
+        final String name;
+    }
+
+    @Test
+    void toMap_emptyCan() {
+        final Can<Customer> origin = Can.empty();
+        var map = origin.toMap(Customer::getName);
+        assertNotNull(map);
+        assertEquals(0, map.size());
+        // verify immutability
+        assertThrows(Exception.class, ()->{
+           map.put("John", new Customer("John"));
+        });
+    }
+    @Test
+    void toMap_singleCan() {
+        final Can<Customer> origin = Can.of(new Customer("Jeff"));
+        var map = origin.toMap(Customer::getName);
+        assertNotNull(map);
+        assertEquals(1, map.size());
+        assertEquals(new Customer("Jeff"), map.get("Jeff"));
+        // verify immutability
+        assertThrows(Exception.class, ()->{
+           map.put("John", new Customer("John"));
+        });
+    }
+    @Test
+    void toMap_multiCan() {
+        final Can<Customer> origin = Can.of(new Customer("Jeff"), new Customer("Jane"));
+        var map = origin.toMap(Customer::getName);
+        assertNotNull(map);
+        assertEquals(2, map.size());
+        assertEquals(new Customer("Jeff"), map.get("Jeff"));
+        assertEquals(new Customer("Jane"), map.get("Jane"));
+        // verify immutability
+        assertThrows(Exception.class, ()->{
+           map.put("John", new Customer("John"));
+        });
+    }
 
     // -- HEPER
 
@@ -395,7 +441,5 @@ class CanTest {
         assertTrue(_Sets.minus(a, b).isEmpty());
         assertTrue(_Sets.minus(b, a).isEmpty());
     }
-
-
 
 }

@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -33,6 +34,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -463,6 +465,12 @@ final class Can_Multiple<T> implements Can<T> {
     public T[] toArray(final @NonNull Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
         return elements.toArray(array);
+    }
+
+    @Override
+    public <K> Map<K, T> toMap(final @NonNull Function<? super T, ? extends K> keyExtractor) {
+        return stream()
+                .collect(Can.toMapCollector(keyExtractor));
     }
 
 }

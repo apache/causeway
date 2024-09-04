@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -36,6 +37,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -80,14 +82,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     Optional<T> get(int elementIndex);
 
     /**
-     * Shortcut for {@code get(this.size() - 1 - (-offset))} 
+     * Shortcut for {@code get(this.size() - 1 - (-offset))}
      * @param offset - expected zero or negative (zero returning the last element)
      * @see #get(int)
      */
-    default Optional<T> getRelativeToLast(int offset) {
+    default Optional<T> getRelativeToLast(final int offset) {
         return get(size() - 1 + offset);
     }
-    
+
     /**
      * Shortcut to {@code get(elementIndex).orElseThrow(...)}
      * <p>
@@ -102,9 +104,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));
     }
-    
+
     /**
-     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))} 
+     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))}
      * @param offset - expected zero or negative (zero returning the last element)
      * @see #getElseFail(int)
      */
@@ -776,10 +778,20 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     public static <T>
     Collector<T, ?, Can<T>> toCan() {
-
         return Collectors.collectingAndThen(
                 Collectors.toList(),
                 Can::ofCollection);
+    }
+
+    /**
+     * Return a {@link Collector},
+     * that delegates {@link Map} creation to {@link Collectors#toUnmodifiableMap(Function, Function)}.
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     * @return an unmodifiable (hash) {@link Map}
+     */
+    public static <T, K>
+    Collector<T, ?, Map<K, T>> toMapCollector(final @NonNull Function<? super T, ? extends K> keyExtractor) {
+        return Collectors.toUnmodifiableMap(keyExtractor, UnaryOperator.identity());
     }
 
     // -- CONVERSIONS
@@ -831,5 +843,11 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
+    /**
+     * Returns am unmodifiable (hash) {@link Map}, mapping
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     */
+    <K> Map<K, T> toMap(@NonNull Function<? super T, ? extends K> keyExtractor);
 
 }

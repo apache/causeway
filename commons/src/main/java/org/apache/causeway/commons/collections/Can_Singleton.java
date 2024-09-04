@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -33,6 +34,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -397,7 +399,9 @@ final class Can_Singleton<T> implements Can<T> {
         return array;
     }
 
-
-
+    @Override
+    public <K> Map<K, T> toMap(final @NonNull Function<? super T, ? extends K> keyExtractor) {
+        return Map.of(keyExtractor.apply(element), element);
+    }
 
 }
