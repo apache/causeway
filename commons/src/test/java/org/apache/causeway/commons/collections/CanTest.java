@@ -19,19 +19,29 @@
 package org.apache.causeway.commons.collections;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.val;
 
 class CanTest {
@@ -388,6 +398,81 @@ class CanTest {
         assertEquals(Can.empty(), origin.subCan(4, 4));
     }
 
+    // -- TO MAP
+
+    @Value
+    static class Customer {
+        final String name;
+    }
+
+    @RequiredArgsConstructor
+    enum MapScenario {
+        HASH_MAP(customers->customers.toMap(Customer::getName)),
+        HASH_UNMOD_MAP(customers->customers.toUnmodifiableMap(Customer::getName)),
+        TREE_MAP(customers->customers.toMap(Customer::getName, (a, b)->a, TreeMap::new)),
+        TREE_UNMOD_MAP(customers->customers.toUnmodifiableMap(Customer::getName, (a, b)->a, TreeMap::new));
+        final Function<Can<Customer>, Map<String, Customer>> toMapConverterUnderTest;
+        private boolean isModifiable() {
+            return ordinal()%2 == 0;
+        }
+        void assertModifiability(final Map<String, Customer> map) {
+            if(isModifiable()) {
+                map.put("John", new Customer("John"));
+            } else {
+                assertThrows(Exception.class, ()->{
+                    map.put("John", new Customer("John"));
+                });
+            }
+        }
+        void assertMapType(final Map<String, Customer> map) {
+            switch (this) {
+            case HASH_MAP:
+                assertTrue(map instanceof HashMap);
+                break;
+            case TREE_MAP:
+                assertTrue(map instanceof TreeMap);
+                break;
+            case HASH_UNMOD_MAP:
+            case TREE_UNMOD_MAP:
+                // cannot test easily
+                break;
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(MapScenario.class)
+    void toMap_emptyCan(final MapScenario scenario) {
+        final Can<Customer> origin = Can.empty();
+        var map = scenario.toMapConverterUnderTest.apply(origin);
+        assertNotNull(map);
+        assertEquals(0, map.size());
+        scenario.assertModifiability(map);
+        scenario.assertMapType(map);
+    }
+    @ParameterizedTest
+    @EnumSource(MapScenario.class)
+    void toMap_singleCan(final MapScenario scenario) {
+        final Can<Customer> origin = Can.of(new Customer("Jeff"));
+        var map = scenario.toMapConverterUnderTest.apply(origin);
+        assertNotNull(map);
+        assertEquals(1, map.size());
+        assertEquals(new Customer("Jeff"), map.get("Jeff"));
+        scenario.assertModifiability(map);
+        scenario.assertMapType(map);
+    }
+    @ParameterizedTest
+    @EnumSource(MapScenario.class)
+    void toMap_multiCan(final MapScenario scenario) {
+        final Can<Customer> origin = Can.of(new Customer("Jeff"), new Customer("Jane"));
+        var map = scenario.toMapConverterUnderTest.apply(origin);
+        assertNotNull(map);
+        assertEquals(2, map.size());
+        assertEquals(new Customer("Jeff"), map.get("Jeff"));
+        assertEquals(new Customer("Jane"), map.get("Jane"));
+        scenario.assertModifiability(map);
+        scenario.assertMapType(map);
+    }
 
     // -- HEPER
 
@@ -395,7 +480,5 @@ class CanTest {
         assertTrue(_Sets.minus(a, b).isEmpty());
         assertTrue(_Sets.minus(b, a).isEmpty());
     }
-
-
 
 }

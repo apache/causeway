@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -36,6 +37,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -80,14 +82,14 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     Optional<T> get(int elementIndex);
 
     /**
-     * Shortcut for {@code get(this.size() - 1 - (-offset))} 
+     * Shortcut for {@code get(this.size() - 1 - (-offset))}
      * @param offset - expected zero or negative (zero returning the last element)
      * @see #get(int)
      */
-    default Optional<T> getRelativeToLast(int offset) {
+    default Optional<T> getRelativeToLast(final int offset) {
         return get(size() - 1 + offset);
     }
-    
+
     /**
      * Shortcut to {@code get(elementIndex).orElseThrow(...)}
      * <p>
@@ -102,9 +104,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
                 .orElseThrow(()->new NoSuchElementException(
                         "no element with elementIndex = " + elementIndex));
     }
-    
+
     /**
-     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))} 
+     * Shortcut for {@code getElseFail(this.size() - 1 - (-offset))}
      * @param offset - expected zero or negative (zero returning the last element)
      * @see #getElseFail(int)
      */
@@ -776,10 +778,28 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 
     public static <T>
     Collector<T, ?, Can<T>> toCan() {
-
         return Collectors.collectingAndThen(
                 Collectors.toList(),
                 Can::ofCollection);
+    }
+
+    /**
+     * Return a {@link Collector},
+     * that delegates {@link Map} creation to {@link Collectors#toMap(Function, Function, BinaryOperator, Supplier)}.
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     * @param mergeFunction a merge function, used to resolve collisions between
+     *                      values associated with the same key, as supplied
+     *                      to {@link Map#merge(Object, Object, BiFunction)}
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *                   into which the results will be inserted
+     * @return an unmodifiable (hash) {@link Map}
+     */
+    public static <T, K, M extends Map<K, T>>
+    Collector<T, ?, M> toMapCollector(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final BinaryOperator<T> mergeFunction,
+            final Supplier<M> mapFactory) {
+        return Collectors.toMap(keyExtractor, UnaryOperator.identity(), mergeFunction, mapFactory);
     }
 
     // -- CONVERSIONS
@@ -831,5 +851,47 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @return a non-null array, containing the elements of this Can
      */
     T[] toArray(Class<T> elementType);
+
+    // -- TO MAP
+
+    /**
+     * Returns a modifiable (hash) {@link Map}, with values from this {@link Can},
+     * and keys as produced by given {@code keyExtractor}.
+     * <p>
+     * On duplicate keys, behavior is unspecified.
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     */
+    <K> Map<K, T> toMap(@NonNull Function<? super T, ? extends K> keyExtractor);
+
+    /**
+     * Variant of {@link #toMap(Function)}, that protects the resulting {@link Map} from modification.
+     * @see #toMap(Function)
+     */
+    <K> Map<K, T> toUnmodifiableMap(@NonNull Function<? super T, ? extends K> keyExtractor);
+
+    /**
+     * Returns a modifiable {@link Map}, with values from this {@link Can},
+     * and keys as produced by given {@code keyExtractor}.
+     * @param keyExtractor a mapping function to produce keys, must be non-null
+     * @param mergeFunction a merge function, used to resolve collisions between
+     *                      values associated with the same key, as supplied
+     *                      to {@link Map#merge(Object, Object, BiFunction)}
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *                   into which the results will be inserted
+     */
+    <K, M extends Map<K, T>> M toMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory);
+
+    /**
+     * Variant of {@link #toMap(Function, BinaryOperator, Supplier)},
+     * that protects the resulting {@link Map} from modification.
+     * @see #toMap(Function, BinaryOperator, Supplier)
+     */
+    <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory);
 
 }
