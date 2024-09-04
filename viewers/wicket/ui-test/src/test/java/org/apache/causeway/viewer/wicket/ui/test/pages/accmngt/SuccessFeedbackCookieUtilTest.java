@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 
 import lombok.val;
@@ -62,6 +63,9 @@ class SuccessFeedbackCookieUtilTest {
                 mock(IExceptionMapper.class))));
     }
 
+    // unstable test, may fail with SuccessFeedbackCookieUtilTest.roundtrip:71
+    // » WicketRuntime The application attached to the current thread is not a WebApplication
+    @DisabledIfRunningWithSurefire
     @Test
     void roundtrip() {
 
