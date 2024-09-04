@@ -317,6 +317,24 @@ public final class _NullSafe {
     public static <T> int size(final @Nullable T[] array){ return array!=null ? array.length : 0; }
     public static int size(final @Nullable EnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
     public static int size(final @Nullable ImmutableEnumSet<?> enumSet){ return enumSet!=null ? enumSet.size() : 0; }
+    public static int sizeAutodetect(final @Nullable Object pojo) {
+        if(pojo==null) {
+            return 0;
+        }
+        if(pojo instanceof Collection) {
+            return ((Collection<?>)pojo).size();
+        }
+        if(pojo instanceof ImmutableCollection) {
+            return ((ImmutableCollection<?>)pojo).size();
+        }
+        if(pojo.getClass().isArray()) {
+            return Array.getLength(pojo);
+        }
+        if(pojo instanceof Map) {
+            return ((Map<?, ?>)pojo).size();
+        }
+        return Math.toIntExact(streamAutodetect(pojo).count());
+    }
 
     // -- NON-NULL VARIANTS
 
