@@ -260,7 +260,9 @@ extends ScalarPanelAbstract {
                     break;
                 case DISABLED_REASON_PROTOTYPING:
                     addDisabledReasonIcon(buttonContainer, "fa-solid fa-text-slash veto-reason-icon prototyping",
-                            " Note: This icon only appears in prototyping mode (unless disabled via config option).");
+                            "\nNote: This icon only appears in prototyping mode "
+                            + "(unless disabled via config option "
+                            + "causeway.viewer.wicket.disable-reason-explanation-in-prototyping-mode-enabled).");
                     break;
                 case CLEAR_FIELD:
                     addClearFieldButton(buttonContainer);

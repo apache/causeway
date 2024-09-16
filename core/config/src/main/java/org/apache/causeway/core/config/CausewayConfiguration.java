@@ -2973,7 +2973,7 @@ public class CausewayConfiguration {
             private boolean clearFieldButtonEnabled = true;
 
             /**
-             * In prototyping mode, a text icon is appeneded to any property that is disabled, with its tool-tip explaining why the property is disabled.
+             * In prototyping mode, a text icon is appended to any property that is disabled, with its tool-tip explaining why the property is disabled.
              * This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
              *
              * <p>
