@@ -143,7 +143,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.13.1</jmock.version>
-        <joda-time.version>2.12.7</joda-time.version>
+        <joda-time.version>2.13.0</joda-time.version>
         <jopt-simple.version>6.0-alpha-3</jopt-simple.version>
 
         <jquery-ui.version>1.14.0</jquery-ui.version> <!-- org.webjars:jquery-ui -->
