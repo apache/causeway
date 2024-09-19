@@ -84,7 +84,7 @@ import lombok.val;
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
 public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
