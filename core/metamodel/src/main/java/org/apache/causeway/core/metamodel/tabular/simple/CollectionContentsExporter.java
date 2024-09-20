@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.tabular.simple;
 import java.io.File;
 import java.nio.file.Files;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.DataSource;
@@ -66,7 +68,7 @@ public interface CollectionContentsExporter {
         createExport(dataTable, tempFile, AccessMode.USER);
     }
 
-    void createExport(DataTable dataTable, File tempFile, AccessMode interactionInitiatedBy);
+    void createExport(DataTable dataTable, File tempFile, @Nullable AccessMode accessMode);
 
     /**
      * Writes given tabular data into a {@link Blob} of given name.
@@ -77,10 +79,10 @@ public interface CollectionContentsExporter {
     }
 
     @SneakyThrows
-    default Blob exportToBlob(final DataTable dataTable, final String name, final AccessMode interactionInitiatedBy) {
+    default Blob exportToBlob(final DataTable dataTable, final String name, final @Nullable AccessMode accessMode) {
         var tempFile = File.createTempFile(this.getClass().getCanonicalName(), name);
         try {
-            createExport(dataTable, tempFile, interactionInitiatedBy);
+            createExport(dataTable, tempFile, accessMode);
             return Blob.of(name, getMimeType(), DataSource.ofFile(tempFile).bytes());
         } finally {
             Files.deleteIfExists(tempFile.toPath()); // cleanup
