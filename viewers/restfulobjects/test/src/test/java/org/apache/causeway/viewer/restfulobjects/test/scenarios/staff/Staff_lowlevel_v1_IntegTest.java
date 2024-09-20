@@ -67,7 +67,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
 
-@DisabledIfRunningWithSurefire //XXX nightly build broken since spring-boot 3.3.4
+@DisabledIfRunningWithSurefire //XXX surefire run broken since around 2024-09-20
 @Order(value = Integer.MAX_VALUE)   // last
 @DirtiesContext
 @Import({Staff_lowlevel_v1_IntegTest.BlobValueSemanticsV1LegacyEncoding.class})
