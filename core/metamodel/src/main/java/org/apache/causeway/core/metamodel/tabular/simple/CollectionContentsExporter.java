@@ -35,6 +35,25 @@ import lombok.SneakyThrows;
  */
 public interface CollectionContentsExporter {
 
+    public enum AccessMode {
+        /**
+         * must be authorized, with transactions, with publishing, with domain events
+         */
+        USER,
+        /**
+         * always authorized, no transactions, no publishing, no domain events;
+         */
+        PASS_THROUGH;
+        /**
+         * @see #USER
+         */
+        public boolean isUser() { return this==USER; }
+        /**
+         * @see #PASS_THROUGH
+         */
+        public boolean isPassThrough() { return this==PASS_THROUGH; }
+    }
+
     /**
      * Implementing exporters need to write given tabular data from
      * {@link DataTable} into the {@link File tempFile},
@@ -43,17 +62,25 @@ public interface CollectionContentsExporter {
      * @param dataTable data model for the table
      * @param tempFile destination, this exporter writes its data to
      */
-    void createExport(DataTable dataTable, File tempFile);
+    default void createExport(final DataTable dataTable, final File tempFile) {
+        createExport(dataTable, tempFile, AccessMode.USER);
+    }
+
+    void createExport(DataTable dataTable, File tempFile, AccessMode interactionInitiatedBy);
 
     /**
      * Writes given tabular data into a {@link Blob} of given name.
      *
      */
-    @SneakyThrows
     default Blob exportToBlob(final DataTable dataTable, final String name) {
+        return exportToBlob(dataTable, name, AccessMode.USER);
+    }
+
+    @SneakyThrows
+    default Blob exportToBlob(final DataTable dataTable, final String name, final AccessMode interactionInitiatedBy) {
         var tempFile = File.createTempFile(this.getClass().getCanonicalName(), name);
         try {
-            createExport(dataTable, tempFile);
+            createExport(dataTable, tempFile, interactionInitiatedBy);
             return Blob.of(name, getMimeType(), DataSource.ofFile(tempFile).bytes());
         } finally {
             Files.deleteIfExists(tempFile.toPath()); // cleanup

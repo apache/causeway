@@ -32,6 +32,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.consent.VetoUtil;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -168,11 +169,20 @@ public final class InteractionUtils {
         return reason;
     }
 
-    private boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
+    private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
+        if(ic.getInitiatedBy().isPassThrough()
+                && isDomainEventAdvisor(advisor)) {
+            //[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
+            return false;
+        }
         if(advisor instanceof ActionDomainEventFacet) {
             return ic instanceof ActionInteractionContext;
         }
         return true;
+    }
+
+    private static boolean isDomainEventAdvisor(final InteractionAdvisor advisor) {
+        return advisor instanceof DomainEventFacetAbstract;
     }
 
     private CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(final ManagedObject ownerAdapter) {
