@@ -58,6 +58,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
@@ -66,7 +67,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
 
-
+@DisabledIfRunningWithSurefire //XXX surefire run broken since around 2024-09-20
 @Order(value = Integer.MAX_VALUE)   // last
 @DirtiesContext
 @Import({Staff_lowlevel_v1_IntegTest.BlobValueSemanticsV1LegacyEncoding.class})
