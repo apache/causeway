@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.tabular.excel.exporter;
 
 import java.io.File;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -31,8 +32,12 @@ public class CollectionContentsAsExcelExporter
 implements CollectionContentsExporter {
 
     @Override
-    public void createExport(final DataTable dataTable, final File tempFile) {
-        new ExcelExporter().accept(dataTable, tempFile);
+    public void createExport(final DataTable dataTable, final File tempFile,
+            final @Nullable CollectionContentsExporter.AccessMode accessMode) {
+        ExcelExporter.of(accessMode!=null
+                ? accessMode
+                : CollectionContentsExporter.AccessMode.USER)
+            .accept(dataTable, tempFile);
     }
 
     @Override

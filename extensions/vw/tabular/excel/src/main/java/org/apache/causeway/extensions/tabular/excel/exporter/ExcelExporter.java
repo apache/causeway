@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,17 @@ class ExcelExporter implements BiConsumer<DataTable, File> {
         private int rowNum;
         public Row newRow() {
             return sheet.createRow((short) rowNum++);
+        }
+    }
+
+    final InteractionInitiatedBy interactionInitiatedBy;
+
+    static ExcelExporter of(final CollectionContentsExporter.AccessMode accessMode) {
+        switch(accessMode) {
+            case USER: return new ExcelExporter(InteractionInitiatedBy.USER);
+            case PASS_THROUGH: return new ExcelExporter(InteractionInitiatedBy.PASS_THROUGH);
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + accessMode);
         }
     }
 
@@ -116,7 +128,7 @@ class ExcelExporter implements BiConsumer<DataTable, File> {
                 maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                 for(val column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
-                    val cellElements = dataRow.getCellElements(column, InteractionInitiatedBy.PASS_THROUGH)
+                    val cellElements = dataRow.getCellElements(column, interactionInitiatedBy)
                             .filter(managedObject->managedObject.getPojo()!=null);
                     final int linesWritten = setCellValue(cellElements,
                             cell,

@@ -139,6 +139,9 @@ extends MetaModelContext {
     private MetamodelEventService metamodelEventService =
         MetamodelEventService
         .builder()
+        .publisher(event->{
+            System.out.printf("MetaModelContext_forTesting (logs event to console): %s%n", event);
+        })
         .build();
 
     @Builder.Default
@@ -163,11 +166,11 @@ extends MetaModelContext {
 
     @Builder.Default
     Can<Function<MetaModelContext, MetaModelRefiner>> refiners = Can.empty();
-    
+
     @Builder.Default
-    private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory = 
+    private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory =
         (mmc, refiners)->new ProgrammingModelFacetsJava11(mmc, refiners);
-    
+
     private InteractionService interactionService;
 
     private TranslationService translationService;
@@ -363,8 +366,8 @@ extends MetaModelContext {
     }
     private final ProgrammingModel initProgrammingModel() {
         var metamodelRefiners = refiners.map(factory->factory.apply(this));
-        val programmingModel = programmingModelFactory.apply(this, metamodelRefiners); 
-                 
+        val programmingModel = programmingModelFactory.apply(this, metamodelRefiners);
+
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
         return programmingModel;
     }
