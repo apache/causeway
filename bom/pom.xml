@@ -99,7 +99,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.17.0</commons-io.version>
 
-        <cucumber.version>7.18.1</cucumber.version>
+        <cucumber.version>7.19.0</cucumber.version>
 
         <cxf-rt-rs-client.version>3.6.4</cxf-rt-rs-client.version>
 
