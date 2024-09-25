@@ -19,8 +19,12 @@
 package org.apache.causeway.commons.graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -35,6 +39,7 @@ import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._PrimitiveCollections.IntList;
+import org.apache.causeway.commons.internal.primitives._Longs;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -279,6 +284,7 @@ public class GraphUtils {
     public class Graph<T> {
         private final GraphKernel kernel;
         private final Can<T> nodes;
+        private final Map<Long, Object> edgeAttributeByPackedEdgeIndex;
 
         // -- TRAVERSAL
 
@@ -353,8 +359,23 @@ public class GraphUtils {
          * Returns an isomorphic graph with this graph's nodes replaced by given mapping function.
          */
         public <R> Graph<R> map(final Function<T, R> nodeMapper) {
-            return new Graph<R>(kernel, nodes.map(nodeMapper));
+            return new Graph<R>(kernel, nodes.map(nodeMapper), edgeAttributeByPackedEdgeIndex());
         }
+
+        // -- EDGE ATTRIBUTE
+
+        /**
+         * For multi-graphs, edge attributes are shared.
+         */
+        public Optional<Object> getEdgeAttribute(final int fromIndex, final int toIndex) {
+            final long packedEdgeIndex = kernel().isUndirected()
+                    ? _Longs.pack(Math.min(fromIndex, toIndex), Math.max(fromIndex, toIndex))
+                    : _Longs.pack(fromIndex, toIndex);
+            return Optional.ofNullable(
+                    edgeAttributeByPackedEdgeIndex.get(packedEdgeIndex));
+        }
+
+        // -- FORMAT
 
         @Override
         public String toString() {
@@ -375,12 +396,11 @@ public class GraphUtils {
             final NodeFormatter<T> nodeFormat = nodeFormatter != null
                     ? nodeFormatter
                     : NodeFormatter.of(null);
-            final EdgeFunction<T, String> edgeToString = isDirected
-                    ? (i, a, j, b) -> String.format("%s -> %s", nodeFormat.format(i, a), nodeFormat.format(j, b))
-                    : (i, a, j, b) -> String.format("%s - %s", nodeFormat.format(i, a), nodeFormat.format(j, b));
             final EdgeFormatter<T> edgeFormat = edgeFormatter != null
                     ? edgeFormatter
-                    : (i, a, j, b, nf) -> edgeToString.apply(i, a, j, b);
+                    : isDirected
+                            ? (i, a, j, b, nf) -> String.format("%s -> %s", nf.format(i, a), nf.format(j, b))
+                            : (i, a, j, b, nf) -> String.format("%s - %s", nf.format(i, a), nf.format(j, b));
 
             var filter = isDirected
                     ? EdgeFilter.includeAll()
@@ -414,9 +434,11 @@ public class GraphUtils {
         @SuppressWarnings("unused")
         private final Class<T> nodeType;
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
+        private final boolean isUndirected;
         private final List<T> nodeList;
         private final IntList fromNode = new IntList(4); // best guess initial edge capacity
         private final IntList toNode = new IntList(4); // best guess initial edge capacity
+        private final Map<Long, Object> edgeAttributeByPackedEdgeIndex;
 
         // -- FACTORIES
 
@@ -449,6 +471,19 @@ public class GraphUtils {
         }
 
         /**
+         * Variant of {@link #addEdge(int, int)}, that stores an arbitrary attribute with the edge.
+         * @see #addEdge(int, int)
+         */
+        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex, @NonNull final Object edgeAttribute) {
+            addEdge(fromIndex, toIndex);
+            final long packedEdgeIndex = isUndirected
+                    ? _Longs.pack(Math.min(fromIndex, toIndex), Math.max(fromIndex, toIndex))
+                    : _Longs.pack(fromIndex, toIndex);
+            edgeAttributeByPackedEdgeIndex.put(packedEdgeIndex, edgeAttribute);
+            return this;
+        }
+
+        /**
          * Current node count. It increments with each node added.
          */
         public int nodeCount() {
@@ -467,7 +502,9 @@ public class GraphUtils {
         private GraphBuilder(final Class<T> nodeType, final ImmutableEnumSet<GraphCharacteristic> characteristics) {
             this.nodeType = nodeType;
             this.characteristics = characteristics;
+            this.isUndirected = characteristics.contains(GraphCharacteristic.UNDIRECTED);
             this.nodeList = new ArrayList<>();
+            this.edgeAttributeByPackedEdgeIndex = new TreeMap<>();
         }
 
         public Graph<T> build() {
@@ -476,7 +513,9 @@ public class GraphUtils {
             for (int edgeIndex = 0; edgeIndex<edgeCount; edgeIndex++) {
                 kernel.addEdge(fromNode.get(edgeIndex), toNode.get(edgeIndex));
             }
-            var graph = new Graph<T>(kernel, Can.ofCollection(nodeList));
+            var graph = new Graph<T>(kernel,
+                    Can.ofCollection(nodeList),
+                    Collections.unmodifiableMap(edgeAttributeByPackedEdgeIndex));
             return graph;
         }
 
