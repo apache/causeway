@@ -19,8 +19,12 @@
 package org.apache.causeway.commons.graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -35,6 +39,7 @@ import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._PrimitiveCollections.IntList;
+import org.apache.causeway.commons.internal.primitives._Longs;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -85,6 +90,10 @@ public class GraphUtils {
             public static ImmutableEnumSet<GraphCharacteristic> directed() {
                 return ImmutableEnumSet.noneOf(GraphCharacteristic.class);
             }
+
+            public static ImmutableEnumSet<GraphCharacteristic> undirected() {
+                return ImmutableEnumSet.of(GraphCharacteristic.UNDIRECTED);
+            }
         }
 
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
@@ -107,16 +116,21 @@ public class GraphUtils {
         public int edgeCount() {
             return adjacencyList.stream().mapToInt(IntList::size).sum();
         }
+        public int neighborCount(final int nodeIndex) {
+            return isWithinBounds(nodeIndex)
+                    ? adjacencyList.get(nodeIndex).size()
+                    : 0;
+        }
         public void addEdge(final int u, final int v) {
-            boundsCheck(u);
-            boundsCheck(v);
+            assertBounds(u);
+            assertBounds(v);
             adjacencyList.get(u).addUnique(v);
             if(isUndirected()) {
                 adjacencyList.get(v).addUnique(u);
             }
         }
         public IntStream streamNeighbors(final int nodeIndex) {
-            boundsCheck(nodeIndex);
+            assertBounds(nodeIndex);
             return adjacencyList.get(nodeIndex).stream();
         }
         public GraphKernel copy() {
@@ -172,11 +186,15 @@ public class GraphUtils {
 
         // -- HELPER
 
-        private void boundsCheck(final int nodeIndex) {
-            if(nodeIndex<0
-                    || nodeIndex>=nodeCount) {
+        private void assertBounds(final int nodeIndex) {
+            if(!isWithinBounds(nodeIndex)) {
                 throw new IndexOutOfBoundsException(nodeIndex);
             }
+        }
+
+        private boolean isWithinBounds(final int nodeIndex) {
+            return nodeIndex>=0
+                    && nodeIndex<nodeCount;
         }
 
         private class WeaklyConnectedNodesFinder {
@@ -211,6 +229,48 @@ public class GraphUtils {
 
     }
 
+    // -- FUNCTIONAL INTERFACES
+
+    @FunctionalInterface
+    public interface EdgeFilter {
+        boolean test(int nodeIndexFrom, int nodeIndexTo);
+        public static EdgeFilter includeAll() {
+            return (i, j) -> true;
+        }
+        /**
+         * Eg.g when undirected, we report edges only in one direction, that is,
+         * when from-index is less or equal to to-index.
+         */
+        public static EdgeFilter excludeToLessThanFrom() {
+            return (i, j) -> j>=i;
+        }
+    }
+
+    @FunctionalInterface
+    public interface EdgeConsumer<T> {
+        void accept(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo);
+    }
+
+    @FunctionalInterface
+    public interface EdgeFunction<T, R> {
+        R apply(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo);
+    }
+
+    @FunctionalInterface
+    public interface NodeFormatter<T> {
+        String format(int nodeIndex, T node);
+        public static <T> NodeFormatter<T> of(@Nullable final Function<T, String> toStringFunction) {
+            return toStringFunction!=null
+                ? (i, node)->toStringFunction.apply(node)
+                : (i, node)->node.toString();
+        }
+    }
+
+    @FunctionalInterface
+    public interface EdgeFormatter<T> {
+        String format(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo, NodeFormatter<T> nodeFormatter);
+    }
+
     // -- GRAPH
 
     /**
@@ -224,17 +284,52 @@ public class GraphUtils {
     public class Graph<T> {
         private final GraphKernel kernel;
         private final Can<T> nodes;
+        private final Map<Long, Object> edgeAttributeByPackedEdgeIndex;
 
         // -- TRAVERSAL
 
-        public void visitNeighbors(final int nodeIndex, final Consumer<T> nodeVisitor) {
+        public void visitNeighbors(final int nodeIndex,
+                @Nullable final Consumer<T> nodeVisitor) {
             kernel()
                 .streamNeighbors(nodeIndex)
                 .forEach(neighborIndex->
                     nodeVisitor.accept(nodes.getElseFail(neighborIndex)));
         }
 
-        public void visitNeighborsIndexed(final int nodeIndex, final IndexedConsumer<T> nodeVisitor) {
+        public void visitNeighbors(final int nodeIndex,
+                @Nullable final EdgeFilter edgeFilter,
+                @Nullable final Consumer<T> nodeVisitor) {
+            if(nodeVisitor==null) return;
+            var stream = kernel()
+                .streamNeighbors(nodeIndex);
+            stream = edgeFilter==null
+                    ? stream
+                    : stream.filter(neighborIndex->
+                        edgeFilter.test(nodeIndex, neighborIndex));
+            stream.forEach(neighborIndex->
+                    nodeVisitor.accept(nodes.getElseFail(neighborIndex)));
+        }
+
+        public void visitEdges(final int nodeIndex,
+                @Nullable final EdgeFilter edgeFilter,
+                @Nullable final EdgeConsumer<T> edgeConsumer) {
+            if(edgeConsumer==null) return;
+            var fromNode = nodes.getElseFail(nodeIndex);
+            var stream = kernel()
+                    .streamNeighbors(nodeIndex);
+            stream = edgeFilter==null
+                    ? stream
+                    : stream.filter(neighborIndex->
+                        edgeFilter.test(nodeIndex, neighborIndex));
+            stream.forEach(neighborIndex->
+                edgeConsumer.accept(
+                        nodeIndex, fromNode,
+                        neighborIndex, nodes.getElseFail(neighborIndex)));
+        }
+
+        public void visitNeighborsIndexed(final int nodeIndex,
+                @Nullable final IndexedConsumer<T> nodeVisitor) {
+            if(nodeVisitor==null) return;
             kernel()
                 .streamNeighbors(nodeIndex)
                 .forEach(neighborIndex->
@@ -264,7 +359,75 @@ public class GraphUtils {
          * Returns an isomorphic graph with this graph's nodes replaced by given mapping function.
          */
         public <R> Graph<R> map(final Function<T, R> nodeMapper) {
-            return new Graph<R>(kernel, nodes.map(nodeMapper));
+            return new Graph<R>(kernel, nodes.map(nodeMapper), edgeAttributeByPackedEdgeIndex());
+        }
+
+        // -- EDGE ATTRIBUTE
+
+        /**
+         * For multi-graphs, edge attributes are shared.
+         */
+        public Optional<Object> getEdgeAttribute(final int fromIndex, final int toIndex) {
+            final long packedEdgeIndex = kernel().isUndirected()
+                    ? _Longs.pack(Math.min(fromIndex, toIndex), Math.max(fromIndex, toIndex))
+                    : _Longs.pack(fromIndex, toIndex);
+            return Optional.ofNullable(
+                    edgeAttributeByPackedEdgeIndex.get(packedEdgeIndex));
+        }
+
+        // -- FORMAT
+
+        @Override
+        public String toString() {
+            return toString(null, null);
+        }
+
+        public String toString(
+                @Nullable final Function<T, String> nodeFormatter) {
+            return toString(NodeFormatter.of(nodeFormatter), null);
+        }
+
+        public String toString(
+                @Nullable final NodeFormatter<T> nodeFormatter,
+                @Nullable final Function<Object, String> edgeAttributeFormatter) {
+
+            var isDirected = !kernel().isUndirected();
+            var hasEdgeAttributes = !edgeAttributeByPackedEdgeIndex.isEmpty();
+
+            final NodeFormatter<T> nodeFormat = nodeFormatter != null
+                    ? nodeFormatter
+                    : NodeFormatter.of(null);
+            final Function<Object, String> edgeAttributeFormat = edgeAttributeFormatter != null
+                    ? edgeAttributeFormatter
+                    : edgeAttr->"(" + edgeAttr + ")";
+            final EdgeFormatter<T> edgeFormat = hasEdgeAttributes
+                    ? isDirected
+                            ? (i, a, j, b, nf) -> String.format("%s -> %s%s", nf.format(i, a), nf.format(j, b),
+                                    getEdgeAttribute(i, j).map(edgeAttributeFormat).map(s->" "+s).orElse(""))
+                            : (i, a, j, b, nf) -> String.format("%s - %s%s", nf.format(i, a), nf.format(j, b),
+                                    getEdgeAttribute(i, j).map(edgeAttributeFormat).map(s->" "+s).orElse(""))
+                    : isDirected
+                            ? (i, a, j, b, nf) -> String.format("%s -> %s", nf.format(i, a), nf.format(j, b))
+                            : (i, a, j, b, nf) -> String.format("%s - %s", nf.format(i, a), nf.format(j, b));
+
+            var filter = isDirected
+                    ? EdgeFilter.includeAll()
+                    : EdgeFilter.excludeToLessThanFrom();
+
+            var sb = new StringBuilder();
+            for(int nodeIndex = 0; nodeIndex < kernel.nodeCount(); ++nodeIndex) {
+                visitEdges(nodeIndex, filter, (i, a, j, b)->{
+                    sb
+                        .append(edgeFormat.format(i, a, j, b, nodeFormat))
+                        .append("\n");
+                });
+                if(kernel().neighborCount(nodeIndex)==0) {
+                    sb
+                        .append(String.format("%s", nodeFormat.format(nodeIndex, nodes.getElseFail(nodeIndex))))
+                        .append("\n");
+                }
+            }
+            return sb.toString();
         }
 
     }
@@ -280,14 +443,20 @@ public class GraphUtils {
         @SuppressWarnings("unused")
         private final Class<T> nodeType;
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
+        private final boolean isUndirected;
         private final List<T> nodeList;
         private final IntList fromNode = new IntList(4); // best guess initial edge capacity
         private final IntList toNode = new IntList(4); // best guess initial edge capacity
+        private final Map<Long, Object> edgeAttributeByPackedEdgeIndex;
 
         // -- FACTORIES
 
         public static <T> GraphBuilder<T> directed(final Class<T> nodeType) {
             return new GraphBuilder<T>(nodeType, GraphCharacteristic.directed());
+        }
+
+        public static <T> GraphBuilder<T> undirected(final Class<T> nodeType) {
+            return new GraphBuilder<T>(nodeType, GraphCharacteristic.undirected());
         }
 
         /**
@@ -311,6 +480,19 @@ public class GraphUtils {
         }
 
         /**
+         * Variant of {@link #addEdge(int, int)}, that stores an arbitrary attribute with the edge.
+         * @see #addEdge(int, int)
+         */
+        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex, @NonNull final Object edgeAttribute) {
+            addEdge(fromIndex, toIndex);
+            final long packedEdgeIndex = isUndirected
+                    ? _Longs.pack(Math.min(fromIndex, toIndex), Math.max(fromIndex, toIndex))
+                    : _Longs.pack(fromIndex, toIndex);
+            edgeAttributeByPackedEdgeIndex.put(packedEdgeIndex, edgeAttribute);
+            return this;
+        }
+
+        /**
          * Current node count. It increments with each node added.
          */
         public int nodeCount() {
@@ -329,7 +511,11 @@ public class GraphUtils {
         private GraphBuilder(final Class<T> nodeType, final ImmutableEnumSet<GraphCharacteristic> characteristics) {
             this.nodeType = nodeType;
             this.characteristics = characteristics;
+            this.isUndirected = characteristics.contains(GraphCharacteristic.UNDIRECTED);
             this.nodeList = new ArrayList<>();
+            //XXX map implementation is not required to be ordered, could use a HashMap here as well.
+            // This is purely a performance question!
+            this.edgeAttributeByPackedEdgeIndex = new TreeMap<>();
         }
 
         public Graph<T> build() {
@@ -338,7 +524,9 @@ public class GraphUtils {
             for (int edgeIndex = 0; edgeIndex<edgeCount; edgeIndex++) {
                 kernel.addEdge(fromNode.get(edgeIndex), toNode.get(edgeIndex));
             }
-            var graph = new Graph<T>(kernel, Can.ofCollection(nodeList));
+            var graph = new Graph<T>(kernel,
+                    Can.ofCollection(nodeList),
+                    Collections.unmodifiableMap(edgeAttributeByPackedEdgeIndex));
             return graph;
         }
 

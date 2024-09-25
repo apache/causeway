@@ -53,6 +53,16 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class _Ints {
 
+    @FunctionalInterface
+    public interface BiIntConsumer {
+        void accept(int i, int j);
+    }
+
+    @FunctionalInterface
+    public interface BiIntFunction<R> {
+        R apply(int i, int j);
+    }
+
     // -- RANGE
 
     @Value(staticConstructor = "of")
@@ -402,7 +412,7 @@ public class _Ints {
      * @return the value {@code 0} if {@code x == y};
      *         {@code -1} if {@code x < y}; and
      *         {@code 1} if {@code x > y}
-     * @apiNote copy of {@link Integer#compress(int, int)}
+     * @apiNote copy of {@link Integer#compare(int, int)}
      *      because their java-doc states that return values -1, +1 are not guaranteed.
      */
     public static int compare(final int x, final int y) {
