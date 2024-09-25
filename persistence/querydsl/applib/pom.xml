@@ -23,20 +23,20 @@
 
 	<parent>
 		<groupId>org.apache.causeway.persistence</groupId>
-		<artifactId>causeway-persistence-jpa</artifactId>
+		<artifactId>causeway-persistence-querydsl</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>causeway-persistence-jpa-applib</artifactId>
+	<artifactId>causeway-persistence-querydsl-applib</artifactId>
 
-	<name>Apache Causeway Persistence - JPA (applib)</name>
+	<name>Apache Causeway Persistence - querydsl (applib)</name>
 	<description>
-		Supplementary applib for JPA persistence
+		Supplementary applib for querydsl support
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jpa.applib</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/persistence/jpa/applib</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.querydsl.applib</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/causeway/persistence/querydsl/applib</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -85,18 +85,6 @@
 			<artifactId>causeway-commons</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-		</dependency>
-
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-transaction</artifactId>
-			<scope>provided</scope>
-        </dependency>
-
 	</dependencies>
-
 
 </project>

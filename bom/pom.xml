@@ -436,6 +436,43 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</dependency>
 
 
+			<dependency>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-querydsl</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-querydsl-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-querydsl-metamodel</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-querydsl-jdo</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-querydsl-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+
+
 			<!-- org.apache.causeway.security -->
 
 			<dependency>
@@ -2331,7 +2368,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             </manifest>
 							<manifestEntries>
-								<Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
+                                <Automatic-Module-Name>${jar-plugin.automaticModuleName}</Automatic-Module-Name>
 								<Implementation-Vendor-Id>org.apache.causeway</Implementation-Vendor-Id>
 								<Implementation-Vendor>Apache Causeway™ Project</Implementation-Vendor>
 								<Bundle-SymbolicName>${jar-plugin.automaticModuleName}</Bundle-SymbolicName>
