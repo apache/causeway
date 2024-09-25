@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.graph;
 
+import java.util.TreeMap;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,6 +31,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
+import org.apache.causeway.commons.graph.GraphUtils.NodeFormatter;
+import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Value;
@@ -83,6 +87,36 @@ class GraphUtilsTest {
 
         assertEquals(
                 Can.of("A - B", "A - C", "B - C", "D"),
+                TextUtils.readLines(textForm).filter(StringUtils::hasLength));
+    }
+
+    @Test
+    void builderWeighted() {
+        var gBuilder = GraphUtils.GraphBuilder.undirected(Customer.class);
+        gBuilder
+            .addNode(new Customer("A"))
+            .addNode(new Customer("B"))
+            .addNode(new Customer("C"))
+            .addNode(new Customer("D"))
+            .addEdge(0, 1)
+            .addEdge(1, 2)
+            .addEdge(2, 0);
+
+        var weights = new TreeMap<Long, Double>();
+
+        weights.put(_Longs.pack(0, 1), 0.1);
+        weights.put(_Longs.pack(1, 2), 0.7);
+        weights.put(_Longs.pack(0, 2), 0.3);
+
+        var graph = gBuilder.build();
+        var textForm = graph.toString(NodeFormatter.of(Customer::getName), (i, a, j, b, nf)->
+            String.format("%s - %s (weight=%.1f)", nf.format(i, a), nf.format(j, b), weights.get(_Longs.pack(i, j))));
+
+        //debug
+        System.err.println(textForm);
+
+        assertEquals(
+                Can.of("A - B (weight=0.1)", "A - C (weight=0.3)", "B - C (weight=0.7)", "D"),
                 TextUtils.readLines(textForm).filter(StringUtils::hasLength));
     }
 

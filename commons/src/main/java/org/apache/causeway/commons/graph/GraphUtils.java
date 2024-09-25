@@ -229,12 +229,41 @@ public class GraphUtils {
     @FunctionalInterface
     public interface EdgeFilter {
         boolean test(int nodeIndexFrom, int nodeIndexTo);
-        public static EdgeFilter includeAll() { return (i, j) -> true; }
+        public static EdgeFilter includeAll() {
+            return (i, j) -> true;
+        }
+        /**
+         * Eg.g when undirected, we report edges only in one direction, that is,
+         * when from-index is less or equal to to-index.
+         */
+        public static EdgeFilter excludeToLessThanFrom() {
+            return (i, j) -> j>=i;
+        }
     }
 
     @FunctionalInterface
     public interface EdgeConsumer<T> {
         void accept(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo);
+    }
+
+    @FunctionalInterface
+    public interface EdgeFunction<T, R> {
+        R apply(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo);
+    }
+
+    @FunctionalInterface
+    public interface NodeFormatter<T> {
+        String format(int nodeIndex, T node);
+        public static <T> NodeFormatter<T> of(@Nullable final Function<T, String> toStringFunction) {
+            return toStringFunction!=null
+                ? (i, node)->toStringFunction.apply(node)
+                : (i, node)->node.toString();
+        }
+    }
+
+    @FunctionalInterface
+    public interface EdgeFormatter<T> {
+        String format(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo, NodeFormatter<T> nodeFormatter);
     }
 
     // -- GRAPH
@@ -329,38 +358,49 @@ public class GraphUtils {
 
         @Override
         public String toString() {
-            return toString(Object::toString);
+            return toString(null, null);
         }
 
-        public String toString(final Function<T, String> nodeFormatter) {
+        public String toString(
+                @Nullable final Function<T, String> nodeFormatter) {
+            return toString(NodeFormatter.of(nodeFormatter), null);
+        }
+
+        public String toString(
+                @Nullable final NodeFormatter<T> nodeFormatter,
+                @Nullable final EdgeFormatter<T> edgeFormatter) {
+
             var isDirected = !kernel().isUndirected();
+
+            final NodeFormatter<T> nodeFormat = nodeFormatter != null
+                    ? nodeFormatter
+                    : NodeFormatter.of(null);
+            final EdgeFunction<T, String> edgeToString = isDirected
+                    ? (i, a, j, b) -> String.format("%s -> %s", nodeFormat.format(i, a), nodeFormat.format(j, b))
+                    : (i, a, j, b) -> String.format("%s - %s", nodeFormat.format(i, a), nodeFormat.format(j, b));
+            final EdgeFormatter<T> edgeFormat = edgeFormatter != null
+                    ? edgeFormatter
+                    : (i, a, j, b, nf) -> edgeToString.apply(i, a, j, b);
+
+            var filter = isDirected
+                    ? EdgeFilter.includeAll()
+                    : EdgeFilter.excludeToLessThanFrom();
+
             var sb = new StringBuilder();
             for(int nodeIndex = 0; nodeIndex < kernel.nodeCount(); ++nodeIndex) {
-                var a = nodes().getElseFail(nodeIndex);
-                if(isDirected) {
-                    visitNeighbors(nodeIndex, b->{
-                        sb
-                            .append(String.format("%s -> %s", nodeFormatter.apply(a), nodeFormatter.apply(b)))
-                            .append("\n");
-                    });
-                } else {
-                    // when undirected, we report edges only in one direction, that is,
-                    // when from-index is less or equal to to-index
-                    visitNeighbors(nodeIndex, (i, j)->j>=i, b->{
-                        sb
-                            .append(String.format("%s - %s", nodeFormatter.apply(a), nodeFormatter.apply(b)))
-                            .append("\n");
-                    });
-                }
+                visitEdges(nodeIndex, filter, (i, a, j, b)->{
+                    sb
+                        .append(edgeFormat.format(i, a, j, b, nodeFormat))
+                        .append("\n");
+                });
                 if(kernel().neighborCount(nodeIndex)==0) {
                     sb
-                        .append(String.format("%s", nodeFormatter.apply(a)))
+                        .append(String.format("%s", nodeFormat.format(nodeIndex, nodes.getElseFail(nodeIndex))))
                         .append("\n");
                 }
             }
             return sb.toString();
         }
-
     }
 
     /**
