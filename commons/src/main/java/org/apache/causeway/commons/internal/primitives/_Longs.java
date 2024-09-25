@@ -24,6 +24,8 @@ import java.util.function.Consumer;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.primitives._Ints.BiIntConsumer;
+import org.apache.causeway.commons.internal.primitives._Ints.BiIntFunction;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -232,6 +234,25 @@ public class _Longs {
             return OptionalLong.empty();
         }
         return OptionalLong.of(negative ? result : -result);
+    }
+
+    // -- INT PACKING
+
+    /**
+     * For reference see <a href="http://stackoverflow.com/questions/12772939/java-storing-two-ints-in-a-long">link</a>.
+     * @param lower
+     * @param upper
+     */
+    public static long pack(final int lower, final int upper) {
+        return (((long)upper) << 32) | (lower & 0xffffffffL);
+    }
+
+    public static void unpackAndAccept(final long x, final BiIntConsumer consumer) {
+        consumer.accept((int)x,(int)(x>>>32));
+    }
+
+    public static <X> X unpackAndApply(final long x, final BiIntFunction<X> function) {
+        return function.apply((int)x,(int)(x>>>32));
     }
 
     // -- SHORTCUTS
