@@ -23,11 +23,45 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.springframework.util.StringUtils;
+
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
+import org.apache.causeway.commons.io.TextUtils;
+
+import lombok.Value;
 
 class GraphUtilsTest {
+
+    @Value
+    static class Customer {
+       String name;
+    }
+
+    @Test
+    void builder() {
+        var gBuilder = GraphUtils.GraphBuilder.directed(Customer.class);
+        gBuilder
+            .addNode(new Customer("A"))
+            .addNode(new Customer("B"))
+            .addNode(new Customer("C"))
+            .addNode(new Customer("D"))
+            .addEdge(0, 1)
+            .addEdge(1, 2)
+            .addEdge(2, 0);
+
+        var graph = gBuilder.build();
+        var textForm = graph.toString(Customer::getName);
+
+        //debug
+        //System.err.println(textForm);
+
+        assertEquals(
+                Can.of("A -> B", "B -> C", "C -> A", "D"),
+                TextUtils.readLines(textForm).filter(StringUtils::hasLength));
+    }
 
     @Test
     void subgraph() {
@@ -57,7 +91,6 @@ class GraphUtilsTest {
         assertFalse(subgraph3.isUndirected());
         assertEquals(3, subgraph3.nodeCount());
         assertEquals(2, subgraph3.edgeCount());
-
     }
 
 }

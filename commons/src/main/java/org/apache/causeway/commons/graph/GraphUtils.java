@@ -34,6 +34,7 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._PrimitiveCollections.IntList;
 
 import lombok.Getter;
@@ -265,6 +266,32 @@ public class GraphUtils {
          */
         public <R> Graph<R> map(final Function<T, R> nodeMapper) {
             return new Graph<R>(kernel, nodes.map(nodeMapper));
+        }
+
+        @Override
+        public String toString() {
+            return toString(Object::toString);
+        }
+
+        public String toString(final Function<T, String> nodeFormatter) {
+            var sb = new StringBuilder();
+            var neighbourCount = _Refs.intRef(0);
+            for(int nodeIndex = 0; nodeIndex < kernel.nodeCount(); ++nodeIndex) {
+                var a = nodes().getElseFail(nodeIndex);
+                neighbourCount.setValue(0);
+                visitNeighbors(nodeIndex, b->{
+                    sb
+                        .append(String.format("%s -> %s", nodeFormatter.apply(a), nodeFormatter.apply(b)))
+                        .append("\n");
+                    neighbourCount.incAndGet();
+                });
+                if(neighbourCount.getValue()==0) {
+                    sb
+                        .append(String.format("%s", nodeFormatter.apply(a)))
+                        .append("\n");
+                }
+            }
+            return sb.toString();
         }
 
     }
