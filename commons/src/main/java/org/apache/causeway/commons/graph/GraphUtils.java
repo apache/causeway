@@ -389,15 +389,23 @@ public class GraphUtils {
 
         public String toString(
                 @Nullable final NodeFormatter<T> nodeFormatter,
-                @Nullable final EdgeFormatter<T> edgeFormatter) {
+                @Nullable final Function<Object, String> edgeAttributeFormatter) {
 
             var isDirected = !kernel().isUndirected();
+            var hasEdgeAttributes = !edgeAttributeByPackedEdgeIndex.isEmpty();
 
             final NodeFormatter<T> nodeFormat = nodeFormatter != null
                     ? nodeFormatter
                     : NodeFormatter.of(null);
-            final EdgeFormatter<T> edgeFormat = edgeFormatter != null
-                    ? edgeFormatter
+            final Function<Object, String> edgeAttributeFormat = edgeAttributeFormatter != null
+                    ? edgeAttributeFormatter
+                    : edgeAttr->"(" + edgeAttr + ")";
+            final EdgeFormatter<T> edgeFormat = hasEdgeAttributes
+                    ? isDirected
+                            ? (i, a, j, b, nf) -> String.format("%s -> %s%s", nf.format(i, a), nf.format(j, b),
+                                    getEdgeAttribute(i, j).map(edgeAttributeFormat).map(s->" "+s).orElse(""))
+                            : (i, a, j, b, nf) -> String.format("%s - %s%s", nf.format(i, a), nf.format(j, b),
+                                    getEdgeAttribute(i, j).map(edgeAttributeFormat).map(s->" "+s).orElse(""))
                     : isDirected
                             ? (i, a, j, b, nf) -> String.format("%s -> %s", nf.format(i, a), nf.format(j, b))
                             : (i, a, j, b, nf) -> String.format("%s - %s", nf.format(i, a), nf.format(j, b));
@@ -421,6 +429,7 @@ public class GraphUtils {
             }
             return sb.toString();
         }
+
     }
 
     /**
@@ -504,6 +513,8 @@ public class GraphUtils {
             this.characteristics = characteristics;
             this.isUndirected = characteristics.contains(GraphCharacteristic.UNDIRECTED);
             this.nodeList = new ArrayList<>();
+            //XXX map implementation is not required to be ordered, could use a HashMap here as well.
+            // This is purely a performance question!
             this.edgeAttributeByPackedEdgeIndex = new TreeMap<>();
         }
 

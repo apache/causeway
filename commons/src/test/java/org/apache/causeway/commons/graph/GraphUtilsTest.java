@@ -88,7 +88,7 @@ class GraphUtilsTest {
     }
 
     @Test
-    void builderWeighted() {
+    void builderWithEdgeAttributes() {
         var gBuilder = GraphUtils.GraphBuilder.undirected(Customer.class);
         gBuilder
             .addNode(new Customer("A"))
@@ -100,15 +100,14 @@ class GraphUtilsTest {
             .addEdge(2, 0);
 
         var graph = gBuilder.build();
-        var textForm = graph.toString(NodeFormatter.of(Customer::getName), (i, a, j, b, nf)->
-            String.format("%s - %s (weight=%.1f)", nf.format(i, a), nf.format(j, b), graph.getEdgeAttribute(i, j)
-                    .map(Double.class::cast)
-                    .orElse(Double.NaN)));
+        var textForm = graph.toString(
+                NodeFormatter.of(Customer::getName),
+                edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
         //debug
-        System.err.println(textForm);
+        //System.err.println(textForm);
 
         assertEquals(
-                Can.of("A - B (weight=0.1)", "A - C (weight=NaN)", "B - C (weight=0.7)", "D"),
+                Can.of("A - B (weight=0.1)", "A - C", "B - C (weight=0.7)", "D"),
                 TextUtils.readLines(textForm).filter(StringUtils::hasLength));
     }
 
