@@ -112,30 +112,30 @@ class GraphUtilsTest {
     }
 
     @Test
-    void subgraph() {
-        var graph = new GraphKernel(4, ImmutableEnumSet.noneOf(GraphCharacteristic.class));
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(2, 3);
+    void kernelSubgraph() {
+        var kernel = new GraphKernel(4, ImmutableEnumSet.noneOf(GraphCharacteristic.class));
+        kernel.addEdge(0, 1);
+        kernel.addEdge(1, 2);
+        kernel.addEdge(2, 3);
 
-        assertFalse(graph.isUndirected());
-        assertEquals(4, graph.nodeCount());
-        assertEquals(3, graph.edgeCount());
+        assertFalse(kernel.isUndirected());
+        assertEquals(4, kernel.nodeCount());
+        assertEquals(3, kernel.edgeCount());
 
         // identity
-        var subgraphId = graph.subGraph(new int[] {0, 1, 2, 3});
+        var subgraphId = kernel.subGraph(new int[] {0, 1, 2, 3});
         assertFalse(subgraphId.isUndirected());
         assertEquals(4, subgraphId.nodeCount());
         assertEquals(3, subgraphId.edgeCount());
 
         // disjoint
-        var subgraphDisjointNoEdges = graph.subGraph(new int[] {0, 3});
+        var subgraphDisjointNoEdges = kernel.subGraph(new int[] {0, 3});
         assertFalse(subgraphDisjointNoEdges.isUndirected());
         assertEquals(2, subgraphDisjointNoEdges.nodeCount());
         assertEquals(0, subgraphDisjointNoEdges.edgeCount());
 
         // subgraph w/ 3 nodes, reordered
-        var subgraph3 = graph.subGraph(new int[] {3, 1, 2});
+        var subgraph3 = kernel.subGraph(new int[] {3, 1, 2});
         assertFalse(subgraph3.isUndirected());
         assertEquals(3, subgraph3.nodeCount());
         assertEquals(2, subgraph3.edgeCount());
