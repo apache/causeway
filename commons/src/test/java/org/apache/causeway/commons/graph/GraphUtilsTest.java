@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.graph;
 
+import java.util.Comparator;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -110,6 +112,35 @@ class GraphUtilsTest {
                 Can.of("A - B (weight=0.1)", "A - C", "B - C (weight=0.7)", "D"),
                 TextUtils.readLines(textForm).filter(StringUtils::hasLength));
     }
+
+    @Test
+    void builderWithAdvancedEdgeAdding() {
+        var a = new Customer("A");
+        var b = new Customer("B");
+        var c = new Customer("C");
+        var d = new Customer("D");
+
+        var gBuilder = GraphUtils.GraphBuilder.undirected(Customer.class);
+        gBuilder
+            .addNode(d)
+            .addEdge(a, b, 0.1)
+            .addEdge(c, a)
+            .addEdge(c, b, 0.7);
+
+        var graph = gBuilder
+                .build()
+                .sorted(Comparator.comparing(Customer::getName)); // test sorting
+        var textForm = graph.toString(
+                NodeFormatter.of(Customer::getName),
+                edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
+        //debug
+        System.err.println(textForm);
+
+        assertEquals(
+                Can.of("A - B (weight=0.1)", "A - C", "B - C (weight=0.7)", "D"),
+                TextUtils.readLines(textForm).filter(StringUtils::hasLength));
+    }
+
 
     @Test
     void kernelSubgraph() {
