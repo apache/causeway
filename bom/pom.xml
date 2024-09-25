@@ -128,6 +128,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <htmlparser.version>2.1</htmlparser.version>
 
+
         <javafaker.version>1.0.2</javafaker.version>
         <javassist.version>3.30.2-GA</javassist.version>
 
@@ -170,6 +171,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <poi.version>5.2.5</poi.version>
 
         <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
+        <querydsl.version>5.1.0</querydsl.version>
 
         <resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
         <resteasy.version>5.0.0.Final</resteasy.version> <!-- keep in sync with property defined in resteasy4-spring-boot-starter -->
@@ -434,8 +436,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
-
-
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-querydsl</artifactId>
@@ -446,6 +446,13 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>org.apache.causeway.persistence</groupId>
 				<artifactId>causeway-persistence-querydsl-applib</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.persistence</groupId>
+				<artifactId>causeway-persistence-querydsl-integration</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 				<type>jar</type>
 				<scope>compile</scope>
@@ -1731,7 +1738,24 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                 <version>${sql-formatter.version}</version>
             </dependency>
 
-			<dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jdo</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+
+            <dependency>
 				<groupId>com.tngtech.archunit</groupId>
 				<artifactId>archunit-junit5-api</artifactId>
 				<version>${archunit.version}</version>
@@ -1882,7 +1906,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<version>${jsoup.version}</version>
 			</dependency>
 
-			<dependency>
+            <dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
 				<version>${wicket.version}</version>

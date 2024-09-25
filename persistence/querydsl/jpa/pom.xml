@@ -78,9 +78,14 @@
 
 		<dependency>
             <groupId>org.apache.causeway.persistence</groupId>
-            <artifactId>causeway-persistence-querydsl-applib</artifactId>
+            <artifactId>causeway-persistence-querydsl-integration</artifactId>
 		</dependency>
 
-	</dependencies>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

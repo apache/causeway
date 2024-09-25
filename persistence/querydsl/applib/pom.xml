@@ -74,6 +74,7 @@
         </testResources>
 	</build>
 
+
 	<dependencies>
 
 		<dependency>
@@ -85,6 +86,25 @@
 			<artifactId>causeway-commons</artifactId>
 		</dependency>
 
-	</dependencies>
+        <!-- TODO: move down to metamodel -->
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-metamodel</artifactId>
+        </dependency>
+
+        <!-- TODO: move down and refactor AutoCompleteGeneratedQueryFacetFactory -->
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>javax.jdo</artifactId>
+        </dependency>
+
+        <!-- TODO: might want to move this down also -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
