@@ -41,7 +41,7 @@ class GraphUtilsTest {
     }
 
     @Test
-    void builder() {
+    void builderDirected() {
         var gBuilder = GraphUtils.GraphBuilder.directed(Customer.class);
         gBuilder
             .addNode(new Customer("A"))
@@ -60,6 +60,29 @@ class GraphUtilsTest {
 
         assertEquals(
                 Can.of("A -> B", "B -> C", "C -> A", "D"),
+                TextUtils.readLines(textForm).filter(StringUtils::hasLength));
+    }
+
+    @Test
+    void builderUndirected() {
+        var gBuilder = GraphUtils.GraphBuilder.undirected(Customer.class);
+        gBuilder
+            .addNode(new Customer("A"))
+            .addNode(new Customer("B"))
+            .addNode(new Customer("C"))
+            .addNode(new Customer("D"))
+            .addEdge(0, 1)
+            .addEdge(1, 2)
+            .addEdge(2, 0);
+
+        var graph = gBuilder.build();
+        var textForm = graph.toString(Customer::getName);
+
+        //debug
+        //System.err.println(textForm);
+
+        assertEquals(
+                Can.of("A - B", "A - C", "B - C", "D"),
                 TextUtils.readLines(textForm).filter(StringUtils::hasLength));
     }
 

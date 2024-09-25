@@ -34,7 +34,6 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.collections._PrimitiveCollections.IntList;
 
 import lombok.Getter;
@@ -86,6 +85,10 @@ public class GraphUtils {
             public static ImmutableEnumSet<GraphCharacteristic> directed() {
                 return ImmutableEnumSet.noneOf(GraphCharacteristic.class);
             }
+
+            public static ImmutableEnumSet<GraphCharacteristic> undirected() {
+                return ImmutableEnumSet.of(GraphCharacteristic.UNDIRECTED);
+            }
         }
 
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
@@ -108,16 +111,21 @@ public class GraphUtils {
         public int edgeCount() {
             return adjacencyList.stream().mapToInt(IntList::size).sum();
         }
+        public int neighborCount(final int nodeIndex) {
+            return isWithinBounds(nodeIndex)
+                    ? adjacencyList.get(nodeIndex).size()
+                    : 0;
+        }
         public void addEdge(final int u, final int v) {
-            boundsCheck(u);
-            boundsCheck(v);
+            assertBounds(u);
+            assertBounds(v);
             adjacencyList.get(u).addUnique(v);
             if(isUndirected()) {
                 adjacencyList.get(v).addUnique(u);
             }
         }
         public IntStream streamNeighbors(final int nodeIndex) {
-            boundsCheck(nodeIndex);
+            assertBounds(nodeIndex);
             return adjacencyList.get(nodeIndex).stream();
         }
         public GraphKernel copy() {
@@ -173,11 +181,15 @@ public class GraphUtils {
 
         // -- HELPER
 
-        private void boundsCheck(final int nodeIndex) {
-            if(nodeIndex<0
-                    || nodeIndex>=nodeCount) {
+        private void assertBounds(final int nodeIndex) {
+            if(!isWithinBounds(nodeIndex)) {
                 throw new IndexOutOfBoundsException(nodeIndex);
             }
+        }
+
+        private boolean isWithinBounds(final int nodeIndex) {
+            return nodeIndex>=0
+                    && nodeIndex<nodeCount;
         }
 
         private class WeaklyConnectedNodesFinder {
@@ -212,6 +224,19 @@ public class GraphUtils {
 
     }
 
+    // -- FUNCTIONAL INTERFACES
+
+    @FunctionalInterface
+    public interface EdgeFilter {
+        boolean test(int nodeIndexFrom, int nodeIndexTo);
+        public static EdgeFilter includeAll() { return (i, j) -> true; }
+    }
+
+    @FunctionalInterface
+    public interface EdgeConsumer<T> {
+        void accept(int nodeIndexFrom, T nodeFrom, int nodeIndexTo, T nodeTo);
+    }
+
     // -- GRAPH
 
     /**
@@ -228,14 +253,48 @@ public class GraphUtils {
 
         // -- TRAVERSAL
 
-        public void visitNeighbors(final int nodeIndex, final Consumer<T> nodeVisitor) {
+        public void visitNeighbors(final int nodeIndex,
+                @Nullable final Consumer<T> nodeVisitor) {
             kernel()
                 .streamNeighbors(nodeIndex)
                 .forEach(neighborIndex->
                     nodeVisitor.accept(nodes.getElseFail(neighborIndex)));
         }
 
-        public void visitNeighborsIndexed(final int nodeIndex, final IndexedConsumer<T> nodeVisitor) {
+        public void visitNeighbors(final int nodeIndex,
+                @Nullable final EdgeFilter edgeFilter,
+                @Nullable final Consumer<T> nodeVisitor) {
+            if(nodeVisitor==null) return;
+            var stream = kernel()
+                .streamNeighbors(nodeIndex);
+            stream = edgeFilter==null
+                    ? stream
+                    : stream.filter(neighborIndex->
+                        edgeFilter.test(nodeIndex, neighborIndex));
+            stream.forEach(neighborIndex->
+                    nodeVisitor.accept(nodes.getElseFail(neighborIndex)));
+        }
+
+        public void visitEdges(final int nodeIndex,
+                @Nullable final EdgeFilter edgeFilter,
+                @Nullable final EdgeConsumer<T> edgeConsumer) {
+            if(edgeConsumer==null) return;
+            var fromNode = nodes.getElseFail(nodeIndex);
+            var stream = kernel()
+                    .streamNeighbors(nodeIndex);
+            stream = edgeFilter==null
+                    ? stream
+                    : stream.filter(neighborIndex->
+                        edgeFilter.test(nodeIndex, neighborIndex));
+            stream.forEach(neighborIndex->
+                edgeConsumer.accept(
+                        nodeIndex, fromNode,
+                        neighborIndex, nodes.getElseFail(neighborIndex)));
+        }
+
+        public void visitNeighborsIndexed(final int nodeIndex,
+                @Nullable final IndexedConsumer<T> nodeVisitor) {
+            if(nodeVisitor==null) return;
             kernel()
                 .streamNeighbors(nodeIndex)
                 .forEach(neighborIndex->
@@ -274,18 +333,26 @@ public class GraphUtils {
         }
 
         public String toString(final Function<T, String> nodeFormatter) {
+            var isDirected = !kernel().isUndirected();
             var sb = new StringBuilder();
-            var neighbourCount = _Refs.intRef(0);
             for(int nodeIndex = 0; nodeIndex < kernel.nodeCount(); ++nodeIndex) {
                 var a = nodes().getElseFail(nodeIndex);
-                neighbourCount.setValue(0);
-                visitNeighbors(nodeIndex, b->{
-                    sb
-                        .append(String.format("%s -> %s", nodeFormatter.apply(a), nodeFormatter.apply(b)))
-                        .append("\n");
-                    neighbourCount.incAndGet();
-                });
-                if(neighbourCount.getValue()==0) {
+                if(isDirected) {
+                    visitNeighbors(nodeIndex, b->{
+                        sb
+                            .append(String.format("%s -> %s", nodeFormatter.apply(a), nodeFormatter.apply(b)))
+                            .append("\n");
+                    });
+                } else {
+                    // when undirected, we report edges only in one direction, that is,
+                    // when from-index is less or equal to to-index
+                    visitNeighbors(nodeIndex, (i, j)->j>=i, b->{
+                        sb
+                            .append(String.format("%s - %s", nodeFormatter.apply(a), nodeFormatter.apply(b)))
+                            .append("\n");
+                    });
+                }
+                if(kernel().neighborCount(nodeIndex)==0) {
                     sb
                         .append(String.format("%s", nodeFormatter.apply(a)))
                         .append("\n");
@@ -315,6 +382,10 @@ public class GraphUtils {
 
         public static <T> GraphBuilder<T> directed(final Class<T> nodeType) {
             return new GraphBuilder<T>(nodeType, GraphCharacteristic.directed());
+        }
+
+        public static <T> GraphBuilder<T> undirected(final Class<T> nodeType) {
+            return new GraphBuilder<T>(nodeType, GraphCharacteristic.undirected());
         }
 
         /**
