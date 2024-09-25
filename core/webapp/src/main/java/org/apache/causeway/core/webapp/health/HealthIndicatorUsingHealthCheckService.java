@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.core.webapp.health;
 
+import lombok.Builder;
+import lombok.val;
+
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.inject.Inject;
@@ -31,44 +35,35 @@ import org.apache.causeway.applib.services.health.HealthCheckService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
-import lombok.val;
-
 @Component
 @Named("causeway.webapp.HealthCheckService") // logical name appears in the endpoint
 public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndicator {
 
     private final InteractionService interactionService;
-    private final Optional<HealthCheckService> healthCheckServiceIfAny;
+    private final List<HealthCheckService> healthCheckServices;
 
+    @Builder
     @Inject
     public HealthIndicatorUsingHealthCheckService(
             final InteractionService interactionService,
-            final Optional<HealthCheckService> healthCheckServiceIfAny) {
+            final List<HealthCheckService> healthCheckServices) {
         this.interactionService = interactionService;
-        this.healthCheckServiceIfAny = healthCheckServiceIfAny;
+        this.healthCheckServices = healthCheckServices;
     }
 
     @Override
-    protected void doHealthCheck(Health.Builder builder) throws Exception {
-        val health = healthCheckServiceIfAny
-                .map(healthCheckService ->
-                    interactionService
-                        .call(InteractionContextFactory.health(), healthCheckService::check))
-                .orElse(null);
-        if(health != null) {
-            final boolean result = health.getResult();
-            if(result) {
-                builder.up();
-            } else {
-                final Throwable cause = health.getCause();
-                if(cause != null) {
-                    builder.down(cause);
-                } else {
-                    builder.down();
+    protected void doHealthCheck(Health.Builder builder) {
+        for (HealthCheckService healthCheckService : healthCheckServices) {
+            org.apache.causeway.applib.services.health.Health health = interactionService.call(InteractionContextFactory.health(), healthCheckService::check);
+            if (health != null) {
+                val success = health.getResult();
+                if(! success) {
+                    Optional.ofNullable(health.getCause())
+                            .ifPresentOrElse(ex -> builder.down(ex), () -> builder.down());
+                    return;
                 }
             }
-        } else {
-            builder.unknown();
         }
+        builder.up();
     }
 }

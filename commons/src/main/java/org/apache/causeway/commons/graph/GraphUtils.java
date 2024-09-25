@@ -380,7 +380,9 @@ public class GraphUtils {
         // -- SORTING
 
         /**
-         * Returns an isomorphic transformed graph with its node list sorts by given comparator.
+         * Returns an isomorphic graph that has its node list sorted by given comparator.
+         * <p>
+         * Preserves graph characteristics and edge attributes.
          */
         public Graph<T> sorted(final Comparator<T> nodeComparator) {
             var sortedNodes = nodes.sorted(nodeComparator);

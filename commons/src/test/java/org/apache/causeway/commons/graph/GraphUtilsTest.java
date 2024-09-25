@@ -134,7 +134,7 @@ class GraphUtilsTest {
                 NodeFormatter.of(Customer::getName),
                 edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
         //debug
-        System.err.println(textForm);
+        //System.err.println(textForm);
 
         assertEquals(
                 Can.of("A - B (weight=0.1)", "A - C", "B - C (weight=0.7)", "D"),
