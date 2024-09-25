@@ -36,6 +36,7 @@
 		<module>integration</module>
 		<module>jdo</module>
 		<module>jpa</module>
+		<module>testsupport</module>
 	</modules>
 
 
