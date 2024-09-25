@@ -20,6 +20,8 @@ package org.apache.causeway.commons.graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -375,6 +377,27 @@ public class GraphUtils {
                     edgeAttributeByPackedEdgeIndex.get(packedEdgeIndex));
         }
 
+        // -- SORTING
+
+        /**
+         * Returns an isomorphic transformed graph with its node list sorts by given comparator.
+         */
+        public Graph<T> sorted(final Comparator<T> nodeComparator) {
+            var sortedNodes = nodes.sorted(nodeComparator);
+            _Assert.assertEquals(nodes.size(), sortedNodes.size(),
+                    ()->"nodeComparator has reduced the number of nodes from the original node list");
+
+            var builder = new GraphBuilder<T>((Class<T>) null, kernel.characteristics);
+            sortedNodes.forEach(builder::addNode);
+
+            for(int nodeIndex = 0; nodeIndex < kernel.nodeCount(); ++nodeIndex) {
+                visitEdges(nodeIndex, EdgeFilter.includeAll(), (i, a, j, b)->{
+                    builder.addEdge(a, b, getEdgeAttribute(i, j).orElse(null));
+                });
+            }
+            return builder.build();
+        }
+
         // -- FORMAT
 
         @Override
@@ -439,7 +462,6 @@ public class GraphUtils {
      * @implNote not thread-safe, in other words: should to be used by a single thread only
      */
     public class GraphBuilder<T> {
-
         @SuppressWarnings("unused")
         private final Class<T> nodeType;
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
@@ -464,7 +486,7 @@ public class GraphUtils {
          * @apiNote nodes are not required to be unique with respect to {@link Objects#equals}.
          */
         public GraphBuilder<T> addNode(final @NonNull T node) {
-            nodeList.add(node);
+            addNodeHonoringIndexMap(node);
             return this;
         }
 
@@ -483,12 +505,34 @@ public class GraphUtils {
          * Variant of {@link #addEdge(int, int)}, that stores an arbitrary attribute with the edge.
          * @see #addEdge(int, int)
          */
-        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex, @NonNull final Object edgeAttribute) {
+        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex, @Nullable final Object edgeAttribute) {
             addEdge(fromIndex, toIndex);
             final long packedEdgeIndex = isUndirected
                     ? _Longs.pack(Math.min(fromIndex, toIndex), Math.max(fromIndex, toIndex))
                     : _Longs.pack(fromIndex, toIndex);
-            edgeAttributeByPackedEdgeIndex.put(packedEdgeIndex, edgeAttribute);
+            if(edgeAttribute!=null) {
+                edgeAttributeByPackedEdgeIndex.put(packedEdgeIndex, edgeAttribute);
+            }
+            return this;
+        }
+
+        /**
+         * Adds a new edge to the graph.
+         * Also adds any of the 2 given nodes to the node-list, if not already added before.
+         */
+        public GraphBuilder<T> addEdge(final T from, final T to) {
+            addEdge(from, to, null);
+            return this;
+        }
+
+        /**
+         * Variant of {@link #addEdge(Object, Object)}, that stores an arbitrary attribute with the edge.
+         * @see #addEdge(Object, Object)
+         */
+        public GraphBuilder<T> addEdge(final T from, final T to, @Nullable final Object edgeAttribute) {
+            final int fromIndex = indexOfWithAdd(from);
+            final int toIndex = indexOfWithAdd(to);
+            addEdge(fromIndex, toIndex, edgeAttribute);
             return this;
         }
 
@@ -528,6 +572,42 @@ public class GraphUtils {
                     Can.ofCollection(nodeList),
                     Collections.unmodifiableMap(edgeAttributeByPackedEdgeIndex));
             return graph;
+        }
+
+        // -- HELPER
+
+        /**
+         * Created only if triggered by {@link #addEdge(Object, Object)}
+         * or {@link #addEdge(Object, Object, Object)}.
+         */
+        private Map<T, Integer> nodeIndexByNode = null;
+
+        private Map<T, Integer> snapshotNodeIndexByNode() {
+            var nodeIndexByNode = new HashMap<T, Integer>();
+            nodeList.forEach(IndexedConsumer.zeroBased((i, node)->{
+                nodeIndexByNode.put(node, i);
+            }));
+            return nodeIndexByNode;
+        }
+
+        private int indexOfWithAdd(final T node) {
+            if(nodeIndexByNode==null) {
+                this.nodeIndexByNode = snapshotNodeIndexByNode();
+            }
+            var nodeIndex = nodeIndexByNode.get(node);
+            if(nodeIndex!=null) {
+                return nodeIndex;
+            }
+            return addNodeHonoringIndexMap(node);
+        }
+
+        private int addNodeHonoringIndexMap(final T node) {
+            final int nextIndex = nodeList.size();
+            nodeList.add(node);
+            if(nodeIndexByNode!=null) {
+                nodeIndexByNode.put(node, nextIndex);
+            }
+            return nextIndex;
         }
 
     }
