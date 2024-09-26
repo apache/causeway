@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.logicaltype.classname;
 import jakarta.inject.Inject;
 import jakarta.xml.bind.annotation.XmlType;
 
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -74,8 +75,8 @@ implements
 
             val logicalType = objectSpec.getLogicalType();
 
-            //XXX has a slight chance to be a false positive; would need to check whether annotated with @Named
-            if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())) {
+            if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())
+                    && !_ClassCache.getInstance().isAnnotatedWithNamed(objectSpec.getCorrespondingClass())) {
                 ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
                         .builder()
                         .addVariable("type", objectSpec.getFullIdentifier())
