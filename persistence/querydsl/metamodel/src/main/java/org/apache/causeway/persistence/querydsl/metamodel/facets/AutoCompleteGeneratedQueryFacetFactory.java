@@ -38,16 +38,14 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 
 import org.springframework.util.ReflectionUtils;
 
-
-public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract implements ObjectTypeFacetFactory {
+public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract {
 
     public AutoCompleteGeneratedQueryFacetFactory(MetaModelContext metaModelContext) {
         super(metaModelContext, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessObjectTypeContext processClassContext) {
-
+    public void process(ProcessClassContext processClassContext) {
 
         if (processClassContext.getFacetHolder().containsFacet(AutoCompleteGeneratedQueryFacet.class)) {
             return;

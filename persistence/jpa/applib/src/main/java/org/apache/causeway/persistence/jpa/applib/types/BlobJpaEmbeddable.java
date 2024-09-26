@@ -73,7 +73,6 @@ import lombok.val;
  *     Lastly; note that {@link javax.persistence.AttributeOverrides} and {@link javax.persistence.AttributeOverride}
  *     provide a standardised way of fine-tuning the column definitions.
  * </p>
- *
  * @since 2.x {@index}
  */
 @Embeddable

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.persistence.querydsl.jpa;
 
+import org.apache.causeway.persistence.jpa.applib.CausewayModulePersistenceJpaApplib;
 import org.apache.causeway.persistence.querydsl.integration.CausewayModulePersistenceQueryDslIntegration;
 
 import org.apache.causeway.persistence.querydsl.jpa.services.query.DslExpressionsJpa;
@@ -37,7 +38,9 @@ import org.springframework.context.annotation.Import;
         QueryDslSupportJpa.class,
 
         // modules
+        CausewayModulePersistenceJpaApplib.class,
         CausewayModulePersistenceQueryDslIntegration.class,
 })
 public class CausewayModulePersistenceQueryDslJpa {
+
 }

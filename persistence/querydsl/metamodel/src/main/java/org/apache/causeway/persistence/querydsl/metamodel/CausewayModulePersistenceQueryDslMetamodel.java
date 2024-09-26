@@ -20,6 +20,8 @@ package org.apache.causeway.persistence.querydsl.metamodel;
 
 import org.apache.causeway.persistence.querydsl.applib.CausewayModulePersistenceQueryDslApplib;
 
+import org.apache.causeway.persistence.querydsl.metamodel.refiner.AutoCompleteGeneratedQueryMetaModelRefiner;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -28,8 +30,11 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({
+        // services
+        AutoCompleteGeneratedQueryMetaModelRefiner.class,
+
+        // modules
         CausewayModulePersistenceQueryDslApplib.class,
-        CausewayModulePersistenceQueryDslMetamodel.class,
 })
 public class CausewayModulePersistenceQueryDslMetamodel {
 }
