@@ -1,5 +1,6 @@
 package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,13 +19,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.persistence.querydsl.applib.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
 import org.apache.causeway.persistence.querydsl.applib.annotation.AutoComplete;
-import org.apache.causeway.persistence.querydsl.applib.annotation.AutoCompleteDomain;
 
 import static org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil.replaceWildcards;
 
@@ -57,16 +61,20 @@ public class AutoCompleteGeneratedDslQuery {
     final protected Object repository;
     final protected Method predicateMethod;
 
-    protected Integer minLength;
     @Builder.Default
-    protected Integer limitResults = AutoCompleteDomain.Constants.LIMIT_RESULTS;
+    protected Integer minLength = DomainObject.QueryDslAutoCompleteConstants.MIN_LENGTH;
+
+    @Builder.Default
+    protected Integer limitResults = DomainObject.QueryDslAutoCompleteConstants.LIMIT_RESULTS;
 
     /**
      * Dynamically generate an auto complete query on runtime using Query DSL.
      * Auto complete operates on fields of String type ONLY.
      * The autoComplete method ALWAYS applies wildcards when NONE are specified in de given search string.
      */
-    public <T> List<T> autoComplete(String searchPhrase, Function<PathBuilder<T>, Predicate> additionalPredicate) {
+    public <T> List<T> autoComplete(
+            final String searchPhrase,
+            final Function<PathBuilder<T>, Predicate> additionalPredicate) {
 
         Function<PathBuilder<T>, Predicate> predicate = additionalPredicate;
 
@@ -89,35 +97,43 @@ public class AutoCompleteGeneratedDslQuery {
      * Auto complete operates on fields of String type ONLY.
      * The executeQuery method NEVER applies wildcards when NONE are specified in de given search string.
      */
-    public <T> List<T> executeQuery(String searchPhrase, Function<PathBuilder<T>, Predicate> additionalPredicate) {
-        Optional<DslQuery> q = generateQuery(searchPhrase, additionalPredicate);
-        return q.map(query -> query.fetch()).orElse(QueryDslUtil.newList());
+    public <T> List<T> executeQuery(
+            final String searchPhrase,
+            final Function<PathBuilder<T>, Predicate> additionalPredicate) {
+        val dslQueryIfAny = generateQuery(searchPhrase, additionalPredicate);
+        return dslQueryIfAny.map(query -> query.fetch()).orElse(QueryDslUtil.newList());
     }
 
 
-    public <T> Optional<DslQuery> generateQuery(final String searchPhrase, Function<PathBuilder<T>, Predicate> additionalPredicate) {
+    public <T> Optional<DslQuery> generateQuery(
+            final String searchPhrase,
+            final Function<PathBuilder<T>, Predicate> additionalPredicate) {
+
         if (fields.isEmpty()) {
+            // not expected
             throw new RecoverableException("At least one field should be given");
         }
-        if (QueryDslUtil.isNotEmpty(searchPhrase) &&
-                searchPhrase.trim().length()>=getMinLength()) {
-            // Define entity
+
+        if (QueryDslUtil.isNotEmpty(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
+
+            // define entity
             PathBuilder<T> entityPath = new PathBuilder(entity, "e");
             BooleanBuilder where = new BooleanBuilder();
             List<OrderSpecifier<String>> orderSpecifiers = QueryDslUtil.newList();
 
             // Build where and order clause
-            fields.stream().forEach(field -> {
-                // Only string type fields are supported
-                StringPath stringPath = entityPath.getString(field.getName());
-                String searchReplaced = replaceWildcards(searchPhrase, false);
-                BooleanExpression expr = QueryDslUtil.search(stringPath, searchReplaced, false);
+            fields.forEach(field -> {
 
-                // Case-insensitive?
-                if (field.isAnnotationPresent(AutoComplete.class) &&
-                        field.getAnnotationsByType(AutoComplete.class)[0].caseInsensitive()) {
-                    expr = QueryDslUtil.search(stringPath, searchReplaced, true);
-                }
+                // Only string type fields are supported
+                val stringPath = entityPath.getString(field.getName());
+                val searchReplaced = replaceWildcards(searchPhrase, false);
+
+                val ignoreCase = _Annotations.synthesize(field, Property.class)
+                        .map(property -> property.queryDslAutoComplete())
+                        .filter(policy -> policy.isIncluded())
+                        .map(policy -> policy.isIgnoreCase())
+                        .orElse(true);
+                val expr = QueryDslUtil.search(stringPath, searchReplaced, ignoreCase);
                 where.or(expr);
 
                 // Build order by clause
@@ -125,27 +141,20 @@ public class AutoCompleteGeneratedDslQuery {
             });
 
             // Build query
-            DslQuery q = queryDslSupport.selectFrom(entityPath);
-            // Add additional expression if any
+            val dslQuery = queryDslSupport.selectFrom(entityPath);
+
+            // add additional expression if any
             if(additionalPredicate!=null){
                 where.and(additionalPredicate.apply(entityPath));
             }
-            q.where(where);
-            q.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]));
-            q.limit(limitResults==null? AutoCompleteDomain.Constants.LIMIT_RESULTS:limitResults);
-            return Optional.of(q);
+
+            dslQuery.where(where);
+            dslQuery.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]));
+            dslQuery.limit(limitResults==null ? DomainObject.QueryDslAutoCompleteConstants.LIMIT_RESULTS : limitResults);
+
+            return Optional.of(dslQuery);
         }
         return Optional.empty();
     }
 
-    public int getMinLength(){
-        if(minLength==null){
-            minLength= AutoCompleteDomain.Constants.MIN_LENGTH;
-            AutoCompleteDomain acd=entity.getAnnotation(AutoCompleteDomain.class);
-            if(acd!=null && acd.minLength()> AutoCompleteDomain.Constants.MIN_LENGTH){
-                minLength= acd.minLength();
-            }
-        }
-        return minLength;
-    }
 }

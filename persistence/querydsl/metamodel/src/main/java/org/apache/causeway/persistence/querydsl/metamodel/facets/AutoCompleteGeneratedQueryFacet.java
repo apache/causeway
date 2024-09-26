@@ -24,7 +24,15 @@ public class AutoCompleteGeneratedQueryFacet extends FacetAbstract implements Au
 
     final protected AutoCompleteGeneratedDslQuery autoCompleteGeneratedDslQuery;
 
-    public AutoCompleteGeneratedQueryFacet(Class<?> entity, FacetHolder facetHolder, List<Field> fields, Object repository, Method autoCompletePredicateMethod, Integer limit) {
+    public AutoCompleteGeneratedQueryFacet(
+            final Class<?> entity,
+            final FacetHolder facetHolder,
+            final List<Field> fields,
+            final Object repository,
+            final Method autoCompletePredicateMethod,
+            final Integer limit,
+            final Integer minLength
+    ) {
         super(AutoCompleteFacet.class, facetHolder);
         this.autoCompleteGeneratedDslQuery = AutoCompleteGeneratedDslQuery
                 .builder()
@@ -34,6 +42,7 @@ public class AutoCompleteGeneratedQueryFacet extends FacetAbstract implements Au
                 .repository(repository)
                 .predicateMethod(autoCompletePredicateMethod)
                 .limitResults(limit)
+                .minLength(minLength)
                 .build();
     }
 

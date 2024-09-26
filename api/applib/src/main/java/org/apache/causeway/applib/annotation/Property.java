@@ -289,4 +289,70 @@ public @interface Property {
      */
     String regexPatternReplacement()
             default "Doesn't match pattern";
+
+    enum QueryDslAutoCompletePolicy {
+        /**
+         * Use the (case-insensitive) value of this property for autocomplete.
+         *
+         * <p>
+         *     The property is expected to be a string or characters, otherwise it will be ignored.
+         * </p>
+         */
+        INCLUDE,
+        /**
+         * Use the case-sensitive value of this property for autocomplete.
+         *
+         * <p>
+         *     The property is expected to be a string or characters, otherwise it will be ignored.
+         * </p>
+         */
+        INCLUDE_CASE_SENSITIVE,
+        /**
+         * Do not use the value of this property for autocomplete.
+         */
+        EXCLUDE,
+        ;
+
+        public boolean isIncluded() {
+            return this == INCLUDE || this == INCLUDE_CASE_SENSITIVE;
+        }
+        public boolean isIgnoreCase() {
+            return this == INCLUDE;
+        }
+    }
+
+    /**
+     * Whether to use the value of this property for autocompletes.
+     *
+     * <p>
+     *     The minimum number of characters can be specified by annotating the the containing entity with
+     *     {@link DomainObject#queryDslAutoCompleteMinLength()}.  The number of returned rows can also be limited using
+     *     {@link DomainObject#queryDslAutoCompleteLimitResults()}.
+     * </p>
+     *
+     * <p>
+     *     Moreover, additional criteria (predicates) can be specified for the auto-complete query, by annotating
+     *     the containing entity with {@link DomainObject#queryDslAutoCompleteAdditionalPredicateRepository()} and
+     *     (if required) {@link DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()}.
+     * </p>
+     *
+     * <p>
+     *     NOTE: if {@link DomainObject#autoCompleteRepository()} (and {@link DomainObject#autoCompleteMethod()}) have
+     *     been specified, then these take precedence of the query DSL auto-complete.
+     * </p>
+     *
+     * <p>
+     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
+     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     * </p>
+     *
+     * <p>
+     *     NOTE: if <i>NO</i> fields are annotated, then all string properties are included by default.
+     * </p>
+     *
+     * <p>
+     *     NOTE: this feature only applies to entities, not to view models.  Only persisted properties should be annotated.
+     * </p>
+     */
+    QueryDslAutoCompletePolicy queryDslAutoComplete() default QueryDslAutoCompletePolicy.EXCLUDE;
 }

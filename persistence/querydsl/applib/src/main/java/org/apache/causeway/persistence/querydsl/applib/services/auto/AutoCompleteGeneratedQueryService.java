@@ -3,15 +3,22 @@ package org.apache.causeway.persistence.querydsl.applib.services.auto;
 import java.util.List;
 import java.util.function.Function;
 
-import org.apache.causeway.persistence.querydsl.applib.annotation.AutoComplete;
-import org.apache.causeway.persistence.querydsl.applib.annotation.AutoCompleteDomain;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Property;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 
 /**
  * Programmatic access to the autocomplete functionality defined declaratively by
- * {@link AutoCompleteDomain} and {@link AutoComplete}.
+ * {@link Property#queryDslAutoComplete()} and can be fine-tuned using the <code>queryDslAutoCompleteXxx...()</code>
+ * attributes in {@link DomainObject}.
+ *
+ * @see Property#queryDslAutoComplete()
+ * @see DomainObject#queryDslAutoCompleteMinLength()
+ * @see DomainObject#queryDslAutoCompleteLimitResults()
+ * @see DomainObject#queryDslAutoCompleteAdditionalPredicateRepository()
+ * @see DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()
  */
 public interface AutoCompleteGeneratedQueryService {
 

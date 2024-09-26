@@ -11,9 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.criteria.Path;
-import javax.xml.transform.Templates;
-
 import com.querydsl.core.types.*;
 
 /**
