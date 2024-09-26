@@ -98,7 +98,11 @@
             <artifactId>javax.jdo</artifactId>
         </dependency>
 
-        <!-- TODO: might want to move this down also -->
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>

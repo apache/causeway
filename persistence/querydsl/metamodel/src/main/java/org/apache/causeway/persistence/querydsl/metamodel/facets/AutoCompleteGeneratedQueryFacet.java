@@ -1,4 +1,4 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,6 +15,7 @@ import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoComplet
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;

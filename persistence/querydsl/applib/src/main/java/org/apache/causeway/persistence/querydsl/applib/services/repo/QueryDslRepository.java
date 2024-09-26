@@ -1,4 +1,4 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.applib.services.repo;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,13 +13,15 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.util.ReflectionUtils;
 
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
 
 /**
  * Provides default implementation and convinience methods for querying a specific entity (hierarchy).

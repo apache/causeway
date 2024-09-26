@@ -82,6 +82,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jdo-applib</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jdo</artifactId>
         </dependency>

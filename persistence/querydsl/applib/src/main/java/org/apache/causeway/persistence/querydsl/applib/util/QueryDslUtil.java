@@ -1,6 +1,5 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.applib.util;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -118,7 +117,7 @@ public class QueryDslUtil {
         return result;
     }
 
-    static <T> List<T> newList(T... objs) {
+    public static <T> List<T> newList(T... objs) {
         return newArrayList(objs);
     }
 
@@ -128,7 +127,7 @@ public class QueryDslUtil {
         return result;
     }
 
-    static boolean isNotEmpty(CharSequence cs) {
+    public static boolean isNotEmpty(CharSequence cs) {
         return !isEmpty(cs);
     }
 
@@ -140,7 +139,7 @@ public class QueryDslUtil {
         return array == null || array.length == 0;
     }
 
-    static <T> Class<T> getTypeParameter(Class<?> parameterizedType, int index){
+    public static <T> Class<T> getTypeParameter(Class<?> parameterizedType, int index){
         if(parameterizedType==null) return null;
 
         ParameterizedType pType= (ParameterizedType) parameterizedType.getGenericSuperclass();

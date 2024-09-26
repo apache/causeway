@@ -1,18 +1,8 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.applib.util;
 
 import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.regex.Pattern;
-
-import com.querydsl.core.types.*;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.BooleanOperation;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringPath;
 
 @UtilityClass
 public class ArrayUtils {

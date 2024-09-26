@@ -1,25 +1,28 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.integration.services;
+
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.function.Function;
 
 import javax.inject.Inject;
 
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.PathBuilder;
-
 import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
-
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+
+import org.apache.causeway.persistence.querydsl.applib.services.auto.AutoCompleteGeneratedQueryService;
+import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
+
+import org.apache.causeway.persistence.querydsl.metamodel.facets.AutoCompleteGeneratedQueryFacet;
 
 import org.springframework.stereotype.Service;
 
-
-import lombok.NoArgsConstructor;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
 
 @Service
 @NoArgsConstructor
-public class AutoCompleteGeneratedQueryService{
+public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGeneratedQueryService {
 
     @Inject protected SpecificationLoader specificationLoader;
 

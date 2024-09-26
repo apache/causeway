@@ -1,4 +1,6 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.testsupport;
+
+import lombok.SneakyThrows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -9,21 +11,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.querydsl.core.types.Constant;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.FactoryExpression;
-import com.querydsl.core.types.Operation;
-import com.querydsl.core.types.Ops;
-import com.querydsl.core.types.ParamExpression;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.SubQueryExpression;
-import com.querydsl.core.types.Template;
-import com.querydsl.core.types.TemplateExpression;
-import com.querydsl.core.types.TemplateFactory;
-import com.querydsl.core.types.Templates;
-import com.querydsl.core.types.Visitor;
+import javax.persistence.criteria.Path;
+import javax.xml.transform.Templates;
 
-import lombok.SneakyThrows;
+import com.querydsl.core.types.*;
 
 /**
  * For testing purposes.

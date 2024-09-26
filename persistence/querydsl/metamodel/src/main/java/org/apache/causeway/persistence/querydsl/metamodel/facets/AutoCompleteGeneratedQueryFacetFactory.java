@@ -1,4 +1,4 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,6 +15,8 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 
+import org.apache.causeway.persistence.querydsl.applib.annotation.AutoComplete;
+import org.apache.causeway.persistence.querydsl.applib.annotation.AutoCompleteDomain;
 import org.springframework.util.ReflectionUtils;
 
 

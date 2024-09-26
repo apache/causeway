@@ -46,8 +46,12 @@
 			<artifactId>causeway-persistence-querydsl-applib</artifactId>
 		</dependency>
 
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+        </dependency>
 
-		<!-- TESTING -->
+        <!-- TESTING -->
 
         <dependency>
             <groupId>org.apache.causeway.core</groupId>

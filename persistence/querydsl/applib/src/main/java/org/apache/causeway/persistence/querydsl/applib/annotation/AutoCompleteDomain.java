@@ -1,4 +1,4 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.applib.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,5 +14,11 @@ public @interface AutoCompleteDomain {
 
     int minLength() default 0;
 
-    int limitResults() default AutoCompleteGeneratedDslQuery.LIMIT_RESULTS;
+    int limitResults() default Constants.LIMIT_RESULTS;
+
+    static class Constants {
+
+        public final static int LIMIT_RESULTS = 50;
+        public final static int MIN_LENGTH = 1;
+    }
 }

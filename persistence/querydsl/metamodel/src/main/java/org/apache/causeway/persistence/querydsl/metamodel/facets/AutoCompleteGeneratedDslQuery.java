@@ -1,10 +1,8 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -21,11 +19,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
-import javax.ejb.ApplicationException;
-
 import org.apache.causeway.applib.exceptions.RecoverableException;
+import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
+import org.apache.causeway.persistence.querydsl.applib.annotation.AutoComplete;
+import org.apache.causeway.persistence.querydsl.applib.annotation.AutoCompleteDomain;
 
-import static org.apache.causeway.persistence.querydsl.applib.QueryDslUtil.replaceWildcards;
+import static org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil.replaceWildcards;
 
 
 /**
@@ -36,9 +37,6 @@ import static org.apache.causeway.persistence.querydsl.applib.QueryDslUtil.repla
 @Builder(access = AccessLevel.PUBLIC)
 @Getter
 public class AutoCompleteGeneratedDslQuery {
-
-    public final static int MIN_LENGTH = 1;
-    public final static int LIMIT_RESULTS = 50;
 
     /**
      * Query DSL is used to dynamically generate the query on runtime
@@ -61,7 +59,7 @@ public class AutoCompleteGeneratedDslQuery {
 
     protected Integer minLength;
     @Builder.Default
-    protected Integer limitResults = LIMIT_RESULTS;
+    protected Integer limitResults = AutoCompleteDomain.Constants.LIMIT_RESULTS;
 
     /**
      * Dynamically generate an auto complete query on runtime using Query DSL.
@@ -134,7 +132,7 @@ public class AutoCompleteGeneratedDslQuery {
             }
             q.where(where);
             q.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]));
-            q.limit(limitResults==null?LIMIT_RESULTS:limitResults);
+            q.limit(limitResults==null? AutoCompleteDomain.Constants.LIMIT_RESULTS:limitResults);
             return Optional.of(q);
         }
         return Optional.empty();
@@ -142,9 +140,9 @@ public class AutoCompleteGeneratedDslQuery {
 
     public int getMinLength(){
         if(minLength==null){
-            minLength=MIN_LENGTH;
+            minLength= AutoCompleteDomain.Constants.MIN_LENGTH;
             AutoCompleteDomain acd=entity.getAnnotation(AutoCompleteDomain.class);
-            if(acd!=null && acd.minLength()>MIN_LENGTH){
+            if(acd!=null && acd.minLength()> AutoCompleteDomain.Constants.MIN_LENGTH){
                 minLength= acd.minLength();
             }
         }

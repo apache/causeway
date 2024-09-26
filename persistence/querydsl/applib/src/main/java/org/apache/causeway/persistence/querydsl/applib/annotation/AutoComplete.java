@@ -1,4 +1,4 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.applib.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

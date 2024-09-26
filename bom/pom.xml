@@ -1746,6 +1746,11 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
             <dependency>
                 <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-core</artifactId>
+                <version>${querydsl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.querydsl</groupId>
                 <artifactId>querydsl-apt</artifactId>
                 <version>${querydsl.version}</version>
                 <scope>provided</scope>

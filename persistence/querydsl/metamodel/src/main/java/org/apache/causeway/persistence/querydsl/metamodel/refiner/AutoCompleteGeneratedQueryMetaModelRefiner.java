@@ -1,7 +1,9 @@
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.metamodel.refiner;
 
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+
+import org.apache.causeway.persistence.querydsl.metamodel.facets.AutoCompleteGeneratedQueryFacetFactory;
 
 import org.springframework.stereotype.Component;
 
