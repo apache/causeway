@@ -26,4 +26,9 @@ public enum CaseSensitivity {
     public boolean isIgnoreCase() {
         return this == INSENSITIVE;
     }
+
+    public static CaseSensitivity of(boolean ignoreCase) {
+        return ignoreCase ? INSENSITIVE : SENSITIVE;
+    }
+
 }

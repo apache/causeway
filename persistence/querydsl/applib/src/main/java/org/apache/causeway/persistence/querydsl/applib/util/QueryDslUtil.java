@@ -101,12 +101,14 @@ public class QueryDslUtil {
     public static Predicate and(Predicate... predicates) {
         if (predicates.length == 1) {
             return predicates[0];
-        } else if (predicates.length > 2) {
+        }
+        if (predicates.length > 2) {
             Predicate[] predicate = new Predicate[]{and(Arrays.copyOf(predicates, 2))};
             Predicate[] remainder = Arrays.copyOfRange(predicates, 2, predicates.length);
             if (remainder.length == 1) {
                 return and(addAll(predicate, remainder[0]));
-            } else if (remainder.length > 2) {
+            }
+            if (remainder.length > 2) {
                 return and(addAll(predicate, remainder));
             }
             return and(addAll(predicate, and(remainder)));
@@ -121,12 +123,14 @@ public class QueryDslUtil {
     public static Predicate or(Predicate... predicates) {
         if (predicates.length == 1) {
             return predicates[0];
-        } else if (predicates.length > 2) {
+        }
+        if (predicates.length > 2) {
             Predicate[] predicate = new Predicate[]{or(Arrays.copyOf(predicates, 2))};
             Predicate[] remainder = Arrays.copyOfRange(predicates, 2, predicates.length);
             if (remainder.length == 1) {
                 return or(addAll(predicate, remainder[0]));
-            } else if (remainder.length > 2) {
+            }
+            if (remainder.length > 2) {
                 return or(addAll(predicate, remainder));
             }
             return or(addAll(predicate, or(remainder)));
