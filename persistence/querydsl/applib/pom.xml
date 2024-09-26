@@ -109,6 +109,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- testing -->
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

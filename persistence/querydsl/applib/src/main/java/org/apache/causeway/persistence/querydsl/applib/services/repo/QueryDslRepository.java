@@ -1,5 +1,28 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
+ */
 package org.apache.causeway.persistence.querydsl.applib.services.repo;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -59,7 +82,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @return a list of OrderSpecifiers
      */
     protected List<OrderSpecifier<? extends Comparable>> getDefaultOrders() {
-        return QueryDslUtil.newList(QueryDslUtil.ID_ORDER_SPECIFIER);
+        return newList(QueryDslUtil.ID_ORDER_SPECIFIER);
     }
 
     protected OrderSpecifier<? extends Comparable>[] getDefaultOrder() {
@@ -75,7 +98,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      */
     public Class<T> getEntityClass() {
         if (entityClass == null) {
-            entityClass = QueryDslUtil.getTypeParameter(getClass(), 0);
+            entityClass = getTypeParameter(getClass(), 0);
         }
         return entityClass;
     }
@@ -95,7 +118,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
     }
 
     private Q getEntityPathInstance() {
-        Class<Q> qClass = QueryDslUtil.getTypeParameter(getClass(), 1);
+        Class<Q> qClass = getTypeParameter(getClass(), 1);
         if (qClass == null) {
             throw new RecoverableException("Could not find Q type for this entity");
         }
@@ -456,4 +479,27 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
                 .orderBy(orderSpecifier)
                 .fetch();
     }
+
+    private static <T> Class<T> getTypeParameter(Class<?> parameterizedType, int index){
+        if(parameterizedType==null) return null;
+
+        ParameterizedType pType= (ParameterizedType) parameterizedType.getGenericSuperclass();
+        if(pType==null) return null;
+
+        Type[] types= pType.getActualTypeArguments();
+        if(types==null || types.length<=index || types[index] instanceof ParameterizedType) return null;
+
+        return (Class<T>) types[index];
+    }
+
+    static <T> List<T> newList(T... objs) {
+        return newArrayList(objs);
+    }
+
+    static <T> ArrayList<T> newArrayList(T... objs) {
+        ArrayList<T> result = new ArrayList();
+        Collections.addAll(result, objs);
+        return result;
+    }
+
 }

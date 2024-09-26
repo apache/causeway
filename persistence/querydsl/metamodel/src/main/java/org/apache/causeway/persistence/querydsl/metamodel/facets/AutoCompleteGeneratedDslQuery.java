@@ -1,9 +1,29 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
+ */
 package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -11,9 +31,7 @@ import java.util.function.Function;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.core.types.dsl.StringPath;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,9 +46,7 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.persistence.querydsl.applib.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
-import org.apache.causeway.persistence.querydsl.applib.annotation.AutoComplete;
-
-import static org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil.replaceWildcards;
+import org.apache.causeway.persistence.querydsl.applib.util.WildcardRegexUtil;
 
 
 /**
@@ -89,7 +105,7 @@ public class AutoCompleteGeneratedDslQuery {
             }
         }
 
-        return executeQuery(replaceWildcards(searchPhrase, true), predicate);
+        return executeQuery(WildcardRegexUtil.toAnsiSqlWildcard(searchPhrase), predicate);
     }
 
     /**
@@ -101,7 +117,7 @@ public class AutoCompleteGeneratedDslQuery {
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
         val dslQueryIfAny = generateQuery(searchPhrase, additionalPredicate);
-        return dslQueryIfAny.map(query -> query.fetch()).orElse(QueryDslUtil.newList());
+        return dslQueryIfAny.map(query -> query.fetch()).orElse(newList());
     }
 
 
@@ -114,19 +130,19 @@ public class AutoCompleteGeneratedDslQuery {
             throw new RecoverableException("At least one field should be given");
         }
 
-        if (QueryDslUtil.isNotEmpty(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
+        if (isNotEmpty(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
 
             // define entity
             PathBuilder<T> entityPath = new PathBuilder(entity, "e");
             BooleanBuilder where = new BooleanBuilder();
-            List<OrderSpecifier<String>> orderSpecifiers = QueryDslUtil.newList();
+            List<OrderSpecifier<String>> orderSpecifiers = newList();
 
             // Build where and order clause
             fields.forEach(field -> {
 
                 // Only string type fields are supported
                 val stringPath = entityPath.getString(field.getName());
-                val searchReplaced = replaceWildcards(searchPhrase, false);
+                val searchReplaced = WildcardRegexUtil.toAnsiSqlWildcard(searchPhrase);
 
                 val ignoreCase = _Annotations.synthesize(field, Property.class)
                         .map(property -> property.queryDslAutoComplete())
@@ -156,5 +172,25 @@ public class AutoCompleteGeneratedDslQuery {
         }
         return Optional.empty();
     }
+
+    static <T> List<T> newList(T... objs) {
+        return newArrayList(objs);
+    }
+
+    static <T> ArrayList<T> newArrayList(T... objs) {
+        ArrayList<T> result = new ArrayList();
+        Collections.addAll(result, objs);
+        return result;
+    }
+
+    static boolean isNotEmpty(CharSequence cs) {
+        return !isEmpty(cs);
+    }
+
+    static boolean isEmpty(CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+
 
 }

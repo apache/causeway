@@ -1,7 +1,28 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
+ */
 package org.apache.causeway.persistence.querydsl.integration.services;
 
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -39,7 +60,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
         if(facet!=null){
             return facet.autoComplete(searchPhrase);
         }
-        return QueryDslUtil.newList();
+        return newList();
     }
 
     /**
@@ -56,7 +77,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
         if(facet!=null){
             return facet.autoComplete(searchPhrase, additionalExpression);
         }
-        return QueryDslUtil.newList();
+        return newList();
     }
 
     /**
@@ -72,7 +93,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
         if(facet!=null){
             return facet.executeQuery(searchPhrase);
         }
-        return QueryDslUtil.newList();
+        return newList();
     }
 
     /**
@@ -89,7 +110,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
         if(facet!=null){
             return facet.executeQuery(searchPhrase, additionalExpression);
         }
-        return QueryDslUtil.newList();
+        return newList();
     }
 
     private <T> AutoCompleteGeneratedQueryFacet getFacet(Class<T> cls) {
@@ -100,4 +121,16 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
         }
         return null;
     }
+
+    private static <T> List<T> newList(T... objs) {
+        return newArrayList(objs);
+    }
+
+    static <T> ArrayList<T> newArrayList(T... objs) {
+        ArrayList<T> result = new ArrayList();
+        Collections.addAll(result, objs);
+        return result;
+    }
+
+
 }
