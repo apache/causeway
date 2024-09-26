@@ -43,7 +43,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.commons.internal.reflection._Annotations;
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.CaseSensitivity;
 import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;

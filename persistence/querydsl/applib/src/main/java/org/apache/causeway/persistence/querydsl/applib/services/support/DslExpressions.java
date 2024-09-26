@@ -24,7 +24,7 @@ import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.Expressions;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 
 /**
  * Factory for detacted query expressions, most commonly used in subqueries.

@@ -19,7 +19,7 @@
  */
 package org.apache.causeway.persistence.querydsl.applib.services.support;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;

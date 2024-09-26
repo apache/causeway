@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoComplet
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import org.apache.causeway.persistence.querydsl.applib.services.auto.AutoCompleteGeneratedQueryService;
-import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
 
 import org.apache.causeway.persistence.querydsl.metamodel.facets.AutoCompleteGeneratedQueryFacet;
 

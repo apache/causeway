@@ -17,49 +17,37 @@
  *  under the License.
  *
  */
-package org.apache.causeway.persistence.querydsl.jdo.services.support;
+package org.apache.causeway.persistence.querydsl.jpa.services.support;
 
-import java.util.function.Supplier;
-
-import javax.inject.Inject;
-import javax.jdo.PersistenceManager;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.dml.DeleteClause;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
-import com.querydsl.jdo.JDOQuery;
-import com.querydsl.jdo.JDOQueryFactory;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
-import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
-
-import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 
-import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
+
 
 @Component
-@Primary
-public class QueryDslSupportJdoImpl implements QueryDslSupport {
+@ConditionalOnMissingBean(QueryDslSupport.class)
+public class QueryDslSupportJpa implements QueryDslSupport {
 
-    @Inject protected JdoSupportService jdoSupportService;
-    protected CustomizedJdoQueryFactory queryFactory;
+    @PersistenceContext EntityManager entityManager;
 
-    protected CustomizedJdoQueryFactory getQueryFactory(){
+    protected JPAQueryFactory queryFactory;
+
+    protected JPAQueryFactory getQueryFactory(){
         if(queryFactory==null){
-            queryFactory = new CustomizedJdoQueryFactory(() -> jdoSupportService.getPersistenceManager());
+            queryFactory = new JPAQueryFactory(() -> entityManager);
         }
         return queryFactory;
-    }
-
-    class CustomizedJdoQueryFactory extends JDOQueryFactory{
-        public CustomizedJdoQueryFactory(Supplier<PersistenceManager> persistenceManager) {
-            super(persistenceManager);
-        }
-        public JDOQuery<?> from(EntityPath<?>... from){
-            return this.query().from(from);
-        }
     }
 
     @Override
@@ -69,52 +57,52 @@ public class QueryDslSupportJdoImpl implements QueryDslSupport {
 
     @Override
     public <T> DslQuery<T> select(Expression<T> expr) {
-        return DslQueryJdoImpl.of(getQueryFactory().select(expr));
+        return DslQueryJpa.of(getQueryFactory().select(expr));
     }
 
     @Override
     public DslQuery<Tuple> select(Expression<?>... exprs) {
-        return DslQueryJdoImpl.of(getQueryFactory().select(exprs));
+        return DslQueryJpa.of(getQueryFactory().select(exprs));
     }
 
     @Override
     public <T> DslQuery<T> selectDistinct(Expression<T> expr) {
-        return DslQueryJdoImpl.of(getQueryFactory().selectDistinct(expr));
+        return DslQueryJpa.of(getQueryFactory().selectDistinct(expr));
     }
 
     @Override
     public DslQuery<Tuple> selectDistinct(Expression<?>... exprs) {
-        return DslQueryJdoImpl.of(getQueryFactory().selectDistinct(exprs));
+        return DslQueryJpa.of(getQueryFactory().selectDistinct(exprs));
     }
 
     @Override
     public DslQuery<Integer> selectZero() {
-        return DslQueryJdoImpl.of(getQueryFactory().selectZero());
+        return DslQueryJpa.of(getQueryFactory().selectZero());
     }
 
     @Override
     public DslQuery<Integer> selectOne() {
-        return DslQueryJdoImpl.of(getQueryFactory().selectOne());
+        return DslQueryJpa.of(getQueryFactory().selectOne());
     }
 
     @Override
     public <T> DslQuery<T> selectFrom(EntityPath<T> expr) {
-        return DslQueryJdoImpl.of(getQueryFactory().selectFrom(expr));
+        return DslQueryJpa.of(getQueryFactory().selectFrom(expr));
     }
 
     @Override
     public <T> DslQuery<T> from(EntityPath<T> from) {
-        return (DslQuery<T>) DslQueryJdoImpl.of(getQueryFactory().from(from));
+        return (DslQuery<T>) DslQueryJpa.of(getQueryFactory().from(from));
     }
 
     @Override
     public <T> DslQuery<T> from(EntityPath<T>... from) {
-        return (DslQuery<T>) DslQueryJdoImpl.of(getQueryFactory().from(from));
+        return (DslQuery<T>) DslQueryJpa.of(getQueryFactory().from(from));
     }
+
 
     @Override
     public DslQuery<?> query() {
-        return DslQueryJdoImpl.of(getQueryFactory().query());
+        return DslQueryJpa.of(getQueryFactory().query());
     }
-
 }

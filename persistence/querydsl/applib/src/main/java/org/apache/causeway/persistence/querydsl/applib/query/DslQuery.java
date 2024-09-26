@@ -17,7 +17,10 @@
  *  under the License.
  *
  */
-package org.apache.causeway.persistence.querydsl.applib;
+package org.apache.causeway.persistence.querydsl.applib.query;
+
+import org.apache.causeway.persistence.querydsl.applib.services.support.DslExpressions;
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
 import com.querydsl.core.FetchableQuery;
 import com.querydsl.core.Query;
@@ -27,6 +30,22 @@ import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 
+/**
+ * Representation of a query (conceptually, a SQL <code>SELECT</code> statement more or less).  If attached to
+ * a persistent context, then can be used {@link DslQuery#fetch() fetch}'ed.  If not attached, can be used to build
+ * other queries (because it also implements the QueryDSL {@link Expression} interface.
+ *
+ * <p>
+ *  Typically is built up using {@link QueryDslSupport} (in which case will be attached to a persistence context and
+ *  can be fetched immediately if desired), or else using {@link DslExpressions} (in which case will <i>not</i> be
+ *  attached, but can be used to build up other queries, eg as a subquery).
+ * </p>
+ *
+ * @param <T>
+ *
+ * @see QueryDslSupport
+ * @see DslExpressions
+ */
 public interface DslQuery<T> extends FetchableQuery<T, DslQuery<T>>, Query<DslQuery<T>>, ExtendedSubQuery<T> {
 
     /**

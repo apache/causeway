@@ -17,7 +17,7 @@
  *  under the License.
  *
  */
-package org.apache.causeway.persistence.querydsl.jdo.services.support;
+package org.apache.causeway.persistence.querydsl.jdo.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,28 +44,28 @@ import com.querydsl.core.types.dsl.BooleanOperation;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jdo.JDOQuery;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of")
-public class DslQueryJdoImpl<T> implements DslQuery<T> {
+public class DslQueryJdo<T> implements DslQuery<T> {
 
     final JDOQuery<T> jdoQuery;
 
     @Override
     public <U> DslQuery<U> projection(Expression<U> expr) {
-        return DslQueryJdoImpl.of(jdoQuery.select(expr));
+        return DslQueryJdo.of(jdoQuery.select(expr));
     }
 
     @Override
     public DslQuery<T> from(EntityPath<?>... sources) {
-        return DslQueryJdoImpl.of(jdoQuery.from(sources));
+        return DslQueryJdo.of(jdoQuery.from(sources));
     }
 
     @Override
     public <U> DslQuery<T> from(CollectionExpression<?, U> path, Path<U> alias) {
-        return DslQueryJdoImpl.of(jdoQuery.from(path,alias));
+        return DslQueryJdo.of(jdoQuery.from(path,alias));
     }
 
     @Override
@@ -156,47 +156,47 @@ public class DslQueryJdoImpl<T> implements DslQuery<T> {
 
     @Override
     public DslQuery<T> groupBy(Expression<?>... expressions) {
-        return DslQueryJdoImpl.of(jdoQuery.groupBy(expressions));
+        return DslQueryJdo.of(jdoQuery.groupBy(expressions));
     }
 
     @Override
     public DslQuery<T> having(Predicate... predicates) {
-        return DslQueryJdoImpl.of(jdoQuery.having(predicates));
+        return DslQueryJdo.of(jdoQuery.having(predicates));
     }
 
     @Override
     public DslQuery<T> limit(long limit) {
-        return DslQueryJdoImpl.of(jdoQuery.limit(limit));
+        return DslQueryJdo.of(jdoQuery.limit(limit));
     }
 
     @Override
     public DslQuery<T> offset(long offset) {
-        return DslQueryJdoImpl.of(jdoQuery.offset(offset));
+        return DslQueryJdo.of(jdoQuery.offset(offset));
     }
 
     @Override
     public DslQuery<T> restrict(QueryModifiers queryModifiers) {
-        return DslQueryJdoImpl.of(jdoQuery.restrict(queryModifiers));
+        return DslQueryJdo.of(jdoQuery.restrict(queryModifiers));
     }
 
     @Override
     public DslQuery<T> orderBy(OrderSpecifier<?>... orderSpecifiers) {
-        return DslQueryJdoImpl.of(jdoQuery.orderBy(orderSpecifiers));
+        return DslQueryJdo.of(jdoQuery.orderBy(orderSpecifiers));
     }
 
     @Override
     public <P> DslQuery<T> set(ParamExpression<P> paramExpression, P t) {
-        return DslQueryJdoImpl.of(jdoQuery.set(paramExpression,t));
+        return DslQueryJdo.of(jdoQuery.set(paramExpression,t));
     }
 
     @Override
     public DslQuery<T> distinct() {
-        return DslQueryJdoImpl.of(jdoQuery.distinct());
+        return DslQueryJdo.of(jdoQuery.distinct());
     }
 
     @Override
     public DslQuery<T> where(Predicate... predicates) {
-        return DslQueryJdoImpl.of(jdoQuery.where(predicates));
+        return DslQueryJdo.of(jdoQuery.where(predicates));
     }
 
     @Override

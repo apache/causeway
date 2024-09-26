@@ -15,30 +15,14 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-package org.apache.causeway.persistence.querydsl.jpa.services.support;
+package org.apache.causeway.persistence.querydsl.applib;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
-import org.apache.causeway.persistence.querydsl.applib.services.support.DslExpressions;
+import org.springframework.context.annotation.Configuration;
 
-import org.springframework.stereotype.Service;
-
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Expression;
-import com.querydsl.jpa.impl.JPAQuery;
-
-@Service
-public class DslExpressionsImpl implements DslExpressions {
-
-    @Override
-    public <T> DslQuery<T> select(Expression<T> expr) {
-        return DslQueryJpaImpl.of(new JPAQuery<Void>().select(expr));
-    }
-
-    @Override
-    public DslQuery<Tuple> select(Expression<?>... exprs) {
-        return DslQueryJpaImpl.of(new JPAQuery<Void>().select(exprs));
-    }
-
+/**
+ * @since 2.0 {@index}
+ */
+@Configuration
+public class CausewayModulePersistenceQueryDslApplib {
 }

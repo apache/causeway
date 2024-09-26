@@ -42,28 +42,28 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.BooleanOperation;
 import com.querydsl.jpa.impl.JPAQuery;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of")
-public class DslQueryJpaImpl<T> implements DslQuery<T> {
+public class DslQueryJpa<T> implements DslQuery<T> {
 
     final JPAQuery<T> jpaQuery;
 
     @Override
     public <U> DslQuery<U> projection(Expression<U> expr) {
-        return DslQueryJpaImpl.of(jpaQuery.select(expr));
+        return DslQueryJpa.of(jpaQuery.select(expr));
     }
 
     @Override
     public DslQuery<T> from(EntityPath<?>... sources) {
-        return DslQueryJpaImpl.of(jpaQuery.from(sources));
+        return DslQueryJpa.of(jpaQuery.from(sources));
     }
 
     @Override
     public <U> DslQuery<T> from(CollectionExpression<?, U> path, Path<U> alias) {
-        return DslQueryJpaImpl.of(jpaQuery.from(path,alias));
+        return DslQueryJpa.of(jpaQuery.from(path,alias));
     }
 
     @Override
@@ -113,47 +113,47 @@ public class DslQueryJpaImpl<T> implements DslQuery<T> {
 
     @Override
     public DslQuery<T> groupBy(Expression<?>... expressions) {
-        return DslQueryJpaImpl.of(jpaQuery.groupBy(expressions));
+        return DslQueryJpa.of(jpaQuery.groupBy(expressions));
     }
 
     @Override
     public DslQuery<T> having(Predicate... predicates) {
-        return DslQueryJpaImpl.of(jpaQuery.having(predicates));
+        return DslQueryJpa.of(jpaQuery.having(predicates));
     }
 
     @Override
     public DslQuery<T> limit(long limit) {
-        return DslQueryJpaImpl.of(jpaQuery.limit(limit));
+        return DslQueryJpa.of(jpaQuery.limit(limit));
     }
 
     @Override
     public DslQuery<T> offset(long offset) {
-        return DslQueryJpaImpl.of(jpaQuery.offset(offset));
+        return DslQueryJpa.of(jpaQuery.offset(offset));
     }
 
     @Override
     public DslQuery<T> restrict(QueryModifiers queryModifiers) {
-        return DslQueryJpaImpl.of(jpaQuery.restrict(queryModifiers));
+        return DslQueryJpa.of(jpaQuery.restrict(queryModifiers));
     }
 
     @Override
     public DslQuery<T> orderBy(OrderSpecifier<?>... orderSpecifiers) {
-        return DslQueryJpaImpl.of(jpaQuery.orderBy(orderSpecifiers));
+        return DslQueryJpa.of(jpaQuery.orderBy(orderSpecifiers));
     }
 
     @Override
     public <P> DslQuery<T> set(ParamExpression<P> paramExpression, P t) {
-        return DslQueryJpaImpl.of(jpaQuery.set(paramExpression,t));
+        return DslQueryJpa.of(jpaQuery.set(paramExpression,t));
     }
 
     @Override
     public DslQuery<T> distinct() {
-        return DslQueryJpaImpl.of(jpaQuery.distinct());
+        return DslQueryJpa.of(jpaQuery.distinct());
     }
 
     @Override
     public DslQuery<T> where(Predicate... predicates) {
-        return DslQueryJpaImpl.of(jpaQuery.where(predicates));
+        return DslQueryJpa.of(jpaQuery.where(predicates));
     }
 
     @Override

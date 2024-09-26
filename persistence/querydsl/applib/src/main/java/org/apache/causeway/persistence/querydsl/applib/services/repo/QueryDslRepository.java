@@ -42,7 +42,7 @@ import lombok.experimental.SuperBuilder;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
 

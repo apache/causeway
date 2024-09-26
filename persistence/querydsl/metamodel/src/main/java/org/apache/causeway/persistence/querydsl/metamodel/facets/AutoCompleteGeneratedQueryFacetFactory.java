@@ -74,7 +74,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
             });
         });
 
-        // If no fields with AutoComplete annotation found, search for string fields that have a getter
+        // If no fields with Property#queryDslAutoComplete annotation found, search for string fields that have a getter
         // TODO: should use the metamodel instead here, look for presence of AccessorFacet.
         if (fields.isEmpty()) {
             ReflectionUtils.doWithFields(processClassContext.getCls(), field -> {

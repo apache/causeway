@@ -15,31 +15,23 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-package org.apache.causeway.persistence.querydsl.jdo.services.support;
+package org.apache.causeway.persistence.querydsl.integration;
 
-import org.apache.causeway.persistence.querydsl.applib.DslQuery;
+import org.apache.causeway.persistence.querydsl.applib.CausewayModulePersistenceQueryDslApplib;
 
-import org.apache.causeway.persistence.querydsl.applib.services.support.DslExpressions;
+import org.apache.causeway.persistence.querydsl.metamodel.CausewayModulePersistenceQueryDslMetamodel;
 
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Expression;
-import com.querydsl.jdo.JDOQuery;
-
-@Service
-public class DslExpressionsImpl implements DslExpressions {
-
-    @Override
-    public <T> DslQuery<T> select(Expression<T> expr) {
-        return DslQueryJdoImpl.of(new JDOQuery<Void>().select(expr));
-    }
-
-    @Override
-    public DslQuery<Tuple> select(Expression<?>... exprs) {
-        return DslQueryJdoImpl.of(new JDOQuery<Void>().select(exprs));
-    }
-
+/**
+ * @since 2.0 {@index}
+ */
+@Configuration
+@Import({
+        CausewayModulePersistenceQueryDslApplib.class,
+        CausewayModulePersistenceQueryDslMetamodel.class,
+})
+public class CausewayModulePersistenceQueryDslIntegration {
 }

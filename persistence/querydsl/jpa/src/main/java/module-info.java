@@ -15,18 +15,17 @@
  *  KIND, either express or implied.  See the License for the
  *  specific language governing permissions and limitations
  *  under the License.
- *
  */
-package org.apache.causeway.persistence.querydsl.applib.annotation;
+module org.apache.causeway.persistence.querydsl.jpa {
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+    requires com.querydsl.core;
+    requires com.querydsl.jpa;
+    requires java.persistence;
+    requires mysema.commons.lang;
+    requires org.apache.causeway.persistence.querydsl.applib;
+    requires org.apache.causeway.persistence.querydsl.integration;
+    requires spring.boot.autoconfigure;
+    requires spring.context;
 
-@Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AutoComplete {
-
-    boolean caseInsensitive() default true;
+    requires static lombok;
 }
