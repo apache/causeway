@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,8 +95,18 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- TYPE SPECIFIC SEMANTICS
 
+    /**
+     * whether type is annotated with {@link XmlRootElement}
+     */
     public boolean hasJaxbRootElementSemantics(final Class<?> type) {
         return classModel(type).hasJaxbRootElementSemantics;
+    }
+
+    /**
+     * whether type is annotated with {@link Named}
+     */
+    public boolean isAnnotatedWithNamed(final Class<?> type) {
+        return classModel(type).isAnnotatedWithNamed;
     }
 
     // -- CONSTRUCTOR SEMANTICS
@@ -217,9 +228,9 @@ public final class _ClassCache implements AutoCloseable {
             .stream();
         }
     }
-    
+
     // -- ATTRIBUTES
-    
+
     public _ClassCache setAttribute(
             final Class<?> type,
             final String attributeName,
@@ -228,7 +239,7 @@ public final class _ClassCache implements AutoCloseable {
         classModel.attributeMap.put(attributeName, value);
         return this;
     }
-    
+
     public Optional<String> lookupAttribute(
             final Class<?> type,
             final String attributeName) {
@@ -241,6 +252,8 @@ public final class _ClassCache implements AutoCloseable {
     @RequiredArgsConstructor
     private static class ClassModel {
         private final Can<Field> declaredFields;
+        private final boolean hasJaxbRootElementSemantics;
+        private final boolean isAnnotatedWithNamed;
 
         private final Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey = new HashMap<>();
         private final Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey = new HashMap<>();
@@ -251,7 +264,6 @@ public final class _ClassCache implements AutoCloseable {
 
         private final Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute = new HashMap<>();
         private final Map<String, String> attributeMap = new ConcurrentHashMap<>();
-        private final boolean hasJaxbRootElementSemantics;
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
@@ -340,7 +352,8 @@ public final class _ClassCache implements AutoCloseable {
 
         val model = new ClassModel(
                 Can.ofArray(type.getDeclaredFields()),
-                _Annotations.isPresent(type, XmlRootElement.class));
+                _Annotations.isPresent(type, XmlRootElement.class),
+                _Annotations.isPresent(type, Named.class));
 
         // process public constructors
         val publicConstr = type.getConstructors();
@@ -511,6 +524,5 @@ public final class _ClassCache implements AutoCloseable {
         }
         return _Strings.decapitalize(fieldName);
     }
-
 
 }
