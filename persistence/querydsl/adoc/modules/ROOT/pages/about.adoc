@@ -5,3 +5,6 @@
 
 TODO
 
+
+
+optionally override QueryDslRepository#getDefaultOrders()
