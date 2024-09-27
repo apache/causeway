@@ -26,7 +26,7 @@ urls:
 content:
   sources:
 
-# antora
+    # antora
     - url: .
       start_path: antora/components/docs # docs
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -52,12 +52,12 @@ content:
       start_path: antora/components/userguide # userguide
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# api
+    # api
     - url: .
       start_path: api/schema/src/main/adoc # refguide
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# core
+    # core
     - url: .
       start_path: core/adoc  # core (design docs)
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -95,12 +95,12 @@ content:
       start_path: core/webapp/src/main/adoc # core
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# examples
+    # examples
     - url: .
       start_path: antora/components/tutorials # tutorials
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# extensions
+    # extensions
     - url: .
       start_path: extensions/adoc # extensions
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -131,7 +131,7 @@ content:
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
     - url: .
       start_path: extensions/core/titlecache/adoc # userguide
-      branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
+      branches: [2.1.0, 3.1.0]
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security
@@ -163,23 +163,23 @@ content:
       start_path: extensions/vw/sse/adoc # vw
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# incubator
+    # incubator
     - url: .
       start_path: incubator/adoc # incubator
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
-#   - url: .
-#     start_path: incubator/clients/kroviz/adoc # incubator
-#     branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
-#   - url: .
-#     start_path: incubator/extensions/core/commandreplay/adoc # incubator
-#     branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
+    #   - url: .
+    #     start_path: incubator/clients/kroviz/adoc # incubator
+    #     branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
+    #   - url: .
+    #     start_path: incubator/extensions/core/commandreplay/adoc # incubator
+    #     branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# mavendeps
+    # mavendeps
     - url: .
       start_path: mavendeps/adoc # starters
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# persistence
+    # persistence
     - url: .
       start_path: persistence/jpa/adoc # pjpa
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -187,15 +187,15 @@ content:
       start_path: persistence/jdo/adoc # pjdo
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
     - url: .
-      start_path: persistence/jdo/adoc # querydsl
+      start_path: persistence/querydsl/adoc # pjdo
       branches: [2.2.0, 3.2.0]
 
-# regression tests
+    # regression tests
     - url: .
       start_path: regressiontests/adoc # regressiontests
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# security
+    # security
     - url: .
       start_path: security/adoc # security
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -215,13 +215,13 @@ content:
       start_path: security/spring/src/main/adoc # security
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# starters
+    # starters
     - url: .
       start_path: starters/adoc # toc
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
 
-# testing
+    # testing
     - url: .
       start_path: testing/adoc # testing
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -250,7 +250,7 @@ content:
       start_path: testing/unittestsupport/adoc # testing
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# valuetypes
+    # valuetypes
     - url: .
       start_path: valuetypes/adoc # valuetypes
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -267,7 +267,7 @@ content:
       start_path: valuetypes/vega/adoc # valuetypes
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
 
-# viewers
+    # viewers
     - url: .
       start_path: viewers/graphql/adoc
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
@@ -281,7 +281,7 @@ content:
 
 ui:
   bundle:
-#    url: ../../causeway-antora/build/ui-bundle.zip
+    #    url: ../../causeway-antora/build/ui-bundle.zip
     url: https://github.com/apache/causeway-antora/blob/master/build/ui-bundle.zip?raw=true
     snapshot: true
   supplemental_files: antora/supplemental-ui
@@ -302,10 +302,12 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
-    page-causewayprevv2: "2.1.0"
-    page-causewayprevv3: "3.1.0"
-    page-causewayrelv2: "2.2.0"
-    page-causewayrelv3: "3.2.0"
+    page-causewayprevv2: "2.2.0"
+    page-causewayprevv3: "3.2.0"
+    page-causewayrelv2: "2.3.0"
+    page-causewayrelv3: "3.3.0"
+    page-causewayjdkv2: "11"
+    page-causewayjdkv3: "17"
 
 output:
   dir: antora/target/site
