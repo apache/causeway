@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.NonUniqueResultException;
 import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
@@ -45,7 +46,7 @@ import lombok.experimental.SuperBuilder;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
-import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
+import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
 
 import org.springframework.lang.Nullable;
 
@@ -64,6 +65,7 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 public abstract class QueryDslRepository<T extends Comparable, Q extends EntityPathBase<T>> {
 
+    public static final OrderSpecifier<Comparable> ID_ORDER_SPECIFIER = new OrderSpecifier<>(Order.ASC, DslExpressions.constant("id"));
     @Inject protected QueryDslSupport queryDslSupport;
     @Inject protected RepositoryService repositoryService;
 
@@ -101,7 +103,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @return a list of OrderSpecifiers
      */
     protected List<OrderSpecifier<? extends Comparable>> getDefaultOrders() {
-        return newList(QueryDslUtil.ID_ORDER_SPECIFIER);
+        return newList(ID_ORDER_SPECIFIER);
     }
 
     private OrderSpecifier<? extends Comparable>[] getDefaultOrder() {

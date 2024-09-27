@@ -28,8 +28,6 @@ import java.util.regex.Pattern;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Ops;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -39,12 +37,14 @@ import com.querydsl.core.types.dsl.StringPath;
 
 import lombok.experimental.UtilityClass;
 
+/**
+ * Static factory methods for various types of {@link Expression}s (in particular, {@link BooleanOperation}s and
+ * {@link Predicate}s).
+ */
 @UtilityClass
-public class QueryDslUtil {
+public class DslExpressions {
 
     public final static Pattern REGEX_PATTERN = Pattern.compile("\\(\\?i\\)"); // Pattern to recognize #wildcardToCaseInsensitiveRegex conversion
-
-    public static final OrderSpecifier<Comparable> ID_ORDER_SPECIFIER = new OrderSpecifier<>(Order.ASC, constant("id"));
 
     /**
      * Creates {@link BooleanOperation} where the arguments use the operator 'startsWith'.
@@ -72,7 +72,7 @@ public class QueryDslUtil {
             final StringPath stringPath,
             final String searchPhrase,
             final CaseSensitivity caseSensitivity) {
-        return search(stringPath, WildcardRegexUtil.toAnsiSqlWildcard(searchPhrase), caseSensitivity);
+        return search(stringPath, Wildcards.toAnsiSqlWildcard(searchPhrase), caseSensitivity);
     }
 
     public static BooleanExpression search(
@@ -93,6 +93,7 @@ public class QueryDslUtil {
         if (argument == null) return null;
         return Expressions.constant(argument);
     }
+
 
     public static Predicate and(List<? extends Predicate> predicates) {
         return and(predicates.toArray(new Predicate[0]));

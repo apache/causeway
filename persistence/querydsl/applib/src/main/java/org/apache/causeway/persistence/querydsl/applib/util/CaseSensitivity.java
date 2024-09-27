@@ -20,6 +20,7 @@
 package org.apache.causeway.persistence.querydsl.applib.util;
 
 public enum CaseSensitivity {
+
     INSENSITIVE,
     SENSITIVE;
 

@@ -27,12 +27,13 @@ import com.querydsl.core.types.dsl.Expressions;
 import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 
 /**
- * Factory for detached query expressions, most commonly used in subqueries.
+ * Factory for detached query expressions.  These are most commonly used in subqueries; they cannot be fetched directly
+ * because they are not attached to any persistence context.
  *
  * @see QueryDslSupport
  * @see <a href="https://chatgpt.com/share/66f522fd-a9cc-8010-9659-731f9a6182da">ChatGPT transcript on attached vs detached queries</a>.
  */
-public interface DslExpressions {
+public interface DetachedQueryFactory {
 
     <T> DslQuery<T> select(Expression<T> expr);
 

@@ -21,7 +21,7 @@ package org.apache.causeway.persistence.querydsl.jpa;
 import org.apache.causeway.persistence.jpa.applib.CausewayModulePersistenceJpaApplib;
 import org.apache.causeway.persistence.querydsl.integration.CausewayModulePersistenceQueryDslIntegration;
 
-import org.apache.causeway.persistence.querydsl.jpa.services.query.DslExpressionsJpa;
+import org.apache.causeway.persistence.querydsl.jpa.services.query.DetachedQueryFactoryJpa;
 
 import org.apache.causeway.persistence.querydsl.jpa.services.support.QueryDslSupportJpa;
 
@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
         // services
-        DslExpressionsJpa.class,
+        DetachedQueryFactoryJpa.class,
         QueryDslSupportJpa.class,
 
         // modules

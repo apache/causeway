@@ -27,12 +27,16 @@ import java.util.regex.Pattern;
 
 import org.springframework.lang.Nullable;
 
+/**
+ * Utility methods to convert between UI &quot;wildcards&quot; (meaning &quot;*&quot; and &quot;?&quot;), ANSI SQL
+ * wildcards (&quot;%&quot; and &quot;_&quot;) and Regex (&quot;.*&quot; and &quot;.&quot;).
+ */
 @UtilityClass
-public class WildcardRegexUtil {
+public class Wildcards {
 
     public final static Pattern REGEX_PATTERN = Pattern.compile("\\(\\?i\\)"); // Pattern to recognize #wildcardToCaseInsensitiveRegex conversion
 
-    public static String toAnsiSqlWildcard(final String search) {
+    public String toAnsiSqlWildcard(final String search) {
         if (REGEX_PATTERN.matcher(search).find()) {
             // Don't replace anything when regex is given
             return search;
@@ -44,7 +48,7 @@ public class WildcardRegexUtil {
         return result;
     }
 
-    public static String wildcardToRegex(
+    public String wildcardToRegex(
             @Nullable final String searchPattern,
             final CaseSensitivity caseSensitivity
     ) {
@@ -59,7 +63,7 @@ public class WildcardRegexUtil {
         }
     }
 
-    private static String withWildcards(@Nullable String searchPattern) {
+    private String withWildcards(@Nullable String searchPattern) {
         if(searchPattern == null || searchPattern.isEmpty()) {
             return "*";
         }
@@ -68,7 +72,7 @@ public class WildcardRegexUtil {
                 : "*" + searchPattern + "*";
     }
 
-    private static String wildToRegex(@NonNull String pattern) {
+    private String wildToRegex(@NonNull String pattern) {
         return pattern.replace("*", ".*").replace("?", ".");
     }
 

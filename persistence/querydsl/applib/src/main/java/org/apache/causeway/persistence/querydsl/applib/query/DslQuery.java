@@ -19,7 +19,7 @@
  */
 package org.apache.causeway.persistence.querydsl.applib.query;
 
-import org.apache.causeway.persistence.querydsl.applib.services.support.DslExpressions;
+import org.apache.causeway.persistence.querydsl.applib.services.support.DetachedQueryFactory;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
 import com.querydsl.core.FetchableQuery;
@@ -37,14 +37,14 @@ import com.querydsl.core.types.Path;
  *
  * <p>
  *  Typically is built up using {@link QueryDslSupport} (in which case will be attached to a persistence context and
- *  can be fetched immediately if desired), or else using {@link DslExpressions} (in which case will <i>not</i> be
+ *  can be fetched immediately if desired), or else using {@link DetachedQueryFactory} (in which case will <i>not</i> be
  *  attached, but can be used to build up other queries, eg as a subquery).
  * </p>
  *
  * @param <T>
  *
  * @see QueryDslSupport
- * @see DslExpressions
+ * @see DetachedQueryFactory
  */
 public interface DslQuery<T> extends FetchableQuery<T, DslQuery<T>>, Query<DslQuery<T>>, ExtendedSubQuery<T> {
 

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.persistence.querydsl.jdo;
 
-import org.apache.causeway.persistence.querydsl.jdo.services.support.DslExpressionsJdo;
+import org.apache.causeway.persistence.querydsl.jdo.services.support.DetachedQueryFactoryJdo;
 
 import org.apache.causeway.persistence.querydsl.jdo.services.support.QueryDslSupportJdo;
 
@@ -33,7 +33,7 @@ import org.apache.causeway.persistence.querydsl.integration.CausewayModulePersis
 @Configuration
 @Import({
         // services
-        DslExpressionsJdo.class,
+        DetachedQueryFactoryJdo.class,
         QueryDslSupportJdo.class,
 
         // modules

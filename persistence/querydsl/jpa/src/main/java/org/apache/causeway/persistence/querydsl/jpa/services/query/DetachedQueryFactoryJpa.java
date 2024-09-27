@@ -20,7 +20,7 @@
 package org.apache.causeway.persistence.querydsl.jpa.services.query;
 
 import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
-import org.apache.causeway.persistence.querydsl.applib.services.support.DslExpressions;
+import org.apache.causeway.persistence.querydsl.applib.services.support.DetachedQueryFactory;
 
 import org.apache.causeway.persistence.querydsl.jpa.services.support.DslQueryJpa;
 
@@ -31,7 +31,7 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.jpa.impl.JPAQuery;
 
 @Service
-public class DslExpressionsJpa implements DslExpressions {
+public class DetachedQueryFactoryJpa implements DetachedQueryFactory {
 
     @Override
     public <T> DslQuery<T> select(Expression<T> expr) {

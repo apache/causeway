@@ -46,8 +46,8 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.CaseSensitivity;
-import org.apache.causeway.persistence.querydsl.applib.util.QueryDslUtil;
-import org.apache.causeway.persistence.querydsl.applib.util.WildcardRegexUtil;
+import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
+import org.apache.causeway.persistence.querydsl.applib.util.Wildcards;
 
 
 /**
@@ -106,7 +106,7 @@ public class AutoCompleteGeneratedDslQuery {
             }
         }
 
-        return executeQuery(WildcardRegexUtil.toAnsiSqlWildcard(searchPhrase), predicate);
+        return executeQuery(Wildcards.toAnsiSqlWildcard(searchPhrase), predicate);
     }
 
     /**
@@ -143,14 +143,14 @@ public class AutoCompleteGeneratedDslQuery {
 
                 // Only string type fields are supported
                 val stringPath = entityPath.getString(field.getName());
-                val searchReplaced = WildcardRegexUtil.toAnsiSqlWildcard(searchPhrase);
+                val searchReplaced = Wildcards.toAnsiSqlWildcard(searchPhrase);
 
                 boolean ignoreCase = _Annotations.synthesize(field, Property.class)
                         .map(Property::queryDslAutoComplete)
                         .filter(Property.QueryDslAutoCompletePolicy::isIncluded)
                         .map(Property.QueryDslAutoCompletePolicy::isIgnoreCase)
                         .orElse(true);
-                val expr = QueryDslUtil.search(stringPath, searchReplaced, CaseSensitivity.of(ignoreCase));
+                val expr = DslExpressions.search(stringPath, searchReplaced, CaseSensitivity.of(ignoreCase));
                 where.or(expr);
 
                 // Build order by clause

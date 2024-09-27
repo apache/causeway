@@ -1,6 +1,5 @@
 package org.apache.causeway.persistence.querydsl.applib.util;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,7 +27,7 @@ public class WildcardRegexUtil_toAnsiSqlWildcard_Test {
     @ParameterizedTest
     @EnumSource(Scenario.class)
     public void should_replace_wildcards(Scenario scenario) {
-        String result = WildcardRegexUtil.toAnsiSqlWildcard(scenario.input);
+        String result = Wildcards.toAnsiSqlWildcard(scenario.input);
         assertThat(result).isEqualTo(scenario.expected);
     }
 }
