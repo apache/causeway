@@ -312,6 +312,7 @@
 		<module>../persistence/commons</module>
 		<module>../persistence/jdo</module>
 		<module>../persistence/jpa</module>
+		<module>../persistence/querydsl</module>
 
 	</modules>
 
