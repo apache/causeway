@@ -186,9 +186,10 @@ content:
     - url: .
       start_path: persistence/jdo/adoc # pjdo
       branches: [2.0.0, 2.1.0, 2.2.0, 3.0.0, 3.1.0, 3.2.0]
-    - url: .
-      start_path: persistence/querydsl/adoc # pjdo
-      branches: [2.2.0, 3.2.0]
+    #TODO enable once feature is merged into master
+    #- url: .
+    #  start_path: persistence/querydsl/adoc # pjdo
+    #  branches: [2.2.0, 3.2.0]
 
     # regression tests
     - url: .
