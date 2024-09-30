@@ -53,13 +53,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up JDK 22
+    - name: Set up JDK (zulu 22)
       if: matrix.language == 'java'
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: 22
-
+    - name: Set up Maven (3.9.9)
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: 3.9.9
     - name: Print Maven Version
       if: matrix.language == 'java'
       run: mvn --version
