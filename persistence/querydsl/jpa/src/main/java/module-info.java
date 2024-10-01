@@ -16,23 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.persistence.jpa.applib {
-    exports org.apache.causeway.persistence.jpa.applib;
-    exports org.apache.causeway.persistence.jpa.applib.services;
-    exports org.apache.causeway.persistence.jpa.applib.integration;
-    exports org.apache.causeway.persistence.jpa.applib.types;
+module org.apache.causeway.persistence.querydsl.jpa {
 
-    requires jakarta.activation;
-    requires java.inject;
-    requires java.persistence;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires org.apache.causeway.core.config;
-    requires org.apache.causeway.core.metamodel;
-    requires org.apache.logging.log4j;
-    requires org.eclipse.persistence.core;
-    requires spring.context;
-    requires java.compiler;
     requires com.querydsl.core;
+    requires com.querydsl.jpa;
+    requires java.persistence;
+    requires mysema.commons.lang;
+
+    requires org.apache.causeway.persistence.jpa.applib;
+    requires org.apache.causeway.persistence.querydsl.applib;
+    requires org.apache.causeway.persistence.querydsl.integration;
+
+    requires spring.boot.autoconfigure;
+    requires spring.context;
+
+    requires static lombok;
+
 }
