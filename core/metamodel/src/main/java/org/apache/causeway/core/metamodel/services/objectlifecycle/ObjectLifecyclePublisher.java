@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
  *     NOTE: this interface should really have been called ObjectLifecycleSubscriber...
  * </p>
  *
- * @since 2.0 {index}
+ * @since 2.0 {@index}
  */
 public interface ObjectLifecyclePublisher {
 

@@ -38,6 +38,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Default implementation of {@link LanguageProvider}.
  *
  * @since 2.0 {@index}
  */

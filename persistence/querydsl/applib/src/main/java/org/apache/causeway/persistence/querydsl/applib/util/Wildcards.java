@@ -30,6 +30,8 @@ import org.springframework.lang.Nullable;
 /**
  * Utility methods to convert between UI &quot;wildcards&quot; (meaning &quot;*&quot; and &quot;?&quot;), ANSI SQL
  * wildcards (&quot;%&quot; and &quot;_&quot;) and Regex (&quot;.*&quot; and &quot;.&quot;).
+ *
+ * @since 2.1 {@index}
  */
 @UtilityClass
 public class Wildcards {

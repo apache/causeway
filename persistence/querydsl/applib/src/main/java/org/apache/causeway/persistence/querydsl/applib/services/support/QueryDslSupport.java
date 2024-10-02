@@ -31,6 +31,8 @@ import com.querydsl.core.types.Expression;
  * Factory for attached query expressions, executable directly (using for example {@link DslQuery#fetch()},
  * {@link DslQuery#fetchOne()}, {@link DslQuery#fetchFirst()} etc).
  *
+ * @since 2.1 {@index}
+ *
  * @see DetachedQueryFactory
  * @see <a href="https://chatgpt.com/share/66f522fd-a9cc-8010-9659-731f9a6182da">ChatGPT transcript on attached vs detached queries</a>.
  */

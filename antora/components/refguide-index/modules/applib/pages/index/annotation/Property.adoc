@@ -28,6 +28,7 @@ Publishing entityChangePublishing() default Publishing.NOT_SPECIFIED;     // <.>
   String regexPattern() default "";     // <.>
   int regexPatternFlags() default 0;     // <.>
   String regexPatternReplacement() default "Doesn't match pattern";     // <.>
+  QueryDslAutoCompletePolicy queryDslAutoComplete() default QueryDslAutoCompletePolicy.EXCLUDE;     // <.>
 }
 ----
 
@@ -110,6 +111,11 @@ Pattern flags, as per _java.util.regex.Pattern#compile(String, int)_ .
 +
 --
 Replacement text for the pattern in generated error message.
+--
+<.> xref:#queryDslAutoComplete[queryDslAutoComplete]
++
+--
+Whether to use the value of this property for autocompletes.
 --
 
 == Members
@@ -234,6 +240,23 @@ The default value, `0` , means that no flags have been specified.
 === regexPatternReplacement
 
 Replacement text for the pattern in generated error message.
+
+[#queryDslAutoComplete]
+=== queryDslAutoComplete
+
+Whether to use the value of this property for autocompletes.
+
+The minimum number of characters can be specified by annotating the the containing entity with _DomainObject#queryDslAutoCompleteMinLength()_ . The number of returned rows can also be limited using _DomainObject#queryDslAutoCompleteLimitResults()_ .
+
+Moreover, additional criteria (predicates) can be specified for the auto-complete query, by annotating the containing entity with _DomainObject#queryDslAutoCompleteAdditionalPredicateRepository()_ and (if required) _DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()_ .
+
+NOTE: if _DomainObject#autoCompleteRepository()_ (and _DomainObject#autoCompleteMethod()_ ) have been specified, then these take precedence of the query DSL auto-complete.
+
+NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
+
+NOTE: if _NO_ fields are annotated, then all string properties are included by default.
+
+NOTE: this feature only applies to entities, not to view models. Only persisted properties should be annotated.
 
 include::hooks/Property_010-examples-and-usage.adoc[]
 

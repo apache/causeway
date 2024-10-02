@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link MessageService}.
  *
  * @since 2.0 {@index}
  */

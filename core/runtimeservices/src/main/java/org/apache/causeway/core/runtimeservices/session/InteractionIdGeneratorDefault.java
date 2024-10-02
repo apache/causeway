@@ -34,6 +34,8 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Default implementation of {@link InteractionIdGenerator}, which simply returns a
+ * {@link UUID#randomUUID() random UUID}.
  *
  * @since 2.0 {@index}
  */

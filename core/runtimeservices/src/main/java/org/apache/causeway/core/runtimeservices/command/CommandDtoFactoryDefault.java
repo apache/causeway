@@ -54,8 +54,12 @@ import org.apache.causeway.schema.common.v2.OidsDto;
 import lombok.val;
 
 /**
+ * Default implementation of {@link CommandDtoFactory}.
+ *
+ * <p>
  * The design of this service is similar to
  * {@link org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault}.
+ * </p>
  *
  * @see org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault
  *

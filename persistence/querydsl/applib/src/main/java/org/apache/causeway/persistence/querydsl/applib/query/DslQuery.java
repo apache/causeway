@@ -41,10 +41,12 @@ import com.querydsl.core.types.Path;
  *  attached, but can be used to build up other queries, eg as a subquery).
  * </p>
  *
- * @param <T>
+ * @since 2.1 {@index}
  *
  * @see QueryDslSupport
  * @see DetachedQueryFactory
+ *
+ * @param <T>
  */
 public interface DslQuery<T> extends FetchableQuery<T, DslQuery<T>>, Query<DslQuery<T>>, ExtendedSubQuery<T> {
 

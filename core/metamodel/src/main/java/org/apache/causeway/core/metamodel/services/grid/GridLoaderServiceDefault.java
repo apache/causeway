@@ -59,7 +59,9 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * @since 2.0 {@index}
+ * Default implementation of {@link GridLoaderService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridLoaderServiceDefault")

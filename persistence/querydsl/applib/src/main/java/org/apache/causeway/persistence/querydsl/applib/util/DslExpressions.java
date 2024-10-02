@@ -40,6 +40,8 @@ import lombok.experimental.UtilityClass;
 /**
  * Static factory methods for various types of {@link Expression}s (in particular, {@link BooleanOperation}s and
  * {@link Predicate}s).
+ *
+ * @since 2.1 {@index}
  */
 @UtilityClass
 public class DslExpressions {

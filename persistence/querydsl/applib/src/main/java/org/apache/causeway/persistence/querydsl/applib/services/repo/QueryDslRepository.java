@@ -58,6 +58,8 @@ import org.springframework.lang.Nullable;
  *     Internally, delegates to {@link QueryDslSupport} to actually submit the queries.
  * </p>
  *
+ * @since 2.1 {@index}
+ *
  * @param <T> is the entity type
  * @param <Q> is the Q type of the entity
  */

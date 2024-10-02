@@ -11,30 +11,6 @@ The cache configuration will by default be taken from _org.apache.causeway.core.
 .Cached.java
 ----
 interface Cached {
-  int expiryDurationInMinutes()     // <.>
-  int maxSizeInEntries()     // <.>
 }
 ----
 
-<.> xref:#expiryDurationInMinutes_[expiryDurationInMinutes()]
-+
---
-The number of minutes that a title should stay in the cache (of a given logical type name)
---
-<.> xref:#maxSizeInEntries_[maxSizeInEntries()]
-+
---
-The maximum number of entries that can reside in the cache (of a given logical type name).
---
-
-== Members
-
-[#expiryDurationInMinutes_]
-=== expiryDurationInMinutes()
-
-The number of minutes that a title should stay in the cache (of a given logical type name)
-
-[#maxSizeInEntries_]
-=== maxSizeInEntries()
-
-The maximum number of entries that can reside in the cache (of a given logical type name).

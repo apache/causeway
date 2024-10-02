@@ -14,7 +14,6 @@ interface TranslationService {
   String translate(TranslationContext context, String text)     // <.>
   String translate(TranslationContext context, String singularText, String pluralText, int num)     // <.>
   Mode getMode()     // <.>
-  TranslationService identity()     // <.>
 }
 ----
 
@@ -32,11 +31,6 @@ Return a translation of either the singular or the plural text, dependent on the
 +
 --
 Whether this implementation is operating in read or in write mode.
---
-<.> xref:#identity_[identity()]
-+
---
-Can be used as fallback in the absence of a xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] implementation. Acts as a text pass-through, not translating anything.
 --
 
 == Members
@@ -63,11 +57,6 @@ Whether this implementation is operating in read or in write mode.
 If in read mode, then the translations are expected to be present. In such cases, the _#translate(TranslationContext, String) translate_ _#translate(TranslationContext, String, String, int) method_ s should be _lazily_ called, if only because there will (most likely) need to be a session in progress (such that the locale of the current user can be determined).
 
 If in write mode, then the implementation is saving translation keys, and will always return the untranslated translation. In such cases, the _#translate(TranslationContext, String) translate_ _#translate(TranslationContext, String, String, int) method_ s should be _eagerly_ called such that all pathways are exercised..
-
-[#identity_]
-=== identity()
-
-Can be used as fallback in the absence of a xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] implementation. Acts as a text pass-through, not translating anything.
 
 include::hooks/TranslationService_010-implementation.adoc[]
 

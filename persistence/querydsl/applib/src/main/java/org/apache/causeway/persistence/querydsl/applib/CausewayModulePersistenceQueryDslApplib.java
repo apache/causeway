@@ -21,7 +21,7 @@ package org.apache.causeway.persistence.querydsl.applib;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @since 2.0 {@index}
+ * @since 2.1 {@index}
  */
 @Configuration
 public class CausewayModulePersistenceQueryDslApplib {

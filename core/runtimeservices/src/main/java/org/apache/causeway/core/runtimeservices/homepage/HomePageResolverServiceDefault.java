@@ -38,6 +38,14 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.val;
 
 /**
+ * Default implementation of {@link HomePageResolverService}, which uses the view model annotated with
+ * {@link HomePage} as the home page.
+ *
+ * <p>
+ *     If there is more than one such view model so annotated, then the one chosen is not defined
+ *     (in effect, can be considered is randomly chosen).
+ * </p>
+ *
  * @since 2.0 {@index}
  */
 @Service

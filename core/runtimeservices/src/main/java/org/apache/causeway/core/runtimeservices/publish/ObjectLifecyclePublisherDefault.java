@@ -44,8 +44,11 @@ import org.apache.causeway.core.transaction.changetracking.EntityChangeTracker;
 import lombok.RequiredArgsConstructor;
 
 /**
- * @see ObjectLifecyclePublisher
+ * Default implementation of {@link ObjectLifecyclePublisher}.
+ *
  * @since 2.0 {@index}
+ *
+ * @see ObjectLifecyclePublisher
  */
 @Service
 @TransactionScope

@@ -25,7 +25,6 @@ Domain service APIs for the presentation layer allow the domain objects to contr
 |Obtain a URL to a domain object (eg for use within an email or report)
 
 
-
 |===
 
 

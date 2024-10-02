@@ -33,6 +33,8 @@ import com.querydsl.core.types.dsl.PathBuilder;
  * {@link Property#queryDslAutoComplete()} and can be fine-tuned using the <code>queryDslAutoCompleteXxx...()</code>
  * attributes in {@link DomainObject}.
  *
+ * @since 2.1 {@index}
+ *
  * @see Property#queryDslAutoComplete()
  * @see DomainObject#queryDslAutoCompleteMinLength()
  * @see DomainObject#queryDslAutoCompleteLimitResults()

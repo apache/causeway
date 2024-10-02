@@ -19,6 +19,11 @@
  */
 package org.apache.causeway.persistence.querydsl.applib.util;
 
+/**
+ * As used in {@link DslExpressions} and {@link Wildcards}.
+ *
+ * @since 2.1 {@index}
+ */
 public enum CaseSensitivity {
 
     INSENSITIVE,

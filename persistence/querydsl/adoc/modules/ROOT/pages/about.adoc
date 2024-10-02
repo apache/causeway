@@ -7,7 +7,7 @@ link:http://querydsl.com/[QueryDSL] provides a way to express queries independen
 
 Apache Causeway's integration with QueryDSL provides the following capabilities:
 
-* it extends
+* xref:
 
 
 

@@ -37,9 +37,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Default implementation of {@link ServiceInjector}.
  *
- * @since 2.0
- *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(ServiceInjectorDefault.LOGICAL_TYPE_NAME)
