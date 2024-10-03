@@ -90,8 +90,6 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.Tempora
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions.SequencePolicy;
