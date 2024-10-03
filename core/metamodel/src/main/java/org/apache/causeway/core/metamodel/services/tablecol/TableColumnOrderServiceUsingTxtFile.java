@@ -118,9 +118,12 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      * </p>
      *
      * <p>
-         * Additional files can be provided by overriding {@link #addResourceNames(Class, String, Class, List)}
+     * Additional files can be provided by overriding {@link #addResourceNames(Class, String, Class, List)}
      * </p>
+     * 
+     * @Returns {@code null}, if no matching resource was found
      */
+    @Nullable
     @Override
     public List<String> orderParented(
             final Object domainObject,
@@ -199,7 +202,10 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      * <p>
      * Additional files can be provided by overriding {@link #addResourceNames(Class, List)}.
      * </p>
+     * 
+     * @Returns {@code null}, if no matching resource was found
      */
+    @Nullable
     @Override
     public List<String> orderStandalone(
             final Class<?> domainType,
@@ -233,14 +239,20 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
         addTo.add(String.format("%s.columnOrder.fallback.txt", domainClass.getSimpleName()));
     }
 
+    /**
+     * if contents is {@code null} returns {@code null}
+     */
+    @Nullable
     private static List<String> contentsMatching(
             final @Nullable String contents,
             final @NonNull List<String> associationIds) {
-        return TextUtils.readLines(contents).stream()
-            .map(String::trim) // ignore any leading or trailing whitespace
-            .filter(line->!line.startsWith("#")) // speed up (not strictly required)
-            .filter(associationIds::contains)
-            .collect(Collectors.toList());
+        return contents==null
+                ? null
+                : TextUtils.readLines(contents).stream()
+                    .map(String::trim) // ignore any leading or trailing whitespace
+                    .filter(line->!line.startsWith("#")) // speed up (not strictly required)
+                    .filter(associationIds::contains)
+                    .collect(Collectors.toList());
     }
 
 }

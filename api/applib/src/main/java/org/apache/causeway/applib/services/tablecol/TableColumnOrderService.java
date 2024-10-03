@@ -20,6 +20,8 @@ package org.apache.causeway.applib.services.tablecol;
 
 import java.util.List;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Provides the ability to reorder columns in both parented- and
  * standalone tables.
@@ -72,6 +74,7 @@ public interface TableColumnOrderService {
      *
      * @return <code>null</code> if has no opinion/provides no reordering for this parent and collection.
      */
+    @Nullable
     List<String> orderParented(
             final Object parent,
             final String collectionId,
@@ -87,6 +90,7 @@ public interface TableColumnOrderService {
      *
      * @return <code>null</code> if has no opinion/provides no reordering for this type.
      */
+    @Nullable
     List<String> orderStandalone(
             final Class<?> domainType,
             final List<String> associationIds);
