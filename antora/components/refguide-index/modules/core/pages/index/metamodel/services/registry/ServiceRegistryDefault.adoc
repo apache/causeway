@@ -1,18 +1,19 @@
-= CommandDtoFactoryDefault
+= ServiceRegistryDefault
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-The design of this service is similar to _org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault_ .
+Default implementation of xref:refguide:applib:index/services/registry/ServiceRegistry.adoc[ServiceRegistry] .
 
 == API
 
 [source,java]
-.CommandDtoFactoryDefault.java
+.ServiceRegistryDefault.java
 ----
-class CommandDtoFactoryDefault {
-  CommandDto asCommandDto(UUID interactionId, InteractionHead targetHead, ObjectAction objectAction, Can<ManagedObject> argAdapters)
-  CommandDto asCommandDto(UUID interactionId, InteractionHead targetHead, OneToOneAssociation property, ManagedObject valueAdapter)
-  void addActionArgs(InteractionHead head, ObjectAction objectAction, ActionDto actionDto, Can<ManagedObject> argAdapters)
-  void addPropertyValue(InteractionHead interactionHead, OneToOneAssociation property, PropertyDto propertyDto, ManagedObject valueAdapter)
+class ServiceRegistryDefault {
+  Optional<_SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id)
+  Optional<?> lookupBeanById(String id)
+  Stream<_SingletonBeanProvider> streamRegisteredBeans()
+  Can<T> select(Class<T> type, Annotation[] qualifiers)
+  void clearRegisteredBeans()
 }
 ----
 

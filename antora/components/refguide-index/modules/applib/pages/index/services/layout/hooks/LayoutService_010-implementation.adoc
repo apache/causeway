@@ -5,4 +5,4 @@
 
 == Implementation
 
-The framework provides a default implementation, `o.a.c.core.metamodel.services.layout.LayoutServiceDefault`.
+The xref:core:metamodel:about.adoc[Core Metamodel] module provides a default implementation, xref:refguide:core:index/metamodel/services/layout/LayoutServiceDefault.adoc[].

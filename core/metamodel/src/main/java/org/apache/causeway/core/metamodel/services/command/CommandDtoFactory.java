@@ -43,7 +43,7 @@ import org.apache.causeway.schema.cmd.v2.PropertyDto;
  *     the <i>actual</i> execution of the action invocation or property edit.
  * </p>
  *
- * @since 1.x {@index}
+ * @since 1.x
  *
  * @see org.apache.causeway.applib.services.wrapper.WrapperFactory
  * @see org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory

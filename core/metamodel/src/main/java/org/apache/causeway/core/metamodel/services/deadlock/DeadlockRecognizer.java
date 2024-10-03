@@ -23,7 +23,8 @@ import lombok.SneakyThrows;
 
 /**
  * Provides a pluggable mechanism
- * @since 2.1 {@index}
+ *
+ * @since 2.1
  */
 public interface DeadlockRecognizer {
 

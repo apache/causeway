@@ -5,7 +5,6 @@
 
 == Implementation
 
-The core framework provides a default implementation of this service (`o.a.c.core.runtime.services.user.UserServiceDefault`).
-
+This class is concrete.
 
 

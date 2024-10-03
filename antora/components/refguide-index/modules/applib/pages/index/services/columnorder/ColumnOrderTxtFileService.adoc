@@ -28,3 +28,4 @@ interface ColumnOrderTxtFileService {
 }
 ----
 
+include::hooks/ColumnOrderTxtFileService_010-implementation.adoc[]

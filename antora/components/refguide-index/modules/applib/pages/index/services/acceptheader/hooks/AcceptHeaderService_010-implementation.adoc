@@ -3,6 +3,6 @@
 
 == Implementation
 
-The xref:vro:ROOT:about.adoc[Restful Objects] viewer provides an implementation of this API, `o.a.c.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest`.
+The xref:vro:ROOT:about.adoc[Restful Objects] viewer provides an implementation of this API, xref:refguide:viewer:index/restfulobjects/rendering/service/acceptheader/AcceptHeaderServiceForRest.adoc[].
 
 

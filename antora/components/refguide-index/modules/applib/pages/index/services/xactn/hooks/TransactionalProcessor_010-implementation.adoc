@@ -5,4 +5,5 @@
 
 == Implementation
 
-The core framework provides a default implementation of this service, `o.a.c.core.runtimeservices.transaction.TransactionServiceSpring`.
+The xref:refguide:applib:index/services/xactn/TransactionService.adoc[] is a sub-interface of this interface.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation, xref:refguide:core:index/runtimeservices/transaction/TransactionServiceSpring.adoc[].

@@ -7,6 +7,7 @@
 .AcceptHeaderServiceForRest.java
 ----
 class AcceptHeaderServiceForRest {
+  public static final String LOGICAL_TYPE_NAME;
   List<MediaType> getAcceptableMediaTypes()
 }
 ----

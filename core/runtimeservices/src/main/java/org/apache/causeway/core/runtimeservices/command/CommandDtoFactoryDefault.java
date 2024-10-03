@@ -63,7 +63,7 @@ import lombok.val;
  *
  * @see org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault
  *
- * @since 2.0 {@index}
+ * @since 2.0
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandDtoFactoryDefault")

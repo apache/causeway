@@ -29,3 +29,5 @@ Optionally returns a _Predicate_ that filters collections of given _domainType_ 
 Optionally returns a _Predicate_ that filters collections of given _domainType_ by a nullable _searchString_ , based on whether the search is supported.
 
 For example, the searchString could be parsed into tokens, and then matched against the domain object's title say.
+
+include::hooks/CollectionSearchService_010-implementation.adoc[]

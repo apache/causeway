@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services;
+package org.apache.causeway.core.metamodel.services.inject;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;

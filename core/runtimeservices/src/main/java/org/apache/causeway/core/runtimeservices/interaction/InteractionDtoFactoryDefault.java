@@ -62,7 +62,7 @@ import lombok.val;
  * {@link org.apache.causeway.core.runtimeservices.command.CommandDtoFactoryDefault}
  * </p>
  *
- * @since 2.0 {@index}
+ * @since 2.0
  *
  * @see org.apache.causeway.core.runtimeservices.command.CommandDtoFactoryDefault
  */

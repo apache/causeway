@@ -5,5 +5,5 @@
 
 == Implementation
 
-The framework provides a default implementation of `o.a.c.core.metamodel.services.ServiceInjectorDefault`.
+The xref:core:metamodel:about.adoc[Core Metamodel] module provides a default implementation, xref:refguide:core:index/metamodel/services/inject/ServiceInjectorDefault.adoc[].
 Under the covers this delegates to Spring Framework's injection mechanism.

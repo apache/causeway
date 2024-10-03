@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
  * Default implementation that supports Spring Boot's {@link DeadlockLoserDataAccessException} and also the standard
  * message thrown by SQL Server.
  *
- * @since 2.1 {@index}
+ * @since 2.1
  */
 @Component
 @Priority(PriorityPrecedence.LATE)

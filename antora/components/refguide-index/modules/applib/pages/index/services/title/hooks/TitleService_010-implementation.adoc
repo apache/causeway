@@ -5,4 +5,4 @@
 
 == Implementation
 
-The core framework provides a default implementation of this service (`o.a.c.core.metamodel.services.title.TitleServiceDefault`).
+The xref:core:metamodel:about.adoc[Core Metamodel] module provides a default implementation of this service, xref:refguide:core:index/metamodel/services/title/TitleServiceDefault.adoc[].

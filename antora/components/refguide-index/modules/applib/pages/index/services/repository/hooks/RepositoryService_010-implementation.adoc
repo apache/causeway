@@ -5,7 +5,8 @@
 
 == Implementation
 
-The default implementation of this domain service is `o.a.c.core.runtimeservices.repository.RepositoryServiceDefault`.
+The Commons Persistence module
+provides a default implementation of this service, xref:refguide:persistence:index/commons/integration/repository/RepositoryServiceDefault.adoc[].
 
 === Configuration Properties
 

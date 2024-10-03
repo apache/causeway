@@ -46,11 +46,14 @@ import static org.apache.causeway.commons.internal.base._NullSafe.stream;
  * @since 1.x {@index}
  */
 @Service
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".AcceptHeaderServiceForRest")
+@Named(AcceptHeaderServiceForRest.LOGICAL_TYPE_NAME)
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("ForRest")
 @InteractionScope
 public class AcceptHeaderServiceForRest implements AcceptHeaderService {
+
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".AcceptHeaderServiceForRest";
 
     private static ThreadLocal<List<MediaType>> mediaTypesByThread = new ThreadLocal<>();
 

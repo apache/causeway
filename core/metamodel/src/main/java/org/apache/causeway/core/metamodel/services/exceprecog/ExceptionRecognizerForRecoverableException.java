@@ -32,9 +32,11 @@ import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
- * Framework-provided implementation of {@link ExceptionRecognizer},
+ * Default implementation of {@link ExceptionRecognizer},
  * which will automatically recognize any
  * {@link org.apache.causeway.applib.exceptions.RecoverableException}s.
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ExceptionRecognizerForRecoverableException")

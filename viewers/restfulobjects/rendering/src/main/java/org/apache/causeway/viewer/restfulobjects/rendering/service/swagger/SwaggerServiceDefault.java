@@ -37,11 +37,22 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inter
 
 import lombok.val;
 
+/**
+ * Default implementation of {@link SwaggerService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".swaggerServiceDefault")
+@Named(SwaggerServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public class SwaggerServiceDefault implements SwaggerService {
+
+    /**
+     * Beware this name uses camelCase rather than the usual PascalCase.
+     */
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".swaggerServiceDefault";
 
     private final OpenApiSpecGenerator swaggerSpecGenerator;
     private final String basePath;
