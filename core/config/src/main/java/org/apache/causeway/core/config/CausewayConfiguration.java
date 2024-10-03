@@ -58,8 +58,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
@@ -88,6 +86,7 @@ import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.services.userui.UserMenu;
+import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
@@ -1868,7 +1867,7 @@ public class CausewayConfiguration {
                 private int socketTimeout = 2000;
 
                 /**
-                 * The maximum number of millseconds to wait to obtain a socket before timing out.
+                 * The maximum number of milliseconds to wait to obtain a socket before timing out.
                  *
                  * @deprecated  - ignored, instead use <code>spring.mail.properties.mail.smtp.timeout</code>
                  */
@@ -2302,7 +2301,7 @@ public class CausewayConfiguration {
 
         public enum IfDisabledPolicy {
             /**
-             * The default  behaviour: any properties, collections or actions whose usabiliity has been vetoed
+             * The default  behaviour: any properties, collections or actions whose usability has been vetoed
              * will be shown as disabled in the UI.
              */
             DISABLE,
@@ -2320,7 +2319,7 @@ public class CausewayConfiguration {
          * Whether and how to display any properties, actions and collections whose usability has been vetoed.
          *
          * <p>
-         *     By default, such object members are shown as disabled, with the tolipindicating why. Setting the
+         *     By default, such object members are shown as disabled, with the tooltip indicating why. Setting the
          *     property to {@link IfDisabledPolicy#SHOW_AS_DISABLED_WITH_DIAGNOSTICS SHOW_AS_DISABLED_WITH_DIAGNOSTICS} shows additional detail in the
          *     tooltip.
          * </p>
