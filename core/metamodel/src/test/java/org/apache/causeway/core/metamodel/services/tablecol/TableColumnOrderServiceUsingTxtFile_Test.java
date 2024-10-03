@@ -112,7 +112,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
-            assertThat(ordered).isNull();
+            assertThat(ordered).isEmpty();
         }
 
     }
@@ -147,7 +147,7 @@ class TableColumnOrderServiceUsingTxtFile_Test {
                     Arrays.asList("orderNum", "orderStatus", "orderDate", "orderAmount"));
 
             // then
-            assertThat(ordered).isNull();
+            assertThat(ordered).isEmpty();
         }
     }
 
