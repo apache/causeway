@@ -21,11 +21,13 @@ package org.apache.causeway.core.metamodel.services.tablecol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -36,6 +38,7 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
+import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -128,8 +131,9 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
         val domainClass = domainObject.getClass();
         val resourceNames = buildResourceNames(domainClass, collectionId, elementType);
         addResourceNames(elementType, resourceNames);   // fallback to reading the element type's own .txt file.
-        val contentsIfAny = tryLoad(domainClass, resourceNames);
-        return contentsMatching(contentsIfAny, associationIds);
+        val contents = tryLoad(domainClass, resourceNames)
+                .orElse(null);
+        return contentsMatching(contents, associationIds);
     }
 
     private List<String> buildResourceNames(
@@ -201,8 +205,9 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> domainType,
             final List<String> associationIds) {
         val resourceNames = buildResourceNames(domainType);
-        val contentsIfAny = tryLoad(domainType, resourceNames);
-        return contentsMatching(contentsIfAny, associationIds);
+        val contents = tryLoad(domainType, resourceNames)
+                .orElse(null);
+        return contentsMatching(contents, associationIds);
     }
 
     private List<String> buildResourceNames(final Class<?> domainClass) {
@@ -229,12 +234,13 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     }
 
     private static List<String> contentsMatching(
-            final Optional<String> contentsIfAny,
-            final List<String> associationIds) {
-        return contentsIfAny
-                .map(content -> TextUtils.readLines(content)
-                        .filter(associationIds::contains)
-                        .toList()).orElse(null);
+            final @Nullable String contents,
+            final @NonNull List<String> associationIds) {
+        return TextUtils.readLines(contents).stream()
+            .map(String::trim) // ignore any leading or trailing whitespace
+            .filter(line->!line.startsWith("#")) // speed up (not strictly required)
+            .filter(associationIds::contains)
+            .collect(Collectors.toList());
     }
 
 }
