@@ -88,7 +88,7 @@
         	<!-- provides javax.enterprise.inject.* -->
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>2.0.2</version> <!-- do not upgrade from 2.x before Spring 6 -->
+            <version>4.0.0</version> <!-- do not upgrade from 2.x before Spring 6 -->
             <exclusions>
             	<exclusion>
             		<groupId>jakarta.inject</groupId>
