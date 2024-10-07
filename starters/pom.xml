@@ -204,7 +204,7 @@
 
 			<properties>
 				<!-- uses maven-surefire-plugin.version, which is declared by spring-boot-starter-parent -->
-				<maven-surefire-report-plugin.version>3.5.0</maven-surefire-report-plugin.version>
+				<maven-surefire-report-plugin.version>3.5.1</maven-surefire-report-plugin.version>
 			
 				<skipTests>false</skipTests>
 				<skipUTs>${skipTests}</skipUTs>
