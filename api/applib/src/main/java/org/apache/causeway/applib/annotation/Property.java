@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.applib.annotation;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -290,6 +293,7 @@ public @interface Property {
     String regexPatternReplacement()
             default "Doesn't match pattern";
 
+    @RequiredArgsConstructor
     enum QueryDslAutoCompletePolicy {
         /**
          * Use the (case-insensitive) value of this property for autocomplete.
@@ -298,7 +302,7 @@ public @interface Property {
          *     The property is expected to be a string or characters, otherwise it will be ignored.
          * </p>
          */
-        INCLUDE,
+        INCLUDE("case insensitive"),
         /**
          * Use the case-sensitive value of this property for autocomplete.
          *
@@ -306,12 +310,19 @@ public @interface Property {
          *     The property is expected to be a string or characters, otherwise it will be ignored.
          * </p>
          */
-        INCLUDE_CASE_SENSITIVE,
+        INCLUDE_CASE_SENSITIVE("case sensitive"),
         /**
          * Do not use the value of this property for autocomplete.
          */
-        EXCLUDE,
+        EXCLUDE("excluded"),
         ;
+
+        @Getter
+        private final String description;
+
+        public boolean isExcluded() {
+            return !isIncluded();
+        }
 
         public boolean isIncluded() {
             return this == INCLUDE || this == INCLUDE_CASE_SENSITIVE;
@@ -319,6 +330,7 @@ public @interface Property {
         public boolean isIgnoreCase() {
             return this == INCLUDE;
         }
+
     }
 
     /**
@@ -344,10 +356,6 @@ public @interface Property {
      * <p>
      *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
      *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
-     * </p>
-     *
-     * <p>
-     *     NOTE: if <i>NO</i> fields are annotated, then all string properties are included by default.
      * </p>
      *
      * <p>

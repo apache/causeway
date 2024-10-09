@@ -21,33 +21,35 @@ package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
 import lombok.val;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 
+import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
+
+import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
 import org.springframework.util.ReflectionUtils;
 
 public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract {
 
     public AutoCompleteGeneratedQueryFacetFactory(MetaModelContext metaModelContext) {
-        super(metaModelContext, FeatureType.OBJECTS_ONLY);
+        super(metaModelContext, FeatureType.OBJECTS_AND_PROPERTIES);
     }
+
 
     @Override
     public void process(ProcessClassContext processClassContext) {
 
-        if (processClassContext.getFacetHolder().containsFacet(AutoCompleteGeneratedQueryFacet.class)) {
+        if (processClassContext.getFacetHolder().containsFacet(AutoCompleteUsingQueryDslFacet.class)) {
             return;
         }
 
@@ -58,59 +60,90 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
 
         val domainObjectIfAny= processClassContext.synthesizeOnType(DomainObject.class);
 
-        // TODO: this ought to only look at the properties, rather than every field of the class.
-        //  perhaps it should be refactored into a processing on Property, and then use a Post processor to add in the
-        //  autoCompleteQueryFacet on the class afterwards
-        //  should also take into account if the field is persistable
-        val fields = new ArrayList<Field>();
-        ReflectionUtils.doWithFields(processClassContext.getCls(), field -> {
-            val propertyIfAny = _Annotations.synthesize(field, Property.class);
-            propertyIfAny
-                    .filter(property -> property.queryDslAutoComplete().isIncluded())
-                    .ifPresent(property -> {
-                        fields.add(field);
-            });
-        });
+        val repositoryAdditionalPredicateClass = domainObjectIfAny
+                .map(DomainObject::queryDslAutoCompleteAdditionalPredicateRepository)
+                .filter(clz -> clz != Object.class)
+                .orElse(null);
 
-        // If no fields with Property#queryDslAutoComplete annotation found, search for string fields that have a getter
-        // TODO: should use the metamodel instead here, look for presence of AccessorFacet.
-        if (fields.isEmpty()) {
-            ReflectionUtils.doWithFields(processClassContext.getCls(), field -> {
-                if (getClassCache().getterForField(processClassContext.getCls(), field).isPresent() &&
-                        field.getType() == String.class)
-                    fields.add(field);
-            });
-        }
+        val repositoryAdditionalPredicateObject = Optional.ofNullable(repositoryAdditionalPredicateClass)
+                .flatMap(this::lookupService)
+                .orElse(null);
 
-        if (!fields.isEmpty()) {
+        val repositoryAdditionalPredicateMethod = domainObjectIfAny
+                .filter(x -> repositoryAdditionalPredicateClass != null)
+                .map(DomainObject::queryDslAutoCompleteAdditionalPredicateMethod)
+                .map(methodName -> ReflectionUtils.findMethod(repositoryAdditionalPredicateClass, methodName, String.class))
+                .orElse(null);
 
-            final Class<?> repositoryClass = domainObjectIfAny
-                    .map(DomainObject::queryDslAutoCompleteAdditionalPredicateRepository)
-                    .filter(clz -> clz != Object.class)
-                    .orElse(null);
+        val limitResults = domainObjectIfAny
+                .map(DomainObject::queryDslAutoCompleteLimitResults)
+                .orElse(DomainObject.QueryDslAutoCompleteConstants.LIMIT_RESULTS);
 
-            final Object repository = Optional.ofNullable(repositoryClass)
-                    .flatMap(this::lookupService)
-                    .orElse(null);
+        val minLength = domainObjectIfAny
+                .map(DomainObject::queryDslAutoCompleteMinLength)
+                .filter(x -> x > DomainObject.QueryDslAutoCompleteConstants.MIN_LENGTH)
+                .orElse(DomainObject.QueryDslAutoCompleteConstants.MIN_LENGTH);
 
-            final Method method = domainObjectIfAny
-                    .filter(x -> repositoryClass != null)
-                    .map(DomainObject::queryDslAutoCompleteAdditionalPredicateMethod)
-                    .map(methodName -> ReflectionUtils.findMethod(repositoryClass, methodName, String.class))
-                    .orElse(null);
+        val queryDslSupport = queryDslSupport();
 
-            final Integer limit = domainObjectIfAny
-                    .map(DomainObject::queryDslAutoCompleteLimitResults)
-                    .orElse(DomainObject.QueryDslAutoCompleteConstants.LIMIT_RESULTS);
-
-            final Integer minLength = domainObjectIfAny
-                    .map(DomainObject::queryDslAutoCompleteMinLength)
-                    .filter(x -> x > DomainObject.QueryDslAutoCompleteConstants.MIN_LENGTH)
-                    .orElse(DomainObject.QueryDslAutoCompleteConstants.MIN_LENGTH);
-
-            addFacet(new AutoCompleteGeneratedQueryFacet(processClassContext.getCls(),
-                    processClassContext.getFacetHolder(), fields, repository, method, limit, minLength));
-        }
+        addFacet(new AutoCompleteUsingQueryDslFacet(
+                processClassContext.getCls(),
+                processClassContext.getFacetHolder(),
+                repositoryAdditionalPredicateObject, repositoryAdditionalPredicateMethod,
+                limitResults, minLength,
+                queryDslSupport
+        ));
     }
+
+    @Override
+    public void process(ProcessMethodContext processMethodContext) {
+
+        val facetedMethod = processMethodContext.getFacetHolder();
+        val owningType = facetedMethod.getOwningType();
+        val declaringSpec = specForTypeElseFail(owningType);
+
+        val propertyIfAny = propertyIfAny(processMethodContext);
+
+        propertyIfAny
+                .ifPresent(property -> {
+                    val queryDslAutoCompletePolicy = property.queryDslAutoComplete();
+                    if(queryDslAutoCompletePolicy.isIncluded()) {
+                        updateAutoCompleteQueryDslFacet(declaringSpec, facetedMethod.getFeatureIdentifier().getMemberLogicalName(), queryDslAutoCompletePolicy);
+                    }
+                });
+    }
+
+    private void updateAutoCompleteQueryDslFacet(
+            final ObjectSpecification declaringSpec,
+            final String propertyId,
+            final Property.QueryDslAutoCompletePolicy queryDslAutoCompletePolicy
+    ) {
+        // TODO: this ought to take into account if the field is persistable
+
+        // we update the existing facet
+        val autoCompleteUsingQueryDslFacet = Optional.ofNullable(declaringSpec.getFacet(AutoCompleteFacet.class))
+                .filter(x -> x instanceof AutoCompleteUsingQueryDslFacet)
+                .map(AutoCompleteUsingQueryDslFacet.class::cast)
+                .orElseGet(() -> {
+                    var newFacet = new AutoCompleteUsingQueryDslFacet(declaringSpec.getCorrespondingClass(), declaringSpec, null, null, null, null, queryDslSupport());
+                    declaringSpec.addFacet(newFacet);
+                    return newFacet;
+                });
+
+        autoCompleteUsingQueryDslFacet.addSearchableProperty(propertyId, queryDslAutoCompletePolicy);
+    }
+
+    Optional<Property> propertyIfAny(final ProcessMethodContext processMethodContext) {
+        return processMethodContext
+                .synthesizeOnMethodOrMixinType(
+                        Property.class,
+                        () -> ValidationFailureUtils
+                                .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
+    }
+
+    private QueryDslSupport queryDslSupport() {
+        return getMetaModelContext().lookupServiceElseFail(QueryDslSupport.class);
+    }
+
 
 }

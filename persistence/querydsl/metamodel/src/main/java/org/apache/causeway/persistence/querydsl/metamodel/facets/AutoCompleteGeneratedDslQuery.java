@@ -19,7 +19,6 @@
  */
 package org.apache.causeway.persistence.querydsl.metamodel.facets;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ import lombok.val;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.CaseSensitivity;
@@ -67,10 +66,25 @@ public class AutoCompleteGeneratedDslQuery {
      * the entity for which to generate the auto complete query
      */
     @NonNull final protected Class<?> entity;
+
+    @lombok.Value
+    static class SearchableProperty {
+        @Getter
+        String propertyId;
+        Property.QueryDslAutoCompletePolicy queryDslAutoCompletePolicy;
+
+        public String toString() {
+            return propertyId + " (" + queryDslAutoCompletePolicy.getDescription() + ")";
+        }
+
+        public CaseSensitivity getCaseSensitivity() {
+            return CaseSensitivity.of(this.queryDslAutoCompletePolicy.isIgnoreCase());
+        }
+    }
     /**
-     * The fields to use in the generated query in this way (field1 like searchPhrase || fieldn like searchPhrase || ...)
+     * The properties to use in the generated query (using <code>OR</code>).
      */
-    @NonNull final protected List<Field> fields;
+    @NonNull final protected List<SearchableProperty> searchableProperties;
     /**
      * Add additional criteria that can be added to the autocomplete method in form:
      * <pre>
@@ -101,9 +115,7 @@ public class AutoCompleteGeneratedDslQuery {
             // Add optional additional predicate from repository
             try {
                 predicate = (Function<PathBuilder<T>, Predicate>) predicateMethod.invoke(repository, searchPhrase);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -128,9 +140,9 @@ public class AutoCompleteGeneratedDslQuery {
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
 
-        if (fields.isEmpty()) {
+        if (searchableProperties.isEmpty()) {
             // not expected
-            throw new RecoverableException("At least one field should be given");
+            throw new RecoverableException("At least one searchable property should be specified");
         }
 
         if (isNotEmpty(searchPhrase) && searchPhrase.trim().length() >= getMinLength()) {
@@ -141,22 +153,17 @@ public class AutoCompleteGeneratedDslQuery {
             List<OrderSpecifier<String>> orderSpecifiers = newList();
 
             // Build where and order clause
-            fields.forEach(field -> {
+            searchableProperties.forEach(se -> {
 
                 // Only string type fields are supported
-                val stringPath = entityPath.getString(field.getName());
+                val propertyPath = entityPath.getString(se.getPropertyId());
                 val searchReplaced = Wildcards.toAnsiSqlWildcard(searchPhrase);
 
-                boolean ignoreCase = _Annotations.synthesize(field, Property.class)
-                        .map(Property::queryDslAutoComplete)
-                        .filter(Property.QueryDslAutoCompletePolicy::isIncluded)
-                        .map(Property.QueryDslAutoCompletePolicy::isIgnoreCase)
-                        .orElse(true);
-                val expr = DslExpressions.search(stringPath, searchReplaced, CaseSensitivity.of(ignoreCase));
+                val expr = DslExpressions.search(propertyPath, searchReplaced, se.getCaseSensitivity());
                 where.or(expr);
 
                 // Build order by clause
-                orderSpecifiers.add(stringPath.asc());
+                orderSpecifiers.add(propertyPath.asc());
             });
 
             // Build query

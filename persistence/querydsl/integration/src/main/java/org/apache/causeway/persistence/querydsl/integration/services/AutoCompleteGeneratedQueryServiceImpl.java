@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import org.apache.causeway.persistence.querydsl.applib.services.auto.AutoCompleteGeneratedQueryService;
 
-import org.apache.causeway.persistence.querydsl.metamodel.facets.AutoCompleteGeneratedQueryFacet;
+import org.apache.causeway.persistence.querydsl.metamodel.facets.AutoCompleteUsingQueryDslFacet;
 
 import org.springframework.stereotype.Service;
 
@@ -55,7 +55,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      */
     public <T> List<T> autoComplete(Class<T> cls, String searchPhrase){
         // Call generated autoComplete
-        AutoCompleteGeneratedQueryFacet facet = getFacet(cls);
+        AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
         if(facet!=null){
             return facet.autoComplete(searchPhrase);
         }
@@ -72,7 +72,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      */
     public <T> List<T> autoComplete(Class<T> cls, String searchPhrase, Function<PathBuilder<T>, Predicate> additionalExpression){
         // Call generated autoComplete
-        AutoCompleteGeneratedQueryFacet facet = getFacet(cls);
+        AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
         if(facet!=null){
             return facet.autoComplete(searchPhrase, additionalExpression);
         }
@@ -88,7 +88,7 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      */
     public <T> List<T> executeQuery(Class<T> cls, String searchPhrase){
         // Call generated autoComplete
-        AutoCompleteGeneratedQueryFacet facet = getFacet(cls);
+        AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
         if(facet!=null){
             return facet.executeQuery(searchPhrase);
         }
@@ -105,18 +105,18 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      */
     public <T> List<T> executeQuery(Class<T> cls, String searchPhrase, Function<PathBuilder<T>, Predicate> additionalExpression){
         // Call generated autoComplete
-        AutoCompleteGeneratedQueryFacet facet = getFacet(cls);
+        AutoCompleteUsingQueryDslFacet facet = getFacet(cls);
         if(facet!=null){
             return facet.executeQuery(searchPhrase, additionalExpression);
         }
         return newList();
     }
 
-    private <T> AutoCompleteGeneratedQueryFacet getFacet(Class<T> cls) {
+    private <T> AutoCompleteUsingQueryDslFacet getFacet(Class<T> cls) {
         AutoCompleteFacet facet = specificationLoader.loadSpecification(cls)
                 .getFacet(AutoCompleteFacet.class);
-        if(facet instanceof AutoCompleteGeneratedQueryFacet){
-            return (AutoCompleteGeneratedQueryFacet)facet;
+        if(facet instanceof AutoCompleteUsingQueryDslFacet){
+            return (AutoCompleteUsingQueryDslFacet)facet;
         }
         return null;
     }
