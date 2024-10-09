@@ -36,6 +36,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -160,6 +161,11 @@ final class Can_Empty<T> implements Can<T> {
     @Override
     public <R, Z> Can<R> zipMap(final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
         return Can.empty();
+    }
+
+    @Override
+    public <R, Z> Stream<R> zipStream(final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
+        return Stream.empty();
     }
 
     @Override
@@ -319,6 +325,21 @@ final class Can_Empty<T> implements Can<T> {
     public <K, M extends Map<K, T>> M toUnmodifiableMap(@NonNull final Function<? super T, ? extends K> keyExtractor,
             @NonNull final BinaryOperator<T> mergeFunction, @NonNull final Supplier<M> mapFactory) {
         return _Casts.uncheckedCast(Collections.emptyMap());
+    }
+
+    @Override
+    public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
+        return collector.finisher().apply(collector.supplier().get());
+    }
+
+    @Override
+    public String join(@NonNull final String delimiter) {
+        return "";
+    }
+
+    @Override
+    public String join(@NonNull final Function<? super T, String> toStringFunction, @NonNull final String delimiter) {
+        return "";
     }
 
 }
