@@ -73,7 +73,9 @@ public class AutoCompleteGeneratedDslQuery {
     @NonNull final protected List<Field> fields;
     /**
      * Add additional criteria that can be added to the autocomplete method in form:
-     * public static Function<EntityPathBase<T>, Predicate> autoCompletePredicate(String search)
+     * <pre>
+     * public Function<EntityPathBase<T>, Predicate> autoCompletePredicate(String search)
+     * </pre>
      */
     final protected Object repository;
     final protected Method predicateMethod;

@@ -459,7 +459,7 @@ public @interface DomainObject {
      * @see #queryDslAutoCompleteAdditionalPredicateRepository()
      * @see #queryDslAutoCompleteAdditionalPredicateMethod()
      */
-    int queryDslAutoCompleteMinLength() default 0;
+    int queryDslAutoCompleteMinLength() default QueryDslAutoCompleteConstants.MIN_LENGTH;
 
     /**
      * If at least one property of the entity has been annotated with {@link Property#queryDslAutoComplete()}, then
@@ -490,7 +490,7 @@ public @interface DomainObject {
      *
      * <p>
      *     If this attribute is specified, it indicates the class of a repository service that includes a method which
-     *     returns a predicate to be applied.  The default name of that method is
+     *     returns an additional predicate to be applied.  The default name of that method is
      *     &quot;queryDslAutoCompleteAdditionalPredicates&quot; (but can be overridden if required using
      *     {@link DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()}).
      * </p>

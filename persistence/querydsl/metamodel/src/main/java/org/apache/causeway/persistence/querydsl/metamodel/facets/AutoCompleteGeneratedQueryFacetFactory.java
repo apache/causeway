@@ -90,7 +90,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
                     .orElse(null);
 
             final Object repository = Optional.ofNullable(repositoryClass)
-                    .map(this::lookupService)
+                    .flatMap(this::lookupService)
                     .orElse(null);
 
             final Method method = domainObjectIfAny

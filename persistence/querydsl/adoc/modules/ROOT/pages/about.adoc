@@ -7,9 +7,38 @@ link:http://querydsl.com/[QueryDSL] provides a way to express queries independen
 
 Apache Causeway's integration with QueryDSL provides the following capabilities:
 
-* xref:
+* xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc[]
++
+Intended to be subclassed (it is `abstract`), provides a set of finder methods for a specified entity.
++
+The subclass is parameterized by the entity and its corresponding "Q" query class.
++
+Internally, this class delegates to xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[].
++
+[IMPORTANT]
+====
+Implementing classes are encouraged to override `QueryDslRepository#getDefaultOrders()`; this defines an order by statement used for `findFirst()` and similar methods.
+
+If the method is not defined, then the `id` property is used.
+If the entity does not _have_ an `id` property (e.g. application-defined primary key), then a runtime exception will be thrown if the method is not suitably overridden.
+====
 
 
 
+* xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[] and xref:refguide:persistence:index/querydsl/applib/services/support/DetachedQueryFactory.adoc[]
++
+Provides the mechanism to construct arbitrary queries against any entity.
+The query expressions from xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[] are attached, meaning they can be submitted directly to the database.
+Those from xref:refguide:persistence:index/querydsl/applib/services/support/DetachedQueryFactory.adoc[] are detached; they cannot be submitted directly, but are intended to be combined with the attached queries, e.g. in subqueries).
++
+Although xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[] is abstract, both the xref:pjpa::about.adoc[JPA] and xref:pjdo::about.adoc[JDO] persistence mechanisms provide concrete implementations.
++
+More discussion on writing queries can be found xref:example-queries.adoc[here].
 
-optionally override QueryDslRepository#getDefaultOrders()
+* xref:refguide:persistence:index/querydsl/applib/services/auto/AutoCompleteGeneratedQueryService.adoc[]
++
+Primarily used internally to provide support for autocomplete (using xref:refguide:applib:index/annotation/Property.adoc[@Property] and optionally xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject]).
+However, the service can also be called directly by the application if required.
++
+More discussion on using the annotations can be found xref:autocomplete-annotations.adoc[here].
+
