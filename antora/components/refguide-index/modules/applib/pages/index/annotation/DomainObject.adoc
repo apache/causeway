@@ -31,7 +31,7 @@ If - for the currently logged on user - none of the domain object's members are 
   Class<? extends ActionDomainEvent<?>> actionDomainEvent() default ActionDomainEvent.Default.class;     // <.>
   Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEvent() default PropertyDomainEvent.Default.class;     // <.>
   Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEvent() default CollectionDomainEvent.Default.class;     // <.>
-  int queryDslAutoCompleteMinLength() default 0;     // <.>
+  int queryDslAutoCompleteMinLength() default QueryDslAutoCompleteConstants.MIN_LENGTH;     // <.>
   int queryDslAutoCompleteLimitResults() default QueryDslAutoCompleteConstants.LIMIT_RESULTS;     // <.>
   Class<?> queryDslAutoCompleteAdditionalPredicateRepository() default Object.class;     // <.>
   String queryDslAutoCompleteAdditionalPredicateMethod() default QueryDslAutoCompleteConstants.ADDITIONAL_PREDICATE_METHOD_NAME;     // <.>
@@ -360,7 +360,7 @@ NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as re
 
 If at least one property of the entity has been annotated with _Property#queryDslAutoComplete()_ , then that property (and any others) will automatically be used for autocomplete functionality; this attribute can be used to specify additional predicate(s) to always be added to the autocomplete (for example to search only for current or active objects).
 
-If this attribute is specified, it indicates the class of a repository service that includes a method which returns a predicate to be applied. The default name of that method is "queryDslAutoCompleteAdditionalPredicates" (but can be overridden if required using _DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()_ ).
+If this attribute is specified, it indicates the class of a repository service that includes a method which returns an additional predicate to be applied. The default name of that method is "queryDslAutoCompleteAdditionalPredicates" (but can be overridden if required using _DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()_ ).
 
 NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 

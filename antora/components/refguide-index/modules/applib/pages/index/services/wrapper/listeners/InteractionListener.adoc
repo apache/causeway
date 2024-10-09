@@ -186,3 +186,5 @@ Will be fired prior to _#actionInvoked(ActionInvocationEvent)_ .
 === actionInvoked(ActionInvocationEvent)
 
 An action was invoked (or an attempt to invoke it was made).
+
+include::hooks/InteractionListener_010-implementation.adoc[]

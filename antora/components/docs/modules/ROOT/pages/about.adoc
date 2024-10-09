@@ -77,7 +77,6 @@ _Security_
 
 * xref:security:bypass:about.adoc[Bypass]
 * xref:security:simple:about.adoc[Simple]
-* xref:security:shiro:about.adoc[Shiro]
 * xref:security:spring:about.adoc[Spring]
 * xref:security:keycloak:about.adoc[Keycloak]
 
@@ -117,6 +116,10 @@ _Web UI (Wicket)_
 
 ** *xref:vw:tabular:about.adoc[]*
 ** *xref:vw:pdfjs:about.adoc[]*
+
+_Persistence_
+
+* xref:querydsl::about.adoc[QueryDSL]
 
 
 |

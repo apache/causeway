@@ -74,9 +74,10 @@ public class SimpleObjectRepository extends QueryDslRepository<SimpleObject, QSi
     public Function<PathBuilder<SimpleObject>, Predicate> autoFilter(
             String search
     ) {
-        return so -> so.getString("attachment").isNull();
+        return so -> so.getString("attachment").isNull();   // <.>
     }
 
     //...
 }
 ----
+<.> In this (silly) example, the auto complete will only propose objects that meet the additional criteria (in this case, that the `SimpleObject#attachment` property is null).

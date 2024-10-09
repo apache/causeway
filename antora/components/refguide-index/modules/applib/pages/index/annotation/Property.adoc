@@ -254,8 +254,6 @@ NOTE: if _DomainObject#autoCompleteRepository()_ (and _DomainObject#autoComplete
 
 NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 
-NOTE: if _NO_ fields are annotated, then all string properties are included by default.
-
 NOTE: this feature only applies to entities, not to view models. Only persisted properties should be annotated.
 
 include::hooks/Property_010-examples-and-usage.adoc[]

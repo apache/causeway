@@ -42,6 +42,7 @@ import com.querydsl.core.types.dsl.EntityPathBase;
 
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import lombok.val;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -68,6 +69,7 @@ import org.springframework.lang.Nullable;
 public abstract class QueryDslRepository<T extends Comparable, Q extends EntityPathBase<T>> {
 
     public static final OrderSpecifier<Comparable> ID_ORDER_SPECIFIER = new OrderSpecifier<>(Order.ASC, DslExpressions.constant("id"));
+
     @Inject protected QueryDslSupport queryDslSupport;
     @Inject protected RepositoryService repositoryService;
 
@@ -89,7 +91,8 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      *
      * <p>
      *     Used as a default by certain methods that require an ordering, eg
-     *     {@link #findUniqueUsingDefaultOrder(Function)}.  All such methods have the suffix
+     *     {@link #findAnyUsingDefaultOrder(Function...)} or
+     *     {@link #findFieldsDistinctUsingDefaultOrder(Function, Function...)}.  All such methods have the suffix
      *     &quot;UsingDefaultOrder&quot; in their name.
      * </p>
      *
@@ -102,15 +105,30 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      *     otherwise calls to &quot;findXxxUsingDefaultOrder&quot; methods will fail.
      * </p>
      *
-     * @return a list of OrderSpecifiers
+     * @return a list of {@link OrderSpecifier}s
+     *
+     * @see #findUsingDefaultOrder(Function[])
+     * @see #findAllUsingDefaultOrder()
+     * @see #findAnyUsingDefaultOrder(Function...)
+     * @see #findFieldsDistinctUsingDefaultOrder(Function, Function...)
      */
-    protected List<OrderSpecifier<? extends Comparable>> getDefaultOrders() {
-        return newList(ID_ORDER_SPECIFIER);
+    protected Function<Q, List<OrderSpecifier<? extends Comparable>>> getDefaultOrders() {
+        return entity -> newList(ID_ORDER_SPECIFIER);
     }
 
-    private OrderSpecifier<? extends Comparable>[] getDefaultOrder() {
+    private Function<Q, OrderSpecifier<?>>[] getDefaultOrdersAsArray() {
+        return getDefaultOrders().apply(getEntityPath())
+                .stream()
+                .map(orderSpecifier -> (Function<Q, OrderSpecifier<?>>) q -> orderSpecifier)
+                .collect(Collectors.toList())
+                .toArray(new Function[]{});
+    }
+
+    private OrderSpecifier<? extends Comparable>[] getDefaultOrdersUnwrapped() {
         try {
-            return getDefaultOrders() == null ? null : getDefaultOrders().toArray(new OrderSpecifier[0]);
+            val defaultOrdersFunc = getDefaultOrders();
+            val defaultOrders = defaultOrdersFunc.apply(entity());
+            return defaultOrders == null ? null : defaultOrders.toArray(new OrderSpecifier[0]);
         } catch (Exception e) {
             throw new RuntimeException("Invalid default order!", e);
         }
@@ -127,6 +145,20 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
     }
 
     /**
+     * The main entity Q instance for which this repository implementation operates.
+     *
+     * <p>
+     *     The default implementation instantiates this reflectively, based on the conventions of the query-dsl
+     *     annotation processor; eg <code>QCustomer</code> has a 1-arg string constructor.  In most cases there is
+     *     no reason to override this.
+     * </p>
+     *
+     * <p>
+     *     However, for some complicated orderings, we have found it necessary to instead use the Q instance created
+     *     by the annotation processor, called eg <code>QCustomer.customer</code>.  It is perfectly acceptable to
+     *     override this method and just return the appropriate for the entity in question.
+     * </p>
+     *
      * @return the main entity Q instance for which this repository implementation operates
      *
      * @see #entity()
@@ -148,6 +180,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
     public Q q() {
         return getEntityPath();
     }
+
     /**
      * @return the main entity Q instance for which this repository implementation operates
      *
@@ -163,55 +196,33 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
         if (qClass == null) {
             throw new RecoverableException("Could not find Q type for this entity");
         }
-        Q instance = null;
         try {
             String alias = "e";
             if (getEntityClass() != null) {
                 alias = getEntityClass().getSimpleName();
                 alias = alias.substring(0, 1).toLowerCase() + alias.substring(1);
             }
-            instance = qClass.getConstructor(String.class).newInstance(alias);
+            return qClass.getConstructor(String.class).newInstance(alias);
         } catch (Exception e) {
             throw new RecoverableException("Could not instantiate Q type " + qClass.getName(), e);
         }
-        return instance;
     }
 
 
     /**
      * Returns all the instances of this entity, in the preferred {@link OrderSpecifier ordering}.
-     *
-     * @return all instances of this entity in the preferred {@link OrderSpecifier ordering}.
-     *
-     * @param orderSpecifiers    the ordering to apply
-     *
-     * @see #findAll(Function[])
-     * @see #findAllUsingDefaultOrder()
-     */
-    public List<T> findAll(final OrderSpecifier<?>... orderSpecifiers) {
-        return queryDslSupport
-                .selectFrom(getEntityPath())
-                .orderBy(orderSpecifiers)
-                .fetch();
-    }
-
-    /**
-     * Returns all the instances of this entity, in the preferred {@link OrderSpecifier ordering}.
-     *
-     * <p>
-     * As {@link #findAll(OrderSpecifier[])}, but allowing the {@link OrderSpecifier order} to be passed in as a
-     * function (just syntax sugar).
-     * </p>
      *
      * @param orderSpecifiers    the ordering to apply
      *
      * @return all instances of this entity in the preferred order
      *
-     * @see #findAll(OrderSpecifier[])
      * @see #findAllUsingDefaultOrder()
      */
     public List<T> findAll(final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
-        return findAll(apply(orderSpecifiers));
+        return queryDslSupport
+                .selectFrom(getEntityPath())
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
+                .fetch();
     }
 
     /**
@@ -224,176 +235,154 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      *
      * @return all instances of this entity in the {@link #getDefaultOrders() default order}.
      *
-     * @see #findAll(OrderSpecifier[])
      * @see #findAll(Function[])
      * @see #getDefaultOrders()
      */
     public List<T> findAllUsingDefaultOrder() {
-        return findAll(getDefaultOrder());
+        return findAll(getDefaultOrdersAsArray());
     }
 
 
+
     /**
-     * Based on the given predicates search for exactly zero or one entity instance.
+     * Based on the given predicate(s), search for exactly zero or one entity instance.
      *
      * @param predicates the predicates to apply as a filter
+     *
      * @return exactly one result or null
      * @throws NonUniqueResultException if there is more than one matching result
-     *
-     * @see #findUnique(Function)
      */
     public Optional<T> findUnique(
-            Predicate... predicates
+            final Function<Q, Predicate>... predicates
     ) throws NonUniqueResultException {
         return Optional.ofNullable(queryDslSupport
                 .selectFrom(getEntityPath())
-                .where(predicates)
+                .where(unwrapPredicates(predicates))
                 .fetchOne());
     }
 
-    /**
-     * Based on the given predicates search for exactly zero or one entity instance.
-     *
-     * <p>
-     *     This is equivalent to {@link #findUnique(Function)}, but bundles up the
-     *     predicates as a function (just syntax sugar).
-     * </p>
-     *
-     * @param predicateFunction the predicates to apply as a filter
-     *
-     * @return exactly one result or null
-     * @throws NonUniqueResultException if there is more than one matching result
-     *
-     * @see #findUnique(Function)
-     */
-    public Optional<T> findUnique(
-            final Function<Q, Predicate> predicateFunction
-    ) throws NonUniqueResultException {
-        return findUnique(predicateFunction.apply(getEntityPath()));
-    }
-
-
-
 
     /**
-     * Based on the given predicates search for the first entity instance based on the
-     * {@link #getDefaultOrders() default ordering}.
+     * Based on the given predicates search for the first entity instance based on the provided ordering.
      *
-     * <p>
-     *     NOTE: the default implementation of {@link #getDefaultOrders()} requires that the <code>id</code> field
-     *     exists.  If this is not the case, then the method must be overridden.
-     * </p>
-     *
-     * @param predicates the predicates to apply as a filter
+     * @param predicates the predicate(s) to apply as a filter (can be null)
      * @return the first result or null
      *
-     * @see #findAnyUsingDefaultOrder(Function)
-     * @see #getDefaultOrder()
+     * @see #findAny(Function, Function[])
+     * @see #findAnyUsingDefaultOrder(Function...)
      */
-    public Optional<T> findAnyUsingDefaultOrder(final Predicate... predicates) {
+    public Optional<T> findAny(
+            @Nullable final Function<Q, Predicate>[] predicates,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+    ) {
         return Optional.ofNullable(queryDslSupport
                 .selectFrom(getEntityPath())
-                .where(predicates)
-                .orderBy(getDefaultOrder())
+                .where(unwrapPredicates(predicates))
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
                 .fetchFirst());
     }
+
+
+    /**
+     * Based on the given predicate, search for the first entity instance based on the provided ordering.
+     *
+     * @param predicate      the predicate to apply as a filter (can be null)
+     *
+     * @return the first result or null
+     *
+     * @see #findAny(Function[], Function[])
+     * @see #findAnyUsingDefaultOrder(Function...)
+     */
+    public Optional<T> findAny(
+            final Function<Q, Predicate> predicate,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+    ) {
+        return findAny(asArray(predicate), orderSpecifiers);
+    }
+
 
     /**
      * Based on the given predicate function search for the first entity instance based on the
      * {@link #getDefaultOrders() default ordering}.
      *
      * <p>
-     *     This is equivalent to {@link #findAnyUsingDefaultOrder(Predicate...)}, but with the predicates supplied
-     *     as a function (syntax sugar).
-     * </p>
-     *
-     * <p>
      *     NOTE: the default implementation of {@link #getDefaultOrders()} requires that the <code>id</code> field
      *     exists.  If this is not the case, then that method must be overridden.
      * </p>
      *
-     * @param predicateFunction the predicate function to apply as a filter
+     * @param predicates the predicate(s) to apply as a filter
      * @return the first result or null
      *
-     * @see #findAnyUsingDefaultOrder(Predicate...)
-     * @see #getDefaultOrder()
+     * @see #findAny(Function[], Function[])
+     * @see #findAny(Function, Function[])
+     * @see #getDefaultOrdersUnwrapped()
      */
-    public Optional<T> findAnyUsingDefaultOrder(Function<Q, Predicate> predicateFunction) {
-        return findAnyUsingDefaultOrder(predicateFunction.apply(getEntityPath()));
+    public Optional<T> findAnyUsingDefaultOrder(final Function<Q, Predicate>... predicates) {
+        return findAny(predicates, getDefaultOrdersAsArray());
     }
 
 
     /**
-     * Based on the given predicates search for the first entity instance based on specified
+     * Based on the given predicate(s), search for the first entity instance based on specified
      * {@link OrderSpecifier ordering}.
      *
-     * @param predicates the predicates to apply as a filter
-     * @param orderSpecifier    the ordering to apply
+     * @param predicates        the predicate(s) to apply as a filter (can be null)
+     * @param orderSpecifiers   the ordering to apply
      *
      * @return the first result or null
      *
-     * @see #findFirst(Function, OrderSpecifier[])
+     * @see #findFirstUsingDefaultOrder(Function[]) (Predicate[], OrderSpecifier[])
      * @see #findFirst(Function, Function[])
      */
     public Optional<T> findFirst(
-            final Predicate[] predicates,
-            final OrderSpecifier<?>... orderSpecifier) {
+            @Nullable final Function<Q, Predicate>[] predicates,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+    ) {
         return Optional.ofNullable(queryDslSupport
                 .selectFrom(getEntityPath())
-                .where(predicates)
-                .orderBy(orderSpecifier)
+                .where(unwrapPredicates(predicates))
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
                 .fetchFirst());
     }
 
     /**
-     * Based on the given predicate function search for the first entity instance based on specified
+     * Based on the given predicate, search for the first entity instance based on specified
      * {@link OrderSpecifier ordering}.
      *
-     * <p>
-     *     This is equivalent to {@link #findFirst(Predicate[], OrderSpecifier[])}, but with the predicates supplied
-     *     as a function (syntax sugar).
-     * </p>
-     *
-     * @param predicateFunction the predicate function to apply as a filter
-     * @param orderSpecifier    the ordering to apply
+     * @param predicate        the predicate(s) to apply as a filter
+     * @param orderSpecifiers   the ordering to apply
      *
      * @return the first result or null
      *
-     * @see #findFirst(Predicate[], OrderSpecifier[])
-     * @see #findFirst(Function, Function[])
+     * @see #findFirstUsingDefaultOrder(Function[]) (Predicate[], OrderSpecifier[])
+     * @see #findFirst(Function[], Function[])
      */
     public Optional<T> findFirst(
-            final Function<Q, Predicate> predicateFunction,
-            final OrderSpecifier<?>... orderSpecifier) {
-        return findFirst(new Predicate[]{predicateFunction.apply(getEntityPath())}, orderSpecifier);
-    }
-
-    /**
-     * Based on the given predicate function search for the first entity instance based on specified
-     * {@link OrderSpecifier ordering}.
-     *
-     * <p>
-     *     This is equivalent to {@link #findFirst(Predicate[], OrderSpecifier[])}, but with the predicate and
-     *     ordering supplied as a function (syntax sugar).
-     * </p>
-     *
-     * @param predicateFunction the predicate function to apply as a filter
-     * @param orderSpecifier    the ordering to apply
-     *
-     * @return the first result or null
-     *
-     * @see #findFirst(Function, Function[])
-     * @see #findFirst(Function, OrderSpecifier[])
-     */
-    public Optional<T> findFirst(
-            final Function<Q, Predicate> predicateFunction,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifier) {
-        return findFirst(new Predicate[]{predicateFunction.apply(getEntityPath())}, apply(orderSpecifier));
+            final Function<Q, Predicate> predicate,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+        return findFirst(asArray(predicate), orderSpecifiers);
     }
 
 
     /**
-     * Based on the given predicate function search for applicable entity instances and return the distinct projection
+     * Based on the given predicate(s) search for the first entity instance based on specified
+     * {@link OrderSpecifier ordering}.
+     *
+     * @param predicates the predicate(s) to apply as a filter
+     *
+     * @return the first result or null
+     *
+s     * @see #findFirst(Function[], Function[])
+     * @see #findFirst(Function, Function[])
+     */
+    public Optional<T> findFirstUsingDefaultOrder(
+            final Function<Q, Predicate>... predicates) {
+        return findFirst(predicates, getDefaultOrdersAsArray());
+    }
+
+
+    /**
+     * Based on the given predicate(s), search for applicable entity instances and return the distinct projection
      * (a subset of fields).
      *
      * <p>
@@ -402,35 +391,31 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * </p>
      *
      * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter (can be null).
-     * @param orderSpecifier    the ordering to apply; make sure aligns with the projection.
+     * @param predicates        the predicate(s) to apply as a filter (can be null)
+     * @param orderSpecifiers   the ordering to apply; make sure aligns with the projection.
      *
      * @return the projection result ordered as specified
      *
-     * @see #findFieldsDistinct(Expression, Function, OrderSpecifier[])
-     * @see #findFieldsDistinctUsingDefaultOrder(Expression, Predicate...)
+     * @see #findFieldsDistinct(Function, Function[], Function[])
+     * @see #findFieldsDistinctUsingDefaultOrder(Function, Function...)
      */
     public <F> List<F> findFieldsDistinct(
-            final Expression<F> projection,
-            @Nullable final Function<Q, Predicate> predicateFunction,
-            final OrderSpecifier<?>... orderSpecifier) {
+            final Function<Q, Expression<F>> projection,
+            @Nullable final Function<Q, Predicate>[] predicates,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return queryDslSupport
-                .select(projection)
+                .select(projection.apply(getEntityPath()))
                 .distinct()
                 .from(getEntityPath())
-                .where(predicateFunction == null ? new BooleanBuilder() : predicateFunction.apply(getEntityPath()))
-                .orderBy(orderSpecifier)
+                .where(unwrapPredicates(predicates))
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
                 .fetch();
     }
 
+
     /**
-     * Based on the given predicate function search for applicable entity instances and return the distinct projection
+     * Based on the given predicate, search for applicable entity instances and return the distinct projection
      * (a subset of fields).
-     *
-     * <p>
-     *     Same as {@link #findFieldsDistinct(Expression, Function, OrderSpecifier[])}, but with the
-     *     {@link OrderSpecifier ordering} bundled up as a function (syntax sugar).
-     * </p>
      *
      * <p>
      * <b>CAUTION</b>: when the supplied {@link OrderSpecifier ordering} is not aligned to the projection one might get
@@ -438,24 +423,26 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * </p>
      *
      * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter (can be null).
-     * @param orderSpecifier    the ordering to apply; make sure aligns with the projection.
+     * @param predicate the predicate function to apply as a filter (can be null).
+     * @param orderSpecifiers    the ordering to apply; make sure aligns with the projection.
      *
      * @return the projection result ordered as specified
      *
-     * @see #findFieldsDistinct(Expression, Function, OrderSpecifier[])
-     * @see #findFieldsDistinctUsingDefaultOrder(Expression, Predicate...)
+     * @see #findFieldsDistinct(Function, Function[], Function[])
+     * @see #findFieldsDistinctUsingDefaultOrder(Function, Function...)
      */
     public <F> List<F> findFieldsDistinct(
-            final Expression<F> projection,
-            @Nullable final Function<Q, Predicate> predicateFunction,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifier) {
-        return findFieldsDistinct(projection, predicateFunction, apply(orderSpecifier));
+            final Function<Q, Expression<F>> projection,
+            @Nullable final Function<Q, Predicate> predicate,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+        return findFieldsDistinct(projection, asArray(predicate), orderSpecifiers);
     }
 
+
+
     /**
-     * Based on the given predicates search for applicable entity instances and return the distinct projection,
-     * using the {@link #getDefaultOrders() default order}.
+     * Based on the given predicate function search for applicable entity instances and return the distinct projection,
+     * using the {@link #getDefaultOrders() default ordering}.
      *
      * <p>
      * <b>CAUTION</b>: when the {@link #getDefaultOrders() ordering} is not aligned to the projection one might get
@@ -468,89 +455,25 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * </p>
      *
      * @param projection the projection that defines the field to return
-     * @param predicates the predicates to apply as a filter
+     * @param predicates the predicate(s) to apply as a filter (can be null)
      * @return the ordered projection result
      *
-     * @see #findFieldsDistinct(Expression, Function, OrderSpecifier[])
-     * @see #findFieldsDistinct(Expression, Function, Function[])
-     * @see #findFieldsDistinctUsingDefaultOrder(Expression, Function)
+     * @see #findFieldsDistinct(Function, Function[], Function[])
+     * @see #findFieldsDistinct(Function, Function, Function[])
      */
     public <F> List<F> findFieldsDistinctUsingDefaultOrder(
-            final Expression<F> projection,
-            final Predicate... predicates
+            final Function<Q, Expression<F>> projection,
+            @Nullable final Function<Q, Predicate>... predicates
     ) {
         return queryDslSupport
-                .select(projection)
+                .select(projection.apply(getEntityPath()))
                 .distinct()
                 .from(getEntityPath())
-                .where(predicates)
-                .orderBy(getDefaultOrder())
+                .where(unwrapPredicates(predicates))
+                .orderBy(getDefaultOrdersUnwrapped())
                 .fetch();
     }
 
-    /**
-     * Based on the given predicate function search for applicable entity instances and return the distinct projection,
-     * using the {@link #getDefaultOrders() default ordering}.
-     *
-     * <p>
-     *     This is the same as {@link #findFieldsDistinctUsingDefaultOrder(Expression, Predicate...)}, but allowing the
-     *     predicates to be provided as a function (syntax sugar).
-     * </p>
-     *
-     * <p>
-     * <b>CAUTION</b>: when the {@link #getDefaultOrders() ordering} is not aligned to the projection one might get
-     * unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
-     * </p>
-     *
-     * <p>
-     *     NOTE: the default implementation of {@link #getDefaultOrders()} requires that the <code>id</code> field
-     *     exists.  If this is not the case, then that method must be overridden.
-     * </p>
-     *
-     * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter
-     * @return the ordered projection result
-     *
-     * @see #findFieldsDistinct(Expression, Function, OrderSpecifier[])
-     * @see #findFieldsDistinctUsingDefaultOrder(Expression, Predicate...)
-     */
-    public <F> List<F> findFieldsDistinctUsingDefaultOrder(
-            final Expression<F> projection,
-            final Function<Q, Predicate> predicateFunction
-    ) {
-        return findFieldsDistinct(projection, predicateFunction, getDefaultOrder());
-    }
-
-
-    /**
-     * Based on the given predicate search for applicable entity instances and return the first projection
-     * based on specified {@link OrderSpecifier ordering}.
-     *
-     * <p>
-     * <b>CAUTION</b>: when the supplied {@link OrderSpecifier ordering} is not aligned to the projection one might get
-     * unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
-     * </p>
-     *
-     * @param projection     the projection that defines the field to return
-     * @param predicate      the predicate to apply as a filter
-     * @param orderSpecifiers the ordering to apply
-     * @return the first projection result based on the given order
-     *
-     * @see #findFirstFields(Expression, Function, OrderSpecifier[])
-     */
-    public <F> Optional<F> findFirstFields(
-            final Expression<F> projection,
-            @Nullable final Predicate predicate,
-            final OrderSpecifier<?>... orderSpecifiers
-    ) {
-        return Optional.ofNullable(queryDslSupport
-                .select(projection)
-                .distinct()
-                .from(getEntityPath())
-                .where(predicate == null ? new BooleanBuilder() : predicate)
-                .orderBy(orderSpecifiers)
-                .fetchFirst());
-    }
 
 
     /**
@@ -558,68 +481,53 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * based on specified {@link OrderSpecifier ordering}.
      *
      * <p>
-     *     Same as {@link #findFirstFields(Expression, Predicate, OrderSpecifier[])}, but with the predicates
-     *     bundled up as a function (syntax sugar).
-     * </p>
-     *
-     * <p>
      * <b>CAUTION</b>: when the supplied {@link OrderSpecifier ordering} is not aligned to the projection one might get
      * unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
      * </p>
      *
      * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter
-     * @param orderSpecifier    the ordering to apply
-     * @return the first projection result based on the given order
-     *
-     * @see #findFirstFields(Expression, Function, OrderSpecifier[])
-     * @see #findFirstFields(Expression, Function, Function[])
-     */
-    public <F> Optional<F> findFirstFields(
-            final Expression<F> projection,
-            @Nullable final Function<Q, Predicate> predicateFunction,
-            final OrderSpecifier<?>... orderSpecifier
-    ) {
-        return findFirstFields(
-                projection,
-                predicateFunction == null ? null : predicateFunction.apply(getEntityPath()),
-                orderSpecifier
-        );
-    }
-
-    /**
-     * Based on the given predicate function search for applicable entity instances and return the first projection
-     * based on specified {@link OrderSpecifier ordering}.
-     *
-     * <p>
-     *     Same as {@link #findFirstFields(Expression, Predicate, OrderSpecifier[])}, but with the predicates
-     *     and order specifiers both bundled up as a function (syntax sugar).
-     * </p>
-     *
-     * <p>
-     * <b>CAUTION</b>: when the supplied {@link OrderSpecifier ordering} is not aligned to the projection one might get
-     * unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
-     * </p>
-     *
-     * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter
+     * @param predicates        the predicate(s) to apply as a filter (can be null)
      * @param orderSpecifiers    the ordering to apply
      * @return the first projection result based on the given order
      *
-     * @see #findFirstFields(Expression, Predicate, OrderSpecifier[])
-     * @see #findFirstFields(Expression, Function, OrderSpecifier[])
-     * @see #findFirstFieldUsingDefaultOrder(Expression, Function)
+     * @see #findFirstFields(Function, Function, Function[])
      */
     public <F> Optional<F> findFirstFields(
-            final Expression<F> projection,
-            @Nullable final Function<Q, Predicate> predicateFunction,
+            final Function<Q, Expression<F>> projection,
+            @Nullable final Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
-        return findFirstFields(
-                projection,
-                predicateFunction,
-                apply(orderSpecifiers)
-        );
+        return Optional.ofNullable(queryDslSupport
+                .select(projection.apply(getEntityPath()))
+                .distinct()
+                .from(getEntityPath())
+                .where(unwrapPredicates(predicates))
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
+                .fetchFirst());
+    }
+
+    /**
+     * Based on the given predicate function search for applicable entity instances and return the first projection
+     * based on specified {@link OrderSpecifier ordering}.
+     *
+     * <p>
+     * <b>CAUTION</b>: when the supplied {@link OrderSpecifier ordering} is not aligned to the projection one might get
+     * unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+     * </p>
+     *
+     * @param projection        the projection that defines the field to return
+     * @param predicate         the predicate to apply as a filter
+     * @param orderSpecifiers    the ordering to apply
+     * @return the first projection result based on the given order
+     *
+     * @see #findFirstFields(Function, Function[], Function[])
+     */
+    public <F> Optional<F> findFirstFields(
+            final Function<Q, Expression<F>> projection,
+            @Nullable final Function<Q, Predicate> predicate,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+    ) {
+        return findFirstFields(projection, asArray(predicate), orderSpecifiers);
     }
 
     /**
@@ -636,20 +544,17 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      *     exists.  If this is not the case, then that method must be overridden.
      * </p>
      *
-     * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter
+     * @param projection    the projection that defines the field to return
+     * @param predicates    the predicate(s) to apply as a filter
      * @return the first projection result based on the default order
      *
-     * @see #findFirstFields(Expression, Predicate, OrderSpecifier[])
-     * @see #findFirstFields(Expression, Function, OrderSpecifier[])
-     * @see #findFirstFields(Expression, Function, Function[])
      * @see #getDefaultOrders()
      */
-    public <F> Optional<F> findFirstFieldUsingDefaultOrder(
-            final Expression<F> projection,
-            final Function<Q, Predicate> predicateFunction
+    public <F> Optional<F> findFirstFieldsUsingDefaultOrder(
+            final Function<Q, Expression<F>> projection,
+            @Nullable final Function<Q, Predicate>... predicates
     ) {
-        return findFirstFields(projection, predicateFunction, getDefaultOrder());
+        return findFirstFields(projection, predicates, getDefaultOrdersAsArray());
     }
 
 
@@ -661,206 +566,118 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @param predicates the predicates to apply as a filter
      * @return the projection result
      * @throws NonUniqueResultException if there is more than one matching result
-     *
-     * @see #findUniqueFields(Expression, Function)
      */
     public <F> Optional<F> findUniqueFields(
-            final Expression<F> projection,
-            final Predicate... predicates) throws NonUniqueResultException {
+            final Function<Q, Expression<F>> projection,
+            final Function<Q, Predicate>... predicates
+    ) throws NonUniqueResultException {
         return Optional.ofNullable(queryDslSupport
-                .select(projection)
+                .select(projection.apply(getEntityPath()))
                 .from(getEntityPath())
-                .where(predicates)
-                .fetchOne());
-    }
-
-    /**
-     * Based on the given predicate function search for exactly one or zero entity instance and return the projection.
-     *
-     * @param projection        the projection that defines the field to return
-     * @param predicateFunction the predicate function to apply as a filter
-     * @return the projection result
-     * @throws NonUniqueResultException if there is more than one matching result
-     *
-     * @see #findUniqueFields(Expression, Predicate...)
-     */
-    public <F> Optional<F> findUniqueFields(
-            final Expression<F> projection,
-            final Function<Q, Predicate> predicateFunction) throws NonUniqueResultException {
-        return Optional.ofNullable(queryDslSupport
-                .select(projection)
-                .from(getEntityPath())
-                .where(predicateFunction.apply(getEntityPath()))
+                .where(unwrapPredicates(predicates))
                 .fetchOne());
     }
 
 
+
     /**
-     * Based on the given predicate search for applicable entity instances and apply the given
+     * Based on the given predicate(s), search for applicable entity instances and apply the given
      * {@link OrderSpecifier ordering}.
      *
-     * @param predicate      the predicate to apply as a filter
-     * @param orderSpecifier the ordering to apply
+     * @param predicates the predicate(s) to apply as a filter
+     * @param orderSpecifiers    the ordering to apply
      * @return the ordered instances
      *
-     * @see #find(Function, OrderSpecifier[])
      * @see #find(Function, Function[])
-     * @see #findUsingDefaultOrder(Predicate...)
-     * @see #findUsingDefaultOrder(Function)
+     * @see #findUsingDefaultOrder(Function[])
      */
     public List<T> find(
-            final Predicate predicate,
-            final OrderSpecifier<?>... orderSpecifier
+            @Nullable final Function<Q, Predicate>[] predicates,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return queryDslSupport
                 .selectFrom(getEntityPath())
-                .where(predicate)
-                .orderBy(orderSpecifier)
+                .where(unwrapPredicates(predicates))
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
                 .fetch();
     }
 
+
+
     /**
-     * Based on the given predicate function search for applicable entity instances and apply the given
+     * Based on the given predicate(s), search for applicable entity instances and apply the given
      * {@link OrderSpecifier ordering}.
      *
-     * <p>
-     *     Same as {@link #find(Predicate, OrderSpecifier[])}, but with the predicate bundled up as
-     *     a function (syntax sugar).
-     * </p>
-     *
-     * @param predicateFunction the predicate function to apply as a filter
-     * @param orderSpecifier    the ordering to apply
+     * @param predicate the predicate to apply as a filter (can be null)
+     * @param orderSpecifiers    the ordering to apply
      * @return the ordered instances
      *
-     * @see #find(Predicate, OrderSpecifier[])
-     * @see #find(Function, Function[])
-     * @see #findUsingDefaultOrder(Predicate...)
-     * @see #findUsingDefaultOrder(Function)
+     * @see #find(Function[], Function[])
+     * @see #findUsingDefaultOrder(Function[])
      */
     public List<T> find(
-            final Function<Q, Predicate> predicateFunction,
-            final OrderSpecifier<?>... orderSpecifier
+            @Nullable final Function<Q, Predicate> predicate,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
-        return queryDslSupport
-                .selectFrom(getEntityPath())
-                .where(predicateFunction.apply(getEntityPath()))
-                .orderBy(orderSpecifier)
-                .fetch();
-    }
-
-    /**
-     * Based on the given predicate function search for applicable entity instances and apply the given
-     * {@link OrderSpecifier ordering}.
-     *
-     * <p>
-     *     Same as {@link #find(Predicate, OrderSpecifier[])}, but with the predicate and ordering bundled up as
-     *     a function (syntax sugar).
-     * </p>
-     *
-     * @param predicateFunction the predicate function to apply as a filter
-     * @param orderSpecifier    the ordering to apply
-     * @return the ordered instances
-     *
-     * @see #find(Predicate, OrderSpecifier[])
-     * @see #find(Function, OrderSpecifier[])
-     * @see #findUsingDefaultOrder(Predicate...)
-     * @see #findUsingDefaultOrder(Function)
-     */
-    public List<T> find(
-            final Function<Q, Predicate> predicateFunction,
-            final Function<Q, OrderSpecifier<?>>... orderSpecifier
-    ) {
-        return find(predicateFunction, apply(orderSpecifier));
+        return find(asArray(predicate), orderSpecifiers);
     }
 
 
-    /**
-     * Based on the given predicates search for applicable entity instances and apply the
-     * {@link #getDefaultOrders() default ordering}.
-     *
-     * <p>
-     *     NOTE: the default implementation of {@link #getDefaultOrders()} requires that the <code>id</code> field
-     *     exists.  If this is not the case, then that method must be overridden.
-     * </p>
-     *
-     * @param predicates the predicates to apply as a filter
-     * @return the ordered instances
-     *
-     * @see #find(Predicate, OrderSpecifier[])
-     * @see #find(Function, OrderSpecifier[])
-     * @see #find(Function, Function[])
-     * @see #findUsingDefaultOrder(Function)
-     */
-    public List<T> findUsingDefaultOrder(Predicate... predicates) {
-        return queryDslSupport
-                .selectFrom(getEntityPath())
-                .where(predicates)
-                .orderBy(getDefaultOrder())
-                .fetch();
-    }
+
 
     /**
      * Based on the given predicate function search for applicable entity instances and apply the
      * {@link #getDefaultOrders() default ordering}.
      *
      * <p>
-     *     Same as {@link #findUsingDefaultOrder(Predicate...)}, but with the predicate bundled up as a function
-     *     (syntax sugar).
-     * </p>
-     *
-     * <p>
      *     NOTE: the default implementation of {@link #getDefaultOrders()} requires that the <code>id</code> field
      *     exists.  If this is not the case, then that method must be overridden.
      * </p>
      *
-     * @param predicateFunction the predicate function to apply as a filter
+     * @param predicates the predicate function to apply as a filter
      * @return the ordered instances
      *
-     * @see #find(Predicate, OrderSpecifier[])
-     * @see #find(Function, OrderSpecifier[])
+     * @see #find(Function[], Function[])
      * @see #find(Function, Function[])
-     * @see #findUsingDefaultOrder(Predicate...)
      */
-    public List<T> findUsingDefaultOrder(Function<Q, Predicate> predicateFunction) {
-        return find(predicateFunction, getDefaultOrder());
+    public List<T> findUsingDefaultOrder(Function<Q, Predicate>[] predicates) {
+        return find(predicates, getDefaultOrdersAsArray());
     }
-
 
 
     /**
      * Based on the given predicate search for applicable entity instances,
-     * then transform the results to the given bean using the given projections and apply the given
-     * {@link OrderSpecifier ordering}.
+     * then transform the results to the given bean using the given projections and apply the given ordering.
      *
-     * @param predicate      the predicate to apply as a filter
-     * @param orderSpecifier the ordering to apply
-     * @param bean           the bean class to use as a destination for the projection results
-     * @param projections    the projections which define which information to deliver to the bean creation
-     * @param <B>            the bean type
+     * @param projections       the projections which define which information to deliver to the bean creation
+     * @param predicates        the predicate(s) to apply as a filter (can be null)
+     * @param orderSpecifiers    the ordering to apply
+     * @param bean              the bean class to use as a destination for the projection results
+     * @param <B>               the bean type
      * @return the information defined by the projections as ordered beans
+     *
+     * @see #findAsBean(Function, Function, Class, Function[])
      */
     public <B> List<B> findAsBean(
-            final Predicate predicate,
-            final OrderSpecifier<?> orderSpecifier,
+            final Function<Q, Expression<?>>[] projections,
             final Class<? extends B> bean,
-            final Expression<?>... projections) {
+            @Nullable final Function<Q, Predicate>[] predicates,
+            final Function<Q, OrderSpecifier<?>>... orderSpecifiers
+    ) {
         return (List<B>) queryDslSupport
                 .from(getEntityPath())
-                .projection(Projections.bean(bean, projections))
-                .where(predicate)
-                .orderBy(orderSpecifier)
+                .projection(Projections.bean(bean, unwrapProjections(projections)))
+                .where(unwrapPredicates(predicates))
+                .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
                 .fetch();
     }
 
+
     /**
-     * Based on the given predicate function search for applicable entity instances,
+     * Based on the given predicate search for applicable entity instances,
      * then transform the results to the given bean using the given projections and apply the given ordering.
      *
-     * <p>
-     *     Same as {@link #findAsBean(Predicate, OrderSpecifier, Class, Expression[])}, but with the predicate
-     * </p>
-     *
-     * @param predicateFunction the predicate function to apply as a filter
+     * @param predicate         the predicate to apply as a filter (can be null)
      * @param orderSpecifier    the ordering to apply
      * @param bean              the bean class to use as a destination for the projection results
      * @param projections       the projections which define which information to deliver to the bean creation
@@ -868,20 +685,50 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @return the information defined by the projections as ordered beans
      */
     public <B> List<B> findAsBean(
-            final Function<Q, Predicate> predicateFunction,
-            final OrderSpecifier<?> orderSpecifier,
+            @Nullable final Function<Q, Predicate> predicate,
+            final Function<Q, OrderSpecifier<?>> orderSpecifier,
             final Class<? extends B> bean,
-            final Expression<?>... projections) {
+            final Function<Q, Expression<?>>... projections) {
         return (List<B>) queryDslSupport
                 .from(getEntityPath())
-                .projection(Projections.bean(bean, projections))
-                .where(predicateFunction.apply(getEntityPath()))
-                .orderBy(orderSpecifier)
+                .projection(Projections.bean(bean, unwrapProjections(projections)))
+                .where(unwrapPredicates(predicate))
+                .orderBy(orderSpecifier.apply(getEntityPath()))
                 .fetch();
     }
 
+    private <F> Expression<F>[] unwrapExpressions(Function<Q, Expression<F>>... expressions) {
+        return Arrays.stream(expressions)
+                .map(x -> x.apply(getEntityPath()))
+                .collect(Collectors.toUnmodifiableList())
+                .toArray(new Expression[0]);
+    }
 
-    private OrderSpecifier<?>[] apply(Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
+    private Expression<?>[] unwrapProjections(Function<Q, Expression<?>>... projections) {
+        return Arrays.stream(projections)
+                .map(x -> x.apply(getEntityPath()))
+                .collect(Collectors.toUnmodifiableList())
+                .toArray(new Expression[0]);
+    }
+
+    private Predicate[] unwrapPredicates(final Function<Q, Predicate>... predicates) {
+        if(predicates == null) {
+            return new Predicate[]{new BooleanBuilder()};
+        }
+        if(predicates.length == 0) {
+            return new Predicate[]{new BooleanBuilder()};
+        }
+        if(predicates.length == 1 && predicates[0] == null) {
+            return new Predicate[]{new BooleanBuilder()};
+        }
+        return Arrays.stream(predicates)
+                .map(x -> x.apply(getEntityPath()))
+                .collect(Collectors.toUnmodifiableList())
+                .toArray(new Predicate[0]);
+    }
+
+
+    private OrderSpecifier<?>[] unwrapOrderSpecifiers(final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return Arrays.stream(orderSpecifiers)
                 .map(x -> x.apply(getEntityPath()))
                 .collect(Collectors.toUnmodifiableList())
@@ -900,6 +747,11 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
         return (Class<T>) types[index];
     }
 
+    private static <T extends Comparable, Q extends EntityPathBase<T>> Function<Q, Predicate>[] asArray(Function<Q, Predicate> predicate) {
+        return predicate != null ? (Function<Q, Predicate>[]) new Function[] {predicate} : new Function[0];
+    }
+
+
     static <T> List<T> newList(T... objs) {
         return newArrayList(objs);
     }
@@ -909,6 +761,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
         Collections.addAll(result, objs);
         return result;
     }
+
 
 
 }
