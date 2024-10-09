@@ -38,6 +38,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -45,6 +46,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
@@ -223,6 +225,14 @@ final class Can_Multiple<T> implements Can<T> {
     public <R, Z> Can<R> zipMap(final @NonNull Iterable<Z> zippedIn, final @NonNull BiFunction<? super T, ? super Z, R> mapper) {
         val zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
+    }
+
+    @Override
+    public <R, Z> Stream<R> zipStream(final @NonNull Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
+        val zippedInIterator = zippedIn.iterator();
+        return stream()
+                .map(t->mapper.apply(t, zippedInIterator.next()))
+                .filter(_NullSafe::isPresent);
     }
 
     @Override
@@ -494,6 +504,24 @@ final class Can_Multiple<T> implements Can<T> {
             final @NonNull BinaryOperator<T> mergeFunction,
             final @NonNull Supplier<M> mapFactory) {
         return Collections.unmodifiableMap(toMap(keyExtractor, mergeFunction, mapFactory));
+    }
+
+    @Override
+    public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
+        return stream().collect(collector);
+    }
+
+    @Override
+    public String join(@NonNull final String delimiter) {
+        return join(Object::toString, delimiter);
+    }
+
+    @Override
+    public String join(@NonNull final Function<? super T, String> toStringFunction, @NonNull final String delimiter) {
+        return stream()
+                .map(toStringFunction)
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.joining(delimiter));
     }
 
 }

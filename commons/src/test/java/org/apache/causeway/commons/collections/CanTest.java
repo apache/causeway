@@ -19,12 +19,15 @@
 package org.apache.causeway.commons.collections;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -33,10 +36,15 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.StringUtils;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
@@ -406,6 +414,26 @@ class CanTest {
     }
 
     @RequiredArgsConstructor
+    enum CustomerScenario {
+        EMPTY(Can.empty()),
+        ONE(Can.of(new Customer("Jeff"))),
+        MANY( Can.of(new Customer("Jeff"), new Customer("Jane"))),
+        ONE_UNNAMED(Can.of(new Customer(null))),
+        MANY_WITH_UNNAMED( Can.of(new Customer(null), new Customer("Jeff"), new Customer("Jane"), new Customer(null)));
+        ;
+        final Can<Customer> customers;
+        int cardinality() {
+            return customers.size();
+        }
+        // simulates a zip-function with nullable result
+        @Nullable static String format(Customer customer, int ordinal) {
+            return StringUtils.hasLength(customer.name)
+                    ? String.format("%d->%s", ordinal, customer.name)
+                    : null;
+        }
+    }
+
+    @RequiredArgsConstructor
     enum MapScenario {
         HASH_MAP(customers->customers.toMap(Customer::getName)),
         HASH_UNMOD_MAP(customers->customers.toUnmodifiableMap(Customer::getName)),
@@ -472,6 +500,96 @@ class CanTest {
         assertEquals(new Customer("Jane"), map.get("Jane"));
         scenario.assertModifiability(map);
         scenario.assertMapType(map);
+    }
+
+    // -- ZIP
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#zip(Iterable, java.util.function.BiConsumer) zip},
+     *  {@link Can#zipMap(Iterable, java.util.function.BiFunction) zipMap} and
+     *  {@link Can#zipStream(Iterable, java.util.function.BiFunction) zipStream}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void zip(final CustomerScenario scenario) {
+        var ordinals = IntStream.range(0, scenario.cardinality())
+            .mapToObj(Integer::valueOf)
+            .collect(Collectors.toList());
+        var expectedZipped = new ArrayList<String>();
+        for (int i = 0; i < scenario.cardinality(); i++) {
+            var next = CustomerScenario.format(scenario.customers.getElseFail(i), i);
+            if(next!=null) expectedZipped.add(next); // exclude nulls
+        }
+        { // zip
+            var list = new ArrayList<String>();
+            scenario.customers
+                .zip(
+                        ordinals,
+                        (customer, ordinal)->list.add(CustomerScenario.format(customer, ordinal)));
+            assertIterableEquals(
+                    expectedZipped,
+                    //remove nulls
+                    list.stream().filter(_NullSafe::isPresent).collect(Collectors.toList()));
+        }
+        { // zipMap
+            var actualZipped = scenario.customers
+                .zipMap(ordinals, CustomerScenario::format);
+            assertIterableEquals(expectedZipped, actualZipped);
+        }
+        { // zipStream
+            var actualZipped = scenario.customers
+                .zipStream(ordinals, CustomerScenario::format)
+                .collect(Collectors.toList());
+            assertIterableEquals(expectedZipped, actualZipped);
+        }
+
+    }
+
+    // -- COLLECT
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#collect(java.util.stream.Collector) collect}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void collect(final CustomerScenario scenario) {
+        assertIterableEquals(
+                scenario.customers.toList(),
+                scenario.customers.collect(Collectors.toList()));
+    }
+
+    // -- JOIN
+
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#join(String) join w/ implicit toString}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void join_withImplicit_toString(final CustomerScenario scenario) {
+        assertEquals(
+                scenario.customers.map(Object::toString)
+                    .stream()
+                    .collect(Collectors.joining(", ")),
+                scenario.customers
+                    .join(", "));
+    }
+    
+    /**
+     * Tests all {@link Cardinality}(s) on
+     * {@link Can#join(Function, String) join w/ explicit toString}
+     */
+    @ParameterizedTest
+    @EnumSource(CustomerScenario.class)
+    void join_withExplicit_toString(final CustomerScenario scenario) {
+        assertEquals(
+                scenario.customers.map(Customer::getName)
+                    .stream()
+                    .collect(Collectors.joining(", ")),
+                scenario.customers
+                    .join(Customer::getName, ", "));
     }
 
     // -- HEPER

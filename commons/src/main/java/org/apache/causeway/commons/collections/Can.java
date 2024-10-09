@@ -496,7 +496,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     void forEach(@NonNull Consumer<? super T> action);
 
     /**
-     * Similar to {@link #forEach(Consumer)}, but zipps in {@code zippedIn} to iterate through
+     * Similar to {@link #forEach(Consumer)}, but zips in {@code zippedIn} to iterate through
      * its elements and passes them over as the second argument to the {@code action}.
      * @param <R>
      * @param zippedIn must have at least as much elements as this {@code Can}
@@ -506,15 +506,29 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     <R> void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action);
 
     /**
-     * Similar to {@link #map(Function)}, but zipps in {@code zippedIn} to iterate through
+     * Similar to {@link #map(Function)}, but zips in {@code zippedIn} to iterate through
      * its elements and passes them over as the second argument to the {@code mapper}.
      * @param <R>
      * @param <Z>
      * @param zippedIn must have at least as much elements as this {@code Can}
      * @param mapper
      * @throws NoSuchElementException if {@code zippedIn} overflows
+     * @see {@link #zipStream(Iterable, BiFunction)}
      */
     <R, Z> Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper);
+
+    /**
+     * Semantically equivalent to {@link #zipMap(Iterable, BiFunction)}.stream().
+     * <p> (Actual implementations might be optimized.)
+     * @apiNote the resulting Stream will not contain {@code null} elements 
+     * @param <R>
+     * @param <Z>
+     * @param zippedIn must have at least as much elements as this {@code Can}
+     * @param mapper
+     * @throws NoSuchElementException if {@code zippedIn} overflows
+     * @see {@link #zipMap(Iterable, BiFunction)}
+     */
+    <R, Z> Stream<R> zipStream(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper);
 
     // -- MANIPULATION
 
@@ -880,9 +894,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      *                   into which the results will be inserted
      */
     <K, M extends Map<K, T>> M toMap(
-            final @NonNull Function<? super T, ? extends K> keyExtractor,
-            final @NonNull BinaryOperator<T> mergeFunction,
-            final @NonNull Supplier<M> mapFactory);
+            @NonNull Function<? super T, ? extends K> keyExtractor,
+            @NonNull BinaryOperator<T> mergeFunction,
+            @NonNull Supplier<M> mapFactory);
 
     /**
      * Variant of {@link #toMap(Function, BinaryOperator, Supplier)},
@@ -890,8 +904,45 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @see #toMap(Function, BinaryOperator, Supplier)
      */
     <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
-            final @NonNull Function<? super T, ? extends K> keyExtractor,
-            final @NonNull BinaryOperator<T> mergeFunction,
-            final @NonNull Supplier<M> mapFactory);
+            @NonNull Function<? super T, ? extends K> keyExtractor,
+            @NonNull BinaryOperator<T> mergeFunction,
+            @NonNull Supplier<M> mapFactory);
+
+    // -- COLLECT
+
+    /**
+     * Semantically equivalent to {@link #stream()}
+     * .{@link Stream#collect(Collector) collect(collector)}.
+     * <p>(Actual implementations might be optimized.)
+     * @param <R>
+     * @param <A>
+     * @param collector
+     */
+    <R, A> R collect(@NonNull Collector<? super T, A, R> collector);
+
+    // -- JOIN AS STRING
+
+    /**
+     * Semantically equivalent to {@link #map(Function) map(Object::toString)}
+     * <br>{@code .collect(Collectors.joining(delimiter));}
+     * <p>(Actual implementations might be optimized.)
+     * @param delimiter
+     * @apiNote the corner case, 
+     *      when the {@code Object::toString} function returns {@code null} for some elements,
+     *      results in those elements simply being ignored by the join 
+     */
+    String join(@NonNull String delimiter);
+
+    /**
+     * Semantically equivalent to {@link #map(Function) map(toStringFunction)}
+     * <br>{@code .collect(Collectors.joining(delimiter));}
+     * <p>(Actual implementations might be optimized.)
+     * @param toStringFunction
+     * @param delimiter
+     * @apiNote the corner case, 
+     *      when given {@code toStringFunction} function returns {@code null} for some elements,
+     *      results in those elements simply being ignored by the join 
+     */
+    String join(@NonNull Function<? super T, String> toStringFunction, @NonNull String delimiter);
 
 }
