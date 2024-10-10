@@ -103,6 +103,7 @@ import lombok.extern.log4j.Log4j2;
  * hardcoded set of built-in {@link ComponentFactory}s, along with any
  * implementations discovered by the IoC container.
  */
+@Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
 
     public static final String LOGICAL_TYPE_NAME =

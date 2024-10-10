@@ -58,6 +58,7 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -65,6 +66,7 @@ import lombok.extern.log4j.Log4j2;
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a
  * provided {@link ComponentFactoryRegistrar}.
  */
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class ComponentFactoryRegistryDefault
 implements ComponentFactoryRegistry {
@@ -79,13 +81,15 @@ implements ComponentFactoryRegistry {
         @Order(PriorityPrecedence.MIDPOINT)
         @Qualifier("Default")
         public ComponentFactoryRegistryDefault componentFactoryRegistryDefault(
-                final ComponentFactoryRegistrar componentFactoryRegistrar) {
-            return new ComponentFactoryRegistryDefault(componentFactoryRegistrar);
+                final ComponentFactoryRegistrar componentFactoryRegistrar,
+                final MetaModelContext metaModelContext
+        ) {
+            return new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
         }
     }
 
-    @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
-    @Inject private MetaModelContext metaModelContext;
+    private final ComponentFactoryRegistrar componentFactoryRegistrar;
+    private final MetaModelContext metaModelContext;
 
     private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByComponentType =
             _Multimaps.newListMultimap();
@@ -231,7 +235,14 @@ implements ComponentFactoryRegistry {
     // -- JUNIT SUPPORT
 
     static ComponentFactoryRegistryDefault forTesting(final List<ComponentFactory> componentFactories) {
-        val factory = new ComponentFactoryRegistryDefault();
+        return forTesting(null, null, componentFactories);
+    }
+
+    static ComponentFactoryRegistryDefault forTesting(
+            final ComponentFactoryRegistrar componentFactoryRegistrar,
+            final MetaModelContext metaModelContext,
+            final List<ComponentFactory> componentFactories) {
+        val factory = new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
         _NullSafe.stream(componentFactories)
         .forEach(componentFactory->
             factory.componentFactoriesByComponentType.putElement(
