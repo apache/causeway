@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -106,8 +107,8 @@ class ServiceInjectorDefaultTest_usingFields {
     }
 
     // not-managed
-    static class D { 
-        @Inject @Getter private A someA;    
+    static class D {
+        @Inject @Getter private A someA;
         @Inject @Getter private B someB;
         @Inject @Getter private C someC;
     }

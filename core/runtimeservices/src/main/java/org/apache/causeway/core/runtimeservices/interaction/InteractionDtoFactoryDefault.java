@@ -55,12 +55,16 @@ import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 import lombok.val;
 
 /**
+ * Default implementation of {@link InteractionDtoFactory}.
+ *
+ * <p>
  * The design of this service is similar to
  * {@link org.apache.causeway.core.runtimeservices.command.CommandDtoFactoryDefault}
+ * </p>
+ *
+ * @since 2.0
  *
  * @see org.apache.causeway.core.runtimeservices.command.CommandDtoFactoryDefault
- *
- * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionDtoServiceInternalDefault")

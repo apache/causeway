@@ -44,3 +44,5 @@ Returns the xref:refguide:applib:index/services/iactnlayer/InteractionContext.ad
 === currentInteraction()
 
 Returns the xref:refguide:applib:index/services/iactn/Interaction.adoc[Interaction] wrapped by the _#currentInteractionLayer()_ (if within an xref:refguide:applib:index/services/iactnlayer/InteractionLayer.adoc[InteractionLayer] ).
+
+include::hooks/InteractionLayerTracker_010-implementation.adoc[]

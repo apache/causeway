@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
+import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshallerAbstract;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.common.v2.CollectionDto;
@@ -48,6 +49,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Default implementation of {@link SchemaValueMarshaller}.
  *
  * @since 2.0 {@index}
  */

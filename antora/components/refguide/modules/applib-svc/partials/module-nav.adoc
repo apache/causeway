@@ -79,6 +79,22 @@
 ** xref:refguide:applib:index/services/xml/XmlService.adoc[XmlService]
 ** xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService.adoc[XmlSnapshotService]
 
-** Viewer (Common Applib)
+** Core Transaction
+*** xref:refguide:core:index/transaction/changetracking/EntityChangeTracker.adoc[]
+*** xref:refguide:core:index/transaction/changetracking/EntityChangesPublisher.adoc[]
+
+** Viewer Common Applib
 *** xref:refguide:viewer:index/commons/applib/services/userprof/UserProfileUiService.adoc[UserProfileUiService]
+
+** Persistence JDO Applib
+*** xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[]
+
+** Persistence JPA Applib
+*** xref:refguide:persistence:index/jpa/applib/services/JpaSupportService.adoc[]
+
+** Persistence QueryDsl Applib
+*** xref:refguide:persistence:index/querydsl/applib/services/auto/AutoCompleteGeneratedQueryService.adoc[]
+*** xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc[]
+*** xref:refguide:persistence:index/querydsl/applib/services/support/DetachedQueryFactory.adoc[]
+*** xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[]
 

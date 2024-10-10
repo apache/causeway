@@ -47,6 +47,7 @@ interface Can<T> {
   void forEach(Consumer<? super T> action)
   void zip(Iterable<R> zippedIn, BiConsumer<? super T, ? super R> action)     // <.>
   Can<R> zipMap(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
+  Stream<R> zipStream(Iterable<Z> zippedIn, BiFunction<? super T, ? super Z, R> mapper)     // <.>
   Can<T> add(T element)
   Can<T> addUnique(T element)     // <.>
   Can<T> addAll(Can<T> other)
@@ -69,6 +70,7 @@ interface Can<T> {
   boolean isCardinalityOne()
   boolean isCardinalityMultiple()
   Collector<T, ?, Can<T>> toCan()
+  Collector<T, ?, M> toMapCollector(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
   List<T> toList()     // <.>
   List<T> toArrayList()     // <.>
   Set<T> toSet()     // <.>
@@ -76,6 +78,13 @@ interface Can<T> {
   C toCollection(Supplier<C> collectionFactory)     // <.>
   T[] toArray(T[] a)     // <.>
   T[] toArray(Class<T> elementType)     // <.>
+  Map<K, T> toMap(Function<? super T, ? extends K> keyExtractor)     // <.>
+  Map<K, T> toUnmodifiableMap(Function<? super T, ? extends K> keyExtractor)     // <.>
+  M toMap(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
+  Map<K, T> toUnmodifiableMap(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
+  R collect(Collector<? super T, A, R> collector)     // <.>
+  String join(String delimiter)     // <.>
+  String join(Function<? super T, String> toStringFunction, String delimiter)     // <.>
 }
 ----
 
@@ -209,12 +218,17 @@ Returns an iterator that skips the first _skip_ elements, then returns a maximum
 <.> xref:#zip_Iterable_BiConsumer[zip(Iterable, BiConsumer)]
 +
 --
-Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
+Similar to _#forEach(Consumer)_ , but zips in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
 --
 <.> xref:#zipMap_Iterable_BiFunction[zipMap(Iterable, BiFunction)]
 +
 --
-Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
+Similar to _#map(Function)_ , but zips in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
+--
+<.> xref:#zipStream_Iterable_BiFunction[zipStream(Iterable, BiFunction)]
++
+--
+Semantically equivalent to _#zipMap(Iterable, BiFunction)_ .stream().
 --
 <.> xref:#addUnique_T[addUnique(T)]
 +
@@ -277,6 +291,11 @@ Let _n_ be the number of elements in _other_ . Returns whether the first _n_ ele
 --
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
+<.> xref:#toMapCollector_Function_BinaryOperator_Supplier[toMapCollector(Function, BinaryOperator, Supplier)]
++
+--
+Return a _Collector_ , that delegates _Map_ creation to _Collectors#toMap(Function, Function, BinaryOperator, Supplier)_ .
+--
 <.> xref:#toList_[toList()]
 <.> xref:#toArrayList_[toArrayList()]
 <.> xref:#toSet_[toSet()]
@@ -284,6 +303,41 @@ Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elem
 <.> xref:#toCollection_Supplier[toCollection(Supplier)]
 <.> xref:#toArray_T[toArray(T)]
 <.> xref:#toArray_Class[toArray(Class)]
+<.> xref:#toMap_Function[toMap(Function)]
++
+--
+Returns a modifiable (hash) _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+--
+<.> xref:#toUnmodifiableMap_Function[toUnmodifiableMap(Function)]
++
+--
+Variant of _#toMap(Function)_ , that protects the resulting _Map_ from modification.
+--
+<.> xref:#toMap_Function_BinaryOperator_Supplier[toMap(Function, BinaryOperator, Supplier)]
++
+--
+Returns a modifiable _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+--
+<.> xref:#toUnmodifiableMap_Function_BinaryOperator_Supplier[toUnmodifiableMap(Function, BinaryOperator, Supplier)]
++
+--
+Variant of _#toMap(Function, BinaryOperator, Supplier)_ , that protects the resulting _Map_ from modification.
+--
+<.> xref:#collect_Collector[collect(Collector)]
++
+--
+Semantically equivalent to _#stream()_ . _Stream#collect(Collector) collect(collector)_ .
+--
+<.> xref:#join_String[join(String)]
++
+--
+Semantically equivalent to _#map(Function) map(Object::toString)__.collect(Collectors.joining(delimiter));_
+--
+<.> xref:#join_Function_String[join(Function, String)]
++
+--
+Semantically equivalent to _#map(Function) map(toStringFunction)__.collect(Collectors.joining(delimiter));_
+--
 
 == Members
 
@@ -441,12 +495,19 @@ Returns an iterator that skips the first _skip_ elements, then returns a maximum
 [#zip_Iterable_BiConsumer]
 === zip(Iterable, BiConsumer)
 
-Similar to _#forEach(Consumer)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
+Similar to _#forEach(Consumer)_ , but zips in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _action_ .
 
 [#zipMap_Iterable_BiFunction]
 === zipMap(Iterable, BiFunction)
 
-Similar to _#map(Function)_ , but zipps in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
+Similar to _#map(Function)_ , but zips in _zippedIn_ to iterate through its elements and passes them over as the second argument to the _mapper_ .
+
+[#zipStream_Iterable_BiFunction]
+=== zipStream(Iterable, BiFunction)
+
+Semantically equivalent to _#zipMap(Iterable, BiFunction)_ .stream().
+
+(Actual implementations might be optimized.)
 
 [#addUnique_T]
 === addUnique(T)
@@ -532,6 +593,11 @@ Let _n_ be the number of elements in _other_ . Returns whether the first _n_ ele
 
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 
+[#toMapCollector_Function_BinaryOperator_Supplier]
+=== toMapCollector(Function, BinaryOperator, Supplier)
+
+Return a _Collector_ , that delegates _Map_ creation to _Collectors#toMap(Function, Function, BinaryOperator, Supplier)_ .
+
 [#toList_]
 === toList()
 
@@ -552,3 +618,46 @@ Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elem
 
 [#toArray_Class]
 === toArray(Class)
+
+[#toMap_Function]
+=== toMap(Function)
+
+Returns a modifiable (hash) _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+
+On duplicate keys, behavior is unspecified.
+
+[#toUnmodifiableMap_Function]
+=== toUnmodifiableMap(Function)
+
+Variant of _#toMap(Function)_ , that protects the resulting _Map_ from modification.
+
+[#toMap_Function_BinaryOperator_Supplier]
+=== toMap(Function, BinaryOperator, Supplier)
+
+Returns a modifiable _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+
+[#toUnmodifiableMap_Function_BinaryOperator_Supplier]
+=== toUnmodifiableMap(Function, BinaryOperator, Supplier)
+
+Variant of _#toMap(Function, BinaryOperator, Supplier)_ , that protects the resulting _Map_ from modification.
+
+[#collect_Collector]
+=== collect(Collector)
+
+Semantically equivalent to _#stream()_ . _Stream#collect(Collector) collect(collector)_ .
+
+(Actual implementations might be optimized.)
+
+[#join_String]
+=== join(String)
+
+Semantically equivalent to _#map(Function) map(Object::toString)__.collect(Collectors.joining(delimiter));_
+
+(Actual implementations might be optimized.)
+
+[#join_Function_String]
+=== join(Function, String)
+
+Semantically equivalent to _#map(Function) map(toStringFunction)__.collect(Collectors.joining(delimiter));_
+
+(Actual implementations might be optimized.)

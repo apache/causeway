@@ -5,4 +5,4 @@
 
 == Implementation
 
-The framework provides a default implementation of the service, `o.a.c.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault`.
+The xref:vro::about.adoc[] provides an implementation of the service, xref:refguide:viewer:index/restfulobjects/rendering/service/swagger/SwaggerServiceDefault.adoc[].

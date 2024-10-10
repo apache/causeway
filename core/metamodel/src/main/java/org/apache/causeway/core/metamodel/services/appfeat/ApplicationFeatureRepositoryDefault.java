@@ -66,6 +66,10 @@ import lombok.NonNull;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(ApplicationFeatureRepositoryDefault.LOGICAL_TYPE_NAME)
 @Log4j2

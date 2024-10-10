@@ -49,7 +49,9 @@ import lombok.val;
 
 /**
  * An implementation of {@link org.apache.causeway.applib.services.linking.DeepLinkService}
- * for Wicket Viewer
+ * for Wicket Viewer.
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named("causeway.viewer.wicket.DeepLinkServiceWicket")

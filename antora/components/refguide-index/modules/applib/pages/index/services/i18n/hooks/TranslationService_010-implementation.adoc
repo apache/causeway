@@ -5,4 +5,5 @@
 
 == Implementation
 
-The Apache Causeway framework provides a default implementation (`o.a.c.core.runtimeservices.i18n.po.TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation, xref:refguide:core:index/runtimeservices/i18n/po/TranslationServicePo.adoc[].
+It uses the GNU `.pot` and `.po` files for translations.

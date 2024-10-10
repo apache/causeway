@@ -35,6 +35,19 @@ interface DataSource {
   DataSource ofString(String string, Charset charset)     // <.>
   DataSource ofStringUtf8(String string)     // <.>
   DataSource ofBytes(byte[] bytes)     // <.>
+  Optional<File> getFile()     // <.>
+  void consumeAsFile(ThrowingConsumer<File> fileConsumer)     // <.>
+  String getDescription()     // <.>
+  DataSource ofInputStreamSupplierInternal(String description, ThrowingSupplier<InputStream> inputStreamSupplier)
+  DataSource ofInputStreamSupplierInternal(String description, Optional<File> file, ThrowingSupplier<InputStream> inputStreamSupplier)
+  String descriptionForEmpty()
+  String descriptionForBytes(byte[] bytes)
+  String descriptionForString(String string)
+  String descriptionForResource(Resource springResource)
+  String descriptionForResource(Class<?> cls, String resourcePath)
+  String descriptionForMapped(DataSource ds)
+  String descriptionForFile(File file)
+  Optional<File> fileForResource(Resource springResource)
 }
 ----
 
@@ -142,6 +155,21 @@ Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _
 +
 --
 Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given byte array. If `null` or empty, an 'empty' DataSource is returned.
+--
+<.> xref:#getFile_[getFile()]
++
+--
+Optionally returns the underlying _File_ , based on whether this resource originates from a file.
+--
+<.> xref:#consumeAsFile_ThrowingConsumer[consumeAsFile(ThrowingConsumer)]
++
+--
+The given file-consumer is either passed the underlying _File_ (if this resource originates from a file), or a temporary file.
+--
+<.> xref:#getDescription_[getDescription()]
++
+--
+Return a description for this DataSource, to be used for error output when working with the resource.
 --
 
 == Members
@@ -270,3 +298,20 @@ Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given _
 === ofBytes(byte)
 
 Creates a xref:refguide:commons:index/io/DataSource.adoc[DataSource] for given byte array. If `null` or empty, an 'empty' DataSource is returned.
+
+[#getFile_]
+=== getFile()
+
+Optionally returns the underlying _File_ , based on whether this resource originates from a file.
+
+[#consumeAsFile_ThrowingConsumer]
+=== consumeAsFile(ThrowingConsumer)
+
+The given file-consumer is either passed the underlying _File_ (if this resource originates from a file), or a temporary file.
+
+In the temporary file case, the temporary file is deleted after consumption.
+
+[#getDescription_]
+=== getDescription()
+
+Return a description for this DataSource, to be used for error output when working with the resource.

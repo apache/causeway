@@ -30,13 +30,13 @@ import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- * A simpler SPI for {@link GridLoaderServiceDefault}.
+ * Default implementation of {@link LayoutResourceLoader}.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".LayoutResourceLoaderDefault")

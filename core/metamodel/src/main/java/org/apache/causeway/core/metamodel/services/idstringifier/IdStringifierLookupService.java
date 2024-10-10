@@ -47,8 +47,10 @@ import lombok.val;
 /**
  * Convenience service that looks up (and caches) the {@link IdStringifier}
  * available for a given value class, and optionally the class of the owning entity.
+ *
  * <p>
  * This is intended for framework use, there is little reason to call it or override it.
+ * </p>
  *
  * @since 2.0
  */

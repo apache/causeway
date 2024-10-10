@@ -45,6 +45,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.experimental.Accessors;
 
+/**
+ * Default implementation of {@link GridService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

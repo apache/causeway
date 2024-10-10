@@ -68,3 +68,5 @@ In case there is no session for storing available, will return _Optional#empty()
 Removes the entry from the store.
 
 In case there is no session for storing available, acts as a no-op.
+
+include::hooks/KeyValueSessionStore_010-implementation.adoc[]

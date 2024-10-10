@@ -31,9 +31,13 @@ import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
- * Used as a identity fallback.
+ * The default implementation of {@link TableColumnOrderService}.
+ * Note though that this implementation has lower priority (later precedence) than
+ * {@link TableColumnOrderServiceUsingTxtFile}.
  *
  * @since 1.x {@index}
+ *
+ * @see TableColumnOrderServiceUsingTxtFile
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceDefault")

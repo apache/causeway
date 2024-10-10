@@ -33,6 +33,9 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link UrlEncodingService}, which encodes the provided bytes into a string,
+ * compressing those bytes first.
+ *
  * @since 2.0 {@index}
  */
 @Service

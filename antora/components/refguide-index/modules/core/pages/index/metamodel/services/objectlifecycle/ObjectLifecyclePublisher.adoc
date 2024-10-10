@@ -1,0 +1,109 @@
+= ObjectLifecyclePublisher
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Responsible for collecting and then passing along changes (to the EntityChangeTracker, in persistence commons) so that they can be published; and is responsible for calling the various persistence call-back facets.
+
+NOTE: this interface should really have been called ObjectLifecycleSubscriber...
+
+== API
+
+[source,java]
+.ObjectLifecyclePublisher.java
+----
+interface ObjectLifecyclePublisher {
+  void onPostCreate(ManagedObject domainObject)     // <.>
+  void onPostLoad(ManagedObject entity)     // <.>
+  void onPrePersist(Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid)     // <.>
+  void onPostPersist(ManagedObject entity)     // <.>
+  void onPreUpdate(ManagedObject entity, Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier)     // <.>
+  void onPostUpdate(ManagedObject entity)     // <.>
+  void onPreRemove(ManagedObject entity)     // <.>
+}
+----
+
+<.> xref:#onPostCreate_ManagedObject[onPostCreate(ManagedObject)]
++
+--
+Independent of the persistence stack, called when an object has been created in-memory, for example by xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] and internal _ObjectManager_ .
+--
+<.> xref:#onPostLoad_ManagedObject[onPostLoad(ManagedObject)]
++
+--
+Called by both JPA and JDO, just after an object is retrieved from the database.
+--
+<.> xref:#onPrePersist_Either[onPrePersist(Either)]
++
+--
+Called by both JPA and JDO, just before an entity is inserted into the database.
+--
+<.> xref:#onPostPersist_ManagedObject[onPostPersist(ManagedObject)]
++
+--
+Called by both JPA and JDO, just after an entity has been inserted into the database.
+--
+<.> xref:#onPreUpdate_ManagedObject_Function[onPreUpdate(ManagedObject, Function)]
++
+--
+Called by both JPA and JDO (though JDO does _not_ provide any changeRecords).
+--
+<.> xref:#onPostUpdate_ManagedObject[onPostUpdate(ManagedObject)]
++
+--
+Called by both JPA and JDO, after an existing entity has been updated.
+--
+<.> xref:#onPreRemove_ManagedObject[onPreRemove(ManagedObject)]
++
+--
+Called by both JPA and JDO, just before an entity is deleted from the database.
+--
+
+== Members
+
+[#onPostCreate_ManagedObject]
+=== onPostCreate(ManagedObject)
+
+Independent of the persistence stack, called when an object has been created in-memory, for example by xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService] and internal _ObjectManager_ .
+
+Default implementation fires off callback/lifecycle events.
+
+[#onPostLoad_ManagedObject]
+=== onPostLoad(ManagedObject)
+
+Called by both JPA and JDO, just after an object is retrieved from the database.
+
+Default implementation calls `EntityChangeTracker#recognizeLoaded(ManagedObject)` and fires off callback/lifecycle events.
+
+[#onPrePersist_Either]
+=== onPrePersist(Either)
+
+Called by both JPA and JDO, just before an entity is inserted into the database.
+
+Default implementation fires callbacks (including emitting the `PreStoreEvent` , eg as subscribed) by the `TimestampService` .
+
+[#onPostPersist_ManagedObject]
+=== onPostPersist(ManagedObject)
+
+Called by both JPA and JDO, just after an entity has been inserted into the database.
+
+Default implementation fires callbacks and enlists the entity within `EntityChangeTracker` for create/persist.
+
+[#onPreUpdate_ManagedObject_Function]
+=== onPreUpdate(ManagedObject, Function)
+
+Called by both JPA and JDO (though JDO does _not_ provide any changeRecords).
+
+Default implementation fires callbacks and enlists the entity within `EntityChangeTracker` for update.
+
+[#onPostUpdate_ManagedObject]
+=== onPostUpdate(ManagedObject)
+
+Called by both JPA and JDO, after an existing entity has been updated.
+
+Default implementation fires callbacks.
+
+[#onPreRemove_ManagedObject]
+=== onPreRemove(ManagedObject)
+
+Called by both JPA and JDO, just before an entity is deleted from the database.
+
+Default implementation fires callbacks and enlists the entity within `EntityChangeTracker` for delete/remove.

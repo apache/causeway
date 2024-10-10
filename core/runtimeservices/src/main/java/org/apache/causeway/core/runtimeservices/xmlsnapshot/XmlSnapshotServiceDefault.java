@@ -42,6 +42,7 @@ import org.apache.causeway.core.metamodel.util.snapshot.XmlSnapshot;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link XmlSnapshotService}.
  *
  * @since 1.0 {@index}
  */

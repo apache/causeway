@@ -13,3 +13,4 @@ interface LocaleChoiceProvider {
 }
 ----
 
+include::hooks/LocaleChoiceProvider_010-implementation.adoc[]

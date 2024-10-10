@@ -3,6 +3,13 @@
 
 
 
-== Implementation
+== Implementations
 
-This is an SPI, but the framework provides a simple implementation, `o.a.c.applib.services.publishing.log.EntityChangesLogger`, that just logs events as they are received.
+This is an SPI.
+
+NOTE: If multiple implementations of this service are registered, all will be called.
+
+=== Applib (Log4j2)
+
+The applib provides a simple implementation, xref:refguide:applib:index/services/publishing/log/EntityChangesLogger.adoc[], that just logs events as they are received.
+

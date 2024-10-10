@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.user.ImpersonateMenuAdvisor;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
- * This default implementation simply returns empty lists.
+ * This default implementation of {@link ImpersonateMenuAdvisor}; simply returns empty lists.
  *
  * <p>
  *  This has the effect that the

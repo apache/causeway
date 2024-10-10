@@ -62,6 +62,7 @@ import lombok.val;
 
 /**
  * Calls lifecycle callbacks for entities, ensuring that any given entity is only ever called once.
+ *
  * @since 2.0 {@index}
  */
 @Component

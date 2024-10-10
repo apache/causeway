@@ -33,6 +33,11 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link Scratchpad}, which simply stores data in-memory.
+ *
+ * <p>
+ *     This service is {@link InteractionScope}d, so no memory leak ought to be possible.
+ * </p>
  *
  * @since 2.0 {@index}
  */

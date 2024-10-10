@@ -15,3 +15,4 @@ interface AsciiIdentifierService {
 }
 ----
 
+include::hooks/AsciiIdentifierService_010-implementation.adoc[]

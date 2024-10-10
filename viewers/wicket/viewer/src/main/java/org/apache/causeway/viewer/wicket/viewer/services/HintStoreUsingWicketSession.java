@@ -37,6 +37,11 @@ import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Wicket-specific implementation of {@link HintStore}.
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named("causeway.viewer.wicket.HintStoreUsingWicketSession")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)

@@ -26,6 +26,8 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- *
+ * Default implementation of {@link JaxbService}.
  * @since 2.0 {@index}
  */
 @Service

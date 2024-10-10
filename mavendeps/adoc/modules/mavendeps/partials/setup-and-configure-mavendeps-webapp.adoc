@@ -23,4 +23,5 @@ In the webapp module of your application, add the following dependency:
 </dependencies>
 ----
 
+Note that this transitively includes the Wicket viewer module (`org.apache.causeway.viewer:causeway-viewer-wicket-viewer` in your app).
 

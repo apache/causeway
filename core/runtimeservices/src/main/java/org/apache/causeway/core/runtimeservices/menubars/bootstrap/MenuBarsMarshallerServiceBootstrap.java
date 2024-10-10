@@ -45,6 +45,8 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
+ * Default implementation of {@link MenuBarsMarshallerService} parameterized on {@link BSMenuBars},
+ * supports DTOs modelled on <a href="https://getbootstrap.com/">Bootstrap</a> CSS/JS design system.
  *
  * @since 2.0 {@index}
  */

@@ -27,7 +27,7 @@ import lombok.NonNull;
 
 /**
  * A low-level service to programmatically &quot;connect&quot; (or create a
- * session, or interact with; choose your term) the the framework's runtime.
+ * session, or interact with; choose your term) the framework's runtime.
  *
  * <p>
  *     This service is used internally by the framework itself, for example

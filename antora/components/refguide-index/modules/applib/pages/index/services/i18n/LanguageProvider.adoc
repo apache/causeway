@@ -27,3 +27,7 @@ Optionally returns the preferred language _Locale_ of the current user, based on
 === getPreferredLanguage()
 
 Optionally returns the preferred language _Locale_ of the current user, based on whether there is a context with a current user object.
+
+include::hooks/LanguageProvider_010-implementation.adoc[]
+
+include::hooks/LanguageProvider_020-examples-and-usage.adoc[]

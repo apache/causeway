@@ -46,7 +46,7 @@ import lombok.Getter;
 import lombok.val;
 
 /**
- *
+ * Implementation of {@link TranslationService} that uses <code>.po</code>po file format.
  * @since 2.0 {@index}
  */
 @Service

@@ -87,6 +87,12 @@ import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Default implementation of {@link org.apache.causeway.applib.services.grid.GridSystemService} using DTOs based on
+ * <a href="https://getbootstrap.com>Bootstrap</a> design system.
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)

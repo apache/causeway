@@ -44,10 +44,11 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * A service that sends email notifications when specific events occur
+ * Default implementation of {@link EmailService}, that uses Spring Boot's {@link JavaMailSender} API service
+ * to send out emails.
  *
  * <p>
- *     Note that this default implementation requires that an implementation of Spring's {@link JavaMailSender}
+ *     Note that this implementation requires that an implementation of Spring's {@link JavaMailSender}
  *     is configured.
  * </p>
  *

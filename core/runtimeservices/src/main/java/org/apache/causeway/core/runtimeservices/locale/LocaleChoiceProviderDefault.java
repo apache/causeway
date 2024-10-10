@@ -39,6 +39,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Default implementation of {@link LocaleChoiceProvider}.
  *
  * @since 2.0 {@index}
  */

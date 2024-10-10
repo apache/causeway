@@ -5,4 +5,13 @@
 
 == Implementation
 
-The framework provides a fallback implementation of this service, namely `o.a.c.core.metamodel.services.tablecol.TableColumnOrderServiceDefault`.
+The xref:core:metamodel:about.adoc[Core Metamodel] module
+provides <i>two</i> implementations of this service:
+
+* xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceUsingTxtFile.adoc[]
++
+which reads the column order from a corresponding <code>Xxx.columnOrder.txt</code> file
+
+* xref:refguide:core:index/metamodel/services/tablecol/TableColumnOrderServiceDefault.adoc[]
++
+which is an identity fallback (all available properties shown in the fields in the order originally provided).

@@ -32,21 +32,36 @@ import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Default implementation that supports Spring Boot's {@link DeadlockLoserDataAccessException} and also the standard
+ * message thrown by SQL Server.
+ *
+ * @since 2.1
+ */
 @Component
 @Priority(PriorityPrecedence.LATE)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class DeadlockRecognizerDefault implements DeadlockRecognizer {
 
+    static final String SQL_SERVER_DEADLOCK_MESSAGE = "chosen as the deadlock victim";
+
     @Override
     public boolean isDeadlock(Throwable ex) {
-        val whetherDeadlock = ex instanceof DeadlockLoserDataAccessException ||
-                (ex.getMessage() != null && ex.getMessage().contains("chosen as the deadlock victim"));
+        val whetherDeadlock = ex instanceof DeadlockLoserDataAccessException || isMessage(ex, SQL_SERVER_DEADLOCK_MESSAGE);
         if (whetherDeadlock) {
             log.warn("Detected deadlock");
             log.debug("Detected deadlock details:", ex);
         }
         return whetherDeadlock;
+    }
+
+    private static boolean isMessage(Throwable ex, String message) {
+        return isMessage(ex.getMessage(), message);
+    }
+
+    private static boolean isMessage(String exMessage, String message) {
+        return exMessage != null && exMessage.contains(message);
     }
 
 }

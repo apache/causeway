@@ -5,4 +5,5 @@
 
 == Implementation
 
-The framework provides a default implementation, `o.a.c.core.runtimeservices.userreg.EmailNotificationServiceDefault`, that constructs the emails to send.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation of this service, xref:refguide:core:index/runtimeservices/userreg/EmailNotificationServiceDefault.adoc[].
+This implementation constructs the emails to send in support of user registration.

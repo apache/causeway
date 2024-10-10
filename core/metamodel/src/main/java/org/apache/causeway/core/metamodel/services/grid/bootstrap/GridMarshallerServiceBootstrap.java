@@ -45,7 +45,10 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
- * @since 2.0
+ * Default implementation of {@link GridMarshallerService} using DTOs based on
+ * <a href="https://getbootstrap.com>Bootstrap</a> design system.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerServiceBootstrap")

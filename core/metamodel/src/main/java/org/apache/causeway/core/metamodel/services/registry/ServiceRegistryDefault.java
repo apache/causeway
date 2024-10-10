@@ -44,6 +44,11 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.val;
 
+/**
+ * Default implementation of {@link ServiceRegistry}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ServiceRegistryDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

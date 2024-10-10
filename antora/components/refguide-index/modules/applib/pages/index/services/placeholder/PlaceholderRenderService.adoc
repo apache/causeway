@@ -40,3 +40,5 @@ Textual representation of given _PlaceholderLiteral_ , as used for eg. titles an
 === asHtml(PlaceholderLiteral, Map)
 
 HTML representation of given _PlaceholderLiteral_ , as used for rendering with the UI (when appropriate).
+
+include::hooks/PlaceholderRenderService_010-implementation.adoc[]

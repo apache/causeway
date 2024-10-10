@@ -46,7 +46,13 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * An implementation that reads from /WEB-INF/...
+ * The default implementation of {@link TranslationsResolver}.
+ *
+ * <p>
+ * This implementation reads from <code>/WEB-INF/...</code>.
+ * </p>
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".TranslationsResolverDefault")

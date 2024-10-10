@@ -38,6 +38,11 @@ import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsSe
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Default implementation of {@link UserProfileUiService}
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".UserProfileUiServiceDefault")
 @Priority(PriorityPrecedence.LATE)
