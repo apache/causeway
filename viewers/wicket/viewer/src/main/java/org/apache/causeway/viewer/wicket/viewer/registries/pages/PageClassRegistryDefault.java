@@ -25,9 +25,14 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+
 import org.apache.wicket.Page;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -42,11 +47,21 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistrySpi;
  * Default implementation of {@link PageClassRegistry}; just delegates to an
  * underlying {@link PageClassList}.
  */
-@Service
-@Named("causeway.viewer.wicket.PageClassRegistryDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
+
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerWicketViewer.NAMESPACE + ".PageClassRegistryDefault";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public PageClassRegistryDefault pageClassRegistryDefault(PageClassList pageClassList) {
+            return new PageClassRegistryDefault(pageClassList);
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 
