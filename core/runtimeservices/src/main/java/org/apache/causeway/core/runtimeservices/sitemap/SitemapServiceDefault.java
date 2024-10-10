@@ -51,7 +51,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- *
+ * Default implementation of {@link SitemapService}.
+ * 
  * @since 2.0 {@index}
  */
 @Service

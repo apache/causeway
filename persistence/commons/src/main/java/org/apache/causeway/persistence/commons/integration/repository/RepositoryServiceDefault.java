@@ -63,14 +63,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
 
+/**
+ * Default implementation of {@link RepositoryService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
-@Named(CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault")
+@Named(RepositoryServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor
 //@Log4j2
 public class RepositoryServiceDefault
 implements RepositoryService, HasMetaModelContext {
+
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModulePersistenceCommons.NAMESPACE + ".RepositoryServiceDefault";
 
     final FactoryService factoryService;
     final WrapperFactory wrapperFactory;

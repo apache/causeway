@@ -41,9 +41,9 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
+ * Default implementation of {@link ExceptionRecognizerService}.
  *
- * @since 2.0
- *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ExceptionRecognizerServiceDefault")

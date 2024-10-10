@@ -12,9 +12,9 @@ include::../section-hooks/causeway.value-types~pre.adoc[]
 |Default
 |Description
 |
-[[causeway.value-types.big-decimal.min-scale]]
+[[causeway.value-types.big-decimal.display.min-scale]]
 causeway.value-types.big-decimal. +
-min-scale
+display.min-scale
 
 | 
 | The minimum scale to use for all ``BigDecimal``s.
@@ -23,9 +23,27 @@ Is only used if the minimum scale has not been specified explicitly by some othe
 
 
 |
-[[causeway.value-types.big-decimal.use-grouping-separator]]
+[[causeway.value-types.big-decimal.display.use-grouping-separator]]
 causeway.value-types.big-decimal. +
-use-grouping-separator
+display.use-grouping-separator
+
+|  true
+| Whether to use a grouping (thousands) separator (eg the "," (comma) in the English locale) when rendering a big decimal. @see Editing#isUseGroupingSeparator()
+
+
+|
+[[causeway.value-types.big-decimal.editing.preserve-scale]]
+causeway.value-types.big-decimal. +
+editing.preserve-scale
+
+| 
+| When a BigDecimal is presented for editing, whether it should enforce the scale, possibly meaning trailing '0's to pad). This is probably appropriate for BigDecimals that represent a money amount.
+
+
+|
+[[causeway.value-types.big-decimal.editing.use-grouping-separator]]
+causeway.value-types.big-decimal. +
+editing.use-grouping-separator
 
 | 
 | A common use of ``BigDecimal`` is as a money value. In some locales (eg English), the "," (comma) is the grouping (thousands) separator wihle the "." (period) acts as a decimal point, but in others (eg France, Italy) it is the other way around.
@@ -37,6 +55,8 @@ The purpose of this configuration property is to remove the confusion by simply 
 For maximum safety, allowing the grouping separator is disallowed, but the alternate (original) behaviour can be reinstated by setting this config property back to ``true``.
 
 The same configuration property is also used for rendering the value.
+
+@see Display#isUseGroupingSeparator()
 
 
 |
@@ -191,6 +211,36 @@ editing.zone-joining-pattern
 
 |  %1$s %2$s
 | null
+
+
+|
+[[causeway.value-types.big-decimal.min-scale]]
+causeway.value-types.big-decimal. +
+min-scale
+
+| 
+| The minimum scale to use for all ``BigDecimal``s.
+
+Is only used if the minimum scale has not been specified explicitly by some other means, typically either ``Digits#fraction()`` or an ORM semantic such as the (JPA) ``Column#scale()``. @deprecated - use ``Display#getMinScale()`` instead
+
+
+|
+[[causeway.value-types.big-decimal.use-grouping-separator]]
+causeway.value-types.big-decimal. +
+use-grouping-separator
+
+| 
+| A common use of ``BigDecimal`` is as a money value. In some locales (eg English), the "," (comma) is the grouping (thousands) separator wihle the "." (period) acts as a decimal point, but in others (eg France, Italy) it is the other way around.
+
+Surprisingly perhaps, a string such as "123,99", when parsed ((by ``DecimalFormat``) in an English locale, is not rejected but instead is evaluated as the value 12399L. That's almost certainly not what the end-user would have expected, and results in a money value 100x too large.
+
+The purpose of this configuration property is to remove the confusion by simply disallowing the thousands separator from being part of the input string.
+
+For maximum safety, allowing the grouping separator is disallowed, but the alternate (original) behaviour can be reinstated by setting this config property back to ``true``.
+
+The same configuration property is also used for rendering the value.
+
+@deprecated - use ``Editing#isUseGroupingSeparator()`` instead.
 
 
 

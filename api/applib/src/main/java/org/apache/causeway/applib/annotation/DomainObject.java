@@ -439,4 +439,93 @@ public @interface DomainObject {
             collectionDomainEvent()
             default CollectionDomainEvent.Default.class;
 
+    /**
+     * If at least one property of the entity has been annotated with {@link Property#queryDslAutoComplete()}, then
+     * that property (and any others) will automatically be used for autocomplete functionality; this attribute
+     * determines the minimum number of characters that must be entered before the query is submitted.
+     * Fine-tunes how auto-complete queries work, Whether to use the value of this (string) property for auto.
+     *
+     * <p>
+     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
+     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     * </p>
+     *
+     * <p>
+     *     NOTE: if {@link DomainObject#autoCompleteRepository()} (and {@link DomainObject#autoCompleteMethod()}) have
+     *     been specified, then these take precedence of the query DSL auto-complete.
+     * </p>
+     *
+     * @see #queryDslAutoCompleteLimitResults()
+     * @see #queryDslAutoCompleteAdditionalPredicateRepository()
+     * @see #queryDslAutoCompleteAdditionalPredicateMethod()
+     */
+    int queryDslAutoCompleteMinLength() default QueryDslAutoCompleteConstants.MIN_LENGTH;
+
+    /**
+     * If at least one property of the entity has been annotated with {@link Property#queryDslAutoComplete()}, then
+     * that property (and any others) will automatically be used for autocomplete functionality; this attribute
+     * can be used to limit the number of rows that are returned.
+     *
+     * <p>
+     *     NOTE: if {@link DomainObject#autoCompleteRepository()} (and {@link DomainObject#autoCompleteMethod()}) have
+     *     been specified, then these take precedence of the query DSL auto-complete.
+     * </p>
+     *
+     * <p>
+     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
+     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     * </p>
+     *
+     * @see #queryDslAutoCompleteMinLength()
+     * @see #queryDslAutoCompleteAdditionalPredicateRepository()
+     * @see #queryDslAutoCompleteAdditionalPredicateMethod()
+     */
+    int queryDslAutoCompleteLimitResults() default QueryDslAutoCompleteConstants.LIMIT_RESULTS;
+
+    /**
+     * If at least one property of the entity has been annotated with {@link Property#queryDslAutoComplete()}, then
+     * that property (and any others) will automatically be used for autocomplete functionality; this attribute
+     * can be used to specify additional predicate(s) to always be added to the autocomplete (for example to search
+     * only for current or active objects).
+     *
+     * <p>
+     *     If this attribute is specified, it indicates the class of a repository service that includes a method which
+     *     returns an additional predicate to be applied.  The default name of that method is
+     *     &quot;queryDslAutoCompleteAdditionalPredicates&quot; (but can be overridden if required using
+     *     {@link DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()}).
+     * </p>
+     *
+     * <p>
+     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
+     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     * </p>
+     *
+     * @see #queryDslAutoCompleteAdditionalPredicateMethod()
+     * @see #queryDslAutoCompleteMinLength()
+     * @see #queryDslAutoCompleteLimitResults()
+     */
+    Class<?> queryDslAutoCompleteAdditionalPredicateRepository() default Object.class;
+
+    /**
+     * If at least one property of the entity has been annotated with {@link Property#queryDslAutoComplete()}, then
+     * that property (and any others) will automatically be used for autocomplete functionality; this attribute
+     * can be used to specify the name of a method in a repository to provide additional predicate(s) to always be
+     * added to the autocomplete (for example to search only for current or active objects).
+     *
+     * <p>
+     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
+     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     * </p>
+     *
+     * @see #queryDslAutoCompleteMinLength()
+     * @see #queryDslAutoCompleteLimitResults()
+     * @see #queryDslAutoCompleteAdditionalPredicateRepository()
+     */
+    String queryDslAutoCompleteAdditionalPredicateMethod() default QueryDslAutoCompleteConstants.ADDITIONAL_PREDICATE_METHOD_NAME;
+
+    class QueryDslAutoCompleteConstants {
+        public final static String ADDITIONAL_PREDICATE_METHOD_NAME = "queryDslAutoCompleteAdditionalPredicates";
+        public final static int MIN_LENGTH = 1;
+        public final static int LIMIT_RESULTS = 50;
+    }
 }

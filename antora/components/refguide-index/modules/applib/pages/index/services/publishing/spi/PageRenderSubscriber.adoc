@@ -101,3 +101,5 @@ Indicates that a standalone list of domain objects (each represented by a xref:r
 === onRenderedValue(Object)
 
 Indicates that a value has been rendered.
+
+include::hooks/PageRenderSubscriber_010-implementation.adoc[]

@@ -26,7 +26,7 @@ urls:
 content:
   sources:
 
-    # antora
+# antora
     - url: .
       start_path: antora/components/docs # docs
       branches: HEAD
@@ -186,10 +186,9 @@ content:
     - url: .
       start_path: persistence/jdo/adoc
       branches: HEAD
-    #TODO enable once feature is merged into master	
-    #- url: .
-    #  start_path: persistence/querydsl/adoc
-    #  branches: HEAD
+    - url: .
+      start_path: persistence/querydsl/adoc
+      branches: HEAD
 
     # regression tests
     - url: .

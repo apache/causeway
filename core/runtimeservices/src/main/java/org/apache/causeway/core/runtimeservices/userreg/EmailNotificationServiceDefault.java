@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 /**
+ * Default implementation of {@link EmailNotificationService}.
  *
  * @since 2.0 {@index}
  */

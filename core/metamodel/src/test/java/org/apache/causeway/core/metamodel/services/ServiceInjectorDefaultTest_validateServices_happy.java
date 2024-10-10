@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.services;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

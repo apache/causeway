@@ -13,12 +13,12 @@
 
 ** Viewers
 
-*** xref:vw:ROOT:about.adoc[Web UI (Wicket)]
-*** xref:gqlv:ROOT:about.adoc[GraphQL API]
-*** xref:vro:ROOT:about.adoc[REST API (Restful Objects)]
+*** xref:vw:ROOT:about.adoc[]
+*** xref:gqlv:ROOT:about.adoc[]
+*** xref:vro:ROOT:about.adoc[]
 
 ** Persistence
 
-*** xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
-*** xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
+*** xref:pjpa:ROOT:about.adoc[]
+*** xref:pjdo:ROOT:about.adoc[]
 

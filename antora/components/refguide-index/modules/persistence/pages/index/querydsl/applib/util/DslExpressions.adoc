@@ -1,0 +1,47 @@
+= DslExpressions
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Static factory methods for various types of _Expression_ s (in particular, _BooleanOperation_ s and _Predicate_ s).
+
+== API
+
+[source,java]
+.DslExpressions.java
+----
+class DslExpressions {
+  // Pattern to recognize #wildcardToCaseInsensitiveRegex conversion
+public final static Pattern REGEX_PATTERN;
+  BooleanOperation startsWith(T argument, Path<T> path)     // <.>
+  BooleanOperation eqOrNull(Path<T> path, T argument)     // <.>
+  BooleanExpression searchAndReplace(StringPath stringPath, String searchPhrase, CaseSensitivity caseSensitivity)
+  BooleanExpression search(StringPath stringPath, String searchPhrase, CaseSensitivity caseSensitivity)
+  Expression<T> constant(T argument)
+  Predicate and(List<? extends Predicate> predicates)
+  Predicate and(Predicate... predicates)
+  Predicate or(List<? extends Predicate> predicates)
+  Predicate or(Predicate... predicates)
+}
+----
+
+<.> xref:#startsWith_T_Path[startsWith(T, Path)]
++
+--
+Creates _BooleanOperation_ where the arguments use the operator 'startsWith'. Equivalent to SQL clause '.startsWith()'. This has a different outcome compared to the '.startsWith()'
+--
+<.> xref:#eqOrNull_Path_T[eqOrNull(Path, T)]
++
+--
+Creates _BooleanOperation_ where the arguments is checked for null. Equivalent with SQL clause '=' or 'IS NULL'.
+--
+
+== Members
+
+[#startsWith_T_Path]
+=== startsWith(T, Path)
+
+Creates _BooleanOperation_ where the arguments use the operator 'startsWith'. Equivalent to SQL clause '.startsWith()'. This has a different outcome compared to the '.startsWith()'
+
+[#eqOrNull_Path_T]
+=== eqOrNull(Path, T)
+
+Creates _BooleanOperation_ where the arguments is checked for null. Equivalent with SQL clause '=' or 'IS NULL'.

@@ -73,7 +73,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Is the factory of {@link Interaction}s.
+ * Default implementation of {@link InteractionService}, keeping track of the current {@link Interaction}
  *
  * @implNote holds a reference to the current session using a thread-local
  *

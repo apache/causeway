@@ -41,7 +41,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
- * since 2.0 {@index}
+ * Default implementation of {@link ColumnOrderTxtFileService}.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ColumnOrderTxtFileServiceDefault")

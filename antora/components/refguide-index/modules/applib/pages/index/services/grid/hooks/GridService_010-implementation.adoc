@@ -5,5 +5,5 @@
 
 == Implementation
 
-The framework provides a default implementation of this service, 
-namely `o.a.c.core.metamodel.services.grid.GridServiceDefault`.
+The xref:core:metamodel:about.adoc[Core Metamodel] module provides a default implementation of this service,
+xref:refguide:core:index/metamodel/services/grid/GridServiceDefault.adoc[].

@@ -3,8 +3,18 @@
 
 
 
-== Implementation
+== Implementations
 
-This is an SPI, but the framework provides a simple implementation, `o.a.c.applib.services.publishing.log.CommandLogger`, that just logs events as they are received.
+This is an SPI, and the framework provides several implementations.
 
+NOTE: If multiple implementations of this service are registered, all will be called.
+
+=== Applib (Log4j2)
+
+The applib provides a simple implementation, xref:refguide:applib:index/services/publishing/log/CommandLogger.adoc[], that just logs events as they are received.
+
+=== Command Log
+
+The xref:userguide:commandlog:about.adoc[] module also provides an implementation, xref:refguide:extensions:index/commandlog/applib/subscriber/CommandSubscriberForCommandLog.adoc[].
+This implementation persists an instance of the xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[] entity for each event.
 

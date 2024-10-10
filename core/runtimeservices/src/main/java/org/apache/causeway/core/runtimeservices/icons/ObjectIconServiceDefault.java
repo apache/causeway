@@ -49,7 +49,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 
 /**
- *
+ * Default implementation of {@link ObjectIconService}.
  * @since 2.0 {@index}
  */
 @Service

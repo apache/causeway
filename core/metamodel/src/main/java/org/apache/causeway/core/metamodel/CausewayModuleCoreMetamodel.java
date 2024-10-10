@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.inspect.model.PropertyNode;
 import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.services.ServiceInjectorDefault;
+import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;

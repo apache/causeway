@@ -52,7 +52,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.val;
 
 /**
- * This service enables a serializable 'bookmark' to be created for an entity.
+ * Default implementation of {@link BookmarkService}.
  *
  * @since 2.0 {@index}
  */

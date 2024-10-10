@@ -66,6 +66,11 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 import lombok.NonNull;
 import lombok.val;
 
+/**
+ * Default implementation of {@link MetaModelService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

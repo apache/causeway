@@ -26,6 +26,6 @@ package org.apache.causeway.core.metamodel.services.metamodel;
  */
 public interface MetaModelExportSupport {
 
-    public String toMetamodelString();
+    String toMetamodelString();
 
 }

@@ -11,7 +11,8 @@ The framework provides a number of default implementations for JPA and JDO, to r
 * object not found
 * related data exists (foreign key constraints preventing change)
 * unable to save data (foreign key constraints not met)
-* other data access problem.
+* other data access problem based on a particular type that they throw, xref:refguide:applib:index/services/exceprecog/ExceptionRecognizerForType.adoc[] and its subclass in turn, xref:refguide:core:index/metamodel/services/exceprecog/ExceptionRecognizerForRecoverableException.adoc[]
+
 
 
 === Configuration Properties

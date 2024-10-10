@@ -5,6 +5,5 @@
 
 == Implementation
 
-The framework provides a default of this service, namely `o.a.c.core.transaction.changetracking.EntityChangeTrackerDefault`.
-
+The common persistence module provides a default of this service, namely xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[].
 This supports both JDO and JPA persistence mechanisms.

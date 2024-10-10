@@ -38,14 +38,12 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @since 2.0 {@index}
  */
-
 @Service
 @Named(ExecutionSubscriberForExecutionOutbox.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Outbox")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-
 public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionSubscriberForExecutionOutbox";
