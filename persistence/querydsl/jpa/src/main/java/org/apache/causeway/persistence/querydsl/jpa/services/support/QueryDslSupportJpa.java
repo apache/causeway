@@ -26,6 +26,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.dml.DeleteClause;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
@@ -40,11 +41,11 @@ public class QueryDslSupportJpa implements QueryDslSupport {
 
     @PersistenceContext EntityManager entityManager;
 
-    protected JPAQueryFactoryJakartaEdition queryFactory;
+    protected JPAQueryFactory queryFactory;
 
-    protected JPAQueryFactoryJakartaEdition getQueryFactory(){
+    protected JPAQueryFactory getQueryFactory(){
         if(queryFactory==null){
-            queryFactory = new JPAQueryFactoryJakartaEdition(entityManager);
+            queryFactory = new JPAQueryFactory(() -> entityManager);
         }
         return queryFactory;
     }
