@@ -2288,6 +2288,14 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </pluginRepository>
     </pluginRepositories>
     <distributionManagement>
         <repository>
@@ -2937,6 +2945,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <extensions>
             <!-- scp and sftp support for deployments. -->
@@ -3366,6 +3375,24 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>telemetry</id>
+            <activation>
+                <property>
+                    <name>telemetry</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.opentelemetry.contrib</groupId>
+                        <artifactId>opentelemetry-maven-extension</artifactId>
+                        <version>1.14.0-alpha</version>
+                        <extensions>true</extensions>
                     </plugin>
                 </plugins>
             </build>
