@@ -63,11 +63,13 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         ComponentFactoryRegistryDefault.class,
         DeepLinkServiceWicket.class,
         ImageResourceCacheClassPath.class,
-        HintStoreUsingWicketSession.class,
         PageClassListDefault.class,
         PageClassRegistryDefault.class,
         PageNavigationServiceDefault.class,
         WebModuleWicket.class,
+
+        // autoconfigurations
+        HintStoreUsingWicketSession.AutoConfiguration.class,
 
 })
 public class CausewayModuleViewerWicketViewer {
