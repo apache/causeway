@@ -24,10 +24,15 @@ import java.util.Set;
 
 import javax.inject.Named;
 
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+
 import org.apache.wicket.Session;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -42,12 +47,22 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Service
-@Named("causeway.viewer.wicket.HintStoreUsingWicketSession")
-@javax.annotation.Priority(PriorityPrecedence.EARLY)
-@Qualifier("Wicket")
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleViewerWicketViewer.NAMESPACE + ".HintStoreUsingWicketSession";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @ConditionalOnMissingBean(HintStore.class)
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.EARLY)
+        @Qualifier("Wicket")
+        public HintStoreUsingWicketSession hintStoreUsingWicketSession() {
+            return new HintStoreUsingWicketSession();
+        }
+    }
 
     @Override
     public String get(final Bookmark bookmark, final String key) {
