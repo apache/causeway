@@ -41,7 +41,8 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import lombok.val;
 
 /**
- *
+ * An implementation of {@link ContentMappingService}.
+ * 
  * @since 2.0 {@index}
  */
 @Service

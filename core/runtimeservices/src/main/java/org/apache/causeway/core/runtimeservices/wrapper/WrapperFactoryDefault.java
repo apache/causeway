@@ -114,6 +114,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
+ * Default implementation of {@link WrapperFactory}.
  *
  * @since 2.0 {@index}
  */

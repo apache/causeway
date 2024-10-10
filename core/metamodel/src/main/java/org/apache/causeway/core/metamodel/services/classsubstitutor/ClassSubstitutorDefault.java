@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorDefault")
 @javax.annotation.Priority(PriorityPrecedence.MIDPOINT)

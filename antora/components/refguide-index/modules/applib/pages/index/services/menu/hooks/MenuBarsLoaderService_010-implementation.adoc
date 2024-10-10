@@ -5,10 +5,11 @@
 
 == Implementation
 
-The framework provides a default implementation of this service, namely `o.a.c.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault`.
-This searches for a classpath resource `menubars.layout.xml`, located ni the root package.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation of this service, xref:refguide:core:index/runtimeservices/menubars/MenuBarsLoaderServiceDefault.adoc[].
+This searches for a classpath resource `menubars.layout.xml`, located in the root package.
+Reloading is supported only in prototype mode.
 
-If using the Wicket viewer, the location of this file (and its name) can be overridden using the `causeway.viewer.wicket.application.menubars-layout-file` configuration property.
+The location of this file (and its name) can be overridden using the xref:refguide:config:sections/causeway.viewer.common.adoc#causeway.viewer.common.application.menubars-layout-file[] configuration property.
 
 For example:
 
@@ -22,4 +23,3 @@ causeway:
         menubars-layout-file: demoapp/dom/menubars.layout.xml
 ----
 
-The default implementation supports reloading only in prototype mode.

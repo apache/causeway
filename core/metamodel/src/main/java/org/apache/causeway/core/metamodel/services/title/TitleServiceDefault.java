@@ -37,6 +37,11 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+/**
+ * Default implementation of {@link TitleService}.
+ *
+ * @since 1.x revised for 2.0 {@index}
+ */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TitleServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)

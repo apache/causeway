@@ -53,6 +53,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Default implementation of {@link EntityPropertyChangePublisher}.
  *
  * @since 2.0 {@index}
  */

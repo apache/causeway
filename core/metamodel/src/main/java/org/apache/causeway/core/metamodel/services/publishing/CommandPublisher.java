@@ -25,6 +25,7 @@ import lombok.NonNull;
 
 /**
  * Notifies {@link CommandSubscriber}s.
+ *
  * @since 2.0 {@index}
  */
 public interface CommandPublisher {

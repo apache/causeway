@@ -1,0 +1,41 @@
+= GridServiceDefault
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Default implementation of xref:refguide:applib:index/services/grid/GridService.adoc[GridService] .
+
+== API
+
+[source,java]
+.GridServiceDefault.java
+----
+class GridServiceDefault {
+  public static final String COMPONENT_TNS;
+  public static final String COMPONENT_SCHEMA_LOCATION;
+  public static final String LINKS_TNS;
+  public static final String LINKS_SCHEMA_LOCATION;
+  boolean supportsReloading()
+  void remove(Class<?> domainClass)
+  boolean existsFor(Class<?> domainClass)
+  Grid load(Class<?> domainClass)
+  Grid load(Class<?> domainClass, String layout)
+  Grid defaultGridFor(Class<?> domainClass)
+  Grid normalize(Grid grid)
+  Grid complete(Grid grid)
+  Grid minimal(Grid grid)
+  String tnsAndSchemaLocation(Grid grid)     // <.>
+  Collection<GridSystemService<? extends Grid>> getGridSystemServices()
+}
+----
+
+<.> xref:#tnsAndSchemaLocation_Grid[tnsAndSchemaLocation(Grid)]
++
+--
+Not public API, exposed only for testing.
+--
+
+== Members
+
+[#tnsAndSchemaLocation_Grid]
+=== tnsAndSchemaLocation(Grid)
+
+Not public API, exposed only for testing.

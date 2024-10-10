@@ -34,6 +34,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.NonNull;
 
 /**
+ * Default implementation of {@link UserCurrentSessionTimeZoneHolder}.
  *
  * @since 2.0 {@index}
  */

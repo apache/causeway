@@ -47,6 +47,8 @@ import lombok.NonNull;
 import lombok.val;
 
 /**
+ * Default implementation of {@link FactoryService}.
+ *
  * @since 2.0 {@index}
  */
 @Service

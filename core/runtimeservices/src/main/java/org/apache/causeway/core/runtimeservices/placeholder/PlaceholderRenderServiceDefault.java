@@ -41,9 +41,9 @@ import lombok.val;
 
 /**
  * Default implementation of {@link PlaceholderRenderService},
- * that (HTML) renders <i>Bootstrap</i> styled placeholder badges.
+ * that (HTML) renders <a href="https://getbootstrap.com/">Bootstrap</a> styled placeholder badges.
  *
- * @since 2.0
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".PlaceholderRenderServiceDefault")

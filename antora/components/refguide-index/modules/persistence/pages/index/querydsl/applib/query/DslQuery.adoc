@@ -1,0 +1,51 @@
+= DslQuery
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Representation of a query (conceptually, a SQL `SELECT` statement more or less). If attached to a persistent context, then can be used _DslQuery#fetch() fetch_ 'ed. If not attached, can be used to build other queries (because it also implements the QueryDSL _Expression_ interface.
+
+Typically is built up using xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[QueryDslSupport] (in which case will be attached to a persistence context and can be fetched immediately if desired), or else using xref:refguide:persistence:index/querydsl/applib/services/support/DetachedQueryFactory.adoc[DetachedQueryFactory] (in which case will _not_ be attached, but can be used to build up other queries, eg as a subquery).
+
+== API
+
+[source,java]
+.DslQuery.java
+----
+interface DslQuery<T> {
+  DslQuery<U> projection(Expression<U> expr)     // <.>
+  DslQuery<T> from(EntityPath<?>... sources)     // <.>
+  DslQuery<T> from(CollectionExpression<?, U> path, Path<U> alias)     // <.>
+}
+----
+
+<.> xref:#projection_Expression[projection(Expression)]
++
+--
+Change the projection of this query
+--
+<.> xref:#from_EntityPath[from(EntityPath)]
++
+--
+Add query sources
+--
+<.> xref:#from_CollectionExpression_Path[from(CollectionExpression, Path)]
++
+--
+Add query sources
+--
+
+== Members
+
+[#projection_Expression]
+=== projection(Expression)
+
+Change the projection of this query
+
+[#from_EntityPath]
+=== from(EntityPath)
+
+Add query sources
+
+[#from_CollectionExpression_Path]
+=== from(CollectionExpression, Path)
+
+Add query sources

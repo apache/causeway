@@ -43,7 +43,7 @@ if-disabled-policy
 | 
 | Whether and how to display any properties, actions and collections whose usability has been vetoed.
 
-By default, such object members are shown as disabled, with the tolipindicating why. Setting the property to SHOW_AS_DISABLED_WITH_DIAGNOSTICS shows additional detail in the tooltip.
+By default, such object members are shown as disabled, with the tooltip indicating why. Setting the property to SHOW_AS_DISABLED_WITH_DIAGNOSTICS shows additional detail in the tooltip.
 
 This config property only applies in prototyping mode.
 

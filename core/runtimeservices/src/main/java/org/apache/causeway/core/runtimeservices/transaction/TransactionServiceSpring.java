@@ -66,12 +66,14 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * @implNote This implementation yet does not support more than one {@link PlatformTransactionManager}
+ * Default implementation of {@link TransactionService}, which delegates to Spring's own transaction management
+ * framework, such as {@link PlatformTransactionManager}.
+ *
+ * @implNote This implementation does not yet support more than one {@link PlatformTransactionManager}
  * on the same Spring context. If more than one are discovered, some methods will fail
  * with {@link IllegalStateException}s.
  *
  * @since 2.0 {@index}
- *
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".TransactionServiceSpring")

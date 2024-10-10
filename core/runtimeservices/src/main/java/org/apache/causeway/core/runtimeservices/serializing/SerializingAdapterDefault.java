@@ -46,10 +46,12 @@ import lombok.val;
 /**
  * Default implementation of {@link SerializingAdapter}, intended as an 'internal' service.
  *
+ * <p>
  * @implNote uses {@link Bookmark} or {@link ValueDecomposition}
  * for identifiable objects or value types,
  * while some predefined serializable types that implement {@link Serializable}
  * are written/read directly
+ * </p>
  *
  * @see PredefinedSerializables
  *

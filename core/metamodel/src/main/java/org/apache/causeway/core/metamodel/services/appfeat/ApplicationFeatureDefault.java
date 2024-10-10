@@ -51,6 +51,8 @@ import lombok.Setter;
  *     Note that this is NOT a view model; instead it can be converted to a string using methods of
  *     {@link ApplicationFeatureRepository}.
  * </p>
+ *
+ * @since 1.x revised for 2.0 {@index}
  */
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".services.appfeat.ApplicationFeature")
 @Value

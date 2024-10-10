@@ -76,6 +76,8 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Default implementation of {@link MenuBarsService}, supporting DTOs
+ * modelled on <a href="https://getbootstrap.com/">Bootstrap</a> CSS/JS design system.
  *
  * @since 2.0 {@index}
  */

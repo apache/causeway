@@ -42,3 +42,5 @@ Supported format(s) for _#unmarshal(String, CommonMimeType)_ and _#marshal(Objec
 === unmarshal(String, CommonMimeType)
 
 Returns a new de-serialized instance wrapped in a xref:refguide:commons:index/functional/Try.adoc[Try] .
+
+include::hooks/MarshallerService_010-implementation.adoc[]

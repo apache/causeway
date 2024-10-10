@@ -22,7 +22,11 @@ package org.apache.causeway.core.runtimeservices.session;
 
 import java.util.UUID;
 
+import org.apache.causeway.applib.services.iactn.Interaction;
+
 /**
+ * Every {@link Interaction} has an {@link Interaction#getInteractionId() interactionId}; this service is delegaterd
+ * to in order to obtain a unique Id for each interaction.
  *
  * @since 2.0 {@index}
  */

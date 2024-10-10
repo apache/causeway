@@ -5,4 +5,4 @@
 
 == Implementation
 
-The framework provides a default implementation of the service, `o.a.c.core.runtimeservices.eventbus.EventBusServiceSpring`.
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default implementation of the service, xref:refguide:core:index/runtimeservices/eventbus/EventBusServiceSpring.adoc[].

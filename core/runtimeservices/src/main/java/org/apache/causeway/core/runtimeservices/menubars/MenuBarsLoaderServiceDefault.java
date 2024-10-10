@@ -48,6 +48,7 @@ import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Default implementation of {@link MenuBarsLoaderService}.
  *
  * @since 2.0 {@index}
  */

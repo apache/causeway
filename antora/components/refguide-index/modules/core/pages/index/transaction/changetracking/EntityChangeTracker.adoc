@@ -66,3 +66,5 @@ The post-modification values are captured when the transaction commits. In the c
 === incrementLoaded(ManagedObject)
 
 Not strictly part of the concern of entity tracking, but allows the default implementation to also implement the _org.apache.causeway.applib.services.metrics.MetricsService_ .
+
+include::hooks/EntityChangeTracker_010-implementation.adoc[]

@@ -33,8 +33,12 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.RequiredArgsConstructor;
 
 /**
+ * Default implementation of {@link RoutingService}, which will route any <code>void</code>action or action
+ * returning <code>null</code> to the home page (as per {@link HomePageResolverService}.
  *
  * @since 2.0 {@index}
+ *
+ * @see HomePageResolverService
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")

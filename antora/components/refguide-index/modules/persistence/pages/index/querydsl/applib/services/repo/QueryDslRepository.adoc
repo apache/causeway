@@ -1,0 +1,304 @@
+= QueryDslRepository
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+Provides default implementation and convenience methods for querying a specific entity (hierarchy), using QueryDSL to construct the queries.
+
+Internally, delegates to xref:refguide:persistence:index/querydsl/applib/services/support/QueryDslSupport.adoc[QueryDslSupport] to actually submit the queries.
+
+== API
+
+[source,java]
+.QueryDslRepository.java
+----
+class QueryDslRepository<T, Q> {
+  public static final OrderSpecifier<Comparable> ID_ORDER_SPECIFIER;
+  Class<T> getEntityClass()     // <.>
+  Q getEntityPath()     // <.>
+  Q q()     // <.>
+  Q entity()     // <.>
+  List<T> findAll(Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  List<T> findAllUsingDefaultOrder()     // <.>
+  Optional<T> findUnique(Function<Q, Predicate>... predicates)     // <.>
+  Optional<T> findAny(Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  Optional<T> findAny(Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  Optional<T> findAnyUsingDefaultOrder(Function<Q, Predicate>... predicates)     // <.>
+  Optional<T> findFirst(Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  Optional<T> findFirst(Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  Optional<T> findFirstUsingDefaultOrder(Function<Q, Predicate>... predicates)     // <.>
+  List<F> findFieldsDistinct(Function<Q, Expression<F>> projection, Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  List<F> findFieldsDistinct(Function<Q, Expression<F>> projection, Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  List<F> findFieldsDistinctUsingDefaultOrder(Function<Q, Expression<F>> projection, Function<Q, Predicate>... predicates)     // <.>
+  Optional<F> findFirstFields(Function<Q, Expression<F>> projection, Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  Optional<F> findFirstFields(Function<Q, Expression<F>> projection, Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  Optional<F> findFirstFieldsUsingDefaultOrder(Function<Q, Expression<F>> projection, Function<Q, Predicate>... predicates)     // <.>
+  Optional<F> findUniqueFields(Function<Q, Expression<F>> projection, Function<Q, Predicate>... predicates)     // <.>
+  List<T> find(Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  List<T> find(Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  List<T> findUsingDefaultOrder(Function<Q, Predicate>... predicates)     // <.>
+  List<B> findAsBean(Function<Q, Expression<?>>[] projections, Class<? extends B> bean, Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
+  List<B> findAsBean(Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>> orderSpecifier, Class<? extends B> bean, Function<Q, Expression<?>>... projections)     // <.>
+  List<T> newList(T... objs)
+  ArrayList<T> newArrayList(T... objs)
+}
+----
+
+<.> xref:#getEntityClass_[getEntityClass()]
+<.> xref:#getEntityPath_[getEntityPath()]
++
+--
+The main entity Q instance for which this repository implementation operates.
+--
+<.> xref:#q_[q()]
+<.> xref:#entity_[entity()]
+<.> xref:#findAll_Function[findAll(Function)]
++
+--
+Returns all the instances of this entity, in the preferred _OrderSpecifier ordering_ .
+--
+<.> xref:#findAllUsingDefaultOrder_[findAllUsingDefaultOrder()]
++
+--
+Returns all the instances of this entity, in the _#getDefaultOrders() default order_ .
+--
+<.> xref:#findUnique_Function[findUnique(Function)]
++
+--
+Based on the given predicate(s), search for exactly zero or one entity instance.
+--
+<.> xref:#findAny_Function_Function[findAny(Function, Function)]
++
+--
+Based on the given predicates search for the first entity instance based on the provided ordering.
+--
+<.> xref:#findAny_Function_Function[findAny(Function, Function)]
++
+--
+Based on the given predicate, search for the first entity instance based on the provided ordering.
+--
+<.> xref:#findAnyUsingDefaultOrder_Function[findAnyUsingDefaultOrder(Function)]
++
+--
+Based on the given predicate function search for the first entity instance based on the _#getDefaultOrders() default ordering_ .
+--
+<.> xref:#findFirst_Function_Function[findFirst(Function, Function)]
++
+--
+Based on the given predicate(s), search for the first entity instance based on specified _OrderSpecifier ordering_ .
+--
+<.> xref:#findFirst_Function_Function[findFirst(Function, Function)]
++
+--
+Based on the given predicate, search for the first entity instance based on specified _OrderSpecifier ordering_ .
+--
+<.> xref:#findFirstUsingDefaultOrder_Function[findFirstUsingDefaultOrder(Function)]
++
+--
+Based on the given predicate(s) search for the first entity instance based on specified _OrderSpecifier ordering_ .
+--
+<.> xref:#findFieldsDistinct_Function_Function_Function[findFieldsDistinct(Function, Function, Function)]
++
+--
+Based on the given predicate(s), search for applicable entity instances and return the distinct projection (a subset of fields).
+--
+<.> xref:#findFieldsDistinct_Function_Function_Function[findFieldsDistinct(Function, Function, Function)]
++
+--
+Based on the given predicate, search for applicable entity instances and return the distinct projection (a subset of fields).
+--
+<.> xref:#findFieldsDistinctUsingDefaultOrder_Function_Function[findFieldsDistinctUsingDefaultOrder(Function, Function)]
++
+--
+Based on the given predicate function search for applicable entity instances and return the distinct projection, using the _#getDefaultOrders() default ordering_ .
+--
+<.> xref:#findFirstFields_Function_Function_Function[findFirstFields(Function, Function, Function)]
++
+--
+Based on the given predicate function search for applicable entity instances and return the first projection based on specified _OrderSpecifier ordering_ .
+--
+<.> xref:#findFirstFields_Function_Function_Function[findFirstFields(Function, Function, Function)]
++
+--
+Based on the given predicate function search for applicable entity instances and return the first projection based on specified _OrderSpecifier ordering_ .
+--
+<.> xref:#findFirstFieldsUsingDefaultOrder_Function_Function[findFirstFieldsUsingDefaultOrder(Function, Function)]
++
+--
+Based on the given predicate function search for applicable entity instances and return the first projection based on the _#getDefaultOrders() default ordering_ .
+--
+<.> xref:#findUniqueFields_Function_Function[findUniqueFields(Function, Function)]
++
+--
+Based on the given predicates search for exactly one or zero entity instance and return the projection.
+--
+<.> xref:#find_Function_Function[find(Function, Function)]
++
+--
+Based on the given predicate(s), search for applicable entity instances and apply the given _OrderSpecifier ordering_ .
+--
+<.> xref:#find_Function_Function[find(Function, Function)]
++
+--
+Based on the given predicate(s), search for applicable entity instances and apply the given _OrderSpecifier ordering_ .
+--
+<.> xref:#findUsingDefaultOrder_Function[findUsingDefaultOrder(Function)]
++
+--
+Based on the given predicate function search for applicable entity instances and apply the _#getDefaultOrders() default ordering_ .
+--
+<.> xref:#findAsBean_Function_Class_Function_Function[findAsBean(Function, Class, Function, Function)]
++
+--
+Based on the given predicate search for applicable entity instances, then transform the results to the given bean using the given projections and apply the given ordering.
+--
+<.> xref:#findAsBean_Function_Function_Class_Function[findAsBean(Function, Function, Class, Function)]
++
+--
+Based on the given predicate search for applicable entity instances, then transform the results to the given bean using the given projections and apply the given ordering.
+--
+
+== Members
+
+[#getEntityClass_]
+=== getEntityClass()
+
+[#getEntityPath_]
+=== getEntityPath()
+
+The main entity Q instance for which this repository implementation operates.
+
+The default implementation instantiates this reflectively, based on the conventions of the query-dsl annotation processor; eg `QCustomer` has a 1-arg string constructor. In most cases there is no reason to override this.
+
+However, for some complicated orderings, we have found it necessary to instead use the Q instance created by the annotation processor, called eg `QCustomer.customer` . It is perfectly acceptable to override this method and just return the appropriate for the entity in question.
+
+[#q_]
+=== q()
+
+[#entity_]
+=== entity()
+
+[#findAll_Function]
+=== findAll(Function)
+
+Returns all the instances of this entity, in the preferred _OrderSpecifier ordering_ .
+
+[#findAllUsingDefaultOrder_]
+=== findAllUsingDefaultOrder()
+
+Returns all the instances of this entity, in the _#getDefaultOrders() default order_ .
+
+NOTE: the default implementation of _#getDefaultOrders()_ requires that the `id` field exists. If this is not the case, then the method must be overridden.
+
+[#findUnique_Function]
+=== findUnique(Function)
+
+Based on the given predicate(s), search for exactly zero or one entity instance.
+
+[#findAny_Function_Function]
+=== findAny(Function, Function)
+
+Based on the given predicates search for the first entity instance based on the provided ordering.
+
+[#findAny_Function_Function]
+=== findAny(Function, Function)
+
+Based on the given predicate, search for the first entity instance based on the provided ordering.
+
+[#findAnyUsingDefaultOrder_Function]
+=== findAnyUsingDefaultOrder(Function)
+
+Based on the given predicate function search for the first entity instance based on the _#getDefaultOrders() default ordering_ .
+
+NOTE: the default implementation of _#getDefaultOrders()_ requires that the `id` field exists. If this is not the case, then that method must be overridden.
+
+[#findFirst_Function_Function]
+=== findFirst(Function, Function)
+
+Based on the given predicate(s), search for the first entity instance based on specified _OrderSpecifier ordering_ .
+
+[#findFirst_Function_Function]
+=== findFirst(Function, Function)
+
+Based on the given predicate, search for the first entity instance based on specified _OrderSpecifier ordering_ .
+
+[#findFirstUsingDefaultOrder_Function]
+=== findFirstUsingDefaultOrder(Function)
+
+Based on the given predicate(s) search for the first entity instance based on specified _OrderSpecifier ordering_ .
+
+[#findFieldsDistinct_Function_Function_Function]
+=== findFieldsDistinct(Function, Function, Function)
+
+Based on the given predicate(s), search for applicable entity instances and return the distinct projection (a subset of fields).
+
+ *CAUTION* : when the supplied _OrderSpecifier ordering_ is not aligned to the projection one might get unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+
+[#findFieldsDistinct_Function_Function_Function]
+=== findFieldsDistinct(Function, Function, Function)
+
+Based on the given predicate, search for applicable entity instances and return the distinct projection (a subset of fields).
+
+ *CAUTION* : when the supplied _OrderSpecifier ordering_ is not aligned to the projection one might get unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+
+[#findFieldsDistinctUsingDefaultOrder_Function_Function]
+=== findFieldsDistinctUsingDefaultOrder(Function, Function)
+
+Based on the given predicate function search for applicable entity instances and return the distinct projection, using the _#getDefaultOrders() default ordering_ .
+
+ *CAUTION* : when the _#getDefaultOrders() ordering_ is not aligned to the projection one might get unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+
+NOTE: the default implementation of _#getDefaultOrders()_ requires that the `id` field exists. If this is not the case, then that method must be overridden.
+
+[#findFirstFields_Function_Function_Function]
+=== findFirstFields(Function, Function, Function)
+
+Based on the given predicate function search for applicable entity instances and return the first projection based on specified _OrderSpecifier ordering_ .
+
+ *CAUTION* : when the supplied _OrderSpecifier ordering_ is not aligned to the projection one might get unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+
+[#findFirstFields_Function_Function_Function]
+=== findFirstFields(Function, Function, Function)
+
+Based on the given predicate function search for applicable entity instances and return the first projection based on specified _OrderSpecifier ordering_ .
+
+ *CAUTION* : when the supplied _OrderSpecifier ordering_ is not aligned to the projection one might get unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+
+[#findFirstFieldsUsingDefaultOrder_Function_Function]
+=== findFirstFieldsUsingDefaultOrder(Function, Function)
+
+Based on the given predicate function search for applicable entity instances and return the first projection based on the _#getDefaultOrders() default ordering_ .
+
+ *CAUTION* : when the _#getDefaultOrders() ordering_ is not aligned to the projection one might get unexpected results, because the elimination of duplicates is based on the ordering, not the projection!
+
+NOTE: the default implementation of _#getDefaultOrders()_ requires that the `id` field exists. If this is not the case, then that method must be overridden.
+
+[#findUniqueFields_Function_Function]
+=== findUniqueFields(Function, Function)
+
+Based on the given predicates search for exactly one or zero entity instance and return the projection.
+
+[#find_Function_Function]
+=== find(Function, Function)
+
+Based on the given predicate(s), search for applicable entity instances and apply the given _OrderSpecifier ordering_ .
+
+[#find_Function_Function]
+=== find(Function, Function)
+
+Based on the given predicate(s), search for applicable entity instances and apply the given _OrderSpecifier ordering_ .
+
+[#findUsingDefaultOrder_Function]
+=== findUsingDefaultOrder(Function)
+
+Based on the given predicate function search for applicable entity instances and apply the _#getDefaultOrders() default ordering_ .
+
+NOTE: the default implementation of _#getDefaultOrders()_ requires that the `id` field exists. If this is not the case, then that method must be overridden.
+
+[#findAsBean_Function_Class_Function_Function]
+=== findAsBean(Function, Class, Function, Function)
+
+Based on the given predicate search for applicable entity instances, then transform the results to the given bean using the given projections and apply the given ordering.
+
+[#findAsBean_Function_Function_Class_Function]
+=== findAsBean(Function, Function, Class, Function)
+
+Based on the given predicate search for applicable entity instances, then transform the results to the given bean using the given projections and apply the given ordering.

@@ -40,7 +40,8 @@ import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
  * </p>
  *
  * @see org.apache.causeway.core.metamodel.services.command.CommandDtoFactory
- * @since 1.x {@index}
+ *
+ * @since 1.x revised for 2.0
  */
 public interface InteractionDtoFactory {
 

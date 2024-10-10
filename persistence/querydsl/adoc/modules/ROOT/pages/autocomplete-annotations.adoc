@@ -1,0 +1,96 @@
+= Autocomplete Annotations
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+Actions that accept an entity as a parameter provide a mechanism for finding the entity; either a bounded set of choices, or an autocomplete (enter a number of characters and then search for entities that match).
+
+The QueryDSL module provides a simplified way of providing an autocomplete for a given entity class.
+For each of the properties that should be used in the search, annotated using   xref:refguide:applib:index/annotation/Property.adoc#queryDslAutoComplete[Property#queryDslAutoComplete()].
+
+For example:
+
+[source,java]
+----
+@Title
+@Column(length = Name.MAX_LEN, nullable = false, name = "name")
+@Getter @Setter @ToString.Include
+@Property(queryDslAutoComplete = QueryDslAutoCompletePolicy.INCLUDE)    // <.>
+private String name;
+----
+<.> property is explicitly searched in any autocomplete query.
++
+If multiple properties have been annotated, then the entered value needs to match any one of the properties (the query performed uses `OR`, not `AND`).
+
+The behaviour of the query can be modified in several ways, using various attributes of xref:refguide:applib:index/annotation/DomainObject.adoc#queryDslAutoCompleteAdditionalPredicateRepository[@DomainObject]):
+
+* xref:refguide:applib:index/annotation/DomainObject.adoc#queryDslAutoCompleteMinLength[@DomainObject#queryDslAutoCompleteMinLength])
++
+Specifies the minimum number of characters to be entered before a search is performed; the default if not specified is 1 character.
+
+* xref:refguide:applib:index/annotation/DomainObject.adoc#queryDslAutoCompleteLimitResults[@DomainObject#queryDslAutoCompleteLimitResults]),
++
+Specifies the maximum number of candidate entities returned in the drop down list; the default if not specified is 50.
+
+* xref:refguide:applib:index/annotation/DomainObject.adoc#queryDslAutoCompleteAdditionalPredicateRepository[@DomainObject#queryDslAutoCompleteAdditionalPredicateRepository])
++
+Specifies the repository class that contains a method (default name "queryDslAutoCompleteAdditionalPredicates") which returns a predicate that is applied to every auto-complete query.
++
+This can be used for example to restrict the query so that each user is only prompted with entities that they have access to.
++
+The default name of the method can be overridden (see below).
+
+* xref:refguide:applib:index/annotation/DomainObject.adoc#queryDslAutoCompleteAdditionalPredicateMethod[@DomainObject#queryDslAutoCompleteAdditionalPredicateMethod])
++
+If an additional predicate repository has been defined, this method allows the name of the method returning the additional predicate to be overridden from its default name.
+
+For example, suppose (for some strange reason) that we want to limit the selection only to objects where their `attachment` property is not populated:
+
+* specify the additional predicate repository/method:
++
+[source,java]
+----
+@DomainObject(
+  queryDslAutoCompleteMinLength = 3,
+  queryDslAutoCompleteLimitResults = 30,
+  queryDslAutoCompleteAdditionalPredicateRepository = SimpleObjectRepository.class,
+  queryDslAutoCompleteAdditionalPredicateMethod = "autoFilter"
+)
+public class SimpleObject implements Comparable<SimpleObject> { /*...*/ }
+----
+
+* implement the predicate method with the correct signature:
++
+[source,java]
+----
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.PathBuilder;
+
+@Service
+public class SimpleObjectRepository extends QueryDslRepository<SimpleObject, QSimpleObject> {
+
+    //...
+
+    public Function<PathBuilder<SimpleObject>, Predicate> autoFilter(
+            String search
+    ) {
+        return so -> so.getString("attachment").isNull();   // <.>
+    }
+
+    //...
+}
+----
+<.> In this (silly) example, the auto complete will only propose objects that meet the additional criteria (in this case, that the `SimpleObject#attachment` property is null).
+
+
+As a more realistic example, this filter excludes any agreements that are no longer current:
+
+[source,java]
+----
+public Function<PathBuilder<Agreement>, Predicate> autoFilter(
+        final String searchPhrase
+) {
+    return a -> a.getDate("endDate", LocalDate.class).isNull()
+            .or(a.getDate("endDate", LocalDate.class).goe(clockService.nowAsLocalDate()));
+}
+----

@@ -36,7 +36,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- * A simpler SPI for {@link GridLoaderServiceDefault}.
+ * Default implementation of {@link LayoutResourceLoader}.
+ *
+ * @since 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".LayoutResourceLoaderDefault")

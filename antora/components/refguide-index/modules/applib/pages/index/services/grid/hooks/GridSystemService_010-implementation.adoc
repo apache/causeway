@@ -3,10 +3,9 @@
 
 == Implementation
 
-The framework provides a single grid implementation, `o.a.c.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap`, 
-which supports Bootstrap3 (https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd).
+The xref:core:metamodel:about.adoc[Core Metamodel] module provides a default implementation, xref:refguide:core:index/metamodel/services/grid/bootstrap/GridSystemServiceBootstrap.adoc[].
 
-A *SPI* is provided via nested _interface_ `FallbackLayoutDataSource`, 
+An *SPI* is provided via nested _interface_ `FallbackLayoutDataSource`,
 that allows to customize layout fallback behavior on a per class basis.
 (Without having to override the heavy weight `GridSystemServiceBootstrap`.)
 
@@ -17,11 +16,12 @@ interface FallbackLayoutDataSource {
     Try<String> tryLoadAsStringUtf8(Class<?> domainClass); <.>
 }
 ----
-. Provides custom default for given `domainClass` 
-or return an `Try.empty()` if indifferent. 
+<.> Provides custom default for given `domainClass`
+or return an `Try.empty()` if indifferent.
 
+For example:
 [source,java]
-.FallbackLayoutDataSource example  
+.FallbackLayoutDataSource example
 ----
 @Service
 public class FallbackLayoutForManager implements FallbackLayoutDataSource {
@@ -30,13 +30,13 @@ public class FallbackLayoutForManager implements FallbackLayoutDataSource {
     public Try<String> tryLoadAsStringUtf8(final Class<?> domainClass) {
         return domainClass.getSimpleName().endsWith("Manager")
                 ? DataSource.ofResource(getClass(), "ManagerLayout.xml") // <.>
-                    .tryReadAsStringUtf8() 
-                : Try.empty(); // <.> 
+                    .tryReadAsStringUtf8()
+                : Try.empty(); // <.>
     }
 
 }
 ----
-. Provides a custom layout for all domain classes that have a name ending with 'Manager'.
-. Indifferent for given domain type. Tells the framework to fall through. 
+<.> Provides a custom layout for all domain classes that have a name ending with 'Manager'.
+<.> Indifferent for given domain type. Tells the framework to fall through.
 
 (The framework also provides xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)] components that are capable of interpreting and rendering this metadata.

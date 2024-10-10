@@ -22,6 +22,11 @@ import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of {@link AsciiIdentifierService} with support for a small selection of replacements.
+ *
+ * @since 2.0 {@index}
+ */
 @Service
 public class AsciiIdentifierServiceSupportingGraphqlViewer implements AsciiIdentifierService {
     @Override
