@@ -131,7 +131,7 @@ content:
       branches: HEAD
     - url: .
       start_path: extensions/core/titlecache/adoc # userguide
-      branches: [2.1.0, 3.1.0]
+      branches: HEAD
 
     - url: .
       start_path: extensions/security/audittrail/adoc # security
