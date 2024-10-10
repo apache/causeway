@@ -22,6 +22,8 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RestartResponseException;
@@ -29,6 +31,9 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -39,11 +44,20 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 /**
  * Default implementation of {@link org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService}
  */
-@Service
-@Named("causeway.viewer.wicket.PageNavigationServiceDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
 public class PageNavigationServiceDefault implements PageNavigationService {
+
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleViewerWicketViewer.NAMESPACE + ".PageNavigationServiceDefault";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public PageNavigationServiceDefault pageNavigationServiceDefault() {
+            return new PageNavigationServiceDefault();
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 

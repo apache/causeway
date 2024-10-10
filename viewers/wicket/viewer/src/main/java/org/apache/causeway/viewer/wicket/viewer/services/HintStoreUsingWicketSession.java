@@ -24,6 +24,8 @@ import java.util.Set;
 
 import javax.inject.Named;
 
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
+
 import org.apache.wicket.Session;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,12 +50,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HintStoreUsingWicketSession implements HintStore {
 
+    public static final String LOGICAL_TYPE_NAME = CausewayModuleViewerWicketViewer.NAMESPACE + ".HintStoreUsingWicketSession";
+
     @Configuration
     public static class AutoConfiguration {
-
         @Bean
         @ConditionalOnMissingBean(HintStore.class)
-        @Named("causeway.viewer.wicket.HintStoreUsingWicketSession")
+        @Named(LOGICAL_TYPE_NAME)
         @Order(PriorityPrecedence.EARLY)
         @Qualifier("Wicket")
         public HintStoreUsingWicketSession hintStoreUsingWicketSession() {
