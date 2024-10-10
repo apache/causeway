@@ -47,7 +47,6 @@ public interface AutoCompleteGeneratedQueryService {
      * Convenience method for programmatically delegate to the generated facet query
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will ALWAYS be added when absent
-     * @return
      * @param <T>
      */
     <T> List<T> autoComplete(
@@ -59,7 +58,6 @@ public interface AutoCompleteGeneratedQueryService {
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will ALWAYS be added when absent
      * @param additionalExpression
-     * @return
      * @param <T>
      */
     <T> List<T> autoComplete(
@@ -71,7 +69,6 @@ public interface AutoCompleteGeneratedQueryService {
      * Convenience method for programmatically delegate to the generated facet query
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will NEVER be added when absent
-     * @return
      * @param <T>
      */
     <T> List<T> executeQuery(
@@ -83,7 +80,6 @@ public interface AutoCompleteGeneratedQueryService {
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will NEVER be added when absent
      * @param additionalExpression
-     * @return
      * @param <T>
      */
     <T> List<T> executeQuery(

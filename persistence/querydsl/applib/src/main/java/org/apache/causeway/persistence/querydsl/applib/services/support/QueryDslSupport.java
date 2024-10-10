@@ -34,7 +34,7 @@ import com.querydsl.core.types.Expression;
  * @since 2.1 {@index}
  *
  * @see DetachedQueryFactory
- * @see <a href="https://chatgpt.com/share/66f522fd-a9cc-8010-9659-731f9a6182da">ChatGPT transcript on attached vs detached queries</a>.
+ * @see <a href="https://chatgpt.com/share/66f522fd-a9cc-8010-9659-731f9a6182da">ChatGPT transcript on attached vs detached queries.</a>
  */
 public interface QueryDslSupport extends QueryFactory<DslQuery<?>> {
 

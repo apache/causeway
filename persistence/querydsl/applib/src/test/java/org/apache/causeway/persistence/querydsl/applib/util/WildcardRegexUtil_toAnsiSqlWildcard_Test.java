@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WildcardRegexUtil_toAnsiSqlWildcard_Test {
+class WildcardRegexUtil_toAnsiSqlWildcard_Test {
 
     @RequiredArgsConstructor
     enum Scenario {
@@ -44,7 +44,7 @@ public class WildcardRegexUtil_toAnsiSqlWildcard_Test {
 
     @ParameterizedTest
     @EnumSource(Scenario.class)
-    public void should_replace_wildcards(Scenario scenario) {
+    void should_replace_wildcards(Scenario scenario) {
         String result = Wildcards.toAnsiSqlWildcard(scenario.input);
         assertThat(result).isEqualTo(scenario.expected);
     }

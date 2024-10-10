@@ -223,6 +223,7 @@ public final class PredicatePrettifier implements Visitor<String, Templates> {
         }
 
         public static class IndentedOr extends Template.Element {
+            private static final long serialVersionUID = 1L;
 
             @Override
             public Object convert(List<?> args) {
@@ -234,9 +235,9 @@ public final class PredicatePrettifier implements Visitor<String, Templates> {
                 return true;
             }
 
-            private static String spaces(int num) {
-                return Stream.generate(() -> " ").limit(num).collect(Collectors.joining());
-            }
+//            private static String spaces(int num) {
+//                return Stream.generate(() -> " ").limit(num).collect(Collectors.joining());
+//            }
 
         }
 

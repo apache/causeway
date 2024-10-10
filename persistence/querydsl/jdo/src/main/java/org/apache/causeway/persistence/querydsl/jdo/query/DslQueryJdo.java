@@ -50,7 +50,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of")
 public class DslQueryJdo<T> implements DslQuery<T> {
-
+    private static final long serialVersionUID = 1L;
+    
     final JDOQuery<T> jdoQuery;
 
     @Override
@@ -96,7 +97,7 @@ public class DslQueryJdo<T> implements DslQuery<T> {
         try {
             // When using offset/limit it is mandatory to apply an ordering!!
             if (jdoQuery.getMetadata().getOrderBy().isEmpty()) {
-                jdoQuery.orderBy(new OrderSpecifier(com.querydsl.core.types.Order.ASC, Expressions.constant(1)));
+                jdoQuery.orderBy(new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, Expressions.constant(1)));
             }
             List<T> results = jdoQuery
                     // instead of fetchFirst; workaround for SqlServer and the v1 datanuclues implementation which
@@ -119,7 +120,7 @@ public class DslQueryJdo<T> implements DslQuery<T> {
         try {
             // When using offset/limit it is mandatory to apply an ordering!!
             if (jdoQuery.getMetadata().getOrderBy().isEmpty()) {
-                jdoQuery.orderBy(new OrderSpecifier(com.querydsl.core.types.Order.ASC, Expressions.constant(1)));
+                jdoQuery.orderBy(new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, Expressions.constant(1)));
             }
             List<T> results = jdoQuery
                     // instead of fetchOne; workaround for SqlServer and the v1 datanuclues implementation which
@@ -319,10 +320,9 @@ public class DslQueryJdo<T> implements DslQuery<T> {
     }
 
     private static <T> ArrayList<T> newArrayList(Collection<T> objs) {
-        ArrayList<T> result = new ArrayList();
+        ArrayList<T> result = new ArrayList<>();
         result.addAll(objs);
         return result;
     }
-
 
 }

@@ -41,7 +41,6 @@ import lombok.val;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.RecoverableException;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.CaseSensitivity;

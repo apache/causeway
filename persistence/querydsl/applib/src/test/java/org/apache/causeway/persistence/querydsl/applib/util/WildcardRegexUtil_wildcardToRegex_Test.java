@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.RequiredArgsConstructor;
 
-public class WildcardRegexUtil_wildcardToRegex_Test {
+class WildcardRegexUtil_wildcardToRegex_Test {
 
     @RequiredArgsConstructor
     enum Scenario {
@@ -49,7 +49,7 @@ public class WildcardRegexUtil_wildcardToRegex_Test {
 
     @ParameterizedTest
     @EnumSource(Scenario.class)
-    public void should_convert_wildcard_to_regex(Scenario scenario) {
+    void should_convert_wildcard_to_regex(Scenario scenario) {
         String result = Wildcards.wildcardToRegex(scenario.input, scenario.caseSensitivity);
         assertThat(result).isEqualTo(scenario.expected);
     }

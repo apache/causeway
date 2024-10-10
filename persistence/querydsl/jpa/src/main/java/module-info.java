@@ -21,7 +21,6 @@ module org.apache.causeway.persistence.querydsl.jpa {
     requires com.querydsl.core;
     requires com.querydsl.jpa;
     requires java.persistence;
-    requires mysema.commons.lang;
 
     requires org.apache.causeway.persistence.jpa.applib;
     requires org.apache.causeway.persistence.querydsl.applib;

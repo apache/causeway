@@ -100,7 +100,6 @@ public class QueryDslSupportJpa implements QueryDslSupport {
         return (DslQuery<T>) DslQueryJpa.of(getQueryFactory().from(from));
     }
 
-
     @Override
     public DslQuery<?> query() {
         return DslQueryJpa.of(getQueryFactory().query());

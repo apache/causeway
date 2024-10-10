@@ -50,7 +50,6 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * Convenience method for programmatically delegate to the generated facet query
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will ALWAYS be added when absent
-     * @return
      * @param <T>
      */
     public <T> List<T> autoComplete(Class<T> cls, String searchPhrase){
@@ -67,7 +66,6 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will ALWAYS be added when absent
      * @param additionalExpression
-     * @return
      * @param <T>
      */
     public <T> List<T> autoComplete(Class<T> cls, String searchPhrase, Function<PathBuilder<T>, Predicate> additionalExpression){
@@ -83,7 +81,6 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * Convenience method for programmatically delegate to the generated facet query
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will NEVER be added when absent
-     * @return
      * @param <T>
      */
     public <T> List<T> executeQuery(Class<T> cls, String searchPhrase){
@@ -100,7 +97,6 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
      * @param cls for which the auto generated query should be called
      * @param searchPhrase wildcard will NEVER be added when absent
      * @param additionalExpression
-     * @return
      * @param <T>
      */
     public <T> List<T> executeQuery(Class<T> cls, String searchPhrase, Function<PathBuilder<T>, Predicate> additionalExpression){

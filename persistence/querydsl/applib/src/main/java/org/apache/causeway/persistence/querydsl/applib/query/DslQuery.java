@@ -77,4 +77,5 @@ public interface DslQuery<T> extends FetchableQuery<T, DslQuery<T>>, Query<DslQu
      * @return the current object
      */
     <U> DslQuery<T> from(CollectionExpression<?, U> path, Path<U> alias);
+
 }

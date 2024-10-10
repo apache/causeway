@@ -24,11 +24,13 @@ module org.apache.causeway.persistence.querydsl.applib {
     exports org.apache.causeway.persistence.querydsl.applib.services.support;
     exports org.apache.causeway.persistence.querydsl.applib.util;
     exports org.apache.causeway.persistence.querydsl.applib.query;
-
-    requires com.querydsl.core;
+    
+    requires transitive mysema.commons.lang; //unstable automatic module name
+    requires transitive com.querydsl.core;
     requires spring.context;
     requires java.inject;
     requires org.apache.causeway.applib;
 
     requires static lombok;
+    
 }

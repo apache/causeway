@@ -21,7 +21,6 @@ module org.apache.causeway.persistence.querydsl.jdo {
     requires com.querydsl.jdo;
     requires java.inject;
     requires javax.jdo;
-    requires mysema.commons.lang;
     requires org.apache.causeway.persistence.jdo.applib;
     requires org.apache.causeway.persistence.querydsl.applib;
     requires org.apache.causeway.persistence.querydsl.integration;

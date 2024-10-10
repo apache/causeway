@@ -697,12 +697,13 @@ s     * @see #findFirst(Function[], Function[])
                 .fetch();
     }
 
-    private <F> Expression<F>[] unwrapExpressions(Function<Q, Expression<F>>... expressions) {
-        return Arrays.stream(expressions)
-                .map(x -> x.apply(getEntityPath()))
-                .collect(Collectors.toUnmodifiableList())
-                .toArray(new Expression[0]);
-    }
+//not used    
+//    private <F> Expression<F>[] unwrapExpressions(Function<Q, Expression<F>>... expressions) {
+//        return _Casts.uncheckedCast(Arrays.stream(expressions)
+//                .map(x -> x.apply(getEntityPath()))
+//                .collect(Collectors.toUnmodifiableList())
+//                .toArray(new Expression[0]));
+//    }
 
     private Expression<?>[] unwrapProjections(Function<Q, Expression<?>>... projections) {
         return Arrays.stream(projections)
@@ -748,7 +749,9 @@ s     * @see #findFirst(Function[], Function[])
     }
 
     private static <T extends Comparable, Q extends EntityPathBase<T>> Function<Q, Predicate>[] asArray(Function<Q, Predicate> predicate) {
-        return predicate != null ? (Function<Q, Predicate>[]) new Function[] {predicate} : new Function[0];
+        return predicate != null 
+                ? (Function<Q, Predicate>[]) new Function[] {predicate} 
+                : new Function[0];
     }
 
 
@@ -757,7 +760,7 @@ s     * @see #findFirst(Function[], Function[])
     }
 
     static <T> ArrayList<T> newArrayList(T... objs) {
-        ArrayList<T> result = new ArrayList();
+        ArrayList<T> result = new ArrayList<>();
         Collections.addAll(result, objs);
         return result;
     }
