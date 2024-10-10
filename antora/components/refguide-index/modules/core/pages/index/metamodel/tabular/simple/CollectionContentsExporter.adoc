@@ -10,7 +10,9 @@ SPI to provide file export to table views.
 ----
 interface CollectionContentsExporter {
   void createExport(DataTable dataTable, File tempFile)     // <.>
+  void createExport(DataTable dataTable, File tempFile, AccessMode accessMode)
   Blob exportToBlob(DataTable dataTable, String name)     // <.>
+  Blob exportToBlob(DataTable dataTable, String name, AccessMode accessMode)
   CommonMimeType getMimeType()
   String getTitleLabel()     // <.>
   String getCssClass()     // <.>
