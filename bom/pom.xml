@@ -200,7 +200,7 @@ identified
         <swagger-core.version>2.2.25</swagger-core.version>
 
         <wicket.version>10.2.0</wicket.version>
-        <wicket-bootstrap.version>7.0.5</wicket-bootstrap.version> <!--
+        <wicket-bootstrap.version>7.0.8</wicket-bootstrap.version> <!--
         de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>4.0.5</wicket-webjars.version> <!--
         de.agilecoders.wicket.webjars:wicket-webjars -->
