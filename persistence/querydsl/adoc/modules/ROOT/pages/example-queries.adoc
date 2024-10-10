@@ -33,6 +33,8 @@ The default implementation of `getDefaultOrders()` assumes that there is a uniqu
 If that isn't the case, then override the method to avoid potential runtime exceptions.
 ====
 
+== find & findUsingDefaultOrder
+
 The xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#find_Function_Function[QueryDslRepository#find()] returns all matching entities, in the specified order:
 
 [source,java]
@@ -72,20 +74,21 @@ This slightly more complicated example combine predicates with an `AND`:
     }
 ----
 
-The xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#findFirst_Function_OrderSpecifier[QueryDslRepository#findFirst()] will instead return only a single instance:
+=== findFirst
+
+The xref:refguide:persistence:index/querydsl/applib/services/repo/QueryDslRepository.adoc#findFirst_Function_Function[QueryDslRepository#findFirst()] will instead return only a single instance:
 
 [source,java]
 ----
-public SimpleObject findFirstByNameAndAmount(
-        final String name,
-        final int amount
-) {
+public SimpleObject findFirstByName(final String name) {
     return findFirst(
             entity -> entity.name.eq(name),
             entity -> entity.name.asc()
     );
 }
 ----
+
+=== findFieldsDistinct & findUniqueFields
 
 As well as returning entire entities, with QueryDSL we can also return custom projections.
 For example:
@@ -94,27 +97,23 @@ For example:
 ----
 public List<String> findUniqueNames(final String name) {
     return findFieldsDistinct(
-            entity().name,
+            entity -> entity.name,
             entity -> entity.name.eq(name),
             entity -> entity.name.asc()
     );
 }
 ----
 
-
-
-== Autocomplete Predicates
-
-The xref:refguide:applib:index/annotation/DomainObject.adoc#queryDslAutoCompleteAdditionalPredicateRepository[@DomainObject#queryDslAutoCompleteAdditionalPredicateRepository] attribute is used to specify a method returning a predicate that is applied to all queries.
-
-For example:
+and in a similar manner:
 
 [source,java]
 ----
-public Function<PathBuilder<Unit>, Predicate> autoCompletePredicate(
-        final String searchPhrase
-) {
-    return u -> u.getDate("endDate", LocalDate.class).isNull()
-            .or(u.getDate("endDate", LocalDate.class).goe(clockService.nowAsLocalDate()));
+public String findUniqueName(final String name) {
+    return findUniqueFields(
+            entity -> entity.name,
+            entity -> entity.name.eq(name)
+    ).orElse(null);
 }
 ----
+
+

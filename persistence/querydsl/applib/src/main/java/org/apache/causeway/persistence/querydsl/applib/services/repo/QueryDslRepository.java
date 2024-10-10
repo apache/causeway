@@ -640,7 +640,7 @@ s     * @see #findFirst(Function[], Function[])
      * @see #find(Function[], Function[])
      * @see #find(Function, Function[])
      */
-    public List<T> findUsingDefaultOrder(Function<Q, Predicate>[] predicates) {
+    public List<T> findUsingDefaultOrder(Function<Q, Predicate>... predicates) {
         return find(predicates, getDefaultOrdersAsArray());
     }
 

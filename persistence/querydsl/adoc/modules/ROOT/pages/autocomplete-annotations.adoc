@@ -81,3 +81,16 @@ public class SimpleObjectRepository extends QueryDslRepository<SimpleObject, QSi
 }
 ----
 <.> In this (silly) example, the auto complete will only propose objects that meet the additional criteria (in this case, that the `SimpleObject#attachment` property is null).
+
+
+As a more realistic example, this filter excludes any agreements that are no longer current:
+
+[source,java]
+----
+public Function<PathBuilder<Agreement>, Predicate> autoFilter(
+        final String searchPhrase
+) {
+    return a -> a.getDate("endDate", LocalDate.class).isNull()
+            .or(a.getDate("endDate", LocalDate.class).goe(clockService.nowAsLocalDate()));
+}
+----
