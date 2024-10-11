@@ -23,7 +23,6 @@ import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -31,7 +30,9 @@ import org.apache.wicket.Component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -88,6 +89,7 @@ import org.apache.causeway.viewer.wicket.ui.components.value.StandaloneValuePane
 import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.NonNull;
 import lombok.val;
@@ -98,12 +100,23 @@ import lombok.extern.log4j.Log4j2;
  * hardcoded set of built-in {@link ComponentFactory}s, along with any
  * implementations discovered by the IoC container.
  */
-@Service
-@Named("causeway.viewer.wicket.ComponentFactoryRegistrarDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
 @Log4j2
 public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
+
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerWicketViewer.NAMESPACE + ".ComponentFactoryRegistrarDefault";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public ComponentFactoryRegistrarDefault componentFactoryRegistrarDefault(
+                final List<ComponentFactory> componentFactoriesPluggedIn) {
+            return new ComponentFactoryRegistrarDefault(componentFactoriesPluggedIn);
+        }
+    }
 
     private @Inject ValueSemanticsResolver valueSemanticsResolver;
     private @Autowired(required = false) List<CollectionContentsExporter> collectionContentsExporters;

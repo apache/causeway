@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -35,8 +34,10 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -52,7 +53,9 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
@@ -60,16 +63,30 @@ import lombok.extern.log4j.Log4j2;
  * Implementation of {@link ComponentFactoryRegistry} that delegates to a
  * provided {@link ComponentFactoryRegistrar}.
  */
-@Service
-@Named("causeway.viewer.wicket.ComponentFactoryRegistryDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
+@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
 public class ComponentFactoryRegistryDefault
 implements ComponentFactoryRegistry {
 
-    @Inject private ComponentFactoryRegistrar componentFactoryRegistrar;
-    @Inject private MetaModelContext metaModelContext;
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerWicketViewer.NAMESPACE + ".ComponentFactoryRegistryDefault";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public ComponentFactoryRegistryDefault componentFactoryRegistryDefault(
+                final ComponentFactoryRegistrar componentFactoryRegistrar,
+                final MetaModelContext metaModelContext
+        ) {
+            return new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
+        }
+    }
+
+    private final ComponentFactoryRegistrar componentFactoryRegistrar;
+    private final MetaModelContext metaModelContext;
 
     private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByComponentType =
             _Multimaps.newListMultimap();
@@ -215,7 +232,14 @@ implements ComponentFactoryRegistry {
     // -- JUNIT SUPPORT
 
     static ComponentFactoryRegistryDefault forTesting(final List<ComponentFactory> componentFactories) {
-        val factory = new ComponentFactoryRegistryDefault();
+        return forTesting(null, null, componentFactories);
+    }
+
+    static ComponentFactoryRegistryDefault forTesting(
+            final ComponentFactoryRegistrar componentFactoryRegistrar,
+            final MetaModelContext metaModelContext,
+            final List<ComponentFactory> componentFactories) {
+        val factory = new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
         _NullSafe.stream(componentFactories)
         .forEach(componentFactory->
             factory.componentFactoriesByComponentType.putElement(

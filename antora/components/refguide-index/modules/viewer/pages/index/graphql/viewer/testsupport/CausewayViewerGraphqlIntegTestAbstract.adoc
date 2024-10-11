@@ -12,7 +12,6 @@ Write tests as queries with a `._.gql` suffix (or specify a different suffix thr
     public Iterable each() throws IOException, URISyntaxException {
         return super.each();
     }
-    
 ----
 
 The class will use _Approvals approval_ tests to assert the returned response is correct.

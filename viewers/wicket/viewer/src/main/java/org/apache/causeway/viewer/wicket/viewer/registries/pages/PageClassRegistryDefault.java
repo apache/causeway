@@ -21,14 +21,15 @@ package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 import java.util.Map;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.wicket.Page;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -37,16 +38,27 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassList;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistrySpi;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 /**
  * Default implementation of {@link PageClassRegistry}; just delegates to an
  * underlying {@link PageClassList}.
  */
-@Service
-@Named("causeway.viewer.wicket.PageClassRegistryDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
+
+    public static final String LOGICAL_TYPE_NAME =
+            CausewayModuleViewerWicketViewer.NAMESPACE + ".PageClassRegistryDefault";
+
+    @Configuration
+    public static class AutoConfiguration {
+        @Bean
+        @Named(LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public PageClassRegistryDefault pageClassRegistryDefault(PageClassList pageClassList) {
+            return new PageClassRegistryDefault(pageClassList);
+        }
+    }
 
     private static final long serialVersionUID = 1L;
 

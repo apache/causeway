@@ -23,7 +23,6 @@ Example usage:
     public void setPdf(final Clob xml) {
         this.xml = ClobJpaEmbeddable.fromClob(xml);
     }
-   
 ----
 
 Lastly; note that _javax.persistence.AttributeOverrides_ and _javax.persistence.AttributeOverride_ provide a standardised way of fine-tuning the column definitions.

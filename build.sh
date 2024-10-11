@@ -44,6 +44,7 @@ usage() {
  echo "  -O do NOT add '-o' (offline) flag, ie bring down any new dependencies"                        >&2
  echo "  -t skip tests"                                                                                >&2
  echo "  -l single threaded, do NOT add '-T1C' flag"                                                   >&2
+ echo "  -q build with telemetry (run jaeger.sh first)"                                                >&2
  echo "  -k use 'package' rather than 'install'.  Does not run integ tests.  Cannot combine with '-y'" >&2
  echo "  -y use 'verify' rather than 'install'.  Cannot combine with '-k'"                             >&2
  echo "  -a append '-Dmodule-all'.  Cannot combine with '-I' or '-K'"                                  >&2
@@ -64,6 +65,7 @@ usage() {
  echo "sh build.sh -ptOdI         # pull, no tests, no offline, use mvnd, no incubator"                >&2
  echo "sh build.sh -pctOvI        # pull, clean, no tests, no offline, verbose, no incubator"          >&2
  echo "sh build.sh -CHOdI         # fetch, clean and reset, no offline, use mvnd, no incubator"         >&2
+ echo "sh build.sh -qOdI          # telemetry, no offline, use mvnd, no incubator"         >&2
  echo ""                                                                                               >&2
 }
 
@@ -75,6 +77,7 @@ SKIP_TESTS=false
 SKIP_OFFLINE=false
 PACKAGE_ONLY=false
 VERIFY_ONLY=false
+TELEMETRY=false
 TIMELINE=false
 WHATIF=false
 SINGLE_THREADED=false
@@ -89,7 +92,7 @@ VERBOSE=false
 
 MVN_LOG=/tmp/$BASENAME_0.$$.log
 
-while getopts 'CHprcntlkyaIKOdFSwveh' opt
+while getopts 'CHprcntlqkyaIKOdFSwveh' opt
 do
   case $opt in
     C) GIT_CLEAN_HARD=true ;;
@@ -98,6 +101,7 @@ do
     c) CLEAN=true ;;
     O) SKIP_OFFLINE=true ;;
     l) SINGLE_THREADED=true ;;
+    q) TELEMETRY=true ;;
     t) SKIP_TESTS=true ;;
     k) PACKAGE_ONLY=true ;;
     y) VERIFY_ONLY=true ;;
@@ -126,24 +130,25 @@ shift $((OPTIND-1))
 echo ""
 
 if [ "$VERBOSE" = "true" ]; then
-  echo "-C (git clean -dfx)                     : $GIT_CLEAN_HARD"
-  echo "-H (git reset --hard)                   : $GIT_RESET_HARD"
-  echo "-p (git pull --ff-only)                 : $GIT_PULL"
-  echo "-c mvn clean                            : $CLEAN"
-  echo "-t skip all tests (mvn -DskipTests)     : $SKIP_TESTS"
-  echo "-O not mvn --offline                    : $SKIP_OFFLINE"
-  echo "-l not mvn -T1C                         : $SINGLE_THREADED"
-  echo "-k mvn package                          : $PACKAGE_ONLY"
-  echo "-y mvn verify                           : $VERIFY_ONLY"
-  echo "-a include ALL modules                  : $ALL"
-  echo "-I include all modules except incubator : $ALL_EXCEPT_INCUBATOR"
-  echo "-K include all modules except kroviz    : $ALL_EXCEPT_KROVIZ"
-  echo "-d use mvnd rather than mvn             : $USE_MVND"
-  echo "-n serve up timeline                    : $TIMELINE"
-  echo "-F skip search for failures             : $SKIP_SEARCH_FOR_FAILURES"
-  echo "-S skip summary                         : $SKIP_SUMMARY"
-  echo "-w what-if                              : $WHATIF"
-  echo "-v verbose                              : $VERBOSE"
+  echo "-C (git clean -dfx)                          : $GIT_CLEAN_HARD"
+  echo "-H (git reset --hard)                        : $GIT_RESET_HARD"
+  echo "-p (git pull --ff-only)                      : $GIT_PULL"
+  echo "-c mvn clean                                 : $CLEAN"
+  echo "-t skip all tests (mvn -DskipTests)          : $SKIP_TESTS"
+  echo "-O not mvn --offline                         : $SKIP_OFFLINE"
+  echo "-l not mvn -T1C                              : $SINGLE_THREADED"
+  echo "-q with otel telemetry (run jaeger.sh first) : $TELEMETRY"
+  echo "-k mvn package                               : $PACKAGE_ONLY"
+  echo "-y mvn verify                                : $VERIFY_ONLY"
+  echo "-a include ALL modules                       : $ALL"
+  echo "-I include all modules except incubator      : $ALL_EXCEPT_INCUBATOR"
+  echo "-K include all modules except kroviz         : $ALL_EXCEPT_KROVIZ"
+  echo "-d use mvnd rather than mvn                  : $USE_MVND"
+  echo "-n serve up timeline                         : $TIMELINE"
+  echo "-F skip search for failures                  : $SKIP_SEARCH_FOR_FAILURES"
+  echo "-S skip summary                              : $SKIP_SUMMARY"
+  echo "-w what-if                                   : $WHATIF"
+  echo "-v verbose                                   : $VERBOSE"
   echo ""
 fi
 
@@ -186,6 +191,10 @@ fi
 
 if [ "$SKIP_TESTS" = "true" ]; then
   OPTS="$OPTS -DskipTests=true"
+fi
+
+if [ "$TELEMETRY" = "true" ]; then
+  OPTS="$OPTS -Dtelemetry -Dotel.traces.exporter=otlp"
 fi
 
 if [ "$ALL" = "true" ]; then
