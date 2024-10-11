@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.registries.pages;
 
-import javax.annotation.Priority;
 import javax.inject.Named;
-
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import org.apache.wicket.Page;
 
@@ -30,7 +27,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -46,6 +42,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 public class PageClassListDefault implements PageClassList {
 

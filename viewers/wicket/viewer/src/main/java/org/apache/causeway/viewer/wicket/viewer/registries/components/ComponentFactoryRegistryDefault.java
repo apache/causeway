@@ -26,11 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -41,7 +38,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -57,6 +53,7 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;

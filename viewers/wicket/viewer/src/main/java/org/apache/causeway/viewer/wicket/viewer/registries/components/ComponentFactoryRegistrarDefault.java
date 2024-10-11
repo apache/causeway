@@ -23,11 +23,8 @@ import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import org.apache.wicket.Component;
 
@@ -36,7 +33,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -93,6 +89,7 @@ import org.apache.causeway.viewer.wicket.ui.components.value.StandaloneValuePane
 import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.NonNull;
 import lombok.val;
