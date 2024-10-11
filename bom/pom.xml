@@ -72,7 +72,7 @@ identified
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2024-07-02T12:45:04Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-10-11T06:42:04Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
