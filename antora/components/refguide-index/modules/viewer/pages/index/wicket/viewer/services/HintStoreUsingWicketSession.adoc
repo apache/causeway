@@ -9,6 +9,7 @@ Wicket-specific implementation of xref:refguide:applib:index/services/hint/HintS
 .HintStoreUsingWicketSession.java
 ----
 class HintStoreUsingWicketSession {
+  public static final String LOGICAL_TYPE_NAME;
   String get(Bookmark bookmark, String key)
   void set(Bookmark bookmark, String key, String value)
   void remove(Bookmark bookmark, String key)

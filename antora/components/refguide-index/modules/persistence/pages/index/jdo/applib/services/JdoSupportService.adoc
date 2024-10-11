@@ -95,7 +95,6 @@ Typical usage:
                              q.atPath.eq(atPath).and(
                              q.description.indexOf(description).gt(0))
                              );
-    
 ----
 
 [#executeQueryUnique_Class_BooleanExpression]
@@ -111,7 +110,6 @@ Typical usage:
                              q.atPath.eq(atPath).and(
                              q.description.eq(description))
                              );
-    
 ----
 
 [#newTypesafeQuery_Class]

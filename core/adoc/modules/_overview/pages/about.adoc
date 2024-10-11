@@ -3596,15 +3596,8 @@ Directory: /viewers/wicket/viewer
 ----
 |.Components
 ****
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault +
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassListDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault +
 o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
 o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
-o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
-o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
 o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
 ****
@@ -7543,6 +7536,12 @@ Directory: /incubator/extensions/core/commandreplay/primary
 ----
 |A module for obtaining commands from a primary
 
+.Components
+****
+o.a.i.extensions.commandreplay.primary.config.PrimaryConfig +
+o.a.i.extensions.commandreplay.primary.spiimpl.CaptureResultOfCommand +
+****
+
 .Dependencies
 ****
 org.apache.causeway.core:causeway-core-config:jar:<managed> +
@@ -7567,6 +7566,16 @@ Directory: /incubator/extensions/core/commandreplay/secondary
 ----
 |A module providing a Quartz Job to run on a secondary system,
 for obtaining commands from a primary and saving them so that they are replayed.
+
+.Components
+****
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserException +
+o.a.i.extensions.commandreplay.secondary.analyser.CommandReplayAnalyserResult +
+o.a.i.extensions.commandreplay.secondary.analysis.CommandReplayAnalysisService +
+o.a.i.extensions.commandreplay.secondary.config.SecondaryConfig +
+o.a.i.extensions.commandreplay.secondary.fetch.CommandFetcher +
+o.a.i.extensions.commandreplay.secondary.job.ReplicateAndReplayJob +
+****
 
 .Dependencies
 ****
