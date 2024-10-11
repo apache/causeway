@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.extensions</groupId>
 		<artifactId>causeway-extensions</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
+		<version>3.2.0</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
@@ -40,43 +40,43 @@
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-applib</artifactId>
 				<type>test-jar</type>
 				<scope>test</scope>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jdo</artifactId>
 				<type>test-jar</type>
 				<scope>test</scope>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
 				<type>test-jar</type>
 				<scope>test</scope>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionoutbox-restclient</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
+				<version>3.2.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
