@@ -3013,7 +3013,7 @@ identified
                 <plugins>
                     <plugin>
                         <groupId>io.github.qsy7.org.projectlombok</groupId>
-                        <artifactId>lombok-maven</artifactId>
+                        <artifactId>lombok-maven-plugin</artifactId>
                         <version>1.18.30</version>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
