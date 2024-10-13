@@ -20,7 +20,6 @@ package org.apache.causeway.commons.collections;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -436,35 +435,12 @@ class CanTest {
     @RequiredArgsConstructor
     enum MapScenario {
         HASH_MAP(customers->customers.toMap(Customer::getName)),
-        HASH_UNMOD_MAP(customers->customers.toUnmodifiableMap(Customer::getName)),
-        TREE_MAP(customers->customers.toMap(Customer::getName, (a, b)->a, TreeMap::new)),
-        TREE_UNMOD_MAP(customers->customers.toUnmodifiableMap(Customer::getName, (a, b)->a, TreeMap::new));
+        TREE_MAP(customers->customers.toMap(Customer::getName, (a, b)->a, TreeMap::new));
         final Function<Can<Customer>, Map<String, Customer>> toMapConverterUnderTest;
-        private boolean isModifiable() {
-            return ordinal()%2 == 0;
-        }
-        void assertModifiability(final Map<String, Customer> map) {
-            if(isModifiable()) {
+        void assertUnmodifiable(final Map<String, Customer> map) {
+            assertThrows(Exception.class, ()->{
                 map.put("John", new Customer("John"));
-            } else {
-                assertThrows(Exception.class, ()->{
-                    map.put("John", new Customer("John"));
-                });
-            }
-        }
-        void assertMapType(final Map<String, Customer> map) {
-            switch (this) {
-            case HASH_MAP:
-                assertTrue(map instanceof HashMap);
-                break;
-            case TREE_MAP:
-                assertTrue(map instanceof TreeMap);
-                break;
-            case HASH_UNMOD_MAP:
-            case TREE_UNMOD_MAP:
-                // cannot test easily
-                break;
-            }
+            });
         }
     }
 
@@ -475,8 +451,7 @@ class CanTest {
         var map = scenario.toMapConverterUnderTest.apply(origin);
         assertNotNull(map);
         assertEquals(0, map.size());
-        scenario.assertModifiability(map);
-        scenario.assertMapType(map);
+        scenario.assertUnmodifiable(map);
     }
     @ParameterizedTest
     @EnumSource(MapScenario.class)
@@ -486,8 +461,7 @@ class CanTest {
         assertNotNull(map);
         assertEquals(1, map.size());
         assertEquals(new Customer("Jeff"), map.get("Jeff"));
-        scenario.assertModifiability(map);
-        scenario.assertMapType(map);
+        scenario.assertUnmodifiable(map);
     }
     @ParameterizedTest
     @EnumSource(MapScenario.class)
@@ -498,8 +472,7 @@ class CanTest {
         assertEquals(2, map.size());
         assertEquals(new Customer("Jeff"), map.get("Jeff"));
         assertEquals(new Customer("Jane"), map.get("Jane"));
-        scenario.assertModifiability(map);
-        scenario.assertMapType(map);
+        scenario.assertUnmodifiable(map);
     }
 
     // -- ZIP
