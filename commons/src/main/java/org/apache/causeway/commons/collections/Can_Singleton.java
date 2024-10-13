@@ -50,15 +50,9 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@RequiredArgsConstructor(staticName="of")
-final class Can_Singleton<T> implements Can<T> {
-
-    private static final long serialVersionUID = 1L;
-
-    private final T element;
+record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public Optional<T> getSingleton() {
@@ -172,7 +166,7 @@ final class Can_Singleton<T> implements Can<T> {
     public <R, Z> Can<R> zipMap(final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
         var next = mapper.apply(element, zippedIn.iterator().next());
         return next!=null
-                ? Can_Singleton.of(next)
+                ? new Can_Singleton<>(next)
                 : Can.empty();
     }
 

@@ -46,16 +46,10 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Value;
 import lombok.val;
 
-@Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class Can_Empty<T> implements Can<T> {
-
-    private static final long serialVersionUID = 1L;
+record Can_Empty<T>() implements Can<T> {
 
     static final Can_Empty<?> INSTANCE = new Can_Empty<>();
 

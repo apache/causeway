@@ -52,7 +52,7 @@ class _CanFactory {
             nonNullElements.trimToSize();
         }
 
-        return Can_Multiple.of(nonNullElements);
+        return new Can_Multiple<>(nonNullElements);
     }
 
     <T> ArrayList<T> arrayListWithSizeUpperBound(final int maxSize) {

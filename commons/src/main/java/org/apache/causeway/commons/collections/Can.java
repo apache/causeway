@@ -170,7 +170,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         if(element==null) {
             return empty();
         }
-        return Can_Singleton.of(element);
+        return new Can_Singleton<>(element);
     }
 
     /**
@@ -182,7 +182,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @throws NullPointerException if {@code element} is {@code null}
      */
     public static <T> Can<T> ofSingleton(final @NonNull T element) {
-        return Can_Singleton.of(element);
+        return new Can_Singleton<>(element);
     }
 
     /**
@@ -477,7 +477,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         val newSize = can.size() + 1;
         val union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
         union.add(element);
-        return Can_Multiple.of(union);
+        return new Can_Multiple<>(union);
     }
 
     // -- TRAVERSAL
@@ -520,7 +520,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     /**
      * Semantically equivalent to {@link #zipMap(Iterable, BiFunction)}.stream().
      * <p> (Actual implementations might be optimized.)
-     * @apiNote the resulting Stream will not contain {@code null} elements 
+     * @apiNote the resulting Stream will not contain {@code null} elements
      * @param <R>
      * @param <Z>
      * @param zippedIn must have at least as much elements as this {@code Can}
@@ -927,9 +927,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * <br>{@code .collect(Collectors.joining(delimiter));}
      * <p>(Actual implementations might be optimized.)
      * @param delimiter
-     * @apiNote the corner case, 
+     * @apiNote the corner case,
      *      when the {@code Object::toString} function returns {@code null} for some elements,
-     *      results in those elements simply being ignored by the join 
+     *      results in those elements simply being ignored by the join
      */
     String join(@NonNull String delimiter);
 
@@ -939,10 +939,20 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * <p>(Actual implementations might be optimized.)
      * @param toStringFunction
      * @param delimiter
-     * @apiNote the corner case, 
+     * @apiNote the corner case,
      *      when given {@code toStringFunction} function returns {@code null} for some elements,
-     *      results in those elements simply being ignored by the join 
+     *      results in those elements simply being ignored by the join
      */
     String join(@NonNull Function<? super T, String> toStringFunction, @NonNull String delimiter);
+
+    // -- GROUP BY, HISTOGRAM, MIN, MAX
+
+//    <G> Map<G, Can<T>> groupBy(@NonNull Function<? super T, G> toGroupFunction);
+//    <G> SortedMap<G, Can<T>> groupBy(@NonNull Function<? super T, G> toGroupFunction, @NonNull Comparator<G> groupComparator);
+//
+//
+//    <O extends Comparable<O>> Can<T> min(@NonNull Function<? super T, O> toOrdinalFunction);
+//    <O> Can<T> min(@NonNull Function<? super T, O> toOrdinalFunction, @NonNull Comparator<O> ordinalComparator);
+
 
 }

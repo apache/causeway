@@ -53,15 +53,14 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@RequiredArgsConstructor(staticName="of")
-final class Can_Multiple<T> implements Can<T> {
+record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
-    private static final long serialVersionUID = 1L;
-
-    private final List<T> elements;
+    // package private, but wrapped just in case
+    public List<T> elements() {
+        return Collections.unmodifiableList(elements);
+    }
 
     @Override
     public Optional<T> getFirst() {
@@ -126,7 +125,7 @@ final class Can_Multiple<T> implements Can<T> {
     public Can<T> sorted(final @NonNull Comparator<? super T> c) {
         val newElements = _Lists.<T>newArrayList(elements);
         newElements.sort(c);
-        return Can_Multiple.of(newElements);
+        return new Can_Multiple<>(newElements);
     }
 
     @Override
@@ -180,13 +179,13 @@ final class Can_Multiple<T> implements Can<T> {
         for(int i=elements.size()-1; i>=0; --i) {
             reverse.add(elements.get(i));
         }
-        return Can_Multiple.of(reverse);
+        return new Can_Multiple<>(reverse);
     }
 
     @Override
     public Can<T> reduce(final @NonNull BinaryOperator<T> accumulator) {
         return this.stream().reduce(accumulator)
-                .map(singleton->(Can<T>)Can_Singleton.of(singleton))
+                .<Can<T>>map(Can_Singleton::new)
                 .orElseGet(Can::empty);
     }
 
@@ -251,7 +250,7 @@ final class Can_Multiple<T> implements Can<T> {
         val newElements = new ArrayList<T>(this.size() + other.size());
         newElements.addAll(elements);
         other.forEach(newElements::add);
-        return Can_Multiple.of(newElements);
+        return new Can_Multiple<>(newElements);
     }
 
     @Override
