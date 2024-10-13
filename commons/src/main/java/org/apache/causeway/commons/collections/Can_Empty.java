@@ -308,9 +308,9 @@ final class Can_Empty<T> implements Can<T> {
     }
     @Override
     public <K, M extends Map<K, T>> Map<K, T> toMap(
-            @NonNull Function<? super T, ? extends K> keyExtractor,
-            @NonNull BinaryOperator<T> mergeFunction,
-            @NonNull Supplier<M> mapFactory) {
+            @NonNull final Function<? super T, ? extends K> keyExtractor,
+            @NonNull final BinaryOperator<T> mergeFunction,
+            @NonNull final Supplier<M> mapFactory) {
         return Collections.emptyMap();
     }
 
@@ -318,17 +318,17 @@ final class Can_Empty<T> implements Can<T> {
     public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
         return collector.finisher().apply(collector.supplier().get());
     }
-    
+
     @Override
-    public <K> Map<? extends K, Can<T>> groupBy(
-            @NonNull Function<? super T, ? extends K> classifier) {
+    public <K> Map<K, Can<T>> groupBy(
+            @NonNull final Function<? super T, ? extends K> classifier) {
         return Collections.emptyMap();
     }
 
     @Override
     public <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
-            @NonNull Function<? super T, ? extends K> classifier,
-            @NonNull Supplier<M> mapFactory) {
+            @NonNull final Function<? super T, ? extends K> classifier,
+            @NonNull final Supplier<M> mapFactory) {
         return Collections.emptyMap();
     }
 

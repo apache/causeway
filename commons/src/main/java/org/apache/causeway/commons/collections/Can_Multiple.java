@@ -491,17 +491,17 @@ final class Can_Multiple<T> implements Can<T> {
     public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
         return stream().collect(collector);
     }
-    
+
     @Override
-    public <K> Map<? extends K, Can<T>> groupBy(
-            @NonNull Function<? super T, ? extends K> classifier) {
+    public <K> Map<K, Can<T>> groupBy(
+            @NonNull final Function<? super T, ? extends K> classifier) {
         return groupBy(classifier, HashMap::new);
     }
 
     @Override
-    public <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
-            @NonNull Function<? super T, ? extends K> classifier,
-            @NonNull Supplier<M> mapFactory) {
+    public <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
+            @NonNull final Function<? super T, ? extends K> classifier,
+            @NonNull final Supplier<M> mapFactory) {
         var map = collect(Collectors.groupingBy(classifier, mapFactory, Can.toCan()));
         return Collections.unmodifiableMap(map);
     }
