@@ -836,12 +836,12 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     T[] toArray(Class<T> elementType);
 
     // -- TO MAP
-    
+
     /**
      * Returns a {@link Map} with values from this {@link Can},
      * and keys as produced by given {@code keyExtractor}.
      * <p>
-     * The result is protected from modification. 
+     * The result is protected from modification.
      * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
      * <p>
      * On duplicate keys, behavior is unspecified.
@@ -876,16 +876,16 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * <p>
      * (Actual implementations might be optimized.)
      * <p>
-     * Whether the result is protected from modification, 
+     * Whether the result is protected from modification,
      * is up to given {@link Collector}.
      * @param <R>
      * @param <A>
      * @param collector
      */
     <R, A> R collect(@NonNull Collector<? super T, A, R> collector);
-    
+
     // -- GROUP BY
-    
+
     /**
      * Groups elements of this {@link Can} into a multi-valued {@link Map},
      * according to given classification function.
@@ -893,7 +893,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * The result is protected from modification.
      * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
      */
-    <K> Map<? extends K, Can<T>> groupBy(
+    <K> Map<K, Can<T>> groupBy(
             @NonNull Function<? super T, ? extends K> classifier);
 
     /**
@@ -908,7 +908,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
             @NonNull Function<? super T, ? extends K> classifier,
             @NonNull Supplier<M> mapFactory);
-    
+
     // -- JOIN AS STRING
 
     /**

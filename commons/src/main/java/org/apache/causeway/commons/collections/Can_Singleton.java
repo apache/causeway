@@ -404,9 +404,9 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
     @Override
     public <K, M extends Map<K, T>> Map<K, T> toMap(
-            @NonNull Function<? super T, ? extends K> keyExtractor,
-            @NonNull BinaryOperator<T> mergeFunction,
-            @NonNull Supplier<M> mapFactory) {
+            @NonNull final Function<? super T, ? extends K> keyExtractor,
+            @NonNull final BinaryOperator<T> mergeFunction,
+            @NonNull final Supplier<M> mapFactory) {
         return toMap(keyExtractor);
     }
 
@@ -416,18 +416,18 @@ record Can_Singleton<T>(T element) implements Can<T> {
         collector.accumulator().accept(container, element);
         return collector.finisher().apply(container);
     }
-    
+
     @Override
-    public <K> Map<? extends K, Can<T>> groupBy(
-            @NonNull Function<? super T, ? extends K> classifier) {
+    public <K> Map<K, Can<T>> groupBy(
+            @NonNull final Function<? super T, ? extends K> classifier) {
         return Map.of(classifier.apply(element), this);
     }
 
     @Override
     public <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
-            @NonNull Function<? super T, ? extends K> classifier,
-            @NonNull Supplier<M> mapFactory) {
-        return groupBy(classifier); 
+            @NonNull final Function<? super T, ? extends K> classifier,
+            @NonNull final Supplier<M> mapFactory) {
+        return groupBy(classifier);
     }
 
     @Override
