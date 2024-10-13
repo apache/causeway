@@ -19,10 +19,8 @@
 package org.apache.causeway.commons.collections;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +107,7 @@ record Can_Empty<T>() implements Can<T> {
     }
 
     @Override
-    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
+    public Can<T> sorted(@NonNull final Comparator<? super T> c) {
         return this;
     }
 
@@ -119,7 +117,7 @@ record Can_Empty<T>() implements Can<T> {
     }
 
     @Override
-    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
+    public Can<T> distinct(@NonNull final BiPredicate<T, T> equality) {
         return this;
     }
 
@@ -134,7 +132,7 @@ record Can_Empty<T>() implements Can<T> {
     }
 
     @Override
-    public Can<T> reduce(final @NonNull BinaryOperator<T> accumulator) {
+    public Can<T> reduce(@NonNull final BinaryOperator<T> accumulator) {
         return this; // reduction of empty yields empty
     }
 
@@ -287,43 +285,45 @@ record Can_Empty<T>() implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
+    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
         return Collections.emptySet(); // serializable and immutable
     }
 
     @Override
-    public <C extends Collection<T>> C toCollection(final @NonNull Supplier<C> collectionFactory) {
-        return collectionFactory.get();
-    }
-
-    @Override
-    public T[] toArray(final @NonNull Class<T> elementType) {
+    public T[] toArray(@NonNull final Class<T> elementType) {
         val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
 
     @Override
-    public <K> Map<K, T> toMap(final @NonNull Function<? super T, ? extends K> keyExtractor) {
-       return new HashMap<>();
+    public <K> Map<K, T> toMap(
+            @NonNull final Function<? super T, ? extends K> keyExtractor) {
+       return Collections.emptyMap();
     }
     @Override
-    public <K> Map<K, T> toUnmodifiableMap(@NonNull final Function<? super T, ? extends K> keyExtractor) {
+    public <K, M extends Map<K, T>> Map<K, T> toMap(
+            @NonNull Function<? super T, ? extends K> keyExtractor,
+            @NonNull BinaryOperator<T> mergeFunction,
+            @NonNull Supplier<M> mapFactory) {
         return Collections.emptyMap();
-    }
-    @Override
-    public <K, M extends Map<K, T>> M toMap(@NonNull final Function<? super T, ? extends K> keyExtractor,
-            @NonNull final BinaryOperator<T> mergeFunction, @NonNull final Supplier<M> mapFactory) {
-        return mapFactory.get();
-    }
-    @Override
-    public <K, M extends Map<K, T>> M toUnmodifiableMap(@NonNull final Function<? super T, ? extends K> keyExtractor,
-            @NonNull final BinaryOperator<T> mergeFunction, @NonNull final Supplier<M> mapFactory) {
-        return _Casts.uncheckedCast(Collections.emptyMap());
     }
 
     @Override
     public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
         return collector.finisher().apply(collector.supplier().get());
+    }
+    
+    @Override
+    public <K> Map<? extends K, Can<T>> groupBy(
+            @NonNull Function<? super T, ? extends K> classifier) {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
+            @NonNull Function<? super T, ? extends K> classifier,
+            @NonNull Supplier<M> mapFactory) {
+        return Collections.emptyMap();
     }
 
     @Override

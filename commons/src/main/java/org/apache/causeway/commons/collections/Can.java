@@ -37,7 +37,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -797,57 +796,27 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
                 Can::ofCollection);
     }
 
-    /**
-     * Return a {@link Collector},
-     * that delegates {@link Map} creation to {@link Collectors#toMap(Function, Function, BinaryOperator, Supplier)}.
-     * @param keyExtractor a mapping function to produce keys, must be non-null
-     * @param mergeFunction a merge function, used to resolve collisions between
-     *                      values associated with the same key, as supplied
-     *                      to {@link Map#merge(Object, Object, BiFunction)}
-     * @param mapFactory a supplier providing a new empty {@code Map}
-     *                   into which the results will be inserted
-     * @return an unmodifiable (hash) {@link Map}
-     */
-    public static <T, K, M extends Map<K, T>>
-    Collector<T, ?, M> toMapCollector(
-            final @NonNull Function<? super T, ? extends K> keyExtractor,
-            final BinaryOperator<T> mergeFunction,
-            final Supplier<M> mapFactory) {
-        return Collectors.toMap(keyExtractor, UnaryOperator.identity(), mergeFunction, mapFactory);
-    }
-
     // -- CONVERSIONS
 
     /**
-     * @return a serializable and immutable {@link List}, containing the elements of this Can
+     * @return a serializable and unmodifiable {@link List}, containing the elements of this Can
      */
     List<T> toList();
 
     /**
-     * @return a (serializable and mutable) {@link ArrayList}, containing the elements of this Can
+     * @return a (serializable and modifiable) {@link ArrayList}, containing the elements of this Can
      */
     List<T> toArrayList();
 
     /**
-     * @return a serializable and immutable {@link Set}, containing the elements of this Can
+     * @return a serializable and unmodifiable {@link Set}, containing the elements of this Can
      */
     Set<T> toSet();
 
     /**
-     * @return a serializable and immutable {@link Set}, containing the elements of this Can
+     * @return a serializable and unmodifiable {@link Set}, containing the elements of this Can
      */
     Set<T> toSet(@NonNull Consumer<T> onDuplicated);
-
-//XXX to implement when needed
-//    Set<T> toSortedSet();
-//    Set<T> toSortedSet(Comparator<T> comparator);
-
-    /**
-     * @param <C>
-     * @param collectionFactory
-     * @return a collection, containing the elements of this Can
-     */
-    <C extends Collection<T>> C toCollection(Supplier<C> collectionFactory);
 
     /**
      * @param a the array into which the elements of this Can are to
@@ -867,25 +836,26 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     T[] toArray(Class<T> elementType);
 
     // -- TO MAP
-
+    
     /**
-     * Returns a modifiable (hash) {@link Map}, with values from this {@link Can},
+     * Returns a {@link Map} with values from this {@link Can},
      * and keys as produced by given {@code keyExtractor}.
+     * <p>
+     * The result is protected from modification. 
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
      * <p>
      * On duplicate keys, behavior is unspecified.
      * @param keyExtractor a mapping function to produce keys, must be non-null
      */
-    <K> Map<K, T> toMap(@NonNull Function<? super T, ? extends K> keyExtractor);
+    <K> Map<K, T> toMap(
+            @NonNull Function<? super T, ? extends K> keyExtractor);
 
     /**
-     * Variant of {@link #toMap(Function)}, that protects the resulting {@link Map} from modification.
-     * @see #toMap(Function)
-     */
-    <K> Map<K, T> toUnmodifiableMap(@NonNull Function<? super T, ? extends K> keyExtractor);
-
-    /**
-     * Returns a modifiable {@link Map}, with values from this {@link Can},
+     * Returns a {@link Map} with values from this {@link Can},
      * and keys as produced by given {@code keyExtractor}.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
      * @param keyExtractor a mapping function to produce keys, must be non-null
      * @param mergeFunction a merge function, used to resolve collisions between
      *                      values associated with the same key, as supplied
@@ -893,17 +863,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @param mapFactory a supplier providing a new empty {@code Map}
      *                   into which the results will be inserted
      */
-    <K, M extends Map<K, T>> M toMap(
-            @NonNull Function<? super T, ? extends K> keyExtractor,
-            @NonNull BinaryOperator<T> mergeFunction,
-            @NonNull Supplier<M> mapFactory);
-
-    /**
-     * Variant of {@link #toMap(Function, BinaryOperator, Supplier)},
-     * that protects the resulting {@link Map} from modification.
-     * @see #toMap(Function, BinaryOperator, Supplier)
-     */
-    <K, M extends Map<K, T>> Map<K, T> toUnmodifiableMap(
+    <K, M extends Map<K, T>> Map<K, T> toMap(
             @NonNull Function<? super T, ? extends K> keyExtractor,
             @NonNull BinaryOperator<T> mergeFunction,
             @NonNull Supplier<M> mapFactory);
@@ -913,13 +873,42 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
     /**
      * Semantically equivalent to {@link #stream()}
      * .{@link Stream#collect(Collector) collect(collector)}.
-     * <p>(Actual implementations might be optimized.)
+     * <p>
+     * (Actual implementations might be optimized.)
+     * <p>
+     * Whether the result is protected from modification, 
+     * is up to given {@link Collector}.
      * @param <R>
      * @param <A>
      * @param collector
      */
     <R, A> R collect(@NonNull Collector<? super T, A, R> collector);
+    
+    // -- GROUP BY
+    
+    /**
+     * Groups elements of this {@link Can} into a multi-valued {@link Map},
+     * according to given classification function.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
+     */
+    <K> Map<? extends K, Can<T>> groupBy(
+            @NonNull Function<? super T, ? extends K> classifier);
 
+    /**
+     * Groups elements of this {@link Can} into a multi-valued {@link Map},
+     * according to given classification function.
+     * <p>
+     * The result is protected from modification.
+     * (If you instead need a modifiable result, use the {@link #collect(Collector)} method.)
+     * @param mapFactory a supplier providing a new empty {@code Map}
+     *      into which the results will be inserted
+     */
+    <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
+            @NonNull Function<? super T, ? extends K> classifier,
+            @NonNull Supplier<M> mapFactory);
+    
     // -- JOIN AS STRING
 
     /**
