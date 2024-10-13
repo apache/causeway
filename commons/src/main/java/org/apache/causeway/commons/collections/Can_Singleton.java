@@ -424,7 +424,7 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
+    public <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
             @NonNull final Function<? super T, ? extends K> classifier,
             @NonNull final Supplier<M> mapFactory) {
         return groupBy(classifier);

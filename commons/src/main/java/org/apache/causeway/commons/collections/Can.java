@@ -905,7 +905,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      * @param mapFactory a supplier providing a new empty {@code Map}
      *      into which the results will be inserted
      */
-    <K, M extends Map<K, Can<T>>> Map<? extends K, Can<T>> groupBy(
+    <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
             @NonNull Function<? super T, ? extends K> classifier,
             @NonNull Supplier<M> mapFactory);
 
