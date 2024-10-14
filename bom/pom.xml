@@ -3412,7 +3412,7 @@ identified
                     <plugin>
                         <groupId>io.opentelemetry.contrib</groupId>
                         <artifactId>opentelemetry-maven-extension</artifactId>
-                        <version>1.14.0-alpha</version>
+                        <version>1.39.0-alpha</version>
                         <extensions>true</extensions>
                     </plugin>
                 </plugins>
