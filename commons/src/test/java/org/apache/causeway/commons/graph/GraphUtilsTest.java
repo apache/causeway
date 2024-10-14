@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 
 import org.springframework.util.StringUtils;
 
@@ -87,6 +88,38 @@ class GraphUtilsTest {
         assertEquals(
                 Can.of("A - B", "A - C", "B - C", "D"),
                 TextUtils.readLines(textForm).filter(StringUtils::hasLength));
+    }
+
+    @Test
+    void nodeEqualityDirected() {
+        var graph = GraphUtils.GraphBuilder.directed(Customer.class)
+            .addNode(new Customer("A"))
+            .addNode(new Customer("B"))
+            .addNode(new Customer("A"))
+            .addEdge(0, 1)
+            .build();
+
+        //debug
+        //System.err.println(graph.toString(Customer::getName));
+
+        assertEquals(2,
+                graph.nodes().size());
+    }
+
+    @Test
+    void nodeEqualityUndirected() {
+        var graph = GraphUtils.GraphBuilder.undirected(Customer.class)
+            .addNode(new Customer("A"))
+            .addNode(new Customer("B"))
+            .addNode(new Customer("A"))
+            .addEdge(0, 1)
+            .build();
+
+        //debug
+        //System.err.println(graph.toString(Customer::getName));
+
+        assertEquals(2,
+                graph.nodes().size());
     }
 
     @Test
@@ -170,6 +203,56 @@ class GraphUtilsTest {
         assertFalse(subgraph3.isUndirected());
         assertEquals(3, subgraph3.nodeCount());
         assertEquals(2, subgraph3.edgeCount());
+    }
+
+    @Test
+    void filterDirectedGraph() {
+        var graph = GraphUtils.GraphBuilder.directed(Customer.class)
+            .addNode(new Customer("A"))
+            .addNode(new Customer("B"))
+            .addNode(new Customer("C"))
+            .addNode(new Customer("D"))
+            .addEdge(0, 1, 0.1) // A -> B (weight=0.1)
+            .addEdge(1, 2)      // B -> C
+            .addEdge(2, 0, 0.7) // C -> A (weight=0.7)
+            .build()
+            .filter(node->!node.getName().equals("C")); // now remove C
+
+        var textForm = graph.toString(Customer::getName);
+
+        //debug
+        //System.err.println(textForm);
+
+        assertLinesMatch(
+                Can.of("A -> B (0.1)", "B", "D").toList(),
+                TextUtils.readLines(textForm).filter(StringUtils::hasLength).toList());
+    }
+
+    @Test
+    void filterUndirectedGraph() {
+        var a = new Customer("A");
+        var b = new Customer("B");
+        var c = new Customer("C");
+        var d = new Customer("D");
+
+        var graph = GraphUtils.GraphBuilder.undirected(Customer.class)
+            .addEdge(a, b, 0.1) // A - B (weight=0.1)
+            .addEdge(c, a)      // A - C
+            .addEdge(c, b, 0.7) // B - C (weight=0.7)
+            .addNode(d)
+            .build()
+            .filter(node->!node.getName().equals("C")) // now remove C
+            ;
+
+        var textForm = graph.toString(
+                NodeFormatter.of(Customer::getName),
+                edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
+        //debug
+        //System.err.println(textForm);
+
+        assertLinesMatch(
+                Can.of("A - B (weight=0.1)", "D").toList(),
+                TextUtils.readLines(textForm).filter(StringUtils::hasLength).toList());
     }
 
 }

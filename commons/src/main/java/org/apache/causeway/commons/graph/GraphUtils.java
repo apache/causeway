@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,6 +40,7 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteristic;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._PrimitiveCollections.IntList;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
@@ -361,7 +362,43 @@ public class GraphUtils {
          * Returns an isomorphic graph with this graph's nodes replaced by given mapping function.
          */
         public <R> Graph<R> map(final Function<T, R> nodeMapper) {
-            return new Graph<R>(kernel, nodes.map(nodeMapper), edgeAttributeByPackedEdgeIndex());
+            var graph = new Graph<R>(kernel, nodes.map(nodeMapper), edgeAttributeByPackedEdgeIndex());
+            _Assert.assertEquals(kernel.nodeCount(), graph.nodes().size());
+            return graph;
+        }
+
+        /**
+         * Returns a sub-graph with any nodes removed from this graph, that do not pass the filter.
+         */
+        public Graph<T> filter(final Predicate<T> filter) {
+            if(nodes.isEmpty()) return this;
+
+            var nodeType = _Casts.<Class<T>>uncheckedCast(nodes.getFirst().get().getClass());
+            var builder = new GraphBuilder<T>(nodeType, kernel().characteristics);
+            var isUndirected = kernel().isUndirected();
+            
+            nodes.forEach(IndexedConsumer.zeroBased((nodeIndex, node)->{
+                if(filter.test(node)) {
+                    builder.addNode(node);
+                    Graph.this.visitNeighborsIndexed(nodeIndex, (neighborIndex, neighbor)->{
+                        if(isUndirected
+                                && neighborIndex<nodeIndex) {
+                            return;
+                        }
+                        if(filter.test(neighbor)) {
+                            var edgeAttributes = edgeAttributeByPackedEdgeIndex()
+                                    .get(_Longs.pack(nodeIndex, neighborIndex));
+                            if(edgeAttributes!=null) {
+                                builder.addEdge(node, neighbor, edgeAttributes);
+                            } else {
+                                builder.addEdge(node, neighbor);
+                            }
+                        }
+                    });
+                }
+            }));
+
+            return builder.build();
         }
 
         // -- EDGE ATTRIBUTE
@@ -468,6 +505,7 @@ public class GraphUtils {
         private final Class<T> nodeType;
         private final ImmutableEnumSet<GraphCharacteristic> characteristics;
         private final boolean isUndirected;
+        private final Map<T, Integer> indexByNode;
         private final List<T> nodeList;
         private final IntList fromNode = new IntList(4); // best guess initial edge capacity
         private final IntList toNode = new IntList(4); // best guess initial edge capacity
@@ -484,8 +522,9 @@ public class GraphUtils {
         }
 
         /**
-         * Adds a new node to the graph.
-         * @apiNote nodes are not required to be unique with respect to {@link Objects#equals}.
+         * Adds a new node to the graph, respecting node equality, that is,
+         * no duplicates are added.
+         * @apiNote duplicates with respect to {@link Objects#equals} are not added
          */
         public GraphBuilder<T> addNode(final @NonNull T node) {
             addNodeHonoringIndexMap(node);
@@ -559,9 +598,8 @@ public class GraphUtils {
             this.characteristics = characteristics;
             this.isUndirected = characteristics.contains(GraphCharacteristic.UNDIRECTED);
             this.nodeList = new ArrayList<>();
-            //XXX map implementation is not required to be ordered, could use a HashMap here as well.
-            // This is purely a performance question!
-            this.edgeAttributeByPackedEdgeIndex = new TreeMap<>();
+            this.indexByNode = new HashMap<>();
+            this.edgeAttributeByPackedEdgeIndex = new HashMap<>();
         }
 
         public Graph<T> build() {
@@ -604,7 +642,12 @@ public class GraphUtils {
         }
 
         private int addNodeHonoringIndexMap(final T node) {
+            final Integer nodeIndex = indexByNode.get(node);
+            // skip adding if the node is a duplicate
+            if(nodeIndex!=null) return nodeIndex;
+
             final int nextIndex = nodeList.size();
+            indexByNode.put(node, nextIndex);
             nodeList.add(node);
             if(nodeIndexByNode!=null) {
                 nodeIndexByNode.put(node, nextIndex);
