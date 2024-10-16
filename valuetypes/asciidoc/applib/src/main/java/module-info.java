@@ -32,5 +32,4 @@ module org.apache.causeway.valuetypes.asciidoc.applib {
     requires org.apache.causeway.core.config;
     requires spring.boot.autoconfigure;
     requires java.net.http;
-    requires org.asciidoctor.asciidoctorj.api;
 }
