@@ -21,6 +21,7 @@ package org.apache.causeway.applib.mixins.system;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -34,6 +35,8 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.mixins.security.HasUsername;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.HasTarget;
+
+import org.springframework.lang.Nullable;
 
 
 /**
@@ -170,7 +173,9 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      */
     @TargetLogicalTypeName
     default String getTargetLogicalTypeName() {
-        return getTarget().getLogicalTypeName();
+        return Optional.ofNullable(getTarget())
+                .map(Bookmark::getLogicalTypeName)
+                .orElse(null);
     }
 
 
@@ -193,7 +198,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      * The {@link Bookmark} identifying the domain object that has changed.
      */
     @Target
-    Bookmark getTarget();
+    @Nullable Bookmark getTarget();
 
 
 
