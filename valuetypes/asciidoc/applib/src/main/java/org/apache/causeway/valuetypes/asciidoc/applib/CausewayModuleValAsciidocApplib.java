@@ -138,7 +138,7 @@ public class CausewayModuleValAsciidocApplib {
         }
 
         @Override
-        public void process(final Document document, final PreprocessorReader reader) {
+        public Reader process(final Document document, final PreprocessorReader reader) {
 
             var state = State.DISABLED;
 
@@ -174,7 +174,10 @@ public class CausewayModuleValAsciidocApplib {
             }
 
             reader.restoreLines(processedLines);
+
+            return reader;
         }
+
     }
 
     @org.asciidoctor.extension.Name("plantuml")

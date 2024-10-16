@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.valuetypes.asciidoc.applib.value;
 
-import java.io.Serializable;
+import lombok.EqualsAndHashCode;
+
 import java.util.Objects;
 
 import javax.inject.Named;
@@ -26,44 +27,38 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib.AdocToHtmlConverter;
 import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 /**
- * Immutable value type holding pre-rendered HTML.
+ * Immutable value type holding Json text rendered using an <a href="https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-blocks/">Asciidoc source block</a>
  *
  * @since 2.0 {@index}
  */
-@Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDoc")
+@Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDocJson")
 @org.apache.causeway.applib.annotation.Value
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
-public final class AsciiDoc extends AsciiDocAbstract {
+public final class AsciiDocJson extends AsciiDocAbstract {
 
-    public static AsciiDoc valueOf(final String adoc) {
-        return new AsciiDoc(adoc);
+    public static AsciiDocJson valueOf(final String adoc) {
+        return new AsciiDocJson(adoc);
     }
 
-    public AsciiDoc() {
+    public AsciiDocJson() {
         this(null);
     }
 
-    public AsciiDoc(final String adoc) {
-        super(adoc, null);
+    public AsciiDocJson(final String adoc) {
+        super(adoc, "json");
     }
 
-    public boolean isEqualTo(final AsciiDoc other) {
+    public boolean isEqualTo(final AsciiDocJson other) {
         return Objects.equals(this, other);
     }
 
     @Override
     public String toString() {
-        return String.format("AsciiDoc[length=%d,content=%s]",
+        return String.format("AsciiDocXml[length=%d,content=%s]",
                 adoc.length(), Markup.summarizeHtmlAsTitle(adoc));
     }
 

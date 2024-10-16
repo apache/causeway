@@ -12,7 +12,6 @@ class AsciiDoc {
   AsciiDoc()
   AsciiDoc(String adoc)
   AsciiDoc valueOf(String adoc)
-  String asHtml()
   boolean isEqualTo(AsciiDoc other)
   String toString()
 }

@@ -33,6 +33,30 @@
                 dfg="false"
                 converter-name="causeway.ext.asciidoc-string" />
     </extension>
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocXml"
+                dfg="false"
+                converter-name="causeway.ext.asciidocxml-string" />
+    </extension>
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocJson"
+                dfg="false"
+                converter-name="causeway.ext.asciidocjson-string" />
+    </extension>
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocYaml"
+                dfg="false"
+                converter-name="causeway.ext.asciidocyaml-string" />
+    </extension>
+    <extension point="org.datanucleus.java_type">
+        <java-type
+                name="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocJava"
+                dfg="false"
+                converter-name="causeway.ext.asciidocjava-string" />
+    </extension>
 
     <!--
     http://www.datanucleus.org/extensions/type_converter.html
@@ -43,6 +67,34 @@
                 member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc"
                 datastore-type="java.lang.String"
                 converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters.CausewayAsciiDocConverter"/>
+    </extension>
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="causeway.ext.asciidocxml-string"
+                member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocXml"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters.CausewayAsciiDocXmlConverter"/>
+    </extension>
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="causeway.ext.asciidocjson-string"
+                member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocJson"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters.CausewayAsciiDocJsonConverter"/>
+    </extension>
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="causeway.ext.asciidocyaml-string"
+                member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocYaml"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters.CausewayAsciiDocYamlConverter"/>
+    </extension>
+    <extension point="org.datanucleus.type_converter">
+        <type-converter
+                name="causeway.ext.asciidocjava-string"
+                member-type="org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocJava"
+                datastore-type="java.lang.String"
+                converter-class="org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters.CausewayAsciiDocJavaConverter"/>
     </extension>
 
 

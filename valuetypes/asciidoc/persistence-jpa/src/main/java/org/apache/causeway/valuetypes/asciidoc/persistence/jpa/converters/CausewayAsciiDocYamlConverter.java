@@ -16,21 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.asciidoc.applib {
-    exports org.apache.causeway.valuetypes.asciidoc.applib;
-    exports org.apache.causeway.valuetypes.asciidoc.applib.value;
-    exports org.apache.causeway.valuetypes.asciidoc.applib.jaxb;
+package org.apache.causeway.valuetypes.asciidoc.persistence.jpa.converters;
 
-    requires asciidoctorj.api;
-    requires java.inject;
-    requires java.xml.bind;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires spring.context;
-    requires spring.core;
-    requires org.apache.causeway.core.config;
-    requires spring.boot.autoconfigure;
-    requires java.net.http;
-    requires org.asciidoctor.asciidoctorj.api;
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
+
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocYaml;
+
+/**
+ * @since 2.0 {@index}
+ */
+@Converter(autoApply = true)
+public class CausewayAsciiDocYamlConverter implements AttributeConverter<AsciiDocYaml, String>{
+
+    @Override
+    public String convertToDatabaseColumn(final AsciiDocYaml memberValue) {
+        return memberValue != null
+                ? memberValue.getAdoc()
+                : null;
+    }
+
+    @Override
+    public AsciiDocYaml convertToEntityAttribute(final String datastoreValue) {
+        return datastoreValue != null
+                ? AsciiDocYaml.valueOf(datastoreValue)
+                : null;
+    }
+
 }

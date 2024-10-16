@@ -198,7 +198,7 @@ disable-reason-explanation-in- +
 prototyping-mode-enabled
 
 |  true
-| In prototyping mode, a text icon is appeneded to any property that is disabled, with its tool-tip explaining why the property is disabled. This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
+| In prototyping mode, a text icon is appended to any property that is disabled, with its tool-tip explaining why the property is disabled. This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
 
 The default is to enable (show) the text icon (if in prototyping mode).
 
@@ -529,6 +529,17 @@ This behaviour is enabled by default.
 
 
 |
+[[causeway.viewer.wicket.use-indicator-for-sortable-column]]
+causeway.viewer.wicket. +
+use-indicator-for-sortable-column
+
+| 
+| Whether to show an indicator for a sortable column (that is an up-down arrow icon).
+
+This behaviour is disabled by default.
+
+
+|
 [[causeway.viewer.wicket.welcome.text]]
 causeway.viewer.wicket.welcome. +
 text
@@ -545,7 +556,7 @@ wicket-source-plugin
 | 
 | Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
 
-This behaviour is disabled by default. Please be aware that enabloing it can substantially impact performance.
+This behaviour is disabled by default. Please be aware that enabling it can substantially impact performance.
 
 
 

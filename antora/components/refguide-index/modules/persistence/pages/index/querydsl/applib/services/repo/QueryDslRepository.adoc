@@ -34,7 +34,7 @@ class QueryDslRepository<T, Q> {
   Optional<F> findUniqueFields(Function<Q, Expression<F>> projection, Function<Q, Predicate>... predicates)     // <.>
   List<T> find(Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
   List<T> find(Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
-  List<T> findUsingDefaultOrder(Function<Q, Predicate>[] predicates)     // <.>
+  List<T> findUsingDefaultOrder(Function<Q, Predicate>... predicates)     // <.>
   List<B> findAsBean(Function<Q, Expression<?>>[] projections, Class<? extends B> bean, Function<Q, Predicate>[] predicates, Function<Q, OrderSpecifier<?>>... orderSpecifiers)     // <.>
   List<B> findAsBean(Function<Q, Predicate> predicate, Function<Q, OrderSpecifier<?>> orderSpecifier, Class<? extends B> bean, Function<Q, Expression<?>>... projections)     // <.>
   List<T> newList(T... objs)

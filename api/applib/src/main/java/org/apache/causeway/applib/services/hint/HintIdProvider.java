@@ -34,7 +34,7 @@ package org.apache.causeway.applib.services.hint;
  *
  * <p>
  *     This SPI therefore allows a view model to take advantage of the hinting
- *     mechanism of the viewer by providing a "logical" identity stored which
+ *     mechanism of the viewer by providing a "logical" identity against which
  *     hints for the view model can be stored.
  * </p>
  *

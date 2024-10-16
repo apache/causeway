@@ -3596,15 +3596,8 @@ Directory: /viewers/wicket/viewer
 ----
 |.Components
 ****
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault +
-o.a.i.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassListDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault +
-o.a.i.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault +
 o.a.i.viewer.wicket.viewer.services.BookmarkUiServiceWicket +
 o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket +
-o.a.i.viewer.wicket.viewer.services.HintStoreUsingWicketSession +
-o.a.i.viewer.wicket.viewer.services.ImageResourceCacheClassPath +
 o.a.i.viewer.wicket.viewer.webmodule.WebModuleWicket +
 o.a.i.viewer.wicket.viewer.wicketapp.CausewayWicketApplication$ServiceInjectorHolder +
 ****
@@ -3895,7 +3888,7 @@ org.asciidoctor:asciidoctorj-api:jar:${asciidoctorj.version} +
 
 .Document Index Entries
 ****
-xref:refguide:valuetypes:index/asciidoc/applib/CausewayModuleValAsciidocApplib.adoc[CausewayModuleValAsciidocApplib], xref:refguide:valuetypes:index/asciidoc/applib/jaxb/AsciiDocJaxbAdapter.adoc[AsciiDocJaxbAdapter], xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDoc.adoc[AsciiDoc]
+xref:refguide:valuetypes:index/asciidoc/applib/CausewayModuleValAsciidocApplib.adoc[CausewayModuleValAsciidocApplib], xref:refguide:valuetypes:index/asciidoc/applib/jaxb/AsciiDocJaxbAdapter.adoc[AsciiDocJaxbAdapter], xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDoc.adoc[AsciiDoc], xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDocJava.adoc[AsciiDocJava], xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDocJson.adoc[AsciiDocJson], xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDocXml.adoc[AsciiDocXml], xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDocYaml.adoc[AsciiDocYaml]
 ****
 
 |Apache Causeway Val - Asciidoctor (Builder)
@@ -3967,7 +3960,7 @@ org.datanucleus:datanucleus-core:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:valuetypes:index/asciidoc/persistence/jdo/CausewayModuleValAsciidocPersistenceJdo.adoc[CausewayModuleValAsciidocPersistenceJdo], xref:refguide:valuetypes:index/asciidoc/persistence/jdo/converters/CausewayAsciiDocConverter.adoc[CausewayAsciiDocConverter]
+xref:refguide:valuetypes:index/asciidoc/persistence/jdo/CausewayModuleValAsciidocPersistenceJdo.adoc[CausewayModuleValAsciidocPersistenceJdo], xref:refguide:valuetypes:index/asciidoc/persistence/jdo/converters/CausewayAsciiDocConverter.adoc[CausewayAsciiDocConverter], xref:refguide:valuetypes:index/asciidoc/persistence/jdo/converters/CausewayAsciiDocJsonConverter.adoc[CausewayAsciiDocJsonConverter], xref:refguide:valuetypes:index/asciidoc/persistence/jdo/converters/CausewayAsciiDocXmlConverter.adoc[CausewayAsciiDocXmlConverter]
 ****
 
 |Apache Causeway Val - Asciidoctor (persistence JPA)
@@ -3986,7 +3979,7 @@ org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed>
 
 .Document Index Entries
 ****
-xref:refguide:valuetypes:index/asciidoc/persistence/jpa/CausewayModuleValAsciidocPersistenceJpa.adoc[CausewayModuleValAsciidocPersistenceJpa], xref:refguide:valuetypes:index/asciidoc/persistence/jpa/converters/CausewayAsciiDocConverter.adoc[CausewayAsciiDocConverter]
+xref:refguide:valuetypes:index/asciidoc/persistence/jpa/CausewayModuleValAsciidocPersistenceJpa.adoc[CausewayModuleValAsciidocPersistenceJpa], xref:refguide:valuetypes:index/asciidoc/persistence/jpa/converters/CausewayAsciiDocConverter.adoc[CausewayAsciiDocConverter], xref:refguide:valuetypes:index/asciidoc/persistence/jpa/converters/CausewayAsciiDocJsonConverter.adoc[CausewayAsciiDocJsonConverter], xref:refguide:valuetypes:index/asciidoc/persistence/jpa/converters/CausewayAsciiDocXmlConverter.adoc[CausewayAsciiDocXmlConverter]
 ****
 
 |Apache Causeway Val - Asciidoctor (ui)
@@ -7036,31 +7029,7 @@ Artifact: causeway-regressiontests-base
 Type: jar
 Directory: /regressiontests/base
 ----
-|.Components
-****
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jdo.JdoTestFixtures +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.JpaTestFixtures +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
-o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
-o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
-o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
-o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
-o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-o.a.i.testdomain.wrapperfactory.CounterRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +

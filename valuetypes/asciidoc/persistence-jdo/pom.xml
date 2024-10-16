@@ -53,6 +53,10 @@
 			<groupId>org.datanucleus</groupId>
 			<artifactId>datanucleus-core</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.valuetypes</groupId>
+            <artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -16,21 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-module org.apache.causeway.valuetypes.asciidoc.applib {
-    exports org.apache.causeway.valuetypes.asciidoc.applib;
-    exports org.apache.causeway.valuetypes.asciidoc.applib.value;
-    exports org.apache.causeway.valuetypes.asciidoc.applib.jaxb;
+package org.apache.causeway.valuetypes.asciidoc.persistence.jdo.converters;
 
-    requires asciidoctorj.api;
-    requires java.inject;
-    requires java.xml.bind;
-    requires lombok;
-    requires org.apache.causeway.applib;
-    requires org.apache.causeway.commons;
-    requires spring.context;
-    requires spring.core;
-    requires org.apache.causeway.core.config;
-    requires spring.boot.autoconfigure;
-    requires java.net.http;
-    requires org.asciidoctor.asciidoctorj.api;
+import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDocYaml;
+import org.datanucleus.store.types.converters.TypeConverter;
+
+/**
+ * @since 2.0 {@index}
+ */
+public class CausewayAsciiDocYamlConverter implements TypeConverter<AsciiDocYaml, String>{
+
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toDatastoreType(final AsciiDocYaml memberValue) {
+        return memberValue != null
+                ? memberValue.getAdoc()
+                : null;
+    }
+
+    @Override
+    public AsciiDocYaml toMemberType(final String datastoreValue) {
+        return datastoreValue != null
+                ? AsciiDocYaml.valueOf(datastoreValue)
+                : null;
+    }
+
 }

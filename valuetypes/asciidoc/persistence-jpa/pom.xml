@@ -48,7 +48,11 @@
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-metamodel</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.valuetypes</groupId>
+            <artifactId>causeway-valuetypes-asciidoc-applib</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

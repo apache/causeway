@@ -19,52 +19,52 @@
 package org.apache.causeway.valuetypes.asciidoc.applib.value;
 
 import java.io.Serializable;
-import java.util.Objects;
 
-import javax.inject.Named;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.apache.causeway.applib.value.Markup;
-import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib.AdocToHtmlConverter;
-import org.apache.causeway.valuetypes.asciidoc.applib.jaxb.AsciiDocJaxbAdapter;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-/**
- * Immutable value type holding pre-rendered HTML.
- *
- * @since 2.0 {@index}
- */
-@Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".AsciiDoc")
-@org.apache.causeway.applib.annotation.Value
+
 @EqualsAndHashCode
-@XmlJavaTypeAdapter(AsciiDocJaxbAdapter.class)  // for JAXB view model support
-public final class AsciiDoc extends AsciiDocAbstract {
+public abstract class AsciiDocAbstract implements Serializable {
 
-    public static AsciiDoc valueOf(final String adoc) {
-        return new AsciiDoc(adoc);
+    private static final long serialVersionUID = 1L;
+
+    @Getter final String adoc;
+
+    @EqualsAndHashCode.Exclude
+    private final String sourceLanguage;
+
+    @EqualsAndHashCode.Exclude
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    @Accessors(fluent = true)
+    private final String html = AdocToHtmlConverter.instance().adocToHtml(
+            String.format("%s%s%s",
+                    sourceLanguage != null ? String.format("[source,%s]\n====\n", sourceLanguage) : "",
+                    adoc,
+                    sourceLanguage != null ? "====\n" : ""
+            ));
+
+    public AsciiDocAbstract(String sourceLanguage) {
+        this(null, sourceLanguage);
     }
 
-    public AsciiDoc() {
-        this(null);
+    public AsciiDocAbstract(
+            final String adoc,
+            final String sourceLanguage
+    ) {
+        this.adoc = blankIfNull(adoc);
+        this.sourceLanguage = sourceLanguage;
     }
 
-    public AsciiDoc(final String adoc) {
-        super(adoc, null);
+    public String asHtml() {
+        return html();
     }
 
-    public boolean isEqualTo(final AsciiDoc other) {
-        return Objects.equals(this, other);
+    private static String blankIfNull(String str) {
+        return str != null ? str : "";
     }
-
-    @Override
-    public String toString() {
-        return String.format("AsciiDoc[length=%d,content=%s]",
-                adoc.length(), Markup.summarizeHtmlAsTitle(adoc));
-    }
-
 }
