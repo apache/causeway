@@ -38,8 +38,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.services.hint.HintStore;
+
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -111,6 +117,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 /**
@@ -118,12 +125,22 @@ import lombok.val;
  *
  * @since 2.0 {@index}
  */
-@Service
-@Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
+@Log4j2
 public class WrapperFactoryDefault
 implements WrapperFactory, HasMetaModelContext {
+
+    @Configuration
+    public static class AutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(WrapperFactory.class)
+        @Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
+        @Order(PriorityPrecedence.MIDPOINT)
+        @Qualifier("Default")
+        public WrapperFactoryDefault hintStoreUsingWicketSession() {
+            return new WrapperFactoryDefault();
+        }
+    }
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleCoreRuntimeServices.NAMESPACE + ".WrapperFactoryDefault";
 

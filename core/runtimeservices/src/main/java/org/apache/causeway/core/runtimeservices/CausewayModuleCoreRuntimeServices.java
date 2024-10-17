@@ -122,6 +122,9 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
 
+        // Autoconfigurations
+        WrapperFactoryDefault.AutoConfiguration.class,
+
         // @Controller
         RoutingServiceDefault.class,
 
