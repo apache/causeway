@@ -36,6 +36,11 @@ import lombok.RequiredArgsConstructor;
  * Default implementation of {@link RoutingService}, which will route any <code>void</code>action or action
  * returning <code>null</code> to the home page (as per {@link HomePageResolverService}.
  *
+ * <p>
+ *     There can be multiple implementations of {@link RoutingService}; they are
+ *     {@link RoutingService#canRoute(Object) checked} in order of {@link Priority priority}.
+ * </p>
+ *
  * @since 2.0 {@index}
  *
  * @see HomePageResolverService
