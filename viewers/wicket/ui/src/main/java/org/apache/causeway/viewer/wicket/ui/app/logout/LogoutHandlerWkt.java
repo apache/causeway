@@ -28,7 +28,6 @@ import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class LogoutHandlerWkt implements LogoutHandler {
             return; // logout is only permissive if within the context of a Wicket request-cycle
         }
 
-        val currentWktSession = AuthenticatedWebSession.get();
+        var currentWktSession = AuthenticatedWebSession.get();
         if(currentWktSession==null) {
             return;
         }

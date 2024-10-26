@@ -41,8 +41,6 @@ import org.apache.causeway.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.val;
-
 public class BreadcrumbPanel
 extends PanelAbstract<Void, IModel<Void>> {
 
@@ -125,7 +123,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                         final String oidStr = breadcrumbChoice.getInput();
                         final UiObjectWkt selectedModel = breadcrumbModel.lookup(oidStr);
                         if(selectedModel == null) {
-                            val configuration = getMetaModelContext().getConfiguration();
+                            var configuration = getMetaModelContext().getConfiguration();
 
                             getMetaModelContext().getMessageBroker()
                             .ifPresent(messageBroker->{

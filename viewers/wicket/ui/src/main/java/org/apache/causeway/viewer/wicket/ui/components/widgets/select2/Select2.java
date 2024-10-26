@@ -41,7 +41,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChange
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
@@ -60,7 +59,7 @@ implements
             final ScalarModel scalarModel,
             final ChoiceProviderAbstract choiceProvider,
             final ScalarModelChangeDispatcher select2ChangeDispatcher) {
-        val select2 = new Select2(scalarModel.isSingular()
+        var select2 = new Select2(scalarModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
                                 ScalarModelWithSingleChoice.chain(scalarModel),
@@ -159,7 +158,7 @@ implements
 
     public IModel<String> obtainOutputFormatModel() {
         return LambdaModel.<String>of(()->{
-            val memento = memento();
+            var memento = memento();
             return memento!=null
                     ? memento.getTitle()
                     : null;

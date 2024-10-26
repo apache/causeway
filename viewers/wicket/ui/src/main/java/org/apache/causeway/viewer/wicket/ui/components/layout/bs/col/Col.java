@@ -52,8 +52,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 public class Col
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
@@ -124,7 +122,7 @@ implements HasDynamicallyVisibleContent {
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDataList = bsCol.getActions();
 
-        val visibleActions = _NullSafe.stream(actionLayoutDataList)
+        var visibleActions = _NullSafe.stream(actionLayoutDataList)
         .filter(actionLayoutData -> actionLayoutData.getMetadataError() == null)
         .filter(_NullSafe::isPresent)
         .map(actionLayoutData ->
@@ -232,11 +230,11 @@ implements HasDynamicallyVisibleContent {
         }
 
         final UiObjectWkt entityModel = getModel();
-        val ownerSpec = entityModel.getManagedObject().getSpecification();
+        var ownerSpec = entityModel.getManagedObject().getSpecification();
 
         // collection layout data by collection id (the collection's member-id)
         // preserving order, as order matters
-        val collectionLayoutById = new LinkedHashMap<String, CollectionLayoutData>();
+        var collectionLayoutById = new LinkedHashMap<String, CollectionLayoutData>();
         _NullSafe.stream(bsCol.getCollections())
             .filter(colLayoutData->colLayoutData.getMetadataError() == null)
             .filter(colLayoutData->!ownerSpec.getCollection(colLayoutData.getId()).isEmpty())
@@ -248,7 +246,7 @@ implements HasDynamicallyVisibleContent {
 
             collectionLayoutById.forEach((id, layout)->{
 
-                val helperModel = Model.of(new CollectionOwnerAndLayout(entityModel, layout));
+                var helperModel = Model.of(new CollectionOwnerAndLayout(entityModel, layout));
 
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(

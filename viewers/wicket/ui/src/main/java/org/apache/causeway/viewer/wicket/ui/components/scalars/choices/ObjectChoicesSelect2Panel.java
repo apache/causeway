@@ -43,8 +43,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
@@ -70,7 +68,7 @@ implements ChoiceTitleHandler {
     @Override
     protected Component createComponentForOutput(final String id) {
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
         final String name = scalarModel.getFriendlyName();
 
         this.entityLinkOutputFormat = (EntityLinkSimplePanel) getComponentFactoryRegistry()
@@ -146,22 +144,22 @@ implements ChoiceTitleHandler {
     private void syncWithInput() {
         if(isCompactFormat) return;
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         lookupScalarValueContainer()
         .ifPresent(container->{
-            val componentFactory = getComponentFactoryRegistry()
+            var componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
-            val iconAndTitle = componentFactory
+            var iconAndTitle = componentFactory
                     .createComponent(UiComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
             container.addOrReplace(iconAndTitle);
 
-            val isInlinePrompt = scalarModel.isInlinePrompt();
+            var isInlinePrompt = scalarModel.isInlinePrompt();
             if(isInlinePrompt) {
                 iconAndTitle.setVisible(false);
             }
 
-            val adapter = scalarModel.getObject();
+            var adapter = scalarModel.getObject();
             if(adapter != null
                     || isInlinePrompt) {
                 WktComponents.permanentlyHide(container, ID_ENTITY_TITLE_IF_NULL);
@@ -223,7 +221,7 @@ implements ChoiceTitleHandler {
     // -- GET INPUT AS TITLE
 
     String getTitleForFormComponentInput() {
-        val pendingElseCurrentAdapter = scalarModel().getObject();
+        var pendingElseCurrentAdapter = scalarModel().getObject();
         return pendingElseCurrentAdapter != null
                 ? pendingElseCurrentAdapter.getTitle()
                 : "(no object)";
@@ -242,13 +240,13 @@ implements ChoiceTitleHandler {
     */
     void convertInput() {
 
-        val scalarModel = scalarModel();
-        val pendingValue = scalarModel.proposedValue().getValue();
+        var scalarModel = scalarModel();
+        var pendingValue = scalarModel.proposedValue().getValue();
 
         if(isEditable()) {
 
             // flush changes to pending model
-            val adapter = select2.getConvertedInputValue();
+            var adapter = select2.getConvertedInputValue();
             pendingValue.setValue(adapter);
         }
 

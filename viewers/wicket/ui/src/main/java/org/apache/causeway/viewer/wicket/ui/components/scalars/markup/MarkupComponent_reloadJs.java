@@ -27,8 +27,6 @@ import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandle
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import lombok.val;
-
 /**
  * Helper for MarkupComponents to reload a specified java-script reference, when rendering.
  * @implNote used by AsciiDoc and Markdown extensions
@@ -36,9 +34,9 @@ import lombok.val;
 public class MarkupComponent_reloadJs {
 
     public static CharSequence decorate(final CharSequence htmlContent, final Iterable<JavaScriptResourceReference> jsRefs) {
-        val targetId = UUID.randomUUID().toString();
+        var targetId = UUID.randomUUID().toString();
 
-        val sb = new StringBuilder()
+        var sb = new StringBuilder()
         .append("<div id=\"").append(targetId).append("\">\n")
         .append(htmlContent)
         .append("\n</div>\n");

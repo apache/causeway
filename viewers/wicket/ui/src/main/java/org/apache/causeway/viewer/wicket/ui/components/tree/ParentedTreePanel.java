@@ -25,8 +25,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 
-import lombok.val;
-
 /**
  * Immutable tree, hooks into the ScalarPanelTextField without actually using its text field.
  */
@@ -59,9 +57,9 @@ extends ScalarPanelAbstract2 {
     // -- HELPER
 
     private MarkupContainer createTreeComponent(final String id) {
-        val container = getScalarFrameContainer();
-        val scalarModel = scalarModel();
-        val tree = CausewayToWicketTreeAdapter.adapt(id, scalarModel);
+        var container = getScalarFrameContainer();
+        var scalarModel = scalarModel();
+        var tree = CausewayToWicketTreeAdapter.adapt(id, scalarModel);
         container.add(tree);
         // adds the tree-theme behavior to the tree's parent
         container.add(getTreeThemeProvider().treeThemeFor(scalarModel));

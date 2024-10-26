@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Provides a list of links for selecting other views that support
@@ -133,8 +132,8 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
         final Label viewButtonIcon = Wkt.labelAdd(views, ID_VIEW_BUTTON_ICON, "");
 
         Wkt.listViewAdd(container, ID_VIEW_ITEM, sorted(componentFactories), item->{
-            val menuable = item.getModelObject();
-            val menuableKind = menuable.menuableKind();
+            var menuable = item.getModelObject();
+            var menuableKind = menuable.menuableKind();
 
             Wkt.cssAppend(item, menuableKind.getCssClassForLiElement());
 
@@ -157,7 +156,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
                 return;
             }
 
-            val linkEntry = (LinkEntry) menuable;
+            var linkEntry = (LinkEntry) menuable;
             final ComponentFactoryKey componentFactory = linkEntry.getComponentFactoryKey();
 
             // add direct download link instead of a panel
@@ -175,7 +174,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
             }
 
             // on click: make the clicked item the new selected item
-            val link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
+            var link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
                 final CollectionPresentationSelectorPanel linksSelectorPanel = CollectionPresentationSelectorPanel.this;
                 linksSelectorPanel.setViewHintAndBroadcast(componentFactory.id(), target);
 
@@ -195,9 +194,9 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
             // add title and icon to the link
             addLinkWithIconAndTitle(item, link);
-            val checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
+            var checkmarkForSelectedPresentation = Wkt.labelAdd(link, ID_VIEW_ITEM_CHECKMARK, "");
 
-            val isSelectedPresentation = linkEntry.isSelectedIn(this);
+            var isSelectedPresentation = linkEntry.isSelectedIn(this);
             checkmarkForSelectedPresentation.setVisible(isSelectedPresentation);
             if (isSelectedPresentation) {
                 linkEntry.markAsSelected(viewButtonIcon, link);
@@ -215,9 +214,9 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
      * @see CollectionContentsAsFactory#orderOfAppearanceInUiDropdown()
      */
     private List<Menuable> sorted(final Can<ComponentFactoryKey> componentFactories) {
-        val presentations = sorted(componentFactories, _Util.filterTablePresentations());
-        val exports = sorted(componentFactories, _Util.filterTableExports());
-        val sortedWithSeparators = new ArrayList<Menuable>(
+        var presentations = sorted(componentFactories, _Util.filterTablePresentations());
+        var exports = sorted(componentFactories, _Util.filterTableExports());
+        var sortedWithSeparators = new ArrayList<Menuable>(
                 presentations.size() + exports.size() + 2); // heap optimization, not strictly required
 
         boolean needsSpacer = false;

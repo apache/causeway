@@ -26,7 +26,6 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -38,11 +37,11 @@ final class _RedirectHandler {
             final @NonNull WebAppContextPath webAppContextPath) {
 
         if(value instanceof java.net.URL) {
-            val url = (java.net.URL) value;
+            var url = (java.net.URL) value;
             return new RedirectRequestHandlerWithOpenUrlStrategy(url.toString());
         }
         if(value instanceof LocalResourcePath) {
-            val localResourcePath = (LocalResourcePath) value;
+            var localResourcePath = (LocalResourcePath) value;
             return new RedirectRequestHandlerWithOpenUrlStrategy(
                     localResourcePath.getEffectivePath(webAppContextPath::prependContextPath),
                     localResourcePath.getOpenUrlStrategy());

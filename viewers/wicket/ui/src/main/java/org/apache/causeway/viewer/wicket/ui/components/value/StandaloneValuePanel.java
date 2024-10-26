@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstra
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * Panel for rendering any value types that do not have their own custom
  * {@link ScalarPanelAbstract panel} to render them.
@@ -63,7 +61,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     // -- HELPER
 
     private boolean isProbablySimpleInlineHtml(final ObjectSpecification valueSpec) {
-        val cls = valueSpec.getCorrespondingClass();
+        var cls = valueSpec.getCorrespondingClass();
 
         return PredefinedSerializables.isPredefinedSerializable(cls)
                 || UUID.class.equals(cls)

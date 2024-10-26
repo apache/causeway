@@ -42,8 +42,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap.FormGro
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 /**
  * Panel for rendering scalars representing dates, along with a date picker.
  */
@@ -65,14 +63,14 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     @Override
     protected final TextField<T> createTextField(final String id) {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         this.temporalDecomposition = TemporalDecompositionModel.create(type,
                 scalarModel,
                 offsetCharacteristic(),
                 (ConverterBasedOnValueSemantics<T>)converterElseFail());
 
-        val textField = new TextFieldWithDateTimePicker<T>(
+        var textField = new TextFieldWithDateTimePicker<T>(
                         id, scalarModel.unwrapped(type), type, scalarModel.isRequired(),
                         temporalDecomposition,
                         temporalDecomposition.getEditingPattern());

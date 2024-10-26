@@ -37,8 +37,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 public class StandaloneCollectionPanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider, CollectionPresentationSelectorProvider {
@@ -63,8 +61,8 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
         addOrReplace(outerDiv);
 
-        val table = collectionModel.getDataTableModel();
-        val featureId = collectionModel.getIdentifier();
+        var table = collectionModel.getDataTableModel();
+        var featureId = collectionModel.getIdentifier();
 
         Wkt.labelAdd(outerDiv, StandaloneCollectionPanel.ID_ACTION_NAME,
                 table.getTitle().getValue());
@@ -128,7 +126,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
     private Optional<TableDecorator> tableDecorator() {
         //noinspection OptionalAssignedToNull
         if(tableDecorator==null) {  // this is NOT a bug; we are caching an Optional
-            val collectionModel = getModel();
+            var collectionModel = getModel();
             this.tableDecorator = collectionModel.getTableDecoratorIfAny();
         }
         return tableDecorator;

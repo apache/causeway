@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
-import org.apache.causeway.viewer.commons.model.decorators.MenuActionDecorator.MenuActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.mixin.HasUiComponent;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 
@@ -92,17 +91,6 @@ implements
 
     public boolean isEnabled() {
         return actionModel.getUsabilityConsent().isAllowed();
-    }
-
-    public MenuActionDecorationModel getMenuActionDecorationModel() {
-        return MenuActionDecorationModel
-                .builder(getManagedAction())
-                .featureIdentifier(getFeatureIdentifier())
-                .describedAs(getDescription())
-                .disabling(getDisableUiModel())
-                .additionalCssClass(getAdditionalCssClass())
-                .fontAwesomeLayers(lookupFontAwesomeLayers(true))
-                .build();
     }
     
     // -- UTILITY

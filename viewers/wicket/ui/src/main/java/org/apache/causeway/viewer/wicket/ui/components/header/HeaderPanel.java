@@ -38,8 +38,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 /**
  * A panel for the default page header
  */
@@ -68,7 +66,7 @@ extends PanelAbstract<String, Model<String>> {
     protected void onInitialize() {
         super.onInitialize();
 
-        val headerUiModel = super.getHeaderModel();
+        var headerUiModel = super.getHeaderModel();
 
         addApplicationName(headerUiModel.getBranding());
         addUserName(headerUiModel.getUserProfile());
@@ -84,8 +82,8 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     protected void addApplicationName(final BrandingUiModel branding) {
-        val homePage = getApplication().getHomePage();
-        val applicationNameLink = new BookmarkablePageLink<Void>("applicationName", homePage);
+        var homePage = getApplication().getHomePage();
+        var applicationNameLink = new BookmarkablePageLink<Void>("applicationName", homePage);
         applicationNameLink.add(
                 new BrandName("brandText", branding),
                 new BrandLogo("brandLogo", branding));
@@ -124,8 +122,8 @@ extends PanelAbstract<String, Model<String>> {
             final MenuUiModel menuUiModel) {
 
         final MarkupContainer container = this;
-        val menuModel = new ServiceActionsModel(menuUiModel);
-        val menuBarComponent = getComponentFactoryRegistry()
+        var menuModel = new ServiceActionsModel(menuUiModel);
+        var menuBarComponent = getComponentFactoryRegistry()
                 .createComponent(id, UiComponentType.SERVICE_ACTIONS, menuModel);
         Wkt.cssAppend(menuBarComponent, menuUiModel.getCssClass());
         container.add(menuBarComponent);

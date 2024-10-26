@@ -28,7 +28,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Functions;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -47,7 +46,7 @@ public class SuccessFeedbackCookieManager {
      * messages.
      */
     public static void storeSuccessFeedback(final @Nullable String successFeedback) {
-        val cookieUtils = new CookieUtils();
+        var cookieUtils = new CookieUtils();
         if (_Strings.isNotEmpty(successFeedback)) {
             cookieUtils.save(FEEDBACK_COOKIE_NAME, _Strings.base64UrlEncode(successFeedback));
         } else {
@@ -63,7 +62,7 @@ public class SuccessFeedbackCookieManager {
      * messages.
      */
     public static void drainSuccessFeedback(final @NonNull Consumer<String> onSuccessFeedback) {
-        val cookieUtils = new CookieUtils();
+        var cookieUtils = new CookieUtils();
         final String successFeedback = cookieUtils.load(FEEDBACK_COOKIE_NAME);
         if (_Strings.isNotEmpty(successFeedback)) {
             onSuccessFeedback.accept(_Strings.base64UrlDecode(successFeedback));

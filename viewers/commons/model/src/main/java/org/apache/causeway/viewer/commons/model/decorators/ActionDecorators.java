@@ -22,31 +22,27 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.val;
 import lombok.experimental.Accessors;
+import lombok.experimental.UtilityClass;
 
 /**
- * Decorates Actions that appear in drop-down menus.
- * 
- * @param <T> primary UI component type to decorate
- * @param <U> secondary UI component type to decorate
- * @param <V> tertiary UI component type to decorate
+ * Decorators for actions that appear in drop-down menus and as buttons.
  */
-@FunctionalInterface
-public interface MenuActionDecorator<T, U, V> {
-
-    void decorate(T uiComponent1, U uiComponent2, V uiComponent3, MenuActionDecorationModel decorationModel);
+@UtilityClass
+public class ActionDecorators {
 
     // -- DECORATION MODEL
 
-    @Builder(builderMethodName = "builderInternal")
+    @Builder(builderMethodName = "builderInternal", access = AccessLevel.PRIVATE)
     @Getter @Accessors(fluent=true) //RECORD (java 16)
     @AllArgsConstructor
     public static class MenuActionDecorationModel {
@@ -58,13 +54,20 @@ public interface MenuActionDecorator<T, U, V> {
         private final Optional<String> describedAs;
         private final Optional<String> additionalCssClass;
         
-        public static MenuActionDecorationModelBuilder builder(final ManagedAction managedAction) {
+        public static MenuActionDecorationModel of(HasManagedAction managedActionHolder) {
+            var managedAction = managedActionHolder.getManagedAction();
             val action = managedAction.getAction();
             return builderInternal()
-                    .prototyping(managedAction.getAction().isPrototype() 
-                            ? Optional.of(PrototypingDecorationModel.of(managedAction))
-                            : Optional.empty())
-                    .isImmediateConfirmationRequired(action.isImmediateConfirmationRequired());
+                .featureIdentifier(action.getFeatureIdentifier())
+                .prototyping(action.isPrototype() 
+                        ? Optional.of(PrototypingDecorationModel.of(managedAction))
+                        : Optional.empty())
+                .isImmediateConfirmationRequired(action.isImmediateConfirmationRequired())
+                .describedAs(managedAction.getDescription())
+                .disabling(DisablingDecorationModel.of(managedAction.checkUsability()))
+                .additionalCssClass(managedActionHolder.getAdditionalCssClass())
+                .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(true))
+                .build();
         }
         
     }

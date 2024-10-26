@@ -22,8 +22,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.val;
-
 public class StandaloneMarkupPanel
 extends PanelAbstract<ManagedObject, ValueModel> {
 
@@ -36,7 +34,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
             final MarkupComponentFactory<ValueModel> markupComponentFactory) {
 
         super(id, valueModel);
-        val markupComponent = markupComponentFactory
+        var markupComponent = markupComponentFactory
                 .newMarkupComponent(ID_STANDALONE_VALUE, valueModel);
         add(markupComponent);
     }

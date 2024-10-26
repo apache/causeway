@@ -26,8 +26,6 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStand
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for {@link StandaloneCollectionPanel}.
  */
@@ -44,7 +42,7 @@ public class StandaloneCollectionPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        val collectionModel = (EntityCollectionModelStandalone) model;
+        var collectionModel = (EntityCollectionModelStandalone) model;
         return new StandaloneCollectionPanel(id, collectionModel);
     }
 

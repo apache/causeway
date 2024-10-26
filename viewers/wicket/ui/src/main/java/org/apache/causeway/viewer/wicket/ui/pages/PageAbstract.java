@@ -81,7 +81,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicke
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
@@ -167,12 +166,12 @@ implements ActionPromptProvider {
 
             log.error("Failed to construct page, going back to sign in page", ex);
 
-            val exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
+            var exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
                     .lookupServiceElseFail(ExceptionRecognizerService.class);
 
-            val recognition = exceptionRecognizerService.recognize(ex);
+            var recognition = exceptionRecognizerService.recognize(ex);
 
-            val exceptionModel = ExceptionModel.create(getMetaModelContext(), recognition, ex);
+            var exceptionModel = ExceptionModel.create(getMetaModelContext(), recognition, ex);
 
             getSession().invalidate();
             getSession().clear();
@@ -424,7 +423,7 @@ implements ActionPromptProvider {
             // fall through
         }
 
-        val dialogMode =
+        var dialogMode =
                 sort.isManagedBeanAny()
                         ? getWicketViewerSettings().getDialogModeForMenu()
                         : getWicketViewerSettings().getDialogMode();
@@ -480,11 +479,11 @@ implements ActionPromptProvider {
     @Override
     public void renderPage() {
 
-        val pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
+        var pageType = Optional.ofNullable(getPageClassRegistry().getPageType(this))
                 .map(PageType::asApplibPageType)
                 .orElse(PageRenderSubscriber.PageType.OTHER);
 
-        val enabledPageRenderSubscribers = enabledPageRenderSubscriber();
+        var enabledPageRenderSubscribers = enabledPageRenderSubscriber();
 
         enabledPageRenderSubscribers
                 .forEach(subscriber -> subscriber.onRendering(pageType));
@@ -492,7 +491,7 @@ implements ActionPromptProvider {
 
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());
-            val stopWatch = _Timing.now();
+            var stopWatch = _Timing.now();
             onRendering(enabledPageRenderSubscribers);
             onNewRequestCycle();
             super.renderPage();

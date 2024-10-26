@@ -30,8 +30,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
-import lombok.val;
-
 public final class TitleColumn
 extends GenericColumnAbstract {
 
@@ -55,21 +53,21 @@ extends GenericColumnAbstract {
     @Override
     protected Component createCellComponent(
             final String componentId, final DataRowWkt dataRowWkt) {
-        val dataRow = dataRowWkt.getObject();
-        val rowElement = dataRow.getRowElement();
+        var dataRow = dataRowWkt.getObject();
+        var rowElement = dataRow.getRowElement();
 
         if(ManagedObjects.isValue(rowElement)) {
-            val objectMember = dataRow.getParentTable().getMetaModel();
-            val valueModel = ValueModel.of(objectMember, rowElement);
-            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
+            var objectMember = dataRow.getParentTable().getMetaModel();
+            var valueModel = ValueModel.of(objectMember, rowElement);
+            var componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }
 
-        val uiObject = UiObjectWkt.ofAdapterForCollection(rowElement, variant);
+        var uiObject = UiObjectWkt.ofAdapterForCollection(rowElement, variant);
         uiObject.setContextBookmarkIfAny(contextBookmark);
 
         // will use EntityLinkSimplePanelFactory as model is an EntityModel
-        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
+        var componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
         final Component entityLink = opts.applyTo(
                 componentFactory.createComponent(componentId, uiObject));
         return entityLink;

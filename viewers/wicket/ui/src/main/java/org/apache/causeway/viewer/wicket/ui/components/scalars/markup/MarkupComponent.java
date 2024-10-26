@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 
 import lombok.Builder;
 import lombok.Value;
-import lombok.val;
 
 public class MarkupComponent extends WebComponent {
 
@@ -84,7 +83,7 @@ public class MarkupComponent extends WebComponent {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(markupStream, openTag,
                 options.highlightBehavior().htmlContentPostProcess(htmlContent));
     }
@@ -104,9 +103,9 @@ public class MarkupComponent extends WebComponent {
         }
 
         if(modelObject instanceof ManagedObject) {
-            val adapter = (ManagedObject) modelObject;
-            val feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
-            val asHtml = MmValueUtils.htmlStringForValueType(feature, adapter);
+            var adapter = (ManagedObject) modelObject;
+            var feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
+            var asHtml = MmValueUtils.htmlStringForValueType(feature, adapter);
             return asHtml != null
                 ? asHtml
                 : fallback;

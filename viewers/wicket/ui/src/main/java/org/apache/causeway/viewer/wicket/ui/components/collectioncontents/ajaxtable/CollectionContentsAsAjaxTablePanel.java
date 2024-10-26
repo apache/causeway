@@ -51,8 +51,6 @@ import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterToolba
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
@@ -108,7 +106,7 @@ implements CollectionCountProvider {
 
         final List<GenericColumn> columns = _Lists.newArrayList();
 
-        val collectionModel = entityCollectionModel();
+        var collectionModel = entityCollectionModel();
 
         // first create property columns, so we know how many columns there are
         addPropertyColumnsIfRequired(columns);
@@ -123,8 +121,8 @@ implements CollectionCountProvider {
         getToggleboxColumn()
             .ifPresent(toggleboxColumn->columns.add(0, toggleboxColumn));
 
-        val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
-        val dataTable = new CausewayAjaxDataTable(
+        var dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
+        var dataTable = new CausewayAjaxDataTable(
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize());
         addOrReplace(dataTable);
 
@@ -163,14 +161,14 @@ implements CollectionCountProvider {
             final Variant variant,
             final Wicket wktConfig) {
 
-        val contextBookmark = entityCollectionModel().getParentObject().getBookmark()
+        var contextBookmark = entityCollectionModel().getParentObject().getBookmark()
                 .orElse(null);
 
         final int maxColumnTitleLength = getModel().getVariant().isParented()
                     ? wktConfig.getMaxTitleLengthInParentedTables()
                     : wktConfig.getMaxTitleLengthInStandaloneTables();
 
-        val opts = ColumnAbbreviationOptions.builder()
+        var opts = ColumnAbbreviationOptions.builder()
             .maxElementTitleLength(columns.size()==0
                             ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
                             : -1 /* don't override */)
@@ -181,14 +179,14 @@ implements CollectionCountProvider {
 
     private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
 
-        val collectionModel = getModel();
-        val elementTypeSpec = collectionModel.getElementType();
+        var collectionModel = getModel();
+        var elementTypeSpec = collectionModel.getElementType();
         if(elementTypeSpec == null) {
             return;
         }
 
         final ManagedObject parentObject = collectionModel.getParentObject();
-        val memberIdentifier = collectionModel.getIdentifier();
+        var memberIdentifier = collectionModel.getIdentifier();
 
         // add all ordered columns to the table
         elementTypeSpec.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
@@ -200,7 +198,7 @@ implements CollectionCountProvider {
     }
 
     private SingularColumn createSingularColumn(final OneToOneAssociation property) {
-        val collectionModel = getModel();
+        var collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
         final Optional<String> sortability = property.getElementType().isComparableOrOrdered()
                 ? Optional.of(property.getId())
@@ -216,7 +214,7 @@ implements CollectionCountProvider {
     }
 
     private PluralColumn createPluralColumn(final OneToManyAssociation collection) {
-        val collectionModel = getModel();
+        var collectionModel = getModel();
         final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
 
         return new PluralColumn(

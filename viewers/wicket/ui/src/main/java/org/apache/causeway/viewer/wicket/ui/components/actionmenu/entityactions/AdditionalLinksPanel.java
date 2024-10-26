@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.val;
-
 public class AdditionalLinksPanel
 extends MenuablePanelAbstract {
 
@@ -78,11 +76,11 @@ extends MenuablePanelAbstract {
         super(id, menuables);
         setOutputMarkupId(true);
 
-        val container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
+        var container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
                     this::hasAnyVisibleLink));
 
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
-            val linkAndLabel = item.getModelObject();
+            var linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks.asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style==Style.DROPDOWN));
             if (!linkAndLabel.isVisible()) {
                 Wkt.cssAppend(item, "hidden");

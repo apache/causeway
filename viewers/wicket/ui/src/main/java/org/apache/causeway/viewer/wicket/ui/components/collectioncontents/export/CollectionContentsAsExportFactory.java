@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.download.FileDownloadLink;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link DownloadLink}.
@@ -111,7 +110,7 @@ implements CollectionContentsAsFactory {
 
         @Override @SneakyThrows
         public File getObject() {
-            val tempFile = File.createTempFile(CollectionContentsAsExportFactory.class.getCanonicalName(), fileName);
+            var tempFile = File.createTempFile(CollectionContentsAsExportFactory.class.getCanonicalName(), fileName);
             Try.run(()->
                 exporter().createExport(model.getDataTableModel().export(), tempFile))
             .ifFailure(__->{

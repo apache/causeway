@@ -35,13 +35,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
-import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
-import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -64,52 +58,12 @@ public final class WktLinks {
             final boolean isForceAlignmentWithBlankIcon) {
 
         var link = linkAndLabel.getUiComponent();
-        var action = linkAndLabel.getManagedAction().getAction();
-
-        var hasDisabledReason = link instanceof ActionLink 
-                && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny());
-
-        WktTooltips.addTooltip(tooltipReceiver, hasDisabledReason
-                ? ((ActionLink) link).getReasonDisabledIfAny()
-                : linkAndLabel.getDescription().orElse(null));
-
-        if(ObjectAction.Util.returnsBlobOrClob(action)) {
-            Wkt.cssAppend(link, "noVeil");
-        }
-        if(action.isPrototype()) {
-            Wkt.cssAppend(link, "prototype");
-        }
-        Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
-
-        if (action.getSemantics().isAreYouSure()) {
-            if(action.getParameterCount()==0) {
-                if (!hasDisabledReason) {
-                    var confirmUiModel = ConfirmDecorationModel
-                            .areYouSure(UiPlacementDirection.BOTTOM);
-                    WktDecorators.getConfirm().decorate(link, confirmUiModel);
-                }
-            }
-            // ensure links receive the danger style
-            // don't care if expressed twice
-            WktDecorators.getDanger().decorate(link);
-        } else {
-            Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
-                    || action.isPrototype()
-                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
-                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
-        }
-
-        linkAndLabel
-        .getAdditionalCssClass()
-        .ifPresent(cssClass->Wkt.cssAppend(link, cssClass));
-
         var viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
+        
+        WktDecorators
+            .decorateAdditionalLink(linkAndLabel, tooltipReceiver, viewTitleLabel, isForceAlignmentWithBlankIcon);
 
-        var faLayers = linkAndLabel.lookupFontAwesomeLayers(isForceAlignmentWithBlankIcon);
-
-        WktDecorators.getIcon().decorate(viewTitleLabel, faLayers);
-        WktDecorators.getMissingIcon().decorate(viewTitleLabel, faLayers);
         return link;
     }
 

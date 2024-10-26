@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -162,7 +161,7 @@ class _Util {
             if(scalarModel.isSingular()) {
                 // seeing this code-path with FileUpload being wrapped in an ArrayList of size 1
                 // as a more general rule of thumb, use the first element in the ArrayList if present
-                val unpackedValue = ((Collection<?>)valueObject).stream()
+                var unpackedValue = ((Collection<?>)valueObject).stream()
                         .limit(1)
                         .map(v->scalarModel.getObjectManager()
                                 .adapt(valueObject))
@@ -170,7 +169,7 @@ class _Util {
                 return unpackedValue;
             }
 
-            val unpackedValues = ((Collection<?>)valueObject).stream()
+            var unpackedValues = ((Collection<?>)valueObject).stream()
             .map(v->scalarModel
                     .getObjectManager().demementify((ObjectMemento)v))
             .collect(Can.toCan());
@@ -191,7 +190,7 @@ class _Util {
     }
 
     private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final ScalarModel scalarModel) {
-        val spec = scalarModel.getElementType();
+        var spec = scalarModel.getElementType();
         if(!spec.isValue()) {
             return Optional.empty();
         }

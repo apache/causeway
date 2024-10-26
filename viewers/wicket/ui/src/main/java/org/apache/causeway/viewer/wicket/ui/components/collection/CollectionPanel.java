@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -61,9 +59,9 @@ implements
             final EntityCollectionModelParented collectionModel) {
         super(id, collectionModel);
 
-        val collMetaModel = getModel().getMetaModel();
+        var collMetaModel = getModel().getMetaModel();
 
-        val associatedActions = collMetaModel.streamAssociatedActions()
+        var associatedActions = collMetaModel.streamAssociatedActions()
         .map(LinkAndLabelFactory.forCollection(collectionModel))
         .collect(Can.toCan());
 
@@ -77,7 +75,7 @@ implements
     }
 
     private void buildGui() {
-        val collectionContents = getComponentFactoryRegistry()
+        var collectionContents = getComponentFactoryRegistry()
                 .addOrReplaceComponent(this, UiComponentType.COLLECTION_CONTENTS, getModel());
 
         addOrReplace(new NotificationPanel(ID_FEEDBACK, collectionContents,
@@ -93,8 +91,8 @@ implements
     @Override
     public ToggleboxColumn getToggleboxColumn() {
         if(toggleboxColumn == null) {
-            val collModel = getModel();
-            val collMetaModel = collModel.getMetaModel();
+            var collModel = getModel();
+            var collMetaModel = collModel.getMetaModel();
             toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
                     ? Optional.of(new ToggleboxColumn(collModel.delegate()))
                     : Optional.empty();

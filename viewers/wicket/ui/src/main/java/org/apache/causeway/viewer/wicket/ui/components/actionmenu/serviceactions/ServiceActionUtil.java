@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -52,8 +51,8 @@ class ServiceActionUtil {
         var menuItemActionLink = linkAndLabel.getUiComponent();
         var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
-        WktDecorators.getActionLink()
-            .decorate(listItem, menuItemActionLink, menuItemLabel, linkAndLabel.getMenuActionDecorationModel());
+        WktDecorators
+            .decorateMenuAction(listItem, menuItemActionLink, menuItemLabel, linkAndLabel.getMenuActionDecorationModel());
 
         var leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
@@ -101,15 +100,15 @@ class ServiceActionUtil {
 
         @Override
         public void addSectionSpacer() {
-            val menuSection = CssMenuItem.newSpacer();
+            var menuSection = CssMenuItem.newSpacer();
             currentTopLevelMenu.addSubMenuItem(menuSection);
         }
 
         @Override
         public void addSubMenu(final MenuItemDto menuDto) {
-            val managedAction = menuDto.getManagedAction();
+            var managedAction = menuDto.getManagedAction();
 
-            val menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
+            var menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
             currentTopLevelMenu.addSubMenuItem(menuItem);
 
             menuItem.setLinkAndLabel(newActionLink(managedAction));
@@ -117,12 +116,12 @@ class ServiceActionUtil {
 
         @Override
         public void addSectionLabel(final String named) {
-            val menuSectionLabel = CssMenuItem.newSectionLabel(named);
+            var menuSectionLabel = CssMenuItem.newSectionLabel(named);
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
 
         private LinkAndLabel newActionLink(final ManagedAction managedAction) {
-            val serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
+            var serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
             return LinkAndLabelFactory.forMenu(serviceModel)
                     .apply(managedAction.getAction());
         }

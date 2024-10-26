@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 /**
  * {@link PanelAbstract Panel} representing the summary details (title, icon and
  * actions) of an entity, as per the provided {@link UiObjectWkt}.
@@ -73,9 +71,9 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private void buildEntityActionsGui() {
         final UiObjectWkt model = getModel();
-        val adapter = model.getObject();
+        var adapter = model.getObject();
         if (adapter != null) {
-            val topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
+            var topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
             .map(LinkAndLabelFactory.forEntity(model))
             .collect(Can.toCan());
 

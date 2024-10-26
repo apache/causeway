@@ -30,7 +30,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.settings.ITheme;
@@ -55,7 +54,7 @@ public class ThemeProviderComposite implements ThemeProvider {
     public ITheme byName(String name) {
         if (!Strings.isEmpty(name)) {
             ensureInit();
-            val theme = themesByName.get(name.toLowerCase());
+            var theme = themesByName.get(name.toLowerCase());
             if(theme!=null) {
                 return theme;
             }

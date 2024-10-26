@@ -24,7 +24,6 @@ import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -56,9 +55,9 @@ public class JGrowlUtil {
     }
 
     public String asJGrowlCalls(final MessageBroker messageBroker, final CausewayConfiguration configuration) {
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
 
-        val messagePopupConfig = configuration.getViewer().getWicket().getMessagePopups();
+        var messagePopupConfig = configuration.getViewer().getWicket().getMessagePopups();
         for (String info : messageBroker.drainMessages()) {
             addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, messagePopupConfig, buf);
         }

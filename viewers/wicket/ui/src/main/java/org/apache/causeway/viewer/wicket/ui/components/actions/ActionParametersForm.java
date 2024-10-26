@@ -121,7 +121,7 @@ extends PromptFormAbstract<ActionModel> {
 
         if (action.getSemantics().isAreYouSure()) {
             var confirmUiModel = ConfirmDecorationModel.areYouSure(UiPlacementDirection.BOTTOM);
-            WktDecorators.getConfirm().decorate(button, confirmUiModel);
+            WktDecorators.confirm().decorate(button, confirmUiModel);
         }
     }
 

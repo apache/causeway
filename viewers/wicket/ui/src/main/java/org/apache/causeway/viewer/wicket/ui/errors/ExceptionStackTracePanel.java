@@ -45,8 +45,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.val;
-
 public class ExceptionStackTracePanel
 extends PanelBase<List<StackTraceDetail>> {
 
@@ -86,9 +84,9 @@ extends PanelBase<List<StackTraceDetail>> {
 
         super(id, exceptionModel);
 
-        val ticketIfAny = exceptionModel.getTicket();
+        var ticketIfAny = exceptionModel.getTicket();
 
-        val mainMessage = ticketIfAny
+        var mainMessage = ticketIfAny
             .map(Ticket::getUserMessage)
             .orElseGet(exceptionModel::getMainMessage);
         Wkt.labelAdd(this, ID_MAIN_MESSAGE, mainMessage);

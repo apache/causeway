@@ -45,8 +45,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.val;
-
 public class BookmarkedPagesPanel
 extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
@@ -100,7 +98,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         Wkt.ajaxEnable(container);
         add(container);
 
-        val clearAllBookmarksLink = Wkt.linkAdd(this, CLEAR_BOOKMARKS, target->{
+        var clearAllBookmarksLink = Wkt.linkAdd(this, CLEAR_BOOKMARKS, target->{
             BookmarkedPagesPanel.this.getModel().clear();
             setEnabled(false);
             target.add(container, this);
@@ -116,7 +114,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
             try {
                 final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
 
-                val clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
+                var clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
                     bookmarkedPagesModel.remove(bookmarkNode);
                     if(bookmarkedPagesModel.isEmpty()) {
                         WktComponents.permanentlyHide(this, CLEAR_BOOKMARKS);
@@ -130,7 +128,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     clearBookmarkLink.setEnabled(true);
                 }
 
-                val link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
+                var link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
                                 bookmarkNode.getPageParameters(),
                                 pageClass));
 

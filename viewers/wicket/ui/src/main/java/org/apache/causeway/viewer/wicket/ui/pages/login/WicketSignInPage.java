@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 
-import lombok.val;
-
 /**
  * Boilerplate, pick up our HTML and CSS.
  */
@@ -81,7 +79,7 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
         final boolean signUpLink = !suppressSignUpLink;
         final boolean passwordReset = !suppressPasswordResetLink;
         final boolean continueToOriginalDestination = !clearOriginalDestination;
-        val signInPanel =
+        var signInPanel =
                 new CausewaySignInPanel("signInPanel", rememberMe, signUpLink, passwordReset, continueToOriginalDestination);
         return signInPanel;
     }

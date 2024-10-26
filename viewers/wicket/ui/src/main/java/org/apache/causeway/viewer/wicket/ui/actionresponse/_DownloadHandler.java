@@ -36,7 +36,6 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -46,11 +45,11 @@ final class _DownloadHandler {
             final ObjectAction action,
             final Object value) {
         if(value instanceof Clob) {
-            val clob = (Clob)value;
+            var clob = (Clob)value;
             return handlerFor(action, resourceStreamFor(clob), clob);
         }
         if(value instanceof Blob) {
-            val blob = (Blob)value;
+            var blob = (Blob)value;
             return handlerFor(action, resourceStreamFor(blob), blob);
         }
         return null;
@@ -88,7 +87,7 @@ final class _DownloadHandler {
             final ObjectAction action,
             final IResourceStream resourceStream,
             final NamedWithMimeType namedWithMimeType) {
-        val handler =
+        var handler =
                 new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
 

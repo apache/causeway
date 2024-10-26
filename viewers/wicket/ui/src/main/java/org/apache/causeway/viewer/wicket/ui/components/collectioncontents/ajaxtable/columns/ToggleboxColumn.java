@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWk
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 public final class ToggleboxColumn
 extends GenericColumnAbstract {
 
@@ -61,15 +59,15 @@ extends GenericColumnAbstract {
 
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
-        val dataRowToggle = new DataRowToggleWkt(dataRowWkt);
-        val rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
+        var dataRowToggle = new DataRowToggleWkt(dataRowWkt);
+        var rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
         rowToggles.add(rowToggle);
         return rowToggle.setOutputMarkupId(true);
     }
 
     @Override
     public Component getHeader(final String componentId) {
-        val bulkToggle = new ContainedToggleboxPanel(
+        var bulkToggle = new ContainedToggleboxPanel(
                 componentId,
                 new BulkToggleWkt(dataTableModelHolder),
                     this::onBulkUpdate);
@@ -83,7 +81,7 @@ extends GenericColumnAbstract {
         var dataTableInteractive = dataTableModelHolder.getObject();
 
         dataTableInteractive.doProgrammaticToggle(()->{
-            val bulkToggle = BulkToggle.valueOf(isChecked);
+            var bulkToggle = BulkToggle.valueOf(isChecked);
             for (ContainedToggleboxPanel rowToggle : rowToggles) {
                 rowToggle.set(bulkToggle, target);
             }

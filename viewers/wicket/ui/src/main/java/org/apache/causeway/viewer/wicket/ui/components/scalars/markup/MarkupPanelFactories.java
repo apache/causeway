@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for {@link ScalarMarkupPanel}.
  */
@@ -87,8 +85,8 @@ public class MarkupPanelFactories {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
 
-            val valueModel = (ValueModel) model;
-            val objectAdapter = valueModel.getObject();
+            var valueModel = (ValueModel) model;
+            var objectAdapter = valueModel.getObject();
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
@@ -116,7 +114,7 @@ public class MarkupPanelFactories {
 
         @Override
         protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
-            val markupComponent = new MarkupComponent(id, model);
+            var markupComponent = new MarkupComponent(id, model);
             markupComponent.setEnabled(false);
             return markupComponent;
         }

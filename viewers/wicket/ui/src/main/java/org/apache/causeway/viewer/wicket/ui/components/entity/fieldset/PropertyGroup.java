@@ -50,8 +50,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
@@ -100,9 +98,9 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
-        val properties = getPropertiesNotStaticallyHidden();
+        var properties = getPropertiesNotStaticallyHidden();
 
-        val memberGroupActions = collectMemberGroupActions(propertyRv, childComponents::add);
+        var memberGroupActions = collectMemberGroupActions(propertyRv, childComponents::add);
 
         final WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
@@ -138,10 +136,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
             final RepeatingView container,
             final Consumer<Component> onNewChildComponent) {
 
-        val memberGroupActionList = _Lists.<LinkAndLabel>newArrayList();
+        var memberGroupActionList = _Lists.<LinkAndLabel>newArrayList();
 
-        for (val property : getPropertiesNotStaticallyHidden()) {
-            val propertyRvContainer = new WebMarkupContainer(container.newChildId());
+        for (var property : getPropertiesNotStaticallyHidden()) {
+            var propertyRvContainer = new WebMarkupContainer(container.newChildId());
             container.addOrReplace(propertyRvContainer);
             onNewChildComponent.accept(
                     addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActionList::add));
@@ -152,8 +150,8 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 
     private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden() {
 
-        val entity = getModel().getManagedObject();
-        val propertyLayouts = this.fieldSet.getProperties();
+        var entity = getModel().getManagedObject();
+        var propertyLayouts = this.fieldSet.getProperties();
         //
         // previously we filtered out any invisible properties.
         // However, the inline prompt/don't redirect logic introduced in 1.15.0 means that we keep the same page,
@@ -196,7 +194,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 //            Wkt.cssAppend(scalarNameAndValueComponent, scalarModel.getIdentifier());
 //        }
 
-        val entity = entityModel.getManagedObject();
+        var entity = entityModel.getManagedObject();
 
         ObjectAction.Util.findForAssociation(entity, property)
         .map(LinkAndLabelFactory.forEntity(entityModel))

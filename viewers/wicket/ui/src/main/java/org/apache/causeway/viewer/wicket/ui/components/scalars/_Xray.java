@@ -25,8 +25,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.MmDebugUtils;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import lombok.val;
-
 class _Xray {
 
     static void onParamOrPropertyEdited(final ScalarPanelAbstract scalarPanel) {
@@ -35,12 +33,12 @@ class _Xray {
         scalarPanel.scalarModel().getSpecialization()
         .accept(
             param->{
-                val data = MmDebugUtils
+                var data = MmDebugUtils
                         .paramUpdateDataFor(param.getParameterIndex(), param.getParameterNegotiationModel());
                 _XrayEvent.event("Form Component (Parameter) update %s", data.formatted());
             },
             prop->{
-                val data = MmDebugUtils
+                var data = MmDebugUtils
                         .propUpdateDataFor(prop.getPendingPropertyModel());
                 _XrayEvent.event("Form Component (Property) update: %s", data.formatted());
             });
@@ -49,7 +47,7 @@ class _Xray {
     public static void debugRequestParams() {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val requestArgs = PageParameterUtils.streamCurrentRequestParameters()
+        var requestArgs = PageParameterUtils.streamCurrentRequestParameters()
                 .map(pair->String.format("%s->%s", pair.getKey(), pair.getValue()))
                 .collect(Collectors.joining(",\n"));
 

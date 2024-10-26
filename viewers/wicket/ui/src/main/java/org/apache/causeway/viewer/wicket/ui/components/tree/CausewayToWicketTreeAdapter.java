@@ -40,8 +40,6 @@ import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 class CausewayToWicketTreeAdapter {
 
     /**
@@ -83,16 +81,16 @@ class CausewayToWicketTreeAdapter {
         public static DomainObjectTree of(
                 final String id, final ManagedObject treeNodeObject) {
 
-            val treeNode = (TreeNode<?>) treeNodeObject.getPojo();
-            val wrappingTreeAdapter = new _TreeModelTreeAdapter(treeNode.getTreeAdapter());
+            var treeNode = (TreeNode<?>) treeNodeObject.getPojo();
+            var wrappingTreeAdapter = new _TreeModelTreeAdapter(treeNode.getTreeAdapter());
 
-            val treeModelTreeProvider = new _TreeModelTreeProvider(
+            var treeModelTreeProvider = new _TreeModelTreeProvider(
                     wrappingTreeAdapter.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),
                     wrappingTreeAdapter);
 
-            val treeState = treeNode.getTreeState();
+            var treeState = treeNode.getTreeState();
 
-            val treeExpansionModel = _TreeExpansionModel.of(treeState);
+            var treeExpansionModel = _TreeExpansionModel.of(treeState);
 
             return new DomainObjectTree(id,
                     treeModelTreeProvider,

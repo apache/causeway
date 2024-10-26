@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
-import lombok.val;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
@@ -86,7 +85,7 @@ implements HasLogicalType {
 
     private transient IModel<ObjectMemento> packingAdapterModel;
     private IModel<ObjectMemento> createPackingAdapterModel() {
-        val multi = this;
+        var multi = this;
 
         return new IModel<ObjectMemento>() {
             private static final long serialVersionUID = 1L;
@@ -128,7 +127,7 @@ implements HasLogicalType {
 
     @Override
     public Collection<ObjectMemento> getModelObject() {
-        val modelObj = super.getModelObject();
+        var modelObj = super.getModelObject();
         if(workaround) {
             return modelObj==null
                     ? null

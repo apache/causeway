@@ -26,7 +26,6 @@ import org.apache.wicket.model.Model;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -36,7 +35,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 class CssMenuItem
@@ -106,11 +104,10 @@ implements Menuable {
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
 
-        val linkAndLabel = getLinkAndLabel();
-        val actionMeta = getLinkAndLabel().getManagedAction().getAction();
-        val actionLink = getLinkAndLabel().getUiComponent();
+        var linkAndLabel = getLinkAndLabel();
+        var actionLink = getLinkAndLabel().getUiComponent();
 
-        val label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
+        var label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
 
         if (actionLink != null) {
 
@@ -118,29 +115,7 @@ implements Menuable {
             markupContainer.add(actionLink);
             actionLink.add(label);
 
-            linkAndLabel
-            .getDescription()
-            .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
-
-            if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
-                Wkt.cssAppend(actionLink, "noVeil");           }
-            if (actionMeta.isPrototype()) {
-                Wkt.cssAppend(actionLink, "prototype");
-            }
-
-            linkAndLabel
-            .getAdditionalCssClass()
-            .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
-
-            Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
-
-            val faLayers = getLinkAndLabel().lookupFontAwesomeLayers(true);
-            WktDecorators.getIcon().decorate(label, faLayers);
-
-            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                WktDecorators.getDisable().decorate(actionLink, disableUiModel);
-            });
-
+            WktDecorators.decorateMenuItem(linkAndLabel, label);
 
             // .. and hide label
             WktComponents.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
@@ -163,7 +138,7 @@ implements Menuable {
     }
 
     private void addSubMenuItemComponentsIfAnyTo(final MarkupContainer menuItemMarkup) {
-        val subMenuItems = getSubMenuItems();
+        var subMenuItems = getSubMenuItems();
         if (subMenuItems.isEmpty()) {
             WktComponents.permanentlyHide(menuItemMarkup, CssMenuItem.ID_SUB_MENU_ITEMS);
         } else {

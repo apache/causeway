@@ -24,7 +24,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.MmDebugUtils;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -35,7 +34,7 @@ final class _Xray {
             final ParameterNegotiationModel paramNegotiationModel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val data = MmDebugUtils
+        var data = MmDebugUtils
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
         _XrayEvent.event("Param Form - about to update: %s", data.formatted());
     }
@@ -45,7 +44,7 @@ final class _Xray {
             final ParameterNegotiationModel paramNegotiationModel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val data = MmDebugUtils
+        var data = MmDebugUtils
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
         _XrayEvent.event("Param Form - param[index=%s] defaults reassessed: %s", paramIndex, data.formatted());
     }
@@ -55,7 +54,7 @@ final class _Xray {
             final ParameterNegotiationModel paramNegotiationModel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val data = MmDebugUtils
+        var data = MmDebugUtils
                 .paramUpdateDataFor(paramIndex, paramNegotiationModel);
         _XrayEvent.event("Param Form - updated: %s", data.formatted());
     }

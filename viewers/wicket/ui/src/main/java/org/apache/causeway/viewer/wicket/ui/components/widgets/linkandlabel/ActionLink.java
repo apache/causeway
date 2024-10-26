@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import static org.apache.causeway.commons.internal.base._Casts.castTo;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  *
@@ -84,7 +83,7 @@ implements HasMetaModelContext {
             final @NonNull String linkId,
             final @NonNull ActionModel actionModel) {
 
-        val actionLink = new ActionLink(linkId, actionModel);
+        var actionLink = new ActionLink(linkId, actionModel);
         return Wkt.cssAppend(actionLink, "noVeil");
     }
 
@@ -165,7 +164,7 @@ implements HasMetaModelContext {
         _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                 + "originating from User clicking an Action Link.");
 
-        val actionModel = this.getActionModel();
+        var actionModel = this.getActionModel();
 
         if(actionModel.getPromptStyle().isDialogAny()
                 || actionModel.getInlinePromptContext() == null) {
@@ -182,10 +181,10 @@ implements HasMetaModelContext {
     }
 
     private void executeWithoutParams() {
-        val actionModel = this.getActionModel();
+        var actionModel = this.getActionModel();
 
         // on non-recoverable exception throws
-        val outcome = FormExecutorDefault
+        var outcome = FormExecutorDefault
                 .forAction(actionModel)
                 .executeAndProcessResults(null, null, actionModel);
 
@@ -197,9 +196,9 @@ implements HasMetaModelContext {
             // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
             // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
             // an error page, but is probably 'good enough').
-            val targetAdapter = actionModel.getParentObject();
+            var targetAdapter = actionModel.getParentObject();
 
-            val bookmark = targetAdapter.refreshBookmark().orElseThrow();
+            var bookmark = targetAdapter.refreshBookmark().orElseThrow();
             getMetaModelContext().getTransactionService().flushTransaction();
 
             // "redirect-after-post"
@@ -209,13 +208,13 @@ implements HasMetaModelContext {
     }
 
     private void startDialogWithParams(final AjaxRequestTarget target) {
-        val actionModel = this.getActionModel();
-        val actionOwnerSpec = actionModel.getActionOwner().getSpecification();
-        val actionPrompt = ActionPromptProvider
+        var actionModel = this.getActionModel();
+        var actionOwnerSpec = actionModel.getActionOwner().getSpecification();
+        var actionPrompt = ActionPromptProvider
                 .getFrom(this.getPage())
                 .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
 
-        val actionParametersPanel = (ActionParametersPanel)
+        var actionParametersPanel = (ActionParametersPanel)
                 getComponentFactoryRegistry()
                 .createComponent(actionPrompt.getContentId(),
                         UiComponentType.ACTION_PROMPT,
@@ -223,7 +222,7 @@ implements HasMetaModelContext {
 
         actionParametersPanel.setShowHeader(false);
 
-        val label = Wkt.label(actionPrompt.getTitleId(), actionModel::getFriendlyName);
+        var label = Wkt.label(actionPrompt.getTitleId(), actionModel::getFriendlyName);
         actionPrompt.setTitle(label, target);
         actionPrompt.setPanel(actionParametersPanel, target);
         actionPrompt.showPrompt(target);
@@ -236,9 +235,9 @@ implements HasMetaModelContext {
     }
 
     private void startDialogInline(final AjaxRequestTarget target) {
-        val actionModel = this.getActionModel();
-        val inlinePromptContext = actionModel.getInlinePromptContext();
-        val scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
+        var actionModel = this.getActionModel();
+        var inlinePromptContext = actionModel.getInlinePromptContext();
+        var scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
 
         getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                 FrameFragment.INLINE_PROMPT_FORM.getContainerId(),

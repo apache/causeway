@@ -34,8 +34,6 @@ import org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
-import lombok.val;
-
 /**
  * Web page representing the home page (showing a welcome message).
  */
@@ -52,7 +50,7 @@ public class ErrorPage extends PageAbstract {
 
         addBookmarkedPages(themeDiv);
 
-        val errorReportingService = super.getMetaModelContext().getServiceRegistry()
+        var errorReportingService = super.getMetaModelContext().getServiceRegistry()
                 .lookupService(ErrorReportingService.class).orElse(null);
 
         if(errorReportingService != null) {
@@ -81,7 +79,7 @@ public class ErrorPage extends PageAbstract {
 
         }
 
-        val pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
+        var pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
 
         themeDiv.add(new ExceptionStackTracePanel(pageClassRegistry, ID_EXCEPTION_STACK_TRACE, exceptionModel));
 

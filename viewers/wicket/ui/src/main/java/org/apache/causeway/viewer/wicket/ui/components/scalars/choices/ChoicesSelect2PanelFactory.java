@@ -24,8 +24,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryS
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;
 
-import lombok.val;
-
 public class ChoicesSelect2PanelFactory
 extends ComponentFactoryScalarAbstract {
 
@@ -50,10 +48,10 @@ extends ComponentFactoryScalarAbstract {
 
     @Override
     protected ScalarPanelAbstract createComponent(final String id, final ScalarModel scalarModel) {
-        val componentSort = ComponentSort.valueOf(scalarModel);
+        var componentSort = ComponentSort.valueOf(scalarModel);
         switch(componentSort) {
         case TITLE_BADGE:
-            val valueType = scalarModel.getElementType().getCorrespondingClass();
+            var valueType = scalarModel.getElementType().getCorrespondingClass();
             return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
         case VALUE_CHOICES:
             return new ValueChoicesSelect2Panel(id, scalarModel);
