@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.MenuActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 import lombok.val;
@@ -127,8 +127,8 @@ public interface HasManagedAction {
         return DisablingDecorationModel.of(getManagedAction().checkUsability()) ;
     }
     
-    default MenuActionDecorationModel getMenuActionDecorationModel() {
-        return MenuActionDecorationModel.of(this);
+    default ActionDecorationModel getActionDecorationModel() {
+        return ActionDecorationModel.of(this);
     }
 
 }

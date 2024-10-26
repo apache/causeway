@@ -52,7 +52,7 @@ class ServiceActionUtil {
         var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
         WktDecorators
-            .decorateMenuAction(listItem, menuItemActionLink, menuItemLabel, linkAndLabel.getMenuActionDecorationModel());
+            .decorateMenuAction(listItem, menuItemActionLink, menuItemLabel, linkAndLabel.getActionDecorationModel());
 
         var leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);

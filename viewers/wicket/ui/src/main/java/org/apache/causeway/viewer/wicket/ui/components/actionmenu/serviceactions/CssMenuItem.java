@@ -115,7 +115,10 @@ implements Menuable {
             markupContainer.add(actionLink);
             actionLink.add(label);
 
-            WktDecorators.decorateMenuItem(linkAndLabel, label);
+            WktDecorators.decorateAdditionalLink(
+                    linkAndLabel.getUiComponent(), 
+                    label, 
+                    linkAndLabel.getActionDecorationModel());
 
             // .. and hide label
             WktComponents.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);

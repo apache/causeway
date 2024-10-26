@@ -30,7 +30,7 @@ import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.MenuActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.DangerDecorator;
@@ -160,15 +160,16 @@ public class WktDecorators {
             ListItem<? extends Menuable> listItem, 
             AjaxLink<ManagedObject> actionLink,
             Label actionLabel,
-            MenuActionDecorationModel decorationModel) {
-        Wkt.cssAppend(listItem, decorationModel.featureIdentifier());
+            ActionDecorationModel decorationModel) {
         
         decorationModel.disabling()
             .ifPresentOrElse(disableUiModel->{
+                //DISABLE
                 disable().decorate(listItem, disableUiModel);
                 tooltip().decorate(listItem,
                         TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, disableUiModel.reason()));
             }, ()->{
+                //DESCRIBE
                 decorationModel
                     .describedAs()
                     .ifPresent(describedAs->
@@ -184,55 +185,68 @@ public class WktDecorators {
                 
             });
         
+        //PROTOTYPING
         decorationModel.prototyping().ifPresent(protoDecModel->{
             prototyping().decorate(actionLink, protoDecModel);
         });
         
+        //CSS
+        Wkt.cssAppend(listItem, decorationModel.featureIdentifier());
         decorationModel.additionalCssClass()
             .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
         
+        //FA-ICON
         var faLayers = decorationModel.fontAwesomeLayers();
         faIcon().decorate(actionLabel, faLayers);
         missingIcon().decorate(actionLink, faLayers);
     }
 
-    //TODO[CAUSEWAY-3824] WIP make more generic
     /**
-     * For rendering {@link LinkAndLabel} within additional-link panels or drop-downs.
+     * For rendering actions within additional-link panels or drop-downs.
      */
-    public void decorateMenuItem(LinkAndLabel linkAndLabel, Label actionLabel) {
-        var actionLink = linkAndLabel.getUiComponent();
-        var actionMeta = linkAndLabel.getAction();
-        // TODO Auto-generated method stub
-        linkAndLabel
-            .getDescription()
-            .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
+    public void decorateAdditionalLink(
+            AjaxLink<ManagedObject> actionLink,
+            Label actionLabel, 
+            ActionDecorationModel decorationModel) {
 
-        if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
+        decorationModel.disabling()
+            .ifPresentOrElse(disableUiModel->{
+                //DISABLE
+                disable().decorate(actionLink, disableUiModel);
+            }, ()->{
+                //DESCRIBE
+                decorationModel
+                    .describedAs()
+                    .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
+            });
+
+        if (ObjectAction.Util.returnsBlobOrClob(decorationModel.action())) {
             Wkt.cssAppend(actionLink, "noVeil");           
         }
-        if (actionMeta.isPrototype()) { 
-            Wkt.cssAppend(actionLink, "prototype");
-        }
+        
+        //PROTOTYPING
+        decorationModel.prototyping().ifPresent(protoDecModel->{
+            prototyping().decorate(actionLink, protoDecModel);
+        });
     
-        linkAndLabel
-            .getAdditionalCssClass()
+        //CSS
+        Wkt.cssAppend(actionLink, decorationModel.featureIdentifier());
+        decorationModel.additionalCssClass()
             .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
     
-        Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
-    
-        var faLayers = linkAndLabel.lookupFontAwesomeLayers(true);
-        WktDecorators.faIcon().decorate(actionLabel, faLayers);
-    
-        linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-            WktDecorators.disable().decorate(actionLink, disableUiModel);
-        });
+        //FA-ICON
+        var faLayers = decorationModel.fontAwesomeLayers();
+        faIcon().decorate(actionLabel, faLayers);
     }
 
     //TODO[CAUSEWAY-3824] WIP make more generic
-    public void decorateAdditionalLink(LinkAndLabel linkAndLabel, Component tooltipReceiver, 
+    public void decorateAdditionalLink(
+            final LinkAndLabel linkAndLabel, 
+            final Component tooltipReceiver, 
             final Label viewTitleLabel,
-            final boolean isForceAlignmentWithBlankIcon) {
+            final boolean isForceAlignmentWithBlankIcon,
+            final ActionDecorationModel decorationModel) {
+        
         var link = linkAndLabel.getUiComponent();
         var action = linkAndLabel.getManagedAction().getAction();
         var hasDisabledReason = link instanceof ActionLink 

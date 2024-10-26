@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
@@ -45,29 +46,35 @@ public class ActionDecorators {
     @Builder(builderMethodName = "builderInternal", access = AccessLevel.PRIVATE)
     @Getter @Accessors(fluent=true) //RECORD (java 16)
     @AllArgsConstructor
-    public static class MenuActionDecorationModel {
-        private final boolean isImmediateConfirmationRequired;
-        private final Identifier featureIdentifier;
+    public static class ActionDecorationModel {
+        private final ObjectAction action;
         private final Optional<DisablingDecorationModel> disabling;
         private final Optional<PrototypingDecorationModel> prototyping;
         private final Optional<FontAwesomeLayers> fontAwesomeLayers;
         private final Optional<String> describedAs;
         private final Optional<String> additionalCssClass;
         
-        public static MenuActionDecorationModel of(HasManagedAction managedActionHolder) {
+        public static ActionDecorationModel of(HasManagedAction managedActionHolder) {
             var managedAction = managedActionHolder.getManagedAction();
             val action = managedAction.getAction();
             return builderInternal()
-                .featureIdentifier(action.getFeatureIdentifier())
+                .action(action)
                 .prototyping(action.isPrototype() 
                         ? Optional.of(PrototypingDecorationModel.of(managedAction))
                         : Optional.empty())
-                .isImmediateConfirmationRequired(action.isImmediateConfirmationRequired())
                 .describedAs(managedAction.getDescription())
                 .disabling(DisablingDecorationModel.of(managedAction.checkUsability()))
                 .additionalCssClass(managedActionHolder.getAdditionalCssClass())
                 .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(true))
                 .build();
+        }
+        
+        public Identifier featureIdentifier() {
+            return action.getFeatureIdentifier();
+        }
+        
+        public boolean isImmediateConfirmationRequired() {
+            return action.isImmediateConfirmationRequired();
         }
         
     }

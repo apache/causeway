@@ -62,7 +62,8 @@ public final class WktLinks {
                 linkAndLabel::getFriendlyName);
         
         WktDecorators
-            .decorateAdditionalLink(linkAndLabel, tooltipReceiver, viewTitleLabel, isForceAlignmentWithBlankIcon);
+            .decorateAdditionalLink(linkAndLabel, tooltipReceiver, viewTitleLabel, isForceAlignmentWithBlankIcon, 
+                    linkAndLabel.getActionDecorationModel());
 
         return link;
     }
