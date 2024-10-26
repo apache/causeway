@@ -35,6 +35,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 
 import lombok.NonNull;
@@ -55,15 +57,17 @@ public final class WktLinks {
             final Component tooltipReceiver,
             final String titleId,
             final LinkAndLabel linkAndLabel,
-            final boolean isForceAlignmentWithBlankIcon) {
+            final ActionStyle actionStyle) {
 
         var link = linkAndLabel.getUiComponent();
         var viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
         
-        WktDecorators
-            .decorateAdditionalLink(linkAndLabel, tooltipReceiver, viewTitleLabel, isForceAlignmentWithBlankIcon, 
-                    linkAndLabel.getActionDecorationModel());
+        WktDecorators.decorateAdditionalLink(
+                link, tooltipReceiver, viewTitleLabel,
+                ActionDecorationModel.builder(linkAndLabel)
+                    .actionStyle(actionStyle)
+                    .build());
 
         return link;
     }
@@ -82,13 +86,12 @@ public final class WktLinks {
         Wkt.labelAdd(container, titleId, titleProvider.apply(t));
 
         final Label viewItemIcon = Wkt.labelAdd(container, iconId, Optional.ofNullable(iconProvider)
-                .map(iconProv->iconProv.apply(t))
-                .orElseGet(()->Model.of("")));
+            .map(iconProv->iconProv.apply(t))
+            .orElseGet(()->Model.of("")));
 
         Optional.ofNullable(cssFactory)
-        .map(cssFact->cssFact.apply(t, viewItemIcon))
-        .ifPresent(cssModel->Wkt.cssAppend(viewItemIcon, cssModel));
+            .map(cssFact->cssFact.apply(t, viewItemIcon))
+            .ifPresent(cssModel->Wkt.cssAppend(viewItemIcon, cssModel));
 
         return container;
-
     }}

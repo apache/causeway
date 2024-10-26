@@ -24,10 +24,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.list.ListItem;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
@@ -41,8 +39,6 @@ import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.FontAwesomeBehavior;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
@@ -157,16 +153,16 @@ public class WktDecorators {
     // -- ACTION DECORATION
     
     public void decorateMenuAction(
-            ListItem<? extends Menuable> listItem, 
             AjaxLink<ManagedObject> actionLink,
+            Component tooltipReceiver,
             Label actionLabel,
             ActionDecorationModel decorationModel) {
         
         decorationModel.disabling()
             .ifPresentOrElse(disableUiModel->{
                 //DISABLE
-                disable().decorate(listItem, disableUiModel);
-                tooltip().decorate(listItem,
+                disable().decorate(tooltipReceiver, disableUiModel);
+                tooltip().decorate(tooltipReceiver,
                         TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, disableUiModel.reason()));
             }, ()->{
                 //DESCRIBE
@@ -174,7 +170,7 @@ public class WktDecorators {
                     .describedAs()
                     .ifPresent(describedAs->
                         tooltip()
-                            .decorate(listItem,
+                            .decorate(tooltipReceiver,
                                     TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, describedAs)));
                 
                 //{CAUSEWAY-1626] confirmation dialog for no-parameter menu actions
@@ -185,26 +181,48 @@ public class WktDecorators {
                 
             });
         
-        //PROTOTYPING
-        decorationModel.prototyping().ifPresent(protoDecModel->{
-            prototyping().decorate(actionLink, protoDecModel);
-        });
-        
         //CSS
-        Wkt.cssAppend(listItem, decorationModel.featureIdentifier());
-        decorationModel.additionalCssClass()
-            .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
+        Wkt.cssAppend(tooltipReceiver, decorationModel.featureIdentifier());
         
-        //FA-ICON
-        var faLayers = decorationModel.fontAwesomeLayers();
-        faIcon().decorate(actionLabel, faLayers);
-        missingIcon().decorate(actionLink, faLayers);
+        decorateActionCommon(actionLink, actionLabel, decorationModel);
     }
-
+    
     /**
      * For rendering actions within additional-link panels or drop-downs.
      */
     public void decorateAdditionalLink(
+            final AjaxLink<ManagedObject> actionLink,
+            final Component tooltipReceiver, 
+            final Label actionLabel,
+            final ActionDecorationModel decorationModel) {
+        
+        var action = decorationModel.action();
+        
+        WktTooltips.addTooltip(tooltipReceiver, decorationModel.disabling().isPresent()
+                ? ((ActionLink) actionLink).getReasonDisabledIfAny()
+                : decorationModel.describedAs().orElse(null));
+        
+        if (action.getSemantics().isAreYouSure()) {
+            if(action.getParameterCount()==0) {
+                if (decorationModel.disabling().isEmpty()) {
+                    var confirmUiModel = ConfirmDecorationModel
+                            .areYouSure(UiPlacementDirection.BOTTOM);
+                    WktDecorators.confirm().decorate(actionLink, confirmUiModel);
+                }
+            }
+            // ensure links receive the danger style
+            // don't care if expressed twice
+            WktDecorators.danger().decorate(actionLink);
+        } else {
+            Wkt.cssAppend(actionLink, decorationModel.isRenderOutlined()
+                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
+                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
+        }
+        
+        decorateActionCommon(actionLink, actionLabel, decorationModel);
+    }
+
+    public void decorateCssMenuItem(
             AjaxLink<ManagedObject> actionLink,
             Label actionLabel, 
             ActionDecorationModel decorationModel) {
@@ -219,76 +237,34 @@ public class WktDecorators {
                     .describedAs()
                     .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
             });
-
-        if (ObjectAction.Util.returnsBlobOrClob(decorationModel.action())) {
-            Wkt.cssAppend(actionLink, "noVeil");           
-        }
-        
-        //PROTOTYPING
-        decorationModel.prototyping().ifPresent(protoDecModel->{
-            prototyping().decorate(actionLink, protoDecModel);
-        });
     
+        decorateActionCommon(actionLink, actionLabel, decorationModel);
+    }
+
+    // -- ACTION DECORATION HELPER
+    
+    private void decorateActionCommon(
+            AjaxLink<ManagedObject> actionLink,
+            Label actionLabel, 
+            ActionDecorationModel decorationModel) {
         //CSS
         Wkt.cssAppend(actionLink, decorationModel.featureIdentifier());
         decorationModel.additionalCssClass()
             .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
-    
-        //FA-ICON
+        //blob/clob
+        if (ObjectAction.Util.returnsBlobOrClob(decorationModel.action())) {
+            Wkt.cssAppend(actionLink, "noVeil");           
+        }
+        //prototyping
+        decorationModel.prototyping().ifPresent(protoDecModel->{
+            prototyping().decorate(actionLink, protoDecModel);
+        });
+        //fa-icon
         var faLayers = decorationModel.fontAwesomeLayers();
         faIcon().decorate(actionLabel, faLayers);
+        if(decorationModel.isMenuItem()) {
+            missingIcon().decorate(actionLink, faLayers);    
+        }
     }
-
-    //TODO[CAUSEWAY-3824] WIP make more generic
-    public void decorateAdditionalLink(
-            final LinkAndLabel linkAndLabel, 
-            final Component tooltipReceiver, 
-            final Label viewTitleLabel,
-            final boolean isForceAlignmentWithBlankIcon,
-            final ActionDecorationModel decorationModel) {
-        
-        var link = linkAndLabel.getUiComponent();
-        var action = linkAndLabel.getManagedAction().getAction();
-        var hasDisabledReason = link instanceof ActionLink 
-                && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny());
-        
-        WktTooltips.addTooltip(tooltipReceiver, hasDisabledReason
-                ? ((ActionLink) link).getReasonDisabledIfAny()
-                : linkAndLabel.getDescription().orElse(null));
-        
-        if(ObjectAction.Util.returnsBlobOrClob(action)) {
-            Wkt.cssAppend(link, "noVeil");
-        }
-        if(action.isPrototype()) {
-            Wkt.cssAppend(link, "prototype");
-        }
-        Wkt.cssAppend(link, linkAndLabel.getFeatureIdentifier());
-        
-        if (action.getSemantics().isAreYouSure()) {
-            if(action.getParameterCount()==0) {
-                if (!hasDisabledReason) {
-                    var confirmUiModel = ConfirmDecorationModel
-                            .areYouSure(UiPlacementDirection.BOTTOM);
-                    WktDecorators.confirm().decorate(link, confirmUiModel);
-                }
-            }
-            // ensure links receive the danger style
-            // don't care if expressed twice
-            WktDecorators.danger().decorate(link);
-        } else {
-            Wkt.cssAppend(link, linkAndLabel.isRenderOutlined()
-                    || action.isPrototype()
-                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
-                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
-        }
-        
-        linkAndLabel
-            .getAdditionalCssClass()
-            .ifPresent(cssClass->Wkt.cssAppend(link, cssClass));
-        
-        var faLayers = linkAndLabel.lookupFontAwesomeLayers(isForceAlignmentWithBlankIcon);
-        WktDecorators.faIcon().decorate(viewTitleLabel, faLayers);
-        WktDecorators.missingIcon().decorate(viewTitleLabel, faLayers);
-    }
-
+    
 }

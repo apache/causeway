@@ -27,7 +27,6 @@ import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,33 +39,65 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class ActionDecorators {
+    
+    public enum ActionStyle {
+        BUTTON,
+        MENU_ITEM;
+    }
+    
+    public enum ButtonModifier {
+        NONE,
+        /**
+         * To respect UI visual hierarchy, we render action buttons outlined, 
+         * if they appear next to their association, (this is, not in the field-set header). 
+         */
+        OUTLINED,
+    }
+    
+    public enum MenuItemModifier {
+        NONE,
+        /**
+         * For menu items that are rendered in vertical sequence, some may have icons some may not.
+         * For improved visual appearance, the latter can be force aligned with the others by means 
+         * of a blank icon, that just occupies the same amount of width as regular icons.   
+         */
+        FORCE_ALIGNMENT_WITH_BLANK_ICON;
+    }
 
     // -- DECORATION MODEL
 
-    @Builder(builderMethodName = "builderInternal", access = AccessLevel.PRIVATE)
+    @Builder(builderMethodName = "builderInternal")
     @Getter @Accessors(fluent=true) //RECORD (java 16)
     @AllArgsConstructor
     public static class ActionDecorationModel {
         private final ObjectAction action;
+        private final ActionStyle actionStyle;
+        private final ButtonModifier buttonModifier;
+        private final MenuItemModifier menuItemModifier;
         private final Optional<DisablingDecorationModel> disabling;
         private final Optional<PrototypingDecorationModel> prototyping;
         private final Optional<FontAwesomeLayers> fontAwesomeLayers;
         private final Optional<String> describedAs;
         private final Optional<String> additionalCssClass;
         
-        public static ActionDecorationModel of(HasManagedAction managedActionHolder) {
+        public static ActionDecorationModelBuilder builder(
+                HasManagedAction managedActionHolder) {
             var managedAction = managedActionHolder.getManagedAction();
             val action = managedAction.getAction();
             return builderInternal()
                 .action(action)
+                .buttonModifier(managedActionHolder.isRenderOutlined()
+                        || action.isPrototype()
+                        ? ButtonModifier.OUTLINED
+                        : ButtonModifier.NONE)
+                .menuItemModifier(MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON) // default
                 .prototyping(action.isPrototype() 
                         ? Optional.of(PrototypingDecorationModel.of(managedAction))
                         : Optional.empty())
                 .describedAs(managedAction.getDescription())
                 .disabling(DisablingDecorationModel.of(managedAction.checkUsability()))
                 .additionalCssClass(managedActionHolder.getAdditionalCssClass())
-                .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(true))
-                .build();
+                .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(true));
         }
         
         public Identifier featureIdentifier() {
@@ -77,6 +108,30 @@ public class ActionDecorators {
             return action.isImmediateConfirmationRequired();
         }
         
+        public Optional<String> disabledReason() {
+            return disabling.map(DisablingDecorationModel::reason); 
+        }
+        
+        /**
+         * @see ButtonModifier
+         */
+        public boolean isRenderOutlined() {
+            return buttonModifier==ButtonModifier.OUTLINED;
+        }
+        
+        /**
+         * @see MenuItemModifier
+         */
+        public boolean isForceAlignmentWithBlankIcon() {
+            return menuItemModifier==MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON; 
+        }
+
+        /**
+         * @see ActionStyle
+         */
+        public boolean isMenuItem() {
+            return actionStyle==ActionStyle.MENU_ITEM;
+        }
     }
 
 }

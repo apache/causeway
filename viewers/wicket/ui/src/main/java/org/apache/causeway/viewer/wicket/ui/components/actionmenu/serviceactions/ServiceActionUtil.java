@@ -30,6 +30,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
@@ -52,7 +54,10 @@ class ServiceActionUtil {
         var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
         WktDecorators
-            .decorateMenuAction(listItem, menuItemActionLink, menuItemLabel, linkAndLabel.getActionDecorationModel());
+            .decorateMenuAction(menuItemActionLink, listItem, menuItemLabel, 
+                    ActionDecorationModel.builder(linkAndLabel)
+                        .actionStyle(ActionStyle.MENU_ITEM)
+                        .build());
 
         var leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);

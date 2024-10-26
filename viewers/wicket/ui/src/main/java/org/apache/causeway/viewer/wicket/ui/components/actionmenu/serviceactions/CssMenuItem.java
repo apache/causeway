@@ -26,6 +26,8 @@ import org.apache.wicket.model.Model;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -115,10 +117,12 @@ implements Menuable {
             markupContainer.add(actionLink);
             actionLink.add(label);
 
-            WktDecorators.decorateAdditionalLink(
+            WktDecorators.decorateCssMenuItem(
                     linkAndLabel.getUiComponent(), 
                     label, 
-                    linkAndLabel.getActionDecorationModel());
+                    ActionDecorationModel.builder(linkAndLabel)
+                        .actionStyle(ActionStyle.MENU_ITEM)
+                        .build());
 
             // .. and hide label
             WktComponents.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);

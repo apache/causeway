@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -31,7 +32,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 import lombok.val;
@@ -122,13 +122,20 @@ public interface HasManagedAction {
             final ActionLayout.Position position) {
         return a -> a.getPosition() == position;
     }
+    
+    /**
+     * To respect UI visual hierarchy, we render action buttons outlined,
+     * if they appear next to their association,
+     * this is, not in the field-set header. 
+     */
+    default boolean isRenderOutlined() {
+        return isPositionedAt(Position.BELOW)
+            .or(isPositionedAt(Position.RIGHT))
+            .test(this);
+    }
 
     default Optional<DisablingDecorationModel> getDisableUiModel() {
         return DisablingDecorationModel.of(getManagedAction().checkUsability()) ;
-    }
-    
-    default ActionDecorationModel getActionDecorationModel() {
-        return ActionDecorationModel.of(this);
     }
 
 }
