@@ -124,11 +124,10 @@ public interface HasManagedAction {
     }
     
     /**
-     * To respect UI visual hierarchy, we render action buttons outlined,
-     * if they appear next to their association,
-     * this is, not in the field-set header. 
+     * With respect to UI visual hierarchy, actions that appear in the field-set header
+     * are ranked higher than those that appear inside a field-set. 
      */
-    default boolean isRenderOutlined() {
+    default boolean isPositionedInsideFieldSet() {
         return isPositionedAt(Position.BELOW)
             .or(isPositionedAt(Position.RIGHT))
             .test(this);

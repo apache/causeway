@@ -86,7 +86,7 @@ public class ActionDecorators {
             val action = managedAction.getAction();
             return builderInternal()
                 .action(action)
-                .buttonModifier(managedActionHolder.isRenderOutlined()
+                .buttonModifier(managedActionHolder.isPositionedInsideFieldSet()
                         || action.isPrototype()
                         ? ButtonModifier.OUTLINED
                         : ButtonModifier.NONE)
