@@ -40,8 +40,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelFormFi
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import lombok.val;
-
 public abstract class CausewayBlobOrClobPanelAbstract<T extends NamedWithMimeType>
 extends ScalarPanelFormFieldAbstract<T> {
 
@@ -70,8 +68,8 @@ extends ScalarPanelFormFieldAbstract<T> {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
-        val initialCaption = outputFormatAsString();
-        val fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
+        var initialCaption = outputFormatAsString();
+        var fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
         addAcceptFilterTo(fileUploadField);
         return fileUploadField;
     }
@@ -80,7 +78,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected UiString obtainOutputFormat() {
-        val caption = getBlobOrClobFromModel()
+        var caption = getBlobOrClobFromModel()
                 .map(NamedWithMimeType::getName)
                 .orElseGet(()->
                     getPlaceholderRenderService()
@@ -90,7 +88,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     @Override
     protected Component createComponentForOutput(final String id) {
-        val link = CompactFragment.LINK
+        var link = CompactFragment.LINK
                 .createFragment(id, this, scalarValueId->
                     createDownloadLink(scalarValueId, this::outputFormatAsString));
         return link;
@@ -117,7 +115,7 @@ extends ScalarPanelFormFieldAbstract<T> {
         })
         .orElseGet(()->{
             // represent null reference by a simple markup displaying '(none)'
-            val linkContainer = Wkt.container(id);
+            var linkContainer = Wkt.container(id);
             Wkt.markupAdd(linkContainer, CompactFragment.ID_LINK_LABEL,
                     getPlaceholderRenderService()
                     .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
@@ -192,7 +190,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 //    }
 
 //    private Label createFileNameLabel(final String idFileName, final MarkupContainer formComponent) {
-//        val fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
+//        var fileNameLabel = Wkt.labelAdd(formComponent, idFileName, ()->
 //        getBlobOrClobFromModel()
 //        .map(NamedWithMimeType::getName)
 //        .orElse(""));
@@ -245,7 +243,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
 
 //    private Image asWicketImage(final String id) {
-//        val blob = scalarModel().unwrapped(Blob.class).getObject();
+//        var blob = scalarModel().unwrapped(Blob.class).getObject();
 //        return WicketImageUtil.asWicketImage(id, blob).orElse(null);
 //    }
 

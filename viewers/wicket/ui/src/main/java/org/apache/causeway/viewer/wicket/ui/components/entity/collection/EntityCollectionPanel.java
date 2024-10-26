@@ -48,7 +48,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.val;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -118,15 +117,15 @@ implements HasDynamicallyVisibleContent {
     // -- HELPER
 
     private void buildGui() {
-        val collectionModel = entityCollectionModelParented();
+        var collectionModel = entityCollectionModelParented();
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
-        val collectionMetaModel = collectionModel.getMetaModel();
+        var collectionMetaModel = collectionModel.getMetaModel();
 
         Wkt.cssAppend(div, collectionModel.getIdentifier());
         Wkt.cssAppend(div, collectionModel.getElementType().getFeatureIdentifier());
 
-        val objectAdapter = getModel().getObject();
+        var objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
                 .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
@@ -140,10 +139,10 @@ implements HasDynamicallyVisibleContent {
             tableDecorator().ifPresent(tableDecorator->
                 Wkt.cssAppend(div, tableDecorator.cssClass()));
 
-            val collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
+            var collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
             div.addOrReplace(collectionPanel);
 
-            val labelComponent = Wkt.label(ID_COLLECTION_NAME,
+            var labelComponent = Wkt.label(ID_COLLECTION_NAME,
                     collectionMetaModel.getFriendlyName(collectionModel::getParentObject));
             labelComponent.setEscapeModelStrings(true);
             div.add(labelComponent);

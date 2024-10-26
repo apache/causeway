@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.Acti
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.NonNull;
-import lombok.val;
 
 @FunctionalInterface
 public interface LinkAndLabelFactory
@@ -99,7 +98,7 @@ extends Function<ObjectAction, LinkAndLabel> {
     public static LinkAndLabelFactory forParameter(
             final ScalarParameterModel parameterModel) {
         //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
-        val param = parameterModel.getMetaModel();
+        var param = parameterModel.getMetaModel();
         if(param.isSingular()
                 && param.getElementType().isCompositeValue()) {
             return action -> LinkAndLabel.of(
@@ -116,7 +115,7 @@ extends Function<ObjectAction, LinkAndLabel> {
     // -- HELPER
 
     private static void guardAgainstNotBookmarkable(final ManagedObject objectAdapter) {
-        val isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
+        var isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
         if (!isIdentifiable) {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not identifiable (has no identifier).",

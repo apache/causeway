@@ -35,8 +35,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent.Can
 import org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent.FormComponentPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * {@link FormComponentPanel} representing a reference to an entity: a link and
  * (optionally) an auto-complete field.
@@ -64,8 +62,8 @@ implements CancelHintRequired, HasMetaModelContext  {
 
     private void buildGui() {
 
-        val objectModelForLink = getModel();
-        val isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectModelForLink.getObject());
+        var objectModelForLink = getModel();
+        var isEmpty = ManagedObjects.isNullOrUnspecifiedOrEmpty(objectModelForLink.getObject());
 
         if(isEmpty) {
             // represent null reference by a simple markup displaying '(none)'
@@ -75,7 +73,7 @@ implements CancelHintRequired, HasMetaModelContext  {
 
         } else {
 
-            val componentFactory = getComponentFactoryRegistry()
+            var componentFactory = getComponentFactoryRegistry()
                     .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, objectModelForLink);
 
             final Component component = componentFactory

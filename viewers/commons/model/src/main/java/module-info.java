@@ -18,7 +18,6 @@
  */
 module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model;
-    exports org.apache.causeway.viewer.commons.model.action.decorator;
     exports org.apache.causeway.viewer.commons.model.layout;
     exports org.apache.causeway.viewer.commons.model.components;
     exports org.apache.causeway.viewer.commons.model.binding;

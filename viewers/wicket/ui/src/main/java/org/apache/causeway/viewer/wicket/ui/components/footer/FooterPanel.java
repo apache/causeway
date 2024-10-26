@@ -42,8 +42,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * A panel for the default page footer
  */
@@ -79,26 +77,26 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addCredits() {
 
-        val credits = super.getCommonViewerSettings().getCredit();
-        val hasAnyCredits = !_NullSafe.isEmpty(credits);
+        var credits = super.getCommonViewerSettings().getCredit();
+        var hasAnyCredits = !_NullSafe.isEmpty(credits);
 
-        val creditItems = new RepeatingView("creditItems");
+        var creditItems = new RepeatingView("creditItems");
         add(creditItems);
 
         if(hasAnyCredits) {
 
-            val webAppContextPath = super.getWebAppContextPath();
+            var webAppContextPath = super.getWebAppContextPath();
 
             _NullSafe.stream(credits)
             .forEach(credit->{
 
-                val listItem = new WebMarkupContainer(creditItems.newChildId());
+                var listItem = new WebMarkupContainer(creditItems.newChildId());
                 creditItems.add(listItem);
 
-                val creditLink = newCreditLinkComponent(credit);
+                var creditLink = newCreditLinkComponent(credit);
                 listItem.add(creditLink);
 
-                val imageUrl = webAppContextPath.prependContextPathIfLocal(credit.getImage());
+                var imageUrl = webAppContextPath.prependContextPathIfLocal(credit.getImage());
 
                 creditLink.add(new CreditImage("creditImage", imageUrl));
                 creditLink.add(new CreditName("creditName", credit.getName()));
@@ -106,13 +104,13 @@ extends PanelAbstract<String, Model<String>> {
             });
         }
 
-        val creditsLabel = Wkt.labelAdd(this, "creditsLabel", "Credits: ");
+        var creditsLabel = Wkt.labelAdd(this, "creditsLabel", "Credits: ");
         creditsLabel.setVisibilityAllowed(hasAnyCredits);
     }
 
     private WebMarkupContainer newCreditLinkComponent(final Credit credit) {
 
-        val creditLinkId = "creditLink";
+        var creditLinkId = "creditLink";
 
         final WebMarkupContainer creditLink = (credit.getUrl() != null)
 

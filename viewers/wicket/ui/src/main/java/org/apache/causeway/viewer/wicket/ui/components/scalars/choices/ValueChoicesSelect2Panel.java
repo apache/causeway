@@ -33,8 +33,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import lombok.val;
-
 public class ValueChoicesSelect2Panel
 extends ScalarPanelSelectAbstract
 implements ChoiceTitleHandler {
@@ -118,7 +116,7 @@ implements ChoiceTitleHandler {
 
     @Override
     public void clearTitleAttribute() {
-        val target = getRegularFrame();
+        var target = getRegularFrame();
         WktTooltips.clearTooltip(target);
     }
 
@@ -128,7 +126,7 @@ implements ChoiceTitleHandler {
             clearTitleAttribute();
             return;
         }
-        val target = getRegularFrame();
+        var target = getRegularFrame();
         WktTooltips.addTooltip(target, titleAttribute);
     }
 

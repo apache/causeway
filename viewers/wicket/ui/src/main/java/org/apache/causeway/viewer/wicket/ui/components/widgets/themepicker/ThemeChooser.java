@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
-import lombok.val;
-
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
@@ -115,7 +113,7 @@ extends PanelAbstract<Void, IModel<Void>> {
         String activeTheme = cookieUtils.load(CAUSEWAY_THEME_COOKIE_NAME);
         if (!Strings.isEmpty(activeTheme)) {
 
-            val isAvailable = getThemeSupport().getThemeProvider().available().stream()
+            var isAvailable = getThemeSupport().getThemeProvider().available().stream()
                     .anyMatch(theme->activeTheme.equals(theme.name()));
 
             if(isAvailable) {

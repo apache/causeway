@@ -45,8 +45,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
@@ -75,10 +73,10 @@ extends ScalarPanelAbstract {
     @Override
     protected final void setupInlinePrompt() {
 
-        val scalarModel = scalarModel();
-        val regularFrame = getRegularFrame();
-        val fieldFrame = getFieldFrame();
-        val scalarFrameContainer = getScalarFrameContainer();
+        var scalarModel = scalarModel();
+        var regularFrame = getRegularFrame();
+        var fieldFrame = getFieldFrame();
+        var scalarFrameContainer = getScalarFrameContainer();
 
         // even if this particular scalarModel (property) is not configured for inline edits,
         // it's possible that one of the associated actions is.  Thus we set the prompt context
@@ -102,14 +100,14 @@ extends ScalarPanelAbstract {
                 // needs InlinePromptContext to properly initialize
                 addOnClickBehaviorTo(inlinePromptLink);
 
-                val additionalButtonContainer = fieldFragment.createButtonContainer(inlinePromptLink);
+                var additionalButtonContainer = fieldFragment.createButtonContainer(inlinePromptLink);
                 addAdditionalButtonsTo(additionalButtonContainer, fieldFragment);
                 return;
             }
             case NO_LINK_VIEWING:
             case NO_LINK_EDITING: {
 
-                val additionalButtonContainer = fieldFragment.createButtonContainer(fieldFrame);
+                var additionalButtonContainer = fieldFragment.createButtonContainer(fieldFrame);
                 addAdditionalButtonsTo(additionalButtonContainer, fieldFragment);
 
                 return;
@@ -139,8 +137,8 @@ extends ScalarPanelAbstract {
         if(isUsingTextarea()) {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
-                        val textArea = Wkt.textAreaNoTab(scalarValueId, this::outputFormatAsString);
-                        val scalarModel = scalarModel();
+                        var textArea = Wkt.textAreaNoTab(scalarValueId, this::outputFormatAsString);
+                        var scalarModel = scalarModel();
                         Wkt.setFormComponentAttributes(textArea,
                                 scalarModel::multilineNumberOfLines,
                                 scalarModel::maxLength,
@@ -179,7 +177,7 @@ extends ScalarPanelAbstract {
      * Usually HTML, except for (non-empty) text-areas or badges (that are already modeled in HTML).
      */
     protected UiString obtainOutputFormat() {
-        val proposedValue = scalarModel().proposedValue();
+        var proposedValue = scalarModel().proposedValue();
         if(!proposedValue.isPresent()) {
             return UiString.markup(
                     getPlaceholderRenderService()
@@ -224,7 +222,7 @@ extends ScalarPanelAbstract {
 
         if(clickReceiver==null) return;
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
 
@@ -278,10 +276,10 @@ extends ScalarPanelAbstract {
             final @NonNull RepeatingView buttonContainer,
             final @NonNull String faClass,
             final @NonNull String reasonSuffix) {
-        val disableReasonButton = Wkt.linkAddWithBody(buttonContainer,
+        var disableReasonButton = Wkt.linkAddWithBody(buttonContainer,
                 Wkt.faIcon(faClass), ajaxTarget->{/*no-op*/});
 
-        val disabledReason = scalarModel().disabledReason()
+        var disabledReason = scalarModel().disabledReason()
                 .flatMap(InteractionVeto::getReasonAsString)
                 .orElse("framework bug: should provide a reason");
 
@@ -295,7 +293,7 @@ extends ScalarPanelAbstract {
     }
 
     private void addClearFieldButton(final @NonNull RepeatingView buttonContainer) {
-        val clearFieldButton = Wkt.linkAddWithBody(buttonContainer,
+        var clearFieldButton = Wkt.linkAddWithBody(buttonContainer,
                 Wkt.faIcon("fa-regular fa-trash-can"), this::onClearFieldButtonClick);
 
         Wkt.cssAppend(clearFieldButton, "btn-warning");
@@ -355,11 +353,11 @@ extends ScalarPanelAbstract {
      */
     private void clearBootstrapFileInputField() {
         if(this instanceof ScalarPanelFormFieldAbstract) {
-            val formContainer = ((ScalarPanelFormFieldAbstract<?>)this);
-            val formComponent = formContainer.getFormComponent();
+            var formContainer = ((ScalarPanelFormFieldAbstract<?>)this);
+            var formComponent = formContainer.getFormComponent();
             if(formComponent instanceof BootstrapFileInputField) {
                 // recreate from scratch
-                val replacement = formContainer.createFormComponent(formComponent.getId(), scalarModel());
+                var replacement = formContainer.createFormComponent(formComponent.getId(), scalarModel());
                 formComponent.replaceWith(replacement);
             }
         }

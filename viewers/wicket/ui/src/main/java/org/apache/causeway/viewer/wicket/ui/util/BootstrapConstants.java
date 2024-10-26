@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
@@ -55,7 +54,7 @@ public class BootstrapConstants {
             return "btn-outline-" + name().toLowerCase();
         }
         public String fullButtonCss(final @NonNull EnumSet<ButtonModifier> modifiers) {
-            val sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.append("btn ");
             if(modifiers.contains(ButtonModifier.OUTLINE)) {
                 sb.append(buttonDefaultCss());

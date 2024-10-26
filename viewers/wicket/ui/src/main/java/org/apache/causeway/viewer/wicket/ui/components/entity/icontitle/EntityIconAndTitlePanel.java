@@ -41,7 +41,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Builder;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -68,7 +67,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     protected ManagedObject linkedDomainObject() {
-        val linkedDomainObject = getModel().getObject();
+        var linkedDomainObject = getModel().getObject();
         return linkedDomainObject;
     }
 
@@ -91,7 +90,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     private void addLinkWrapper() {
-        val linkWrapper = Wkt.container(ID_ENTITY_LINK_WRAPPER);
+        var linkWrapper = Wkt.container(ID_ENTITY_LINK_WRAPPER);
         linkWrapper.addOrReplace(createLinkWithIconAndTitle());
         addOrReplace(linkWrapper);
         onLinkWrapperCreated(linkWrapper);
@@ -154,9 +153,9 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     private AbstractLink createDynamicallyVisibleLink(final ManagedObject linkedDomainObject) {
-        val pageParameters = PageParameterUtils
+        var pageParameters = PageParameterUtils
                 .createPageParametersForBookmarkablePageLink(linkedDomainObject);
-        val pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
+        var pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
         return Wkt.bookmarkablePageLinkWithVisibility(ID_ENTITY_LINK, pageClass, pageParameters,
                 ()->isLinkVisible(linkedDomainObject()));
@@ -223,7 +222,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         if(cachedTitle!=null) {
             return cachedTitle;
         }
-        val fullTitle = MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
+        var fullTitle = MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
         return this.cachedTitle = TitleRecord.builder()
                 .fullTitle(fullTitle)
                 .abbreviatedTitle(titleAbbreviated(fullTitle))
@@ -277,7 +276,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     }
 
     private static void guardAgainstNonEmptyAbstractSingular(final ObjectAdapterModel objectAdapterModel) {
-        val obj = objectAdapterModel.getObject();
+        var obj = objectAdapterModel.getObject();
         _Assert.assertFalse(isNonEmptyAbstractSingular(obj),
                 ()->String.format("model for EntityIconAndTitlePanel, "
                         + "when non-empty, must not represent abstract types; "

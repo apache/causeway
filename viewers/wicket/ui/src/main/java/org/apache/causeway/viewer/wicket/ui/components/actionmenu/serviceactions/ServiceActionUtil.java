@@ -30,6 +30,8 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
@@ -37,40 +39,33 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-//@Log4j2
-public final class ServiceActionUtil {
+class ServiceActionUtil {
 
-    static void addLeafItem(
-            final MetaModelContext commonContext,
+    void addLeafItem(
             final CssMenuItem menuItem,
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
 
-        val actionUiModel = menuItem.getLinkAndLabel();
-        val menuItemActionLink = actionUiModel.getUiComponent();
-        val menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
+        var linkAndLabel = menuItem.getLinkAndLabel();
+        var menuItemActionLink = linkAndLabel.getUiComponent();
+        var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
-        WktDecorators.getActionLink().decorateMenuItem(
-                listItem,
-                actionUiModel,
-                commonContext.getTranslationService());
+        WktDecorators
+            .decorateMenuAction(menuItemActionLink, listItem, menuItemLabel, 
+                    ActionDecorationModel.builder(linkAndLabel)
+                        .actionStyle(ActionStyle.MENU_ITEM)
+                        .build());
 
-        val faLayers = actionUiModel.lookupFontAwesomeLayers(true);
-        WktDecorators.getIcon().decorate(menuItemLabel, faLayers);
-        WktDecorators.getMissingIcon().decorate(menuItemActionLink, faLayers);
-
-        val leafItem = new Fragment("content", "leafItem", parent);
+        var leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
 
         listItem.add(leafItem);
     }
 
-    static void addFolderItem(
-            final MetaModelContext commonContext,
+    void addFolderItem(
             final CssMenuItem subMenuItem,
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
@@ -87,9 +82,9 @@ public final class ServiceActionUtil {
             CssMenuItem menuItem = listItem.getModelObject();
 
             if (menuItem.hasSubMenuItems()) {
-                addFolderItem(commonContext, menuItem, item, parent);
+                addFolderItem(menuItem, item, parent);
             } else {
-                addLeafItem(commonContext, menuItem, item, parent);
+                addLeafItem(menuItem, item, parent);
             }
         });
 
@@ -110,15 +105,15 @@ public final class ServiceActionUtil {
 
         @Override
         public void addSectionSpacer() {
-            val menuSection = CssMenuItem.newSpacer();
+            var menuSection = CssMenuItem.newSpacer();
             currentTopLevelMenu.addSubMenuItem(menuSection);
         }
 
         @Override
         public void addSubMenu(final MenuItemDto menuDto) {
-            val managedAction = menuDto.getManagedAction();
+            var managedAction = menuDto.getManagedAction();
 
-            val menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
+            var menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
             currentTopLevelMenu.addSubMenuItem(menuItem);
 
             menuItem.setLinkAndLabel(newActionLink(managedAction));
@@ -126,18 +121,18 @@ public final class ServiceActionUtil {
 
         @Override
         public void addSectionLabel(final String named) {
-            val menuSectionLabel = CssMenuItem.newSectionLabel(named);
+            var menuSectionLabel = CssMenuItem.newSectionLabel(named);
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
 
         private LinkAndLabel newActionLink(final ManagedAction managedAction) {
-            val serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
+            var serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
             return LinkAndLabelFactory.forMenu(serviceModel)
                     .apply(managedAction.getAction());
         }
     }
 
-    public static void buildMenu(
+    void buildMenu(
             final MetaModelContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {

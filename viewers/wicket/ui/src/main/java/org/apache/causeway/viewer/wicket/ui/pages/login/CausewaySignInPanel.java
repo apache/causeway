@@ -41,8 +41,6 @@ import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
 import lombok.NonNull;
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -133,7 +131,7 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
 
         // amend authentication/context with time-zone,
         // also propagate user's Locale from current InteractionContext to Wicket's session
-        val session = AuthenticatedWebSession.get();
+        var session = AuthenticatedWebSession.get();
         ((HasAmendableInteractionContext)session).amendInteractionContext(interactionContext->{
             Optional.ofNullable(interactionContext.getUser().getLanguageLocale())
                 .ifPresent(session::setLocale);
@@ -179,15 +177,15 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
     }
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
-        val hasUserRegistrationService = anyUserRegistrationService.isNotEmpty();
-        val hasConfiguredEmailNotificationService = anyEmailNotificationService.stream()
+        var hasUserRegistrationService = anyUserRegistrationService.isNotEmpty();
+        var hasConfiguredEmailNotificationService = anyEmailNotificationService.stream()
                 .anyMatch(EmailNotificationService::isConfigured);
 
-        val visibilityAllowed =
+        var visibilityAllowed =
                 hasUserRegistrationService
                 && hasConfiguredEmailNotificationService;
 
-        for (val component: components) {
+        for (var component: components) {
             if(component.isVisibilityAllowed()) {
                 component.setVisibilityAllowed(visibilityAllowed);
             }

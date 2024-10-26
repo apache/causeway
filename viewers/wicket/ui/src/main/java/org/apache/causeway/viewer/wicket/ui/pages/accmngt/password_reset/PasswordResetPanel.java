@@ -35,8 +35,6 @@ import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
 
@@ -69,7 +67,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
 
         form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
-        val commonContext = super.getMetaModelContext();
+        var commonContext = super.getMetaModelContext();
 
         Button signUpButton = new Button("passwordResetSubmit") {
             private static final long serialVersionUID = -6355836432811022200L;
@@ -82,7 +80,7 @@ public class PasswordResetPanel extends PanelBase<Void> {
 
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
-                val userRegistrationService =
+                var userRegistrationService =
                         commonContext.lookupServiceElseFail(UserRegistrationService.class);
 
                 Boolean passwordUpdated = getInteractionService().callAnonymous(new Callable<Boolean>() {

@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 
 import lombok.NonNull;
-import lombok.Value;
+import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface TooltipDecorator<T> {
@@ -36,7 +36,7 @@ public interface TooltipDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Value(staticConstructor = "of")
+    @lombok.Value @Accessors(fluent=true) //RECORD (java 16)
     public static class TooltipDecorationModel implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -48,14 +48,14 @@ public interface TooltipDecorator<T> {
         public static TooltipDecorationModel ofBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String body) {
-            return of(uiPlacementDirection, Optional.empty(), _Strings.nonEmpty(body).orElse(""));
+            return new TooltipDecorationModel(uiPlacementDirection, Optional.empty(), _Strings.nonEmpty(body).orElse(""));
         }
 
         public static TooltipDecorationModel ofTitleAndBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,
                 final @Nullable String title,
                 final @Nullable String body) {
-            return of(uiPlacementDirection, _Strings.nonEmpty(title), _Strings.nonEmpty(body).orElse(""));
+            return new TooltipDecorationModel(uiPlacementDirection, _Strings.nonEmpty(title), _Strings.nonEmpty(body).orElse(""));
         }
 
         public static TooltipDecorationModel empty() {

@@ -25,9 +25,9 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  *
@@ -43,8 +43,8 @@ public interface PrototypingDecorator<T, R> {
 
     // -- DECORATION MODEL
 
-    @Getter
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter @Accessors(fluent=true) //RECORD (java 16)
+    @AllArgsConstructor
     public static class PrototypingDecorationModel {
 
         private final Class<?> featureType;
@@ -58,7 +58,6 @@ public interface PrototypingDecorator<T, R> {
             String featureFullLabel = String.format("%s: %s",
                     managedAction.getMemberType(),
                     managedAction.getId());
-
             return new PrototypingDecorationModel(featureType, featureShortLabel, featureFullLabel,
                     managedAction.getAction()::streamFacets);
         }
@@ -69,7 +68,6 @@ public interface PrototypingDecorator<T, R> {
             String featureFullLabel = String.format("%s: %s",
                     managedMember.getMemberType(),
                     managedMember.getId());
-
             return new PrototypingDecorationModel(featureType, featureShortLabel, featureFullLabel,
                     managedMember.getElementType()::streamFacets);
         }
@@ -77,8 +75,6 @@ public interface PrototypingDecorator<T, R> {
         public Stream<Facet> streamFeatureFacets() {
             return facetStreamProvider.get();
         }
-
-
 
     }
 

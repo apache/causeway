@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for {@link CollectionContentsAsIconsPanel}.
  */
@@ -47,7 +45,7 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        val entityCollectionModel = (EntityCollectionModel) model;
+        var entityCollectionModel = (EntityCollectionModel) model;
 
         return Facets.iconIsPresent(entityCollectionModel.getElementType())
                 ? ApplicationAdvice.APPLIES

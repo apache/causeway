@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -51,12 +50,12 @@ class _WktImageUtil {
             return Optional.empty();
         }
 
-        val imageResource = new BufferedDynamicImageResource();
+        var imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
 
-        val thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
+        var thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
 
-        val wicketImage = new NonCachingImage(id, thumbnailImageResource);
+        var wicketImage = new NonCachingImage(id, thumbnailImageResource);
         wicketImage.setOutputMarkupId(true);
 
         return Optional.of(wicketImage);
@@ -68,7 +67,7 @@ class _WktImageUtil {
             final @NonNull String id,
             final @Nullable Blob blob) {
 
-        val buffImg = Optional.ofNullable(blob)
+        var buffImg = Optional.ofNullable(blob)
         .flatMap(Blob::asImage)
         .orElse(null);
 
@@ -84,7 +83,7 @@ class _WktImageUtil {
           return Optional.empty();
       }
 
-      val typeSpec = model.getElementType();
+      var typeSpec = model.getElementType();
 
       return Facets.valueStreamSemantics(typeSpec, ImageValueSemantics.class)
       .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))

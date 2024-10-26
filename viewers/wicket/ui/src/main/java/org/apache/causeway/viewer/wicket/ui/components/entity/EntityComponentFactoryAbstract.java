@@ -25,8 +25,6 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.val;
-
 /**
  * Convenience adapter for a number of {@link ComponentFactoryAbstract component
  * factory}s that where the created {@link Component} are backed by an
@@ -60,11 +58,11 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
         // is therefore not called. resulting in a concurrency exception.
         //
         // Therefore, we do the same processing here instead.
-        val adapter = entityModel.getManagedObject();
+        var adapter = entityModel.getManagedObject();
         if (adapter == null) {
             // is ok;
         }
-        val spec = entityModel.getTypeOfSpecification();
+        var spec = entityModel.getTypeOfSpecification();
         if (spec.isSingular()
                 && !spec.isValue()) {
             return doAppliesTo(entityModel);

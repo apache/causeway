@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFac
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * {@link ComponentFactory} for {@link EntityCollectionPanel}.
@@ -66,7 +65,7 @@ public class EntityCollectionPanelFactory extends EntityComponentFactoryAbstract
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        val collectionOwnerAndId = (CollectionOwnerAndLayout) model.getObject();
+        var collectionOwnerAndId = (CollectionOwnerAndLayout) model.getObject();
         return new EntityCollectionPanel(id, collectionOwnerAndId.getOwner(), collectionOwnerAndId.getLayout());
     }
 }

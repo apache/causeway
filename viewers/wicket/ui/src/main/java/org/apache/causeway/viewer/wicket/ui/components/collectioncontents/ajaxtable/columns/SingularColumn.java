@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
-import lombok.val;
-
 public final class SingularColumn
 extends AssociationColumnAbstract {
 
@@ -48,12 +46,12 @@ extends AssociationColumnAbstract {
 
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
-        val dataRow = dataRowWkt.getObject();
-        val rowElement = dataRow.getRowElement();
-        val rowElementModel = UiObjectWkt.ofAdapter(rowElement);
-        val property = rowElement.getSpecification().getPropertyElseFail(memberId);
+        var dataRow = dataRowWkt.getObject();
+        var rowElement = dataRow.getRowElement();
+        var rowElementModel = UiObjectWkt.ofAdapter(rowElement);
+        var property = rowElement.getSpecification().getPropertyElseFail(memberId);
 
-        val scalarModel = rowElementModel
+        var scalarModel = rowElementModel
                 .getPropertyModel(
                         property,
                         ViewOrEditMode.VIEWING,

@@ -21,15 +21,16 @@ package org.apache.causeway.viewer.wicket.ui.util;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.viewer.commons.model.action.decorator.UiActionDecorator;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.ConfirmDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.DangerDecorator;
@@ -37,52 +38,40 @@ import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator;
-import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.FontAwesomeBehavior;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.Getter;
-import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
-/**
- *
- */
 @UtilityClass
 public class WktDecorators {
 
     // -- BASIC DECORATORS
-    @Getter(lazy = true) private final static FormLabel formLabel = new FormLabel();
-    @Getter(lazy = true) private final static Tooltip tooltip = new Tooltip();
-    @Getter(lazy = true) private final static Disable disable = new Disable();
-    @Getter(lazy = true) private final static Prototyping prototyping = new Prototyping();
-    @Getter(lazy = true) private final static Confirm confirm = new Confirm();
-    @Getter(lazy = true) private final static Danger danger = new Danger();
-    @Getter(lazy = true) private final static IconDecoratorWkt icon = new IconDecoratorWkt();
-    @Getter(lazy = true) private final static MissingIconDecorator missingIcon = new MissingIconDecorator();
-
-    // -- ADVANCED DECORATORS
-
-    @Getter(lazy = true) private final static ActionLink actionLink = new ActionLink();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static FormLabel formLabel = new FormLabel();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static Tooltip tooltip = new Tooltip();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static Disable disable = new Disable();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static Prototyping prototyping = new Prototyping();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static Confirm confirm = new Confirm();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static Danger danger = new Danger();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static FaIcon faIcon = new FaIcon();
+    @Getter(lazy = true) @Accessors(fluent=true) private final static MissingIcon missingIcon = new MissingIcon();
 
     // -- BASIC DECORATOR CLASSES
 
     public final static class FormLabel implements FormLabelDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final FormLabelDecorationModel decorationModel) {
-            if(decorationModel.isMandatoryMarker()) {
+            if(decorationModel.isMandatoryIndicatorShown()) {
                 Wkt.cssAppend(uiComponent, "mandatory");
-            }
-            if(_Strings.isNotEmpty(decorationModel.getSuffix())) {
-                final IModel<String> labelModel = _Casts.uncheckedCast(uiComponent.getDefaultModel());
-                uiComponent.setDefaultModel(Model.of(labelModel.getObject() + decorationModel.getSuffix()));
             }
             uiComponent.setEscapeModelStrings(true);
         }
@@ -98,9 +87,9 @@ public class WktDecorators {
     public final static class Disable implements DisablingDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final DisablingDecorationModel decorationModel) {
-            val tooltipDecorationModel = TooltipDecorationModel
-                    .ofBody(UiPlacementDirection.BOTTOM, decorationModel.getReason());
-            getTooltip().decorate(uiComponent, tooltipDecorationModel);
+            var tooltipDecorationModel = TooltipDecorationModel
+                    .ofBody(UiPlacementDirection.BOTTOM, decorationModel.reason());
+            tooltip().decorate(uiComponent, tooltipDecorationModel);
 
             Wkt.cssAppend(uiComponent, "disabled");
             uiComponent.setEnabled(false);
@@ -118,23 +107,21 @@ public class WktDecorators {
     public final static class Confirm implements ConfirmDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final ConfirmDecorationModel decorationModel) {
-
-            val confirmationConfig = new ConfirmationConfig()
-                    .withTitle(decorationModel.getTitle())
-                    .withBtnOkLabel(decorationModel.getOkLabel())
-                    .withBtnCancelLabel(decorationModel.getCancelLabel())
+            var confirmationConfig = new ConfirmationConfig()
+                    .withTitle(decorationModel.title())
+                    .withBtnOkLabel(decorationModel.okLabel())
+                    .withBtnCancelLabel(decorationModel.cancelLabel())
                     .withBtnOkClass(ButtonSemantics.DANGER.fullButtonCss())
                     .withBtnCancelClass(ButtonSemantics.SECONDARY.fullButtonCss())
-                    .withPlacement(Placement.valueOf(decorationModel.getPlacement().name().toLowerCase()));
+                    .withPlacement(Placement.valueOf(decorationModel.placement().name().toLowerCase()));
 
             Wkt.behaviorAddConfirm(uiComponent, confirmationConfig);
 
             if(uiComponent instanceof Button) {
                 // ensure dialog ok buttons receive the danger style as well
                 // don't care if expressed twice
-                WktDecorators.getDanger().decorate(uiComponent);
+                WktDecorators.danger().decorate(uiComponent);
             }
-
         }
     }
 
@@ -145,7 +132,7 @@ public class WktDecorators {
         }
     }
 
-    public final static class IconDecoratorWkt implements IconDecorator<Component, Component> {
+    public final static class FaIcon implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final Optional<FontAwesomeLayers> faLayers) {
             if(faLayers.isPresent()) {
@@ -155,7 +142,7 @@ public class WktDecorators {
         }
     }
 
-    public final static class MissingIconDecorator implements IconDecorator<Component, Component> {
+    public final static class MissingIcon implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final Optional<FontAwesomeLayers> faLayers) {
             if(faLayers.isEmpty()) {
@@ -165,71 +152,129 @@ public class WktDecorators {
         }
     }
 
-    // -- ADVANCED DECORATOR CLASSES
-
-    public final static class ActionLink extends UiActionDecorator<Component> {
-
-        public ActionLink() {
-            super(getTooltip(), getDisable(), getConfirm(), getPrototyping(), getIcon());
-        }
-
-        //TODO this is yet the result of refactoring the logic originating from the wicket viewer
-        //I'm not happy with this yet: this code decorates 2 UI components at once which is confusing
-        //also is not generic enough, because wicket still needs to override this in order to decorate
-        //even another UI component
-        private <T extends Component> void commonDecorateMenuItem(
-                final T uiComponent, // UI component #1
-                final LinkAndLabel linkAndLabel,
-                final TranslationService translationService) {
-
-            val actionLinkUiComponent = linkAndLabel.getUiComponent(); // UI component #2
-            val actionMeta = linkAndLabel.getManagedAction().getAction();
-
-            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                getDisableDecorator().decorate(uiComponent, disableUiModel);
-                getTooltipDecorator().decorate(uiComponent,
-                        TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, disableUiModel.getReason()));
-            });
-
-            if (!linkAndLabel.getDisableUiModel().isPresent()) {
-
-                linkAndLabel
-                .getDescription()
-                .ifPresent(describedAs->
-                    getTooltipDecorator()
-                    .decorate(uiComponent,
-                            TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, describedAs)));
-
-                //XXX CAUSEWAY-1626, confirmation dialog for no-parameter menu actions
-                if (actionMeta.isImmediateConfirmationRequired()) {
-
-                    val confirmUiModel = ConfirmDecorationModel.areYouSure(translationService, UiPlacementDirection.BOTTOM);
-                    getConfirmDecorator().decorate(actionLinkUiComponent, confirmUiModel);
-
+    // -- ACTION DECORATION
+    
+    public void decorateMenuAction(
+            AjaxLink<ManagedObject> actionLink,
+            Component tooltipReceiver,
+            Label actionLabel,
+            ActionDecorationModel decorationModel) {
+        
+        decorationModel.disabling()
+            .ifPresentOrElse(disableUiModel->{
+                //DISABLE
+                disable().decorate(tooltipReceiver, disableUiModel);
+                tooltip().decorate(tooltipReceiver,
+                        TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, disableUiModel.reason()));
+            }, ()->{
+                //DESCRIBE
+                decorationModel
+                    .describedAs()
+                    .ifPresent(describedAs->
+                        tooltip()
+                            .decorate(tooltipReceiver,
+                                    TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, describedAs)));
+                
+                //{CAUSEWAY-1626] confirmation dialog for no-parameter menu actions
+                if (decorationModel.isImmediateConfirmationRequired()) {
+                    var confirmUiModel = ConfirmDecorationModel.areYouSure(UiPlacementDirection.BOTTOM);
+                    confirm().decorate(actionLink, confirmUiModel);
                 }
-
+                
+            });
+        
+        //CSS
+        Wkt.cssAppend(tooltipReceiver, decorationModel.featureIdentifier());
+        
+        decorateActionCommon(actionLink, actionLabel, decorationModel);
+    }
+    
+    /**
+     * For rendering actions within additional-link panels or drop-downs.
+     */
+    public void decorateAdditionalLink(
+            final AjaxLink<ManagedObject> actionLink,
+            final Component tooltipReceiver, 
+            final Label actionLabel,
+            final ActionDecorationModel decorationModel) {
+        
+        var action = decorationModel.action();
+        
+        WktTooltips.addTooltip(tooltipReceiver, decorationModel.disabling().isPresent()
+                ? ((ActionLink) actionLink).getReasonDisabledIfAny()
+                : decorationModel.describedAs().orElse(null));
+        
+        if (action.getSemantics().isAreYouSure()) {
+            if(action.getParameterCount()==0) {
+                if (decorationModel.disabling().isEmpty()) {
+                    var confirmUiModel = ConfirmDecorationModel
+                            .areYouSure(UiPlacementDirection.BOTTOM);
+                    WktDecorators.confirm().decorate(actionLink, confirmUiModel);
+                }
             }
-
-            if (actionMeta.isPrototype()) {
-                getPrototypingDecorator()
-                .decorate(actionLinkUiComponent, PrototypingDecorationModel.of(linkAndLabel.getManagedAction()));
-            }
-
+            // ensure links receive the danger style
+            // don't care if expressed twice
+            WktDecorators.danger().decorate(actionLink);
+        } else {
+            Wkt.cssAppend(actionLink, decorationModel.isRenderOutlined()
+                    ? ButtonSemantics.SECONDARY.buttonOutlineCss()
+                    : ButtonSemantics.SECONDARY.buttonDefaultCss());
         }
-
-        public void decorateMenuItem(
-                final Component uiComponent,
-                final LinkAndLabel linkAndLabel,
-                final TranslationService translationService) {
-
-            Wkt.cssAppend(uiComponent, linkAndLabel.getFeatureIdentifier());
-
-            commonDecorateMenuItem(uiComponent, linkAndLabel, translationService);
-
-            linkAndLabel.getAdditionalCssClass()
-                .ifPresent(cssClass->Wkt.cssAppend(linkAndLabel.getUiComponent(), cssClass));
-        }
-
+        
+        decorateActionCommon(actionLink, actionLabel, decorationModel);
     }
 
+    public void decorateCssMenuItem(
+            AjaxLink<ManagedObject> actionLink,
+            Label actionLabel, 
+            ActionDecorationModel decorationModel) {
+
+        decorationModel.disabling()
+            .ifPresentOrElse(disableUiModel->{
+                //DISABLE
+                disable().decorate(actionLink, disableUiModel);
+            }, ()->{
+                //DESCRIBE
+                decorationModel
+                    .describedAs()
+                    .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
+            });
+    
+        decorateActionCommon(actionLink, actionLabel, decorationModel);
+    }
+
+    // -- ACTION DECORATION HELPER
+    
+    private void decorateActionCommon(
+            AjaxLink<ManagedObject> actionLink,
+            Label actionLabel, 
+            ActionDecorationModel decorationModel) {
+        // ellipsis
+        if(decorationModel.isBoundToDialog()) {
+            var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
+            if(wicketConfig.isActionIndicationWhenBoundToDialog()) {
+                var ellipsifiedModel = actionLabel.getDefaultModel().combineWith(Model.of("…"), (a, b)->a + b);
+                actionLabel.setDefaultModel(ellipsifiedModel);
+            }
+        }
+        // CSS
+        Wkt.cssAppend(actionLink, decorationModel.featureIdentifier());
+        decorationModel.additionalCssClass()
+            .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
+        // blob/clob
+        if (ObjectAction.Util.returnsBlobOrClob(decorationModel.action())) {
+            Wkt.cssAppend(actionLink, "noVeil");           
+        }
+        // prototyping
+        decorationModel.prototyping().ifPresent(protoDecModel->{
+            prototyping().decorate(actionLink, protoDecModel);
+        });
+        // fa-icon
+        var faLayers = decorationModel.fontAwesomeLayers();
+        faIcon().decorate(actionLabel, faLayers);
+        if(decorationModel.isMenuItem()) {
+            missingIcon().decorate(actionLink, faLayers);    
+        }
+    }
+    
 }

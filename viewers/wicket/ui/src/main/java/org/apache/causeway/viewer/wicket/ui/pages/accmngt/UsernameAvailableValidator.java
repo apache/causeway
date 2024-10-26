@@ -25,8 +25,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.viewer.wicket.ui.validation.ValidatorBase;
 
-import lombok.val;
-
 /**
  * Validates that an username is or is not already in use by someone else
  */
@@ -41,10 +39,10 @@ public class UsernameAvailableValidator extends ValidatorBase<String> {
     @Override
     public void validate(final IValidatable<String> validatable) {
 
-        val userRegistrationService = super.getMetaModelContext()
+        var userRegistrationService = super.getMetaModelContext()
                 .lookupServiceElseFail(UserRegistrationService.class);
 
-        val interactionService = super.getMetaModelContext()
+        var interactionService = super.getMetaModelContext()
                 .lookupServiceElseFail(InteractionService.class);
 
         interactionService.runAnonymous(() -> {

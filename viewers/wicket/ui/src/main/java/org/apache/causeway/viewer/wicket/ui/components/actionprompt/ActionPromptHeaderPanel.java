@@ -25,8 +25,6 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * A panel used as a title for the action prompts
  */
@@ -44,7 +42,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
         getComponentFactoryRegistry()
         .addOrReplaceComponent(this, UiComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
 
-        val label = Wkt.labelAdd(this, ID_ACTION_NAME, model::getFriendlyName);
+        var label = Wkt.labelAdd(this, ID_ACTION_NAME, model::getFriendlyName);
 
         label.setEscapeModelStrings(true);
         add(label);

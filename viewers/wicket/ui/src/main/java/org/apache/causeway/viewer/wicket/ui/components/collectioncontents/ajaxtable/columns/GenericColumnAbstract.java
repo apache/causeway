@@ -39,8 +39,6 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegi
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * Represents a {@link AbstractColumn} within a
  * {@link AjaxFallbackDefaultDataTable}.
@@ -93,7 +91,7 @@ implements GenericColumn, HasMetaModelContext {
 
     protected ComponentFactoryRegistry getComponentRegistry() {
         if(componentRegistry==null) {
-            val componentFactoryRegistryAccessor = (HasComponentFactoryRegistry) Application.get();
+            var componentFactoryRegistryAccessor = (HasComponentFactoryRegistry) Application.get();
             componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
         }
         return componentRegistry;

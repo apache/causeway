@@ -2930,6 +2930,14 @@ public class CausewayConfiguration {
         public static class Wicket {
 
             /**
+             * Whether actions, that on click will show a dialog, 
+             * should be indicated by a trailing ellipsis on the actions's label.
+             * <p> 
+             * Applies to both, action buttons and action menu items. 
+             */
+            private boolean actionIndicationWhenBoundToDialog = true;
+            
+            /**
              * Specifies the subclass of
              * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication</code> that is used to
              * bootstrap Wicket.

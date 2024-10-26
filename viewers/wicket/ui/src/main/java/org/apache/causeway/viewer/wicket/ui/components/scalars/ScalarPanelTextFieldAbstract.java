@@ -33,8 +33,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFac
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
  * their backing model.
@@ -135,7 +133,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     <F extends FormComponent<?>> F applyFormComponentAttributes(final F formComponent) {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
         Wkt.setFormComponentAttributes(formComponent,
                 scalarModel::multilineNumberOfLines,
                 scalarModel::maxLength,

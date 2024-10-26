@@ -25,8 +25,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 public class PropertyEditPromptHeaderPanel
 extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
@@ -36,7 +34,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
     public PropertyEditPromptHeaderPanel(final String id, final ScalarPropertyModel model) {
         super(id, model);
 
-        val targetAdapter = model.getParentUiModel().getManagedObject();
+        var targetAdapter = model.getParentUiModel().getManagedObject();
 
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this,

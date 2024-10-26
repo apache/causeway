@@ -35,8 +35,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.accmngt.EmailAvailableValidato
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.SuccessFeedbackCookieManager;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 
-import lombok.val;
-
 /**
  * A panel with a form for creation of new users
  */
@@ -53,20 +51,20 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
     public PasswordResetEmailPanel(final String id) {
         super(id);
 
-        val form = new StatelessForm<Void>("signUpForm");
+        var form = new StatelessForm<Void>("signUpForm");
         addOrReplace(form);
 
-        val emailField = new RequiredTextField<String>("email", Model.of(""));
+        var emailField = new RequiredTextField<String>("email", Model.of(""));
         emailField.setLabel(new ResourceModel("emailLabel"));
         emailField.add(EmailAddressValidator.getInstance());
         emailField.add(EmailAvailableValidator.exists(getMetaModelContext()));
 
-        val formGroup = new FormGroup("formGroup", emailField);
+        var formGroup = new FormGroup("formGroup", emailField);
         form.add(formGroup);
 
         formGroup.add(emailField);
 
-        val signUpButton = new Button("passwordResetSubmit") {
+        var signUpButton = new Button("passwordResetSubmit") {
 
             private static final long serialVersionUID = 1L;
             private final RequiredTextField<String> _emailField = emailField;
@@ -87,7 +85,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
 
         String confirmationUrl = super.getEmailVerificationUrlService().createVerificationUrl(PageType.PASSWORD_RESET, email);
 
-        val passwordResetEvent = new PasswordResetEvent(
+        var passwordResetEvent = new PasswordResetEvent(
                 email,
                 confirmationUrl,
                 getApplicationSettings().getName());

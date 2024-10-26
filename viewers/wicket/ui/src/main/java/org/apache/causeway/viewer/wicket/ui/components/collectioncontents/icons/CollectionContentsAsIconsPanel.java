@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-import lombok.val;
-
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using a simple list of icons.
@@ -48,7 +46,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     private void buildGui() {
         final EntityCollectionModel model = getModel();
 
-        val visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
+        var visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
                 .getValue()
                 .map(DataRow::getRowElement)
                 .toList();
@@ -56,7 +54,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);
 
         add(entityInstances);
-        for (val adapter : visibleAdapters) {
+        for (var adapter : visibleAdapters) {
             final String childId = entityInstances.newChildId();
             final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(adapter);
             final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);

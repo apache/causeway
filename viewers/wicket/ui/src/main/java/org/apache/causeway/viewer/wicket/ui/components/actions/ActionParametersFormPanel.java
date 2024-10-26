@@ -25,8 +25,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
@@ -53,7 +51,7 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
     }
 
     private void buildGui() {
-        val actionModel = getModel();
+        var actionModel = getModel();
         actionModel.clearArguments();  // in case previously used, eg prompt displayed then cancelled
         final ActionParametersForm inputForm =
                 new ActionParametersForm(ID_INPUT_FORM, this, actionModel);

@@ -29,8 +29,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 @SuppressWarnings("rawtypes")
 public abstract class MenuActionPanel extends PanelBase {
 
@@ -42,7 +40,7 @@ public abstract class MenuActionPanel extends PanelBase {
 
     protected ListView<CssMenuItem> subMenuItemsView(final Can<CssMenuItem> subMenuItems) {
         return Wkt.listView("subMenuItems", subMenuItems.toList(), listItem->{
-            val subMenuItem = listItem.getModelObject();
+            var subMenuItem = listItem.getModelObject();
 
             switch(subMenuItem.menuableKind()) {
             case SECTION_SEPARATOR:
@@ -74,25 +72,24 @@ public abstract class MenuActionPanel extends PanelBase {
 
     private void addFolderItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        ServiceActionUtil.addFolderItem(super.getMetaModelContext(), menuItem, listItem, parent);
+        ServiceActionUtil.addFolderItem(menuItem, listItem, parent);
     }
 
     private void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        ServiceActionUtil.addLeafItem(
-                super.getMetaModelContext(), menuItem, listItem, parent);
+        ServiceActionUtil.addLeafItem(menuItem, listItem, parent);
     }
 
     private void addSpacer(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        val fragment = new Fragment("content", "separatorItem", parent);
+        var fragment = new Fragment("content", "separatorItem", parent);
         listItem.add(fragment);
         Wkt.cssAppend(listItem, "list-separator");
     }
 
     private void addSectionLabel(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        val fragment = new Fragment("content", "sectionItem", parent);
+        var fragment = new Fragment("content", "sectionItem", parent);
         Wkt.labelAdd(fragment, "sectionLabel", menuItem.getName());
         listItem.add(fragment);
         Wkt.cssAppend(listItem, "list-section-label");

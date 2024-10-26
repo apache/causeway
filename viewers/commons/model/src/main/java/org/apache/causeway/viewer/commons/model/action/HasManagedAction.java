@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -120,6 +121,16 @@ public interface HasManagedAction {
     public static <T extends HasManagedAction> Predicate<T> isPositionedAt(
             final ActionLayout.Position position) {
         return a -> a.getPosition() == position;
+    }
+    
+    /**
+     * With respect to UI visual hierarchy, actions that appear in the field-set header
+     * are ranked higher than those that appear inside a field-set. 
+     */
+    default boolean isPositionedInsideFieldSet() {
+        return isPositionedAt(Position.BELOW)
+            .or(isPositionedAt(Position.RIGHT))
+            .test(this);
     }
 
     default Optional<DisablingDecorationModel> getDisableUiModel() {

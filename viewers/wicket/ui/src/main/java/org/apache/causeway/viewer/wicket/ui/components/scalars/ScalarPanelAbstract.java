@@ -75,8 +75,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
@@ -136,7 +134,7 @@ implements ScalarModelChangeListener {
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }
         
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
-            val scalarModel = scalarPanel.scalarModel();
+            var scalarModel = scalarPanel.scalarModel();
             if(scalarModel.getRenderingHint().isInTable()) {
                 return COMPACT;
             }
@@ -247,7 +245,7 @@ implements ScalarModelChangeListener {
     protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
 
-        val formatModifiers = EnumSet.noneOf(FormatModifier.class);
+        var formatModifiers = EnumSet.noneOf(FormatModifier.class);
         setupFormatModifiers(formatModifiers);
 
         this.formatModifiers = ImmutableEnumSet.from(formatModifiers);
@@ -281,7 +279,7 @@ implements ScalarModelChangeListener {
      */
     private void buildGui() {
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         scalarFrameContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
         Wkt.cssAppend(scalarFrameContainer, getCssClassName());
@@ -303,7 +301,7 @@ implements ScalarModelChangeListener {
             scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
                     formFrame = createFormFrame());
 
-            val associatedLinksAndLabels = _Util.associatedLinksAndLabels(scalarModel);
+            var associatedLinksAndLabels = _Util.associatedLinksAndLabels(scalarModel);
             addPositioningCssTo(regularFrame, associatedLinksAndLabels);
             addActionLinksBelowAndRight(regularFrame, associatedLinksAndLabels);
 
@@ -330,7 +328,7 @@ implements ScalarModelChangeListener {
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected MarkupContainer createShallowRegularFrame() {
-        val shallowRegularFrame = FrameFragment.REGULAR
+        var shallowRegularFrame = FrameFragment.REGULAR
                 .createComponent(Wkt::container);
         WktComponents.permanentlyHide(shallowRegularFrame,
                 ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_VALUE, ID_SCALAR_NAME_AFTER_VALUE,
@@ -355,7 +353,7 @@ implements ScalarModelChangeListener {
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected WebMarkupContainer createFormFrame() {
-        val isNotInTable = scalarModel().getRenderingHint().isNotInTable();
+        var isNotInTable = scalarModel().getRenderingHint().isNotInTable();
         return (WebMarkupContainer)FrameFragment.INLINE_PROMPT_FORM
                 .createComponent(WebMarkupContainer::new)
                 .setVisible(false)
@@ -442,7 +440,7 @@ implements ScalarModelChangeListener {
     protected abstract void onMakeEditable();
 
     private void addCssFromMetaModel() {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         Wkt.cssAppend(this, scalarModel.getCssClass());
 
@@ -514,9 +512,9 @@ implements ScalarModelChangeListener {
 
     protected final <T extends Behavior> void addOrReplaceBehavoir(
             final @NonNull Class<T> behaviorClass, final @NonNull Supplier<T> factory) {
-        val validationFeedbackReceiver = getValidationFeedbackReceiver();
+        var validationFeedbackReceiver = getValidationFeedbackReceiver();
         if(validationFeedbackReceiver == null) { return; }
-        for (val behavior : validationFeedbackReceiver.getBehaviors(behaviorClass)) {
+        for (var behavior : validationFeedbackReceiver.getBehaviors(behaviorClass)) {
             validationFeedbackReceiver.remove(behavior);
         }
         validationFeedbackReceiver.add(factory.get());
@@ -546,9 +544,9 @@ implements ScalarModelChangeListener {
      */
     protected final void scalarNameLabelAddTo(final MarkupContainer container, final IModel<String> labelCaption) {
 
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
-        val helper = ScalarNameHelper.from(scalarModel);
+        var helper = ScalarNameHelper.from(scalarModel);
 
         helper.hideHiddenLabels(container);
 
@@ -559,7 +557,7 @@ implements ScalarModelChangeListener {
                 return;
             }
 
-            WktDecorators.getFormLabel()
+            WktDecorators.formLabel()
                 .decorate(scalarNameLabel, FormLabelDecorationModel
                         .mandatory(scalarModel.isShowMandatoryIndicator()));
 
@@ -610,13 +608,13 @@ implements ScalarModelChangeListener {
             final MarkupContainer labelIfRegular,
             final Can<LinkAndLabel> linkAndLabels) {
 
-        val linksBelow = linkAndLabels
+        var linksBelow = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
         AdditionalLinksPanel.addAdditionalLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
                 linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        val linksRight = linkAndLabels
+        var linksRight = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
         AdditionalLinksPanel.addAdditionalLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId(),
@@ -662,10 +660,10 @@ implements ScalarModelChangeListener {
    public Repaint updateIfNecessary(
            final @NonNull UiParameter paramModel) {
 
-       val visibilityBefore = isVisibilityAllowed();
-       val usabilityBefore = isCurrentlyRenderedAsUsable();
+       var visibilityBefore = isVisibilityAllowed();
+       var usabilityBefore = isCurrentlyRenderedAsUsable();
        
-       val paramNegotiationModel = paramModel.getParameterNegotiationModel();
+       var paramNegotiationModel = paramModel.getParameterNegotiationModel();
        final int paramIndex = paramModel.getParameterIndex();
        paramNegotiationModel.invalidateVisibilityAndUsability(paramIndex);
         
@@ -676,8 +674,8 @@ implements ScalarModelChangeListener {
         * (3) stop showing      -> Repaint.REQUIRED
         * (4) keep hiding       -> Repaint.OPTIONAL
         */
-       val visibilityConsent = paramNegotiationModel.getVisibilityConsent(paramIndex);
-       val visibilityAfter = visibilityConsent.isAllowed();
+       var visibilityConsent = paramNegotiationModel.getVisibilityConsent(paramIndex);
+       var visibilityAfter = visibilityConsent.isAllowed();
        setVisibilityAllowed(visibilityAfter);
 
        /*
@@ -687,8 +685,8 @@ implements ScalarModelChangeListener {
         * (7) stop being usable     -> Repaint.REQUIRED (but only if visible)
         * (8) keep being readonly   -> Repaint.OPTIONAL
         */
-       val usabilityConsent = paramNegotiationModel.getUsabilityConsent(paramIndex);
-       val usabilityAfter = usabilityConsent.isAllowed();
+       var usabilityConsent = paramNegotiationModel.getUsabilityConsent(paramIndex);
+       var usabilityAfter = usabilityConsent.isAllowed();
        if(usabilityAfter) {
            onMakeEditable();
        } else {

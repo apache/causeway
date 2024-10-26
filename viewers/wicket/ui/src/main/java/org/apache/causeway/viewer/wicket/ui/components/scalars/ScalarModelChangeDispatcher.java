@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import lombok.NonNull;
-import lombok.val;
 
 public interface ScalarModelChangeDispatcher {
 
@@ -29,13 +28,13 @@ public interface ScalarModelChangeDispatcher {
     @NonNull ScalarPanelAbstract getScalarPanel();
 
     default void notifyUpdate(final AjaxRequestTarget target) {
-        for (val listener : getChangeListeners()) {
+        for (var listener : getChangeListeners()) {
             listener.onUpdate(target, getScalarPanel());
         }
     }
 
     default void notifyError(final AjaxRequestTarget target) {
-        for (val listener : getChangeListeners()) {
+        for (var listener : getChangeListeners()) {
             listener.onError(target, getScalarPanel());
         }
     }

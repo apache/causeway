@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.wicket.ui.components.table.nav.NavigationToolb
 import org.apache.causeway.viewer.wicket.ui.components.table.nonav.TotalRecordsToolbar;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, String> {
 
     private static final long serialVersionUID = 1L;
@@ -92,7 +90,7 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(model.getRowElement())) {
             return null;
         }
-        val rowElement = model.getRowElement();
+        var rowElement = model.getRowElement();
         return rowElement.getSpecification().getCssClass(rowElement);
     }
 

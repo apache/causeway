@@ -30,8 +30,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstra
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 final class PropertyEditForm
 extends PromptFormAbstract<ScalarPropertyModel> {
 
@@ -50,10 +48,10 @@ extends PromptFormAbstract<ScalarPropertyModel> {
 
     @Override
     protected void addParameters() {
-        val scalarModel = scalarPropertyModel();
-        val container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
+        var scalarModel = scalarPropertyModel();
+        var container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
-        val component = getComponentFactoryRegistry()
+        var component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
         _Casts.castTo(ScalarPanelAbstract.class, component)

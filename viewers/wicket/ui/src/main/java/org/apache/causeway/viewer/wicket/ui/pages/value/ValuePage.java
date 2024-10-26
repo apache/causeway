@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 import java.util.function.BiFunction;
 
 /**
@@ -100,7 +98,7 @@ public class ValuePage extends PageAbstract {
         ManagedObjects.asSpecified(valueModel.getObject())
         .ifPresent(managedObject->{
 
-            val nullableValuePojo = managedObject.getPojo();
+            var nullableValuePojo = managedObject.getPojo();
 
             pageRenderSubscribers.forEach(subscriber -> handler.apply(subscriber, nullableValuePojo));
         });

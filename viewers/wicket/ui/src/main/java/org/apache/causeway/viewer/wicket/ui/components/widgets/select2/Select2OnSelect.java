@@ -49,7 +49,6 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChange
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Listen on select2:select, select2:unselect and select2:clear events
@@ -111,21 +110,21 @@ class Select2OnSelect extends AbstractAjaxBehavior {
             Event.valueOf(pair)
             .ifPresent(event->{
                 if(getComponent() instanceof Select2MultiChoiceExt) {
-                    val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
                     if(objectMementoFromEvent==null) {
                         return; // add or remove nothing is a no-op
                     }
-                    val component = (Select2MultiChoiceExt)getComponent();
+                    var component = (Select2MultiChoiceExt)getComponent();
                     switch(event) {
                     case SELECT:{
-                        val newSelection = copySelection(component.getModelObject());
+                        var newSelection = copySelection(component.getModelObject());
                         newSelection.add(objectMementoFromEvent);
                         component.setModelObject(newSelection);
                         updateReceiver().setValue(demementify(newSelection));
                         break;
                     }
                     case UNSELECT:{
-                        val newSelection = copySelection(component.getModelObject());
+                        var newSelection = copySelection(component.getModelObject());
                         newSelection.remove(objectMementoFromEvent);
                         component.setModelObject(newSelection);
                         updateReceiver().setValue(demementify(newSelection));
@@ -139,10 +138,10 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                 }
                 else
                 if(getComponent() instanceof Select2ChoiceExt) {
-                    val component = (Select2ChoiceExt)getComponent();
+                    var component = (Select2ChoiceExt)getComponent();
                     switch(event) {
                     case SELECT:
-                        val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                        var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
                         if(objectMementoFromEvent==null) {
                             // select nothing is rather a CLEAR operation
                             component.clearInput();
@@ -162,7 +161,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                 } else return;
 
                 if(XrayUi.isXrayEnabled()) {
-                    val objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
                     if(objectMementoFromEvent!=null) {
                         _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.getBookmark());
                     } else {
@@ -205,7 +204,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private @NonNull Bindable<ManagedObject> updateReceiver() {
-        val updateReceiver = scalarModel.getSpecialization().fold(
+        var updateReceiver = scalarModel.getSpecialization().fold(
                 param->
                     param.getParameterNegotiationModel().getBindableParamValue(param.getParameterIndex()),
                 prop->
@@ -214,7 +213,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private @NonNull ObjectSpecification elementSpec() {
-        val updateReceiver = scalarModel.getSpecialization().fold(
+        var updateReceiver = scalarModel.getSpecialization().fold(
                 param->param.getElementType(),
                 prop->prop.getElementType());
         return updateReceiver;

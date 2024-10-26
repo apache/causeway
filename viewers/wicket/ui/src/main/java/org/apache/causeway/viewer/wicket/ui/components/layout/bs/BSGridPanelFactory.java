@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for {@link BSGridPanel}.
  */
@@ -41,8 +39,8 @@ public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
         final UiObjectWkt entityModel = (UiObjectWkt) model;
 
-        val objectAdapter = entityModel.getObject();
-        val objectSpec = entityModel.getTypeOfSpecification();
+        var objectAdapter = entityModel.getObject();
+        var objectSpec = entityModel.getTypeOfSpecification();
 
         return ApplicationAdvice.appliesIf(
                 Facets.bootstrapGrid(objectSpec, objectAdapter)
@@ -53,8 +51,8 @@ public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
     public Component createComponent(final String id, final IModel<?> model) {
         final UiObjectWkt entityModel = (UiObjectWkt) model;
 
-        val objectAdapter = entityModel.getObject();
-        val objectSpec = entityModel.getTypeOfSpecification();
+        var objectAdapter = entityModel.getObject();
+        var objectSpec = entityModel.getTypeOfSpecification();
 
         return Facets.bootstrapGrid(objectSpec, objectAdapter)
                 .map(grid->new BSGridPanel(id, entityModel, grid))
