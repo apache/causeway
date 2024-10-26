@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
@@ -250,9 +251,11 @@ public class WktDecorators {
             ActionDecorationModel decorationModel) {
         // ellipsis
         if(decorationModel.isBoundToDialog()) {
-            //TODO[CAUSEWAY-3824] decorate only if enabled via config option
-            var ellipsifiedModel = actionLabel.getDefaultModel().combineWith(Model.of("…"), (a, b)->a + b);
-            actionLabel.setDefaultModel(ellipsifiedModel);
+            var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
+            if(wicketConfig.isActionIndicationWhenBoundToDialog()) {
+                var ellipsifiedModel = actionLabel.getDefaultModel().combineWith(Model.of("…"), (a, b)->a + b);
+                actionLabel.setDefaultModel(ellipsifiedModel);
+            }
         }
         // CSS
         Wkt.cssAppend(actionLink, decorationModel.featureIdentifier());
