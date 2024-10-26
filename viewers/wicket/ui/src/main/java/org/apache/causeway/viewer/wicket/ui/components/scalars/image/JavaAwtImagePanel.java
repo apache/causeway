@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public class JavaAwtImagePanel
@@ -54,7 +52,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
 
         Wkt.add(this, createScalarNameLabel(ID_SCALAR_NAME));
 
-        val wicketImage = _WktImageUtil.asWicketImage(ID_SCALAR_VALUE, scalarModel())
+        var wicketImage = _WktImageUtil.asWicketImage(ID_SCALAR_VALUE, scalarModel())
                 .orElse(null);
         if(wicketImage != null) {
             addOrReplace(wicketImage);
@@ -78,10 +76,10 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     /** see also {@link ScalarPanelAbstract} */
     protected Label createScalarNameLabel(final String id) {
 
-        val scalarModel = scalarModel();
-        val scalarNameLabel = Wkt.label(id, scalarModel.getFriendlyName());
+        var scalarModel = scalarModel();
+        var scalarNameLabel = Wkt.label(id, scalarModel.getFriendlyName());
 
-        WktDecorators.getFormLabel()
+        WktDecorators.formLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
                     .mandatory(scalarModel.isShowMandatoryIndicator()));
 

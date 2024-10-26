@@ -28,8 +28,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js.ServerSentEventsJsReference;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 // import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 /**
@@ -48,11 +46,11 @@ public class ServiceActionsPanel extends MenuActionPanel {
         super(id);
 
         Wkt.listViewAdd(this, "menuItems", menuItems, listItem->{
-            val menuItem = listItem.getModelObject();
+            var menuItem = listItem.getModelObject();
 
-            val topMenu = new WebMarkupContainer("topMenu");
+            var topMenu = new WebMarkupContainer("topMenu");
             topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
-            val css = Wkt.cssNormalize(menuItem.getName());
+            var css = Wkt.cssNormalize(menuItem.getName());
             Wkt.cssAppend(topMenu, "top-menu-" + css);
             Wkt.labelAdd(listItem, "name", menuItem.getName());
             listItem.add(topMenu);

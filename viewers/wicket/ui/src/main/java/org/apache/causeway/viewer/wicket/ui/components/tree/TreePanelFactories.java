@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for {@link ParentedTreePanel}.
  */
@@ -72,7 +70,7 @@ public class TreePanelFactories {
             }
 
             final ValueModel valueModel = (ValueModel) model;
-            val adapter = valueModel.getObject();
+            var adapter = valueModel.getObject();
             if(adapter==null || adapter.getPojo()==null) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }

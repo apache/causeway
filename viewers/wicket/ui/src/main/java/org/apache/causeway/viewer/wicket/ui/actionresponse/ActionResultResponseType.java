@@ -54,7 +54,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
 
 public enum ActionResultResponseType {
     OBJECT {
@@ -197,8 +196,8 @@ public enum ActionResultResponseType {
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
                 final @Nullable ManagedObject resultAdapter) {
-            val currentPage = PageRequestHandlerTracker.getLastHandler(RequestCycle.get()).getPage();
-            val pageClass = currentPage.getClass();
+            var currentPage = PageRequestHandlerTracker.getLastHandler(RequestCycle.get()).getPage();
+            var pageClass = currentPage.getClass();
             return ActionResultResponse.toPage(PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage)));
         }
     },
@@ -208,7 +207,7 @@ public enum ActionResultResponseType {
                 final ActionModel actionModel,
                 final AjaxRequestTarget target,
                 final @Nullable ManagedObject resultAdapter) {
-            val signInPage = actionModel.getMetaModelContext()
+            var signInPage = actionModel.getMetaModelContext()
                     .lookupServiceElseFail(PageClassRegistry.class)
                     .getPageClass(PageType.SIGN_IN);
 
@@ -241,11 +240,11 @@ public enum ActionResultResponseType {
          *     repositoryService.removeAndFlush(this);
          * }
          */
-        val mapAbsentResultTo = /*model.getAction().getReturnType().isVoid()
+        var mapAbsentResultTo = /*model.getAction().getReturnType().isVoid()
                 ? ActionResultResponseType.VOID_AS_RELOAD : */
                 ActionResultResponseType.VOID_AS_EMPTY;
 
-        val typeAndAdapter = determineFor(resultAdapter, mapAbsentResultTo, targetIfAny);
+        var typeAndAdapter = determineFor(resultAdapter, mapAbsentResultTo, targetIfAny);
         return typeAndAdapter.type // mapped to 'mapAbsentResultTo' if adapter is unspecified or null
                 .interpretResult(model, targetIfAny, typeAndAdapter.resultAdapter);
     }
@@ -290,7 +289,7 @@ public enum ActionResultResponseType {
             return TypeAndAdapter.of(mapAbsentResultTo, resultAdapter);
         }
 
-        val resultSpec = resultAdapter.getSpecification();
+        var resultSpec = resultAdapter.getSpecification();
         if (!(resultAdapter instanceof PackedManagedObject)) {
 
             // scalar ...
@@ -328,13 +327,13 @@ public enum ActionResultResponseType {
         } else {
             // non-scalar ...
 
-            val packedAdapter = (PackedManagedObject) resultAdapter;
-            val unpacked = packedAdapter.unpack();
+            var packedAdapter = (PackedManagedObject) resultAdapter;
+            var unpacked = packedAdapter.unpack();
 
             final int cardinality = unpacked.size();
             switch (cardinality) {
             case 1:
-                val firstElement = unpacked.getFirstElseFail();
+                var firstElement = unpacked.getFirstElseFail();
                 // recursively unwrap
                 return determineFor(firstElement, ActionResultResponseType.VOID_AS_EMPTY, targetIfAny);
             default:

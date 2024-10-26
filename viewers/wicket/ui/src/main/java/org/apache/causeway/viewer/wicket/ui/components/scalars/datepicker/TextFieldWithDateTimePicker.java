@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 
 import lombok.NonNull;
-import lombok.val;
-
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
@@ -81,7 +79,7 @@ extends TextFieldWithConverter<T> {
             public T convertToObject(final String value, final Locale locale) throws ConversionException {
                 System.err.printf("convertToObject %s%n", value);
                 try {
-                    val obj = converter.convertToObject(value, locale);
+                    var obj = converter.convertToObject(value, locale);
                     System.err.printf("convertedToObject %s%n", obj);
                     return obj;
                 } catch (Exception e) {
@@ -92,7 +90,7 @@ extends TextFieldWithConverter<T> {
 
             @Override
             public String convertToString(final T value, final Locale locale) {
-                val s =  converter.convertToString(value, locale);
+                var s =  converter.convertToString(value, locale);
                 System.err.printf("convertedToString %s%n", s);
                 return s;
             }
@@ -134,8 +132,8 @@ extends TextFieldWithConverter<T> {
     private DateTimeConfig createDatePickerConfig(
             final String temporalPattern,
             final boolean isInputNullable) {
-        val config = new DateTimeConfig();
-        val mmc = MetaModelContext.instanceElseFail();
+        var config = new DateTimeConfig();
+        var mmc = MetaModelContext.instanceElseFail();
 
         config.useLocale(mmc.currentUserLocale()
                 .map(UserLocale::getLanguageLocale)
@@ -176,7 +174,7 @@ extends TextFieldWithConverter<T> {
                 .useCloseIcon(FontAwesome6IconType.check_s)
                 );
 
-        val causewayDatePickerConfig = mmc.getConfiguration().getViewer().getWicket().getDatePicker();
+        var causewayDatePickerConfig = mmc.getConfiguration().getViewer().getWicket().getDatePicker();
 
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
         config.minDate(causewayDatePickerConfig.getMinDate());
@@ -190,7 +188,7 @@ extends TextFieldWithConverter<T> {
      */
     private CharSequence createScript(final Config config) {
 
-        val script = $(this).chain("datetimepicker", config).get();
+        var script = $(this).chain("datetimepicker", config).get();
         //debug
         //System.err.printf("script: %s%n", script);
 

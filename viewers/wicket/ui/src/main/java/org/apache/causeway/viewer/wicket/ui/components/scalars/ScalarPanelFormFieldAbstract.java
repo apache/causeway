@@ -42,8 +42,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import org.apache.causeway.viewer.wicket.ui.util.XrayWkt;
 
-import lombok.val;
-
 public abstract class ScalarPanelFormFieldAbstract<T>
 extends ScalarPanelAbstract2 {
 
@@ -71,7 +69,7 @@ extends ScalarPanelAbstract2 {
      * <p>Is added to {@link #getRegularFrame()}.
      */
     protected MarkupContainer createFieldFrame() {
-        val renderScenario = getRenderScenario();
+        var renderScenario = getRenderScenario();
         final FieldFragment fieldFragment;
         switch (renderScenario) {
         case READONLY:
@@ -115,14 +113,14 @@ extends ScalarPanelAbstract2 {
 
     @Override
     protected final MarkupContainer createRegularFrame() {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
-        val friendlyNameModel = Model.of(scalarModel.getFriendlyName());
+        var friendlyNameModel = Model.of(scalarModel.getFriendlyName());
 
         formComponent = createFormComponent(ID_SCALAR_VALUE, scalarModel);
         formComponent.setLabel(friendlyNameModel);
 
-        val formGroup = FrameFragment.REGULAR
+        var formGroup = FrameFragment.REGULAR
                 .createComponent(id->new FormGroup(id, formComponent));
         formGroup.add(formComponent);
 
@@ -138,11 +136,11 @@ extends ScalarPanelAbstract2 {
 
         formComponent.add(_Util.createValidatorFor(scalarModel));
 
-        val renderScenario = getRenderScenario();
+        var renderScenario = getRenderScenario();
 
         XrayWkt.ifEnabledDo(()->{
             // debug (wicket viewer x-ray)
-            val xrayDetails = _Maps.<String, String>newLinkedHashMap();
+            var xrayDetails = _Maps.<String, String>newLinkedHashMap();
             xrayDetails.put("panel", this.getClass().getSimpleName());
             xrayDetails.put("renderScenario", renderScenario.name());
             xrayDetails.put("inputFragmentType", getInputFragmentType().map(x->x.name()).orElse("(none)"));

@@ -54,8 +54,6 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIc
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * Web page representing an entity.
  */
@@ -87,7 +85,7 @@ public class EntityPage extends PageAbstract {
             _Debug.log("new EntityPage from PageParameters %s", pageParameters);
         });
 
-        val bookmark = PageParameterUtils.toBookmark(pageParameters);
+        var bookmark = PageParameterUtils.toBookmark(pageParameters);
         if(!bookmark.isPresent()) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
@@ -195,7 +193,7 @@ public class EntityPage extends PageAbstract {
             final WebMarkupContainer entityPageContainer,
             final WhereAmIHelper whereAmIModel) {
 
-        val whereAmIContainer = new WebMarkupContainer("whereAmI-container");
+        var whereAmIContainer = new WebMarkupContainer("whereAmI-container");
         entityPageContainer.addOrReplace(whereAmIContainer);
 
         if(!whereAmIModel.isShowWhereAmI()) {
@@ -218,7 +216,7 @@ public class EntityPage extends PageAbstract {
 
     @Override
     public void onNewRequestCycle() {
-        val entityModel = (UiObjectWkt) getUiHintContainerIfAny();
+        var entityModel = (UiObjectWkt) getUiHintContainerIfAny();
         ManagedObjects.refreshViewmodel(entityModel.getObject(),
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())

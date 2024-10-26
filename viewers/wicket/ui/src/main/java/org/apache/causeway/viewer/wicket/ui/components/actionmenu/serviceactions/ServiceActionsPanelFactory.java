@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for a {@link ServiceActionsPanel} to represent the
  * {@link org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel application action}s.
@@ -48,8 +46,8 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         if(!(model instanceof ServiceActionsModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        val navBarSection = ((ServiceActionsModel) model).getObject();
-        val menuBarSelect = navBarSection.menuBarSelect();
+        var navBarSection = ((ServiceActionsModel) model).getObject();
+        var menuBarSelect = navBarSection.menuBarSelect();
         return appliesIf(
                 menuBarSelect != DomainServiceLayout.MenuBar.TERTIARY
                 && menuBarSelect != null);
@@ -57,9 +55,9 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        val navBarSection = ((ServiceActionsModel) model).getObject();
+        var navBarSection = ((ServiceActionsModel) model).getObject();
 
-        val menuItems = _Lists.<CssMenuItem>newArrayList();
+        var menuItems = _Lists.<CssMenuItem>newArrayList();
         ServiceActionUtil.buildMenu(navBarSection, menuItems::add);
 
         return new ServiceActionsPanel(id, menuItems);

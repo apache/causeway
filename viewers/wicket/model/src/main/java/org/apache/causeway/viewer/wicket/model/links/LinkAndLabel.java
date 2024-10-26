@@ -92,17 +92,11 @@ implements
     public boolean isEnabled() {
         return actionModel.getUsabilityConsent().isAllowed();
     }
-
+    
     // -- UTILITY
 
     public static Predicate<LinkAndLabel> isPositionedAt(final Position panel) {
         return HasManagedAction.isPositionedAt(panel);
-    }
-
-    public boolean isRenderOutlined() {
-        return isPositionedAt(Position.BELOW)
-            .or(isPositionedAt(Position.RIGHT))
-            .test(this);
     }
 
     @Override

@@ -50,8 +50,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 public abstract class PromptFormAbstract<T extends
     FormExecutorContext
     & IModel<ManagedObject>>
@@ -115,10 +113,10 @@ implements ScalarModelChangeListener {
 
         setLastFocusHint();
 
-        val form = okButton.getForm();
-        val formExecutor = FormExecutorDefault.forMember(getMemberModel());
+        var form = okButton.getForm();
+        var formExecutor = FormExecutorDefault.forMember(getMemberModel());
 
-        val outcome = formExecutor
+        var outcome = formExecutor
                 .executeAndProcessResults(target, form, formExecutorContext());
 
         if (outcome.isSuccess()) {

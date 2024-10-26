@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
-import lombok.val;
-
 public abstract class ChoiceProviderAbstract
 extends ChoiceProvider<ObjectMemento>
 implements HasCommonContext {
@@ -79,7 +77,7 @@ implements HasCommonContext {
             final int page,
             final org.wicketstuff.select2.Response<ObjectMemento> response) {
 
-        val mementosFiltered = query(term);
+        var mementosFiltered = query(term);
 
         if(isRequired()) {
             response.addAll(mementosFiltered.toList());
@@ -87,7 +85,7 @@ implements HasCommonContext {
         }
 
         // else, if not mandatory, prepend null
-        val mementosIncludingNull = mementosFiltered.toArrayList();
+        var mementosIncludingNull = mementosFiltered.toArrayList();
         mementosIncludingNull.add(0, null);
 
         response.addAll(mementosIncludingNull);
@@ -118,12 +116,12 @@ implements HasCommonContext {
             return choiceMementos;
         }
 
-        val translationContext = TranslationContext.empty();
-        val translator = getTranslationService();
-        val termLower = term.toLowerCase();
+        var translationContext = TranslationContext.empty();
+        var translator = getTranslationService();
+        var termLower = term.toLowerCase();
 
         return choiceMementos.filter((final ObjectMemento candidateMemento)->{
-            val title = translator.translate(translationContext, candidateMemento.getTitle());
+            var title = translator.translate(translationContext, candidateMemento.getTitle());
             return title.toLowerCase().contains(termLower);
         });
 

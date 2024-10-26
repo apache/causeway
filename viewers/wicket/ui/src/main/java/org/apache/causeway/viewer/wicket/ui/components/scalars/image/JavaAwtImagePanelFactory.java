@@ -25,8 +25,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
-import lombok.val;
-
 public class JavaAwtImagePanelFactory
 extends ComponentFactoryScalarAbstract {
 
@@ -41,7 +39,7 @@ extends ComponentFactoryScalarAbstract {
 
     @Override
     protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
-        val typeSpec = scalarModel.getElementType();
+        var typeSpec = scalarModel.getElementType();
         return appliesIf(typeSpec != null
                 && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
     }

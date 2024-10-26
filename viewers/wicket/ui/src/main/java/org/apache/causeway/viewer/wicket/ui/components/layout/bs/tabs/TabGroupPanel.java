@@ -35,8 +35,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 // hmmm... not sure how to make this implement HasDynamicallyVisibleContent
@@ -59,8 +57,8 @@ implements HasDynamicallyVisibleContent {
                 .filter(BSTab.Predicates.notEmpty())
                 .collect(Collectors.toList());
 
-        for (val bsTab : tablist) {
-            val repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bsTab);
+        for (var bsTab : tablist) {
+            var repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(entityModel, bsTab);
             String tabName = bsTab.getName();
             tabs.add(new AbstractTab(Model.of(tabName)) {
                 private static final long serialVersionUID = 1L;

@@ -45,7 +45,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * Cloned from {@link org.apache.wicket.authroles.authentication.panel.SignInPanel},
@@ -116,7 +115,7 @@ implements HasMetaModelContext {
     protected void onConfigure() {
         // logged in already?
         if (isSignedIn() == false) {
-            val authenticationStrategy = authenticationStrategy();
+            var authenticationStrategy = authenticationStrategy();
             // get username, password and zoneID from persistence store
             final String[] data = authenticationStrategy.load();
 
@@ -126,7 +125,7 @@ implements HasMetaModelContext {
                     username = data[0];
                     password = data[1];
 
-                    val tzMememnto = recoverTimezone();
+                    var tzMememnto = recoverTimezone();
                     if(_Strings.isNotEmpty(tzMememnto)) {
                         try {
                             timezone = ZoneId.of(tzMememnto);
@@ -228,15 +227,15 @@ implements HasMetaModelContext {
     }
 
     private String recoverTimezone() {
-        val cookie = new CookieUtils().getCookie(timezoneCookieName());
+        var cookie = new CookieUtils().getCookie(timezoneCookieName());
         return cookie!=null
                 ? cookie.getValue()
                 : null;
     }
 
     private String timezoneCookieName() {
-        val rememberMe = getConfiguration().getViewer().getWicket().getRememberMe();
-        val cookieName = rememberMe.getCookieKey()+"_tz";
+        var rememberMe = getConfiguration().getViewer().getWicket().getRememberMe();
+        var cookieName = rememberMe.getCookieKey()+"_tz";
         return cookieName;
     }
 
@@ -256,7 +255,7 @@ implements HasMetaModelContext {
         public SignInFormWithTimeZone(final String id) {
             super(id);
 
-            val propertyModel = new CompoundPropertyModel<>(SignInPanelAbstract.this);
+            var propertyModel = new CompoundPropertyModel<>(SignInPanelAbstract.this);
 
             setModel(propertyModel);
 
@@ -286,7 +285,7 @@ implements HasMetaModelContext {
          */
         @Override
         public final void onSubmit() {
-            val authenticationStrategy = authenticationStrategy();
+            var authenticationStrategy = authenticationStrategy();
 
             if (signIn(username, password)) {
                 if (rememberMe) {

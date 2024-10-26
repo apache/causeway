@@ -24,8 +24,6 @@ import org.apache.wicket.util.template.PackageTextTemplate;
 
 import org.apache.causeway.commons.io.TextUtils;
 
-import lombok.val;
-
 /**
  * Introduced for optimization purposes.
  */
@@ -47,7 +45,7 @@ extends PackageTextTemplate {
     @Override
     public String getString() {
         if(scriptTemplate==null) {
-            val raw = super.getString();
+            var raw = super.getString();
 
             // strip first n comment lines
             this.scriptTemplate = TextUtils.streamLines(raw)

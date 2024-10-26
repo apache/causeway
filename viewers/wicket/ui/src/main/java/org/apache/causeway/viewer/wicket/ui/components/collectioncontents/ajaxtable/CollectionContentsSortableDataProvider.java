@@ -39,7 +39,6 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstr
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.
@@ -103,7 +102,7 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     private Optional<DataTableInteractive.ColumnSort> columnSort() {
-        val sortParam = getSort();
+        var sortParam = getSort();
         return lookupColumnIndexFor(sortParam).stream()
                 .mapToObj(columnIndex->
                     new DataTableInteractive.ColumnSort(columnIndex, sortDirection(sortParam)))

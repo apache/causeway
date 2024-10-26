@@ -121,7 +121,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -364,7 +363,7 @@ public class Wkt {
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
 
         // be aware: settings is not Serializable
-        val isPreventDoubleClickForFormSubmit = settings.isPreventDoubleClickForFormSubmit();
+        var isPreventDoubleClickForFormSubmit = settings.isPreventDoubleClickForFormSubmit();
 
         return settings.isUseIndicatorForFormSubmit()
         ? new IndicatingAjaxButton(id, labelModel) {
@@ -615,7 +614,7 @@ public class Wkt {
     }
 
     public static String cssNormalize(final Identifier identifier) {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("causeway-");
         sb.append(identifier.getLogicalType().getLogicalTypeName());
         if(_Strings.isNullOrEmpty(identifier.getMemberLogicalName())) {
@@ -626,7 +625,7 @@ public class Wkt {
     }
 
     public static String cssNormalize(final String cssClass) {
-        val trimmed = _Strings.blankToNullOrTrim(cssClass);
+        var trimmed = _Strings.blankToNullOrTrim(cssClass);
         return _Strings.isNullOrEmpty(trimmed)
                 ? null
                 : cssClass.replaceAll("\\.", "-").replaceAll("[^A-Za-z0-9- ]", "").replaceAll("\\s+", "-");
@@ -705,7 +704,7 @@ public class Wkt {
             final String id,
             final String initialCaption,
             final IModel<List<FileUpload>> model) {
-        val fileUploadField = new FileUploadFieldWithNestingFix(
+        var fileUploadField = new FileUploadFieldWithNestingFix(
                 id,
                 model,
                 new FileInputConfig()
@@ -834,7 +833,7 @@ public class Wkt {
      *  is dynamically based on the provided {@link UiString}.
      */
     public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<UiString> labelModel) {
-        val label = new Label(id, ()->labelModel.get().getString()) {
+        var label = new Label(id, ()->labelModel.get().getString()) {
             private static final long serialVersionUID = 1L;
             // we are using this method as a hook to update the ESCAPE flag before rendering
             @Override public <C> IConverter<C> getConverter(final Class<C> type) {
@@ -1000,10 +999,10 @@ public class Wkt {
             final String id,
             final Stream<T> elementStream,
             final BiConsumer<WebMarkupContainer, T> itemPopulator) {
-        val repeatingView = add(container, repeatingView(id));
+        var repeatingView = add(container, repeatingView(id));
         elementStream
         .forEach(t->{
-            val innerContainer = Wkt.container(repeatingView.newChildId());
+            var innerContainer = Wkt.container(repeatingView.newChildId());
             repeatingView.add(innerContainer);
             itemPopulator.accept(innerContainer, t);
         });
@@ -1161,7 +1160,7 @@ public class Wkt {
             return true;
         }
         if(error instanceof ValidationError) {
-            val message = ((ValidationError)error).getMessage();
+            var message = ((ValidationError)error).getMessage();
             // use plain error message from ConversionException, circumventing resource bundles.
             if(_Strings.isNotEmpty(message)) {
                 formComponent.error(message);

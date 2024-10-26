@@ -22,15 +22,14 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.core.config.messages.MessageRegistry;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface ConfirmDecorator<T> {
@@ -39,8 +38,8 @@ public interface ConfirmDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter
-    @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
+    @Getter @Accessors(fluent=true) //RECORD (java 16)
+    @AllArgsConstructor
     public static class ConfirmDecorationModel implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -51,28 +50,18 @@ public interface ConfirmDecorator<T> {
         final @NonNull String cancelLabel;
         final @NonNull UiPlacementDirection placement;
 
-        public static ConfirmDecorationModel areYouSure(
-                final TranslationService translationService,
-                final UiPlacementDirection placement) {
+        public static ConfirmDecorationModel areYouSure(final UiPlacementDirection placement) {
 
-            val context = TranslationContext.forClassName(MessageRegistry.class);
+            var translationService = MetaModelContext.translationServiceOrFallback();
+            var context = TranslationContext.forClassName(MessageRegistry.class);
+            
+            var areYouSure = translationService.translate(context, MessageRegistry.MSG_ARE_YOU_SURE);
+            var confirm = translationService.translate(context, MessageRegistry.MSG_CONFIRM);
+            var cancel = translationService.translate(context, MessageRegistry.MSG_CANCEL);
 
-            val areYouSure = translate(translationService, context, MessageRegistry.MSG_ARE_YOU_SURE);
-            val confirm = translate(translationService, context, MessageRegistry.MSG_CONFIRM);
-            val cancel = translate(translationService, context, MessageRegistry.MSG_CANCEL);
+            var message = Optional.<String>empty(); // not used yet
 
-            val message = Optional.<String>empty(); // not used yet
-
-            return of(areYouSure, message, confirm, cancel, placement);
-        }
-
-        // -- HELPER
-
-        private static String translate(final TranslationService translationService, final TranslationContext context, final String msg) {
-            if(translationService!=null) {
-                return translationService.translate(context, msg);
-            }
-            return msg;
+            return new ConfirmDecorationModel(areYouSure, message, confirm, cancel, placement);
         }
 
     }

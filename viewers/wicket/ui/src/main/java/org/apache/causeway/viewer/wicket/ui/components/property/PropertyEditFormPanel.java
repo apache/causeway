@@ -24,8 +24,6 @@ import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersF
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
-import lombok.val;
-
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
@@ -46,7 +44,7 @@ extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
     }
 
     private void buildGui() {
-        val scalarPropertyModel = scalarPropertyModel();
+        var scalarPropertyModel = scalarPropertyModel();
         add(new PropertyEditForm(ID_INPUT_FORM, this, scalarPropertyModel));
     }
 

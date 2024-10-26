@@ -46,17 +46,17 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
         //[CAUSEWAY-3210] EntityModel.ofAdapter(commonContext, targetAdapterForMixin); not supported for mixins
         return Optional.empty();
 
-//        val action = actionModel.getAction();
+//        var action = actionModel.getAction();
 //        if(action.isMixedIn()) {
 //
-//            val mixinSpec = ((MixedInMember)action).getMixinType();
-//            val targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
+//            var mixinSpec = ((MixedInMember)action).getMixinType();
+//            var targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
 //
 //            // if we can bootstrap a grid, use it
 //            return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
 //            .map(bsGrid->{
-//                val commonContext = actionModel.getMetaModelContext();
-//                val entityModelForMixin =
+//                var commonContext = actionModel.getMetaModelContext();
+//                var entityModelForMixin =
 //                        EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
 //                return new BSGridPanel(id, entityModelForMixin, bsGrid);
 //            });

@@ -38,8 +38,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.val;
-
 /**
  * A panel for the default page header
  */
@@ -68,7 +66,7 @@ extends PanelAbstract<String, Model<String>> {
     protected void onInitialize() {
         super.onInitialize();
 
-        val headerUiModel = super.getHeaderModel();
+        var headerUiModel = super.getHeaderModel();
 
         addApplicationName(headerUiModel.branding());
         addUserName(headerUiModel.userProfile());
@@ -84,8 +82,8 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     protected void addApplicationName(final BrandingUiModel branding) {
-        val homePage = getApplication().getHomePage();
-        val applicationNameLink = new BookmarkablePageLink<Void>("applicationName", homePage);
+        var homePage = getApplication().getHomePage();
+        var applicationNameLink = new BookmarkablePageLink<Void>("applicationName", homePage);
         applicationNameLink.add(
                 new BrandName("brandText", branding),
                 new BrandLogo("brandLogo", branding));
@@ -108,7 +106,7 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     protected void addServiceActionMenuBars(final HeaderUiModel headerUiModel) {
-        val navbar = headerUiModel.navbar();
+        var navbar = headerUiModel.navbar();
         if (getPage() instanceof ErrorPage) {
             WktComponents.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
             WktComponents.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
@@ -125,8 +123,8 @@ extends PanelAbstract<String, Model<String>> {
             final NavbarSection menuUiModel) {
 
         final MarkupContainer container = this;
-        val menuModel = new ServiceActionsModel(menuUiModel);
-        val menuBarComponent = getComponentFactoryRegistry()
+        var menuModel = new ServiceActionsModel(menuUiModel);
+        var menuBarComponent = getComponentFactoryRegistry()
                 .createComponent(id, UiComponentType.SERVICE_ACTIONS, menuModel);
         Wkt.cssAppend(menuBarComponent, menuUiModel.cssClass());
         container.add(menuBarComponent);

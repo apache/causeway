@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.Acti
 import org.apache.causeway.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverBehavior;
@@ -63,7 +62,7 @@ public class WktTooltips {
         }
 
         if(target instanceof ActionLink) {
-            val actionLink = (ActionLink)target;
+            var actionLink = (ActionLink)target;
             if(!actionLink.getActionModel().hasParameters()) {
                 //XXX[CAUSEWAY-3051] adding a tooltip to an ActionLink will break any ConfirmationBehavior,
                 //that's also applied to the ActionLink.
@@ -73,12 +72,12 @@ public class WktTooltips {
             }
         }
 
-        val placementDirection = tooltipDecorationModel.getPlacementDirection();
+        var placementDirection = tooltipDecorationModel.placementDirection();
 
-        final IModel<String> bodyModel = Model.of(tooltipDecorationModel.getBody());
+        final IModel<String> bodyModel = Model.of(tooltipDecorationModel.body());
 
-        val tooltipBehavior = tooltipDecorationModel
-                .getTitle()
+        var tooltipBehavior = tooltipDecorationModel
+                .title()
                 .map(title->Model.of(title))
                 .map(titleModel->createTooltipBehavior(placementDirection, titleModel, bodyModel))
                 .orElseGet(()->createTooltipBehavior(placementDirection, bodyModel));
@@ -156,7 +155,7 @@ public class WktTooltips {
                 // bootstrap.Popover(...) will fail when the popover trigger element is not found
                 // so we wrap the call within a document search, that will only process elements,
                 // that actually exist within the DOM
-                val markupId = WktComponents.getMarkupId(component);
+                var markupId = WktComponents.getMarkupId(component);
                 return String.format("document.querySelectorAll('#%s').forEach((elem)=>{"
                         + "new bootstrap.Popover(elem, %s);"
                         + "})",
@@ -205,7 +204,7 @@ public class WktTooltips {
      * Lookup in config, else returns default.
      */
     private static TextMode getTooltipTextMode() {
-        val textMode = MetaModelContext.instance()
+        var textMode = MetaModelContext.instance()
                 .map(MetaModelContext::getConfiguration)
                 .map(cfg->cfg.getViewer().getWicket().getTooltipTextMode())
                 .orElseGet(TextMode::defaults);

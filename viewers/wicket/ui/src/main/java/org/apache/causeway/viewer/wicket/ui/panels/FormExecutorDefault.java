@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -125,7 +124,7 @@ implements FormExecutor, HasCommonContext {
             //
             //XXX triggers BookmarkedObjectWkt.getObjectAndReAttach() down the call-stack
             //XXX applies the pending property
-            val resultAdapter = actionOrPropertyModel.fold(
+            var resultAdapter = actionOrPropertyModel.fold(
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
 
@@ -159,7 +158,7 @@ implements FormExecutor, HasCommonContext {
             });
 
             //XXX triggers ManagedObject.getBookmarkRefreshed()
-            val resultResponse = actionOrPropertyModel.fold(
+            var resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponseType
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
                     prop->ActionResultResponseType
@@ -206,7 +205,7 @@ implements FormExecutor, HasCommonContext {
             final AjaxRequestTarget target,
             final Form<?> feedbackForm) {
 
-        val recognition = getExceptionRecognizerService().recognize(ex);
+        var recognition = getExceptionRecognizerService().recognize(ex);
         recognition.ifPresent(recog->raiseErrorMessage(target, feedbackForm, recog));
         return recognition;
     }
@@ -216,7 +215,7 @@ implements FormExecutor, HasCommonContext {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
-        val errorMsg = recognition.getCategory().isSuppressCategoryInUI()
+        var errorMsg = recognition.getCategory().isSuppressCategoryInUI()
                 ? recognition.toMessageNoCategory(getTranslationService())
                 : recognition.toMessage(getTranslationService());
 

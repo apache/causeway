@@ -36,7 +36,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -69,7 +68,7 @@ public class ScalarFragmentFactory {
         }
         /* not used
         public void permanentlyHideIn(final MarkupContainer container) {
-            val toHide = container.get(containerId);
+            var toHide = container.get(containerId);
             if (toHide != null) {
                 toHide.setVisibilityAllowed(false);
                 toHide.setVisible(false);
@@ -91,7 +90,7 @@ public class ScalarFragmentFactory {
         /* not used
         public Component addComponentIfMissing(final MarkupContainer container,
                 final Function<String, ? extends Component> factory) {
-            val alreadyExisting = container.get(containerId);
+            var alreadyExisting = container.get(containerId);
             return alreadyExisting!=null
                     ? alreadyExisting
                     : Wkt.add(container, createComponent(factory));
@@ -188,7 +187,7 @@ public class ScalarFragmentFactory {
          */
         public <T extends Component> Fragment createFragment(
                 final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
-            val fragment = Wkt.fragment(id, fragmentId, markupProvider);
+            var fragment = Wkt.fragment(id, fragmentId, markupProvider);
             fragment.add(componentFactory.apply(ScalarPanelAbstract.ID_SCALAR_VALUE));
             return fragment;
         }
@@ -227,7 +226,7 @@ public class ScalarFragmentFactory {
          * @param markupProvider - The component whose markup contains the fragment's markup
          */
         public Fragment createFragment(final MarkupContainer markupProvider, final FormComponent<?> inputComponent) {
-            val fragment = Wkt.fragment(
+            var fragment = Wkt.fragment(
                     FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId(), fragmentId, markupProvider);
             fragment.add(inputComponent);
             return fragment;
@@ -256,7 +255,7 @@ public class ScalarFragmentFactory {
          */
         public <T extends Component> Fragment createFragment(
                 final String id, final MarkupContainer markupProvider, final Function<String, T> componentFactory) {
-            val fragment = Wkt.fragment(id, fragmentId, markupProvider);
+            var fragment = Wkt.fragment(id, fragmentId, markupProvider);
             fragment.add(componentFactory.apply(ScalarPanelAbstract.ID_SCALAR_VALUE));
             return fragment;
         }
@@ -267,9 +266,9 @@ public class ScalarFragmentFactory {
         public Fragment createFragment(final MarkupContainer markupProvider,
                 final IModel<String> promptLabelModel,
                 final @Nullable Consumer<FormComponent<String>> onComponentCreated) {
-            val fragment = Wkt.fragment(
+            var fragment = Wkt.fragment(
                     FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId(), fragmentId, markupProvider);
-            val component = componentFactory.apply(promptLabelModel);
+            var component = componentFactory.apply(promptLabelModel);
             fragment.add(component);
             if(onComponentCreated!=null
                     && component instanceof FormComponent) {

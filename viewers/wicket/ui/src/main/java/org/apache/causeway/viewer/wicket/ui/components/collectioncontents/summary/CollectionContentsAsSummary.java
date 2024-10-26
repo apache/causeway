@@ -44,8 +44,6 @@ import org.apache.causeway.viewer.wicket.ui.components.collection.count.Collecti
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -101,10 +99,10 @@ implements CollectionCountProvider {
 
             repeating.add(item);
 
-            val propertyColumnName = numberAssociation.getCanonicalFriendlyName();
+            var propertyColumnName = numberAssociation.getCanonicalFriendlyName();
             Wkt.labelAdd(item, ID_PROPERTY_NAME, propertyColumnName);
 
-            val visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
+            var visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
                     .getValue()
                     .map(DataRow::getRowElement)
                     .toList();
@@ -135,7 +133,7 @@ implements CollectionCountProvider {
         public Summary(final String propertyName, final List<ManagedObject> adapters, final ObjectAssociation numberAssociation) {
             this.propertyName = propertyName;
             int nonNullCount = 0;
-            for (val adapter : adapters) {
+            for (var adapter : adapters) {
                 titles.add(adapter.getTitle());
                 final ManagedObject valueAdapter =
                         numberAssociation.get(adapter, InteractionInitiatedBy.USER);

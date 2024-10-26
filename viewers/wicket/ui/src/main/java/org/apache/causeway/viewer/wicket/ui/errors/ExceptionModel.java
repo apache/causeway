@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
-import lombok.val;
-
 public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
 
     private static final long serialVersionUID = 1L;
@@ -52,8 +50,8 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
             final Optional<Recognition> recognition,
             final Exception ex) {
 
-        val translationService = commonContext.getTranslationService();
-        val recognizedMessage = recognition.map($->$.toMessage(translationService));
+        var translationService = commonContext.getTranslationService();
+        var recognizedMessage = recognition.map($->$.toMessage(translationService));
 
         return new ExceptionModel(commonContext, recognizedMessage.orElse(null), ex);
     }

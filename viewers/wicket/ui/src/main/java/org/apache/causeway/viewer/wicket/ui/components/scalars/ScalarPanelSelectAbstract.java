@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class ScalarPanelSelectAbstract
 extends ScalarPanelFormFieldAbstract<ManagedObject> {
@@ -61,11 +60,11 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     protected final Select2 createSelect2(
             final String id,
             final Function<ScalarModel, ChoiceProviderAbstract> choiceProviderFactory) {
-        val scalarModel = scalarModel();
-        val select2 = Select2.createSelect2(id, scalarModel,
+        var scalarModel = scalarModel();
+        var select2 = Select2.createSelect2(id, scalarModel,
                 choiceProviderFactory.apply(scalarModel),
                 getScalarModelChangeDispatcher());
-        val settings = select2.getSettings();
+        var settings = select2.getSettings();
         settings.setPlaceholder(scalarModel.getFriendlyName());
 
         switch(scalarModel.getChoiceProviderSort()) {
@@ -95,7 +94,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     }
 
     protected final boolean isEditable() {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
         // cannot edit if in table or is view-mode
         return !scalarModel.getRenderingHint().isInTable()
                 && !scalarModel.isViewingMode();

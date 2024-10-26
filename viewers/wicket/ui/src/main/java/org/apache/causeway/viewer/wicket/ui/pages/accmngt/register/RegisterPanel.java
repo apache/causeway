@@ -43,8 +43,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.UsernameAvailableValidator;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 
-import lombok.val;
-
 /**
  * A panel with a form for self-registration of a user
  */
@@ -101,8 +99,8 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
             final MarkupContainer password,
             final MarkupContainer confirmPassword) {
 
-        val passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
-        val confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
+        var passwordField = (FormComponent<?>) password.get(ID_PASSWORD);
+        var confirmPasswordField = (FormComponent<?>) confirmPassword.get(ID_CONFIRM_PASSWORD);
         return new EqualPasswordInputValidator(passwordField, confirmPasswordField);
     }
 

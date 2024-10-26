@@ -30,8 +30,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.val;
-
 /**
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
  *
@@ -89,7 +87,7 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof ObjectAdapterModel) {
             objectAdapterModel = (ObjectAdapterModel) model;
         } else if (model instanceof ScalarModel) {
-            val scalarModel = (ScalarModel) model;
+            var scalarModel = (ScalarModel) model;
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
             objectAdapterModel = ChainingObjectModel.chain(scalarModel);
         } else {

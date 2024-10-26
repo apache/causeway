@@ -121,7 +121,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     @Override
     public String getVariation() {
-//        val labelAtFacet = getModel().getFacet(LabelAtFace~t.class);
+//        var labelAtFacet = getModel().getFacet(LabelAtFace~t.class);
 //        return labelAtFacet != null
 //                && labelAtFacet.label() == LabelPosition.RIGHT
 //            ? "labelRightPosition"

@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 /**
  * A button contained within its own form.
  */
@@ -55,8 +53,8 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
             final IModel<Boolean> model,
             final SerializableBiConsumer<Boolean, AjaxRequestTarget> onUpdate) {
         super(id);
-        val markupContainer = Wkt.containerAdd(this, ID_CONTAINER);
-        val form = Wkt.formAdd(markupContainer, ID_FORM);
+        var markupContainer = Wkt.containerAdd(this, ID_CONTAINER);
+        var form = Wkt.formAdd(markupContainer, ID_FORM);
         this.checkbox = Wkt.checkboxAdd(
                 form, ID_TOGGLEBOX, model, ajaxTarget->
                     onUpdate.accept(model.getObject(), ajaxTarget));

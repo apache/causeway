@@ -35,7 +35,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 import de.agilecoders.wicket.core.settings.NoopThemeProvider;
@@ -66,7 +65,7 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
     @Override
     public List<String> getEnabledThemeNames() {
 
-        val composite = themeProvider.get();
+        var composite = themeProvider.get();
 
         List<String> allThemes = composite.availableNames();
 
@@ -80,7 +79,7 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
 
     private ThemeProviderComposite createThemeProvider() {
 
-        val providerBeans = serviceRegistry.select(ThemeProvider.class);
+        var providerBeans = serviceRegistry.select(ThemeProvider.class);
         if (providerBeans.isEmpty()) {
             return ThemeProviderComposite.of(Can.ofSingleton(createFallbackThemeProvider()));
         }
@@ -89,7 +88,7 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
     }
 
     private ThemeProvider createFallbackThemeProvider() {
-        val themeName = configuration.getViewer().getWicket().getThemes().getInitial();
+        var themeName = configuration.getViewer().getWicket().getThemes().getInitial();
         if ("default".equalsIgnoreCase(themeName)) {
             // in effect uses the bootstrap 'default' theme
             return new NoopThemeProvider();
@@ -117,12 +116,12 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
      */
     private List<String> filterThemes(final List<String> availableThemes) {
 
-        val configuredThemes = configuration.getViewer().getWicket().getThemes().getEnabled();
+        var configuredThemes = configuration.getViewer().getWicket().getThemes().getEnabled();
         if (configuredThemes == null || configuredThemes.isEmpty()) {
             return Collections.emptyList();
         }
 
-        val enabledThemes = new ArrayList<String>();
+        var enabledThemes = new ArrayList<String>();
         availableThemes.stream()
                 .filter(availableTheme -> configuredThemes.stream().anyMatch(configuredTheme -> configuredTheme.equalsIgnoreCase(availableTheme)))
                 .forEach(enabledThemes::add);

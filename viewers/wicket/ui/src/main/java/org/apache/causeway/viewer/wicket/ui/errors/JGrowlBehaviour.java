@@ -31,8 +31,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
-import lombok.val;
-
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
  * {@link MessageBroker#addMessage(String)}, {@link MessageBroker#addWarning(String)},
@@ -54,7 +52,7 @@ implements HasCommonContext {
     @Override
     protected void respond(final AjaxRequestTarget target) {
 
-        val configuration = getMetaModelContext().getConfiguration();
+        var configuration = getMetaModelContext().getConfiguration();
         getMessageBroker().ifPresent(messageBroker->{
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);
             if(!_Strings.isNullOrEmpty(feedbackMsg)) {
@@ -75,7 +73,7 @@ implements HasCommonContext {
                 JavaScriptHeaderItem
                 .forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/causeway-bootstrap-growl.js")));
 
-        val configuration = getMetaModelContext().getConfiguration();
+        var configuration = getMetaModelContext().getConfiguration();
         getMessageBroker().ifPresent(messageBroker->{
 
             String feedbackMsg = JGrowlUtil.asJGrowlCalls(messageBroker, configuration);

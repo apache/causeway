@@ -42,7 +42,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -82,7 +81,6 @@ import lombok.val;
 @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class InteractionTestWkt extends InteractionTestAbstract {
 
-    @Inject private MetaModelContext commonContext;
     @Inject private WicketTesterFactory wicketTesterFactory;
     private WicketTester wktTester;
 
@@ -206,6 +204,6 @@ class InteractionTestWkt extends InteractionTestAbstract {
                 .checkUsability();
 
         val disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
-        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
+        assertEquals("Disabled for demonstration.", disablingUiModel.reason());
     }
 }

@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWk
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Builder;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 public final class PluralColumn
@@ -76,9 +75,9 @@ extends AssociationColumnAbstract {
 
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
-        val dataRow = dataRowWkt.getObject();
-        val dataColumn = dataRow.lookupColumnById(memberId).orElseThrow();
-        val cellElements = dataRow.getCellElementsForColumn(dataColumn);
+        var dataRow = dataRowWkt.getObject();
+        var dataColumn = dataRow.lookupColumnById(memberId).orElseThrow();
+        var cellElements = dataRow.getCellElementsForColumn(dataColumn);
 
         // if empty, render the 'empty' badge or blank based on RenderOptions
         if(cellElements.isEmpty()) {
@@ -88,7 +87,7 @@ extends AssociationColumnAbstract {
                     : "");
         }
 
-        val container = new RepeatingView(componentId);
+        var container = new RepeatingView(componentId);
         cellElements.stream()
             .limit(opts.maxElements())
             .forEach(cellElement->container
@@ -98,7 +97,7 @@ extends AssociationColumnAbstract {
         final int overflow = cellElements.size()-opts.maxElements();
         if(overflow>0) {
 
-            val href = getMetaModelContext().getServiceRegistry().lookupService(DeepLinkService.class)
+            var href = getMetaModelContext().getServiceRegistry().lookupService(DeepLinkService.class)
                     .map(deepLinkService->deepLinkService.deepLinkFor(dataRow.getRowElement()))
                     .map(URI::toString)
                     .orElse("#");
@@ -119,14 +118,14 @@ extends AssociationColumnAbstract {
             final String componentId, final DataColumn dataColumn, final ManagedObject cellElement) {
 
         if(ManagedObjects.isValue(cellElement)) {
-            val valueModel = ValueModel.of(dataColumn.getAssociationMetaModel(), cellElement);
-            val componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
+            var valueModel = ValueModel.of(dataColumn.getAssociationMetaModel(), cellElement);
+            var componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }
 
-        val uiObject = UiObjectWkt.ofAdapterForCollection(cellElement, collectionVariant);
+        var uiObject = UiObjectWkt.ofAdapterForCollection(cellElement, collectionVariant);
 
-        val componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
+        var componentFactory = findComponentFactory(UiComponentType.ENTITY_LINK, uiObject);
         final Component entityLink =
                 componentFactory.createComponent(componentId, uiObject);
 

@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 public class UnknownModelPanel
 extends PanelAbstract<Object, IModel<Object>> {
 
@@ -56,16 +54,16 @@ extends PanelAbstract<Object, IModel<Object>> {
     private void buildMessageForModel(final StringBuilder buf, final IModel<?> model) {
         buf.append(model.getClass().getSimpleName()).append(" ");
         if(model instanceof UiObjectWkt) {
-            val entityModel = (UiObjectWkt) model;
-            val objectAdapter = entityModel.getObject();
+            var entityModel = (UiObjectWkt) model;
+            var objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
                 buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));
             } else {
                 buf.append("??? objectAdapter is NULL");
             }
         } else if(model instanceof ScalarModel) {
-            val scalarModel = (ScalarModel) model;
-            val scalarAdapter = scalarModel.getObject();
+            var scalarModel = (ScalarModel) model;
+            var scalarAdapter = scalarModel.getObject();
             if(ManagedObjects.isSpecified(scalarAdapter)) {
                 buf.append(String.format("??? spec=%s, value='%s'",
                         scalarAdapter.getSpecification(), scalarAdapter.getPojo()));

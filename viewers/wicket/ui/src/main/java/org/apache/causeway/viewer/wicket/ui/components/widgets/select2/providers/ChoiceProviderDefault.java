@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
-import lombok.val;
-
 public class ChoiceProviderDefault
 extends ChoiceProviderAbstractForScalarModel {
 
@@ -46,7 +44,7 @@ extends ChoiceProviderAbstractForScalarModel {
 
     @Override
     protected Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
-        val autoCompleteAdapters = Facets
+        var autoCompleteAdapters = Facets
                 .autoCompleteExecute(scalarModel().getElementType(), term);
         return autoCompleteAdapters
                 .map(ManagedObject::getMementoElseFail);
@@ -54,16 +52,16 @@ extends ChoiceProviderAbstractForScalarModel {
 
     @Override
     protected Can<ObjectMemento> queryWithAutoComplete(final String term) {
-        val scalarModel = scalarModel();
-        val pendingArgs = scalarModel.isParameter()
+        var scalarModel = scalarModel();
+        var pendingArgs = scalarModel.isParameter()
                 ? ((UiParameter)scalarModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
-        val pendingArgMementos = pendingArgs
+        var pendingArgMementos = pendingArgs
                 .map(ManagedObject::getMementoElseFail);
 
         if(scalarModel.isParameter()) {
             // recover any pendingArgs
-            val paramModel = (UiParameter)scalarModel;
+            var paramModel = (UiParameter)scalarModel;
 
             paramModel
                 .getParameterNegotiationModel()
@@ -82,7 +80,7 @@ extends ChoiceProviderAbstractForScalarModel {
             final UiParameter parameterModel,
             final Can<ObjectMemento> pendingArgMementos) {
 
-        val pendingArgsList = _NullSafe.stream(pendingArgMementos)
+        var pendingArgsList = _NullSafe.stream(pendingArgMementos)
             .map(getObjectManager()::demementify)
             .collect(Can.toCan());
 
