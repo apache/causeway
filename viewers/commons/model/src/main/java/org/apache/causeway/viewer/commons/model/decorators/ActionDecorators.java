@@ -132,6 +132,15 @@ public class ActionDecorators {
         public boolean isMenuItem() {
             return actionStyle==ActionStyle.MENU_ITEM;
         }
+
+        /**
+         * Whether the underlying action will spawn a dialog. 
+         * Typically used to indicate the action with a tailing ellipsis.
+         */
+        public boolean isBoundToDialog() {
+            return action.getParameterCount()>0
+                    || action.isImmediateConfirmationRequired();
+        }
     }
 
 }

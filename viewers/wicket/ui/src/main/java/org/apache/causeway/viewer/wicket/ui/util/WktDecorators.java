@@ -24,6 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -247,19 +248,25 @@ public class WktDecorators {
             AjaxLink<ManagedObject> actionLink,
             Label actionLabel, 
             ActionDecorationModel decorationModel) {
-        //CSS
+        // ellipsis
+        if(decorationModel.isBoundToDialog()) {
+            //TODO[CAUSEWAY-3824] decorate only if enabled via config option
+            var ellipsifiedModel = actionLabel.getDefaultModel().combineWith(Model.of("…"), (a, b)->a + b);
+            actionLabel.setDefaultModel(ellipsifiedModel);
+        }
+        // CSS
         Wkt.cssAppend(actionLink, decorationModel.featureIdentifier());
         decorationModel.additionalCssClass()
             .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
-        //blob/clob
+        // blob/clob
         if (ObjectAction.Util.returnsBlobOrClob(decorationModel.action())) {
             Wkt.cssAppend(actionLink, "noVeil");           
         }
-        //prototyping
+        // prototyping
         decorationModel.prototyping().ifPresent(protoDecModel->{
             prototyping().decorate(actionLink, protoDecModel);
         });
-        //fa-icon
+        // fa-icon
         var faLayers = decorationModel.fontAwesomeLayers();
         faIcon().decorate(actionLabel, faLayers);
         if(decorationModel.isMenuItem()) {
