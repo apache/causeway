@@ -73,12 +73,12 @@ public class WktTooltips {
             }
         }
 
-        val placementDirection = tooltipDecorationModel.getPlacementDirection();
+        val placementDirection = tooltipDecorationModel.placementDirection();
 
-        final IModel<String> bodyModel = Model.of(tooltipDecorationModel.getBody());
+        final IModel<String> bodyModel = Model.of(tooltipDecorationModel.body());
 
         val tooltipBehavior = tooltipDecorationModel
-                .getTitle()
+                .title()
                 .map(title->Model.of(title))
                 .map(titleModel->createTooltipBehavior(placementDirection, titleModel, bodyModel))
                 .orElseGet(()->createTooltipBehavior(placementDirection, bodyModel));

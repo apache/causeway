@@ -151,7 +151,7 @@ implements Menuable {
             // ... and show label, along with disabled reason
 
             linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                WktTooltips.addTooltip(label, disableUiModel.getReason());
+                WktTooltips.addTooltip(label, disableUiModel.reason());
             });
 
             label.add(new AttributeModifier("class", Model.of("disabled")));

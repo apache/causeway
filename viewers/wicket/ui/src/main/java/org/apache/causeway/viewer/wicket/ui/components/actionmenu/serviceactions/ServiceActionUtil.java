@@ -41,36 +41,27 @@ import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-//@Log4j2
-public final class ServiceActionUtil {
+class ServiceActionUtil {
 
-    static void addLeafItem(
-            final MetaModelContext commonContext,
+    void addLeafItem(
             final CssMenuItem menuItem,
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
 
-        val actionUiModel = menuItem.getLinkAndLabel();
-        val menuItemActionLink = actionUiModel.getUiComponent();
-        val menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
+        var linkAndLabel = menuItem.getLinkAndLabel();
+        var menuItemActionLink = linkAndLabel.getUiComponent();
+        var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
 
-        WktDecorators.getActionLink().decorateMenuItem(
-                listItem,
-                actionUiModel,
-                commonContext.getTranslationService());
+        WktDecorators.getActionLink()
+            .decorate(listItem, menuItemActionLink, menuItemLabel, linkAndLabel.getMenuActionDecorationModel());
 
-        val faLayers = actionUiModel.lookupFontAwesomeLayers(true);
-        WktDecorators.getIcon().decorate(menuItemLabel, faLayers);
-        WktDecorators.getMissingIcon().decorate(menuItemActionLink, faLayers);
-
-        val leafItem = new Fragment("content", "leafItem", parent);
+        var leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(menuItemActionLink);
 
         listItem.add(leafItem);
     }
 
-    static void addFolderItem(
-            final MetaModelContext commonContext,
+    void addFolderItem(
             final CssMenuItem subMenuItem,
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
@@ -87,9 +78,9 @@ public final class ServiceActionUtil {
             CssMenuItem menuItem = listItem.getModelObject();
 
             if (menuItem.hasSubMenuItems()) {
-                addFolderItem(commonContext, menuItem, item, parent);
+                addFolderItem(menuItem, item, parent);
             } else {
-                addLeafItem(commonContext, menuItem, item, parent);
+                addLeafItem(menuItem, item, parent);
             }
         });
 
@@ -137,7 +128,7 @@ public final class ServiceActionUtil {
         }
     }
 
-    public static void buildMenu(
+    void buildMenu(
             final MetaModelContext commonContext,
             final MenuUiModel menuUiModel,
             final Consumer<CssMenuItem> onNewMenuItem) {

@@ -44,7 +44,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.Acti
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -64,10 +63,11 @@ public final class WktLinks {
             final LinkAndLabel linkAndLabel,
             final boolean isForceAlignmentWithBlankIcon) {
 
-        val link = linkAndLabel.getUiComponent();
-        val action = linkAndLabel.getManagedAction().getAction();
+        var link = linkAndLabel.getUiComponent();
+        var action = linkAndLabel.getManagedAction().getAction();
 
-        val hasDisabledReason = link instanceof ActionLink && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny());
+        var hasDisabledReason = link instanceof ActionLink 
+                && _Strings.isNotEmpty(((ActionLink) link).getReasonDisabledIfAny());
 
         WktTooltips.addTooltip(tooltipReceiver, hasDisabledReason
                 ? ((ActionLink) link).getReasonDisabledIfAny()
@@ -84,10 +84,8 @@ public final class WktLinks {
         if (action.getSemantics().isAreYouSure()) {
             if(action.getParameterCount()==0) {
                 if (!hasDisabledReason) {
-                    val translationService = linkAndLabel.getAction().getMetaModelContext()
-                            .getTranslationService();
-                    val confirmUiModel = ConfirmDecorationModel
-                            .areYouSure(translationService, UiPlacementDirection.BOTTOM);
+                    var confirmUiModel = ConfirmDecorationModel
+                            .areYouSure(UiPlacementDirection.BOTTOM);
                     WktDecorators.getConfirm().decorate(link, confirmUiModel);
                 }
             }
@@ -105,10 +103,10 @@ public final class WktLinks {
         .getAdditionalCssClass()
         .ifPresent(cssClass->Wkt.cssAppend(link, cssClass));
 
-        val viewTitleLabel = Wkt.labelAdd(link, titleId,
+        var viewTitleLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
 
-        val faLayers = linkAndLabel.lookupFontAwesomeLayers(isForceAlignmentWithBlankIcon);
+        var faLayers = linkAndLabel.lookupFontAwesomeLayers(isForceAlignmentWithBlankIcon);
 
         WktDecorators.getIcon().decorate(viewTitleLabel, faLayers);
         WktDecorators.getMissingIcon().decorate(viewTitleLabel, faLayers);
@@ -122,7 +120,7 @@ public final class WktLinks {
             final @NonNull String iconId, final @Nullable Function<T, IModel<String>> iconProvider,
             final @Nullable BiFunction<T, Label, IModel<String>> cssFactory) {
 
-        val t = item.getModelObject();
+        var t = item.getModelObject();
 
         // add title and icon to the link
 

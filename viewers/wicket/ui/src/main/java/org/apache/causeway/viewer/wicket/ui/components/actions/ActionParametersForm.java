@@ -44,8 +44,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 
-import lombok.val;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 
 class ActionParametersForm
@@ -66,9 +64,9 @@ extends PromptFormAbstract<ActionModel> {
 
     @Override
     protected void addParameters() {
-        val actionModel = actionModel();
+        var actionModel = actionModel();
 
-        val repeatingView =
+        var repeatingView =
                 Wkt.add(this, new RepeatingView(ActionParametersFormPanel.ID_ACTION_PARAMETERS));
 
         paramPanels.clear();
@@ -77,7 +75,7 @@ extends PromptFormAbstract<ActionModel> {
         .map(UiParameterWkt.class::cast)
         .forEach(paramModel->{
 
-            val container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
+            var container = Wkt.containerAdd(repeatingView, repeatingView.newChildId());
 
             newParamPanel(container, paramModel, paramPanels::add);
 
@@ -91,10 +89,10 @@ extends PromptFormAbstract<ActionModel> {
             final UiParameterWkt paramModel,
             final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
 
-        val scalarParamModel = ScalarParameterModel.wrap(paramModel);
+        var scalarParamModel = ScalarParameterModel.wrap(paramModel);
 
         // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
-        val component = getComponentFactoryRegistry()
+        var component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
                         UiComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
 
@@ -118,11 +116,11 @@ extends PromptFormAbstract<ActionModel> {
      * @param button The button which action should be confirmed
      */
     private void applyAreYouSure(final AjaxButton button) {
-        val actionModel = actionModel();
-        val action = actionModel.getAction();
+        var actionModel = actionModel();
+        var action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmDecorationModel.areYouSure(getTranslationService(), UiPlacementDirection.BOTTOM);
+            var confirmUiModel = ConfirmDecorationModel.areYouSure(UiPlacementDirection.BOTTOM);
             WktDecorators.getConfirm().decorate(button, confirmUiModel);
         }
     }
@@ -130,10 +128,10 @@ extends PromptFormAbstract<ActionModel> {
     @Override
     public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
 
-        val actionModel = actionModel();
-        val updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
-        val paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
-        val pendingParamModels = actionModel.streamPendingParamUiModels().collect(Can.toCan());
+        var actionModel = actionModel();
+        var updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();
+        var paramNegotiationModel = updatedParamModel.getParameterNegotiationModel();
+        var pendingParamModels = actionModel.streamPendingParamUiModels().collect(Can.toCan());
 
         final int paramIndexOfUpdated = updatedParamModel.getParameterIndex();
         _Xray.beforeParamFormUpdate(paramIndexOfUpdated, paramNegotiationModel);
@@ -148,8 +146,8 @@ extends PromptFormAbstract<ActionModel> {
                     Repaint.required(wasValueChanged);
             _Xray.reassessedDefault(paramIndexForReassessment, paramNegotiationModel);
 
-            val paramPanel = paramPanels.get(paramIndexForReassessment);
-            val paramModel = pendingParamModels.getElseFail(paramIndexForReassessment);
+            var paramPanel = paramPanels.get(paramIndexForReassessment);
+            var paramModel = pendingParamModels.getElseFail(paramIndexForReassessment);
             /* repaint is required, either because of a changed value during reassessment above
              * or because visibility or usability have changed */
             paramRepaint = paramRepaint.max(
