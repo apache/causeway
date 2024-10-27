@@ -48,17 +48,19 @@ public class ActionDecorators {
     public enum ButtonModifier {
         NONE,
         /**
-         * To respect UI visual hierarchy, we render action buttons outlined, 
-         * if they appear next to their association, (this is, not in the field-set header). 
+         * With respect to UI visual hierarchy, actions that appear in the field-set header
+         * are ranked higher than those that appear inside a field-set.
+         * <p> 
+         * Consequently, viewers may reflect lower visual rank e.g. by rendering the latter action buttons as outlined. 
          */
-        OUTLINED,
+        LOWER_VISUAL_RANK,
     }
     
     public enum MenuItemModifier {
         NONE,
         /**
          * For menu items that are rendered in vertical sequence, some may have icons some may not.
-         * For improved visual appearance, the latter can be force aligned with the others by means 
+         * For improved visual appearance, the latter can be forced to align with the others by means 
          * of a blank icon, that just occupies the same amount of width as regular icons.   
          */
         FORCE_ALIGNMENT_WITH_BLANK_ICON;
@@ -88,7 +90,7 @@ public class ActionDecorators {
                 .action(action)
                 .buttonModifier(managedActionHolder.isPositionedInsideFieldSet()
                         || action.isPrototype()
-                        ? ButtonModifier.OUTLINED
+                        ? ButtonModifier.LOWER_VISUAL_RANK
                         : ButtonModifier.NONE)
                 .menuItemModifier(MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON) // default
                 .prototyping(action.isPrototype() 
@@ -115,8 +117,8 @@ public class ActionDecorators {
         /**
          * @see ButtonModifier
          */
-        public boolean isRenderOutlined() {
-            return buttonModifier==ButtonModifier.OUTLINED;
+        public boolean isLowerVisualRank() {
+            return buttonModifier==ButtonModifier.LOWER_VISUAL_RANK;
         }
         
         /**
