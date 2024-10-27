@@ -99,7 +99,7 @@ extends
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          *
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
-         * The output format is inferred by removar of the square brackets (not their content).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NonNull //@NotEmpty
         private String timePatternNanoSecond = "HH[:mm[:ss][.SSSSSSSSS]]";
@@ -111,7 +111,7 @@ extends
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          *
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
-         * The output format is inferred by removar of the square brackets (not their content).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NonNull //@NotEmpty
         private String timePatternMicroSecond = "HH[:mm[:ss][.SSSSSS]]";
@@ -123,7 +123,7 @@ extends
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          *
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
-         * The output format is inferred by removar of the square brackets (not their content).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NonNull //@NotEmpty
         private String timePatternMilliSecond = "HH[:mm[:ss][.SSS]]";
@@ -135,7 +135,7 @@ extends
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          *
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
-         * The output format is inferred by removar of the square brackets (not their content).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NonNull //@NotEmpty
         private String timePatternSecond = "HH[:mm[:ss]]";
@@ -147,7 +147,7 @@ extends
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          *
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
-         * The output format is inferred by removar of the square brackets (not their content).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NonNull //@NotEmpty
         private String timePatternMinute = "HH[:mm]";
@@ -159,7 +159,7 @@ extends
          * Any missing temporal parts are filled up with zeros to meet the {@link TimeFormatPrecision}.
          *
          * @apiNote Supports various input forms as denoted by optional blocks (square brackets).
-         * The output format is inferred by removar of the square brackets (not their content).
+         * The output format is inferred by removal of the square brackets (not their content).
          */
         @NonNull //@NotEmpty
         private String timePatternHour = "HH";
