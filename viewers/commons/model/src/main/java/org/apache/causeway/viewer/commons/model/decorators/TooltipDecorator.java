@@ -17,8 +17,6 @@
  *  under the License.
  */
 package org.apache.causeway.viewer.commons.model.decorators;
-
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.springframework.lang.Nullable;
@@ -27,7 +25,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface TooltipDecorator<T> {
@@ -36,14 +33,10 @@ public interface TooltipDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @lombok.Value @Accessors(fluent=true) //RECORD (java 16)
-    public static class TooltipDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        final @NonNull UiPlacementDirection placementDirection;
-        final @NonNull Optional<String> title;
-        final @NonNull String body;
+    public record TooltipDecorationModel(
+            @NonNull UiPlacementDirection placementDirection,
+            @NonNull Optional<String> title,
+            @NonNull String body) {
 
         public static TooltipDecorationModel ofBody(
                 final @NonNull UiPlacementDirection uiPlacementDirection,

@@ -25,10 +25,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 /**
  *
  * When in PROTOTYPING mode adds additional UI aspects, which are otherwise (production mode) not visible.
@@ -43,14 +39,11 @@ public interface PrototypingDecorator<T, R> {
 
     // -- DECORATION MODEL
 
-    @Getter @Accessors(fluent=true) //RECORD (java 16)
-    @AllArgsConstructor
-    public static class PrototypingDecorationModel {
-
-        private final Class<?> featureType;
-        private final String featureFriendlyName;
-        private final String featureFriendlyIdentifier;
-        private final Supplier<Stream<Facet>> facetStreamProvider;
+    public record PrototypingDecorationModel(
+            Class<?> featureType,
+            String featureFriendlyName,
+            String featureFriendlyIdentifier,
+            Supplier<Stream<Facet>> facetStreamProvider) {
 
         public static PrototypingDecorationModel of(final ManagedAction managedAction) {
             Class<?> featureType = managedAction.getAction().getReturnType().getCorrespondingClass();

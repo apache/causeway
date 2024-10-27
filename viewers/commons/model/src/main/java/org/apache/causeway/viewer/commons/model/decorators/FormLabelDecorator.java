@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.viewer.commons.model.decorators;
 
-import java.io.Serializable;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 @FunctionalInterface
 public interface FormLabelDecorator<T> {
 
@@ -31,18 +25,12 @@ public interface FormLabelDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter @Accessors(fluent=true) //RECORD (java 16)
-    @AllArgsConstructor
-    public static class FormLabelDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
+    public record FormLabelDecorationModel(
+            boolean isMandatoryIndicatorShown) {
 
         public static FormLabelDecorationModel mandatory(final boolean mandatory) {
             return new FormLabelDecorationModel(mandatory);
         }
-
-        final boolean isMandatoryIndicatorShown;
-
     }
 
 }

@@ -17,17 +17,12 @@
  *  under the License.
  */
 package org.apache.causeway.viewer.commons.model.decorators;
-
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface DisablingDecorator<T> {
@@ -36,13 +31,7 @@ public interface DisablingDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter @Accessors(fluent=true) //RECORD (java 16)
-    @AllArgsConstructor
-    public static class DisablingDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        final @NonNull String reason;
+    public record DisablingDecorationModel(@NonNull String reason) {
 
         public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
             return usabilityVeto

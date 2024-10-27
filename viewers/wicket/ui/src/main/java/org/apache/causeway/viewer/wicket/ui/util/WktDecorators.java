@@ -67,7 +67,7 @@ public class WktDecorators {
 
     // -- BASIC DECORATOR CLASSES
 
-    public final static class FormLabel implements FormLabelDecorator<Component> {
+    public record FormLabel() implements FormLabelDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final FormLabelDecorationModel decorationModel) {
             if(decorationModel.isMandatoryIndicatorShown()) {
@@ -77,14 +77,14 @@ public class WktDecorators {
         }
     }
 
-    public final static class Tooltip implements TooltipDecorator<Component> {
+    public record Tooltip() implements TooltipDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final TooltipDecorationModel decorationModel) {
             WktTooltips.addTooltip(uiComponent, decorationModel);
         }
     }
 
-    public final static class Disable implements DisablingDecorator<Component> {
+    public record Disable() implements DisablingDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final DisablingDecorationModel decorationModel) {
             var tooltipDecorationModel = TooltipDecorationModel
@@ -96,7 +96,7 @@ public class WktDecorators {
         }
     }
 
-    public final static class Prototyping implements PrototypingDecorator<Component, Component> {
+    public record Prototyping() implements PrototypingDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final PrototypingDecorationModel decorationModel) {
             Wkt.cssAppend(uiComponent, "prototype");
@@ -104,7 +104,7 @@ public class WktDecorators {
         }
     }
 
-    public final static class Confirm implements ConfirmDecorator<Component> {
+    public record Confirm() implements ConfirmDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent, final ConfirmDecorationModel decorationModel) {
             var confirmationConfig = new ConfirmationConfig()
@@ -125,14 +125,14 @@ public class WktDecorators {
         }
     }
 
-    public final static class Danger implements DangerDecorator<Component> {
+    public record Danger() implements DangerDecorator<Component> {
         @Override
         public void decorate(final Component uiComponent) {
             Wkt.cssAppend(uiComponent, ButtonSemantics.DANGER.buttonDefaultCss());
         }
     }
 
-    public final static class FaIcon implements IconDecorator<Component, Component> {
+    public record FaIcon() implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final Optional<FontAwesomeLayers> faLayers) {
             if(faLayers.isPresent()) {
@@ -142,7 +142,7 @@ public class WktDecorators {
         }
     }
 
-    public final static class MissingIcon implements IconDecorator<Component, Component> {
+    public record MissingIcon() implements IconDecorator<Component, Component> {
         @Override
         public Component decorate(final Component uiComponent, final Optional<FontAwesomeLayers> faLayers) {
             if(faLayers.isEmpty()) {
@@ -153,13 +153,13 @@ public class WktDecorators {
     }
 
     // -- ACTION DECORATION
-    
+
     public void decorateMenuAction(
-            AjaxLink<ManagedObject> actionLink,
-            Component tooltipReceiver,
-            Label actionLabel,
-            ActionDecorationModel decorationModel) {
-        
+            final AjaxLink<ManagedObject> actionLink,
+            final Component tooltipReceiver,
+            final Label actionLabel,
+            final ActionDecorationModel decorationModel) {
+
         decorationModel.disabling()
             .ifPresentOrElse(disableUiModel->{
                 //DISABLE
@@ -174,36 +174,36 @@ public class WktDecorators {
                         tooltip()
                             .decorate(tooltipReceiver,
                                     TooltipDecorationModel.ofBody(UiPlacementDirection.BOTTOM, describedAs)));
-                
+
                 //{CAUSEWAY-1626] confirmation dialog for no-parameter menu actions
                 if (decorationModel.isImmediateConfirmationRequired()) {
                     var confirmUiModel = ConfirmDecorationModel.areYouSure(UiPlacementDirection.BOTTOM);
                     confirm().decorate(actionLink, confirmUiModel);
                 }
-                
+
             });
-        
+
         //CSS
         Wkt.cssAppend(tooltipReceiver, decorationModel.featureIdentifier());
-        
+
         decorateActionCommon(actionLink, actionLabel, decorationModel);
     }
-    
+
     /**
      * For rendering actions within additional-link panels or drop-downs.
      */
     public void decorateAdditionalLink(
             final AjaxLink<ManagedObject> actionLink,
-            final Component tooltipReceiver, 
+            final Component tooltipReceiver,
             final Label actionLabel,
             final ActionDecorationModel decorationModel) {
-        
+
         var action = decorationModel.action();
-        
+
         WktTooltips.addTooltip(tooltipReceiver, decorationModel.disabling().isPresent()
                 ? ((ActionLink) actionLink).getReasonDisabledIfAny()
                 : decorationModel.describedAs().orElse(null));
-        
+
         if (action.getSemantics().isAreYouSure()) {
             if(action.getParameterCount()==0) {
                 if (decorationModel.disabling().isEmpty()) {
@@ -220,14 +220,14 @@ public class WktDecorators {
                     ? ButtonSemantics.SECONDARY.buttonOutlineCss()
                     : ButtonSemantics.SECONDARY.buttonDefaultCss());
         }
-        
+
         decorateActionCommon(actionLink, actionLabel, decorationModel);
     }
 
     public void decorateCssMenuItem(
-            AjaxLink<ManagedObject> actionLink,
-            Label actionLabel, 
-            ActionDecorationModel decorationModel) {
+            final AjaxLink<ManagedObject> actionLink,
+            final Label actionLabel,
+            final ActionDecorationModel decorationModel) {
 
         decorationModel.disabling()
             .ifPresentOrElse(disableUiModel->{
@@ -239,16 +239,16 @@ public class WktDecorators {
                     .describedAs()
                     .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
             });
-    
+
         decorateActionCommon(actionLink, actionLabel, decorationModel);
     }
 
     // -- ACTION DECORATION HELPER
-    
+
     private void decorateActionCommon(
-            AjaxLink<ManagedObject> actionLink,
-            Label actionLabel, 
-            ActionDecorationModel decorationModel) {
+            final AjaxLink<ManagedObject> actionLink,
+            final Label actionLabel,
+            final ActionDecorationModel decorationModel) {
         // ellipsis
         if(decorationModel.isBoundToDialog()) {
             var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
@@ -263,7 +263,7 @@ public class WktDecorators {
             .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
         // blob/clob
         if (ObjectAction.Util.returnsBlobOrClob(decorationModel.action())) {
-            Wkt.cssAppend(actionLink, "noVeil");           
+            Wkt.cssAppend(actionLink, "noVeil");
         }
         // prototyping
         decorationModel.prototyping().ifPresent(protoDecModel->{
@@ -273,8 +273,8 @@ public class WktDecorators {
         var faLayers = decorationModel.fontAwesomeLayers();
         faIcon().decorate(actionLabel, faLayers);
         if(decorationModel.isMenuItem()) {
-            missingIcon().decorate(actionLink, faLayers);    
+            missingIcon().decorate(actionLink, faLayers);
         }
     }
-    
+
 }

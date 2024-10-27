@@ -27,10 +27,7 @@ import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.PrototypingDecorationModel;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -38,29 +35,29 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public class ActionDecorators {
-    
+
     public enum ActionStyle {
         BUTTON,
         MENU_ITEM;
     }
-    
+
     public enum ButtonModifier {
         NONE,
         /**
          * With respect to UI visual hierarchy, actions that appear in the field-set header
          * are ranked higher than those that appear inside a field-set.
-         * <p> 
-         * Consequently, viewers may reflect lower visual rank e.g. by rendering the latter action buttons as outlined. 
+         * <p>
+         * Consequently, viewers may reflect lower visual rank e.g. by rendering the latter action buttons as outlined.
          */
         LOWER_VISUAL_RANK,
     }
-    
+
     public enum MenuItemModifier {
         NONE,
         /**
          * For menu items that are rendered in vertical sequence, some may have icons some may not.
-         * For improved visual appearance, the latter can be forced to align with the others by means 
-         * of a blank icon, that just occupies the same amount of width as regular icons.   
+         * For improved visual appearance, the latter can be forced to align with the others by means
+         * of a blank icon, that just occupies the same amount of width as regular icons.
          */
         FORCE_ALIGNMENT_WITH_BLANK_ICON;
     }
@@ -68,21 +65,19 @@ public class ActionDecorators {
     // -- DECORATION MODEL
 
     @Builder(builderMethodName = "builderInternal")
-    @Getter @Accessors(fluent=true) //RECORD (java 16)
-    @AllArgsConstructor
-    public static class ActionDecorationModel {
-        private final ObjectAction action;
-        private final ActionStyle actionStyle;
-        private final ButtonModifier buttonModifier;
-        private final MenuItemModifier menuItemModifier;
-        private final Optional<DisablingDecorationModel> disabling;
-        private final Optional<PrototypingDecorationModel> prototyping;
-        private final Optional<FontAwesomeLayers> fontAwesomeLayers;
-        private final Optional<String> describedAs;
-        private final Optional<String> additionalCssClass;
-        
+    public record ActionDecorationModel(
+            ObjectAction action,
+            ActionStyle actionStyle,
+            ButtonModifier buttonModifier,
+            MenuItemModifier menuItemModifier,
+            Optional<DisablingDecorationModel> disabling,
+            Optional<PrototypingDecorationModel> prototyping,
+            Optional<FontAwesomeLayers> fontAwesomeLayers,
+            Optional<String> describedAs,
+            Optional<String> additionalCssClass) {
+
         public static ActionDecorationModelBuilder builder(
-                HasManagedAction managedActionHolder) {
+                final HasManagedAction managedActionHolder) {
             var managedAction = managedActionHolder.getManagedAction();
             var action = managedAction.getAction();
             return builderInternal()
@@ -92,7 +87,7 @@ public class ActionDecorators {
                         ? ButtonModifier.LOWER_VISUAL_RANK
                         : ButtonModifier.NONE)
                 .menuItemModifier(MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON) // default
-                .prototyping(action.isPrototype() 
+                .prototyping(action.isPrototype()
                         ? Optional.of(PrototypingDecorationModel.of(managedAction))
                         : Optional.empty())
                 .describedAs(managedAction.getDescription())
@@ -100,31 +95,31 @@ public class ActionDecorators {
                 .additionalCssClass(managedActionHolder.getAdditionalCssClass())
                 .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(true));
         }
-        
+
         public Identifier featureIdentifier() {
             return action.getFeatureIdentifier();
         }
-        
+
         public boolean isImmediateConfirmationRequired() {
             return action.isImmediateConfirmationRequired();
         }
-        
+
         public Optional<String> disabledReason() {
-            return disabling.map(DisablingDecorationModel::reason); 
+            return disabling.map(DisablingDecorationModel::reason);
         }
-        
+
         /**
          * @see ButtonModifier
          */
         public boolean isLowerVisualRank() {
             return buttonModifier==ButtonModifier.LOWER_VISUAL_RANK;
         }
-        
+
         /**
          * @see MenuItemModifier
          */
         public boolean isForceAlignmentWithBlankIcon() {
-            return menuItemModifier==MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON; 
+            return menuItemModifier==MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON;
         }
 
         /**
@@ -135,7 +130,7 @@ public class ActionDecorators {
         }
 
         /**
-         * Whether the underlying action will spawn a dialog. 
+         * Whether the underlying action will spawn a dialog.
          * Typically used to indicate the action with a tailing ellipsis.
          */
         public boolean isBoundToDialog() {

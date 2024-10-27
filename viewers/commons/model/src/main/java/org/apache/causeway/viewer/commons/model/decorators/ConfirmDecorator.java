@@ -17,8 +17,6 @@
  *  under the License.
  */
 package org.apache.causeway.viewer.commons.model.decorators;
-
-import java.io.Serializable;
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -26,10 +24,7 @@ import org.apache.causeway.core.config.messages.MessageRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface ConfirmDecorator<T> {
@@ -38,23 +33,18 @@ public interface ConfirmDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter @Accessors(fluent=true) //RECORD (java 16)
-    @AllArgsConstructor
-    public static class ConfirmDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        final @NonNull String title;
-        final @NonNull Optional<String> message;
-        final @NonNull String okLabel;
-        final @NonNull String cancelLabel;
-        final @NonNull UiPlacementDirection placement;
+    public record ConfirmDecorationModel(
+            @NonNull String title,
+            @NonNull Optional<String> message,
+            @NonNull String okLabel,
+            @NonNull String cancelLabel,
+            @NonNull UiPlacementDirection placement) {
 
         public static ConfirmDecorationModel areYouSure(final UiPlacementDirection placement) {
 
             var translationService = MetaModelContext.translationServiceOrFallback();
             var context = TranslationContext.forClassName(MessageRegistry.class);
-            
+
             var areYouSure = translationService.translate(context, MessageRegistry.MSG_ARE_YOU_SURE);
             var confirm = translationService.translate(context, MessageRegistry.MSG_CONFIRM);
             var cancel = translationService.translate(context, MessageRegistry.MSG_CANCEL);
