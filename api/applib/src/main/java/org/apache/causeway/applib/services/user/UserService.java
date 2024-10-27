@@ -40,7 +40,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Allows the domain object to obtain the identity of the user interacting with
@@ -97,7 +96,7 @@ public class UserService {
      * {@link InteractionContext} of the current thread).
      */
     public Optional<UserMemento> currentUser() {
-        val currentUser = interactionLayerTrackerProvider.get()
+        var currentUser = interactionLayerTrackerProvider.get()
                     .currentInteractionContext()
                     .map(InteractionContext::getUser);
 

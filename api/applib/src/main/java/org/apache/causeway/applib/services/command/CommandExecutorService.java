@@ -30,8 +30,6 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-import lombok.val;
-
 /**
  * Provides a mechanism to execute a {@link Command}.
  *
@@ -83,8 +81,8 @@ public interface CommandExecutorService {
         ;
 
         private static Instant timestampOf(final CommandDto commandDto) {
-            val timestampGc = commandDto.getTimestamp();
-            val javaSqlTimestamp = JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timestampGc);
+            var timestampGc = commandDto.getTimestamp();
+            var javaSqlTimestamp = JavaSqlXMLGregorianCalendarMarshalling.toTimestamp(timestampGc);
             return javaSqlTimestamp.toInstant();
         }
 

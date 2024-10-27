@@ -41,7 +41,6 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides the ability to download the framework's internal
@@ -86,7 +85,7 @@ public class Object_downloadMetamodelXml {
         }
         final String namespace = logicalTypeIfAny.get().getNamespace();
 
-        val config = Config.builder()
+        var config = Config.builder()
                 .ignoreFallbackFacets(true)
                 .ignoreAbstractClasses(true)
                 .ignoreInterfaces(true)
@@ -94,14 +93,14 @@ public class Object_downloadMetamodelXml {
                 .build()
                 .withNamespacePrefix(namespace);
 
-        val metamodelDto = metaModelService.exportMetaModel(config);
+        var metamodelDto = metaModelService.exportMetaModel(config);
 
-        val className = holder.getClass().getName();
+        var className = holder.getClass().getName();
 
-        val domainClassDtos = metamodelDto.getDomainClassDto();
+        var domainClassDtos = metamodelDto.getDomainClassDto();
         domainClassDtos.removeIf(classDto->!Objects.equals(classDto.getId(), className));
 
-        val xmlString = jaxbService.toXml(metamodelDto);
+        var xmlString = jaxbService.toXml(metamodelDto);
 
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }

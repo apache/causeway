@@ -32,7 +32,6 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 class JaxbServiceTest {
 
@@ -51,8 +50,8 @@ class JaxbServiceTest {
 
     @Test @Disabled("fails because ActionInvocationDto has no @XmlRootElement annonation")
     void roundtrip() {
-        val xml = simple.toXml(sampleDto);
-        val clone = simple.<ActionInvocationDto>fromXml(ActionInvocationDto.class, xml);
+        var xml = simple.toXml(sampleDto);
+        var clone = simple.<ActionInvocationDto>fromXml(ActionInvocationDto.class, xml);
         assertEquals(sampleDto, clone);
     }
 
@@ -61,7 +60,7 @@ class JaxbServiceTest {
         // test prerequisites
         assertNotNull(JAXBContext.newInstance(ActionInvocationDto.class));
 
-        val dto = getSample();
+        var dto = getSample();
         assertDtoEquals(dto, JaxbUtils.mapperFor(ActionInvocationDto.class, opts->opts.allowMissingRootElement(true))
                 .tryClone(dto)
                 .ifFailureFail()
@@ -71,7 +70,7 @@ class JaxbServiceTest {
     // -- HELPER
 
     private ActionInvocationDto getSample() {
-        val dto = new ActionInvocationDto();
+        var dto = new ActionInvocationDto();
         dto.setLogicalMemberIdentifier("customer.Customer#placeOrder");
         return dto;
     }

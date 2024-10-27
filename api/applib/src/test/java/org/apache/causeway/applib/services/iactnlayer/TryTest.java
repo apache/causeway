@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.val;
-
 class TryTest {
 
     // -- TEST DUMMIES
@@ -71,7 +69,7 @@ class TryTest {
     @Test
     void hello_happy_case() {
 
-        val result = Try.<String>call(this::hello_happy);
+        var result = Try.<String>call(this::hello_happy);
         assertTrue(result.isSuccess());
         assertFalse(result.isFailure());
         assertEquals("hello", result.getValue().orElse(""));
@@ -81,7 +79,7 @@ class TryTest {
         // non-evaluated code-path
         result.getValue().orElseGet(()->fail("unexpected code reach"));
 
-        val mandatory = result.mapEmptyToFailure();
+        var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isSuccess());
         assertEquals("hello", mandatory.getValue().orElse(""));
 
@@ -90,14 +88,14 @@ class TryTest {
     @Test
     void hello_nullable_case() {
 
-        val result = Try.<String>call(this::hello_nullable);
+        var result = Try.<String>call(this::hello_nullable);
         assertTrue(result.isSuccess());
         assertFalse(result.isFailure());
         assertEquals("no value", result.getValue().orElse("no value"));
         assertThrows(NoSuchElementException.class, ()->result.ifAbsentFail());
         assertEquals(Optional.empty(), result.ifFailureFail().getValue());
 
-        val mandatory = result.mapEmptyToFailure();
+        var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isFailure());
         assertThrows(NoSuchElementException.class, ()->mandatory.ifFailureFail());
 
@@ -106,7 +104,7 @@ class TryTest {
     @Test
     void hello_throwing_uncatched_case() {
 
-        val result = Try.<String>call(this::hello_throwing_uncatched);
+        var result = Try.<String>call(this::hello_throwing_uncatched);
         assertFalse(result.isSuccess());
         assertTrue(result.isFailure());
         assertEquals("hello failed", result.getFailure().get().getMessage());
@@ -115,7 +113,7 @@ class TryTest {
         assertThrows(RuntimeException.class, ()->result.ifAbsentFail());
         assertEquals(Optional.empty(), result.getValue());
 
-        val mandatory = result.mapEmptyToFailure();
+        var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isFailure());
 
     }
@@ -123,7 +121,7 @@ class TryTest {
     @Test
     void hello_throwing_catched_case() {
 
-        val result = Try.<String>call(this::hello_throwing_catched);
+        var result = Try.<String>call(this::hello_throwing_catched);
         assertFalse(result.isSuccess());
         assertTrue(result.isFailure());
         assertEquals("hello failed", result.getFailure().get().getMessage());
@@ -132,7 +130,7 @@ class TryTest {
         assertThrows(Exception.class, ()->result.ifAbsentFail());
         assertEquals(Optional.empty(), result.getValue());
 
-        val mandatory = result.mapEmptyToFailure();
+        var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isFailure());
 
     }
@@ -140,7 +138,7 @@ class TryTest {
     @Test
     void void_happy_case() {
 
-        val result = Try.run(this::void_happy);
+        var result = Try.run(this::void_happy);
         assertTrue(result.isSuccess());
         assertFalse(result.isFailure());
         assertEquals(null, result.getValue().orElse(null));
@@ -151,7 +149,7 @@ class TryTest {
     @Test
     void void_throwing_uncatched_case() {
 
-        val result = Try.run(this::void_throwing_uncatched);
+        var result = Try.run(this::void_throwing_uncatched);
         assertFalse(result.isSuccess());
         assertTrue(result.isFailure());
         assertEquals("void failed", result.getFailure().get().getMessage());
@@ -160,14 +158,14 @@ class TryTest {
         assertThrows(NoSuchElementException.class, ()->result.ifAbsentFail()); // throw NoSuchElementException always
         assertEquals(Optional.empty(), result.getValue());
 
-        val mandatory = result.mapEmptyToFailure();
+        var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isFailure());
     }
 
     @Test
     void void_throwing_catched_case() {
 
-        val result = Try.run(this::void_throwing_catched);
+        var result = Try.run(this::void_throwing_catched);
         assertFalse(result.isSuccess());
         assertTrue(result.isFailure());
         assertEquals("void failed", result.getFailure().get().getMessage());
@@ -176,7 +174,7 @@ class TryTest {
         assertThrows(NoSuchElementException.class, ()->result.ifAbsentFail()); // throw NoSuchElementException always
         assertEquals(Optional.empty(), result.getValue());
 
-        val mandatory = result.mapEmptyToFailure();
+        var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isFailure());
     }
 

@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -70,8 +69,8 @@ public class CommandLogger implements CommandSubscriber {
     }
 
     private static void on(String verb, Command command) {
-        val commandDto = command.getCommandDto();
-        val xml = CommandDtoUtils.dtoMapper().toString(commandDto);
+        var commandDto = command.getCommandDto();
+        var xml = CommandDtoUtils.dtoMapper().toString(commandDto);
 
         log.debug("{}: {} \n{}",
                 verb,

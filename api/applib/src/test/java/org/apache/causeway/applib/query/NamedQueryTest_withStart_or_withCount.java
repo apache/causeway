@@ -27,8 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.val;
-
 class NamedQueryTest_withStart_or_withCount {
 
     private NamedQuery<Customer> namedQuery;
@@ -46,7 +44,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void defaults() throws Exception {
 
-        val range = namedQuery.getRange();
+        var range = namedQuery.getRange();
 
         assertThat(range.getStart(), is(0L));
         assertThat(range.getLimit(), is(UNLIMITED));
@@ -59,7 +57,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void typicalHappyCase() throws Exception {
 
-        val range = namedQuery
+        var range = namedQuery
                 .withRange(QueryRange.start(10L).withLimit(5L))
                 .getRange();
 
@@ -74,7 +72,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void happyCase_startOnly() throws Exception {
 
-        val range = namedQuery
+        var range = namedQuery
                 .withRange(QueryRange.start(10L))
                 .getRange();
 
@@ -89,7 +87,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void happyCase_startZero() throws Exception {
 
-        val range = namedQuery
+        var range = namedQuery
                 .withRange(QueryRange.start(0L))
                 .getRange();
 
@@ -111,7 +109,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void happyCase_countOnly() throws Exception {
 
-        val range = namedQuery
+        var range = namedQuery
                 .withRange(QueryRange.limit(10L))
                 .getRange();
 
@@ -133,7 +131,7 @@ class NamedQueryTest_withStart_or_withCount {
     @Test
     public void countUnlimited() throws Exception {
 
-        val range = namedQuery
+        var range = namedQuery
                 .withRange(QueryRange.limit(UNLIMITED))
                 .getRange();
 

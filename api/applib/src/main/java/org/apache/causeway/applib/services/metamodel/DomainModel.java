@@ -25,8 +25,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Multimaps;
 
-import lombok.val;
-
 /**
  *
  * @since 1.x {@index}
@@ -42,7 +40,7 @@ public interface DomainModel {
             return;
         }
 
-        val membersByLogicalType = _Multimaps.<String, DomainMember>newListMultimap();
+        var membersByLogicalType = _Multimaps.<String, DomainMember>newListMultimap();
 
         getDomainMembers().forEach(member->
             membersByLogicalType.putElement(member.getLogicalTypeName(), member));

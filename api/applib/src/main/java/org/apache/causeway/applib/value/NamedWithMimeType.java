@@ -31,7 +31,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 1.x {@index}
@@ -219,7 +218,7 @@ extends
             if(_Strings.isNullOrEmpty(fileExt)) {
                 return Optional.empty();
             }
-            val fileExtLower = fileExt.toLowerCase();
+            var fileExtLower = fileExt.toLowerCase();
             return Stream.of(CommonMimeType.values())
                     .filter(mime->mime.getProposedFileExtensions().contains(fileExtLower))
                     .findFirst();

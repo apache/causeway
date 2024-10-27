@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -82,7 +81,7 @@ public class PageRenderCollectionLogger implements PageRenderSubscriber {
     public void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
         final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
 
-        val timing = timings.get();
+        var timing = timings.get();
         if (log.isDebugEnabled()) {
             log.debug("rendered collection: [ {} ]  user: {}  took: {}ms", bookmarksStringified, userService.currentUserNameElseNobody(), timing.took());
         }

@@ -25,7 +25,6 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -72,8 +71,8 @@ public final class Enums {
     }
 
     public static String enumToCamelCase(final Enum<?> anEnum) {
-        val name = anEnum.name();
-        val builder = new StringBuilder();
+        var name = anEnum.name();
+        var builder = new StringBuilder();
         boolean nextUpper = false;
         for (final char c : name.toCharArray()) {
             if (c == '_') {
@@ -89,7 +88,7 @@ public final class Enums {
     public static <T extends Enum<?>> Optional<T> parseFriendlyName(
             final Class<T> correspondingClass,
             final @Nullable String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return Optional.empty();
         }

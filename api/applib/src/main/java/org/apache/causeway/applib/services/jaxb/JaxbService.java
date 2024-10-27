@@ -33,7 +33,6 @@ import org.apache.causeway.commons.io.JaxbUtils;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Allows instances of JAXB-annotated classes to be marshalled to XML and
@@ -115,7 +114,7 @@ public interface JaxbService {
                 return null;
             }
             return JaxbUtils.tryRead(domainClass, xml, opts->{
-                for (val entry : _NullSafe.entrySet(unmarshallerProperties)) {
+                for (var entry : _NullSafe.entrySet(unmarshallerProperties)) {
                     opts.property(entry.getKey(), entry.getValue());
                 }
                 opts.unmarshallerConfigurer(this::configure);
@@ -130,12 +129,12 @@ public interface JaxbService {
                 final @NonNull Object domainObject,
                 final @Nullable Map<String, Object> marshallerProperties) {
 
-            val jaxbContext = domainObject instanceof DomainObjectList
+            var jaxbContext = domainObject instanceof DomainObjectList
                     ? jaxbContextForList((DomainObjectList)domainObject)
                     : JaxbUtils.jaxbContextFor(domainObject.getClass(), true);
 
             return Try.call(()->JaxbUtils.toStringUtf8(domainObject, opts->{
-                for (val entry : _NullSafe.entrySet(marshallerProperties)) {
+                for (var entry : _NullSafe.entrySet(marshallerProperties)) {
                     opts.property(entry.getKey(), entry.getValue());
                 }
                 opts.marshallerConfigurer(this::configure);
@@ -173,9 +172,9 @@ public interface JaxbService {
                 final @NonNull Object domainObject,
                 final @NonNull CausewaySchemas causewaySchemas) {
 
-            val jaxbContext = JaxbUtils.jaxbContextFor(domainObject.getClass(), true);
+            var jaxbContext = JaxbUtils.jaxbContextFor(domainObject.getClass(), true);
 
-            val outputResolver = new CatalogingSchemaOutputResolver(causewaySchemas);
+            var outputResolver = new CatalogingSchemaOutputResolver(causewaySchemas);
             jaxbContext.generateSchema(outputResolver);
 
             return outputResolver.asMap();

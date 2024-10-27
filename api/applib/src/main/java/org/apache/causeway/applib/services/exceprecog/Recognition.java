@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.i18n.TranslationService;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 /**
  * Represents a user-friendly representation of an exception that has been
@@ -53,7 +52,7 @@ public class Recognition {
             return Optional.empty();
         }
 
-        val nonNullCategory = category != null ? category : Category.OTHER;
+        var nonNullCategory = category != null ? category : Category.OTHER;
         return Optional.of(new Recognition(nonNullCategory, reason));
         // ...
     }
@@ -105,8 +104,8 @@ public class Recognition {
      */
     public String toMessage(@Nullable TranslationService translationService) {
 
-        val categoryLiteral = translate(getCategory().getFriendlyName(), translationService);
-        val reasonLiteral = translate(getReason(), translationService);
+        var categoryLiteral = translate(getCategory().getFriendlyName(), translationService);
+        var reasonLiteral = translate(getReason(), translationService);
 
         return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
         // ...
@@ -121,7 +120,7 @@ public class Recognition {
      */
     public String toMessageNoCategory(@Nullable TranslationService translationService) {
 
-        val reasonLiteral = translate(getReason(), translationService);
+        var reasonLiteral = translate(getReason(), translationService);
         return String.format("%s", reasonLiteral);
         // ...
     }
@@ -133,7 +132,7 @@ public class Recognition {
                 || translationService == null) {
             return text;
         }
-        val context = TranslationContext.forClassName(Recognition.class);
+        var context = TranslationContext.forClassName(Recognition.class);
         return translationService.translate(context, text);
     }
 

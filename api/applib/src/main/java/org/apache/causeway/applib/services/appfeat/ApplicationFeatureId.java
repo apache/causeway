@@ -47,7 +47,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Synchronized;
-import lombok.val;
 
 /**
  * Value type representing a namespace, type or member.
@@ -82,7 +81,7 @@ implements
 
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
 
-        val logicalTypeName = identifier.getLogicalTypeName();
+        var logicalTypeName = identifier.getLogicalTypeName();
 
         if(identifier.getType().isClass()) {
             return newType(logicalTypeName);
@@ -113,7 +112,7 @@ implements
         if(logicalTypeSimpleName == null) {
             return newNamespace(namespace);
         }
-        val logicalTypeName = namespace + "." + logicalTypeSimpleName;
+        var logicalTypeName = namespace + "." + logicalTypeSimpleName;
         if(memberName == null) {
             return newType(logicalTypeName);
         }
@@ -121,7 +120,7 @@ implements
     }
 
     public static ApplicationFeatureId newNamespace(final String namespace) {
-        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
+        var featureId = new ApplicationFeatureId(ApplicationFeatureSort.NAMESPACE);
         featureId.namespace = namespace;
         featureId.typeSimpleName = null;
         featureId.logicalMemberName = null;
@@ -139,7 +138,7 @@ implements
     }
 
     public static ApplicationFeatureId newType(final String logicalTypeName) {
-        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
+        var featureId = new ApplicationFeatureId(ApplicationFeatureSort.TYPE);
         initType(featureId, logicalTypeName);
         return featureId;
     }
@@ -153,20 +152,20 @@ implements
     }
 
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName) {
-        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
+        var featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         initType(featureId, logicalTypeName);
         initMember(featureId, memberLogicalName);
         return featureId;
     }
 
     public static ApplicationFeatureId newMember(String fullyQualifiedLogicalName) {
-        val featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
-        val i = fullyQualifiedLogicalName.lastIndexOf("#");
+        var featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
+        var i = fullyQualifiedLogicalName.lastIndexOf("#");
         if(i == -1) {
             throw new IllegalArgumentException("Malformed, expected a '#': " + fullyQualifiedLogicalName);
         }
-        val logicalTypeName = fullyQualifiedLogicalName.substring(0, i);
-        val memberName = fullyQualifiedLogicalName.substring(i + 1);
+        var logicalTypeName = fullyQualifiedLogicalName.substring(0, i);
+        var memberName = fullyQualifiedLogicalName.substring(i + 1);
         initType(featureId, logicalTypeName);
         initMember(featureId, memberName);
         return featureId;
@@ -220,7 +219,7 @@ implements
      * wrapperFactory#unwrap(...) method, which is otherwise broken in Causeway 1.6.0
      */
     @ObjectSupport public String title() {
-        val buf = new TitleBuffer();
+        var buf = new TitleBuffer();
         buf.append(getFullyQualifiedName());
         return buf.toString();
     }
@@ -272,7 +271,7 @@ implements
 
     @Programmatic
     public String getFullyQualifiedName() {
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
         buf.append(getNamespace());
         if(getTypeSimpleName() != null) {
             buf.append(".").append(getTypeSimpleName());
@@ -288,7 +287,7 @@ implements
         if (getTypeSimpleName() == null) {
             return null;
         }
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
         if(!_Strings.isNullOrEmpty(getNamespace())) {
             buf.append(getNamespace()).append(".");
         }
@@ -309,7 +308,7 @@ implements
         if(sort.isType()) {
             return ApplicationFeatureId.newNamespace(getNamespace());
         } else {
-            val namespace = getNamespace(); // eg aaa.bbb.ccc
+            var namespace = getNamespace(); // eg aaa.bbb.ccc
             if(!namespace.contains(".")) {
                 return null; // parent is root
             }
@@ -361,7 +360,7 @@ implements
 
     @Programmatic
     public Can<ApplicationFeatureId> getParentFeatureIds() {
-        val parent = getParentFeatureId();
+        var parent = getParentFeatureId();
         return parent!=null
                 ? getParentFeatureId().getPathIds()
                 : Can.empty();
@@ -374,7 +373,7 @@ implements
     }
 
     private static Can<ApplicationFeatureId> pathIds(final ApplicationFeatureId featureId) {
-        val featureIds = _Lists.<ApplicationFeatureId>newArrayList();
+        var featureIds = _Lists.<ApplicationFeatureId>newArrayList();
         visitSelfAndParents(featureId, featureIds::add);
         return Can.ofCollection(featureIds);
     }

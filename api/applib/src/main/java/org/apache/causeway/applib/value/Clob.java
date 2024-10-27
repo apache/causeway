@@ -48,7 +48,6 @@ import org.apache.causeway.commons.io.DataSource;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Represents a character large object.
@@ -101,7 +100,7 @@ public final class Clob implements NamedWithMimeType {
      * @return new {@link Clob}
      */
     public static Clob of(final String name, final CommonMimeType mimeType, final CharSequence content) {
-        val fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
+        var fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
         return new Clob(fileName, mimeType.getMimeType(), content);
     }
 
@@ -238,7 +237,7 @@ public final class Clob implements NamedWithMimeType {
         if(file==null) {
             return; // just ignore
         }
-        try(val os = new OutputStreamWriter(new FileOutputStream(file), charset)){
+        try(var os = new OutputStreamWriter(new FileOutputStream(file), charset)){
             writeCharsTo(os);
         }
     }
@@ -252,7 +251,7 @@ public final class Clob implements NamedWithMimeType {
 
     @SneakyThrows
     public String asString() {
-        val sw = new StringWriter();
+        var sw = new StringWriter();
         writeCharsTo(sw);
         return sw.toString();
     }

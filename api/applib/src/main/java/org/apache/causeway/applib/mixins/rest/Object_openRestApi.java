@@ -33,7 +33,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.value.LocalResourcePath;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides the ability to navigate to the corresponding URL of this domain
@@ -64,11 +63,11 @@ public class Object_openRestApi {
     private final Object holder;
 
     @MemberSupport public LocalResourcePath act() {
-        val bookmark = bookmarkService.bookmarkForElseFail(holder);
-        val logicalTypeName = bookmark.getLogicalTypeName();
-        val objId = bookmark.getIdentifier();
+        var bookmark = bookmarkService.bookmarkForElseFail(holder);
+        var logicalTypeName = bookmark.getLogicalTypeName();
+        var objId = bookmark.getIdentifier();
 
-        val restfulPathIfAny = restfulPathProvider.getRestfulPath();
+        var restfulPathIfAny = restfulPathProvider.getRestfulPath();
 
         final String format = restfulPathIfAny
                 .map(path -> String.format("%s/objects/%s/%s", path, logicalTypeName, objId))

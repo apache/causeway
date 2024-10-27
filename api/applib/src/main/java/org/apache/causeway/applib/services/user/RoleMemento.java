@@ -37,7 +37,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.
@@ -82,7 +81,7 @@ public class RoleMemento implements Serializable {
         @Order(PriorityPrecedence.LATE)
         @EventListener(RoleMemento.TitleUiEvent.class)
         public void on(final RoleMemento.TitleUiEvent ev) {
-            val roleMemento = ev.getSource();
+            var roleMemento = ev.getSource();
             assert roleMemento != null;
             ev.setTitle(roleMemento.getName());
         }

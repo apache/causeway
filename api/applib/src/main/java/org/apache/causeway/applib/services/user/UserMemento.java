@@ -56,7 +56,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.With;
-import lombok.val;
 
 /**
  * Immutable serializable value holding details about a user and its roles.
@@ -155,7 +154,7 @@ implements Serializable {
         @Order(PriorityPrecedence.LATE)
         @EventListener(UserMemento.TitleUiEvent.class)
         public void on(final UserMemento.TitleUiEvent ev) {
-            val userMemento = Objects.requireNonNull(ev.getSource());
+            var userMemento = Objects.requireNonNull(ev.getSource());
             ev.setTitle(userMemento.nameFormatted());
         }
     }
@@ -361,7 +360,7 @@ implements Serializable {
 
     @Programmatic
     public UserLocale asUserLocale() {
-        val main = languageLocale!=null
+        var main = languageLocale!=null
                 ? languageLocale
                 : Locale.getDefault();
         return UserLocale.builder()

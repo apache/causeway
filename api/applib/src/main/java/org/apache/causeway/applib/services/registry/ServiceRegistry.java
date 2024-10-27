@@ -33,8 +33,6 @@ import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 
-import lombok.val;
-
 /**
  * Collects together methods for injecting or looking up domain services
  * (either provided by the framework or application-specific) currently known
@@ -119,7 +117,7 @@ public interface ServiceRegistry {
      * </p>
      */
     default <T> Optional<T> lookupService(final Class<T> serviceClass, final Comparator<Object> comparator) {
-        val bin = select(serviceClass);
+        var bin = select(serviceClass);
         if(bin.isEmpty()) {
             return Optional.empty();
         }
@@ -128,7 +126,7 @@ public interface ServiceRegistry {
         }
         // dealing with ambiguity, get the one, with highest priority annotated
 
-        val toComparatorReduction =
+        var toComparatorReduction =
                 //TODO [2033] not tested yet, whether the 'direction' is correct < vs >
                 _Reduction.<T>of((max, next)-> {
                     final boolean b = comparator.compare(next, max) > 0;

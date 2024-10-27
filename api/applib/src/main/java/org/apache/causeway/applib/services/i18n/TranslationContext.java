@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 
 import lombok.Getter;
 import lombok.Value;
-import lombok.val;
 
 /**
  * @since 2.x {@index}
@@ -54,7 +53,7 @@ implements Serializable {
             final @Nullable Class<?> contextClass,
             final @Nullable String contextMethodName) {
 
-        val classContext = forClassName(contextClass);
+        var classContext = forClassName(contextClass);
         return _Strings.isNullOrEmpty(contextMethodName)
                 ? classContext
                 : named(classContext.getName() + "#" + contextMethodName + "()");

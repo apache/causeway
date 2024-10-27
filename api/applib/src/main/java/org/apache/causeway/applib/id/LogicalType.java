@@ -39,7 +39,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.ToString;
-import lombok.val;
 
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
@@ -117,7 +116,7 @@ implements
             final @NonNull Class<?> correspondingClass) {
 
         // has precedence, over any former (deprecated) naming strategies
-        val named = _Strings.emptyToNull(
+        var named = _Strings.emptyToNull(
                 _Annotations.synthesize(correspondingClass, Named.class)
                 .map(Named::value)
                 .orElse(null));
@@ -127,7 +126,7 @@ implements
 
         // fallback to @Table annotations
         {
-            val logicalTypeName =
+            var logicalTypeName =
                     _Annotations.synthesize(correspondingClass, Table.class)
                     .map(table->
                         _Strings.nullToEmpty(table.schema())
@@ -214,7 +213,7 @@ implements
      * @implNote the result is not memoized, to keep it simple
      */
     public String getLogicalTypeSimpleName() {
-        val logicalTypeName = getLogicalTypeName();
+        var logicalTypeName = getLogicalTypeName();
         final int lastDot = logicalTypeName.lastIndexOf('.');
         return lastDot >= 0
             ? logicalTypeName.substring(lastDot + 1)
@@ -228,7 +227,7 @@ implements
      * @implNote the result is not memoized, to keep it simple
      */
     public String getNamespace() {
-        val logicalTypeName = getLogicalTypeName();
+        var logicalTypeName = getLogicalTypeName();
         final int lastDot = logicalTypeName.lastIndexOf('.');
         return lastDot >= 0
             ? logicalTypeName.substring(0, lastDot)
@@ -246,11 +245,11 @@ implements
     public String getLogicalTypeNameFormatted(
             final @NonNull String root,
             final @NonNull String delimiter) {
-        val logicalTypeName = getLogicalTypeName();
+        var logicalTypeName = getLogicalTypeName();
         final int lastDot = logicalTypeName.lastIndexOf('.');
         if(lastDot > 0) {
-            val namespace = logicalTypeName.substring(0, lastDot);
-            val simpleTypeName = logicalTypeName.substring(lastDot + 1);
+            var namespace = logicalTypeName.substring(0, lastDot);
+            var simpleTypeName = logicalTypeName.substring(lastDot + 1);
             return namespace + delimiter + simpleTypeName;
         } else {
             return root + logicalTypeName;
@@ -284,7 +283,7 @@ implements
 
     @Override
     public int compareTo(final @Nullable LogicalType other) {
-        val otherClassName = other!=null
+        var otherClassName = other!=null
                 ? other.getCorrespondingClass().getCanonicalName()
                 : null;
         return _Strings.compareNullsFirst(correspondingClass.getCanonicalName(), otherClassName);

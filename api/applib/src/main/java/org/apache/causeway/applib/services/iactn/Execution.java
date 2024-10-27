@@ -41,7 +41,6 @@ import org.apache.causeway.schema.ixn.v2.MetricsDto;
 import org.apache.causeway.schema.ixn.v2.ObjectCountsDto;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Represents an action invocation/property edit as a node in a call-stack
@@ -180,7 +179,7 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
             final ClockService clockService,
             final MetricsService metricsService) {
 
-        val startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
+        var startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         syncMetrics(When.BEFORE, startedAt, metricsService);
         return startedAt;
 

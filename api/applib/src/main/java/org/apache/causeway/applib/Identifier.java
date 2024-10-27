@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Combines {@link LogicalType} and member identification (from properties, collections or actions),
@@ -218,8 +217,8 @@ implements
     // -- NATURAL NAMES
 
     public String getClassNaturalName() {
-        val className = getClassName();
-        val isolatedName = className.substring(className.lastIndexOf('.') + 1);
+        var className = getClassName();
+        var isolatedName = className.substring(className.lastIndexOf('.') + 1);
         return naturalName(isolatedName);
     }
 

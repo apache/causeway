@@ -39,7 +39,6 @@ import org.apache.causeway.schema.metamodel.v2.Member;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -49,31 +48,31 @@ class _DiffExport {
             MetamodelDto leftMetamodelDto,
             MetamodelDto rightMetamodelDto) {
 
-        val leftTypesById = new TreeMap<String, DomainClassDto>();
-        val rightTypesById = new TreeMap<String, DomainClassDto>();
+        var leftTypesById = new TreeMap<String, DomainClassDto>();
+        var rightTypesById = new TreeMap<String, DomainClassDto>();
         
-        val facetsById = new TreeMap<String, Facet>();
+        var facetsById = new TreeMap<String, Facet>();
         final Consumer<? super Facet> facetCollector = facet->facetsById.put(facet.getId(), facet);
         
         visitAllFacets(leftMetamodelDto, facetCollector);
         visitAllFacets(rightMetamodelDto, facetCollector);
         
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         
         // -- type intersection
         
-        val leftTypes = streamTypes(leftMetamodelDto)
+        var leftTypes = streamTypes(leftMetamodelDto)
                 .peek(type->leftTypesById.put(type.getId(), type))
                 .map(DomainClassDto::getId)
                 .collect(Collectors.toSet());
         
-        val rightTypes = streamTypes(rightMetamodelDto)
+        var rightTypes = streamTypes(rightMetamodelDto)
                 .peek(type->rightTypesById.put(type.getId(), type))
                 .map(DomainClassDto::getId)
                 .collect(Collectors.toSet());
         
-        val leftNotInRight = _Sets.minus(leftTypes, rightTypes);
-        val rightNotInLeft = _Sets.minus(rightTypes, leftTypes);
+        var leftNotInRight = _Sets.minus(leftTypes, rightTypes);
+        var rightNotInLeft = _Sets.minus(rightTypes, leftTypes);
         
         leftNotInRight
             .stream()
@@ -82,15 +81,15 @@ class _DiffExport {
             .stream()
             .forEach(typeId->sb.append(RIGHT_SYMBOL).append(" ").append(typeId).append("\n"));
 
-        val inLeftAndRight = _Sets.intersect(leftTypes, rightTypes);
+        var inLeftAndRight = _Sets.intersect(leftTypes, rightTypes);
                 
-        val leftTypeIntersection = inLeftAndRight
+        var leftTypeIntersection = inLeftAndRight
                 .stream()
                 .sorted()
                 .map(leftTypesById::get)
                 .collect(Can.toCan());
         
-        val rightTypeIntersection = inLeftAndRight
+        var rightTypeIntersection = inLeftAndRight
                 .stream()
                 .sorted()
                 .map(rightTypesById::get)
@@ -98,14 +97,14 @@ class _DiffExport {
         
         // -- member intersection
         
-        val leftMembersByKey = new TreeMap<String, Member>();
-        val rightMembersByKey = new TreeMap<String, Member>();
+        var leftMembersByKey = new TreeMap<String, Member>();
+        var rightMembersByKey = new TreeMap<String, Member>();
         
         leftTypeIntersection
         .stream()
         .forEach(type->streamMembers(type)
                 .forEach(m->{
-                    val key = memberKey(type, m);
+                    var key = memberKey(type, m);
                     leftMembersByKey.put(key, m);
                     m.setId(key); // rewrite id with key (that includes type id)
                 }));
@@ -114,13 +113,13 @@ class _DiffExport {
         .stream()
         .forEach(type->streamMembers(type)
                 .forEach(m->{
-                    val key = memberKey(type, m);
+                    var key = memberKey(type, m);
                     rightMembersByKey.put(key, m);
                     m.setId(key); // rewrite id with key (that includes type id)
                 }));
         
-        val leftNotInRightM = _Sets.minus(leftMembersByKey.keySet(), rightMembersByKey.keySet());
-        val rightNotInLeftM = _Sets.minus(rightMembersByKey.keySet(), leftMembersByKey.keySet());
+        var leftNotInRightM = _Sets.minus(leftMembersByKey.keySet(), rightMembersByKey.keySet());
+        var rightNotInLeftM = _Sets.minus(rightMembersByKey.keySet(), leftMembersByKey.keySet());
         
         leftNotInRightM
             .stream()
@@ -129,15 +128,15 @@ class _DiffExport {
             .stream()
             .forEach(memberKey->sb.append(RIGHT_SYMBOL).append(" ").append(memberKey).append("\n"));
         
-        val inLeftAndRightM = _Sets.intersect(leftMembersByKey.keySet(), rightMembersByKey.keySet());
+        var inLeftAndRightM = _Sets.intersect(leftMembersByKey.keySet(), rightMembersByKey.keySet());
         
-        val leftMemberIntersection = inLeftAndRightM
+        var leftMemberIntersection = inLeftAndRightM
                 .stream()
                 .sorted()
                 .map(leftMembersByKey::get)
                 .collect(Can.toCan());
         
-        val rightMemberIntersection = inLeftAndRightM
+        var rightMemberIntersection = inLeftAndRightM
                 .stream()
                 .sorted()
                 .map(rightMembersByKey::get)
@@ -148,7 +147,7 @@ class _DiffExport {
         facetsById
         .values()
         .forEach(facet->{
-            val diffModel = new DiffModel(f->f.getId().equals(facet.getId()), 
+            var diffModel = new DiffModel(f->f.getId().equals(facet.getId()), 
                     leftTypeIntersection, rightTypeIntersection,
                     leftMemberIntersection, rightMemberIntersection);
             diff(diffModel, leftMetamodelDto, rightMetamodelDto);
@@ -205,8 +204,8 @@ class _DiffExport {
     private void diffFacets(DiffModel diffModel, String typeOrMemberId, 
             Facets leftFacets, Facets rightFacets) {
         
-        val leftFacet = findFirstFacet(leftFacets, diffModel.facetFilter);
-        val rightFacet = findFirstFacet(rightFacets, diffModel.facetFilter);
+        var leftFacet = findFirstFacet(leftFacets, diffModel.facetFilter);
+        var rightFacet = findFirstFacet(rightFacets, diffModel.facetFilter);
         
         if(leftFacet.isPresent()) {
             if(!rightFacet.isPresent()) {
@@ -224,13 +223,13 @@ class _DiffExport {
     }
     
     private void reportFacetNotInOther(DiffModel diffModel, String symbol, String typeOrMemberId, Facet facet) {
-        val sb = diffModel.sb;
-        val attrNameValueLiterals = streamFacetAttr(facet)
+        var sb = diffModel.sb;
+        var attrNameValueLiterals = streamFacetAttr(facet)
                 .map(attr->attr.getName() + " " + attr.getValue())
                 .collect(Can.toCan());
 
         // even if there are no attributes, we still want to report that there is a difference with facets 
-        val attrNameValueOrEmptyLiterals =
+        var attrNameValueOrEmptyLiterals =
                 attrNameValueLiterals.isEmpty()
                     ? Can.of("<no-attributes>")
                     : attrNameValueLiterals;
@@ -245,22 +244,22 @@ class _DiffExport {
 
     private void diffAttrs(DiffModel diffModel, String typeOrMemberId, Facet leftFacet, Facet rightFacet) {
         
-        val sb = diffModel.sb;
-        val leftAttrByName = new TreeMap<String, FacetAttr>();
-        val rightAttrByName = new TreeMap<String, FacetAttr>();
+        var sb = diffModel.sb;
+        var leftAttrByName = new TreeMap<String, FacetAttr>();
+        var rightAttrByName = new TreeMap<String, FacetAttr>();
 
-        val leftAttrNames = streamFacetAttr(leftFacet)
+        var leftAttrNames = streamFacetAttr(leftFacet)
                 .peek(attr->leftAttrByName.put(attr.getName(), attr))
                 .map(FacetAttr::getName)
                 .collect(Collectors.toSet());
         
-        val rightAttrNames = streamFacetAttr(rightFacet)
+        var rightAttrNames = streamFacetAttr(rightFacet)
                 .peek(attr->rightAttrByName.put(attr.getName(), attr))
                 .map(FacetAttr::getName)
                 .collect(Collectors.toSet());
         
-        val leftNotInRight = _Sets.minus(leftAttrNames, rightAttrNames);
-        val rightNotInLeft = _Sets.minus(rightAttrNames, leftAttrNames);
+        var leftNotInRight = _Sets.minus(leftAttrNames, rightAttrNames);
+        var rightNotInLeft = _Sets.minus(rightAttrNames, leftAttrNames);
         
         leftNotInRight
             .stream()
@@ -277,15 +276,15 @@ class _DiffExport {
                     .append(" ").append(rightAttrByName.get(attrName).getValue())
                     .append("\n"));
 
-        val inLeftAndRight = _Sets.intersect(leftAttrNames, rightAttrNames);
+        var inLeftAndRight = _Sets.intersect(leftAttrNames, rightAttrNames);
                 
-        val leftAttrIntersection = inLeftAndRight
+        var leftAttrIntersection = inLeftAndRight
                 .stream()
                 .sorted()
                 .map(leftAttrByName::get)
                 .collect(Can.toCan());
         
-        val rightAttrIntersection = inLeftAndRight
+        var rightAttrIntersection = inLeftAndRight
                 .stream()
                 .sorted()
                 .map(rightAttrByName::get)

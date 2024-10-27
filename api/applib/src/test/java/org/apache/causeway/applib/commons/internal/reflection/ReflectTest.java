@@ -38,8 +38,6 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.getAnnota
 import static org.apache.causeway.commons.internal.reflection._Reflect.streamAllMethods;
 import static org.apache.causeway.commons.internal.reflection._Reflect.streamTypeHierarchy;
 
-import lombok.val;
-
 class ReflectTest {
 
     @Test
@@ -47,7 +45,7 @@ class ReflectTest {
 
         Class<?> type = ReflectSampleForTesting.Nested.class;
 
-        val typeSet = streamTypeHierarchy(type, InterfacePolicy.EXCLUDE)
+        var typeSet = streamTypeHierarchy(type, InterfacePolicy.EXCLUDE)
                 .map(Class::getName)
                 .collect(Collectors.toSet());
 
@@ -63,7 +61,7 @@ class ReflectTest {
 
         Class<?> type = ReflectSampleForTesting.Nested.class;
 
-        val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+        var typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(Class::getName)
                 .collect(Collectors.toSet());
 
@@ -80,7 +78,7 @@ class ReflectTest {
 
         Class<?> type = ReflectSampleForTesting.Nested.class;
 
-        val typeSet = streamAllMethods(type, true)
+        var typeSet = streamAllMethods(type, true)
                 .map(m->m.toString())
                 .collect(Collectors.toSet());
 
@@ -117,7 +115,7 @@ class ReflectTest {
 
         Class<?> type = A.class;
 
-        val typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+        var typeSet = streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
                 .map(t->t.getSimpleName())
                 .collect(Collectors.toCollection(TreeSet::new));
 

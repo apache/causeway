@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Works in connection with {@link InteractionService},
@@ -78,7 +77,7 @@ public interface VirtualClock extends Serializable {
      */
     static VirtualClock nowAt(@NonNull final Instant virtualNow) {
         // positive if the resulting clock is in the future
-        val offsetMillis = ChronoUnit.MILLIS.between(Instant.now(), virtualNow);
+        var offsetMillis = ChronoUnit.MILLIS.between(Instant.now(), virtualNow);
         return new VirtualClock_withOffset(offsetMillis);
     }
 
@@ -186,7 +185,7 @@ public interface VirtualClock extends Serializable {
      * Always returns the time {@link Instant} 2003/8/17 21:30:25 (UTC)
      */
     static VirtualClock frozenTestClock() {
-        val frozenAt = Instant.from(
+        var frozenAt = Instant.from(
                 ZonedDateTime.of(2003, 7, 17, 21, 30, 25, 0, ZoneId.from(ZoneOffset.UTC)));
         return frozenAt(frozenAt);
     }
@@ -374,7 +373,7 @@ public interface VirtualClock extends Serializable {
      */
     @Deprecated // forRemoval=? ideally applib should no longer depend on joda.time, use converters instead
     default org.joda.time.LocalDate nowAsJodaLocalDate() {
-        val zoneId = localTimeZone();
+        var zoneId = localTimeZone();
         return nowAsJodaLocalDate(zoneId);
     }
 

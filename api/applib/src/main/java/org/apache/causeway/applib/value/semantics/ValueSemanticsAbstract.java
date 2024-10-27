@@ -57,7 +57,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * @since 2.x {@index}
@@ -148,7 +147,7 @@ ValueSemanticsProvider<T> {
             final @Nullable ValueDecomposition decomposition,
             final @NonNull Function<String, T> fromString,
             final @NonNull Supplier<T> onNullOrEmpty) {
-        val string = decomposition!=null
+        var string = decomposition!=null
                 ? decomposition.left().map(ValueWithTypeDto::getString).orElse(null)
                         : null;
         return _Strings.isNotEmpty(string)
@@ -179,7 +178,7 @@ ValueSemanticsProvider<T> {
             final @NonNull Function<F, T> onNonNull,
             final @NonNull Supplier<T> onNull) {
 
-        val valuePojo = decomposition!=null
+        var valuePojo = decomposition!=null
                 ? decomposition.left().map(fundamentalValueExtractor).orElse(null)
                 : null;
 
@@ -209,7 +208,7 @@ ValueSemanticsProvider<T> {
     protected DecimalFormat getNumberFormat(
             final @Nullable ValueSemanticsProvider.Context context,
             final @NonNull FormatUsageFor usedFor) {
-        val format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
+        var format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
         format.setMaximumFractionDigits(16);
         configureDecimalFormat(context, format, usedFor);
@@ -219,7 +218,7 @@ ValueSemanticsProvider<T> {
     protected Optional<BigInteger> parseInteger(
             final @Nullable ValueSemanticsProvider.Context context,
             final @Nullable String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return Optional.empty();
         }
@@ -241,27 +240,27 @@ ValueSemanticsProvider<T> {
             final @Nullable Context context,
             final @Nullable String text,
             final GroupingSeparatorPolicy groupingSeparatorPolicy) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return Optional.empty();
         }
 
         if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
-            val userLocale = getUserLocale(context);
-            val decimalFormatSymbols = new DecimalFormatSymbols(userLocale.getNumberFormatLocale());
-            val groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
+            var userLocale = getUserLocale(context);
+            var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.getNumberFormatLocale());
+            var groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
             if (input.contains(""+groupingSeparatorChar)) {
                 throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
             }
         }
 
-        val format = getNumberFormat(context, FormatUsageFor.PARSING);
+        var format = getNumberFormat(context, FormatUsageFor.PARSING);
         format.setParseBigDecimal(true);
 
 
-        val position = new ParsePosition(0);
+        var position = new ParsePosition(0);
         try {
-            val number = (BigDecimal)format.parse(input, position);
+            var number = (BigDecimal)format.parse(input, position);
             if (position.getErrorIndex() != -1) {
                 throw new ParseException("could not parse input='" + input + "'", position.getErrorIndex());
             } else if (position.getIndex() < input.length()) {

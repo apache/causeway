@@ -58,7 +58,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an {@link ApplicationFeature}.
@@ -109,7 +108,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
             return ApplicationType.class;
         case MEMBER:
 
-            val memberSort =
+            var memberSort =
             Optional.ofNullable(applicationFeatureRepository.findFeature(featureId))
                 .flatMap(ApplicationFeature::getMemberSort)
                 .orElse(null);

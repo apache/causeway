@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -58,7 +57,7 @@ public class SessionLogger implements SessionSubscriber {
 
         if(log.isDebugEnabled()) {
 
-            val msg = String.format(
+            var msg = String.format(
                     "User '%s' with sessionGuid '%s' (httpSessionId '%s') has logged %s at '%s'.%s",
                     username,
                     sessionGuid,

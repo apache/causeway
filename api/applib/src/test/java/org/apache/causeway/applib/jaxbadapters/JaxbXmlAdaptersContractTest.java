@@ -23,8 +23,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import lombok.val;
-
 public abstract class JaxbXmlAdaptersContractTest<T> {
 
     public static final String sampleComplexString = "Hello World!?{[()]}§$%&=´`*+~#',;.:-_|@€µ<>^°\"";
@@ -50,8 +48,8 @@ public abstract class JaxbXmlAdaptersContractTest<T> {
         XmlAdapter<String, T> xmlAdapter = this.xmlAdapter;
         for(T sampleValue : this.sampleValues) {
 
-            val xml = xmlAdapter.marshal(sampleValue);
-            val recovered = xmlAdapter.unmarshal(xml);
+            var xml = xmlAdapter.marshal(sampleValue);
+            var recovered = xmlAdapter.unmarshal(xml);
 
             if(sampleValue instanceof byte[]) {
                 Assertions.assertArrayEquals((byte[])sampleValue, (byte[])recovered);
@@ -60,8 +58,8 @@ public abstract class JaxbXmlAdaptersContractTest<T> {
             }
         }
 
-        val nullXml = xmlAdapter.marshal(null);
-        val nullRecovered = xmlAdapter.unmarshal(nullXml);
+        var nullXml = xmlAdapter.marshal(null);
+        var nullRecovered = xmlAdapter.unmarshal(nullXml);
 
         Assertions.assertNull(nullRecovered);
     }

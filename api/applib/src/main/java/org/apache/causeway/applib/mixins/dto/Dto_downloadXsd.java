@@ -38,7 +38,6 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.ZipUtils;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Mixin that provides the ability to download the XSD schema for a view model
@@ -91,10 +90,10 @@ public class Dto_downloadXsd {
 
             final CausewaySchemas causewaySchemas) {
 
-        val schemaMap = jaxbService.toXsd(holder, causewaySchemas);
+        var schemaMap = jaxbService.toXsd(holder, causewaySchemas);
 
         if(schemaMap.isEmpty()) {
-            val msg = String.format(
+            var msg = String.format(
                     "No schemas were generated for %s; programming error?",
                     holder.getClass().getName());
             messageService.warnUser(msg);
@@ -102,15 +101,15 @@ public class Dto_downloadXsd {
         }
 
         if(schemaMap.size() == 1) {
-            val xmlString = schemaMap.values().iterator().next();
+            var xmlString = schemaMap.values().iterator().next();
             return Clob.of(fileName, CommonMimeType.XSD, xmlString);
         }
 
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var zipBuilder = ZipUtils.zipEntryBuilder();
 
         for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
-            val namespaceUri = entry.getKey();
-            val schemaText = entry.getValue();
+            var namespaceUri = entry.getKey();
+            var schemaText = entry.getValue();
             zipBuilder.addAsUtf8(zipEntryNameFor(namespaceUri), schemaText);
         }
 

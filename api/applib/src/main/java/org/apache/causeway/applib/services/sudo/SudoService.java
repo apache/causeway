@@ -40,7 +40,6 @@ import org.apache.causeway.commons.functional.ThrowingRunnable;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Allows a block of code to be executed within an arbitrary
@@ -98,19 +97,19 @@ public class SudoService {
             final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull Callable<T> callable) {
 
-        val currentInteractionLayer = interactionLayerTracker.currentInteractionLayerElseFail();
-        val currentInteractionContext = currentInteractionLayer.getInteractionContext();
-        val sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
+        var currentInteractionLayer = interactionLayerTracker.currentInteractionLayerElseFail();
+        var currentInteractionContext = currentInteractionLayer.getInteractionContext();
+        var sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
         try {
-            for (val sudoListener : sudoListeners) {
+            for (var sudoListener : sudoListeners) {
                 sudoListener.beforeCall(currentInteractionContext, sudoInteractionContext);
             }
 
             return interactionService.call(sudoInteractionContext, callable);
 
         } finally {
-            for (val sudoListener : sudoListeners) {
+            for (var sudoListener : sudoListeners) {
                 sudoListener.afterCall(sudoInteractionContext, currentInteractionContext);
             }
         }

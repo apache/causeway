@@ -28,15 +28,13 @@ import org.springframework.core.task.support.TaskExecutorAdapter;
 
 import org.apache.causeway.applib.services.user.UserMemento;
 
-import lombok.val;
-
 class AsyncControl_Test {
 
     @Test
     public void defaults() throws Exception {
 
         // given
-        val control = AsyncControl.returningVoid();
+        var control = AsyncControl.returningVoid();
 
         // then
         Assertions.assertThat(control.getExecutionModes()).isEmpty();
@@ -45,7 +43,7 @@ class AsyncControl_Test {
     @Test
     public void check_rules() throws Exception {
         // given
-        val control = AsyncControl.returningVoid();
+        var control = AsyncControl.returningVoid();
 
         // when
         control.withCheckRules();
@@ -58,7 +56,7 @@ class AsyncControl_Test {
     public void skip_rules() throws Exception {
 
         // given
-        val control = AsyncControl.returningVoid();
+        var control = AsyncControl.returningVoid();
 
         // when
         control.withSkipRules();
@@ -71,7 +69,7 @@ class AsyncControl_Test {
     public void user() throws Exception {
 
         // given
-        val control = AsyncControl.returningVoid();
+        var control = AsyncControl.returningVoid();
 
         // when
         control.withUser(UserMemento.ofName("fred"));
@@ -84,7 +82,7 @@ class AsyncControl_Test {
     public void roles() throws Exception {
 
         // given
-        val control = AsyncControl.returningVoid();
+        var control = AsyncControl.returningVoid();
 
         // when
         control.withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"));
@@ -97,11 +95,11 @@ class AsyncControl_Test {
     @Test
     public void chaining() throws Exception {
 
-        val executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(command -> {
+        var executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(command -> {
         }));
         ExceptionHandler exceptionHandler = ex -> null;
 
-        val control = AsyncControl.returning(String.class)
+        var control = AsyncControl.returning(String.class)
                 .withSkipRules()
                 .withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"))
                 .with(executorService)

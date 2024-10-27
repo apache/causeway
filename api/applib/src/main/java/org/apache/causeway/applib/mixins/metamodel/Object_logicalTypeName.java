@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Contributes a property exposing the logical object type of the domain
@@ -71,13 +70,13 @@ public class Object_logicalTypeName {
     extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent<Object_logicalTypeName, String> {}
 
     @MemberSupport public String prop() {
-        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getLogicalTypeName();
     }
 
     @MemberSupport public boolean hideProp() {
-        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        val beanSort = metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
+        var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        var beanSort = metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED);
         return !beanSort.isEntity() && !beanSort.isViewModel();
     }
 

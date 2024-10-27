@@ -29,7 +29,6 @@ import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Collects together methods for creating, persisting and searching for
@@ -134,7 +133,7 @@ public interface RepositoryService {
     default void persistAndFlush(final Object... domainObjects) {
         final int length = domainObjects.length;
         for (int i = 0; i < length; i++) {
-            val domainObject = domainObjects[i];
+            var domainObject = domainObjects[i];
             if (i < length - 1) {
                 // not at the end
                 persist(domainObject);

@@ -162,7 +162,7 @@ public @interface CollectionLayout {
      *
      * <p>
      * However, in some circumstances the ordering of collection may be different to the entity's
-     * natural ordering.  For example, the entity may represent an interval of time sorted by its
+     * natural ordering.  For example, the entity may represent an intervar of time sorted by its
      * <i>startDate</i> ascending, but the collection may wish to sort by <i>startDate</i>.
      *
      * <p>

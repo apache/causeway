@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Superclass for all domain events that are raised by the framework when
@@ -135,8 +134,8 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
      * {@link #getMixee() mixed-in} domain object for a mixin.
      */
     public <T> T getSubject() {
-        val mixee = getMixee();
-        val mixedInElseSource = mixee != null
+        var mixee = getMixee();
+        var mixedInElseSource = mixee != null
                 ? mixee
                 : getSource();
         return _Casts.uncheckedCast(mixedInElseSource);

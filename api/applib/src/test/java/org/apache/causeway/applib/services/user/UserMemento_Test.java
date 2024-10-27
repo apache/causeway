@@ -26,8 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.apache.causeway.commons.internal.resources._Resources.url;
 
-import lombok.val;
-
 class UserMemento_Test {
 
     @Nested
@@ -37,7 +35,7 @@ class UserMemento_Test {
         void name_only() {
 
             // when
-            val userMemento = UserMemento.ofName("fredflintstone");
+            var userMemento = UserMemento.ofName("fredflintstone");
 
             // then original unchanged
             Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
@@ -50,7 +48,7 @@ class UserMemento_Test {
         void name_and_roles() {
 
             // when
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // then
             Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
@@ -68,10 +66,10 @@ class UserMemento_Test {
         @Test
         void user_and_roles_preserved_and_real_name_set() {
             // copy
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // when
-            val userMemento2 = userMemento.withRealName("Fred Flintstone");
+            var userMemento2 = userMemento.withRealName("Fred Flintstone");
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -94,11 +92,11 @@ class UserMemento_Test {
         @Test
         void user_and_roles_and_avatarUrl_preserved_and_real_name_set() throws MalformedURLException {
             // copy
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND")
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND")
                     .withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // when
-            val userMemento2 = userMemento.withRealName("Fred Flintstone");
+            var userMemento2 = userMemento.withRealName("Fred Flintstone");
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -128,10 +126,10 @@ class UserMemento_Test {
         void user_and_roles_preserved_and_avatarUrl_set() throws MalformedURLException {
 
             // copy
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // when
-            val userMemento2 = userMemento.withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            var userMemento2 = userMemento.withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -155,10 +153,10 @@ class UserMemento_Test {
         void user_and_roles_and_real_name_preserved_and_avatarUrl_set() throws MalformedURLException {
 
             // copy
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND").withRealName("Fred Flintstone");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND").withRealName("Fred Flintstone");
 
             // when
-            val userMemento2 = userMemento.withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            var userMemento2 = userMemento.withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -188,10 +186,10 @@ class UserMemento_Test {
         void user_and_roles_preserved_and_role_added() throws MalformedURLException {
 
             // given
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // when
-            val userMemento2 = userMemento.withRoleAdded("WICKET_ROLE");
+            var userMemento2 = userMemento.withRoleAdded("WICKET_ROLE");
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -218,10 +216,10 @@ class UserMemento_Test {
         void user_and_roles_preserved_and_impersonating_flag_set() throws MalformedURLException {
 
             // given
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // when
-            val userMemento2 = userMemento.withImpersonating(true);
+            var userMemento2 = userMemento.withImpersonating(true);
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -241,10 +239,10 @@ class UserMemento_Test {
         void user_and_roles_preserved_and_impersonating_flag_set() throws MalformedURLException {
 
             // given
-            val userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
+            var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // when
-            val userMemento2 = userMemento.withMultiTenancyToken("/ITA");
+            var userMemento2 = userMemento.withMultiTenancyToken("/ITA");
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
@@ -264,7 +262,7 @@ class UserMemento_Test {
         void happy_case() throws MalformedURLException {
 
             // when
-            val userMemento = UserMemento.ofName("fredflintstone")
+            var userMemento = UserMemento.ofName("fredflintstone")
                     .withRoleAdded("CAVEMAN")
                     .withRoleAdded("HUSBAND")
                     .withAvatarUrl(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"))
@@ -282,7 +280,7 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento.isImpersonating()).isFalse();
 
             // and when
-            val userMemento2 = userMemento.withImpersonating(true);
+            var userMemento2 = userMemento.withImpersonating(true);
 
             // then copy created
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
