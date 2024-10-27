@@ -38,6 +38,7 @@ module org.apache.causeway.incubator.viewer.graphql.model {
     exports org.apache.causeway.viewer.graphql.model.types;
     exports org.apache.causeway.viewer.graphql.model.domain.rich.scenario;
 
+    requires static lombok;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.incubator.viewer.graphql.applib;

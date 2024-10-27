@@ -152,7 +152,7 @@ open module org.apache.causeway.core.metamodel {
     requires java.xml;
     requires jakarta.xml.bind;
     requires jakarta.inject;
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;

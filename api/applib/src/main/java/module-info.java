@@ -135,7 +135,7 @@ module org.apache.causeway.applib {
     requires transitive jakarta.persistence;
     requires transitive jakarta.ws.rs;
     requires transitive jakarta.xml.bind;
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
     requires org.apache.logging.log4j;

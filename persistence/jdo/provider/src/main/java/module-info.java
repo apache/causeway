@@ -28,7 +28,7 @@ module org.apache.causeway.persistence.jdo.provider {
     exports org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent;
 
     requires javax.jdo;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

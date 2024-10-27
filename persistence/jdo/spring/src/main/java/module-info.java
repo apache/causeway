@@ -28,7 +28,7 @@ module org.apache.causeway.persistence.jdo.spring {
     requires jakarta.transaction;
     requires javax.jdo;
     requires jakarta.servlet;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;

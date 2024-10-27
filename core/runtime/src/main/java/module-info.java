@@ -24,7 +24,7 @@ module org.apache.causeway.core.runtime {
     requires jakarta.annotation;
     requires java.desktop;
     requires jakarta.inject;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

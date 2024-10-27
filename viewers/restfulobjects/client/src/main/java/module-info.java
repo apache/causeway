@@ -29,7 +29,7 @@ module org.apache.causeway.viewer.restfulobjects.client {
     requires jakarta.annotation;
     requires jakarta.ws.rs;
     requires jakarta.xml.bind;
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.viewer.restfulobjects.applib;

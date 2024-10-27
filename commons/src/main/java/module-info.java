@@ -57,14 +57,15 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.resources;
     exports org.apache.causeway.commons.internal.testing;
 
+    requires static lombok;
     requires transitive com.fasterxml.jackson.annotation;
     requires transitive com.fasterxml.jackson.core;
     requires transitive com.fasterxml.jackson.databind;
     requires transitive com.fasterxml.jackson.module.jakarta.xmlbind;
+    requires transitive java.base;
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
-    requires transitive lombok;
     requires transitive org.apache.logging.log4j;
     requires transitive org.jdom2;
     requires transitive org.jsoup;

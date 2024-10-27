@@ -31,7 +31,7 @@ module org.apache.causeway.valuetypes.markdown.applib {
     requires flexmark.util.sequence;
     requires jakarta.inject;
     requires jakarta.xml.bind;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;

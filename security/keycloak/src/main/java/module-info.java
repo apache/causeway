@@ -23,7 +23,7 @@ module org.apache.causeway.security.keycloak {
 
     requires org.apache.causeway.core.webapp;
     requires org.apache.causeway.security.spring;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.runtimeservices;
     requires org.apache.causeway.security.api;

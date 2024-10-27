@@ -28,7 +28,7 @@ module org.apache.causeway.incubator.viewer.graphql.viewer {
     requires jakarta.inject;
     requires java.net.http;
     requires jakarta.persistence;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

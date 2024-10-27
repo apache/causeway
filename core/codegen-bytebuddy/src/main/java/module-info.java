@@ -20,6 +20,7 @@ module org.apache.causeway.core.codegen.bytebuddy {
     exports org.apache.causeway.core.codegen.bytebuddy.services;
     exports org.apache.causeway.core.codegen.bytebuddy;
 
+    requires static lombok;
     requires net.bytebuddy;
     requires org.apache.causeway.commons;
     requires spring.context;

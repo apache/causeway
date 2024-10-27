@@ -28,7 +28,7 @@ module org.apache.causeway.persistence.commons {
     requires jakarta.inject;
     requires java.sql;
     requires java.xml;
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

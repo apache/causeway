@@ -20,6 +20,7 @@ module org.apache.causeway.persistence.jdo.integration {
     exports org.apache.causeway.persistence.jdo.integration.metamodel;
     exports org.apache.causeway.persistence.jdo.integration;
 
+    requires java.base;
     requires javax.jdo;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.core.config;

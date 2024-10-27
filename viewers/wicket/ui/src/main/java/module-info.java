@@ -124,7 +124,7 @@ module org.apache.causeway.viewer.wicket.ui {
     requires java.sql;
     requires jakarta.validation;
     requires jakarta.servlet;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

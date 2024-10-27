@@ -22,6 +22,7 @@ module org.apache.causeway.security.simple {
     exports org.apache.causeway.security.simple.authorization;
     exports org.apache.causeway.security.simple.realm;
 
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.security.api;
     requires org.apache.causeway.core.runtimeservices;

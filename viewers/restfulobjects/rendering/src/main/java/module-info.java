@@ -37,7 +37,7 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires java.sql;
     requires jakarta.ws.rs;
     requires jakarta.xml.bind;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

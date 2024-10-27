@@ -23,7 +23,7 @@ module org.apache.causeway.valuetypes.jodatime.applib {
 
     requires java.xml;
     requires jakarta.xml.bind;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.joda.time;
     requires spring.context;

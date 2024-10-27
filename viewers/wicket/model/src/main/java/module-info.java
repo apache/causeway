@@ -36,7 +36,7 @@ module org.apache.causeway.viewer.wicket.model {
     exports org.apache.causeway.viewer.wicket.model.timetaken;
 
     requires jakarta.activation;
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;

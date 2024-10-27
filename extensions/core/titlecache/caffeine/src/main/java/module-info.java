@@ -17,6 +17,8 @@
  *  under the License.
  */
 module org.apache.causeway.extensions.titlecache.caffeine {
+
+    requires static lombok;
     requires spring.beans;
     requires spring.context;
     requires spring.context.support;

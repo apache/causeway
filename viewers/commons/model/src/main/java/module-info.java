@@ -29,7 +29,7 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model.scalar;
     exports org.apache.causeway.viewer.commons.model.hints;
 
-    requires lombok;
+    requires static lombok;
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;

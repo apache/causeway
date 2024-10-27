@@ -34,7 +34,7 @@ module org.apache.causeway.security.api {
     requires jakarta.annotation;
     requires java.desktop;
     requires jakarta.inject;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.schema;

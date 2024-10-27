@@ -19,5 +19,5 @@
 module org.apache.causeway.viewer.commons.prism {
     exports org.apache.causeway.viewer.commons.prism;
 
-    requires lombok;
+    requires static lombok;
 }

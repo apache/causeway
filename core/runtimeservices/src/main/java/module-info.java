@@ -61,7 +61,7 @@ module org.apache.causeway.core.runtimeservices {
     requires java.xml;
     requires jakarta.xml.bind;
     requires jakarta.inject;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

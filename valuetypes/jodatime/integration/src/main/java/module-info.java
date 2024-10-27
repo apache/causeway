@@ -21,7 +21,7 @@ module org.apache.causeway.valuetypes.jodatime.integration {
     exports org.apache.causeway.valuetypes.jodatime.integration.valuesemantics;
 
     requires jakarta.inject;
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

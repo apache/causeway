@@ -20,7 +20,7 @@ module org.apache.causeway.valuetypes.markdown.ui.wkt {
     exports org.apache.causeway.valuetypes.markdown.ui.wkt;
     exports org.apache.causeway.valuetypes.markdown.ui.wkt.components;
 
-    requires lombok;
+    requires static lombok;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.valuetypes.markdown.applib;
