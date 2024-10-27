@@ -30,7 +30,6 @@ import org.apache.causeway.schema.common.v2.OidsDto;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -43,8 +42,8 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, Iterable<Obje
     @Override
     public List<Object> unmarshal(final OidsDto oidsDto) {
         List<Object> domainObjects = new ArrayList<>();
-        for (val oidDto : oidsDto.getOid()) {
-            val bookmark = Bookmark.forOidDto(oidDto);
+        for (var oidDto : oidsDto.getOid()) {
+            var bookmark = Bookmark.forOidDto(oidDto);
             bookmarkService.lookup(bookmark)
             .ifPresent(domainObjects::add);
         }
@@ -56,9 +55,9 @@ public class PersistentEntitiesAdapter extends XmlAdapter<OidsDto, Iterable<Obje
         if(domainObjects == null) {
             return null;
         }
-        val oidsDto = new OidsDto();
-        for (val domainObject : domainObjects) {
-            val bookmark = getBookmarkService().bookmarkForElseFail(domainObject);
+        var oidsDto = new OidsDto();
+        for (var domainObject : domainObjects) {
+            var bookmark = getBookmarkService().bookmarkForElseFail(domainObject);
             oidsDto.getOid().add(bookmark.toOidDto());
         }
         return oidsDto;

@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.TypedHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
-import lombok.val;
-
 public abstract class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
 
     static class Enabled extends CommandPublishingFacetForPropertyAnnotation {
@@ -65,15 +63,15 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
             final FacetHolder holder,
             final ServiceInjector servicesInjector) {
 
-        val publishingPolicy = PropertyConfigOptions.propertyCommandPublishingPolicy(configuration);
+        var publishingPolicy = PropertyConfigOptions.propertyCommandPublishingPolicy(configuration);
 
         return propertyIfAny
             .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
             .map(property -> {
                 Publishing publishing = property.commandPublishing();
 
-                val processorClass = property.commandDtoProcessor();
-                val processor = newProcessorElseNull(processorClass);
+                var processorClass = property.commandDtoProcessor();
+                var processor = newProcessorElseNull(processorClass);
 
                 if(processor != null) {
                     publishing = Publishing.ENABLED;
@@ -111,7 +109,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     }
                 } else {
                     // we are dealing with an action
-                    val actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
+                    var actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
                     switch (actionPublishingPolicy) {
                         case NONE:
                             return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);

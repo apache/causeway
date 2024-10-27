@@ -18,17 +18,14 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.services;
 
-import lombok.val;
-
 import jakarta.inject.Named;
-
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmarkui.BookmarkUiService;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 
 /**
@@ -47,7 +44,7 @@ public class BookmarkUiServiceWicket implements BookmarkUiService {
 
     @Override
     public void clear() {
-        val session = AuthenticatedWebSessionForCauseway.get();
+        var session = AuthenticatedWebSessionForCauseway.get();
         if (session == null) {
             return;
         }

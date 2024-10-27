@@ -35,7 +35,6 @@ import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayo
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides actions to managed the dynamic loading of layouts from a github source code repository.
@@ -113,7 +112,7 @@ public class LayoutLoadersGitHubMenu {
     }
 
     boolean isNotConfigured() {
-        val layoutLoadersGitHub = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub();
+        var layoutLoadersGitHub = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub();
         return layoutLoadersGitHub.getRepository() == null ||
                 layoutLoadersGitHub.getApiKey() == null;
     }

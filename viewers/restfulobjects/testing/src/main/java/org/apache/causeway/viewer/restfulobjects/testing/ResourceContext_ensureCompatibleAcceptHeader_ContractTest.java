@@ -50,7 +50,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
-import lombok.val;
+
 
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
@@ -184,7 +184,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     private ResourceContext instantiateResourceContext(
             final RepresentationType representationType) {
 
-        val resourceDescriptor = ResourceDescriptor.of(representationType, null, null);
+        var resourceDescriptor = ResourceDescriptor.of(representationType, null, null);
 
         return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, null,
                 mockHttpServletRequest, null, null,

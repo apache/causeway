@@ -80,7 +80,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -337,7 +336,7 @@ public final class Facets {
 
     public OptionalInt typicalLength(
             final ObjectSpecification objectSpec, final OptionalInt maxLength) {
-        val typicalLength = objectSpec
+        var typicalLength = objectSpec
                 .lookupFacet(TypicalLengthFacet.class)
                 .map(TypicalLengthFacet::value)
                 .orElse(null);
@@ -359,7 +358,7 @@ public final class Facets {
                 .stream()
                 .map(TableDecoratorFacet::value)
                 .map(decoratorClass -> {
-                    val decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass);
+                    var decorator = _InstanceUtil.createInstance(decoratorClass, decoratorClass);
                     return facetHolders[0].injectServicesInto(decorator);
                 })
                 .findFirst();
@@ -381,7 +380,7 @@ public final class Facets {
             final ObjectFeature param,
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex) {
-        val objectSpec = param.getElementType();
+        var objectSpec = param.getElementType();
         return objectSpec.valueFacet()
             .<ObjectAction>flatMap(valueFacet->
                 valueFacet.selectCompositeValueMixinForParameter(
@@ -392,7 +391,7 @@ public final class Facets {
     public Optional<ObjectAction> valueCompositeMixinForProperty(
             final ObjectFeature prop,
             final ManagedProperty managedProperty) {
-        val objectSpec = prop.getElementType();
+        var objectSpec = prop.getElementType();
         return objectSpec.valueFacet()
             .<ObjectAction>flatMap(valueFacet->
                 valueFacet.selectCompositeValueMixinForProperty(managedProperty));

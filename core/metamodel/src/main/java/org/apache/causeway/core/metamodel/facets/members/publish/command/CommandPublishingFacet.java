@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Indicates that details of the action invocation or property edit,
@@ -44,7 +43,7 @@ public interface CommandPublishingFacet extends Facet {
     CommandDtoProcessor getProcessor();
 
     public static boolean isPublishingEnabled(final @NonNull FacetHolder facetHolder) {
-        val facet = facetHolder.getFacet(CommandPublishingFacet.class);
+        var facet = facetHolder.getFacet(CommandPublishingFacet.class);
         return facet != null && facet.isEnabled();
     }
 

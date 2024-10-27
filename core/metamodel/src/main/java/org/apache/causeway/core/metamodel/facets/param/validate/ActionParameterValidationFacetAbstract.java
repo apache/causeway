@@ -24,8 +24,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 
-import lombok.val;
-
 public abstract class ActionParameterValidationFacetAbstract
 extends FacetAbstract
 implements ActionParameterValidationFacet {
@@ -43,7 +41,7 @@ implements ActionParameterValidationFacet {
         if (!(context instanceof ActionArgValidityContext)) {
             return null;
         }
-        val actionArgValidityContext = (ActionArgValidityContext) context;
+        var actionArgValidityContext = (ActionArgValidityContext) context;
         return invalidReason(
                 actionArgValidityContext.getTarget(),
                 actionArgValidityContext.getArgs(),

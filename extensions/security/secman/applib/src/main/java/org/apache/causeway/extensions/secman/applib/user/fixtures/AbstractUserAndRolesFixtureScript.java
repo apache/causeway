@@ -36,7 +36,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptW
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
 import lombok.Getter;
-import lombok.val;
+
 
 /**
  * Convenience fixture script intended to be easily subclassed in order to set up an
@@ -148,7 +148,7 @@ implements FixtureScriptWithExecutionStrategy {
         serviceInjector.injectServicesInto(this.roleNamesSupplier);
 
         // create user if does not exist, and assign to the role
-        val username = getUsername();
+        var username = getUsername();
         applicationUser = applicationUserRepository.findByUsername(username)
                 .orElse(null);
         if(applicationUser == null) {

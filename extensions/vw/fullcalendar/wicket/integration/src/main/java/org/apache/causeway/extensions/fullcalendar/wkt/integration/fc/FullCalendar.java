@@ -40,8 +40,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.V
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res.FullCalendarEventSourceEvents;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res.FullCalendarIntegrationJsReference;
 
-import lombok.val;
-
 public class FullCalendar extends AbstractFullCalendar implements IRequestListener {
 
     private static final long serialVersionUID = 1L;
@@ -222,17 +220,17 @@ public class FullCalendar extends AbstractFullCalendar implements IRequestListen
     private static final String TIMEZONE_KEY = "timeZone";
 
     public ZonedDateTime startInstant() {
-        val startStr = getRequest().getRequestParameters().getParameterValue(START_KEY).toOptionalString();
+        var startStr = getRequest().getRequestParameters().getParameterValue(START_KEY).toOptionalString();
         return DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(startStr, ZonedDateTime::from);
     }
 
     public ZonedDateTime endInstant() {
-        val endStr = getRequest().getRequestParameters().getParameterValue(END_KEY).toOptionalString();
+        var endStr = getRequest().getRequestParameters().getParameterValue(END_KEY).toOptionalString();
         return DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(endStr, ZonedDateTime::from);
     }
 
     public String clientTimeZone() {
-        val timeZone = getRequest().getRequestParameters()
+        var timeZone = getRequest().getRequestParameters()
                 .getParameterValue(TIMEZONE_KEY).toOptionalString();
         return timeZone;
     }

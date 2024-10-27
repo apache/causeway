@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -56,7 +55,7 @@ class _MemberIdClashReporting {
 
         if(declaringType.isAbstract()) return; // skip abstract types
 
-        val memberIdCollector = new MemberIdCollector();
+        var memberIdCollector = new MemberIdCollector();
 
         // prime member-ids from regular members, without flagging (honor method override)
         regularMembers.forEach(memberIdCollector::collect);

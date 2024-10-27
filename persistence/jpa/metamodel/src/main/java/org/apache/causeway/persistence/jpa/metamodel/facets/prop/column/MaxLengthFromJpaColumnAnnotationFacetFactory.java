@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MaxLengthFromXxxColumnAnnotationMetaModelRefinerUtil;
 
-import lombok.val;
-
 public class MaxLengthFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -49,9 +47,9 @@ implements MetaModelRefiner {
             return;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
-        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        var jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         FacetUtil.addFacetIfPresent(
                 MaxLengthFacetFromJpaColumnAnnotation

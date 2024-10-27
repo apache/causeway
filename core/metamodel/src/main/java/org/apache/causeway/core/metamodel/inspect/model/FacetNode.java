@@ -42,7 +42,6 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 
 @Named(FacetNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -62,7 +61,7 @@ public class FacetNode extends MMNode {
 
     @Override
     public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
+        var title = lookupTitleAnnotation().map(Annotation::getValue)
                 .orElseGet(()->
                 String.format("%s: %s", simpleName(facet.getId()), facet.getFqcn()));
         return title;

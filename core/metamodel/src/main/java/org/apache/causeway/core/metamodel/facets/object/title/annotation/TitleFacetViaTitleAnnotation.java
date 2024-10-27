@@ -51,7 +51,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -63,9 +62,9 @@ implements ImperativeFacet {
             final @NonNull Class<?> cls,
             final @NonNull FacetHolder holder){
 
-        val titles = new ArrayDeque<Title>();
+        var titles = new ArrayDeque<Title>();
 
-        val titleComponents = Evaluators
+        var titleComponents = Evaluators
                 .streamEvaluators(cls,
                     annotatedElement->isTitleComponent(annotatedElement, titles::addLast),
                     TypeHierarchyPolicy.EXCLUDE,
@@ -119,12 +118,12 @@ implements ImperativeFacet {
 
         final ManagedObject targetAdapter = titleRenderRequest.getObject();
 
-        val pojo = targetAdapter.getPojo();
+        var pojo = targetAdapter.getPojo();
         if(pojo==null) {
             return "";
         }
-        val stringBuilder = new StringBuilder();
-        val objectManager = getObjectManager();
+        var stringBuilder = new StringBuilder();
+        var objectManager = getObjectManager();
 
         try {
             for (final TitleComponent component : this.components) {
@@ -133,7 +132,7 @@ implements ImperativeFacet {
                     continue;
                 }
                 // ignore context, if provided
-                val titlePartAdapter = objectManager.adapt(titlePart);
+                var titlePartAdapter = objectManager.adapt(titlePart);
                 if(titleRenderRequest.getSkipTitlePartEvaluator().test(titlePartAdapter)) {
                     continue;
                 }
@@ -157,7 +156,7 @@ implements ImperativeFacet {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            val isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
+            var isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
             if(!isUnitTesting) {
                 log.warn("Title failure", ex);
             }

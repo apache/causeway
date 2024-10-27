@@ -24,7 +24,7 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeader
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 public class AuthorizationHeaderFactoryOauth2Azure implements AuthorizationHeaderFactory {
 
@@ -58,12 +58,12 @@ public class AuthorizationHeaderFactoryOauth2Azure implements AuthorizationHeade
     @SneakyThrows
     @Override
     public String create() {
-        val tokenResult = tokenCache.getToken();
+        var tokenResult = tokenCache.getToken();
         if (tokenResult.isFailure()) {
             // TODO: this will cause the invocation to fail; but should we fail more permanently somehow if a JWT token could not be obtained?
             throw tokenResult.getFailureElseFail();
         }
-        val token = tokenResult.getSuccessElseFail();
+        var token = tokenResult.getSuccessElseFail();
         return "Bearer " + token;
     }
 }

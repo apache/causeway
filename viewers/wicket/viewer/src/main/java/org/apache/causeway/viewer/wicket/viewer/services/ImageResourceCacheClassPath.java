@@ -41,8 +41,6 @@ import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 
 /**
  * Caches images loaded either from the same package as the specified object,
@@ -105,7 +103,7 @@ implements ImageResourceCache {
         @Override
         protected ResourceResponse newResourceResponse(final Attributes attributes) {
 
-            val imageDataBytes = objectIcon.asBytes();
+            var imageDataBytes = objectIcon.asBytes();
             final long size = imageDataBytes.length;
             ResourceResponse resourceResponse = new ResourceResponse();
             resourceResponse.setContentType(objectIcon.getMimeType().getBaseType());

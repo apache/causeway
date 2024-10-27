@@ -48,7 +48,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.DomainTyp
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
-import lombok.val;
+
 
 public class DomainObjectReprRenderer
 extends ReprRendererAbstract<ManagedObject> {
@@ -170,7 +170,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         if (!(mode.isArgs())) {
 
-            val oidIfAny = objectAdapter.getBookmark();
+            var oidIfAny = objectAdapter.getBookmark();
 
             // self, extensions.oid
             if (ManagedObjects.isIdentifiable(objectAdapter)) {
@@ -178,7 +178,7 @@ extends ReprRendererAbstract<ManagedObject> {
                     addLinkToSelf();
                 }
                 oidIfAny.ifPresent(oid->{
-                    val oidStr = oid.stringify();
+                    var oidStr = oid.stringify();
                     getExtensions().mapPutString("oid", oidStr);
                 });
             }
@@ -240,7 +240,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            val renderer =
+            var renderer =
                     new DomainObjectReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap())
                     .with(objectAdapter);
             link.mapPutJsonRepresentation("value", renderer.render());
@@ -364,7 +364,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            val where = resourceContext.getWhere();
+            var where = resourceContext.getWhere();
 
             renderer.with(ManagedCollection.of(objectAdapter, collection, where)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
@@ -391,7 +391,7 @@ extends ReprRendererAbstract<ManagedObject> {
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(),
                             JsonRepresentation.newMap());
 
-            val where = resourceContext.getWhere();
+            var where = resourceContext.getWhere();
 
             renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
             members.mapPutJsonRepresentation(action.getId(), renderer.render());
@@ -446,8 +446,8 @@ extends ReprRendererAbstract<ManagedObject> {
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
         if(!getResourceContext().config().isSuppressUpdateLink()) {
-            val objectRef = ManagedObjects.stringifyElseFail(objectAdapter);
-            val updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", objectRef).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
+            var objectRef = ManagedObjects.stringifyElseFail(objectAdapter);
+            var updateLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", objectRef).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
             getLinks().arrayAdd(updateLinkBuilder.build());
         }
     }
@@ -459,9 +459,9 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonValueEncoderService jsonValueEncoder,
             final ManagedObject domainObject) {
 
-        val spec = domainObject.getSpecification();
+        var spec = domainObject.getSpecification();
         if(spec.isValue()) {
-            val context2 = JsonValueConverter.Context.of(objectFeature, context.config().isSuppressMemberExtensions());
+            var context2 = JsonValueConverter.Context.of(objectFeature, context.config().isSuppressMemberExtensions());
             return jsonValueEncoder.asObject(domainObject, context2);
         }
 

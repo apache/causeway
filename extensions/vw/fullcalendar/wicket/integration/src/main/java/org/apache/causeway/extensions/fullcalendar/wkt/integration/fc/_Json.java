@@ -34,7 +34,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -43,7 +42,7 @@ class _Json {
     public String toJson(final Object object) {
         ObjectMapper mapper = new ObjectMapper(new MappingJsonFactory());
 
-        val jodaModule = new SimpleModule("jodaTime");
+        var jodaModule = new SimpleModule("jodaTime");
         jodaModule.addSerializer(new DateTimeSerializer());
         jodaModule.addSerializer(new LocalTimeSerializer());
         mapper.registerModule(jodaModule);

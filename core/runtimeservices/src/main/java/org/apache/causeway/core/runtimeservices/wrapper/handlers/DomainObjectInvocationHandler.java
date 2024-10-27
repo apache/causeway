@@ -68,7 +68,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -170,7 +169,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
 
         final ObjectSpecification targetSpec = targetAdapter.getSpecification();
-        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+        var resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
                 .orElseThrow();
 
         // save method, through the proxy
@@ -186,10 +185,10 @@ extends DelegatingInvocationHandlerDefault<T> {
             return getSyncControl().getExecutionModes();
         }
 
-        val objectMember = targetSpec.getMemberElseFail(resolvedMethod);
-        val memberId = objectMember.getId();
+        var objectMember = targetSpec.getMemberElseFail(resolvedMethod);
+        var memberId = objectMember.getId();
 
-        val intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
+        var intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberId));
         }
@@ -232,7 +231,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberId));
             }
 
-            val objectAction = (ObjectAction) objectMember;
+            var objectAction = (ObjectAction) objectMember;
 
             if(Facets.mixinIsPresent(targetSpec)) {
                 if (mixeeAdapter == null) {
@@ -274,9 +273,9 @@ extends DelegatingInvocationHandlerDefault<T> {
         if(domainObjectAdapter == null) {
             return null;
         }
-        val specification = domainObjectAdapter.getSpecification();
-        val objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
-        val objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
+        var specification = domainObjectAdapter.getSpecification();
+        var objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
+        var objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
 
         final Stream<ObjectMember> objectMembers = Stream.concat(objectActions, objectAssociations);
         return objectMembers
@@ -306,10 +305,10 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         resolveIfRequired(targetAdapter);
 
-        val targetNoSpec = targetAdapter.getSpecification();
-        val titleContext = targetNoSpec
+        var targetNoSpec = targetAdapter.getSpecification();
+        var titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
-        val titleEvent = titleContext.createInteractionEvent();
+        var titleEvent = titleContext.createInteractionEvent();
         notifyListeners(titleEvent);
         return titleEvent.getTitle();
     }
@@ -319,13 +318,13 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
 
         runValidationTask(()->{
-            val interactionResult =
+            var interactionResult =
                     targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
 
-        val spec = targetAdapter.getSpecification();
+        var spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
                 MmEntityUtils.persistInCurrentTransaction(targetAdapter);
@@ -352,13 +351,13 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         return runExecutionTask(()->{
 
-            val interactionInitiatedBy = getInteractionInitiatedBy();
-            val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
+            var interactionInitiatedBy = getInteractionInitiatedBy();
+            var currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
+            var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
 
-            val propertyAccessEvent = new PropertyAccessEvent(
+            var propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
@@ -374,19 +373,19 @@ extends DelegatingInvocationHandlerDefault<T> {
             final Object[] args,
             final OneToOneAssociation property) {
 
-        val singleArg = singleArgUnderlyingElseNull(args, "setter");
+        var singleArg = singleArgUnderlyingElseNull(args, "setter");
 
         runValidationTask(()->{
             checkVisibility(targetAdapter, property);
             checkUsability(targetAdapter, property);
         });
 
-        val argumentAdapter = getObjectManager().adapt(singleArg);
+        var argumentAdapter = getObjectManager().adapt(singleArg);
 
         resolveIfRequired(targetAdapter);
 
         runValidationTask(()->{
-            val interactionResult = property.isAssociationValid(
+            var interactionResult = property.isAssociationValid(
                     targetAdapter, argumentAdapter, getInteractionInitiatedBy())
                     .getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
@@ -417,26 +416,26 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         return runExecutionTask(()->{
 
-            val interactionInitiatedBy = getInteractionInitiatedBy();
-            val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
+            var interactionInitiatedBy = getInteractionInitiatedBy();
+            var currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-            val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
+            var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
+            var collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
-                val collectionViewObject = lookupWrappingObject(
+                var collectionViewObject = lookupWrappingObject(
                         (Collection<?>) currentReferencedObj, collection);
                 notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                val mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
+                var mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
                         collection);
                 notifyListeners(collectionAccessEvent);
                 return mapViewObject;
             }
 
-            val msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
+            var msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
             throw new IllegalArgumentException(msg);
 
         });
@@ -476,13 +475,13 @@ extends DelegatingInvocationHandlerDefault<T> {
             final Object[] args,
             final ObjectAction objectAction) {
 
-        val head = objectAction.interactionHead(targetAdapter);
-        val objectManager = getObjectManager();
+        var head = objectAction.interactionHead(targetAdapter);
+        var objectManager = getObjectManager();
 
         // adapt argument pojos to managed objects
-        val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
+        var argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
             // guard against index out of bounds
-            val argPojo = _Arrays.get(args, paramIndex).orElse(null);
+            var argPojo = _Arrays.get(args, paramIndex).orElse(null);
             return argPojo!=null
                     ? objectManager.adapt(argPojo)
                     : ManagedObject.empty(paramSpec);
@@ -495,9 +494,9 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
         return runExecutionTask(()->{
-            val interactionInitiatedBy = getInteractionInitiatedBy();
+            var interactionInitiatedBy = getInteractionInitiatedBy();
 
-            val returnedAdapter = objectAction.execute(
+            var returnedAdapter = objectAction.execute(
                     head, argAdapters,
                     interactionInitiatedBy);
             return MmUnwrapUtils.single(returnedAdapter);
@@ -511,7 +510,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        val interactionResult = objectAction
+        var interactionResult = objectAction
                 .isArgumentSetValid(head, argAdapters, getInteractionInitiatedBy())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
@@ -519,7 +518,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     private Object underlying(final Object arg) {
         if (arg instanceof WrappingObject) {
-            val argViewObject = (WrappingObject) arg;
+            var argViewObject = (WrappingObject) arg;
             return argViewObject.__causeway_wrapped();
         } else {
             return arg;
@@ -537,8 +536,8 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
 
-        val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
-        val interactionResult = visibleConsent.getInteractionResult();
+        var visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
+        var interactionResult = visibleConsent.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
@@ -546,7 +545,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
 
-        val interactionResult = objectMember.isUsable(
+        var interactionResult = objectMember.isUsable(
                 targetObjectAdapter,
                 getInteractionInitiatedBy(),
                 where)
@@ -557,7 +556,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     // -- NOTIFY LISTENERS
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
-        val interactionEvent = interactionResult.getInteractionEvent();
+        var interactionEvent = interactionResult.getInteractionEvent();
         notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
             throw toException(interactionEvent);
@@ -622,7 +621,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     @SneakyThrows
     private Object handleException(final Exception ex) {
-        val exceptionHandler = getSyncControl().getExceptionHandler()
+        var exceptionHandler = getSyncControl().getExceptionHandler()
                 .orElse(null);
 
         if(exceptionHandler==null) {
@@ -639,7 +638,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should only have a single argument", name));
         }
-        val argumentObj = underlying(args[0]);
+        var argumentObj = underlying(args[0]);
         return argumentObj;
     }
 

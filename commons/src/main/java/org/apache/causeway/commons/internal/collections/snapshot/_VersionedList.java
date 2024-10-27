@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Thread-safe pseudo list, that increments its version each time a snapshot is requested.
@@ -65,19 +64,19 @@ public final class _VersionedList<T> {
         }
 
         public void forEach(final Consumer<T> action) {
-            for(val ver : versions) {
-                for(val element : ver) {
+            for(var ver : versions) {
+                for(var element : ver) {
                     action.accept(element);
                 }
             }
         }
 
         public void forEachParallel(final Consumer<T> action) {
-            for(val ver : versions) {
+            for(var ver : versions) {
                 if(ver.size()>8) {
                     ver.parallelStream().forEach(action);
                 } else {
-                    for(val element : ver) {
+                    for(var element : ver) {
                         action.accept(element);
                     }
                 }
@@ -102,8 +101,8 @@ public final class _VersionedList<T> {
 
         synchronized(versions) {
             commit();
-            val from = snapshot.toIndex;
-            val to = versions.size();
+            var from = snapshot.toIndex;
+            var to = versions.size();
             return new Snapshot<>(uuid, from, to, defensiveCopy(from, to));
         }
     }
@@ -155,7 +154,7 @@ public final class _VersionedList<T> {
      * @param action
      */
     public void forEach(final Consumer<T> action) {
-        val snapshot = snapshot();
+        var snapshot = snapshot();
         snapshot.forEach(action);
         Snapshot<T> delta = deltaSince(snapshot);
         while(!delta.isEmpty()) {
@@ -169,7 +168,7 @@ public final class _VersionedList<T> {
      * @param action
      */
     public void forEachConcurrent(final Consumer<T> action) {
-        val snapshot = snapshot();
+        var snapshot = snapshot();
         snapshot.forEachParallel(action);
         Snapshot<T> delta = deltaSince(snapshot);
         while(!delta.isEmpty()) {

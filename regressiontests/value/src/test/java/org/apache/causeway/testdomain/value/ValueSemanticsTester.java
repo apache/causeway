@@ -51,7 +51,7 @@ import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 class ValueSemanticsTester<T> {
 
@@ -82,20 +82,20 @@ class ValueSemanticsTester<T> {
             final @NonNull Supplier<T> actionArgumentProvider,
             final @NonNull ActionInteractionProbe<T> probe) {
 
-        val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
-        val act = objSpec.getActionElseFail(actionId);
-        val context = valueFacet(act.getParameters().getFirstElseFail())
+        var objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
+        var act = objSpec.getActionElseFail(actionId);
+        var context = valueFacet(act.getParameters().getFirstElseFail())
                 .createValueSemanticsContext(act);
 
         {
-            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+            var actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
 
-                val command = interactionService.currentInteractionElseFail().getCommand();
-                val actInteraction = ActionInteraction
+                var command = interactionService.currentInteractionElseFail().getCommand();
+                var actInteraction = ActionInteraction
                         .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
 
-                val params = actInteraction.startParameterNegotiation().orElseThrow();
-                val singleArgPojoToUse = actionArgumentProvider.get();
+                var params = actInteraction.startParameterNegotiation().orElseThrow();
+                var singleArgPojoToUse = actionArgumentProvider.get();
 
                 params.updateParamValuePojo(0, __->singleArgPojoToUse);
 
@@ -108,13 +108,13 @@ class ValueSemanticsTester<T> {
         }
 
         {
-            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+            var actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
 
-                val command = interactionService.currentInteractionElseFail().getCommand();
-                val actInteraction = ActionInteraction
+                var command = interactionService.currentInteractionElseFail().getCommand();
+                var actInteraction = ActionInteraction
                         .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
 
-                val params = actInteraction.startParameterNegotiation().orElseThrow();
+                var params = actInteraction.startParameterNegotiation().orElseThrow();
 
                 params.updateParamValuePojo(0, __->null); // overrides default values from value semantics
 
@@ -127,9 +127,9 @@ class ValueSemanticsTester<T> {
         }
 
         {
-            val actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
+            var actionCommandWithNonEmptyArg = interactionService.call(interactionContext, ()->{
 
-                val command = interactionService.currentInteractionElseFail().getCommand();
+                var command = interactionService.currentInteractionElseFail().getCommand();
 
                 domainObject.invokeSampleActionUsingWrapper(wrapperFactory,
                         actionArgumentProvider.get());
@@ -141,9 +141,9 @@ class ValueSemanticsTester<T> {
         }
 
         {
-            val actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
+            var actionCommandWithEmptyArg = interactionService.call(interactionContext, ()->{
 
-                val command = interactionService.currentInteractionElseFail().getCommand();
+                var command = interactionService.currentInteractionElseFail().getCommand();
 
                 domainObject.invokeSampleActionUsingWrapper(wrapperFactory, null); // overrides default values from value semantics
 
@@ -171,13 +171,13 @@ class ValueSemanticsTester<T> {
             final @NonNull Function<ManagedProperty, Object> newProperyValueProvider,
             final @NonNull PropertyInteractionProbe<T> probe) {
 
-        val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
-        val prop = objSpec.getPropertyElseFail(propertyId);
+        var objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
+        var prop = objSpec.getPropertyElseFail(propertyId);
 
-        val context = valueFacet(prop)
+        var context = valueFacet(prop)
                 .createValueSemanticsContext(prop);
 
-        val semanticsIfAny = semantics(prop);
+        var semanticsIfAny = semantics(prop);
 
         assertTrue(semanticsIfAny.isPresent(), ()->
             "value semantics must be available for "
@@ -186,21 +186,21 @@ class ValueSemanticsTester<T> {
         probe.testComposer(context, semanticsIfAny.get());
 
 
-        val parserIfAny = parser(prop);
+        var parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
             probe.testParser(context, parserIfAny.get());
         }
 
-        val rendererIfAny = renderer(prop);
+        var rendererIfAny = renderer(prop);
         if(rendererIfAny.isPresent()) {
             probe.testRenderer(context, rendererIfAny.get());
         }
 
         interactionService.run(interactionContext, ()->{
 
-            val command = interactionService.currentInteractionElseFail().getCommand();
+            var command = interactionService.currentInteractionElseFail().getCommand();
 
-            val propInteraction = PropertyInteraction
+            var propInteraction = PropertyInteraction
                     .wrap(ManagedProperty.of(ManagedObject.adaptSingular(objSpec, domainObject), prop, Where.OBJECT_FORMS));
 
             propInteraction.modifyProperty(managedProp->
@@ -215,8 +215,8 @@ class ValueSemanticsTester<T> {
     public void collectionInteraction(
             final @NonNull String collectionId,
             final @NonNull InteractionContext interactionContext) {
-        val objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
-        val coll = objSpec.getCollectionElseFail(collectionId);
+        var objSpec = specLoader.specForTypeElseFail(domainObject.getClass());
+        var coll = objSpec.getCollectionElseFail(collectionId);
         assertNotNull(coll);
         // collections have no interactions (removed in v2)
     }
@@ -225,7 +225,7 @@ class ValueSemanticsTester<T> {
 
     public void assertValueEquals(final T a, final Object _b, final String message) {
 
-        val b = _Casts.<T>uncheckedCast(_b);
+        var b = _Casts.<T>uncheckedCast(_b);
 
         if(currentOrderRelation.isPresent()) {
             assertTrue(currentOrderRelation.get().equals(a, b), ()->
@@ -241,7 +241,7 @@ class ValueSemanticsTester<T> {
     private ValueFacet<T> valueFacet(
             final ObjectFeature feature) {
 
-        val valueFacet = feature.getElementType()
+        var valueFacet = feature.getElementType()
                 .lookupFacet(ValueFacet.class)
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",
@@ -254,19 +254,19 @@ class ValueSemanticsTester<T> {
 
     private Optional<ValueSemanticsProvider<T>> semantics(
             final ObjectFeature feature) {
-        val valueFacet = valueFacet(feature);
+        var valueFacet = valueFacet(feature);
         return valueFacet.selectDefaultSemantics();
     }
 
     private Optional<Parser<T>> parser(
             final ObjectFeature feature) {
-        val valueFacet = valueFacet(feature);
+        var valueFacet = valueFacet(feature);
         return valueFacet.selectParserForFeature(feature);
     }
 
     private Optional<Renderer<T>> renderer(
             final ObjectFeature feature) {
-        val valueFacet = valueFacet(feature);
+        var valueFacet = valueFacet(feature);
         return valueFacet.selectDefaultRenderer();
     }
 

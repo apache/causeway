@@ -45,7 +45,7 @@ import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -74,7 +74,7 @@ class DomainModelTest {
         //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
 
-        val validateDomainModel = new DomainModelValidator(serviceRegistry);
+        var validateDomainModel = new DomainModelValidator(serviceRegistry);
 
         validateDomainModel.getFailures().forEach(f->System.err.printf("%s:%s%n", f.getOrigin(), f.getMessage()));
 
@@ -84,9 +84,9 @@ class DomainModelTest {
     @Test
     void pluginProvidedMixins_shouldBePickedUp() {
 
-        val entitySpec = specificationLoader.loadSpecification(JdoProduct.class);
+        var entitySpec = specificationLoader.loadSpecification(JdoProduct.class);
 
-        val mx_datanucleusVersionLong = entitySpec.getAssociationElseFail("datanucleusVersionLong"); // plugged in mixin
+        var mx_datanucleusVersionLong = entitySpec.getAssociationElseFail("datanucleusVersionLong"); // plugged in mixin
         assertNotNull(mx_datanucleusVersionLong);
 
     }
@@ -94,13 +94,13 @@ class DomainModelTest {
     @Test
     void metaAnnotatedEntities_shouldBeRecognized() {
 
-        val entitySpec = specificationLoader.loadSpecification(JdoEntityMetaAnnotated.class);
+        var entitySpec = specificationLoader.loadSpecification(JdoEntityMetaAnnotated.class);
 
         assertEquals(BeanSort.ENTITY, entitySpec.getBeanSort());
         assertNotNull(entitySpec.entityFacetElseFail());
 
         //@PersistenceCapable(identityType = IdentityType.DATASTORE)
-        val persistenceCapableFacet = entitySpec.getFacet(JdoPersistenceCapableFacet.class);
+        var persistenceCapableFacet = entitySpec.getFacet(JdoPersistenceCapableFacet.class);
         assertNotNull(persistenceCapableFacet);
         assertEquals(IdentityType.DATASTORE, persistenceCapableFacet.getIdentityType());
 
@@ -108,12 +108,12 @@ class DomainModelTest {
         assertEquals("ORGANISATION", persistenceCapableFacet.getSchema());
 
         //@DatastoreIdentity(strategy = IdGeneratorStrategy.NATIVE)
-        val datastoreIdentityFacet = entitySpec.getFacet(JdoDatastoreIdentityFacet.class);
+        var datastoreIdentityFacet = entitySpec.getFacet(JdoDatastoreIdentityFacet.class);
         assertNotNull(datastoreIdentityFacet);
         assertEquals(IdGeneratorStrategy.NATIVE, datastoreIdentityFacet.getStrategy());
 
         //@Version(strategy = VersionStrategy.VERSION_NUMBER)
-        val versionFacet = entitySpec.getFacet(JdoVersionFacet.class);
+        var versionFacet = entitySpec.getFacet(JdoVersionFacet.class);
         assertNotNull(versionFacet);
     }
 

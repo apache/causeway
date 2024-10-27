@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -59,15 +58,15 @@ class _BindingUtil {
             final @NonNull OneToOneAssociation prop,
             final @NonNull _BindableAbstract<ManagedObject> bindablePropertyValue) {
 
-        val spec = prop.getElementType();
+        var spec = prop.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
         return spec.valueFacet()
         .map(valueFacet->{
-            val eitherRendererOrParser = format.requiresRenderer()
+            var eitherRendererOrParser = format.requiresRenderer()
                 ? Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
                 : Either.<Renderer, Parser>right(valueFacet.selectParserForPropertyElseFallback(prop));
-            val ctx = valueFacet.createValueSemanticsContext(prop);
+            var ctx = valueFacet.createValueSemanticsContext(prop);
 
             return bindAsFormated(format, spec, bindablePropertyValue, eitherRendererOrParser, ctx);
         })
@@ -88,15 +87,15 @@ class _BindingUtil {
 
         guardAgainstNonScalarParam(param);
 
-        val spec = param.getElementType();
+        var spec = param.getElementType();
 
         // value types should have associated parsers/formatters via value semantics
         return spec.valueFacet()
         .map(valueFacet->{
-            val eitherRendererOrParser = format.requiresRenderer()
+            var eitherRendererOrParser = format.requiresRenderer()
                 ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
                 : Either.<Renderer, Parser>right(valueFacet.selectParserForParameterElseFallback(param));
-            val ctx = valueFacet.createValueSemanticsContext(param);
+            var ctx = valueFacet.createValueSemanticsContext(param);
 
             return bindAsFormated(format, spec, bindableParamValue, eitherRendererOrParser, ctx);
         })
@@ -151,32 +150,32 @@ class _BindingUtil {
 
         switch (format) {
         case TITLE: {
-            val renderer = eitherRendererOrParser.left().orElseThrow();
+            var renderer = eitherRendererOrParser.left().orElseThrow();
             return bindableValue.map(value->{
-                        val pojo = MmUnwrapUtils.single(value);
-                        val title = renderer.titlePresentation(context, pojo);
+                        var pojo = MmUnwrapUtils.single(value);
+                        var title = renderer.titlePresentation(context, pojo);
                         return title;
                     });
         }
         case HTML: {
-            val renderer = eitherRendererOrParser.left().orElseThrow();
+            var renderer = eitherRendererOrParser.left().orElseThrow();
             return bindableValue.map(value->{
-                        val pojo = MmUnwrapUtils.single(value);
-                        val html = renderer.htmlPresentation(context, pojo);
+                        var pojo = MmUnwrapUtils.single(value);
+                        var html = renderer.htmlPresentation(context, pojo);
                         return html;
                     });
         }
         case PARSABLE_TEXT:
-            val parser = eitherRendererOrParser.right().orElseThrow();
+            var parser = eitherRendererOrParser.right().orElseThrow();
             return bindableValue.mapToBindable(
                     value->{
-                        val pojo = MmUnwrapUtils.single(value);
-                        val text = parser.parseableTextRepresentation(context, pojo);
+                        var pojo = MmUnwrapUtils.single(value);
+                        var text = parser.parseableTextRepresentation(context, pojo);
                         //System.err.printf("toText: %s -> '%s'%n", ""+value, text);
                         return text;
                     },
                     text->{
-                        val value = ManagedObject.value(spec, parser.parseTextRepresentation(context, text));
+                        var value = ManagedObject.value(spec, parser.parseTextRepresentation(context, text));
                         //System.err.printf("fromText: '%s' -> %s%n", text, ""+value);
                         return value;
                     });

@@ -36,15 +36,13 @@ import org.springframework.dao.TransientDataAccessResourceException;
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.val;
-
 class ExceptionRecognizerForDataAccessExceptionTest {
 
     private ExceptionRecognizerForDataAccessException recognizerForDae;
 
     @BeforeEach
     public void setUp() {
-        val conf = CausewayConfiguration.builder().build();
+        var conf = CausewayConfiguration.builder().build();
         recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);
     }
 
@@ -72,7 +70,7 @@ class ExceptionRecognizerForDataAccessExceptionTest {
             Category category,
             DataAccessException dae) {
 
-        val recognized = recognizerForDae.recognize(dae).orElse(null);
+        var recognized = recognizerForDae.recognize(dae).orElse(null);
         assertNotNull(recognized);
         assertNotNull(recognized.getReason());
         assertTrue(recognized.getReason().length()>10);

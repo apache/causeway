@@ -52,7 +52,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -83,9 +83,9 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(!spec.isValue()) throw new IllegalArgumentException("Representation must be of a value");
 
         // primitive representation checks (ignoring value-semantics)
-        val valueClass = spec.getCorrespondingClass();
+        var valueClass = spec.getCorrespondingClass();
         if(ClassUtils.isPrimitiveOrWrapper(valueClass)) {
-            val primitiveWrapper = ClassUtils.resolvePrimitiveIfNecessary(valueClass);
+            var primitiveWrapper = ClassUtils.resolvePrimitiveIfNecessary(valueClass);
             if(Boolean.class.equals(primitiveWrapper)) {
                 booleanRepresentationCheck(valueRepr);
             } else if(Character.class.equals(primitiveWrapper)) {
@@ -96,10 +96,10 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         // handle composite value types (requires a ValueSemanticsProvider for the valueClass to be registered with Spring)
         if(spec.isCompositeValue()) {
             _Assert.assertTrue(valueRepr.isString(), ()->"expected to receive a String originating from ValueDecomposition#stringify");
-            val valueFacet = spec.valueFacetElseFail();
-            val valSemantics = (ValueSemanticsProvider<?>)valueFacet.selectDefaultSemantics().orElseThrow();
-            val valDecomposition = ValueDecomposition.destringify(ValueType.COMPOSITE, valueRepr.asString());
-            val pojo = valSemantics.compose(valDecomposition);
+            var valueFacet = spec.valueFacetElseFail();
+            var valSemantics = (ValueSemanticsProvider<?>)valueFacet.selectDefaultSemantics().orElseThrow();
+            var valDecomposition = ValueDecomposition.destringify(ValueType.COMPOSITE, valueRepr.asString());
+            var pojo = valSemantics.compose(valDecomposition);
             return ManagedObject.value(spec, pojo);
         }
 
@@ -111,8 +111,8 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final ObjectSpecification spec,
             final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
-        val valueClass = spec.getCorrespondingClass();
-        val valueSerializer = Facets.valueSerializerElseFail(spec, valueClass);
+        var valueClass = spec.getCorrespondingClass();
+        var valueSerializer = Facets.valueSerializerElseFail(spec, valueClass);
 
         // handle values that are represented as maps
         if(valueRepr.isMap()) {
@@ -135,7 +135,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation valueRepr,
             final JsonValueConverter.Context context) {
 
-        val valueClass = spec.getCorrespondingClass();
+        var valueClass = spec.getCorrespondingClass();
         return Optional.ofNullable(converterByClass
                 .get(ClassUtils.resolvePrimitiveIfNecessary(valueClass)))
             .map(jsonValueConverter->jsonValueConverter.recoverValueAsPojo(valueRepr, context))
@@ -150,7 +150,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation valueRepr,
             final ValueSerializer<?> valueSerializer) {
         if (valueRepr.isString()) {
-            val recoveredValue = Try.call(()->
+            var recoveredValue = Try.call(()->
                     valueSerializer.destring(Format.JSON, valueRepr.asString()))
                     .mapFailure(ex->_Exceptions
                             .illegalArgument(ex, "Unable to parse value %s as from String representation", valueRepr))
@@ -168,17 +168,17 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation repr,
             final Context context) {
 
-        val valueSpec = valueAdapter.getSpecification();
-        val valueClass = valueSpec.getCorrespondingClass();
-        val jsonValueConverter = converterByClass.get(valueClass);
+        var valueSpec = valueAdapter.getSpecification();
+        var valueClass = valueSpec.getCorrespondingClass();
+        var jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
             jsonValueConverter.appendValueAndFormat(valueAdapter, context, repr);
             return;
         } else {
             final Optional<ValueDecomposition> valueDecompositionIfAny = decompose(valueAdapter);
             if(valueDecompositionIfAny.isPresent()) {
-                val valueDecomposition = valueDecompositionIfAny.get();
-                val valueAsJson = valueDecomposition.toJson();
+                var valueDecomposition = valueDecompositionIfAny.get();
+                var valueAsJson = valueDecomposition.toJson();
                 valueDecomposition.accept(
                         simple->{
                             // special treatment for BLOB/CLOB/ENUM as these are better represented by a map
@@ -189,7 +189,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                                 /* Don't move this line of code up before
                                  * the accept call (to attempt code de-duplication)!
                                  * It will fail the 'else' path. */
-                                val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
+                                var decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                                 // amend emums with "enumTitle"
                                 if(simple.getType() == ValueType.ENUM) {
                                     decompRepr.mapPutString("enumTitle", valueAdapter.getTitle());
@@ -203,9 +203,9 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                             }
                         },
                         tuple->{
-                            val decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
+                            var decompRepr = JsonRepresentation.jsonAsMap(valueAsJson);
                             repr.mapPutJsonRepresentation("value", decompRepr);
-                            val typeTupleAsFormat = "{"
+                            var typeTupleAsFormat = "{"
                                     + tuple.getElements().stream()
                                         .map(el->el.getType().value())
                                         .collect(Collectors.joining(","))
@@ -223,11 +223,11 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)) {
             return Optional.empty();
         }
-        val valueClass = valueAdapter.getSpecification().getCorrespondingClass();
-        val decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
+        var valueClass = valueAdapter.getSpecification().getCorrespondingClass();
+        var decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
                 .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
         if(decompositionIfAny.isEmpty()) {
-            val valueSpec = valueAdapter.getSpecification();
+            var valueSpec = valueAdapter.getSpecification();
             log.warn("{Could not resolve a ValueComposer for {}, "
                     + "falling back to rendering as 'null'. "
                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
@@ -243,10 +243,10 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context) {
 
-        val objectSpec = adapter.getSpecification();
-        val cls = objectSpec.getCorrespondingClass();
+        var objectSpec = adapter.getSpecification();
+        var cls = objectSpec.getCorrespondingClass();
 
-        val jsonValueConverter = converterByClass.get(cls);
+        var jsonValueConverter = converterByClass.get(cls);
         if(jsonValueConverter != null) {
             return jsonValueConverter.asObject(adapter, context);
         }

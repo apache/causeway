@@ -43,8 +43,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.val;
-
 class ImposteriserTestUsingCodegenPlugin_Test {
 
     private Imposteriser imposteriser = Imposterisers.getDefault();
@@ -327,7 +325,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
             return null;
         };
 
-        val imposter = imposteriser.imposterise(failIfInvokedAction, Object.class);
+        var imposter = imposteriser.imposterise(failIfInvokedAction, Object.class);
         _Reflect.invokeMethodOn(Object.class.getDeclaredMethod("finalize"), imposter);
 
     }

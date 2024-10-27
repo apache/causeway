@@ -30,7 +30,6 @@ import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator.
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
@@ -85,7 +84,7 @@ public class ActionDecorators {
         public static ActionDecorationModelBuilder builder(
                 HasManagedAction managedActionHolder) {
             var managedAction = managedActionHolder.getManagedAction();
-            val action = managedAction.getAction();
+            var action = managedAction.getAction();
             return builderInternal()
                 .action(action)
                 .buttonModifier(managedActionHolder.isPositionedInsideFieldSet()

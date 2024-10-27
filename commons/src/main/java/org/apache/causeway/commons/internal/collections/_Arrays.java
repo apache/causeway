@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -252,13 +251,13 @@ public final class _Arrays {
             throw new IllegalArgumentException("Array must be of lenght 1 or larger.");
         }
         if(index<0 || index>=array.length) {
-            val msg = String.format("Array index %d is out of bounds [0, %d]", index, array.length-1);
+            var msg = String.format("Array index %d is out of bounds [0, %d]", index, array.length-1);
             throw new IllegalArgumentException(msg);
         }
         final T[] result = Arrays.copyOf(array, array.length - 1);
         // copy the elements from index + 1 till end
         // from original array to the new array
-        val remaining = result.length - index;
+        var remaining = result.length - index;
         System.arraycopy(array, index+1, result, index, remaining);
         return result;
     }
@@ -335,12 +334,12 @@ public final class _Arrays {
      * @param index
      */
     public static <T> Optional<T> get(final @Nullable T[] array, final int index) {
-        val size = _NullSafe.size(array);
+        var size = _NullSafe.size(array);
         if(size==0) {
             return Optional.empty();
         }
-        val minIndex = 0;
-        val maxIndex = size - 1;
+        var minIndex = 0;
+        var maxIndex = size - 1;
         if(index < minIndex ||  index > maxIndex) {
             return Optional.empty();
         }
@@ -370,10 +369,10 @@ public final class _Arrays {
         if (array == null) {
             return null;
         }
-        val mappedArray = _Casts.<R[]>uncheckedCast(
+        var mappedArray = _Casts.<R[]>uncheckedCast(
                 Array.newInstance(resultElementType, array.length));
         int i = 0;
-        for (val element : array) {
+        for (var element : array) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
@@ -397,9 +396,9 @@ public final class _Arrays {
         if (array == null) {
             return null;
         }
-        val mappedArray = new Object[array.length];
+        var mappedArray = new Object[array.length];
         int i = 0;
-        for (val element : array) {
+        for (var element : array) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
@@ -426,10 +425,10 @@ public final class _Arrays {
         if (collection == null) {
             return null;
         }
-        val mappedArray = _Casts.<R[]>uncheckedCast(
+        var mappedArray = _Casts.<R[]>uncheckedCast(
                 Array.newInstance(resultElementType, collection.size()));
         int i = 0;
-        for (val element : collection) {
+        for (var element : collection) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;
@@ -453,9 +452,9 @@ public final class _Arrays {
         if (collection == null) {
             return null;
         }
-        val mappedArray = new Object[collection.size()];
+        var mappedArray = new Object[collection.size()];
         int i = 0;
-        for (val element : collection) {
+        for (var element : collection) {
             mappedArray[i++] = mapper.apply(element);
         }
         return mappedArray;

@@ -55,7 +55,6 @@ import org.apache.causeway.core.webapp.modules.WebModule;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -97,7 +96,7 @@ implements
      */
     public String toStringFormatted() {
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         String head = String.format("APACHE CAUSEWAY %s (%s) ",
                 configuration.getViewer().getCommon().getApplication().getVersion(),
@@ -128,17 +127,17 @@ implements
     private _Lazy<List<Map<String, ConfigurationProperty>>> scopedConf = _Lazy.threadSafe(()->loadConfiguration());
 
     private List<Map<String, ConfigurationProperty>> loadConfiguration() {
-        val configCategories =
+        var configCategories =
                 new ArrayList<Map<String, ConfigurationProperty>>();
 
-        val env = loadEnvironment();
-        val primary = loadPrimary(List.of(
+        var env = loadEnvironment();
+        var primary = loadPrimary(List.of(
                 "causeway.",
                 "resteasy.",
                 "datanucleus.",
                 "eclipselink."));
         // we dont't want any duplicates to appear in secondary
-        val secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
+        var secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
                 .distinct()
                 .collect(Collectors.toSet()));
 
@@ -197,7 +196,7 @@ implements
                 add(propName, propertyValue, map);
             });
 
-            val dsInfos = datasourceInfoService.getDataSourceInfos();
+            var dsInfos = datasourceInfoService.getDataSourceInfos();
 
             dsInfos.forEach(IndexedConsumer.offset(1, (index,  dataSourceInfo)->{
                 add(String.format("Data Source (%d/%d)", index, dsInfos.size()),

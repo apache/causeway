@@ -61,7 +61,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Default implementation of {@link RepositoryService}.
@@ -93,7 +92,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @PostConstruct
     public void init() {
-        val disableAutoFlush =
+        var disableAutoFlush =
                 causewayConfiguration.getPersistence().getCommons().getRepositoryService().isDisableAutoFlush() ||
                 causewayConfiguration.getCore().getRuntimeServices().getRepositoryService().isDisableAutoFlush();
         this.autoFlush = !disableAutoFlush;
@@ -101,7 +100,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @Override
     public EntityState getEntityState(final @Nullable Object object) {
-        val adapter = getObjectManager().adapt(unwrapped(object));
+        var adapter = getObjectManager().adapt(unwrapped(object));
         return MmEntityUtils.getEntityState(adapter);
     }
 
@@ -133,12 +132,12 @@ implements RepositoryService, HasMetaModelContext {
     @Override
     public <T> T persist(final T domainObject) {
 
-        val adapter = getObjectManager().adapt(unwrapped(domainObject));
+        var adapter = getObjectManager().adapt(unwrapped(domainObject));
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
         }
         // only persist detached or new entities, otherwise skip
-        val entityState = MmEntityUtils.getEntityState(adapter);
+        var entityState = MmEntityUtils.getEntityState(adapter);
         if(!entityState.isPersistable()
                 || entityState.isAttached()) {
             return domainObject;
@@ -162,7 +161,7 @@ implements RepositoryService, HasMetaModelContext {
         if (domainObject == null) {
             return; // noop
         }
-        val adapter = getObjectManager().adapt(unwrapped(domainObject));
+        var adapter = getObjectManager().adapt(unwrapped(domainObject));
         if(MmEntityUtils.getEntityState(adapter).hasOid()) {
             MmEntityUtils.deleteInCurrentTransaction(adapter);
         }
@@ -213,7 +212,7 @@ implements RepositoryService, HasMetaModelContext {
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        val resultTypeSpec = getSpecificationLoader()
+        var resultTypeSpec = getSpecificationLoader()
                 .specForType(query.getResultType())
                 .orElse(null);
 
@@ -221,8 +220,8 @@ implements RepositoryService, HasMetaModelContext {
             return Collections.emptyList();
         }
 
-        val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = getObjectManager().queryObjects(queryRequest);
+        var queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
+        var allMatching = getObjectManager().queryObjects(queryRequest);
         final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtils.multipleAsList(allMatching));
         return resultList;
     }

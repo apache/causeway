@@ -24,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
-import lombok.val;
-
 class CanVectorTest {
 
     @Test
@@ -41,7 +39,7 @@ class CanVectorTest {
     
     @Test
     void populatedCanVector_shouldBeSerializable() {
-        val vector = new CanVector<String>(3);
+        var vector = new CanVector<String>(3);
         vector.set(0, Can.<String>of("hi"));
         vector.set(1, Can.<String>of("hi", "there"));
         _SerializationTester.assertEqualsOnRoundtrip(Can.<String>of("hi"));

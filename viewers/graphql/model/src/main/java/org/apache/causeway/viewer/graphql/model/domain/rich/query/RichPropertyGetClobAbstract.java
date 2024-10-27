@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
+
 
 public abstract class RichPropertyGetClobAbstract extends Element {
 
@@ -52,18 +52,18 @@ public abstract class RichPropertyGetClobAbstract extends Element {
     }
 
     protected Object fetchDataFromBlob(DataFetchingEnvironment environment, Function<Blob, ?> mapper) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        val association = holder.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
+        var association = holder.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var resultManagedObject = association.get(managedObject);
 
         return Optional.ofNullable(resultManagedObject)
                 .map(ManagedObject::getPojo)

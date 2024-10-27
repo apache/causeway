@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
-import lombok.val;
-
 class ViewModelSemanticCheckingFacetFactoryTest {
 
     @Mock
@@ -47,7 +45,7 @@ class ViewModelSemanticCheckingFacetFactoryTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        val configuration = CausewayConfiguration.builder().build();
+        var configuration = CausewayConfiguration.builder().build();
         configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -66,7 +64,7 @@ class ViewModelSemanticCheckingFacetFactoryTest {
         class ValidAnnotatedDomainObjectAndDomainObjectLayout {
         }
 
-        val validationFailures = processThenValidate(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
+        var validationFailures = processThenValidate(ValidAnnotatedDomainObjectAndDomainObjectLayout.class);
         assertThat(validationFailures.getNumberOfFailures(), is(0));
     }
 
@@ -74,7 +72,7 @@ class ViewModelSemanticCheckingFacetFactoryTest {
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
 
-        val holder = FacetHolder.forTesting(metaModelContext);
+        var holder = FacetHolder.forTesting(metaModelContext);
         facetFactory.process(ProcessClassContext.forTesting(cls, null, holder));
 
         return metaModelContext.getSpecificationLoader().getOrAssessValidationResult();

@@ -52,7 +52,7 @@ import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -99,13 +99,13 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
 
         // when
 
-        val inventories = repositoryService.allInstances(JpaInventory.class);
+        var inventories = repositoryService.allInstances(JpaInventory.class);
 
         // then - expected post condition: ONE inventory with 3 books
 
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
@@ -143,23 +143,23 @@ class JpaQueryTest extends CausewayIntegrationTestAbstract {
     @Test @Order(4)
     void sampleInventory_shouldSupportNamedQueries() {
 
-        val query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
+        var query = Query.named(JpaBook.class, "JpaInventory.findAffordableProducts")
                 .withParameter("priceUpperBound", 60.);
 
-        val affordableBooks = repositoryService.allMatches(query);
+        var affordableBooks = repositoryService.allMatches(query);
         testFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
     }
 
     @Test @Order(5)
     void sampleInventory_shouldSupportJpaCriteria() {
 
-        val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+        var em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
-        val cb = em.getCriteriaBuilder();
-        val cr = cb.createQuery(JpaBook.class);
-        val root = cr.from(JpaBook.class);
+        var cb = em.getCriteriaBuilder();
+        var cr = cb.createQuery(JpaBook.class);
+        var root = cr.from(JpaBook.class);
 
-        val affordableBooks = em
+        var affordableBooks = em
                 .createQuery(cr.select(root).where(cb.between(root.get("price"), 0., 60. )))
                 .getResultList();
 

@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.val;
 
 @ToString
 public final class ObjectMementoForScalar
@@ -77,8 +76,8 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
         this.bookmark = bookmark;
 
-        val logicalTypeName = bookmark.getLogicalTypeName();
-        val spec = specLoader.specForLogicalTypeName(logicalTypeName)
+        var logicalTypeName = bookmark.getLogicalTypeName();
+        var spec = specLoader.specForLogicalTypeName(logicalTypeName)
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
 
@@ -96,15 +95,15 @@ implements HasLogicalType, Serializable, ObjectMemento {
         this.logicalType = adapter.getLogicalType();
         this.title = MmTitleUtils.titleOf(adapter);
 
-        val spec = adapter.getSpecification();
+        var spec = adapter.getSpecification();
 
         if(spec.isIdentifiable()
                 || spec.isParented() ) {
-            val hintId = adapter.getPojo() instanceof HintIdProvider
+            var hintId = adapter.getPojo() instanceof HintIdProvider
                  ? ((HintIdProvider) adapter.getPojo()).hintId()
                  : null;
 
-            val bookmark = ManagedObjects.bookmarkElseFail(adapter);
+            var bookmark = ManagedObjects.bookmarkElseFail(adapter);
             this.bookmark = hintId != null
                     && bookmark != null
                         ? bookmark.withHintId(hintId)
@@ -130,7 +129,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
     }
 
     public ManagedObject reconstructObject(final MetaModelContext mmc) {
-        val spec = mmc.getSpecificationLoader()
+        var spec = mmc.getSpecificationLoader()
                 .specForLogicalType(logicalType).orElse(null);
         if(spec==null) {
             // eg. ill-formed request

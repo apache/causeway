@@ -26,15 +26,13 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JodaL
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalDateTimeHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JodaLocalTimeHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_joda_Test {
 
     @Test
     public void exercise_local_date() {
 
         // given
-        val holder = new JodaLocalDateHolder();
+        var holder = new JodaLocalDateHolder();
         Assertions.assertThat(holder).extracting(JodaLocalDateHolder::getSomeLocalDate).isNull();
 
         // when
@@ -50,7 +48,7 @@ public class PojoTester_datatypes_joda_Test {
     public void exercise_local_date_broken() {
 
         // given
-        val holder = new JodaLocalDateHolder().butBroken();
+        var holder = new JodaLocalDateHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {
@@ -63,7 +61,7 @@ public class PojoTester_datatypes_joda_Test {
     public void exercise_local_date_time() {
 
         // given
-        val holder = new JodaLocalDateTimeHolder();
+        var holder = new JodaLocalDateTimeHolder();
         Assertions.assertThat(holder).extracting(JodaLocalDateTimeHolder::getSomeLocalDateTime).isNull();
 
         // when
@@ -79,7 +77,7 @@ public class PojoTester_datatypes_joda_Test {
     public void exercise_local_date_time_broken() {
 
         // given
-        val holder = new JodaLocalDateTimeHolder().butBroken();
+        var holder = new JodaLocalDateTimeHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {
@@ -92,7 +90,7 @@ public class PojoTester_datatypes_joda_Test {
     public void exercise_local_time() {
 
         // given
-        val holder = new JodaLocalTimeHolder();
+        var holder = new JodaLocalTimeHolder();
         Assertions.assertThat(holder).extracting(JodaLocalTimeHolder::getLocalTime).isNull();
 
         // when
@@ -108,7 +106,7 @@ public class PojoTester_datatypes_joda_Test {
     public void exercise_local_time_broken() {
 
         // given
-        val holder = new JodaLocalTimeHolder().butBroken();
+        var holder = new JodaLocalTimeHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {

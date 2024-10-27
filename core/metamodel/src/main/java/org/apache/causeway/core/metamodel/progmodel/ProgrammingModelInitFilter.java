@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 
 import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
 
-import lombok.val;
-
 /**
  *
  * @since 2.0
@@ -65,7 +63,7 @@ public interface ProgrammingModelInitFilter {
             if(isEmpty(markersOnFactory)) {
                 return true; // accept
             }
-            for(val markerOnFactory : markersOnFactory) {
+            for(var markerOnFactory : markersOnFactory) {
                 if(excludingMarkers.contains(markerOnFactory)) {
                     return true; // don't  accept
                 }

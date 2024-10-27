@@ -60,7 +60,7 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -85,8 +85,8 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
-        val secmanConfig = config.getExtensions().getSecman();
-        val persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
+        var secmanConfig = config.getExtensions().getSecman();
+        var persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
 
         // used as log message provider below - assuming file was found and is readable
         final Supplier<String> yamlFilePath = ()->new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath();

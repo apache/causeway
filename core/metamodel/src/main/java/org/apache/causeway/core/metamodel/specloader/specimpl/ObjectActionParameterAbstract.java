@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class ObjectActionParameterAbstract
 implements
@@ -178,7 +177,7 @@ implements
 
     @Override
     public boolean hasAutoComplete() {
-        val actionParameterAutoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
+        var actionParameterAutoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
         return actionParameterAutoCompleteFacet != null;
     }
 
@@ -188,14 +187,14 @@ implements
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
+        var autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
         if (autoCompleteFacet == null) {
             return Can.empty();
         }
 
-        val paramSpec = getElementType();
+        var paramSpec = getElementType();
 
-        val visibleChoices = autoCompleteFacet
+        var visibleChoices = autoCompleteFacet
                 .autoComplete(paramSpec,
                         pendingArgs.getActionTarget(),
                         pendingArgs.getParamValues(),
@@ -217,7 +216,7 @@ implements
 
     @Override
     public boolean hasChoices() {
-        val choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+        var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
         return choicesFacet != null;
     }
 
@@ -226,13 +225,13 @@ implements
             final ParameterNegotiationModel pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val paramSpec = getElementType();
-        val choicesFacet = getFacet(ActionParameterChoicesFacet.class);
+        var paramSpec = getElementType();
+        var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
         if (choicesFacet == null) {
             return Can.empty();
         }
 
-        val visibleChoices = choicesFacet.getChoices(paramSpec,
+        var visibleChoices = choicesFacet.getChoices(paramSpec,
                 pendingArgs.getHead(),
                 pendingArgs.getParamValues(),
                 interactionInitiatedBy);
@@ -248,8 +247,8 @@ implements
     public ManagedObject getDefault(
             final @NonNull ParameterNegotiationModel pendingArgs) {
 
-        val paramSpec = getElementType();
-        val defaults = lookupNonFallbackFacet(ActionParameterDefaultsFacet.class)
+        var paramSpec = getElementType();
+        var defaults = lookupNonFallbackFacet(ActionParameterDefaultsFacet.class)
                 .map(defaultsFacet->defaultsFacet.getDefault(pendingArgs))
                 .orElseGet(Can::empty);
 
@@ -258,11 +257,11 @@ implements
             // post processing each entry
             .map(obj->ManagedObjects.emptyToDefault(paramSpec, !isOptional(), obj));
             // pack up
-            val packed = ManagedObject.packed(paramSpec, pluralDefaults);
+            var packed = ManagedObject.packed(paramSpec, pluralDefaults);
             return packed;
         }
 
-        val scalarDefault = defaults.getFirst()
+        var scalarDefault = defaults.getFirst()
               .orElseGet(()->ManagedObject.empty(paramSpec));
 
         return ManagedObjects
@@ -277,7 +276,7 @@ implements
 
         for (final ManagedObject choice : choices) {
 
-            val choicePojo = choice.getPojo();
+            var choicePojo = choice.getPojo();
 
             if(choicePojo == null) {
                 continue;
@@ -326,7 +325,7 @@ implements
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val visibilityContext = createArgumentVisibilityContext(
+        var visibilityContext = createArgumentVisibilityContext(
                 head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
@@ -356,10 +355,10 @@ implements
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val usabilityContext = createArgumentUsabilityContext(
+        var usabilityContext = createArgumentUsabilityContext(
                 head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
-        val usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
+        var usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
         return usableResult.createConsent();
     }
 
@@ -383,10 +382,10 @@ implements
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val validityContext = createProposedArgumentInteractionContext(
+        var validityContext = createProposedArgumentInteractionContext(
                 head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
-        val validResult = InteractionUtils.isValidResult(this, validityContext);
+        var validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();
     }
 

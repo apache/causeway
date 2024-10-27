@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class CollectionAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
@@ -60,18 +59,18 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object collectionOrArray = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
         if(collectionOrArray == null) {
             return null;
         }
 
-        val collectionAdapter = getObjectManager().adapt(collectionOrArray);
+        var collectionAdapter = getObjectManager().adapt(collectionOrArray);
 
         final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
 
-            val autofittedObjectContainer = MmVisibilityUtils
+            var autofittedObjectContainer = MmVisibilityUtils
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.returnType());
 
             if (autofittedObjectContainer != null) {

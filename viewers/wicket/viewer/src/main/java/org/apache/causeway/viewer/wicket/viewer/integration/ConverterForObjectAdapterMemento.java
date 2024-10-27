@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.bookmark.Oid;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Implementation of a Wicket {@link IConverter} for
@@ -45,7 +44,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
     @Override
     public ObjectMemento convertToObject(
             final String base64UrlEncodedMemento, final Locale locale) {
-        val obj = ObjectMemento.destringFromUrlBase64(base64UrlEncodedMemento);
+        var obj = ObjectMemento.destringFromUrlBase64(base64UrlEncodedMemento);
 
         //XXX ever used ?
         System.err.printf("ConverterForObjectAdapterMemento: convertTo ObjectMemento %s->%s%n", base64UrlEncodedMemento, obj);
@@ -59,7 +58,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
      */
     @Override
     public String convertToString(final ObjectMemento memento, final Locale locale) {
-        val string = ObjectMemento.enstringToUrlBase64(memento);
+        var string = ObjectMemento.enstringToUrlBase64(memento);
 
         //XXX ever used ?
         System.err.printf("ConverterForObjectAdapterMemento: convertFrom ObjectMemento %s->%s%n", memento.getBookmark(), string);

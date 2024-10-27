@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigDecimalFromXxxColumnAnnotationMetaModelRefinerUtil;
 
-import lombok.val;
-
 public class BigDecimalFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -52,7 +50,7 @@ implements MetaModelRefiner {
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        val jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        var jpaColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
                 MaxTotalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));

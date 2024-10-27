@@ -39,8 +39,6 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.Nav
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectProperAnnot;
 import org.apache.causeway.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 
-import lombok.val;
-
 class NavigableParentAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -58,15 +56,15 @@ extends FacetFactoryTestAbstract {
             final String parentMethodName,
             final @Nullable String expectedValidationMessage) throws Exception {
 
-        val facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
-        val parentMethod = findMethodExactOrFail(domainObject.getClass(), parentMethodName);
+        var facetFactory = new NavigableParentAnnotationFacetFactory(getMetaModelContext());
+        var parentMethod = findMethodExactOrFail(domainObject.getClass(), parentMethodName);
 
         objectScenario(domainObject.getClass(), (processClassContext, facetHolder) -> {
             //when
             facetFactory.process(processClassContext);
             //then
             if(expectedValidationMessage==null) {
-                val navigableParentFacet = facetHolder.getFacet(NavigableParentFacet.class);
+                var navigableParentFacet = facetHolder.getFacet(NavigableParentFacet.class);
                 assertNotNull(navigableParentFacet, ()->"NavigableParentFacet required");
                 assertTrue(navigableParentFacet instanceof NavigableParentFacetViaMethod);
                 assertEquals(
@@ -76,7 +74,7 @@ extends FacetFactoryTestAbstract {
             } else {
                 assertNull(facetHolder.getFacet(NavigableParentFacet.class));
 
-                val validation = getSpecificationLoader().getOrAssessValidationResult();
+                var validation = getSpecificationLoader().getOrAssessValidationResult();
                 assertTrue(validation.getMessages().stream()
                         .anyMatch(msg->msg.contains(expectedValidationMessage)));
             }

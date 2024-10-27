@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class LogicalTypeFacetFromClassNameFactory
 extends FacetFactoryAbstract
 implements
@@ -67,13 +65,13 @@ implements
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
+        var shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
         if(!shouldCheck) return;
 
         programmingModel.addValidatorSkipManagedBeans(objectSpec-> {
             if(skip(objectSpec)) return;
 
-            val logicalType = objectSpec.getLogicalType();
+            var logicalType = objectSpec.getLogicalType();
 
             if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())
                     && !_ClassCache.getInstance().isAnnotatedWithNamed(objectSpec.getCorrespondingClass())) {

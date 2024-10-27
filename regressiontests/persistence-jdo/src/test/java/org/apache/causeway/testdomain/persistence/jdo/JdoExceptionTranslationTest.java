@@ -37,7 +37,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -70,10 +70,10 @@ class JdoExceptionTranslationTest extends RegressionTestWithJdoFixtures {
 
                 // given
 
-                val inventories = repositoryService.allInstances(JdoInventory.class);
+                var inventories = repositoryService.allInstances(JdoInventory.class);
                 assertEquals(1, inventories.size());
 
-                val inventory = inventories.get(0);
+                var inventory = inventories.get(0);
                 assertNotNull(inventory);
 
 
@@ -88,10 +88,10 @@ class JdoExceptionTranslationTest extends RegressionTestWithJdoFixtures {
 
         run(()->{
 
-            val inventories = repositoryService.allInstances(JdoInventory.class);
+            var inventories = repositoryService.allInstances(JdoInventory.class);
             assertEquals(1, inventories.size());
 
-            val inventory = inventories.get(0);
+            var inventory = inventories.get(0);
             assertNotNull(inventory);
 
             assertNotNull(inventory);

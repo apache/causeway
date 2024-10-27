@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Prototypical test base for the MM module.
@@ -47,7 +46,7 @@ implements HasMetaModelContext {
 
     @BeforeEach
     void setUp() throws Exception {
-        val mmcBuilder = MetaModelContext_forTesting.builder()
+        var mmcBuilder = MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class));
         onSetUp(mmcBuilder);
         metaModelContext = mmcBuilder.build();

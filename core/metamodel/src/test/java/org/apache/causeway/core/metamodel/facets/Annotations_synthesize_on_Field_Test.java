@@ -33,7 +33,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
-import lombok.val;
+
 
 @SuppressWarnings("unused")
 public class Annotations_synthesize_on_Field_Test {
@@ -72,14 +72,14 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val field = SomeDomainObject.class.getDeclaredField("name");
-        val nearestF = _Annotations.synthesize(field, Property.class);
+        var field = SomeDomainObject.class.getDeclaredField("name");
+        var nearestF = _Annotations.synthesize(field, Property.class);
 
         assertThat(nearestF.isPresent(), is(true));
         assertThat(nearestF.get().executionPublishing(), is(Publishing.ENABLED));
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -96,8 +96,8 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -114,8 +114,8 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -133,8 +133,8 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));
@@ -152,8 +152,8 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
@@ -172,8 +172,8 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
@@ -193,8 +193,8 @@ public class Annotations_synthesize_on_Field_Test {
             }
         }
 
-        val method = SomeDomainObject.class.getMethod("getName");
-        val nearestM = _Annotations.synthesize(method, Property.class);
+        var method = SomeDomainObject.class.getMethod("getName");
+        var nearestM = _Annotations.synthesize(method, Property.class);
 
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.ENABLED));

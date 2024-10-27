@@ -42,7 +42,7 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -129,13 +129,13 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
 
     @Test
     void sampleViewModel_shouldHave_injectionPointsResolved() {
-        val sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
+        var sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
         sampleViewModel.assertInitialized();
     }
 
     @Test
     void viewModel_shouldHave_injectionPointsResolved() {
-        val viewModel = factoryService.viewModel(new ViewModelWithInjectableFields("aName"));
+        var viewModel = factoryService.viewModel(new ViewModelWithInjectableFields("aName"));
         viewModel.assertInitialized();
     }
 

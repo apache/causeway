@@ -45,7 +45,7 @@ import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -68,16 +68,16 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
     @BeforeEach
     void checkPrereq() {
         assertTrue(restService.getPort()>0);
-        val useRequestDebugLogging = true;
+        var useRequestDebugLogging = true;
         this.restfulClient = restService.newClient(useRequestDebugLogging);
     }
 
     @Test
     void httpSessionInfo() {
-        val digest = restService.getHttpSessionInfo(restfulClient)
+        var digest = restService.getHttpSessionInfo(restfulClient)
                 .ifFailureFail();
 
-        val httpSessionInfo = digest.getValue().orElseThrow();
+        var httpSessionInfo = digest.getValue().orElseThrow();
 
         assertNotNull(httpSessionInfo);
 
@@ -87,10 +87,10 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void bookOfTheWeek_viaRestEndpoint() {
-        val digest = restService.getRecommendedBookOfTheWeek(restfulClient)
+        var digest = restService.getRecommendedBookOfTheWeek(restfulClient)
                 .ifFailureFail();
 
-        val bookOfTheWeek = digest.getValue().orElseThrow();
+        var bookOfTheWeek = digest.getValue().orElseThrow();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -98,13 +98,13 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void addNewBook_viaRestEndpoint() throws JAXBException {
-        val newBook = JdoBook.of("REST Book", "A sample REST book for testing.", 77.,
+        var newBook = JdoBook.of("REST Book", "A sample REST book for testing.", 77.,
                 "REST Author", "REST ISBN", "REST Publisher");
 
-        val digest = restService.storeBook(restfulClient, newBook)
+        var digest = restService.storeBook(restfulClient, newBook)
                 .ifFailureFail();
 
-        val storedBook = digest.getValue().orElseThrow();
+        var storedBook = digest.getValue().orElseThrow();
 
         assertNotNull(storedBook);
         assertEquals("REST Book", storedBook.getName());
@@ -112,12 +112,12 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void multipleBooks_viaRestEndpoint() throws JAXBException {
-        val digest = restService.getMultipleBooks(restfulClient)
+        var digest = restService.getMultipleBooks(restfulClient)
                 .ifFailureFail();
 
-        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+        var expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        val multipleBooks = digest.getValue().orElseThrow()
+        var multipleBooks = digest.getValue().orElseThrow()
                 .filter(book->expectedBookTitles.contains(book.getName()));
 
         assertEquals(3, multipleBooks.size());
@@ -125,10 +125,10 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void bookOfTheWeek_asDto_viaRestEndpoint() {
-        val digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
+        var digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
                 .ifFailureFail();
 
-        val bookOfTheWeek = digest.getValue().orElseThrow();
+        var bookOfTheWeek = digest.getValue().orElseThrow();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -136,21 +136,21 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void multipleBooks_asDto_viaRestEndpoint() throws JAXBException {
-        val digest = restService.getMultipleBooksAsDto(restfulClient)
+        var digest = restService.getMultipleBooksAsDto(restfulClient)
                 .ifFailureFail();
 
-        val multipleBooks = digest.getValue().orElseThrow();
+        var multipleBooks = digest.getValue().orElseThrow();
 
         assertEquals(2, multipleBooks.size());
 
-        for(val book : multipleBooks) {
+        for(var book : multipleBooks) {
             assertEquals("MultipleBooksAsDtoTest", book.getName());
         }
     }
 
     @Test
     void inventoryAsJaxbVm_viaRestEndpoint() {
-        val digest = restService.getInventoryAsJaxbVm(restfulClient)
+        var digest = restService.getInventoryAsJaxbVm(restfulClient)
                 .ifFailureFail();
 
         final JdoInventoryJaxbVm inventoryAsJaxbVm = digest.getValue().orElseThrow();
@@ -161,14 +161,14 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void listBooks_fromInventoryAsJaxbVm_viaRestEndpoint() {
-        val digest = restService.getBooksFromInventoryAsJaxbVm(restfulClient)
+        var digest = restService.getBooksFromInventoryAsJaxbVm(restfulClient)
                 .ifFailure(Assertions::fail);
 
-        val books = digest.getValue().orElseThrow();
+        var books = digest.getValue().orElseThrow();
 
-        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+        var expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        val multipleBooks = books
+        var multipleBooks = books
                 .filter(book->expectedBookTitles.contains(book.getName()));
 
         assertEquals(3, multipleBooks.size());
@@ -176,8 +176,8 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
 
     @Test
     void calendarEvent_echo_viaRestEndpoint() {
-        val calSemantics = new CalendarEventSemantics();
-        val calSample = calSemantics.getExamples().getElseFail(0);
+        var calSemantics = new CalendarEventSemantics();
+        var calSample = calSemantics.getExamples().getElseFail(0);
         /* calSemantics.decompose(calSample).toJson() ...
          * {
          * "elements":[
@@ -190,10 +190,10 @@ class RestServiceTest extends RegressionTestWithJdoFixtures {
          * "cardinality":4
          * }
          */
-        val digest = restService.echoCalendarEvent(restfulClient, calSample)
+        var digest = restService.echoCalendarEvent(restfulClient, calSample)
                 .ifFailure(Assertions::fail);
 
-        val calSampleEchoed = digest.getValue().orElseThrow();
+        var calSampleEchoed = digest.getValue().orElseThrow();
         assertEquals(calSample, calSampleEchoed);
     }
 

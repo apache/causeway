@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 //@Log4j2
@@ -92,7 +91,7 @@ implements MixinFacet {
                     mixinType.getName(), mixee, holderType);
         }
         try {
-            val mixinPojo = constructor.newInstance(mixee);
+            var mixinPojo = constructor.newInstance(mixee);
             getServiceInjector().injectServicesInto(mixinPojo);
             return mixinPojo;
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {

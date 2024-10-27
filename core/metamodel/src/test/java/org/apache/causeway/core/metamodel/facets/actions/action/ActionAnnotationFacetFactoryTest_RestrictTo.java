@@ -27,14 +27,12 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest_RestrictTo
 extends ActionAnnotationFacetFactoryTest {
 
     private void processRestrictTo(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processRestrictTo(processMethodContext, actionIfAny);
     }
 

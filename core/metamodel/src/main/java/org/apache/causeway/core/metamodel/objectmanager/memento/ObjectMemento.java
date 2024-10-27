@@ -35,8 +35,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 /**
  * @since 2.0
  */
@@ -80,7 +78,7 @@ public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializa
 
     @Nullable
     static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
-        val base64UrlEncodedMemento = memento!=null
+        var base64UrlEncodedMemento = memento!=null
                 ? _Strings.ofBytes(
                     _Bytes.asUrlBase64.apply(
                             _Serializables.write(memento)),

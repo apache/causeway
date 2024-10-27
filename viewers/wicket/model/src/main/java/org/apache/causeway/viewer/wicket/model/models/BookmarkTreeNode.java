@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.functions._Functions;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+
 
 public class BookmarkTreeNode
 implements
@@ -105,11 +105,11 @@ implements
     @Override
     public int compareTo(final BookmarkTreeNode o2) {
 
-        val o1 = this;
+        var o1 = this;
 
         // sort by entity type
-        val typeName1 = o1.getBookmark().getLogicalTypeName();
-        val typeName2 = o2.getBookmark().getLogicalTypeName();
+        var typeName1 = o1.getBookmark().getLogicalTypeName();
+        var typeName2 = o2.getBookmark().getLogicalTypeName();
 
         final int typeNameComparison = typeName1.compareTo(typeName2);
         if(typeNameComparison != 0) {
@@ -166,7 +166,7 @@ implements
      * @return - whether the provided candidate is found or was added to this node's tree.
      */
     private boolean matchAndUpdateTitleFor(final UiObjectWkt candidateEntityModel) {
-        val candidateBookmark = candidateEntityModel.toBookmark().orElse(null);
+        var candidateBookmark = candidateEntityModel.toBookmark().orElse(null);
         boolean inGraph = getBookmark().equals(candidateBookmark);
         if(inGraph) {
             this.title = candidateEntityModel.getTitle();
@@ -197,7 +197,7 @@ implements
 //     */
 //    private boolean matchFor(final ActionModelImpl candidateActionModel) {
 //
-//        val candidateBookmark = candidateActionModel.toBookmark().orElse(null);
+//        var candidateBookmark = candidateActionModel.toBookmark().orElse(null);
 //
 //        // check if target object of the action is the same
 //        if(!Objects.equals(getBookmark(), candidateBookmark)) {
@@ -222,7 +222,7 @@ implements
      */
     private boolean addToGraphIfParented(final BookmarkableModel candidateBookmarkableModel) {
 
-        val addedCount = new LongAdder();
+        var addedCount = new LongAdder();
 
         candidateBookmarkableModel.streamPropertyBookmarks()
         .filter(getBookmark()::equals)

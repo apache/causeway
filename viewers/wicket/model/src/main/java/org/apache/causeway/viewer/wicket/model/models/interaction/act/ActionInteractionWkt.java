@@ -47,8 +47,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.val;
-
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
  * {@link ChainingModel}.
@@ -97,8 +95,8 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final ScalarParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
 
-        val onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
-        val objectAction = onwerSpec.getAction(actionIdentifier.getMemberLogicalName());
+        var onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
+        var objectAction = onwerSpec.getAction(actionIdentifier.getMemberLogicalName());
 
         return new ActionInteractionWkt(
                 parentEntityModel.bookmarkedObjectModel(),
@@ -169,7 +167,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
         //[CAUSEWAY-3648] In support of the composite value type's 'Xxx_default' mixin.
         if(actionMemento==null) {
-            val objectAction = actionInteraction().getMetamodel()
+            var objectAction = actionInteraction().getMetamodel()
                 .orElseThrow(()->_Exceptions
                         .noSuchElement("could not resolve action by memberId '%s'", memberId));
             this.actionMemento = objectAction.getMemento();

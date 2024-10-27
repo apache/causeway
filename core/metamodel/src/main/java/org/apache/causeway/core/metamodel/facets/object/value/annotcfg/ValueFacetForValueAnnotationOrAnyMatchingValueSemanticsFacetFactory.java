@@ -50,7 +50,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -86,12 +85,12 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val valueClass = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-        val valueIfAny = processClassContext.synthesizeOnType(Value.class);
+        var valueClass = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
+        var valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
-        val logicalType = LogicalType.infer(valueClass);
-        val identifier = Identifier.classIdentifier(logicalType);
+        var logicalType = LogicalType.infer(valueClass);
+        var identifier = Identifier.classIdentifier(logicalType);
 
         _Casts.castTo(ObjectSpecification.class, facetHolder)
         .ifPresent(valueSpec->
@@ -106,7 +105,7 @@ extends FacetFactoryAbstract {
             final ObjectSpecification valueSpec,
             final Optional<Value> valueIfAny) {
 
-        val semanticsProviders = getValueSemanticsResolver().selectValueSemantics(identifier, valueClass);
+        var semanticsProviders = getValueSemanticsResolver().selectValueSemantics(identifier, valueClass);
         if(semanticsProviders.isEmpty()) {
             if(valueIfAny.isPresent()) {
                 log.warn("could not find a ValueSemanticsProvider for value type {}; "
@@ -120,7 +119,7 @@ extends FacetFactoryAbstract {
             log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
         }
 
-        val valueFacet = installValueFacet(valueClass, semanticsProviders, valueSpec);
+        var valueFacet = installValueFacet(valueClass, semanticsProviders, valueSpec);
         return Optional.of(valueFacet);
     }
 

@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForShortIdentity_Test {
 
@@ -51,18 +51,18 @@ class IdStringifierForShortIdentity_Test {
     @MethodSource()
     void roundtrip(final short value) {
 
-        val entityType = Customer.class;
+        var entityType = Customer.class;
 
-        val stringifier = new JdoShortIdentityValueSemantics();
+        var stringifier = new JdoShortIdentityValueSemantics();
 
-        val stringified = stringifier.enstring(new ShortIdentity(entityType, value));
-        val parse = stringifier.destring(entityType, stringified);
+        var stringified = stringifier.enstring(new ShortIdentity(entityType, value));
+        var parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
 
-        val decomposed = stringifier.decompose(new ShortIdentity(entityType, value));
-        val composed = stringifier.compose(decomposed);
+        var decomposed = stringifier.decompose(new ShortIdentity(entityType, value));
+        var composed = stringifier.compose(decomposed);
 
         Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);

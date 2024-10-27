@@ -34,7 +34,7 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.viewer.graphql.viewer.test2.domain.UniversityModule;
 import org.apache.causeway.viewer.graphql.viewer.test2.e2e.Abstract_IntegTest;
 
-import lombok.val;
+
 
 @Import({
         UniversityModule.class,
@@ -55,11 +55,11 @@ public class VerifySchemaIntegTest extends Abstract_IntegTest {
     @Test
     protected void schema() throws Exception {
 
-        val graphQL = graphQlSourceForCauseway.graphQl();
-        val graphQLSchema = graphQL.getGraphQLSchema();
+        var graphQL = graphQlSourceForCauseway.graphQl();
+        var graphQLSchema = graphQL.getGraphQLSchema();
 
-        val printer = new SchemaPrinter();
-        val submit = printer.print(graphQLSchema);
+        var printer = new SchemaPrinter();
+        var submit = printer.print(graphQLSchema);
 
         Approvals.verify(submit);
     }

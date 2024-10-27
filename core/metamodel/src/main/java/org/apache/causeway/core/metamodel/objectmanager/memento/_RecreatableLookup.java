@@ -24,7 +24,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -40,7 +39,7 @@ class _RecreatableLookup implements _Recreatable{
                     "need an id to lookup an object, got logical-type %s", memento.logicalType);
         }
 
-        val bookmark = memento.bookmark;
+        var bookmark = memento.bookmark;
 
         log.debug("lookup by {}", bookmark);
         return mmc.getObjectManager().loadObjectElseFail(bookmark);

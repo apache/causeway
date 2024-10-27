@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.home;
 
-import lombok.val;
+
 
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.Response;
@@ -43,14 +43,14 @@ public class HomePage_IntegTest extends Abstract_IntegTest {
         Invocation.Builder request = restfulClient.request("/");
 
         // when
-        val response = request.get();
+        var response = request.get();
 
         // then
         assertThat(response)
                 .extracting(Response::getStatus)
                 .isEqualTo(Response.Status.OK.getStatusCode());
 
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
 
         Approvals.verify(entity, jsonOptions());
 

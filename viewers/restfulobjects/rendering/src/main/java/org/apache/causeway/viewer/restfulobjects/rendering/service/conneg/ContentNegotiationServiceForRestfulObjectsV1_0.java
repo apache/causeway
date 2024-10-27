@@ -60,7 +60,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectP
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * Returns representations according to the
@@ -131,12 +131,12 @@ implements ContentNegotiationService {
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, resourceContext);
 
-        val renderer =
+        var renderer =
                 new ObjectPropertyReprRenderer(resourceContext)
                 .with(objectAndProperty)
                 .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
 
-        val repMode = objectAndProperty.getRepresentationMode();
+        var repMode = objectAndProperty.getRepresentationMode();
         if(repMode.isExplicit()) {
             renderer.withMemberMode(repMode);
         }
@@ -182,7 +182,7 @@ implements ContentNegotiationService {
 
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, resourceContext);
 
-        val renderer =
+        var renderer =
                 new ObjectActionReprRenderer(resourceContext)
                 .with(objectAndAction)
                 .usingLinkTo(resourceContext.getObjectAdapterLinkTo())
@@ -198,9 +198,9 @@ implements ContentNegotiationService {
 
         final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
 
-        val returnTypeCompileTimeSpecification = objectAndActionInvocation.getReturnTypeSpecification();
+        var returnTypeCompileTimeSpecification = objectAndActionInvocation.getReturnTypeSpecification();
 
-        val isDomainObjectOrCollection = returnTypeCompileTimeSpecification.isEntityOrViewModelOrAbstract()
+        var isDomainObjectOrCollection = returnTypeCompileTimeSpecification.isEntityOrViewModelOrAbstract()
                 || returnTypeCompileTimeSpecification.isPlural();
 
         if(isDomainObjectOrCollection
@@ -221,13 +221,13 @@ implements ContentNegotiationService {
                 final DomainObjectList listAsViewmodel = domainObjectListFrom(
                         pluralActionResult, elementSpec, actionOwnerSpec, actionId, actionArguments);
 
-                val domainObjectListSpec = resourceContext.getMetaModelContext().getSpecificationLoader()
+                var domainObjectListSpec = resourceContext.getMetaModelContext().getSpecificationLoader()
                     .specForType(DomainObjectList.class)
                     .filter(ObjectSpecification::isViewModel)
                     .orElseThrow(()->_Exceptions.unrecoverable(
                             "framework bug: DomainObjectList should be recognized as viewmodel"));
 
-                val listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel, Optional.empty());
+                var listAdapter = ManagedObject.viewmodel(domainObjectListSpec, listAsViewmodel, Optional.empty());
                 return responseBuilder(
                         buildResponse(
                                 resourceContext,
@@ -269,14 +269,14 @@ implements ContentNegotiationService {
 
     private static String actionArgumentsFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final StringBuilder buf = new StringBuilder();
-        val parameters = objectAndActionInvocation.getAction().getParameters();
-        val argAdapters = objectAndActionInvocation.getArgAdapters();
+        var parameters = objectAndActionInvocation.getAction().getParameters();
+        var argAdapters = objectAndActionInvocation.getArgAdapters();
         if(parameters.size() == argAdapters.size()) {
             for (int i = 0; i < parameters.size(); i++) {
 
-                val paramIndex = i;
-                val param = parameters.getElseFail(paramIndex);
-                val argAdapter = argAdapters.getElseFail(paramIndex);
+                var paramIndex = i;
+                var param = parameters.getElseFail(paramIndex);
+                var argAdapter = argAdapters.getElseFail(paramIndex);
 
                 if(buf.length() > 0) {
                     buf.append(",");
@@ -310,7 +310,7 @@ implements ContentNegotiationService {
 
         final DomainObjectList list = new DomainObjectList(
                 title, elementSpec.fqcn(), actionOwnerSpec.fqcn(), actionId, actionArguments);
-        for (val adapter : collectionAdapters) {
+        for (var adapter : collectionAdapters) {
             list.getObjects().add(adapter.getPojo());
         }
         return list;

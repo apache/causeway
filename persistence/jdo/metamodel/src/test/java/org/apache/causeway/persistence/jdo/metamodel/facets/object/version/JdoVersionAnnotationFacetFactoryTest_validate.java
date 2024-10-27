@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
-import lombok.val;
-
 class JdoVersionAnnotationFacetFactoryTest_validate {
 
     private MetaModelContext_forTesting metaModelContext;
@@ -44,15 +42,15 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
     @BeforeEach
     void setUp() throws Exception {
 
-        val configuration = CausewayConfiguration.builder().build();
+        var configuration = CausewayConfiguration.builder().build();
 
         metaModelContext = MetaModelContext_forTesting
         .builder()
         .programmingModelFactory((mmc, refiners)->{
 
-            val programmingModel = new ProgrammingModelAbstract(mmc) {};
+            var programmingModel = new ProgrammingModelAbstract(mmc) {};
 
-            val facetFactory = new JdoVersionAnnotationFacetFactory(
+            var facetFactory = new JdoVersionAnnotationFacetFactory(
                     metaModelContext,
                     AbstractFacetFactoryTest.jdoFacetContextForTesting());
 
@@ -73,7 +71,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
 
         class Child {}
 
-        val failures = processThenValidate(Child.class);
+        var failures = processThenValidate(Child.class);
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -83,7 +81,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         @Version
         class Child {}
 
-        val failures = processThenValidate(Child.class);
+        var failures = processThenValidate(Child.class);
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -95,7 +93,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         @Version
         class Child extends Parent {}
 
-        val failures = processThenValidate(Child.class);
+        var failures = processThenValidate(Child.class);
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
@@ -109,7 +107,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         @Version
         class Child extends Parent {}
 
-        val failures = processThenValidate(Child.class);
+        var failures = processThenValidate(Child.class);
 
         assertThat(failures.getNumberOfFailures(), is(1));
         assertThat(failures.getMessages().iterator().next(),
@@ -128,7 +126,7 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         @Version
         class Child extends Parent {}
 
-        val failures = processThenValidate(Child.class);
+        var failures = processThenValidate(Child.class);
 
         assertTrue(failures.getNumberOfFailures()>=1);
         assertThat(failures.getMessages().iterator().next(),
@@ -143,13 +141,13 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
 
         class Child extends Parent {}
 
-        val failures = processThenValidate(Child.class);
+        var failures = processThenValidate(Child.class);
 
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
     private ValidationFailures processThenValidate(final Class<?> cls) {
-        val specLoader = metaModelContext.getSpecificationLoader();
+        var specLoader = metaModelContext.getSpecificationLoader();
         specLoader.specForType(cls).get(); // fail if empty
         return specLoader.getOrAssessValidationResult();
     }

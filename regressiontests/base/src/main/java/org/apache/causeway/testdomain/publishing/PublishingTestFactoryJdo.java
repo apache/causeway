@@ -58,7 +58,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 @Component
 @Import({
@@ -223,11 +223,11 @@ extends PublishingTestFactoryAbstract {
                 // when
                 context.changeProperty(()->{
 
-                    val bookAdapter = objectManager.adapt(book);
-                    val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
-                    val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-                    val propertyModel = managedProperty.startNegotiation();
-                    val propertySpec = managedProperty.getElementType();
+                    var bookAdapter = objectManager.adapt(book);
+                    var propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
+                    var managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+                    var propertyModel = managedProperty.startNegotiation();
+                    var propertySpec = managedProperty.getElementType();
                     propertyModel.getValue().setValue(ManagedObject.value(propertySpec, "Book #2"));
                     propertyModel.submit();
 
@@ -245,10 +245,10 @@ extends PublishingTestFactoryAbstract {
                 // when
                 context.executeAction(()->{
 
-                    val bookAdapter = objectManager.adapt(book);
+                    var bookAdapter = objectManager.adapt(book);
 
-                    val actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
-                    val managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
+                    var actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
+                    var managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
                     // this test action is always disabled, so don't enforce rules here, just invoke
                     managedAction.invoke(Can.empty()); // no-arg action
                 });
@@ -279,7 +279,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                var syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
                 context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
 
             });
@@ -292,7 +292,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                var syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
                 context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
 
             });
@@ -319,7 +319,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                var syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
                 //assertThrows(DisabledException.class, ()->{
                     wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
@@ -335,7 +335,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                var syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
                 //assertThrows(DisabledException.class, ()->{
                     wrapper.wrap(book, syncControl).doubleThePrice(); // should fail with DisabledException
@@ -359,7 +359,7 @@ extends PublishingTestFactoryAbstract {
         context.bind(commitListener);
 
         // given
-        val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
+        var asyncControl = returningVoid().withSkipRules(); // don't enforce rules
 
         withBookDo(book->{
 
@@ -386,7 +386,7 @@ extends PublishingTestFactoryAbstract {
             context.runGiven();
 
             // when - running synchronous
-            val asyncControl = returningVoid().withCheckRules(); // enforce rules
+            var asyncControl = returningVoid().withCheckRules(); // enforce rules
 
             //assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
@@ -402,7 +402,7 @@ extends PublishingTestFactoryAbstract {
 
     @SneakyThrows
     private void withBookDo(final CheckedConsumer<JdoBook> transactionalBookConsumer) {
-        val book = repository.allInstances(JdoBook.class).listIterator().next();
+        var book = repository.allInstances(JdoBook.class).listIterator().next();
         transactionalBookConsumer.accept(book);
     }
 

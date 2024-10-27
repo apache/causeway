@@ -50,7 +50,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleTable;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 @RequiredArgsConstructor
 final class NodeWriter implements StructuralNodeVisitor {
@@ -68,9 +67,9 @@ final class NodeWriter implements StructuralNodeVisitor {
         _Strings.nonEmpty(doc.getTitle())
         .ifPresent(title->printChapterTitle(title, depth+1));
 
-        val attr = doc.getAttributes();
+        var attr = doc.getAttributes();
         if(!attr.isEmpty()) {
-            for(val knownAttrKey : knownDocAttributes) {
+            for(var knownAttrKey : knownDocAttributes) {
                 Optional.ofNullable(attr.get(knownAttrKey.toLowerCase()))
                 .ifPresent(attrValue->printfln(":%s: %s", knownAttrKey, attrValue));
             }
@@ -136,7 +135,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         ;
         private final Predicate<String> matcher;
         public static Style parse(final StructuralNode node) {
-            val styleAttribute = node.getStyle();
+            var styleAttribute = node.getStyle();
             return Stream.of(Style.values())
                     .filter(style->style.matcher.test(styleAttribute))
                     .findFirst()
@@ -178,7 +177,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public boolean blockHead(final Block block, final int depth) {
 
-        val style = Style.parse(block);
+        var style = Style.parse(block);
 
         if(style.isOpenBlock()) {
             pushNewWriter(); // write the open block to a StringWriter, such that can handle empty blocks
@@ -209,7 +208,7 @@ final class NodeWriter implements StructuralNodeVisitor {
                 .ifPresent(this::printBlockTitle);
             println("====");
         } else if(style.isSourceBlock()) {
-            val language = (String)block.getAttribute("language");
+            var language = (String)block.getAttribute("language");
             if(_Strings.isNotEmpty(language)) {
                 printfln("[source,%s]", language);
             } else {
@@ -222,7 +221,7 @@ final class NodeWriter implements StructuralNodeVisitor {
             println("++++");
         } else if(style.isDiagramBlock()) {
 
-            val diagramTypeAndOptions = IntStream
+            var diagramTypeAndOptions = IntStream
                     .iterate(1, index->block.getAttribute(""+index)!=null, index->index+1)
                     .mapToObj(index->(String)block.getAttribute(""+index))
                     .collect(Collectors.joining(","));
@@ -234,7 +233,7 @@ final class NodeWriter implements StructuralNodeVisitor {
             println("----");
         }
 
-        for(val line : block.getLines()) {
+        for(var line : block.getLines()) {
             println(line);
         }
 
@@ -244,7 +243,7 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public void blockTail(final Block block, final int depth) {
 
-        val style = Style.parse(block);
+        var style = Style.parse(block);
 
         if(style.isOpenBlock()){
             println("--");
@@ -290,14 +289,14 @@ final class NodeWriter implements StructuralNodeVisitor {
     @Override
     public boolean listItemHead(final ListItem listItem, final int depth) {
 
-        val isCalloutStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
+        var isCalloutStyle = Style.parse((org.asciidoctor.ast.List)(listItem.getParent()))
                 .isCalloutList();
 
-        val bullets = isCalloutStyle
+        var bullets = isCalloutStyle
                 ? "<.>"
                 : _Strings.padEnd("", bulletCount, '*');
 
-        val listItemSource = _Strings.nullToEmpty(listItem.getSource()).trim();
+        var listItemSource = _Strings.nullToEmpty(listItem.getSource()).trim();
         if(!listItemSource.isEmpty()) {
             printfln("%s %s", bullets, listItemSource);
             return true; // continue visit
@@ -313,10 +312,10 @@ final class NodeWriter implements StructuralNodeVisitor {
 
         //find the first block that has a source, use it and blank it out, so is not written twice
 
-        val isFixed = _Refs.booleanRef(false);
+        var isFixed = _Refs.booleanRef(false);
 
         StructuralNodeTraversor.depthFirst(new BlockVisitor(block->{
-            val blockSource = _Strings.nullToEmpty(block.getSource()).trim();
+            var blockSource = _Strings.nullToEmpty(block.getSource()).trim();
             if(!blockSource.isEmpty()) {
                 block.setSource(null);
                 printfln("%s %s", bullets, blockSource);
@@ -365,16 +364,16 @@ final class NodeWriter implements StructuralNodeVisitor {
 
         // table.getColumns() ... styles
 
-        for(val headRow : table.getHeader()) {
-            for(val cell : headRow.getCells()) {
+        for(var headRow : table.getHeader()) {
+            for(var cell : headRow.getCells()) {
                 printf("|%s ", cell.getSource());
             }
             printNewLine();
         }
 
-        for(val row : table.getBody()) {
+        for(var row : table.getBody()) {
             printNewLine(); // empty line before each row
-            for(val cell : row.getCells()) {
+            for(var cell : row.getCells()) {
                 //bypass newline tracking
                 printfln("|%s", cell.getSource());
             }
@@ -405,7 +404,7 @@ final class NodeWriter implements StructuralNodeVisitor {
         if(map.isEmpty()) {
             return;
         }
-        val elements = map.entrySet()
+        var elements = map.entrySet()
                 .stream()
                 .map(entry->String.format(entryFormat, entry.getKey(), entry.getValue()))
                 .collect(Collectors.joining(", "));
@@ -432,7 +431,7 @@ final class NodeWriter implements StructuralNodeVisitor {
             formatedAttrMap.put(SimpleTable.GRID_ATTR, (String)table.getAttribute(SimpleTable.GRID_ATTR));
         }
 
-        val options = table.getAttributes().entrySet()
+        var options = table.getAttributes().entrySet()
                 .stream()
                 .filter(entry->entry.getKey().endsWith("-option"))
                 .map(entry->entry.getKey().substring(0, entry.getKey().length()-7))
@@ -467,17 +466,17 @@ final class NodeWriter implements StructuralNodeVisitor {
         return currentWriter;
     }
     private void pushNewWriter() {
-        val sw = new StringWriter();
+        var sw = new StringWriter();
         currentWriter = sw;
         stringWriterStack.push(sw);
     }
     @SneakyThrows
     private void popWriter() {
-        val sw = stringWriterStack.pop();
+        var sw = stringWriterStack.pop();
         currentWriter = stringWriterStack.isEmpty()
                 ? writer
                 : stringWriterStack.peek();
-        val continuationBlockAsString = sw.toString();
+        var continuationBlockAsString = sw.toString();
         if(continuationBlockAsString.length()>EMPTY_CONTINUATION_BLOCK_SIZE) {
             writer.append(continuationBlockAsString); // write directly to the current writer, no side-effects wanted
         }
@@ -498,9 +497,9 @@ final class NodeWriter implements StructuralNodeVisitor {
     private void print(final @NonNull String line) {
 
         if(line.contains("\n")) {
-            val lineIter = _Text.normalize(TextUtils.readLines(line)).iterator();
+            var lineIter = _Text.normalize(TextUtils.readLines(line)).iterator();
             while(lineIter.hasNext()) {
-                val nextLine = lineIter.next();
+                var nextLine = lineIter.next();
                 currentWriter().append(nextLine);
                 if(!nextLine.isEmpty()) {
                     hasWrittenAnythingYet = true;
@@ -528,12 +527,12 @@ final class NodeWriter implements StructuralNodeVisitor {
     }
 
     private void printf(final @NonNull String format, final Object... strings) {
-        val formattedString = String.format(format, _Arrays.map(strings, this::nullToEmpty));
+        var formattedString = String.format(format, _Arrays.map(strings, this::nullToEmpty));
         print(formattedString);
     }
 
     private void printfln(final @NonNull String format, final Object... strings) {
-        val formattedString = String.format(format, _Arrays.map(strings, this::nullToEmpty));
+        var formattedString = String.format(format, _Arrays.map(strings, this::nullToEmpty));
         print(formattedString);
         printNewLine();
     }

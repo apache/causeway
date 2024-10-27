@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -121,8 +121,8 @@ extends ReferentialStateManagerImpl {
         /* If a previously attached entity becomes hollow (or detached),
          * we memoize the OID in the Persistable.dnStateManager field.
          * Using a pseudo StateManager, that only acts as a holder of an OID. */
-        val entityPojo = myPC; // keep local reference
-        val snapshotOid = snapshotOid();
+        var entityPojo = myPC; // keep local reference
+        var snapshotOid = snapshotOid();
 
         super.disconnect();
 
@@ -179,7 +179,7 @@ extends ReferentialStateManagerImpl {
             if(id==null) {
                 return Optional.empty();
             }
-            val entityFacet = lookupEntityFacet().orElse(null);
+            var entityFacet = lookupEntityFacet().orElse(null);
             if(entityFacet==null) {
                 return Optional.empty();
             }
@@ -187,7 +187,7 @@ extends ReferentialStateManagerImpl {
                 id = DataNucleusHelperJDO
                         .getSingleFieldIdentityForDataNucleusIdentity((SingleFieldId<?, ?>)id, myPC.getClass());
             }
-            val oidIfAny = entityFacet.identifierForDnPrimaryKey(id);
+            var oidIfAny = entityFacet.identifierForDnPrimaryKey(id);
             return oidIfAny;
         } catch (Exception e) {
             log.error("exception while trying to extract entity's current primary key", e);
@@ -199,7 +199,7 @@ extends ReferentialStateManagerImpl {
         if(myPC==null) {
             return Optional.empty();
         }
-        val entityFacet = MetaModelContext.instance()
+        var entityFacet = MetaModelContext.instance()
             .map(MetaModelContext::getSpecificationLoader)
             .flatMap(specLoader->specLoader.specForType(myPC.getClass()))
             .flatMap(ObjectSpecification::entityFacet)
@@ -240,7 +240,7 @@ extends ReferentialStateManagerImpl {
         // assuming we don't need thread-safety here,
         // as each thread presumably has its own DN execution context
 
-        val lockIfGranted = !Objects.equals(myID, id)
+        var lockIfGranted = !Objects.equals(myID, id)
                 || preDirtyPropagationLockRef.isNotNull()
                 ? Optional.<PreDirtyPropagationLock>empty()
                 : Optional.of(preDirtyPropagationLockRef.set(createPreDirtyPropagationLock()));

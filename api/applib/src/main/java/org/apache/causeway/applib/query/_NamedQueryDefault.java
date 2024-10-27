@@ -28,7 +28,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 final class _NamedQueryDefault<T> 
 extends _QueryAbstract<T>
@@ -73,7 +72,7 @@ implements NamedQuery<T> {
         if(parameterName.isEmpty()) {
             throw _Exceptions.illegalArgument("require parameterName to be non empty, got '%s'", parameterName);
         }
-        val params = parametersByName==null 
+        var params = parametersByName==null 
                 ? new HashMap<String, Object>()
                 : new HashMap<String, Object>(getParametersByName());
         params.put(parameterName, parameterValue);

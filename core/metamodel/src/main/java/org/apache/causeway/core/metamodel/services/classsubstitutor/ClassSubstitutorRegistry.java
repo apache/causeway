@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -78,7 +77,7 @@ public class ClassSubstitutorRegistry {
 
     private Substitution getSubstitutionElseWarn(final ClassSubstitutor substitutor, final Class<?> originalClass) {
 
-        val substitution = substitutor.getSubstitution(originalClass);
+        var substitution = substitutor.getSubstitution(originalClass);
         if(substitution == null) {
             log.warn("ClassSubstitutor.getSubstitution(Class) must never return null! "
                     + "However, substitutor {} just did for class argument {}. "

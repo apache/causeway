@@ -26,7 +26,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -88,7 +87,7 @@ public class _XrayEvent {
      * @param depthLimit - max call stack depth printed out to console
      */
     void record(final int depthLimit, final _IconResource icon, final String format, final Object...args) {
-        val stackTrace = _Exceptions.streamStackTrace()
+        var stackTrace = _Exceptions.streamStackTrace()
                 .skip(3)
                 .filter(_XrayEvent::accept)
                 .collect(Can.toCan());
@@ -107,7 +106,7 @@ public class _XrayEvent {
 
         _Xray.recordDebugLogEvent(icon, logMessage, stackTrace);
 
-        val context = String.format("%s|| %s",
+        var context = String.format("%s|| %s",
                 Thread.currentThread().getName(),
                 stackTrace.stream()
                 .limit(depthLimit)

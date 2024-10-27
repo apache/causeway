@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class RemoveAnnotatedMethodsFacetFactory
 extends FacetFactoryAbstract {
@@ -45,7 +44,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val policy = getMetaModelContext().getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy();
+        var policy = getMetaModelContext().getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy();
         switch (policy) {
             case ENCAPSULATION_ENABLED:
                 getClassCache()
@@ -94,14 +93,14 @@ extends FacetFactoryAbstract {
 
         // shortcut, when we already know the class is not a mixin
         if(processClassContext.getFacetHolder() instanceof ObjectSpecification) {
-            val spec = (ObjectSpecification) processClassContext.getFacetHolder();
+            var spec = (ObjectSpecification) processClassContext.getFacetHolder();
             if(!spec.getBeanSort().isMixin()) {
                 return method->false;
             }
         }
         // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier
-        val cls = processClassContext.getCls();
-        val mixinMainMethodName = Attributes.MIXIN_MAIN_METHOD_NAME.lookup(getClassCache(), cls)
+        var cls = processClassContext.getCls();
+        var mixinMainMethodName = Attributes.MIXIN_MAIN_METHOD_NAME.lookup(getClassCache(), cls)
             .orElse(null);
         return method->method.name().equals(mixinMainMethodName);
     }

@@ -27,8 +27,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 
-import lombok.val;
-
 class CausewayModuleExtCorsImplTest {
 
     private CausewayConfiguration causewayDefaultConfiguration;
@@ -45,10 +43,10 @@ class CausewayModuleExtCorsImplTest {
     @Test
     void defaultCausewayConfiguration_shouldYieldCorsUrlPatternWithWildcard() {
         // given
-        val causewayModuleExtCors = new CausewayModuleExtCors();
+        var causewayModuleExtCors = new CausewayModuleExtCors();
 
         // when
-        val filterRegistration = causewayModuleExtCors.createCorsFilterRegistration(causewayDefaultConfiguration, restEasyConfiguration);
+        var filterRegistration = causewayModuleExtCors.createCorsFilterRegistration(causewayDefaultConfiguration, restEasyConfiguration);
 
         // then
         assertTrue(filterRegistration.getUrlPatterns().contains("/restful/*"));

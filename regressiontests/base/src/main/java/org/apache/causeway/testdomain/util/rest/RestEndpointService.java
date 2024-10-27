@@ -49,7 +49,7 @@ import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFi
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -83,7 +83,7 @@ public class RestEndpointService {
             final boolean useRequestDebugLogging,
             final @NonNull Can<ClientConversationFilter> additionalFilters) {
 
-        val restRootPath =
+        var restRootPath =
                 String.format("http://localhost:%d%s/",
                         getPort(),
                         webAppContextPath
@@ -92,7 +92,7 @@ public class RestEndpointService {
 
         log.debug("new restful client created for {}", restRootPath);
 
-        val clientConfig = RestfulClientConfig.builder()
+        var clientConfig = RestfulClientConfig.builder()
                 .restfulBaseUrl(restRootPath)
                 // setup basic-auth
                 .authenticationMode(AuthenticationMode.BASIC)
@@ -104,7 +104,7 @@ public class RestEndpointService {
                 .clientConversationFilters(additionalFilters.toList())
                 .build();
 
-        val client = RestfulClient.ofConfig(clientConfig);
+        var client = RestfulClient.ofConfig(clientConfig);
         return client;
     }
 
@@ -119,40 +119,40 @@ public class RestEndpointService {
 
     public Try<JdoBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digest(response, JdoBook.class);
+        var response = request.post(args);
+        var digest = client.digest(response, JdoBook.class);
 
         return digest;
     }
 
     public Try<BookDto> getRecommendedBookOfTheWeekDto(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekDto/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digest(response, BookDto.class);
+        var response = request.post(args);
+        var digest = client.digest(response, BookDto.class);
 
         return digest;
     }
 
     public Try<Can<JdoBook>> getMultipleBooks(final RestfulClient client) throws JAXBException {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
+        var response = request.post(args);
+        var digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
 
         return digest;
     }
@@ -160,72 +160,72 @@ public class RestEndpointService {
 
     public Try<JdoBook> storeBook(final RestfulClient client, final JdoBook newBook) throws JAXBException {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/storeBook/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .addActionParameter("newBook", BookDto.from(newBook).encode())
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digest(response, JdoBook.class);
+        var response = request.post(args);
+        var digest = client.digest(response, JdoBook.class);
 
         return digest;
     }
 
     public Try<BookDto> getRecommendedBookOfTheWeekAsDto(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digest(response, BookDto.class);
+        var response = request.post(args);
+        var digest = client.digest(response, BookDto.class);
 
         return digest;
     }
 
     public Try<Can<BookDto>> getMultipleBooksAsDto(final RestfulClient client) throws JAXBException {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .addActionParameter("nrOfBooks", 2)
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digestList(response, BookDto.class, new GenericType<List<BookDto>>() {});
+        var response = request.post(args);
+        var digest = client.digestList(response, BookDto.class, new GenericType<List<BookDto>>() {});
 
         return digest;
     }
 
     public Try<JdoInventoryJaxbVm> getInventoryAsJaxbVm(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/inventoryAsJaxbVm/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digest(response, JdoInventoryJaxbVm.class);
+        var response = request.post(args);
+        var digest = client.digest(response, JdoInventoryJaxbVm.class);
         return digest;
     }
 
     public Try<Can<JdoBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
 
-        val objectId = interactionService.callAnonymous(
+        var objectId = interactionService.callAnonymous(
                 ()->jdoTestFixtures.getInventoryJaxbVmAsBookmark().getIdentifier());
 
         // using domain object alias ...
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 "objects/testdomain.jdo.JdoInventoryJaxbVmAlias/"
                         + objectId + "/actions/listBooks/invoke");
 
-        val args = client.arguments()
+        var args = client.arguments()
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
+        var response = request.post(args);
+        var digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
 
         return digest;
     }
@@ -233,29 +233,29 @@ public class RestEndpointService {
     public Try<CalendarEvent> echoCalendarEvent(
             final RestfulClient client, final CalendarEvent calendarEvent) {
 
-        val calSemantics = new CalendarEventSemantics();
+        var calSemantics = new CalendarEventSemantics();
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/echoCalendarEvent/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .addActionParameter("calendarEvent", calSemantics.decompose(calendarEvent))
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digestValue(response, calSemantics);
+        var response = request.post(args);
+        var digest = client.digestValue(response, calSemantics);
 
         return digest;
     }
 
     public Try<String> getHttpSessionInfo(final RestfulClient client) {
 
-        val request = newInvocationBuilder(client,
+        var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
-        val args = client.arguments()
+        var args = client.arguments()
                 .build();
 
-        val response = request.post(args);
-        val digest = client.digest(response, String.class);
+        var response = request.post(args);
+        var digest = client.digest(response, String.class);
 
         return digest;
     }

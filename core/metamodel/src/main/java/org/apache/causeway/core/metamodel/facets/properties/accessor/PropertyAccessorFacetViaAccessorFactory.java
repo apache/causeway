@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class PropertyAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
@@ -52,7 +50,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        val accessorMethod = processMethodContext.getMethod().asMethodElseFail();
+        var accessorMethod = processMethodContext.getMethod().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
         final Class<?> cls = processMethodContext.getCls();

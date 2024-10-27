@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.precpol.Precedi
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForPatternAnnotationOnParameter;
 
-import lombok.val;
-
 public class ParameterAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -57,8 +55,8 @@ extends FacetFactoryAbstract {
     // check for @Parameter(precedingParamsPolicy=...)
     void processPrecedingParamsPolicy(final ProcessParameterContext processParameterContext) {
 
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        var holder = processParameterContext.getFacetHolder();
+        var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
                 PrecedingParametersPolicyFacet
@@ -68,8 +66,8 @@ extends FacetFactoryAbstract {
 
     void processParamsMaxLength(final ProcessParameterContext processParameterContext) {
 
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        var holder = processParameterContext.getFacetHolder();
+        var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
                 MaxLengthFacetForParameterAnnotation
@@ -78,8 +76,8 @@ extends FacetFactoryAbstract {
 
     void processParamsMustSatisfy(final ProcessParameterContext processParameterContext) {
 
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        var holder = processParameterContext.getFacetHolder();
+        var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
                 MustSatisfySpecificationFacetForParameterAnnotation
@@ -88,12 +86,12 @@ extends FacetFactoryAbstract {
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {
 
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        var holder = processParameterContext.getFacetHolder();
+        var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        val parameterType = processParameterContext.getParameterType();
+        var parameterType = processParameterContext.getParameterType();
 
-        val patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
+        var patternIfAny = processParameterContext.synthesizeOnParameter(Pattern.class);
         addFacetIfPresent(
                 RegExFacetForPatternAnnotationOnParameter
                 .create(patternIfAny, parameterType, holder));
@@ -105,13 +103,13 @@ extends FacetFactoryAbstract {
 
     void processParamsOptional(final ProcessParameterContext processParameterContext) {
 
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        var holder = processParameterContext.getFacetHolder();
+        var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
-        val hasNullable = processParameterContext.streamParameterAnnotations()
+        var hasNullable = processParameterContext.streamParameterAnnotations()
             .anyMatch(annot->annot.annotationType().getSimpleName().equals("Nullable"));
 
-        val parameterType = processParameterContext.getParameterType();
+        var parameterType = processParameterContext.getParameterType();
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnParameter
@@ -124,8 +122,8 @@ extends FacetFactoryAbstract {
 
     void processParamsFileAccept(final ProcessParameterContext processParameterContext) {
 
-        val holder = processParameterContext.getFacetHolder();
-        val parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
+        var holder = processParameterContext.getFacetHolder();
+        var parameterIfAny = processParameterContext.synthesizeOnParameter(Parameter.class);
 
         addFacetIfPresent(
                 FileAcceptFacetForParameterAnnotation

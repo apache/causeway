@@ -47,7 +47,7 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo_multiEnu
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -71,7 +71,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldHaveNoVeto() {
 
-        val tester =
+        var tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -81,7 +81,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenDisabled_shouldHaveVeto() {
 
-        val tester =
+        var tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -93,12 +93,12 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldProvideActionMetadata() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val actionMeta = managedAction.getAction();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var actionMeta = managedAction.getAction();
         assertEquals(2, actionMeta.getParameterCount());
 
     }
@@ -106,21 +106,21 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void mixinWhenDisabled_shouldProvideActionMetadata() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgDisabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
         assertFalse(actionInteraction.getManagedAction().isPresent()); // since usability should be vetoed
         assertTrue(actionInteraction.getMetamodel().isPresent()); // but should always provide access to metamodel
 
-        val actionMeta = actionInteraction.getMetamodel().get();
+        var actionMeta = actionInteraction.getMetamodel().get();
         assertEquals(2, actionMeta.getParameterCount());
     }
 
     @Test
     void whenEnabled_shouldAllowInvocation() {
 
-        val tester =
+        var tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -128,14 +128,14 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertInvocationResult(99, UnaryOperator.identity());
 
 
-        val capturedCommands = tester.getCapturedCommands();
+        var capturedCommands = tester.getCapturedCommands();
         assertEquals(1, capturedCommands.size());
-        val command = capturedCommands.getElseFail(1);
+        var command = capturedCommands.getElseFail(1);
         assertEquals("regressiontests.InteractionDemo#noArgEnabled",
                 command.getLogicalMemberIdentifier());
 
         // test feature-identifier to command matching ...
-        val act = tester.getActionMetaModelElseFail();
+        var act = tester.getActionMetaModelElseFail();
         InteractionHead head = tester.getActionMetaModelElseFail().interactionHead(tester.getActionOwnerElseFail());
         assertTrue(IdentifierUtil.isCommandForMember(command, head, act));
     }
@@ -143,21 +143,21 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenDisabled_shouldVetoInvocation() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
         assertFalse(actionInteraction.startParameterNegotiation().isPresent());
 
         // even though when assembling valid parameters ...
-        val pendingArgs = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+        var pendingArgs = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .startParameterNegotiation().get();
 
         // we should not be able to invoke the action
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isFailure());
 
-        val tester =
+        var tester =
                 testerFactory.actionTester(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -168,21 +168,21 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void mixinWithParams_shouldProduceCorrectResult() throws Throwable {
 
-        val tester =
+        var tester =
                 testerFactory.actionTester(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
         tester.assertInvocationResult(46, arg0->12, arg1->34);
 
-        val capturedCommands = tester.getCapturedCommands();
+        var capturedCommands = tester.getCapturedCommands();
         assertEquals(1, capturedCommands.size());
-        val command = capturedCommands.getElseFail(1);
+        var command = capturedCommands.getElseFail(1);
         assertEquals("regressiontests.InteractionDemo#biArgEnabled",
                 command.getLogicalMemberIdentifier());
 
         // test feature-identifier to command matching ...
-        val act = tester.getActionMetaModelElseFail();
+        var act = tester.getActionMetaModelElseFail();
         InteractionHead head = tester.getActionMetaModelElseFail().interactionHead(tester.getActionOwnerElseFail());
         assertTrue(IdentifierUtil.isCommandForMember(command, head, act));
     }
@@ -190,16 +190,16 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void withTooManyParams_shouldIgnoreOverflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
-        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
+        var params = Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        var pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());
 
         assertEquals(46, (int)resultOrVeto.getSuccessElseFail().getPojo());
@@ -208,16 +208,16 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void withTooLittleParams_shouldIgnoreUnderflow() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
-        val params = Can.of(objectManager.adapt(12));
+        var params = Can.of(objectManager.adapt(12));
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        var pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());
 
         assertEquals(12, (int)resultOrVeto.getSuccessElseFail().getPojo());
@@ -227,17 +227,17 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void shouldProvideParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val expectedDefaults = Can.of(
+        var expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).defaultA(null),
                 0);
-        val actualDefaults = pendingArgs.getParamValues();
+        var actualDefaults = pendingArgs.getParamValues();
 
         assertComponentWiseUnwrappedEquals(expectedDefaults, actualDefaults);
 
@@ -246,15 +246,15 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenHavingChoices_shouldProvideProperParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiInt", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiInt", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val mixin = new InteractionDemo_multiInt(null);
-        val expectedDefaults = Can.<Integer>of(
+        var mixin = new InteractionDemo_multiInt(null);
+        var expectedDefaults = Can.<Integer>of(
                 mixin.defaultA(null),
                 mixin.defaultB(null),
                 mixin.defaultC(null));
@@ -270,7 +270,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         uiParam.bind(pendingArgs, choiceParamNr); // bind to param that has choices
         uiParam.simulateChoiceSelect(3); // select 4th choice
 
-        val expectedParamsAfter = Can.<Integer>of(
+        var expectedParamsAfter = Can.<Integer>of(
                 mixin.choicesA(null)[3],
                 mixin.defaultB(null),
                 mixin.defaultC(null));
@@ -282,15 +282,15 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenHavingEnumChoices_shouldProvideProperParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiEnum", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "multiEnum", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val mixin = new InteractionDemo_multiEnum(null);
-        val expectedDefaults = Can.<DemoEnum>of(
+        var mixin = new InteractionDemo_multiEnum(null);
+        var expectedDefaults = Can.<DemoEnum>of(
                 mixin.defaultA(null),
                 mixin.defaultB(null),
                 mixin.defaultC(null));
@@ -306,7 +306,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         uiParam.bind(pendingArgs, choiceParamNr); // bind to param that has choices
         uiParam.simulateChoiceSelect(3); // select 4th choice
 
-        val expectedParamsAfter = Can.<DemoEnum>of(
+        var expectedParamsAfter = Can.<DemoEnum>of(
                 DemoEnum.values()[3],
                 mixin.defaultB(null),
                 mixin.defaultC(null));
@@ -317,15 +317,15 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenHavingListOfStringChoices_shouldProvideProperParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biListOfString", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biListOfString", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val mixin = new InteractionDemo_biListOfString(null);
-        val expectedDefaults = Can.<List<String>>of(
+        var mixin = new InteractionDemo_biListOfString(null);
+        var expectedDefaults = Can.<List<String>>of(
                 mixin.defaultA(null),
                 mixin.defaultB(null));
 
@@ -340,7 +340,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         uiParamA.bind(pendingArgs, choiceParamNr); // bind to param that has choices
         uiParamA.simulateMultiChoiceSelect(0, 2); // select first and 3rd choice
 
-        val expectedParamsAfter = Can.<List<String>>of(
+        var expectedParamsAfter = Can.<List<String>>of(
                 _Lists.ofNullable(
                         mixin.defaultA(null).get(0),
                         mixin.defaultA(null).get(2)
@@ -356,22 +356,22 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void shouldProvideChoices() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
-        val managedAction = actionInteraction.getManagedAction().get();
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get();
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val param0Choices = pendingArgs.getObservableParamChoices(0); // observable
-        val param1Choices = pendingArgs.getObservableParamChoices(1); // observable
+        var param0Choices = pendingArgs.getObservableParamChoices(0); // observable
+        var param1Choices = pendingArgs.getObservableParamChoices(1); // observable
 
         assertTrue(param0Choices.getValue().isEmpty());
 
-        val expectedChoices = new InteractionDemo_biArgEnabled(null).choicesB(null);
-        val actualChoices = param1Choices.getValue();
+        var expectedChoices = new InteractionDemo_biArgEnabled(null).choicesB(null);
+        var actualChoices = param1Choices.getValue();
 
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
     }
@@ -379,17 +379,17 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void actionAnnotation_withChoicesFrom_shouldProvideChoices() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "doSomethingWithItems", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "doSomethingWithItems", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
-        val managedAction = actionInteraction.getManagedAction().get();
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get();
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val param0Choices = pendingArgs.getObservableParamChoices(0); // observable
-        val param1Choices = pendingArgs.getObservableParamChoices(1); // observable
+        var param0Choices = pendingArgs.getObservableParamChoices(0); // observable
+        var param1Choices = pendingArgs.getObservableParamChoices(1); // observable
 
         assertFalse(param0Choices.getValue().isEmpty());
         assertFalse(param1Choices.getValue().isEmpty());
@@ -406,14 +406,14 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void shouldProvideParameterBinding() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
-        val managedAction = actionInteraction.getManagedAction().get();
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get();
+        var pendingArgs = managedAction.startParameterNegotiation();
 
         final int firstParamNr = 0;
 
@@ -433,8 +433,8 @@ class ActionInteractionTest extends InteractionTestAbstract {
         uiParam1.bind(pendingArgs, choiceParamNr); // bind to param that has choices
         uiParam1.simulateChoiceSelect(2); // select 3rd choice
 
-        val expectedChoices = new InteractionDemo_biArgEnabled(null).choicesB(null);
-        val expectedChoice = expectedChoices[2]; // actual 3rd choice
+        var expectedChoices = new InteractionDemo_biArgEnabled(null).choicesB(null);
+        var expectedChoice = expectedChoices[2]; // actual 3rd choice
 
         Object actualChoiceAsSeenByBackend = pendingArgs.getParamValue(choiceParamNr).getPojo();
         Object actualChoiceAsSeenByUi = uiParam1.getValue().getPojo();
@@ -444,11 +444,11 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         // ensure backend changes are reflected back to the UI
 
-        val expectedChoiceAfterBackendUpdated = expectedChoices[0]; // actual first choice
-        val newParamValue = pendingArgs
+        var expectedChoiceAfterBackendUpdated = expectedChoices[0]; // actual first choice
+        var newParamValue = pendingArgs
                 .adaptParamValuePojo(choiceParamNr, expectedChoiceAfterBackendUpdated);
 
-        val bindableParamValue = pendingArgs.getBindableParamValue(choiceParamNr);
+        var bindableParamValue = pendingArgs.getBindableParamValue(choiceParamNr);
         bindableParamValue.setValue(newParamValue);
 
         actualChoiceAsSeenByBackend = pendingArgs.getParamValue(choiceParamNr).getPojo();
@@ -462,19 +462,19 @@ class ActionInteractionTest extends InteractionTestAbstract {
     @Test
     void whenNonScalarResult_shouldHaveDataTable() {
 
-        val tester =
+        var tester =
                 testerFactory.actionTester(InteractionDemo.class, "limitedItems", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
 
-        val choiceElements = ((InteractionDemo)(tester.getManagedActionElseFail()
+        var choiceElements = ((InteractionDemo)(tester.getManagedActionElseFail()
                 .getOwner()
                 .getPojo()))
                 .getItems();
         assertEquals(4, choiceElements.size());
 
-        val tableTester = tester.tableTester(arg0->2); // 2 expected rows in the resulting table
+        var tableTester = tester.tableTester(arg0->2); // 2 expected rows in the resulting table
 
         tableTester.assertUnfilteredDataElements(List.of(
                 choiceElements.get(0),

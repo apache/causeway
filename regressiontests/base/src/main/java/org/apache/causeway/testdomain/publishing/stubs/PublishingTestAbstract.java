@@ -32,7 +32,7 @@ import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 
-import lombok.val;
+
 
 public abstract class PublishingTestAbstract
 implements HasPersistenceStandard {
@@ -80,7 +80,7 @@ implements HasPersistenceStandard {
     // -- HELPER
 
     private final List<DynamicTest> generateTests(final ChangeScenario scenario) {
-        val testFactory = getTestFactory();
+        var testFactory = getTestFactory();
         return testFactory!=null
                 ? testFactory.generateTests(
                         scenario, supportsProgrammaticTesting(scenario), this::given, this::verify)

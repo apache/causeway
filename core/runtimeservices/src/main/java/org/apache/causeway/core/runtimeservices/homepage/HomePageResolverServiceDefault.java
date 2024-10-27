@@ -35,8 +35,6 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.val;
-
 /**
  * Default implementation of {@link HomePageResolverService}, which uses the view model annotated with
  * {@link HomePage} as the home page.
@@ -69,7 +67,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @PostConstruct
     public void init() {
-        val viewModelTypes = causewayBeanTypeRegistry.getViewModelTypes();
+        var viewModelTypes = causewayBeanTypeRegistry.getViewModelTypes();
         viewModelTypeForHomepage = viewModelTypes.keySet().stream()
                 .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class))
                 .findFirst();

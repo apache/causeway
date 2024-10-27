@@ -71,7 +71,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -108,7 +107,7 @@ implements
             Session.get().setMetaData(SESSION_LIFECYCLE_PHASE_KEY, SessionLifecyclePhase.DONT_CARE);
         }
         static boolean isExpiryMessageTimeframeExpired() {
-            val sessionExpiryMessageTimeframe =
+            var sessionExpiryMessageTimeframe =
                     (LocalDateTime) Session.get().getAttribute("session-expiry-message-timeframe");
             return sessionExpiryMessageTimeframe==null
                     || LocalDateTime.now().isAfter(sessionExpiryMessageTimeframe);
@@ -150,8 +149,8 @@ implements
         // participate if an InteractionContext was already provided through some other mechanism,
         // but fail early if the current user is impersonating
         // (seeing this if going back the browser history into a page, that was previously impersonated)
-        val interactionService = getInteractionService();
-        val authenticatedWebSession = AuthenticatedWebSessionForCauseway.get();
+        var interactionService = getInteractionService();
+        var authenticatedWebSession = AuthenticatedWebSessionForCauseway.get();
 
         /*XXX for debugging delegated user ...
         interactionService.openInteraction(InteractionContext
@@ -160,7 +159,7 @@ implements
                         .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
                         .withAuthenticationSource(AuthenticationSource.EXTERNAL)));*/
 
-        val currentInteractionContext = interactionService.currentInteractionContext();
+        var currentInteractionContext = interactionService.currentInteractionContext();
         if(currentInteractionContext.isPresent()) {
             if(currentInteractionContext.get().getUser().isImpersonating()) {
                 throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
@@ -168,14 +167,14 @@ implements
             authenticatedWebSession.setPrimedInteractionContext(currentInteractionContext.get());
         }
 
-        val interactionContext0 = authenticatedWebSession.getInteractionContext();
+        var interactionContext0 = authenticatedWebSession.getInteractionContext();
         if (interactionContext0 == null) {
             log.warn("onBeginRequest out - session was not opened (because no authentication)");
             return;
         }
 
         // impersonation support
-        val interactionContext1 = lookupServiceElseFail(UserService.class)
+        var interactionContext1 = lookupServiceElseFail(UserService.class)
                 .lookupImpersonatedUser()
                 .map(sudoUser -> interactionContext0.withUser(sudoUser))
                 .orElse(interactionContext0);
@@ -214,7 +213,7 @@ implements
         } else if(handler instanceof RenderPageRequestHandler) {
 
             // using side-effect free access to MM validation result
-            val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+            var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
             .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
 
             if(validationResult.hasFailures()) {
@@ -275,11 +274,11 @@ implements
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
 
         if(log.isDebugEnabled()) {
-            val metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
+            var metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
             long took = timings.get().took();
             if(took > 50) {  // avoid too much clutter
                 if(metricsServiceIfAny.isPresent()) {
-                    val metricsService = metricsServiceIfAny.get();
+                    var metricsService = metricsServiceIfAny.get();
                     int numberEntitiesLoaded = metricsService.numberEntitiesLoaded();
                     int numberEntitiesDirtied = metricsService.numberEntitiesDirtied();
                     if(numberEntitiesLoaded > 0 || numberEntitiesDirtied > 0) {
@@ -312,11 +311,11 @@ implements
 
 
         // using side-effect free access to MM validation result
-        val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+        var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
-            val mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
+            var mmvErrorPage = new MmvErrorPage(validationResult.getMessages("[%d] %s"));
             return new RenderPageRequestHandler(new PageProvider(mmvErrorPage), RedirectPolicy.ALWAYS_REDIRECT);
         }
 
@@ -336,8 +335,8 @@ implements
             }
 
             // handle recognized exceptions gracefully also
-            val exceptionRecognizerService = getExceptionRecognizerService();
-            val recognizedIfAny = exceptionRecognizerService.recognize(ex);
+            var exceptionRecognizerService = getExceptionRecognizerService();
+            var recognizedIfAny = exceptionRecognizerService.recognize(ex);
             if(recognizedIfAny.isPresent()) {
                 addWarning(recognizedIfAny.get().toMessage(getMetaModelContext().getTranslationService()));
                 return respondGracefully(cycle);
@@ -426,7 +425,7 @@ implements
 
     protected IRequestablePage errorPageFor(final Exception ex) {
 
-        val mmc = getMetaModelContext();
+        var mmc = getMetaModelContext();
 
         if(mmc==null) {
             log.warn("Unable to obtain the MetaModelContext (no session?)");
@@ -434,14 +433,14 @@ implements
         }
 
         // using side-effect free access to MM validation result
-        val validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+        var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
         }
 
-        val exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
+        var exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
 
         final Optional<Recognition> recognition = exceptionRecognizerService
@@ -452,7 +451,7 @@ implements
                                 .addAll(exceptionRecognizerService.getExceptionRecognizers()),
                         ex);
 
-        val exceptionModel = ExceptionModel.create(mmc, recognition, ex);
+        var exceptionModel = ExceptionModel.create(mmc, recognition, ex);
 
         return isSignedIn()
                 ? new ErrorPage(exceptionModel)
@@ -503,14 +502,14 @@ implements
     }
 
     private boolean userHasSessionWithRememberMe(final RequestCycle requestCycle) {
-        val containerRequest = requestCycle.getRequest().getContainerRequest();
+        var containerRequest = requestCycle.getRequest().getContainerRequest();
 
         if (containerRequest instanceof HttpServletRequest) {
-            val cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
-            val cookieKey = _Strings.nullToEmpty(
+            var cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
+            var cookieKey = _Strings.nullToEmpty(
                     getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
 
-            for (val cookie : cookies) {
+            for (var cookie : cookies) {
                 if (cookieKey.equals(cookie.getName())) {
                     return true;
                 }

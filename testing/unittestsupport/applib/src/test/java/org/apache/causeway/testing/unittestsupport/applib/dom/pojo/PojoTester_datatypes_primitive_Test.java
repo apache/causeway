@@ -30,15 +30,13 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.IntHo
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.LongHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ShortHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_primitive_Test {
 
     @Test
     public void exercise_byte() {
 
         // given
-        val holder = new ByteHolder();
+        var holder = new ByteHolder();
         Assertions.assertThat(holder).extracting(ByteHolder::getSomeByte).isEqualTo((byte)0);
 
         // when
@@ -54,7 +52,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_byte_broken() {
 
         // given
-        val holder = new ByteHolder().butBroken();
+        var holder = new ByteHolder().butBroken();
         Assertions.assertThat(holder).extracting(ByteHolder::getSomeByte).isEqualTo((byte)0);
 
         // when, then
@@ -68,7 +66,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_short() {
 
         // given
-        val holder = new ShortHolder();
+        var holder = new ShortHolder();
         Assertions.assertThat(holder).extracting(ShortHolder::getSomeShort).isEqualTo((short)0);
 
         // when
@@ -84,7 +82,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_short_broken() {
 
         // given
-        val holder = new ShortHolder().butBroken();
+        var holder = new ShortHolder().butBroken();
         Assertions.assertThat(holder).extracting(ShortHolder::getSomeShort).isEqualTo((short)0);
 
         // when, then
@@ -98,7 +96,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_int() {
 
         // given
-        val holder = new IntHolder();
+        var holder = new IntHolder();
         Assertions.assertThat(holder).extracting(IntHolder::getSomeInt).isEqualTo((int)0);
 
         // when
@@ -114,7 +112,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_int_broken() {
 
         // given
-        val holder = new IntHolder().butBroken();
+        var holder = new IntHolder().butBroken();
         Assertions.assertThat(holder).extracting(IntHolder::getSomeInt).isEqualTo((int)0);
 
         // when, then
@@ -128,7 +126,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_long() {
 
         // given
-        val holder = new LongHolder();
+        var holder = new LongHolder();
         Assertions.assertThat(holder).extracting(LongHolder::getSomeLong).isEqualTo((long)0);
 
         // when
@@ -144,7 +142,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_long_broken() {
 
         // given
-        val holder = new LongHolder().butBroken();
+        var holder = new LongHolder().butBroken();
         Assertions.assertThat(holder).extracting(LongHolder::getSomeLong).isEqualTo((long)0);
 
         // when, then
@@ -158,7 +156,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_float() {
 
         // given
-        val holder = new FloatHolder();
+        var holder = new FloatHolder();
         Assertions.assertThat(holder).extracting(FloatHolder::getSomeFloat).isEqualTo((float)0);
 
         // when
@@ -174,7 +172,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_float_broken() {
 
         // given
-        val holder = new FloatHolder().butBroken();
+        var holder = new FloatHolder().butBroken();
         Assertions.assertThat(holder).extracting(FloatHolder::getSomeFloat).isEqualTo((float)0);
 
         // when, then
@@ -188,7 +186,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_double() {
 
         // given
-        val holder = new DoubleHolder();
+        var holder = new DoubleHolder();
         Assertions.assertThat(holder).extracting(DoubleHolder::getSomeDouble).isEqualTo((double)0);
 
         // when
@@ -204,7 +202,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_double_broken() {
 
         // given
-        val holder = new DoubleHolder().butBroken();
+        var holder = new DoubleHolder().butBroken();
         Assertions.assertThat(holder).extracting(DoubleHolder::getSomeDouble).isEqualTo((double)0);
 
         // when, then
@@ -218,7 +216,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_boolean() {
 
         // given
-        val holder = new BooleanHolder();
+        var holder = new BooleanHolder();
         Assertions.assertThat(holder).extracting(BooleanHolder::isSomeBoolean).isEqualTo(false);
 
         // when
@@ -234,7 +232,7 @@ public class PojoTester_datatypes_primitive_Test {
     public void exercise_boolean_broken() {
 
         // given
-        val holder = new BooleanHolder().butBroken();
+        var holder = new BooleanHolder().butBroken();
         Assertions.assertThat(holder).extracting(BooleanHolder::isSomeBoolean).isEqualTo(false);
 
         // when, then

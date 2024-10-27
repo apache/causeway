@@ -57,7 +57,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  * @since 1.x {@index}
@@ -265,7 +265,7 @@ extends ContentNegotiationServiceAbstract {
 
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
-                val dto = dtoForValue(returnedAdapter)
+                var dto = dtoForValue(returnedAdapter)
                         .orElseGet(()->elementAdapter.getSpecification().getCorrespondingClass());
                 return dto;
             })
@@ -276,13 +276,13 @@ extends ContentNegotiationServiceAbstract {
             break;
 
         case SCALAR_VALUE:
-            val dto = dtoForValue(returnedAdapter).orElse(null);
+            var dto = dtoForValue(returnedAdapter).orElse(null);
             if(dto==null) {
                 // 404 not found
                 return Responses.ofNotFound();
             }
 
-            val jsonNode = new POJONode(dto);
+            var jsonNode = new POJONode(dto);
             rootRepresentation = new JsonRepresentation(jsonNode);
             headerContentType = RepresentationTypeSimplifiedV2.VALUE;
 
@@ -297,7 +297,7 @@ extends ContentNegotiationServiceAbstract {
             throw _Exceptions.unmatchedCase(resultType);
         }
 
-        val responseBuilder = restfulObjectsV1_0
+        var responseBuilder = restfulObjectsV1_0
                 .buildResponseTo(resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation)
                 .type(headerContentType.getContentTypeHeaderValue(ACCEPT_PROFILE));  // set appropriate Content-Type
 
@@ -309,8 +309,8 @@ extends ContentNegotiationServiceAbstract {
                 || !valueObject.getSpecification().isValue()) {
             return Optional.empty();
         }
-        val valSpec = valueObject.getSpecification();
-        val dto = valSpec.isCompositeValue()
+        var valSpec = valueObject.getSpecification();
+        var dto = valSpec.isCompositeValue()
                 ? ScalarValueDtoV2.forValue(valueObject.getPojo(),
                         //XXX honor value semantics context?
                         _Casts.uncheckedCast(valSpec.valueFacetElseFail().selectDefaultSemantics().orElseThrow()))
@@ -344,22 +344,22 @@ extends ContentNegotiationServiceAbstract {
 
         appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
-        val where = resourceContext.getWhere();
+        var where = resourceContext.getWhere();
 
         owner.getSpecification()
         .streamCollections(MixedIn.INCLUDED)
         .forEach(collection->{
 
-            val collectionRepresentation = JsonRepresentation.newArray();
+            var collectionRepresentation = JsonRepresentation.newArray();
             rootRepresentation.mapPutJsonRepresentation(collection.getId(), collectionRepresentation);
 
-            val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
-            val visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
+            var interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
+            var visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
             if (!visibilityConsent.isAllowed()) {
                 return;
             }
 
-            val managedCollection = ManagedCollection.of(owner, collection, where);
+            var managedCollection = ManagedCollection.of(owner, collection, where);
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
         });
@@ -372,8 +372,8 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
-        val where = resourceContext.getWhere();
+        var interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
+        var where = resourceContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
                 .streamProperties(MixedIn.INCLUDED);
 
@@ -384,7 +384,7 @@ extends ContentNegotiationServiceAbstract {
             }
 
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
-            val renderer =
+            var renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
                     .asStandalone()
                     .with(ManagedProperty.of(objectAdapter, property, where));
@@ -439,7 +439,7 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation collectionRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        val elementRepresentation = JsonRepresentation.newMap();
+        var elementRepresentation = JsonRepresentation.newMap();
         appendPropertiesTo(resourceContext, elementAdapter, elementRepresentation, suppression);
         collectionRepresentation.arrayAdd(elementRepresentation);
     }

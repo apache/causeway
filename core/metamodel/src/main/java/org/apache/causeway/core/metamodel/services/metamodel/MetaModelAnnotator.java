@@ -37,8 +37,6 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelElement.Annotations;
 import org.apache.causeway.schema.metamodel.v2.Param;
 import org.apache.causeway.schema.metamodel.v2.Property;
 
-import lombok.val;
-
 /**
  * SPI that allows to add arbitrary meta data as
  * {@link org.apache.causeway.schema.metamodel.v2.Annotation}s
@@ -68,10 +66,10 @@ public interface MetaModelAnnotator {
      * creates and adds to its parent
      */
     default <T extends MetamodelElement> T createAnnotation(final T t, final String name, final String value) {
-        val titleAnnot = new org.apache.causeway.schema.metamodel.v2.Annotation();
+        var titleAnnot = new org.apache.causeway.schema.metamodel.v2.Annotation();
         titleAnnot.setName(name);
         titleAnnot.setValue(value);
-        val annots = Optional.ofNullable(t.getAnnotations()).orElseGet(Annotations::new);
+        var annots = Optional.ofNullable(t.getAnnotations()).orElseGet(Annotations::new);
         t.setAnnotations(annots);
         annots.getAsList().add(titleAnnot);
         return t;

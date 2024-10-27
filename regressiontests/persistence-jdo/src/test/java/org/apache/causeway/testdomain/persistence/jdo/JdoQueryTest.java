@@ -42,7 +42,7 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -69,13 +69,13 @@ class JdoQueryTest extends RegressionTestWithJdoFixtures {
 
         // when
 
-        val inventories = repositoryService.allInstances(JdoInventory.class);
+        var inventories = repositoryService.allInstances(JdoInventory.class);
 
         // then - expected post condition: ONE inventory with 3 books
 
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
@@ -119,10 +119,10 @@ class JdoQueryTest extends RegressionTestWithJdoFixtures {
 
         //testFixtures.setUp3Books();
 
-        val query = Query.named(JdoBook.class, "findAffordableBooks")
+        var query = Query.named(JdoBook.class, "findAffordableBooks")
                 .withParameter("priceUpperBound", 60.);
 
-        val affordableBooks = repositoryService.allMatches(query);
+        var affordableBooks = repositoryService.allMatches(query);
         testFixtures.assertInventoryHasBooks(affordableBooks, 1, 2);
     }
 
@@ -131,14 +131,14 @@ class JdoQueryTest extends RegressionTestWithJdoFixtures {
 //
 //        setUp3Books();
 //
-//        val namedParams = _Maps.<String, Object>newHashMap();
+//        var namedParams = _Maps.<String, Object>newHashMap();
 //
-//        val pm = jdoSupport.getPersistenceManagerFactory().getPersistenceManager();
-//        val query = pm.newNamedQuery(JdoProduct.class, "findAffordableProducts")
+//        var pm = jdoSupport.getPersistenceManagerFactory().getPersistenceManager();
+//        var query = pm.newNamedQuery(JdoProduct.class, "findAffordableProducts")
 //                .setNamedParameters(namedParams);
 //        namedParams.put("priceUpperBound", 60.);
 //
-//        val affordableBooks = query.executeList();
+//        var affordableBooks = query.executeList();
 //        assertInventoryHasBooks(affordableBooks, 1, 2);
 //    }
 
@@ -147,11 +147,11 @@ class JdoQueryTest extends RegressionTestWithJdoFixtures {
 //
 //        setUp3Books();
 //
-//        val pm = jdoSupport.getPersistenceManagerFactory().getPersistenceManager();
-//        val query = pm.newQuery(JdoBook.class)
+//        var pm = jdoSupport.getPersistenceManagerFactory().getPersistenceManager();
+//        var query = pm.newQuery(JdoBook.class)
 //                .filter("price <= 60.");
 //
-//        val affordableBooks = query.executeList();
+//        var affordableBooks = query.executeList();
 //        assertInventoryHasBooks(affordableBooks, 1, 2);
 //    }
 

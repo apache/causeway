@@ -55,7 +55,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 @RequiredArgsConstructor
 //@Log4j2
@@ -82,7 +81,7 @@ implements
             throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
         }});
 
-        val method = actionInvocationFacetAbstract.getMethods().getFirstElseFail();
+        var method = actionInvocationFacetAbstract.getMethods().getFirstElseFail();
 
         return new ActionExecutor(
                 owningAction.getMetaModelContext(), facetHolder,
@@ -136,11 +135,11 @@ implements
         // but ... no point in attempting this if no bookmark is yet available.
         // this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
         //
-        val ownerAdapter = head.getOwner();
+        var ownerAdapter = head.getOwner();
         Optional<Bookmark> ownerBookmarkIfAny = ManagedObjects.bookmark(ownerAdapter);
-        val ownerHasBookmark = ownerBookmarkIfAny.isPresent();
+        var ownerHasBookmark = ownerBookmarkIfAny.isPresent();
         if (ownerHasBookmark) {
-            val invocationDto =
+            var invocationDto =
                     getInteractionDtoServiceInternal().asActionInvocationDto(owningAction, head, arguments);
             currentExecution.setDto(invocationDto);
         }
@@ -174,7 +173,7 @@ implements
         currentExecution.setEvent(event);
 
         // invoke method
-        val resultPojo = executeWithoutEvents(argsForInvocation);
+        var resultPojo = executeWithoutEvents(argsForInvocation);
 
         if (event != null) {
             // ... post the executed event
@@ -197,7 +196,7 @@ implements
     @SneakyThrows
     private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
         // invoke method
-        val resultPojo = invokeMethodElseFromCache(method, head, arguments);
+        var resultPojo = invokeMethodElseFromCache(method, head, arguments);
         return getServiceInjector().injectServicesInto(resultPojo);
     }
 
@@ -242,8 +241,8 @@ implements
         // element wise: update adapter if new-argument pojo differs from original adapter pojo
         return params.zipMap(newArgumentPojos, (param, newPojo)->{
             final int paramIndex = param.getParameterIndex();
-            val originalAdapter = argumentAdapters.getElseFail(paramIndex);
-            val originalPojo = originalAdapter.getPojo(); // the original
+            var originalAdapter = argumentAdapters.getElseFail(paramIndex);
+            var originalPojo = originalAdapter.getPojo(); // the original
             return Objects.equals(originalPojo, newPojo)
                     ? originalAdapter
                     : ManagedObject.adaptParameter(param, newPojo);

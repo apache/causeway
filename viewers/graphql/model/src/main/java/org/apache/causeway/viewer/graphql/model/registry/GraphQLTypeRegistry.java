@@ -43,7 +43,7 @@ import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLType;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 
@@ -77,16 +77,16 @@ public class GraphQLTypeRegistry {
     public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
             final Class<?> typeToAdd,
             final SchemaType schemaType) {
-        val objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
-        val typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
-        val enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
+        var objectSpec = contextProvider.get().specificationLoader.loadSpecification(typeToAdd);
+        var typeName = TypeNames.enumTypeNameFor(objectSpec, schemaType);
+        var enumTypeIfAny = lookup(typeName, GraphQLEnumType.class);
 
         if (enumTypeIfAny.isPresent()) {
             return enumTypeIfAny.get();
         }
 
-        val enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
-        val enumType = newEnum()
+        var enumTypeToAdd = (Class<? extends Enum<?>>) typeToAdd;
+        var enumType = newEnum()
                 .name(typeName)
                 .values(Stream.of(enumTypeToAdd.getEnumConstants())
                         .map(enumValue -> newEnumValueDefinition()

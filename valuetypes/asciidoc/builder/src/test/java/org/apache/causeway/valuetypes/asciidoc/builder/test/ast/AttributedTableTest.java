@@ -29,8 +29,6 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.do
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.headCell;
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.table;
 
-import lombok.val;
-
 class AttributedTableTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -45,7 +43,7 @@ class AttributedTableTest extends AbstractAsciiDocWriterTest {
     @Test
     void testTable() throws IOException {
 
-        val table = table(doc);
+        var table = table(doc);
         table.setTitle("Some table");
         table.setAttribute("cols", "3m,2a", true);
         table.setAttribute("header-option", "", true);

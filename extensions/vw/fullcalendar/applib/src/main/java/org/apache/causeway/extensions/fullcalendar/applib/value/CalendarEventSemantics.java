@@ -58,7 +58,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @Component
@@ -109,7 +108,7 @@ implements
 
         final TypedTupleDto dto = decomposition.rightIfAny();
 
-        val elementMap = CommonDtoUtils.typedTupleAsMap(dto);
+        var elementMap = CommonDtoUtils.typedTupleAsMap(dto);
 
         final ZonedDateTime dateTime = ZonedDateTime.ofInstant(
                 Instant.ofEpochMilli((long)elementMap.get("epochMillis")),
@@ -129,7 +128,7 @@ implements
     @Override
     public String titlePresentation(final Context context, final CalendarEvent value) {
         return renderTitle(value, v->{
-            val title = new _StringInterpolation(toMap(context, value))
+            var title = new _StringInterpolation(toMap(context, value))
                     .applyTo(titleTemplate);
             return title;
         });
@@ -144,7 +143,7 @@ implements
     @Override
     public String htmlPresentation(final Context context, final CalendarEvent value) {
         return renderHtml(value, v->{
-            val html = new _StringInterpolation(toMapHtmlEscaped(context, value))
+            var html = new _StringInterpolation(toMapHtmlEscaped(context, value))
                     .applyTo(htmlTemplate)
                     .stream()
                     .collect(Collectors.joining());
@@ -182,19 +181,19 @@ implements
     @Override
     public Can<CalendarEvent> getExamples() {
 
-        val a = CalendarEvent.of(
+        var a = CalendarEvent.of(
                 ZonedDateTime.of(2022, 05, 13, 17, 30, 15, 0, ZoneOffset.ofHours(3)),
                 "Business",
                 "Weekly Meetup",
                 "Calendar Notes: <a href=\"https://apache.org\">apache.org</a>"); // should be properly serialized to JSON
 
-        val b = CalendarEvent.of(
+        var b = CalendarEvent.of(
                 ZonedDateTime.of(2022, 06, 14, 18, 31, 16, 0, ZoneOffset.ofHours(4)),
                 "Private",
                 "Dentist Appointment",
                 "Calendar Notes");
 
-        val c = CalendarEvent.of(
+        var c = CalendarEvent.of(
                 ZonedDateTime.of(2022, 07, 15, 19, 32, 17, 0, ZoneOffset.ofHours(5)),
                 "Family and Friends",
                 "Birthday Party");
@@ -213,7 +212,7 @@ implements
         final String notes;
 
         public CalendarEvent construct() {
-            val zoneId = //context.getInteractionContext().getTimeZone();
+            var zoneId = //context.getInteractionContext().getTimeZone();
                     ZoneId.systemDefault();
             return new CalendarEvent(
                     dateTime().atZone(zoneId).toInstant().toEpochMilli(),
@@ -225,7 +224,7 @@ implements
         public static Parameters deconstruct(
                 //final ValueSemanticsProvider.Context context,
                 final CalendarEvent value) {
-            val zoneId = //context.getInteractionContext().getTimeZone();
+            var zoneId = //context.getInteractionContext().getTimeZone();
                     ZoneId.systemDefault();
             return new Parameters(
                     value.asDateTime(zoneId).toLocalDateTime(),
@@ -266,7 +265,7 @@ implements
                 @ParameterLayout(multiLine = 4)
                 final String notes) {
 
-            val p = new Parameters(
+            var p = new Parameters(
                     dateTime,
                     calendarName,
                     title,

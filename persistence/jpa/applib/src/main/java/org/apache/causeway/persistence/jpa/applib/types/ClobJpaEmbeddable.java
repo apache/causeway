@@ -30,7 +30,6 @@ import org.apache.causeway.applib.value.Clob;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * A utility class to enable the persisting of {@link org.apache.causeway.applib.value.Clob}s.
@@ -88,7 +87,7 @@ public final class ClobJpaEmbeddable {
         if(clob == null) {
             return null;
         }
-        val clobJpaEmbeddable = new ClobJpaEmbeddable();
+        var clobJpaEmbeddable = new ClobJpaEmbeddable();
         clobJpaEmbeddable.chars = clob.getChars().toString();
         clobJpaEmbeddable.mimeType = clob.getMimeType().toString();
         clobJpaEmbeddable.name = clob.getName();

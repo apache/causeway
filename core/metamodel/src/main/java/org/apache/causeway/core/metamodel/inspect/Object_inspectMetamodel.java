@@ -43,7 +43,6 @@ import org.apache.causeway.core.metamodel.inspect.model.MMNodeFactory;
 import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action(
         commandPublishing = Publishing.DISABLED,
@@ -80,7 +79,7 @@ public class Object_inspectMetamodel {
         }
         final String namespace = logicalTypeIfAny.get().getLogicalTypeName();
 
-        val config = Config.builder()
+        var config = Config.builder()
                 .ignoreFallbackFacets(true)
                 .ignoreAbstractClasses(true)
                 .ignoreInterfaces(true)
@@ -90,19 +89,19 @@ public class Object_inspectMetamodel {
                 .build()
                 .withNamespacePrefix(namespace);
 
-        val metamodelDto = metaModelService.exportMetaModel(config);
+        var metamodelDto = metaModelService.exportMetaModel(config);
 
-        val className = domainObject.getClass().getName();
+        var className = domainObject.getClass().getName();
 
-        val domainClassDto = metamodelDto.getDomainClassDto()
+        var domainClassDto = metamodelDto.getDomainClassDto()
             .stream()
             .filter(classDto->Objects.equals(classDto.getId(), className))
             .findFirst()
             .orElseThrow(_Exceptions::noSuchElement);
 
-        val root = MMNodeFactory.type(domainClassDto, null);
+        var root = MMNodeFactory.type(domainClassDto, null);
         
-        val tree = TreeNode.root(root, factoryService.getOrCreate(MMTreeAdapter.class));
+        var tree = TreeNode.root(root, factoryService.getOrCreate(MMTreeAdapter.class));
 
         // Initialize view-model nodes of the entire tree,
         // because as it stands, all the type information gets cleared,

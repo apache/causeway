@@ -37,8 +37,6 @@ import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.T
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class CollectionAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -50,7 +48,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val collectionIfAny = collectionIfAny(processMethodContext);
+        var collectionIfAny = collectionIfAny(processMethodContext);
 
         if(processMethodContext.isMixinMain()) {
             collectionIfAny.ifPresent(collection->{
@@ -79,10 +77,10 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        val cls = processMethodContext.getCls();
-        val holder = processMethodContext.getFacetHolder();
+        var cls = processMethodContext.getCls();
+        var holder = processMethodContext.getFacetHolder();
 
-        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
+        var getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         final boolean isCollection = getterFacetIfAny.isPresent()
                 || (processMethodContext.isMixinMain()
@@ -102,10 +100,10 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Collection> collectionIfAny) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val method = processMethodContext.getMethod();
+        var facetHolder = processMethodContext.getFacetHolder();
+        var method = processMethodContext.getMethod();
 
-        val methodReturnType = method.getReturnType();
+        var methodReturnType = method.getReturnType();
         CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
             addFacetIfPresent(

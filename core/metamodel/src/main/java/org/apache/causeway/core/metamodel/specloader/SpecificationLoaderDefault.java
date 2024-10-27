@@ -89,7 +89,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -193,7 +192,7 @@ implements
             final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
-        val instance = new SpecificationLoaderDefault(
+        var instance = new SpecificationLoaderDefault(
                 programmingModel, causewayConfiguration, causewaySystemEnvironment,
                 serviceRegistry, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
                 ()->new ValueSemanticsResolverDefault(List.of(), null, null),
@@ -230,12 +229,12 @@ implements
         facetProcessor.init();
         postProcessor.init();
 
-        val knownSpecs = _Lists.<ObjectSpecification>newArrayList();
+        var knownSpecs = _Lists.<ObjectSpecification>newArrayList();
 
-        val stopWatch = _Timing.now();
+        var stopWatch = _Timing.now();
 
         // preload otherwise not eagerly discovered classes
-        val prealoadCount = preloadableTypes.stream()
+        var prealoadCount = preloadableTypes.stream()
             .flatMap(PreloadableTypes::stream)
             .peek(this::loadSpecification)
             .count();
@@ -244,14 +243,14 @@ implements
 
         log.info(" - adding value types from from class-path scan and ValueTypeProviders");
 
-        val valueTypeSpecs = _Maps.<Class<?>, ObjectSpecification>newHashMap();
+        var valueTypeSpecs = _Maps.<Class<?>, ObjectSpecification>newHashMap();
 
         Stream
             .concat(
                 causewayBeanTypeRegistry.getDiscoveredValueTypes().keySet().stream(),
                 valueSemanticsResolver.get().streamClassesWithValueSemantics())
             .forEach(valueClass -> {
-                val valueSpec = loadSpecification(valueClass, IntrospectionState.NOT_INTROSPECTED);
+                var valueSpec = loadSpecification(valueClass, IntrospectionState.NOT_INTROSPECTED);
                 if(valueSpec!=null) {
                     knownSpecs.add(valueSpec);
                     valueTypeSpecs.put(valueClass, valueSpec);
@@ -260,13 +259,13 @@ implements
 
         log.info(" - categorizing types from class-path scan");
 
-        val domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
-        val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
+        var domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
+        var mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
 
         causewayBeanTypeRegistry.streamIntrospectableTypes()
         .forEach(typeMeta->{
 
-            val spec = primeSpecification(typeMeta);
+            var spec = primeSpecification(typeMeta);
             if(spec==null) {
                 //XXX only ever happens when the class substitutor vetoes
                 return;
@@ -274,7 +273,7 @@ implements
 
             knownSpecs.add(spec);
 
-            val sort = typeMeta.getBeanSort();
+            var sort = typeMeta.getBeanSort();
 
             if(sort.isManagedBeanAny() || sort.isEntity() || sort.isViewModel() ) {
                 domainObjectSpecs.add(spec);
@@ -314,7 +313,7 @@ implements
         _LogUtil.logAfter(log, cache, knownSpecs);
 
         if(isFullIntrospect()) {
-            val snapshot = cache.snapshotSpecs();
+            var snapshot = cache.snapshotSpecs();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
             introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
             introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
@@ -457,7 +456,7 @@ implements
 
     @Override
     public void forEach(final Consumer<ObjectSpecification> onSpec) {
-        val shouldRunConcurrent = causewayConfiguration.getCore().getMetaModel().getValidator().isParallelize();
+        var shouldRunConcurrent = causewayConfiguration.getCore().getMetaModel().getValidator().isParallelize();
         if(shouldRunConcurrent) {
             cache.forEachConcurrent(onSpec);
         } else {
@@ -468,7 +467,7 @@ implements
 
     @Override
     public Optional<LogicalType> lookupLogicalType(final @NonNull String logicalTypeName) {
-        val logicalType = logicalTypeResolver.lookup(logicalTypeName);
+        var logicalType = logicalTypeResolver.lookup(logicalTypeName);
         if(logicalType.isPresent()) {
             return logicalType;
         }
@@ -478,7 +477,7 @@ implements
         // falling back assuming the logicalTypeName equals the fqn of the corresponding class
         // which might not always be true,
 
-        val cls = ClassUtil.forNameElseNull(logicalTypeName);
+        var cls = ClassUtil.forNameElseNull(logicalTypeName);
         if(cls!=null) {
 
 //TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...
@@ -570,14 +569,14 @@ implements
             return null;
         }
 
-        val substitute = classSubstitutorRegistry.getSubstitution(type);
+        var substitute = classSubstitutorRegistry.getSubstitution(type);
         if (substitute.isNeverIntrospect()) {
             return null; // never inspect
         }
 
-        val substitutedType = substitute.apply(type);
+        var substitutedType = substitute.apply(type);
 
-        val spec = cache.computeIfAbsent(substitutedType, _spec->
+        var spec = cache.computeIfAbsent(substitutedType, _spec->
             logicalTypeResolver
                 .register(
                         createSpecification(beanClassifier.apply(substitutedType))));
@@ -607,7 +606,7 @@ implements
         if(isMetamodelFullyIntrospected()
                 && causewayConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
 
-            val warningMessage = ProgrammingModelConstants.MessageTemplate.TYPE_NOT_EAGERLY_DISCOVERED
+            var warningMessage = ProgrammingModelConstants.MessageTemplate.TYPE_NOT_EAGERLY_DISCOVERED
                     .builder()
                     .addVariable("type", cls.getName())
                     .addVariable("beanSort", causewayBeanTypeClassifier
@@ -629,7 +628,7 @@ implements
 
         // ... and create the specs
 
-        val objectSpec = new ObjectSpecificationDefault(
+        var objectSpec = new ObjectSpecificationDefault(
                         typeMeta,
                         metaModelContext,
                         facetProcessor,
@@ -642,7 +641,7 @@ implements
     private void introspectSequential(
             final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
-        for (val spec : specs) {
+        for (var spec : specs) {
             spec.introspectUpTo(upTo);
         }
     }
@@ -664,7 +663,7 @@ implements
     private void introspect(
             final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
-        val isConcurrentFromConfig = causewayConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
+        var isConcurrentFromConfig = causewayConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
         if(isConcurrentFromConfig) {
             introspectParallel(specs, upTo);
         } else {
@@ -674,7 +673,7 @@ implements
 
     private void invalidateCache(final Class<?> cls) {
 
-        val substitute = classSubstitutorRegistry.getSubstitution(cls);
+        var substitute = classSubstitutorRegistry.getSubstitution(cls);
         if(substitute.isNeverIntrospect()) {
             return;
         }
@@ -683,7 +682,7 @@ implements
                 loadSpecification(substitute.apply(cls), IntrospectionState.FULLY_INTROSPECTED);
 
         while(spec != null) {
-            val type = spec.getCorrespondingClass();
+            var type = spec.getCorrespondingClass();
             cache.remove(type);
             spec = spec.superclass();
         }

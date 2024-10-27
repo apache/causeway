@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -182,7 +182,7 @@ class _EndpointLogging {
     private void logResponse(final Logger log, final Response response) {
         log.debug("<<< RESPONSE");
 
-        val dto = response.getEntity();
+        var dto = response.getEntity();
         if(dto==null
                 || dto instanceof String) {
             log.debug(dto);

@@ -29,7 +29,6 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClient;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 //@Log4j2
@@ -41,7 +40,7 @@ public class RestEndpointService {
 
     public OutboxClient newClient(final int port, final String username, final String password) {
 
-        val restRootPath =
+        var restRootPath =
                 String.format("http://localhost:%d%s/",
                         port,
                         webAppContextPath

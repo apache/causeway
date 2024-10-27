@@ -62,7 +62,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -77,7 +76,7 @@ public class LayoutFacetUtil {
             final HasBookmarking hasBookmarking,
             final FacetHolder facetHolder) {
 
-        val bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
+        var bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
         if(isDoOp(bookmarkPolicyFacet)) {
             final BookmarkPolicy bookmarking = bookmarkPolicyFacet.value();
             if(bookmarking != null) {
@@ -90,7 +89,7 @@ public class LayoutFacetUtil {
             final HasCssClass hasCssClass,
             final FacetHolder facetHolder) {
 
-        val cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
+        var cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
         if(isDoOp(cssClassFacet)) {
             try {
                 // try...finally because CSS class may vary by object, and we pass in only null
@@ -126,7 +125,7 @@ public class LayoutFacetUtil {
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder) {
 
-        val defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
+        var defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
         if(isDoOp(defaultViewFacet)) {
             final String defaultView = defaultViewFacet.value();
             if(_Strings.isNotEmpty(defaultView)) {
@@ -160,7 +159,7 @@ public class LayoutFacetUtil {
             final DomainObjectLayoutData domainObjectLayoutData,
             final FacetHolder facetHolder) {
 
-        val pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder).orElse(null);
+        var pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder).orElse(null);
         if(isDoOp(pagedFacet)) {
             final int value = pagedFacet.value();
             if(value > 0) {
@@ -173,7 +172,7 @@ public class LayoutFacetUtil {
             final DomainObjectLayoutData domainObjectLayoutData,
             final FacetHolder facetHolder) {
 
-        val tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder).orElse(null);
+        var tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder).orElse(null);
         if(isDoOp(tableDecoratorFacet)) {
             final Class<? extends TableDecorator> value = tableDecoratorFacet.value();
             if(value != TableDecorator.Default.class) {
@@ -192,7 +191,7 @@ public class LayoutFacetUtil {
         .ifPresent(specialization->
             specialization.accept(
                     hasStaticText->{
-                        val describedAs = hasStaticText.translated();
+                        var describedAs = hasStaticText.translated();
                         if(_Strings.isNotEmpty(describedAs)) {
                             hasNamed.setNamed(describedAs);
                         }
@@ -209,7 +208,7 @@ public class LayoutFacetUtil {
         .ifPresent(specialization->
             specialization.accept(
                     hasStaticText->{
-                        val describedAs = hasStaticText.translated();
+                        var describedAs = hasStaticText.translated();
                         if(_Strings.isNotEmpty(describedAs)) {
                             hasDescribedAs.setDescribedAs(describedAs);
                         }
@@ -221,7 +220,7 @@ public class LayoutFacetUtil {
             final HasHidden hasHidden,
             final FacetHolder facetHolder) {
 
-        val hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
+        var hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
         if (isDoOp(hiddenFacet)) {
             final Where where = hiddenFacet.where();
             if(where != null) {
@@ -234,7 +233,7 @@ public class LayoutFacetUtil {
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
 
-        val labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
+        var labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
         if(isDoOp(labelAtFacet)) {
             final LabelPosition labelPosition = labelAtFacet.label();
             if(labelPosition != null) {
@@ -247,7 +246,7 @@ public class LayoutFacetUtil {
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
 
-        val multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
+        var multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
         if(isDoOp(multiLineFacet)) {
             final int numberOfLines = multiLineFacet.numberOfLines();
             if(numberOfLines > 0) {
@@ -262,7 +261,7 @@ public class LayoutFacetUtil {
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder, final ObjectSpecification objectSpec) {
 
-        val pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder, objectSpec).orElse(null);
+        var pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder, objectSpec).orElse(null);
         if(isDoOp(pagedFacet)) {
             final int value = pagedFacet.value();
             if(value > 0) {
@@ -275,7 +274,7 @@ public class LayoutFacetUtil {
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder, final ObjectSpecification objectSpec) {
 
-        val tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder, objectSpec).orElse(null);
+        var tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder, objectSpec).orElse(null);
         if(isDoOp(tableDecoratorFacet)) {
             final Class<? extends TableDecorator> value = tableDecoratorFacet.value();
             if(value != TableDecorator.Default.class) {
@@ -288,7 +287,7 @@ public class LayoutFacetUtil {
             final ActionLayoutData actionLayoutData,
             final FacetHolder facetHolder) {
 
-        val actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
         if(isDoOp(actionPositionFacet)) {
             final ActionLayout.Position position = actionPositionFacet.position();
             if(position != null) {
@@ -310,7 +309,7 @@ public class LayoutFacetUtil {
             final CollectionLayoutData collectionLayoutData,
             final FacetHolder facetHolder) {
 
-        val sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
+        var sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
         if(isDoOp(sortedByFacet)) {
             final Class<? extends Comparator<?>> cls = sortedByFacet.value();
             if(cls != null
@@ -324,7 +323,7 @@ public class LayoutFacetUtil {
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder facetHolder) {
 
-        val typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
+        var typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
         if(isDoOp(typicalLengthFacet)) {
             final int typicalLength = typicalLengthFacet.value();
             if(typicalLength > 0) {
@@ -346,25 +345,25 @@ public class LayoutFacetUtil {
         }
 
         public ActionLayoutData createActionLayoutData(final String id) {
-            val layoutData = new ActionLayoutData(id);
+            var layoutData = new ActionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
         public CollectionLayoutData createCollectionLayoutData(final String id) {
-            val layoutData = new CollectionLayoutData(id);
+            var layoutData = new CollectionLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
         public PropertyLayoutData createPropertyLayoutData(final String id) {
-            val layoutData = new PropertyLayoutData(id);
+            var layoutData = new PropertyLayoutData(id);
             helper.visit(layoutData);
             return layoutData;
         }
 
         public DomainObjectLayoutData createDomainObjectLayoutData() {
-            val layoutData = new DomainObjectLayoutData();
+            var layoutData = new DomainObjectLayoutData();
             helper.visit(layoutData);
             return layoutData;
         }

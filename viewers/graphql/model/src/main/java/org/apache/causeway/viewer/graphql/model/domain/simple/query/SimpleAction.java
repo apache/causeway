@@ -51,7 +51,7 @@ import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLType;
 import lombok.Getter;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -70,9 +70,9 @@ public class SimpleAction
         this.objectInteractor = objectInteractor;
         this.objectMember = objectAction;
 
-        val graphQLOutputType = typeFor(objectAction);
+        var graphQLOutputType = typeFor(objectAction);
 
-        val fieldBuilder = newFieldDefinition()
+        var fieldBuilder = newFieldDefinition()
                 .name(getId())
                 .description(objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()))
                 .type(graphQLOutputType);
@@ -87,7 +87,7 @@ public class SimpleAction
 
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
 
-        val objectSpecification = objectAction.getReturnType();
+        var objectSpecification = objectAction.getReturnType();
         switch (objectSpecification.getBeanSort()){
 
             case COLLECTION:
@@ -97,7 +97,7 @@ public class SimpleAction
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
-                val objectSpecificationOfCollectionElement = facet.elementSpec();
+                var objectSpecificationOfCollectionElement = facet.elementSpec();
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, objectInteractor.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
@@ -158,7 +158,7 @@ public class SimpleAction
                             // if the parameter is abstract, we still attempt to figure out the arguments.
                             // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
                             if (argumentValue instanceof List) {
-                                val argumentValueList = (List<Object>) argumentValue;
+                                var argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
                                         .map(value -> asPojo(oap.getElementType(), value, environment, context))
                                         .filter(Optional::isPresent)
@@ -187,12 +187,12 @@ public class SimpleAction
             final Object argumentValue,
             final Context context) {
 
-        val elementType = oap.getElementType();
+        var elementType = oap.getElementType();
         if (argumentValue == null) {
             return ManagedObject.empty(elementType);
         }
 
-        val argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
+        var argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
     }
 
@@ -203,9 +203,9 @@ public class SimpleAction
             final Environment environment,
             final Context context
     ) {
-        val argumentValue = (Map<String, ?>) argumentValueObj;
+        var argumentValue = (Map<String, ?>) argumentValueObj;
 
-        val refValue = (String)argumentValue.get("ref");
+        var refValue = (String)argumentValue.get("ref");
         if (refValue != null) {
             String key = ObjectFeatureUtils.keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
@@ -213,8 +213,8 @@ public class SimpleAction
                 throw new IllegalArgumentException(String.format(
                     "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
             }
-            val targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
-            val targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
+            var targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
+            var targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
             if (targetPojoSpec == null) {
                 throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' is not part of the metamodel (has class '%s')",
@@ -228,12 +228,12 @@ public class SimpleAction
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
 
-        val idValue = (String)argumentValue.get("id");
+        var idValue = (String)argumentValue.get("id");
         if (idValue != null) {
             Class<?> paramClass = elementType.getCorrespondingClass();
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
-                val objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
+                var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
                 if (objectSpecArg == null) {
                     throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
@@ -258,8 +258,8 @@ public class SimpleAction
             final TypeMapper.InputContext inputContext,
             final int upTo) {
 
-        val parameters = objectAction.getParameters();
-        val arguments = parameters.stream()
+        var parameters = objectAction.getParameters();
+        var arguments = parameters.stream()
                 .limit(upTo)
                 .map(objectActionParameter -> gqlArgumentFor(objectActionParameter, inputContext))
                 .collect(Collectors.toList());
@@ -295,37 +295,37 @@ public class SimpleAction
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val environment = new Environment.For(dataFetchingEnvironment);
+        var environment = new Environment.For(dataFetchingEnvironment);
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
             return null;
         }
 
-        val objectAction = getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var objectAction = getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(objectAction.getFeatureIdentifier());
         }
 
-        val usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usableConsent.isVetoed()) {
             throw new DisabledException(objectAction.getFeatureIdentifier());
         }
 
-        val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
+        var head = objectAction.interactionHead(managedObject);
+        var argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
 
-        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
         }
 
-        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();
     }
 

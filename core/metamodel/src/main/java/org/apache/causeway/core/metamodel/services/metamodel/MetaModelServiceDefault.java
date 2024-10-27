@@ -64,7 +64,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Default implementation of {@link MetaModelService}.
@@ -121,7 +120,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public DomainModel getDomainModel() {
 
-        val specifications = specificationLoader.snapshotSpecifications();
+        var specifications = specificationLoader.snapshotSpecifications();
 
         final List<DomainMember> rows = _Lists.newArrayList();
         for (final ObjectSpecification spec : specifications) {
@@ -255,7 +254,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         /*TODO[CAUSEWAY-3206] refactor: ideally config would provide the list, but unfortunately
          * MetaModelAnnotator type is not know to Config, which lives in applib.
          */
-        val metaModelAnnotators = _Lists.<MetaModelAnnotator>newArrayList();
+        var metaModelAnnotators = _Lists.<MetaModelAnnotator>newArrayList();
         if(config.isIncludeTitleAnnotations()) {
             metaModelAnnotators.add(new TitleAnnotator(new ExporterConfig(){}));
         }
@@ -268,7 +267,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter) {
-        val objectSpecs = specificationLoader
+        var objectSpecs = specificationLoader
                 .snapshotSpecifications()
                 .stream()
                 .filter(spec->filter.test(spec.getBeanSort(), spec.getLogicalType()))

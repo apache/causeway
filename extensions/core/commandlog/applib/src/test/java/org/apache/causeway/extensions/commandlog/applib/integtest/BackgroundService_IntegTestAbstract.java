@@ -54,7 +54,6 @@ import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommand
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 @ExtendWith(MockitoExtension.class)
 public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegrationTestAbstract {
@@ -95,7 +94,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         // given
         assertThat(bookmark).isNotNull();
 
-        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+        var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
         assertThat(counter.getNum()).isNull();
     }
 
@@ -104,9 +103,9 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // when
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            val control = AsyncControl.returning(Counter.class);
+            var control = AsyncControl.returning(Counter.class);
             wrapperFactory.asyncWrap(counter, control).bumpUsingDeclaredAction();
 
             // wait til done
@@ -115,17 +114,17 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
         }).ifFailureFail();
 
         // when
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
 
             // when
-            val control = AsyncControl.returning(Counter.class);
+            var control = AsyncControl.returning(Counter.class);
             wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control).act();
 
             // wait til done
@@ -134,7 +133,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(2L);
         }).ifFailureFail();
 
@@ -150,7 +149,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // when
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isNull();
 
             // when
@@ -161,13 +160,13 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // then no change to the counter
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isNull();   // still null
         }).ifFailureFail();
 
         // but then instead a background command is persisted
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val all = commandLogEntryRepository.findAll();
+            var all = commandLogEntryRepository.findAll();
             assertThat(all).hasSize(1);
             CommandLogEntry commandLogEntry = all.get(0);
 
@@ -196,13 +195,13 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // then bumped
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
         }).ifFailureFail();
 
         // and marked as started and completed
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            val after = commandLogEntryRepository.findAll();
+            var after = commandLogEntryRepository.findAll();
             assertThat(after).hasSize(1);
             CommandLogEntry commandLogEntryAfter = after.get(0);
 

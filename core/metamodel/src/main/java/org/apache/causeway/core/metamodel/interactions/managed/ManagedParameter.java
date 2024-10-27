@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -47,9 +46,9 @@ implements
     public final Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
 
         try {
-            val head = getNegotiationModel().getHead();
+            var head = getNegotiationModel().getHead();
 
-            val usabilityConsent =
+            var usabilityConsent =
                     getMetaModel()
                     .isUsable(head, params, InteractionInitiatedBy.USER);
 

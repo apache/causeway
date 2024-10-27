@@ -41,7 +41,6 @@ import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 
 import lombok.NonNull;
-import lombok.val;
 
 final class _Xray {
 
@@ -81,16 +80,16 @@ final class _Xray {
             return null;
         }
 
-        val cannotPublishReason = cannotPublishReasonSupplier.get();
-        val canPublish = cannotPublishReason==null;
-        val enteringLabel = canPublish
+        var cannotPublishReason = cannotPublishReasonSupplier.get();
+        var canPublish = cannotPublishReason==null;
+        var enteringLabel = canPublish
                 ? String.format("publishing command %s to %d subscriber(s):\n%s",
                         verb,
                         enabledSubscribers.size(),
                         toText(command))
                 : String.format("not publishing command %s:\n%s", verb, cannotPublishReason);
 
-        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
+        var handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "cmd-publisher");
         handleIfAny.ifPresent(handle->{
 
             handle.submit(sequenceData->{
@@ -102,7 +101,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstElseFail();
+                var callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -124,15 +123,15 @@ final class _Xray {
             return null;
         }
 
-        val cannotPublishReason = cannotPublishReasonSupplier.get();
-        val canPublish = cannotPublishReason==null;
-        val enteringLabel = canPublish
+        var cannotPublishReason = cannotPublishReasonSupplier.get();
+        var canPublish = cannotPublishReason==null;
+        var enteringLabel = canPublish
                 ? String.format("publishing execution to %d subscriber(s):\n%s",
                         enabledSubscribers.size(),
                         toText(execution))
                 : String.format("not publishing execution:\n%s", cannotPublishReason);
 
-        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
+        var handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "exec-publisher");
         handleIfAny.ifPresent(handle->{
 
             handle.submit(sequenceData->{
@@ -144,7 +143,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstElseFail();
+                var callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -167,15 +166,15 @@ final class _Xray {
             return null;
         }
 
-        val cannotPublishReason = cannotPublishReasonSupplier.get();
-        val canPublish = cannotPublishReason==null;
-        val enteringLabel = canPublish
+        var cannotPublishReason = cannotPublishReasonSupplier.get();
+        var canPublish = cannotPublishReason==null;
+        var enteringLabel = canPublish
                 ? String.format("publishing entity-changes to %d subscriber(s):\n%s",
                         enabledSubscribers.size(),
                         payload.map(x->toText(x)).orElse("null"))
                 : String.format("not publishing entity-changes:\n%s", cannotPublishReason);
 
-        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "ec-publisher");
+        var handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "ec-publisher");
         handleIfAny.ifPresent(handle->{
 
             handle.submit(sequenceData->{
@@ -187,7 +186,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstElseFail();
+                var callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -210,15 +209,15 @@ final class _Xray {
             return null;
         }
 
-        val cannotPublishReason = cannotPublishReasonSupplier.get();
-        val canPublish = cannotPublishReason==null;
-        val enteringLabel = canPublish
+        var cannotPublishReason = cannotPublishReasonSupplier.get();
+        var canPublish = cannotPublishReason==null;
+        var enteringLabel = canPublish
                 ? String.format("publishing entity-property-changes to %d subscriber(s):\n%s",
                         enabledSubscribers.size(),
                         toText(payload))
                 : String.format("not publishing entity-property-changes:\n%s", cannotPublishReason);
 
-        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "epc-publisher");
+        var handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "epc-publisher");
         handleIfAny.ifPresent(handle->{
 
             handle.submit(sequenceData->{
@@ -230,7 +229,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstElseFail();
+                var callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
@@ -250,7 +249,7 @@ final class _Xray {
         }
 
         handle.submit(sequenceData->{
-            val callee = handle.getCallees().getFirstElseFail();
+            var callee = handle.getCallees().getFirstElseFail();
             sequenceData.exit(callee, handle.getCaller());
             sequenceData.deactivate(callee);
 

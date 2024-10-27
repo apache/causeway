@@ -47,7 +47,7 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
-import lombok.val;
+
 
 @SpringBootTest(classes={
         Configuration_headless.class,
@@ -60,8 +60,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenString() {
-        val value = "aString";
-        val representation = representationFor(value);
+        var value = "aString";
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("aString"));
@@ -72,8 +72,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenBooleanWrapper() {
-        val value = Boolean.TRUE;
-        val representation = representationFor(value);
+        var value = Boolean.TRUE;
+        var representation = representationFor(value);
 
         assertThat(representation.isBoolean("value"), is(true));
         assertThat(representation.getBoolean("value"), is(Boolean.TRUE));
@@ -83,8 +83,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenBooleanPrimitive() {
-        val value = true;
-        val representation = representationFor(value);
+        var value = true;
+        var representation = representationFor(value);
 
         assertThat(representation.isBoolean("value"), is(true));
         assertThat(representation.getBoolean("value"), is(true));
@@ -94,8 +94,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenByteWrapper() {
-        val value = Byte.valueOf((byte)123);
-        val representation = representationFor(value);
+        var value = Byte.valueOf((byte)123);
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getByte("value"), is(Byte.valueOf((byte)123)));
@@ -106,8 +106,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenBytePrimitive() {
-        val value = (byte)123;
-        val representation = representationFor(value);
+        var value = (byte)123;
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getByte("value"), is((byte)123));
@@ -118,8 +118,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenShortWrapper() {
-        val value = Short.valueOf((short)12345);
-        val representation = representationFor(value);
+        var value = Short.valueOf((short)12345);
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getShort("value"), is(Short.valueOf((short)12345)));
@@ -130,8 +130,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenShortPrimitive() {
-        val value = (short)12345;
-        val representation = representationFor(value);
+        var value = (short)12345;
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getShort("value"), is((short)12345));
@@ -142,8 +142,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenIntWrapper() {
-        val value = Integer.valueOf(12345678);
-        val representation = representationFor(value);
+        var value = Integer.valueOf(12345678);
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getInt("value"), is(Integer.valueOf(12345678)));
@@ -154,8 +154,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenIntPrimitive() {
-        val value = 12345678;
-        val representation = representationFor(value);
+        var value = 12345678;
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getInt("value"), is(12345678));
@@ -166,8 +166,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenLongWrapper() {
-        val value = Long.valueOf(12345678901234L);
-        val representation = representationFor(value);
+        var value = Long.valueOf(12345678901234L);
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getLong("value"), is(Long.valueOf(12345678901234L)));
@@ -178,8 +178,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenLongPrimitive() {
-        val value = 12345678901234L;
-        val representation = representationFor(value);
+        var value = 12345678901234L;
+        var representation = representationFor(value);
 
         assertThat(representation.isIntegralNumber("value"), is(true));
         assertThat(representation.getLong("value"), is(12345678901234L));
@@ -190,8 +190,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenFloatWrapper() {
-        val value = Float.valueOf((float)123.45);
-        val representation = representationFor(value);
+        var value = Float.valueOf((float)123.45);
+        var representation = representationFor(value);
 
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getFloat("value"), is(Float.valueOf((float)123.45)));
@@ -202,8 +202,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenFloatPrimitive() {
-        val value = (float)123.45;
-        val representation = representationFor(value);
+        var value = (float)123.45;
+        var representation = representationFor(value);
 
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getFloat("value"), is((float)123.45));
@@ -214,8 +214,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenDoubleWrapper() {
-        val value = Double.valueOf(12345.6789);
-        val representation = representationFor(value);
+        var value = Double.valueOf(12345.6789);
+        var representation = representationFor(value);
 
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getDouble("value"), is(Double.valueOf(12345.6789)));
@@ -226,8 +226,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenDoublePrimitive() {
-        val value = 12345.6789;
-        val representation = representationFor(value);
+        var value = 12345.6789;
+        var representation = representationFor(value);
 
         assertThat(representation.isDecimal("value"), is(true));
         assertThat(representation.getDouble("value"), is(12345.6789));
@@ -238,8 +238,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenCharWrapper() {
-        val value = Character.valueOf('a');
-        val representation = representationFor(value);
+        var value = Character.valueOf('a');
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getChar("value"), is(Character.valueOf('a')));
@@ -250,8 +250,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenCharPrimitive() {
-        val value = 'a';
-        val representation = representationFor(value);
+        var value = 'a';
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getChar("value"), is('a'));
@@ -263,9 +263,9 @@ class JsonValueEncoderTest {
     @Test
     public void whenJavaSqlTimestamp() {
 
-        val epochMilli = defaultInstant().toEpochMilli();
-        val value = new java.sql.Timestamp(epochMilli);
-        val representation = representationFor(value);
+        var epochMilli = defaultInstant().toEpochMilli();
+        var value = new java.sql.Timestamp(epochMilli);
+        var representation = representationFor(value);
 
         assertThat(representation.isLong("value"), is(true));
         assertThat(representation.getLong("value"), is(epochMilli));
@@ -276,9 +276,9 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenBigInteger() {
-        val value = new BigInteger("12345678901234567890");
+        var value = new BigInteger("12345678901234567890");
         //"big-integer(22)"
-        val representation = representationFor(value, Context.forTesting(22, 0));
+        var representation = representationFor(value, Context.forTesting(22, 0));
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.isBigInteger("value"), is(true));
@@ -290,9 +290,9 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenBigDecimal() {
-        val value = new BigDecimal("12345678901234567890.1234");
+        var value = new BigDecimal("12345678901234567890.1234");
         //"big-decimal(27,4)"
-        val representation = representationFor(value, Context.forTesting(27, 4));
+        var representation = representationFor(value, Context.forTesting(27, 4));
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.isBigDecimal("value"), is(true));
@@ -306,8 +306,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenJavaUtilDate() {
-        val value = java.util.Date.from(defaultInstant());
-        val representation = representationFor(value);
+        var value = java.util.Date.from(defaultInstant());
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
@@ -318,8 +318,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenJavaSqlDate() {
-        val value = new java.sql.Date(defaultInstant().toEpochMilli());
-        val representation = representationFor(value);
+        var value = new java.sql.Date(defaultInstant().toEpochMilli());
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25"));
@@ -330,8 +330,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenJodaDateTime() {
-        val value = new org.joda.time.DateTime(defaultInstant().toEpochMilli());
-        val representation = representationFor(value);
+        var value = new org.joda.time.DateTime(defaultInstant().toEpochMilli());
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
@@ -342,8 +342,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenJodaLocalDateTime() {
-        val value = new org.joda.time.LocalDateTime(defaultInstant().toEpochMilli());
-        val representation = representationFor(value);
+        var value = new org.joda.time.LocalDateTime(defaultInstant().toEpochMilli());
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25T12:34:45Z"));
@@ -354,8 +354,8 @@ class JsonValueEncoderTest {
 
     @Test
     public void whenJodaLocalDate() {
-        val value = new org.joda.time.LocalDate(2014,4,25);
-        val representation = representationFor(value);
+        var value = new org.joda.time.LocalDate(2014,4,25);
+        var representation = representationFor(value);
 
         assertThat(representation.isString("value"), is(true));
         assertThat(representation.getString("value"), is("2014-04-25"));
@@ -367,8 +367,8 @@ class JsonValueEncoderTest {
 
     @Test
     void whenBlob() {
-        val value = Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3});
-        val representation = representationFor(value, osObj->assertEquals(
+        var value = Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3});
+        var representation = representationFor(value, osObj->assertEquals(
                     JsonRepresentation.newMap("name", "a Blob.bin",
                             "mimeType", "application/octet-stream",
                             "bytes", "AQID").toString(),
@@ -379,8 +379,8 @@ class JsonValueEncoderTest {
 
     @Test
     void whenClob() {
-        val value = Clob.of("a Clob", CommonMimeType.TXT, "abc");
-        val representation = representationFor(value, osObj->assertEquals(
+        var value = Clob.of("a Clob", CommonMimeType.TXT, "abc");
+        var representation = representationFor(value, osObj->assertEquals(
                     JsonRepresentation.newMap("name", "a Clob.txt",
                             "mimeType", "text/plain",
                             "chars", "abc").toString(),
@@ -399,8 +399,8 @@ class JsonValueEncoderTest {
 
     @Test
     void whenEnum() {
-        val value = SampleEnum.HALLO;
-        val representation = representationFor(value, osObj->assertEquals(
+        var value = SampleEnum.HALLO;
+        var representation = representationFor(value, osObj->assertEquals(
                     JsonRepresentation.newMap(
                             "enumType", SampleEnum.class.getName(),
                             "enumName", value.name()).toString(),
@@ -426,12 +426,12 @@ class JsonValueEncoderTest {
 
     private JsonRepresentation representationFor(
             final Object value, final Context context, final Consumer<Object> valueAsObjectVerifier) {
-        val valueAdapter = mmc.getObjectManager().adapt(value);
-        val jsonValueEncoder = new JsonValueEncoderServiceDefault(mmc.getSpecificationLoader());
+        var valueAdapter = mmc.getObjectManager().adapt(value);
+        var jsonValueEncoder = new JsonValueEncoderServiceDefault(mmc.getSpecificationLoader());
 
         valueAsObjectVerifier.accept(jsonValueEncoder.asObject(valueAdapter, context));
 
-        val representation = JsonRepresentation.newMap();
+        var representation = JsonRepresentation.newMap();
         jsonValueEncoder.appendValueAndFormat(valueAdapter, representation, context);
 
         //debug

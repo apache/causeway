@@ -28,7 +28,6 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.InteractionsDto;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -62,8 +61,8 @@ public final class InteractionsDtoUtils {
     private static void copyVersion(
             final InteractionsDto from,
             final InteractionDto to) {
-        val majorVersion = from.getMajorVersion();
-        val minorVersion = from.getMinorVersion();
+        var majorVersion = from.getMajorVersion();
+        var minorVersion = from.getMinorVersion();
         if (!_Strings.isNullOrEmpty(majorVersion) && !_Strings.isNullOrEmpty(minorVersion)) {
             to.setMajorVersion(majorVersion);
             to.setMinorVersion(minorVersion);
@@ -72,7 +71,7 @@ public final class InteractionsDtoUtils {
 
     public static InteractionsDto join(
             final List<InteractionDto> interactionDtos) {
-        val interactionsDto = new InteractionsDto();
+        var interactionsDto = new InteractionsDto();
         interactionDtos.forEach(interactionDto -> {
             copyVersion(interactionDto, interactionsDto);
             interactionsDto.getInteractionDto().add(interactionDto);
@@ -83,8 +82,8 @@ public final class InteractionsDtoUtils {
     private static void copyVersion(
             final InteractionDto from,
             final InteractionsDto dto) {
-        val majorVersion = from.getMajorVersion();
-        val minorVersion = from.getMinorVersion();
+        var majorVersion = from.getMajorVersion();
+        var minorVersion = from.getMinorVersion();
         if (!_Strings.isNullOrEmpty(majorVersion) && !_Strings.isNullOrEmpty(minorVersion)) {
             dto.setMajorVersion(majorVersion);
             dto.setMinorVersion(minorVersion);

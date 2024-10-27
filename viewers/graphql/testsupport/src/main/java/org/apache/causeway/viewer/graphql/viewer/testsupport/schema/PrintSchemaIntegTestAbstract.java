@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraph
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
-import lombok.val;
+
 
 /**
  * Utility to print out the schema, to <code>src/test/resources</code> of the implementing subclass.
@@ -95,14 +95,14 @@ public abstract class PrintSchemaIntegTestAbstract extends CausewayViewerGraphql
     @Test
     protected void schema() throws Exception {
 
-        val graphQL = graphQlSourceForCauseway.graphQl();
-        val graphQLSchema = graphQL.getGraphQLSchema();
+        var graphQL = graphQlSourceForCauseway.graphQl();
+        var graphQLSchema = graphQL.getGraphQLSchema();
 
-        val printer = new SchemaPrinter();
+        var printer = new SchemaPrinter();
 
-        val submit = printer.print(graphQLSchema);
+        var submit = printer.print(graphQLSchema);
 
-        val targetFile = new File("src/test/resources/schema.gql");
+        var targetFile = new File("src/test/resources/schema.gql");
 
         Files.write(Paths.get(targetFile.getPath()), submit.getBytes());
     }

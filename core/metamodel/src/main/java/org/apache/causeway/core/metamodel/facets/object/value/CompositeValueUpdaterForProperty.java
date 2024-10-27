@@ -25,8 +25,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
-import lombok.val;
-
 public class CompositeValueUpdaterForProperty
 extends CompositeValueUpdater {
 
@@ -53,7 +51,7 @@ extends CompositeValueUpdater {
 
     @Override
     protected ManagedObject map(final ManagedObject valueType) {
-        val propNeg = managedProperty.startNegotiation();
+        var propNeg = managedProperty.startNegotiation();
         propNeg.getValue().setValue(valueType);
         propNeg.submit();
         return managedProperty.getOwner();

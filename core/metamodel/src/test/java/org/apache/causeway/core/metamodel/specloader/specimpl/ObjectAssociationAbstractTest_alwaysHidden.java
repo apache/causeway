@@ -46,8 +46,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.val;
-
 @ExtendWith(MockitoExtension.class)
 class ObjectAssociationAbstractTest_alwaysHidden {
 
@@ -211,7 +209,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
             final FacetedMethod holder,
             final boolean noop) {
 
-        val precedence = noop
+        var precedence = noop
                 ? Facet.Precedence.FALLBACK
                 : Facet.Precedence.DEFAULT;
 

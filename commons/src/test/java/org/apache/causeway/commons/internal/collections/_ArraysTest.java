@@ -40,8 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections.Samples.FiniteSpace2;
 
-import lombok.val;
-
 /**
  * @since Feb 22, 2020
  *
@@ -278,42 +276,42 @@ class _ArraysTest {
      */
     @Test
     void removeByIndex_head() {
-        val input = new Integer[] {0, 1, 2, 3};
-        val output = _Arrays.removeByIndex(input, 0);
+        var input = new Integer[] {0, 1, 2, 3};
+        var output = _Arrays.removeByIndex(input, 0);
         assertArrayEquals(new Integer[] {1, 2, 3}, output);
     }
 
     @Test
     void removeByIndex_inBetween() {
-        val input = new Integer[] {0, 1, 2, 3};
-        val output = _Arrays.removeByIndex(input, 1);
+        var input = new Integer[] {0, 1, 2, 3};
+        var output = _Arrays.removeByIndex(input, 1);
         assertArrayEquals(new Integer[] {0, 2, 3}, output);
     }
 
     @Test
     void removeByIndex_tail() {
-        val input = new Integer[] {0, 1, 2, 3};
-        val output = _Arrays.removeByIndex(input, 3);
+        var input = new Integer[] {0, 1, 2, 3};
+        var output = _Arrays.removeByIndex(input, 3);
         assertArrayEquals(new Integer[] {0, 1, 2}, output);
     }
 
     @Test
     void removeByIndex_outOfBounds() {
-        val input = new Integer[] {0, 1, 2, 3};
+        var input = new Integer[] {0, 1, 2, 3};
         assertThrows(IllegalArgumentException.class,
                 ()->_Arrays.removeByIndex(input, 4));
     }
 
     @Test
     void removeByIndex_empty() {
-        val input = new Integer[] {};
+        var input = new Integer[] {};
         assertThrows(IllegalArgumentException.class,
                 ()->_Arrays.removeByIndex(input, 0));
     }
 
     @Test
     void removeByIndex_null() {
-        val input = (Integer[])null;
+        var input = (Integer[])null;
         assertThrows(IllegalArgumentException.class,
                 ()->_Arrays.removeByIndex(input, 0));
     }

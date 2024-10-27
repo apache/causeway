@@ -28,7 +28,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCommandReplayPrimary;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -42,9 +41,9 @@ public class PrimaryConfig {
     @Getter final String secondaryBaseUrlWicket;
 
     public PrimaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
-        val config = causewayConfiguration.getExtensions().getCommandReplay();
+        var config = causewayConfiguration.getExtensions().getCommandReplay();
 
-        val secondaryAccess = config.getSecondaryAccess();
+        var secondaryAccess = config.getSecondaryAccess();
         secondaryBaseUrlWicket = secondaryAccess.getBaseUrlWicket().orElse(null);
     }
 

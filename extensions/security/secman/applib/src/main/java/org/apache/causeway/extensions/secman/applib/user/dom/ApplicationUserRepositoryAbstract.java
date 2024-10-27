@@ -49,7 +49,7 @@ import org.apache.causeway.extensions.secman.applib.user.events.UserCreatedEvent
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  *
@@ -133,7 +133,7 @@ implements ApplicationUserRepository {
 
     @Override
     public Collection<ApplicationUser> find(final @Nullable String _search) {
-        val regex = regexReplacer.asRegex(_search);
+        var regex = regexReplacer.asRegex(_search);
         return repository.allMatches(Query.named(this.applicationUserClass, ApplicationUser.Nq.FIND)
                 .withParameter("regex", regex))
                 .stream()
@@ -214,7 +214,7 @@ implements ApplicationUserRepository {
             @Nullable final AccountType accountType,
             final Consumer<ApplicationUser> beforePersist) {
 
-        val user = newApplicationUser();
+        var user = newApplicationUser();
         user.setUsername(username);
         user.setAccountType(accountType);
         beforePersist.accept(user);

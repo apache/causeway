@@ -34,7 +34,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @XmlRootElement(name = "bookView")
@@ -47,7 +46,7 @@ import lombok.experimental.Accessors;
 public class JpaBookView implements BookView<JpaBook> {
 
     public static JpaBookView createForBook(final @NonNull FactoryService factory, final @NonNull JpaBook book) {
-        val view = factory.viewModel(new JpaBookView());
+        var view = factory.viewModel(new JpaBookView());
         view.setBook(book);
         return view;
     }

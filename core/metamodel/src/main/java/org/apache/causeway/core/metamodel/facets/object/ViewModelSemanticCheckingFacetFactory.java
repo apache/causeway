@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class ViewModelSemanticCheckingFacetFactory
 extends FacetFactoryAbstract {
 
@@ -41,7 +39,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
         final boolean implementsViewModel = org.apache.causeway.applib.ViewModel.class.isAssignableFrom(cls);
         if(!implementsViewModel){
@@ -56,8 +54,8 @@ extends FacetFactoryAbstract {
     // -- HELPER
 
     private void checkViewModelSemantics(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         final DomainObject domainObject = processClassContext.synthesizeOnType(DomainObject.class).orElse(null);
         final boolean annotatedWithDomainObject = domainObject != null;

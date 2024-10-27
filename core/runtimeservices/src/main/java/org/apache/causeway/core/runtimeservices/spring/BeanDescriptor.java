@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -84,7 +83,7 @@ public final class BeanDescriptor {
         this.type = beanFactory.getType(beanName);
         this.resource = definition.getResourceDescription();
 
-        val dependencies = beanFactory.getDependenciesForBean(beanName);
+        var dependencies = beanFactory.getDependenciesForBean(beanName);
 
         this.dependenciesByName = _NullSafe.stream(dependencies)
             .map(name -> {

@@ -29,7 +29,6 @@ import org.apache.causeway.viewer.commons.model.scalar.HasUiProperty;
 import org.apache.causeway.viewer.wicket.model.models.interaction.prop.UiPropertyWkt;
 
 import lombok.Getter;
-import lombok.val;
 
 public class ScalarPropertyModel
 extends ScalarModel
@@ -78,7 +77,7 @@ implements HasUiProperty {
 
     @Override
     public String toStringOf() {
-        val featureId = uiProperty.getMetaModel().getFeatureIdentifier();
+        var featureId = uiProperty.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +
                 featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
 

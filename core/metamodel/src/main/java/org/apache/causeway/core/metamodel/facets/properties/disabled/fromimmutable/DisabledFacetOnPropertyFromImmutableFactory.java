@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-import lombok.val;
-
 public class DisabledFacetOnPropertyFromImmutableFactory
 extends FacetFactoryAbstract {
 
@@ -38,14 +36,14 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        val declaringClass = processMethodContext.getMethod().getDeclaringClass();
-        val spec = getSpecificationLoader().loadSpecification(declaringClass);
+        var declaringClass = processMethodContext.getMethod().getDeclaringClass();
+        var spec = getSpecificationLoader().loadSpecification(declaringClass);
 
         spec.lookupNonFallbackFacet(ImmutableFacet.class)
         .ifPresent(immutableFacet->{
-            val facetHolder = processMethodContext.getFacetHolder();
+            var facetHolder = processMethodContext.getFacetHolder();
 
-            val semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
+            var semantics = facetHolder.lookupNonFallbackFacet(DisabledFacet.class)
             .map(DisabledFacet::getSemantics)
             .orElse(DisabledFacet.Semantics.ENABLED);
 

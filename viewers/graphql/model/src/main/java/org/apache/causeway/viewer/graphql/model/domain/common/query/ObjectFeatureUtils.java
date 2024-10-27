@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.experimental.UtilityClass;
-import lombok.val;
 
 @UtilityClass
 public class ObjectFeatureUtils {
@@ -45,9 +44,9 @@ public class ObjectFeatureUtils {
             final Environment environment,
             final Context context
     ) {
-        val argumentValue = (Map<String, ?>) argumentValueObj;
+        var argumentValue = (Map<String, ?>) argumentValueObj;
 
-        val refValue = (String)argumentValue.get("ref");
+        var refValue = (String)argumentValue.get("ref");
         if (refValue != null) {
             String key = keyFor(refValue);
             BookmarkedPojo bookmarkedPojo = environment.getGraphQlContext().get(key);
@@ -55,8 +54,8 @@ public class ObjectFeatureUtils {
                 throw new IllegalArgumentException(String.format(
                     "Could not find object referenced '%s' in the execution context; was it saved previously using \"saveAs\" ?", refValue));
             }
-            val targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
-            val targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
+            var targetPojoClass = bookmarkedPojo.getTargetPojo().getClass();
+            var targetPojoSpec = context.specificationLoader.loadSpecification(targetPojoClass);
             if (targetPojoSpec == null) {
                 throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' is not part of the metamodel (has class '%s')",
@@ -70,12 +69,12 @@ public class ObjectFeatureUtils {
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
 
-        val idValue = (String)argumentValue.get("id");
+        var idValue = (String)argumentValue.get("id");
         if (idValue != null) {
             Class<?> paramClass = elementType.getCorrespondingClass();
             Optional<Bookmark> bookmarkIfAny;
             if(elementType.isAbstract()) {
-                val objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
+                var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
                 if (objectSpecArg == null) {
                     throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
@@ -127,7 +126,7 @@ public class ObjectFeatureUtils {
                             // if the parameter is abstract, we still attempt to figure out the arguments.
                             // the arguments will need to either use 'ref' or else both 'id' AND 'logicalTypeName'
                             if (argumentValue instanceof List) {
-                                val argumentValueList = (List<Object>) argumentValue;
+                                var argumentValueList = (List<Object>) argumentValue;
                                 pojoOrPojoList = argumentValueList.stream()
                                         .map(value -> asPojo(oap.getElementType(), value, environment, context))
                                         .filter(Optional::isPresent)
@@ -156,12 +155,12 @@ public class ObjectFeatureUtils {
             final Object argumentValue,
             final Context context) {
 
-        val elementType = oap.getElementType();
+        var elementType = oap.getElementType();
         if (argumentValue == null) {
             return ManagedObject.empty(elementType);
         }
 
-        val argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
+        var argPojo = context.typeMapper.unmarshal(argumentValue, elementType);
         return ManagedObject.adaptParameter(oap, argPojo);
     }
 

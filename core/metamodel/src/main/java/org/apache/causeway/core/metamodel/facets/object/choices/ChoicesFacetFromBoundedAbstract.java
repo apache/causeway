@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * A fixed number of choices because the number of instances of this class is bounded.
@@ -111,12 +110,12 @@ implements
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val resulType = getObjectSpecification().getCorrespondingClass();
-        val query = Query.allInstances(resulType);
+        var resulType = getObjectSpecification().getCorrespondingClass();
+        var query = Query.allInstances(resulType);
 
-        val resultTypeSpec = specForType(resulType).orElse(null);
-        val queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
-        val allMatching = getObjectManager().queryObjects(queryRequest)
+        var resultTypeSpec = specForType(resulType).orElse(null);
+        var queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
+        var allMatching = getObjectManager().queryObjects(queryRequest)
                 .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy));
 
         return allMatching;

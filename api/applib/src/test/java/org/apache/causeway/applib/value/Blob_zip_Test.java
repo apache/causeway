@@ -27,22 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
-import lombok.val;
-
 class Blob_zip_Test {
 
     private byte[] bytes;
 
     @BeforeEach
     void setup() {
-        val rd = new Random(9999); // fixed seed - reproducible tests
+        var rd = new Random(9999); // fixed seed - reproducible tests
         this.bytes = new byte[16*1024];
         rd.nextBytes(bytes);
     }
 
     @Test
     void zipUnzipRountripOnBlob() throws Exception {
-        val blob = Blob.of("name", CommonMimeType.BIN, bytes);
+        var blob = Blob.of("name", CommonMimeType.BIN, bytes);
         assertEquals(blob, blob.zip().unZip(CommonMimeType.BIN));
     }
 

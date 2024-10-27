@@ -58,7 +58,6 @@ import org.apache.causeway.core.transaction.changetracking.events.PreStoreEvent;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Calls lifecycle callbacks for entities, ensuring that any given entity is only ever called once.
@@ -88,10 +87,10 @@ public class LifecycleCallbackNotifier {
      *      otherwise adapted entity without OID <i>right</i>
      */
     public void prePersist(final Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid) {
-        val pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
+        var pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
         if(pojo==null) {return;}
         eventBusService.post(PreStoreEvent.of(pojo));
-        val entity = eitherWithOrWithoutOid.fold(UnaryOperator.identity(), UnaryOperator.identity());
+        var entity = eitherWithOrWithoutOid.fold(UnaryOperator.identity(), UnaryOperator.identity());
         dispatch(entity, PersistingCallbackFacet.class, PersistingLifecycleEventFacet.class);
     }
 

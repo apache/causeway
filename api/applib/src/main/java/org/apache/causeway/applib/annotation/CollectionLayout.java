@@ -157,7 +157,7 @@ public @interface CollectionLayout {
      *
      * <p>
      * Whenever there is a collection of type {@link java.util.SortedSet}, the domain entity referenced
-     * is expected to implement {@link Comparable}, ie to have a natural ordering.  In effect tis
+     * is expected to implement {@link Comparable}, ie to have a natural ordering. In effect this
      * means that all domain entities should provide a natural ordering.
      *
      * <p>

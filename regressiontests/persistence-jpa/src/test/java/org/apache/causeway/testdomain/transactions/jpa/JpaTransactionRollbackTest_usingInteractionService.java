@@ -46,7 +46,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -128,7 +128,7 @@ class JpaTransactionRollbackTest_usingInteractionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = interactionService.runAnonymousAndCatch(()->{
+        var result = interactionService.runAnonymousAndCatch(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
@@ -163,11 +163,11 @@ class JpaTransactionRollbackTest_usingInteractionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = interactionService.runAnonymousAndCatch(()->{
+        var result = interactionService.runAnonymousAndCatch(()->{
 
             //_Probe.errOut("before tx that should trigger a rollback");
 
-            val innerResult = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+            var innerResult = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
                 fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 

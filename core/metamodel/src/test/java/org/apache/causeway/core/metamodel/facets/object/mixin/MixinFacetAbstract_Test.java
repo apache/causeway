@@ -23,8 +23,6 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 
-import lombok.val;
-
 class MixinFacetAbstract_Test {
 
     abstract static class Collection_numberOfChildren {
@@ -41,15 +39,15 @@ class MixinFacetAbstract_Test {
     void happy_case() throws Exception {
 
         // given
-        val constructor = Collection_numberOfChildren.class.getConstructor(Object.class);
-        val facet = new MixinFacetAbstract(
+        var constructor = Collection_numberOfChildren.class.getConstructor(Object.class);
+        var facet = new MixinFacetAbstract(
                 Collection_numberOfChildren.class, "prop", constructor, null) {};
 
-        val propMethodInSubclass = _GenericResolver.testing
+        var propMethodInSubclass = _GenericResolver.testing
                 .resolveMethod(SimpleObject_numberOfChildren.class, "prop");
 
         // when
-        val candidate = facet.isCandidateForMain(propMethodInSubclass);
+        var candidate = facet.isCandidateForMain(propMethodInSubclass);
 
         // then
         Assertions.assertThat(candidate).isTrue();

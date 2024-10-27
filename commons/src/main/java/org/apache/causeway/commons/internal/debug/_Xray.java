@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -42,13 +41,13 @@ final class _Xray {
             return;
         }
 
-        val threadId = ThreadMemento.fromCurrentThread();
-        val timeStamp = LocalDateTime.now();
+        var threadId = ThreadMemento.fromCurrentThread();
+        var timeStamp = LocalDateTime.now();
 
         XrayUi.updateModel(model->{
-            val parentNode = model.getThreadNode(threadId);
+            var parentNode = model.getThreadNode(threadId);
 
-            val logModel = model.addDataNode(parentNode,
+            var logModel = model.addDataNode(parentNode,
                     new XrayDataModel.LogEntry(
                             "debug-log", timeStamp, icon.getResourcePath(),
                             _Strings.ellipsifyAtEnd(logMessage, 80, "..."),

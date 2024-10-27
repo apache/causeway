@@ -32,7 +32,7 @@ import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -51,7 +51,7 @@ implements EntityChangesSubscriber {
     public void onChanging(final EntityChanges publishedObjects) {
 
         @SuppressWarnings("unchecked")
-        val publishedEntries =
+        var publishedEntries =
         (List<EntityChanges>) kvStore.get(this, "publishedObjects").orElseGet(ArrayList::new);
 
         publishedEntries.add(publishedObjects);
@@ -75,27 +75,27 @@ implements EntityChangesSubscriber {
     }
 
     public static int getCreated(final KVStoreForTesting kvStore) {
-        val publishedObjects = getPublishedObjects(kvStore);
+        var publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberCreated).sum();
     }
 
     public static int getDeleted(final KVStoreForTesting kvStore) {
-        val publishedObjects = getPublishedObjects(kvStore);
+        var publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberDeleted).sum();
     }
 
     public static int getLoaded(final KVStoreForTesting kvStore) {
-        val publishedObjects = getPublishedObjects(kvStore);
+        var publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberLoaded).sum();
     }
 
     public static int getUpdated(final KVStoreForTesting kvStore) {
-        val publishedObjects = getPublishedObjects(kvStore);
+        var publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberUpdated).sum();
     }
 
     public static int getModified(final KVStoreForTesting kvStore) {
-        val publishedObjects = getPublishedObjects(kvStore);
+        var publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberPropertiesModified).sum();
     }
 

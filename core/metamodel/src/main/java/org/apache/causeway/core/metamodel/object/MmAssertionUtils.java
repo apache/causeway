@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,9 +40,9 @@ public class MmAssertionUtils {
                 || ManagedObjects.isPacked(obj)) {
             return;
         }
-        val pojo = ManagedObjects.peekAtPojoOf(obj);
-        val requiredType = pojo.getClass();
-        val actualSpec = obj.getSpecification();
+        var pojo = ManagedObjects.peekAtPojoOf(obj);
+        var requiredType = pojo.getClass();
+        var actualSpec = obj.getSpecification();
         _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
     }
 
@@ -54,10 +53,10 @@ public class MmAssertionUtils {
                 || requiredSpec==null) {
             return;
         }
-        val actualType = requiredSpec.isPrimitive()
+        var actualType = requiredSpec.isPrimitive()
                 ? ClassUtil.unboxPrimitiveIfNecessary(pojo.getClass())
                 : pojo.getClass();
-        val actualSpec = requiredSpec.getSpecificationLoader().specForType(actualType).orElse(null);
+        var actualSpec = requiredSpec.getSpecificationLoader().specForType(actualType).orElse(null);
         _Assert.assertEquals(requiredSpec, actualSpec, ()->
             String.format("pojo's actual ObjectSpecification %s "
                     + "does not exaclty match %s%n", actualSpec, requiredSpec));
@@ -89,8 +88,8 @@ public class MmAssertionUtils {
             if(ManagedObjects.isInstanceOf(object, elementType)) {
                 return object;
             }
-            val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
-            val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+            var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
+            var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
             throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),

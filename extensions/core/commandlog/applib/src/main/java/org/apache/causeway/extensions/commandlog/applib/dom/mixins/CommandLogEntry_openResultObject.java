@@ -31,7 +31,6 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Contributes an action to open the domain object that was the result of invoking the command (represented in
@@ -55,7 +54,7 @@ public class CommandLogEntry_openResultObject {
     private final CommandLogEntry commandLogEntry;
 
     @MemberSupport public Object act() {
-        val targetBookmark = bookmarkService.lookup(commandLogEntry.getResult()).orElse(null);
+        var targetBookmark = bookmarkService.lookup(commandLogEntry.getResult()).orElse(null);
         if(targetBookmark == null) {
             messageService.warnUser("Object not found - has it since been deleted?");
             return null;

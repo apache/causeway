@@ -46,7 +46,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaEntityNonGeneratedStringId;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -74,7 +74,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
     @Test @Order(1) @Commit
     void detached_shouldBeProperlyDetected() {
 
-        val entity = objectManager.adapt(
+        var entity = objectManager.adapt(
                 repository.detachedEntity(new JpaEntityNonGeneratedStringId("test")));
 
         assertTrue(entity.getSpecification().isEntity());
@@ -88,7 +88,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
     @Test @Order(2) @Commit
     void attached_shouldBeProperlyDetected() {
 
-        val entity = getEntityRef();
+        var entity = getEntityRef();
 
         repository.persist(entity.getPojo());
 
@@ -107,9 +107,9 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
                 EntityState.DETACHED,
                 MmEntityUtils.getEntityState(getEntityRef()));
 
-        val id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
+        var id = ((JpaEntityNonGeneratedStringId)getEntityRef().getPojo()).getName();
 
-        val entity = objectManager.adapt(
+        var entity = objectManager.adapt(
                 repository.firstMatch(
                         JpaEntityNonGeneratedStringId.class,
                         entityPojo->Objects.equals(entityPojo.getName(), id))
@@ -133,7 +133,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
     @Test @Order(4) @Commit
     void postCondition_shouldBe_anEmptyRepository() {
 
-        val entity = getEntityRef();
+        var entity = getEntityRef();
 
         assertEquals(
                 EntityState.REMOVED,
@@ -154,7 +154,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
     }
 
     ManagedObject getEntityRef() {
-        val entity = (ManagedObject) kvStore.get(this, "entity").get();
+        var entity = (ManagedObject) kvStore.get(this, "entity").get();
         return entity;
     }
 

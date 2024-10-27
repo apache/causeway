@@ -24,17 +24,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-import lombok.val;
-
 class _ImagesTest {
 
     @Test
     void pixelRoundtrip() {
         // given
-        val bufferedImage = getBufferedImage();
+        var bufferedImage = getBufferedImage();
 
         // when 
-        val imageAfterRoundtrip = _Images.fromPixels(_Images.toPixels(bufferedImage));
+        var imageAfterRoundtrip = _Images.fromPixels(_Images.toPixels(bufferedImage));
         
         // then
         assertArrayEquals(getPixels(), _Images.toPixels(imageAfterRoundtrip));
@@ -43,10 +41,10 @@ class _ImagesTest {
     @Test
     void bytesRoundtrip() {
         // given
-        val bufferedImage = getBufferedImage();
+        var bufferedImage = getBufferedImage();
 
         // when 
-        val imageAfterRoundtrip = _Images.fromBytes(_Images.toBytes(bufferedImage));
+        var imageAfterRoundtrip = _Images.fromBytes(_Images.toBytes(bufferedImage));
         
         // then
         assertArrayEquals(getPixels(), _Images.toPixels(imageAfterRoundtrip));
@@ -55,10 +53,10 @@ class _ImagesTest {
     @Test
     void base64Roundtrip() {
         // given
-        val bufferedImage = getBufferedImage();
+        var bufferedImage = getBufferedImage();
 
         // when 
-        val imageAfterRoundtrip = _Images.fromBase64(_Images.toBase64(bufferedImage));
+        var imageAfterRoundtrip = _Images.fromBase64(_Images.toBase64(bufferedImage));
         
         // then
         assertArrayEquals(getPixels(), _Images.toPixels(imageAfterRoundtrip));

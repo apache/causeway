@@ -47,7 +47,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class ActionDomainEventFacet
 extends DomainEventFacetAbstract<ActionDomainEvent<?>>
@@ -73,7 +72,7 @@ implements
             final @NonNull ObjectSpecification typeSpec,
             final @NonNull FacetHolder facetHolder){
 
-        val actionDomainEventFacet =
+        var actionDomainEventFacet =
                 actionIfAny
                 .map(Action::domainEvent)
                 .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
@@ -81,7 +80,7 @@ implements
                         new ActionDomainEventFacet(domainEvent, EventTypeOrigin.ANNOTATED_MEMBER, facetHolder))
                 .orElseGet(()->{
 
-                    val typeFromDomainObject = typeSpec
+                    var typeFromDomainObject = typeSpec
                             .getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
                     return typeFromDomainObject != null

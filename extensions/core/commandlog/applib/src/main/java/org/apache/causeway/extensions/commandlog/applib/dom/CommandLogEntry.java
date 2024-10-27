@@ -70,7 +70,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 
 import lombok.NoArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -377,8 +376,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         if (getParentInteractionId() == null) {
             return null;
         }
-        val parentCommandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(getParentInteractionId());
-        val commandLogEntry = parentCommandLogEntryIfAny.orElse(null);
+        var parentCommandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(getParentInteractionId());
+        var commandLogEntry = parentCommandLogEntryIfAny.orElse(null);
         return _Casts.uncheckedCast(commandLogEntry);
     }
 

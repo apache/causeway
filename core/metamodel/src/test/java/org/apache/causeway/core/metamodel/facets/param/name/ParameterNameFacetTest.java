@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
-import lombok.val;
-
 /**
  * needs the javac -parameter flag set when compiling this test
  */
@@ -65,7 +63,7 @@ extends FacetFactoryTestAbstract {
             public void someAction(final String anAwesomeName) { }
         }
 
-        val someAction = _Reflect.streamAllMethods(Customer.class, false)
+        var someAction = _Reflect.streamAllMethods(Customer.class, false)
         .filter(method->method.getName().equals("someAction"))
         .findFirst()
         .get();
@@ -87,7 +85,7 @@ extends FacetFactoryTestAbstract {
             programmingModel.streamFactories()
             .forEach(facetFactory->facetFactory.processParams(processParameterContext));
             // then
-            val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            var namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
             assertEquals("An Awesome Name", namedFacet.text());
         });
     }
@@ -107,7 +105,7 @@ extends FacetFactoryTestAbstract {
             // when
             programmingModel.streamFactories().forEach(facetFactory->facetFactory.processParams(processParameterContext));
             // then
-            val namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            var namedFacet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
             assertNotNull(namedFacet);
             assertEquals("Even Better Name", namedFacet.text());
         });

@@ -32,7 +32,6 @@ import java.util.function.BiFunction;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Value;
-import lombok.val;
 
 /**
  *
@@ -184,7 +183,7 @@ public class TemporalAdjust {
             final String str,
             final int sign) {
 
-        val temporalAdjust = TemporalAdjust.parse(str).sign(sign);
+        var temporalAdjust = TemporalAdjust.parse(str).sign(sign);
         return adjuster.apply(temporalAdjust, contextDate);
     }
 

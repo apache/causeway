@@ -43,7 +43,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Builder;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -119,11 +118,11 @@ public class FakeScheduler {
 
         final _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Execute Command DTOs");
         tasks.addRunnable("Bulk run all pending CommandDtos then call listeners", () ->{
-            for (val commandDto : commandDtos) {
+            for (var commandDto : commandDtos) {
                 executeCommandWithinTransaction(commandDto);
             }
 
-            val interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
+            var interactionIds = commandDtos.stream().map(CommandDto::getInteractionId).collect(Collectors.toList());
             listeners.forEach(listener -> {
                 invokeListenerCallbackWithinTransaction(listener, interactionIds);
             });
@@ -131,7 +130,7 @@ public class FakeScheduler {
         });
 
         tasks.submit(_ConcurrentContext.singleThreaded());
-        val hasTimedOut = !tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
+        var hasTimedOut = !tasks.await(waitForMillis, TimeUnit.MILLISECONDS);
 
         return CommandBulkExecutionResult.builder()
                 .hasTimedOut(hasTimedOut)
@@ -158,7 +157,7 @@ public class FakeScheduler {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRED, () -> {
                     // look up the CommandLogEntry again because we are within a new transaction.
-                    val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                    var commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
                     commandLogEntryIfAny.ifPresent(commandLogEntry ->
                             commandExecutorService.executeCommand(

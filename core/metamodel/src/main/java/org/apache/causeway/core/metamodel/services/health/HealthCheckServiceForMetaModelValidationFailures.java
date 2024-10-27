@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -76,8 +75,8 @@ public class HealthCheckServiceForMetaModelValidationFailures implements HealthC
     }
 
     static Exception ex(ValidationFailures validationFailures) {
-        val messages = validationFailures.getMessages("%d: %s");
-        val joinedMessages = String.join("\n", messages);
+        var messages = validationFailures.getMessages("%d: %s");
+        var joinedMessages = String.join("\n", messages);
         return new RuntimeException(joinedMessages);
     }
 

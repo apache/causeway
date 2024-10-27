@@ -25,7 +25,7 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
-import lombok.val;
+
 import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
@@ -51,7 +51,7 @@ extends WebjarsJavaScriptResourceReference {
     // -- HELPER
 
     private static Url asUrl() {
-        val pdfJsUrl = RequestCycle.get().urlFor(instance(), null);
+        var pdfJsUrl = RequestCycle.get().urlFor(instance(), null);
         return Url.parse(pdfJsUrl);
     }
 

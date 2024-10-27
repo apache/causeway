@@ -37,7 +37,6 @@ import org.apache.wicket.util.crypt.SunJceCrypt;
 import org.apache.causeway.commons.internal.os._OsUtil;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -47,7 +46,7 @@ class _CryptFactory {
 
     ICrypt sunJceCrypt(final String encryptionKey) {
         final byte[] salt = getSalt(8, encryptionKey);
-        val crypt = new SunJceCrypt(salt, 1000);
+        var crypt = new SunJceCrypt(salt, 1000);
         crypt.setKey(encryptionKey);
         return crypt;
     }
@@ -92,17 +91,17 @@ class _CryptFactory {
      * but using {@link SecureRandom} instead of {@link Random}.
      */
     private byte[] secureSalt(final int size) {
-        val salt = new byte[size];
+        var salt = new byte[size];
         new SecureRandom().nextBytes(salt);
         return salt;
     }
 
     private byte[] machineFixedSalt(final int size) {
-        val machineFixedSeed = _OsUtil.machineId();
+        var machineFixedSeed = _OsUtil.machineId();
         if(machineFixedSeed.isEmpty()){
             return secureSalt(size);
         }
-        val salt = new byte[size];
+        var salt = new byte[size];
         /*sonar-ignore-on*/
         new Random(machineFixedSeed.getAsLong()).nextBytes(salt); // not required to be secure
         /*sonar-ignore-off*/

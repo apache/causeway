@@ -31,7 +31,6 @@ import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -70,7 +69,7 @@ public class PageRenderValueLogger implements PageRenderSubscriber {
     @Override
     public void onRenderedValue(final Object value) {
         if(log.isDebugEnabled()) {
-            val timing = timings.get();
+            var timing = timings.get();
             log.debug("rendered value: [ \"{}\" ]  user: {}  took: {}ms", value, userService.currentUserNameElseNobody(), timing.took());
         }
     }

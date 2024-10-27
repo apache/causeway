@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -146,8 +145,8 @@ extends Interaction {
      */
     default Execution<?, ?> getPriorExecutionOrThrowIfAnyException(
             final @NonNull ActionInvocation actionInvocation) {
-        val priorExecution = getPriorExecution();
-        val executionExceptionIfAny = getPriorExecution().getThrew();
+        var priorExecution = getPriorExecution();
+        var executionExceptionIfAny = getPriorExecution().getThrew();
         actionInvocation.setThrew(executionExceptionIfAny);
         if(executionExceptionIfAny != null) {
             throw executionExceptionIfAny instanceof RuntimeException

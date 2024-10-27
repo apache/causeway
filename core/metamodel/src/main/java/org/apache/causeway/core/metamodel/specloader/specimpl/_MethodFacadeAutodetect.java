@@ -32,7 +32,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Messa
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -60,8 +59,8 @@ class _MethodFacadeAutodetect {
                         .addVariable("member", method.name())
                         .buildMessage());
         }
-        val patType = method.paramType(0);
-        val patConstructors = _ClassCache.getInstance().streamPublicConstructors(patType)
+        var patType = method.paramType(0);
+        var patConstructors = _ClassCache.getInstance().streamPublicConstructors(patType)
             .collect(Can.toCan());
         if(!patConstructors.isCardinalityOne()) {
             // invalid

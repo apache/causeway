@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
-
 public class CallbackFacetFactory
 extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -62,10 +60,10 @@ extends MethodPrefixBasedFacetFactoryAbstract {
             final ProcessClassContext processClassContext,
             final CallbackMethod callbackMethodEnum,
             final BiFunction<Can<MethodFacade>, FacetHolder, CallbackFacet> callbackFacetConstructor) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
-        val callbackMethods =
+        var callbackMethods =
             MethodFinder
             .livecycleCallback(
                     cls,

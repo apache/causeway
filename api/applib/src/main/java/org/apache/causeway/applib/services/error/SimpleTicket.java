@@ -26,8 +26,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
 
-import lombok.val;
-
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
  *
@@ -118,7 +116,7 @@ public class SimpleTicket implements Ticket {
     @Override
     public String getMarkup() {
 
-        val messageProperties = Map.<String, Object>of(
+        var messageProperties = Map.<String, Object>of(
                 "title", ifPresentMap(getDetails(),
                         details->"<h3>" + htmlEscape(details) + "</h3>"),
                 "kittenImg", ifPresentMap(getKittenUrl(),

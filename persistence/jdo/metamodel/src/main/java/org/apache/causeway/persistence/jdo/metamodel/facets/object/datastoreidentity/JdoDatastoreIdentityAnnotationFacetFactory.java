@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
+
 
 public class JdoDatastoreIdentityAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -53,7 +53,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val datastoreIdentityIfAny = processClassContext.synthesizeOnType(DatastoreIdentity.class);
+        var datastoreIdentityIfAny = processClassContext.synthesizeOnType(DatastoreIdentity.class);
 
         FacetUtil.addFacetIfPresent(
                 JdoDatastoreIdentityFacetAnnotation

@@ -54,8 +54,6 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
-
 public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @BeforeAll
@@ -253,7 +251,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(executionsForTarget1User1).hasSize(1);
         var executionTarget1User1 = executionsForTarget1User1.get(0);
-        val executionTarget1User1Id = executionTarget1User1.getInteractionId();
+        var executionTarget1User1Id = executionTarget1User1.getInteractionId();
 
         // given (different user, same target, same day)
         counter1 = counterRepository.findByName("counter-1");
@@ -270,7 +268,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(executionsForTarget1User2).hasSize(1);
         var executionTarget1User2 = executionsForTarget1User2.get(0);
-        val executionTarget1User2Id = executionTarget1User2.getInteractionId();
+        var executionTarget1User2Id = executionTarget1User2.getInteractionId();
 
 
         // given (same user, same target, yesterday)
@@ -280,7 +278,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
                 InteractionContext.switchUser(
                         UserMemento.builder().name("user-1").build()),
                 () -> {
-                    val yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
                     sudoService.run(
                             InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
                             () -> {
@@ -308,7 +306,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         // then
         assertThat(executionTarget2User1IfAny).hasSize(1);
         var executionTarget2User1 = executionTarget2User1IfAny.get(0);
-        val executionTarget2User1Id = executionTarget2User1.getInteractionId();
+        var executionTarget2User1Id = executionTarget2User1.getInteractionId();
 
         // when
         Optional<? extends ExecutionLogEntry> executionTarget1User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);
@@ -327,14 +325,14 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         counter1 = counterRepository.findByName("counter-1");
         executionTarget1User1 = executionTarget1User1ById.get();
         executionTarget1User2 = executionTarget1User2ById.get();
-        val executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
+        var executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
         executionTarget2User1 = executionTarget2User1ById.get();
 
-        val target1 = executionTarget1User1.getTarget();
-        val username1 = executionTarget1User1.getUsername();
+        var target1 = executionTarget1User1.getTarget();
+        var username1 = executionTarget1User1.getUsername();
         Timestamp from1 = executionTarget1User1.getStartedAt();
         Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));
-        val bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
+        var bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
 
 
         // when

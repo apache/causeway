@@ -35,7 +35,7 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -59,7 +59,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
     @Test
     void propertyInteraction_whenEnabled_shouldHaveNoVeto() {
 
-        val tester =
+        var tester =
                 testerFactory.propertyTester(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();
@@ -69,13 +69,13 @@ class PropertyInteractionTest extends InteractionTestAbstract {
         assertMetamodelValid();
 
         // verify, that we have the LabelAtFacet
-        val labelAtFacet = tester.getFacetOnMemberElseFail(LabelAtFacet.class);
-        val labelPos = labelAtFacet.label();
+        var labelAtFacet = tester.getFacetOnMemberElseFail(LabelAtFacet.class);
+        var labelPos = labelAtFacet.label();
         assertEquals(LabelPosition.TOP, labelPos);
 
         // verify, that we have the MultiLineFacet
-        val multiLineFacet = tester.getFacetOnMemberElseFail(MultiLineFacet.class);
-        val numberOfLines = multiLineFacet.numberOfLines();
+        var multiLineFacet = tester.getFacetOnMemberElseFail(MultiLineFacet.class);
+        var numberOfLines = multiLineFacet.numberOfLines();
         assertEquals(3, numberOfLines);
 
         tester.assertValue("initial");
@@ -86,7 +86,7 @@ class PropertyInteractionTest extends InteractionTestAbstract {
     @Test
     void propertyInteraction_whenDisabled_shouldHaveVeto() {
 
-        val tester =
+        var tester =
                 testerFactory.propertyTester(InteractionDemo.class, "stringDisabled", Where.OBJECT_FORMS);
 
         tester.assertVisibilityIsNotVetoed();

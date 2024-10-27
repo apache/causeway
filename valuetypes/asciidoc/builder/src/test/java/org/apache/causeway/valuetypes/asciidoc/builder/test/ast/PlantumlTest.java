@@ -29,8 +29,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
 
-import lombok.val;
-
 class PlantumlTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -55,7 +53,7 @@ class PlantumlTest extends AbstractAsciiDocWriterTest {
         
         doc.setTitle("Plantuml");
         
-        val diagramBlock = AsciiDocFactory
+        var diagramBlock = AsciiDocFactory
                 .diagramBlock(doc, "plantuml", Can.of("alice-and-bob" ,"svg"), "Bob->Alice : hello");
         
         diagramBlock.setTitle("Alice and Bob");

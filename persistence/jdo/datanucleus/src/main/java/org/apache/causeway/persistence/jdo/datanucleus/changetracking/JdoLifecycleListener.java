@@ -40,7 +40,7 @@ import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerFo
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -89,7 +89,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postLoad {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val entity = adaptEntity(pojo);
+        var entity = adaptEntity(pojo);
 
         // it seems JDO only calls this once per transaction and entity
         // so no need to keep track of OIDs that had already been loaded
@@ -101,8 +101,8 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("preStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val isInserting = isInserting(pojo); // check before adapting
-        val entity = adaptEntity(pojo);
+        var isInserting = isInserting(pojo); // check before adapting
+        var entity = adaptEntity(pojo);
 
         /* Called either when an entity is initially persisted,
          * or when an entity is updated; fires the appropriate
@@ -122,9 +122,9 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
         log.debug("postStore {}", ()->_Utils.debug(event));
 
         final Persistable pojo = _Utils.persistableFor(event);
-        val isInserting = isInserting(pojo); // check before adapting
+        var isInserting = isInserting(pojo); // check before adapting
 
-        val entity = adaptEntity(pojo);
+        var entity = adaptEntity(pojo);
 
         /* Called either when an entity is initially persisted, or when an entity is updated;
          * fires the appropriate lifecycle callback.*/
@@ -165,7 +165,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
      * @see org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener#gatherPropertyChangeRecords(ManagedObject)
      */
     private final void doPreDirty(final Persistable pojo) {
-        val entity = adaptEntity(pojo);
+        var entity = adaptEntity(pojo);
         objectLifecyclePublisher.onPreUpdate(entity, /*propertyChangeRecordSupplier*/ null);
     }
 
@@ -180,7 +180,7 @@ DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLif
 
         final Persistable pojo = _Utils.persistableFor(event);
         _Assert.assertNotNull(pojo.dnGetObjectId());
-        val entity = adaptEntity(pojo);
+        var entity = adaptEntity(pojo);
 
         objectLifecyclePublisher.onPreRemove(entity);
     }

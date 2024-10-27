@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -158,7 +157,7 @@ public final class ManagedObjects {
     public boolean isInstanceOf(
             final @Nullable ManagedObject object,
             final @NonNull ObjectSpecification elementType) {
-        val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
+        var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(object)) {
             return true;
         }
@@ -166,7 +165,7 @@ public final class ManagedObjects {
             return ((PackedManagedObject)object).unpack().stream()
             .allMatch(element->isInstanceOf(element, elementType));
         }
-        val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+        var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
         return upperBound.isAssignableFrom(objectActualType);
     }
 
@@ -297,8 +296,8 @@ public final class ManagedObjects {
     // -- EQUALITY
 
     public boolean pojoEquals(final @Nullable ManagedObject a, final @Nullable ManagedObject b) {
-        val aPojo = MmUnwrapUtils.single(a);
-        val bPojo = MmUnwrapUtils.single(b);
+        var aPojo = MmUnwrapUtils.single(a);
+        var bPojo = MmUnwrapUtils.single(b);
         return Objects.equals(aPojo, bPojo);
     }
     
@@ -345,7 +344,7 @@ public final class ManagedObjects {
         // 1) if primitive, then don't return null
         // 2) if boxed boolean, that is MANDATORY, then don't return null
 
-        val expectedType = elementSpec.getCorrespondingClass();
+        var expectedType = elementSpec.getCorrespondingClass();
         if(expectedType.isPrimitive()) {
             return ManagedObject.value(elementSpec, ClassExtensions.toDefault(expectedType));
         }
@@ -392,9 +391,9 @@ public final class ManagedObjects {
             return Try.success(null);
         }
 
-        val mmc = object.getSpecification().getMetaModelContext();
+        var mmc = object.getSpecification().getMetaModelContext();
 
-        val result =  Try.call(()->{
+        var result =  Try.call(()->{
             final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), object);
             if(returnValue instanceof String) {
                 return (String) returnValue;
@@ -407,7 +406,7 @@ public final class ManagedObjects {
         });
 
         if(result.isFailure()) {
-            val isUnitTesting = mmc.getSystemEnvironment().isUnitTesting();
+            var isUnitTesting = mmc.getSystemEnvironment().isUnitTesting();
             if(!isUnitTesting) {
                 log.warn("imperative text failure (context: {})", translationContext, result.getFailure().get());
             }

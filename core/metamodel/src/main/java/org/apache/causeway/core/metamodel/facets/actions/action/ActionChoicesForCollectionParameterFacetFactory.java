@@ -37,8 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  * Ensures that every action that has a collection parameter has a choices facet for that parameter.
  */
@@ -61,7 +59,7 @@ implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        val shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isActionCollectionParameterChoices();
+        var shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isActionCollectionParameterChoices();
         if(!shouldCheck) {
             return;
         }
@@ -105,7 +103,7 @@ implements MetaModelRefiner {
             // exact type List, Set, SortedSet or Collection.
             if(!typeOfFacet.value().isSupportedForActionParameter()) {
 
-                val messageFormat = "Collection action parameter found that is not exactly one "
+                var messageFormat = "Collection action parameter found that is not exactly one "
                         + "of the following supported types: "
                         + "List, Set, SortedSet, Collection, Can or Array.  "
                         + "Class: %s action: %s parameter %d";
@@ -121,7 +119,7 @@ implements MetaModelRefiner {
 
         },()->{
 
-            val messageFormat = "framework bug: non-scalar action parameter found,"
+            var messageFormat = "framework bug: non-scalar action parameter found,"
                     + " that has no TypeOfFacet"
                     + "Class: %s action: %s parameter %d";
 
@@ -133,7 +131,7 @@ implements MetaModelRefiner {
 
         });
 
-        val parameterTypeSpec = parameter.getElementType();
+        var parameterTypeSpec = parameter.getElementType();
 
         if (parameter.containsFacet(ActionParameterChoicesFacet.class)
                 || parameter.containsFacet(ActionParameterAutoCompleteFacet.class)
@@ -141,7 +139,7 @@ implements MetaModelRefiner {
             return;
         }
 
-        val messageFormat = "Collection action parameter found without supporting "
+        var messageFormat = "Collection action parameter found without supporting "
                 + "choices or autoComplete facet.  "
                 + "Class: %s action: %s parameter %d";
 

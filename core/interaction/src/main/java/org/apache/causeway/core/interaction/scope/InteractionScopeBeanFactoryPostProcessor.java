@@ -24,8 +24,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
-import lombok.val;
-
 /**
  * @since 2.0
  */
@@ -36,7 +34,7 @@ public class InteractionScopeBeanFactoryPostProcessor implements BeanFactoryPost
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val interactionScope = new InteractionScope(beanFactory);
+        var interactionScope = new InteractionScope(beanFactory);
         beanFactory.registerScope(SCOPE_NAME, interactionScope);
     }
 

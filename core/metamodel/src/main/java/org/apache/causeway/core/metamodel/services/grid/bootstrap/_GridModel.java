@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAnd
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.val;
 
 /**
  * package private helper
@@ -80,7 +79,7 @@ final class _GridModel {
          */
         public static Optional<_GridModel> createFrom(BSGrid bsGrid) {
 
-            val gridModel = new _GridModel();
+            var gridModel = new _GridModel();
 
             bsGrid.visit(new BSGrid.VisitorAdapter(){
                 @Override
@@ -113,7 +112,7 @@ final class _GridModel {
 
                 @Override
                 public void visit(final FieldSet fieldSet) {
-                    val groupIdAndName = GroupIdAndName.forFieldSet(fieldSet);
+                    var groupIdAndName = GroupIdAndName.forFieldSet(fieldSet);
                     if(!groupIdAndName.isPresent()) {
                         fieldSet.setMetadataError("a fieldset must at least have an id or a name");
                         gridModel.gridErrorsDetected = true;

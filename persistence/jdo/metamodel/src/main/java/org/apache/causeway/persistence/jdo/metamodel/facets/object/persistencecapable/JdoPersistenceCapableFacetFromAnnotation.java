@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-import lombok.val;
+
 
 public class JdoPersistenceCapableFacetFromAnnotation
 extends FacetAbstract
@@ -53,7 +53,7 @@ implements JdoPersistenceCapableFacet {
             return Optional.empty();
         }
 
-        val persistenceCapable = persistenceCapableIfAny.get();
+        var persistenceCapable = persistenceCapableIfAny.get();
 
         // Whether objects of this type can only be embedded,
         // hence have no ID that binds them to the persistence layer
@@ -64,13 +64,13 @@ implements JdoPersistenceCapableFacet {
             return Optional.empty();
         }
 
-        val schema = _Strings.emptyToNull(persistenceCapable.schema());
+        var schema = _Strings.emptyToNull(persistenceCapable.schema());
 
-        val table = _Strings.isNotEmpty(persistenceCapable.table())
+        var table = _Strings.isNotEmpty(persistenceCapable.table())
             ? persistenceCapable.table()
             : cls.getSimpleName();
 
-        val identityType = persistenceCapable.identityType();
+        var identityType = persistenceCapable.identityType();
 
         return Optional.of(new JdoPersistenceCapableFacetFromAnnotation(
                 schema,
@@ -90,20 +90,20 @@ implements JdoPersistenceCapableFacet {
             return Optional.empty();
         }
 
-        //val entity = entityIfAny.get(); // optionally has a name, we don't use yet
+        //var entity = entityIfAny.get(); // optionally has a name, we don't use yet
 
-        val table = tableIfAny
+        var table = tableIfAny
             .map(tableAnnot->tableAnnot.name())
             .map(_Strings::emptyToNull)
             .orElseGet(cls::getSimpleName);
 
-        val schema = tableIfAny
+        var schema = tableIfAny
                 .map(tableAnnot->tableAnnot.schema())
                 .map(_Strings::emptyToNull)
                 .orElseGet(cls::getSimpleName);
 
 
-        val identityType = IdentityType.UNSPECIFIED;
+        var identityType = IdentityType.UNSPECIFIED;
 
         return Optional.of(new JdoPersistenceCapableFacetFromAnnotation(
                 schema,

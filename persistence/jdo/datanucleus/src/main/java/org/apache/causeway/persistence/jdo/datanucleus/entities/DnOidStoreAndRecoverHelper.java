@@ -26,7 +26,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 /**
  * JDO distinguishes between DETACHED and HOLLOW, where we are (historically) using HOLLOW,
@@ -54,7 +54,7 @@ public class DnOidStoreAndRecoverHelper {
     public Optional<String> recoverOid() {
         var sm = entityPojo.dnGetStateManager();
         if(sm instanceof DnStateManagerForHollow) {
-            val oidStringified = ((DnStateManagerForHollow)sm).oidStringified;
+            var oidStringified = ((DnStateManagerForHollow)sm).oidStringified;
             return Optional.of(oidStringified);
         }
         return Optional.empty();

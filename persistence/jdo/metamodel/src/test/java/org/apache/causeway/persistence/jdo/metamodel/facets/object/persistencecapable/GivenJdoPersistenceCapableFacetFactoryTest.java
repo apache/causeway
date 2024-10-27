@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-import lombok.val;
-
 class GivenJdoPersistenceCapableFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
@@ -55,7 +53,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        val featureTypes = facetFactory.getFeatureTypes();
+        var featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, FeatureType.OBJECT));
         assertFalse(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));

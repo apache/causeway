@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainS
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ListReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 
-import lombok.val;
+
 
 public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
@@ -67,7 +67,7 @@ extends ReprRendererAbstract<Void> {
             addLinkToSelf();
         }
 
-        val metaModelContext = super.getResourceContext().getMetaModelContext();
+        var metaModelContext = super.getResourceContext().getMetaModelContext();
 
         addLinkToUser(getResourceContext().getInteractionService().currentInteractionContextElseFail());
         addLinksToApplicationLogos();

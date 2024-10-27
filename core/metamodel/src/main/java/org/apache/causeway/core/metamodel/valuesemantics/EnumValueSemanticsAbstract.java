@@ -49,7 +49,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 public class EnumValueSemanticsAbstract<T extends Enum<T>>
@@ -114,7 +113,7 @@ implements
 
     private T fromEnumName(final EnumDto enumDto) {
 
-        val enumName = enumDto.getEnumName();
+        var enumName = enumDto.getEnumName();
 
         return enumName!=null
                 ? Stream.of(correspondingClass.getEnumConstants())
@@ -141,7 +140,7 @@ implements
 
     private String friendlyName(final Context context, final T objectAsEnum) {
 
-        val friendlyNameOfEnum = Optional.ofNullable(loadEnumSpec())
+        var friendlyNameOfEnum = Optional.ofNullable(loadEnumSpec())
             .map(enumSpec->ManagedObject.value(enumSpec, objectAsEnum))
             .map(MmTitleUtils::titleOf)
             .orElseGet(()->Enums.getFriendlyNameOf(objectAsEnum.name()));
@@ -165,7 +164,7 @@ implements
     public T parseTextRepresentation(
             final ValueSemanticsProvider.Context context,
             final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }
@@ -202,7 +201,7 @@ implements
 
     private ObjectSpecification loadEnumSpec() {
 
-        val cachedEnumSpec = enumSpecRef.get();
+        var cachedEnumSpec = enumSpecRef.get();
         if(cachedEnumSpec!=null) {
             return cachedEnumSpec;
         }
@@ -211,7 +210,7 @@ implements
             return null;
         }
 
-        val enumSpec = Try.call(()->{
+        var enumSpec = Try.call(()->{
             /* if not guarded by recursionDepth logic above,
              * might causes recursive call of lazy getter */
             return Optional.ofNullable(specificationLoaderProvider)

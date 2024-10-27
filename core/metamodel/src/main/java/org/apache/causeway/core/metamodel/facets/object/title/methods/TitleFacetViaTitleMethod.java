@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -80,7 +79,7 @@ implements HasImperativeAspect {
             return null;
         }
         try {
-            val returnValue = imperativeAspect.invokeSingleMethod(owningAdapter);
+            var returnValue = imperativeAspect.invokeSingleMethod(owningAdapter);
             if(returnValue instanceof String) {
                 return (String) returnValue;
             }
@@ -90,7 +89,7 @@ implements HasImperativeAspect {
             }
             return null;
         } catch (final RuntimeException ex) {
-            val isUnitTesting = Optional.ofNullable(getMetaModelContext())
+            var isUnitTesting = Optional.ofNullable(getMetaModelContext())
                     .map(MetaModelContext::getSystemEnvironment)
                     .map(CausewaySystemEnvironment::isUnitTesting)
                     .orElse(false);

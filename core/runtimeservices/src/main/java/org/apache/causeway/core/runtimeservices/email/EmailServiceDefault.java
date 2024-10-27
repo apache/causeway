@@ -40,7 +40,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -164,10 +163,10 @@ public class EmailServiceDefault implements EmailService {
 
         try {
 
-            val javaMailSender = emailSenderProvider.get();
+            var javaMailSender = emailSenderProvider.get();
 
-            val email = javaMailSender.createMimeMessage();
-            val emailHelper = new MimeMessageHelper(email, true);
+            var email = javaMailSender.createMimeMessage();
+            var emailHelper = new MimeMessageHelper(email, true);
 
             emailHelper.setFrom(getSenderEmailAddress());
 

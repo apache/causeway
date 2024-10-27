@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class PropertyNegotiationModel implements ManagedValue {
 
@@ -56,15 +55,15 @@ public class PropertyNegotiationModel implements ManagedValue {
     PropertyNegotiationModel(
             final ManagedProperty managedProperty) {
         this.managedProperty = managedProperty;
-        val propMeta = managedProperty.getMetaModel();
+        var propMeta = managedProperty.getMetaModel();
 
         validationFeedbackActive = _Bindables.forValue(false);
 
         isCurrentValueAbsent = _Observables.lazyBoolean(()->
             ManagedObjects.isNullOrUnspecifiedOrEmpty(managedProperty.getPropertyValue()));
 
-        val currentValue = managedProperty.getPropertyValue();
-        val defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
+        var currentValue = managedProperty.getPropertyValue();
+        var defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
             ? propMeta.isMandatory()
                     ? propMeta.getDefault(managedProperty.getOwner())
                     : ManagedObjects.nullToEmpty(getElementType(), currentValue)

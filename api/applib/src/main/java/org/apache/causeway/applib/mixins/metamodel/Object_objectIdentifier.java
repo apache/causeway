@@ -30,7 +30,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Contributes a property exposing the internal identifier of the domain
@@ -71,12 +70,12 @@ public class Object_objectIdentifier {
     extends org.apache.causeway.applib.CausewayModuleApplib.PropertyDomainEvent<Object_objectIdentifier, String> {}
 
     @MemberSupport public String prop() {
-        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return bookmark.getIdentifier();
     }
 
     @MemberSupport public boolean hideProp() {
-        val bookmark = bookmarkService.bookmarkForElseFail(this.holder);
+        var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
         return !metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED).isEntity();
     }
 

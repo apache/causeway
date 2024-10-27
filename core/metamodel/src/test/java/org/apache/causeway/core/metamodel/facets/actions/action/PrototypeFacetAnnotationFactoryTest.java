@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
-import lombok.val;
-
 class PrototypeFacetAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -42,7 +40,7 @@ extends FacetFactoryTestAbstract {
 
     private void processRestrictTo(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processRestrictTo(processMethodContext, actionIfAny);
     }
 

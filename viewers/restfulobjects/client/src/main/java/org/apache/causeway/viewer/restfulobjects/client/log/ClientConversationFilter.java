@@ -31,7 +31,7 @@ import jakarta.ws.rs.client.ClientResponseFilter;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 
-import lombok.val;
+
 
 /**
  * @since 2.0 {@index}
@@ -50,8 +50,8 @@ extends ClientRequestFilter, ClientResponseFilter {
 
     @Override
     default void filter(ClientRequestContext requestContext) throws IOException {
-        val endpoint = requestContext.getUri().toString();
-        val method = requestContext.getMethod();
+        var endpoint = requestContext.getUri().toString();
+        var method = requestContext.getMethod();
 
         Exception acceptableMediaTypeParsingFailure;
         try {
@@ -76,10 +76,10 @@ extends ClientRequestFilter, ClientResponseFilter {
     @Override
     default void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
 
-        val inputStream = responseContext.getEntityStream();
+        var inputStream = responseContext.getEntityStream();
         final String responseBody;
         if(inputStream!=null) {
-            val bytes = _Bytes.ofKeepOpen(inputStream);
+            var bytes = _Bytes.ofKeepOpen(inputStream);
             responseBody = new String(bytes, StandardCharsets.UTF_8);
             responseContext.setEntityStream(new ByteArrayInputStream(bytes));
         } else {

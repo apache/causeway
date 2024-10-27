@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParen
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -99,7 +98,7 @@ extends NavigableParentFacetAbstract {
             final @NonNull ResolvedMethod method,
             final @NonNull FacetHolder holder) {
 
-        val navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.returnType());
+        var navigableParentSpec = holder.getSpecificationLoader().loadSpecification(method.returnType());
         if(navigableParentSpec==null) {
             return Either.left("vetoed");
         }

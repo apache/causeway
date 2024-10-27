@@ -39,7 +39,6 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -133,10 +132,10 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> elementType,
             final List<String> associationIds) {
 
-        val domainClass = domainObject.getClass();
-        val resourceNames = buildResourceNames(domainClass, collectionId, elementType);
+        var domainClass = domainObject.getClass();
+        var resourceNames = buildResourceNames(domainClass, collectionId, elementType);
         addResourceNames(elementType, resourceNames);   // fallback to reading the element type's own .txt file.
-        val contents = tryLoad(domainClass, resourceNames)
+        var contents = tryLoad(domainClass, resourceNames)
                 .orElse(null);
         return contentsMatching(contents, associationIds);
     }
@@ -145,7 +144,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
             final Class<?> domainClass,
             final String collectionId,
             final Class<?> elementType) {
-        val resourceNames = new ArrayList<String>();
+        var resourceNames = new ArrayList<String>();
         addResourceNames(domainClass, collectionId, elementType, resourceNames);
         return resourceNames;
     }
@@ -212,14 +211,14 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
     public List<String> orderStandalone(
             final Class<?> domainType,
             final List<String> associationIds) {
-        val resourceNames = buildResourceNames(domainType);
-        val contents = tryLoad(domainType, resourceNames)
+        var resourceNames = buildResourceNames(domainType);
+        var contents = tryLoad(domainType, resourceNames)
                 .orElse(null);
         return contentsMatching(contents, associationIds);
     }
 
     private List<String> buildResourceNames(final Class<?> domainClass) {
-        val resourceNames = new ArrayList<String>();
+        var resourceNames = new ArrayList<String>();
         addResourceNames(domainClass, resourceNames);
         return resourceNames;
     }

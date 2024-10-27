@@ -61,7 +61,7 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 /**
  * Intended as a base class for integration testing.
@@ -146,7 +146,7 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     protected RestfulClient restfulClient() {
-        val clientConfig = RestfulClientConfig.builder()
+        var clientConfig = RestfulClientConfig.builder()
                 .restfulBaseUrl(String.format("http://0.0.0.0:%d/restful/", port))
                 .authenticationMode(AuthenticationMode.BASIC)
                 .basicAuthUser("any")           // using bypass auth.
@@ -203,7 +203,7 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
 
 
     protected Blob asPdfBlob(final String fileName) {
-        val bytes = toBytes(fileName);
+        var bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 

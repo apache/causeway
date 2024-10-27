@@ -26,8 +26,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 
-import lombok.val;
-
 public record NavbarSection(
         DomainServiceLayout.MenuBar menuBarSelect,
         Can<MenuDropdown> topLevelEntries) {
@@ -46,9 +44,9 @@ public record NavbarSection(
         topLevelEntries.forEach(topLevel->{
             menuVisitor.onTopLevel(topLevel);
             topLevel.subEntries().forEach(subEntry->{
-                val asAction = subEntry.asAction();
+                var asAction = subEntry.asAction();
                 asAction.ifPresentOrElse(menuVisitor::onMenuAction, ()->{
-                    val asSpacer = subEntry.asSpacer();
+                    var asSpacer = subEntry.asSpacer();
                     asSpacer.ifPresent(spacer->{
                         if(spacer.isEmpty()) {
                             menuVisitor.onSectionSpacer();

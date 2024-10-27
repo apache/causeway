@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.EditingEnabledFacet;
 
-import lombok.val;
-
 /**
  *
  * @since 2.0
@@ -39,7 +37,7 @@ public class EditingEnabledFacetForDomainObjectAnnotation extends FacetAbstract 
             final Optional<DomainObject> domainObjectIfAny,
             final FacetHolder holder) {
 
-        val isEditingEnabled = domainObjectIfAny
+        var isEditingEnabled = domainObjectIfAny
         .map(DomainObject::editing)
         .map(editing->editing==Editing.ENABLED)
         .orElse(false);

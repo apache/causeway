@@ -28,8 +28,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
 
-import lombok.val;
-
 class CalloutContinuationTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -64,19 +62,19 @@ class CalloutContinuationTest extends AbstractAsciiDocWriterTest {
     @Test
     void testFootnote() throws IOException {
 
-        val callouts = AsciiDocFactory.callouts(doc);
-        val calloutLI = AsciiDocFactory.callout(callouts, "fn-1");
-        val callout = AsciiDocFactory.openBlock(calloutLI);
+        var callouts = AsciiDocFactory.callouts(doc);
+        var calloutLI = AsciiDocFactory.callout(callouts, "fn-1");
+        var callout = AsciiDocFactory.openBlock(calloutLI);
 
 
-        val note = AsciiDocFactory.warning(callout);
+        var note = AsciiDocFactory.warning(callout);
         AsciiDocFactory.block(note, "warn-1");
         AsciiDocFactory.block(note, "warn-2");
 
         AsciiDocFactory.block(callout, "para-1");
         AsciiDocFactory.block(callout, "para-2");
 
-        val nestedList = AsciiDocFactory.list(callout);
+        var nestedList = AsciiDocFactory.list(callout);
         AsciiDocFactory.listItem(nestedList, "li-1");
         AsciiDocFactory.listItem(nestedList, "li-2");
 

@@ -32,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
 import lombok.Value;
-import lombok.val;
 
 class IdStringifierForSerializable_Test {
 
@@ -65,7 +64,7 @@ class IdStringifierForSerializable_Test {
     @MethodSource()
     void roundtrip(final Serializable value) {
 
-        val stringifier = new IdStringifierForSerializable(codec);
+        var stringifier = new IdStringifierForSerializable(codec);
 
         String stringified = stringifier.enstring(value);
         Serializable parse = stringifier.destring(stringified);

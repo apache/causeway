@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public interface DataTableInteractive extends MultiselectChoices {
 
@@ -74,8 +73,8 @@ public interface DataTableInteractive extends MultiselectChoices {
         final int columnIndex;
         final MmSortUtils.SortDirection sortDirection;
         public Optional<Comparator<ManagedObject>> asComparator(final Can<? extends DataColumn> columns) {
-            val columnToSort = columns.get(columnIndex).orElse(null);
-            val sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
+            var columnToSort = columns.get(columnIndex).orElse(null);
+            var sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
             return Optional.ofNullable(sortProperty)
                     .map(prop->MmSortUtils.orderingBy(sortProperty, sortDirection));
         }

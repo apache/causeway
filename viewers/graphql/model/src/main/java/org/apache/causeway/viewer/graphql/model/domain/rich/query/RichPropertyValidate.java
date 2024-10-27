@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Proper
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
+
 
 public class RichPropertyValidate extends Element {
 
@@ -43,7 +43,7 @@ public class RichPropertyValidate extends Element {
         super(context);
         this.holder = propertyInteractor;
 
-        val fieldBuilder = newFieldDefinition()
+        var fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
         propertyInteractor.addGqlArgument(propertyInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
@@ -54,21 +54,21 @@ public class RichPropertyValidate extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
             return null;
         }
 
-        val otoa = holder.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var otoa = holder.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val arguments = dataFetchingEnvironment.getArguments();
-        val argumentValue = arguments.get(otoa.asciiId());
-        val argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
+        var arguments = dataFetchingEnvironment.getArguments();
+        var argumentValue = arguments.get(otoa.asciiId());
+        var argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
-        val valid = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        var valid = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
         return valid.isVetoed() ? valid.getReasonAsString().orElse("invalid") : null;
     }
 

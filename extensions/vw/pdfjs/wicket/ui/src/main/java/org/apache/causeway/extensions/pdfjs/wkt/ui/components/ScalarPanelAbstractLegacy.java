@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
+
 
 abstract class ScalarPanelAbstractLegacy
 extends PanelAbstract<ManagedObject, ScalarModel> {
@@ -73,7 +73,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     }
 
     private void addCssFromMetaModel() {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
 
         Wkt.cssAppend(this, scalarModel.getCssClass());
 

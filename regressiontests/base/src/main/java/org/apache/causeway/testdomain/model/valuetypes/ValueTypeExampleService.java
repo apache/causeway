@@ -33,7 +33,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Value;
-import lombok.val;
+
 
 @Service
 public class ValueTypeExampleService {
@@ -44,7 +44,7 @@ public class ValueTypeExampleService {
     @Value(staticConstructor = "of")
     public static class Scenario implements Comparable<Scenario> {
         static Scenario of(final ValueTypeExample<?> example) {
-            val name = example.getName();
+            var name = example.getName();
             return Scenario.of(name, Arguments.of(
                     name,
                     example.getValueType(),
@@ -62,7 +62,7 @@ public class ValueTypeExampleService {
     }
 
     public Stream<Scenario> streamScenarios() {
-        val sortedScenarios = streamExamples()
+        var sortedScenarios = streamExamples()
             .map(Scenario::of)
             .collect(Collectors.toCollection(TreeSet::new));
         return sortedScenarios.stream();

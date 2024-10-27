@@ -26,7 +26,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSourc
 import org.apache.causeway.viewer.wicket.ui.util.LicensedTextTemplate;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 public class FullCalendarEventSourceEvents
@@ -46,8 +45,8 @@ extends LicensedTextTemplate {
     public static void setupEventSourceUrls(
             final CalendarConfig calendarConfig,
             final Function<EventSource, String> eventSourceUrlProvider) {
-        val instance = instance();
-        for (val eventSource : calendarConfig.getEventSources()) {
+        var instance = instance();
+        for (var eventSource : calendarConfig.getEventSources()) {
             eventSource.setEvents(instance.asString(Map.of("url", eventSourceUrlProvider.apply(eventSource))));
         }
     }

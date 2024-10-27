@@ -47,7 +47,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class PropertyDomainEventFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
@@ -74,7 +73,7 @@ implements
             final @NonNull Optional<PropertyOrCollectionAccessorFacet> getterFacet,
             final @NonNull FacetHolder facetHolder) {
 
-        val propertyDomainEventFacet = propertyIfAny
+        var propertyDomainEventFacet = propertyIfAny
                 .map(Property::domainEvent)
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
                 .map(domainEvent -> new PropertyDomainEventFacet(domainEvent,
@@ -82,8 +81,8 @@ implements
                 .orElseGet(()->{
 
                     /* only used to lookup {@link PropertyDomainEventDefaultFacetForDomainObjectAnnotation} */
-                    val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
-                    val typeFromDomainObject = typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                    var typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
+                    var typeFromDomainObject = typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
                     return typeFromDomainObject != null
                             ? new PropertyDomainEventFacet(

@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -92,7 +91,7 @@ implements HasMetaModel<ObjectAction> {
      */
     public Can<ManagedObject> getPopulatedParameterValues(@Nullable final List<Object> pojoArgList) {
 
-        val params = getMetaModel().getParameters();
+        var params = getMetaModel().getParameters();
 
         _Assert.assertEquals(params.size(), _NullSafe.size(pojoArgList));
 
@@ -121,7 +120,7 @@ implements HasMetaModel<ObjectAction> {
         // third pass ... verify we have found a fixed point
         final int maxIterations = 3;
 
-        val fixedPoint = fixedPointSearch(
+        var fixedPoint = fixedPointSearch(
                 getEmptyParameterValues(),
                 // vector of packed values - where each is either scalar or non-scalar
                 paramVector->iterate(managedAction, paramVector),
@@ -146,7 +145,7 @@ implements HasMetaModel<ObjectAction> {
     private Can<ManagedObject> iterate(
             final @NonNull ManagedAction managedAction,
             final @NonNull Can<ManagedObject> paramVector) {
-        val pendingParamModel = ParameterNegotiationModel.of(managedAction, paramVector);
+        var pendingParamModel = ParameterNegotiationModel.of(managedAction, paramVector);
         return getMetaModel().getParameters()
             .map(param->param.getDefault(pendingParamModel));
     }

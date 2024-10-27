@@ -41,7 +41,7 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepo
 import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationRole_removePermissions.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  *
@@ -96,7 +96,7 @@ public class ApplicationRole_removePermissions {
     }
 
     private static boolean isStickyAdminNamespace(final Secman secman, final String featureFqn) {
-        val adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
+        var adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
         return _NullSafe.stream(adminNamespacePermissions.getSticky())
                 .anyMatch(stickyPackage -> stickyPackage.equals(featureFqn));
     }

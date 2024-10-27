@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContaine
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Responsibility: member lookup and streaming with support for inheritance,
@@ -71,7 +70,7 @@ implements
     public Optional<ObjectAction> getAction(
             final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
 
-        val declaredAction = getDeclaredAction(id, mixedIn); // no inheritance nor type considered
+        var declaredAction = getDeclaredAction(id, mixedIn); // no inheritance nor type considered
 
         if(declaredAction.isPresent()) {
             // action found but if its not the right type, stop searching
@@ -92,14 +91,14 @@ implements
             final MixedIn mixedIn,
             final Consumer<ObjectAction> onActionOverloaded) {
 
-        val actionStream = isTypeHierarchyRoot()
+        var actionStream = isTypeHierarchyRoot()
                 ? streamDeclaredActions(actionTypes, mixedIn) // stop going deeper
                 : Stream.concat(
                         streamDeclaredActions(actionTypes, mixedIn),
                         superclass().streamActions(actionTypes, mixedIn));
 
-        val actionSignatures = _Sets.<String>newHashSet();
-        val actionIds = _Sets.<String>newHashSet();
+        var actionSignatures = _Sets.<String>newHashSet();
+        var actionIds = _Sets.<String>newHashSet();
 
         return actionStream
 
@@ -108,14 +107,14 @@ implements
             if(action.isMixedIn()) {
                 return true; // do not filter mixedIn actions based on signature
             }
-            val isUnique = actionSignatures
+            var isUnique = actionSignatures
                     .add(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString());
             return isUnique;
         })
 
         // ensure we don't emit duplicates
         .filter(action->{
-            val isUnique = actionIds.add(action.getId());
+            var isUnique = actionIds.add(action.getId());
             if(!isUnique) {
                 onActionOverloaded.accept(action);
             }
@@ -128,7 +127,7 @@ implements
     @Override
     public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
 
-        val declaredAssociation = getDeclaredAssociation(id, mixedIn); // no inheritance considered
+        var declaredAssociation = getDeclaredAssociation(id, mixedIn); // no inheritance considered
 
         if(declaredAssociation.isPresent()) {
             return declaredAssociation;
@@ -146,7 +145,7 @@ implements
             return streamDeclaredAssociations(mixedIn); // stop going deeper
         }
 
-        val ids = _Sets.<String>newHashSet();
+        var ids = _Sets.<String>newHashSet();
 
         return Stream.concat(
                 streamDeclaredAssociations(mixedIn),

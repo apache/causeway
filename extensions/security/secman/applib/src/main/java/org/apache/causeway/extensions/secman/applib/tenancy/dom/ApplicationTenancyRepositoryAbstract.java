@@ -33,7 +33,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  *
@@ -73,7 +73,7 @@ implements ApplicationTenancyRepository {
         if (search == null) {
             return Collections.emptySortedSet();
         }
-        val regex = regexReplacer.asRegex(search);
+        var regex = regexReplacer.asRegex(search);
         return repository.allMatches(Query.named(this.applicationTenancyClass, ApplicationTenancy.Nq.FIND_BY_NAME_OR_PATH_MATCHING)
                 .withParameter("regex", regex))
                 .stream()
@@ -204,7 +204,7 @@ implements ApplicationTenancyRepository {
     @Override
     public void clearParentOnTenancy(
             final @NonNull ApplicationTenancy tenancy) {
-        val parent = tenancy.getParent();
+        var parent = tenancy.getParent();
         if(parent != null) {
             parent.getChildren().remove(tenancy);
             tenancy.setParent(null);

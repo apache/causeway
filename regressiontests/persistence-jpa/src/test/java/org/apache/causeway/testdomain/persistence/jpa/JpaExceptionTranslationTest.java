@@ -37,7 +37,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -70,10 +70,10 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
                 // given
 
-                val inventories = repositoryService.allInstances(JpaInventory.class);
+                var inventories = repositoryService.allInstances(JpaInventory.class);
                 assertEquals(1, inventories.size());
 
-                val inventory = inventories.get(0);
+                var inventory = inventories.get(0);
                 assertNotNull(inventory);
 
 
@@ -88,10 +88,10 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
         run(()->{
 
-            val inventories = repositoryService.allInstances(JpaInventory.class);
+            var inventories = repositoryService.allInstances(JpaInventory.class);
             assertEquals(1, inventories.size());
 
-            val inventory = inventories.get(0);
+            var inventory = inventories.get(0);
             assertNotNull(inventory);
 
             assertNotNull(inventory);

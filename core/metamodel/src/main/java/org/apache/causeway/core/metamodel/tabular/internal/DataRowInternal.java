@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.tabular.DataRow;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 class DataRowInternal
 implements DataRow {
@@ -84,7 +83,7 @@ implements DataRow {
     @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
         final ObjectAssociation assoc = column.getAssociationMetaModel();
-        val interactionInitiatedBy = InteractionInitiatedBy.PASS_THROUGH;
+        var interactionInitiatedBy = InteractionInitiatedBy.PASS_THROUGH;
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue

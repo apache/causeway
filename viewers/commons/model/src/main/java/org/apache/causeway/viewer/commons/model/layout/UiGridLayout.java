@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.commons.model.UiModel;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(staticName = "bind")
 public class UiGridLayout implements UiModel {
@@ -73,7 +72,7 @@ public class UiGridLayout implements UiModel {
         // recursively visit the grid
         gridData.get()
         .ifPresent(bsGrid->{
-            for(val bsRow: bsGrid.getRows()) {
+            for(var bsRow: bsGrid.getRows()) {
                 visitRow(bsRow, visitor.rootContainer, visitor);
             }
         });
@@ -88,7 +87,7 @@ public class UiGridLayout implements UiModel {
     //TODO[refactor] this should not be necessary here, the GridFacet should already have done that for us
     private BSGrid attachAssociatedActions(final BSGrid bSGrid) {
 
-        val primedActions = bSGrid.getAllActionsById();
+        var primedActions = bSGrid.getAllActionsById();
         final Set<String> actionIdsAlreadyAdded = _Sets.newHashSet(primedActions.keySet());
 
         managedObject.getSpecification().streamProperties(MixedIn.INCLUDED)
@@ -113,9 +112,9 @@ public class UiGridLayout implements UiModel {
 
     private <C, T> void visitRow(final BSRow bsRow, final C container, final Visitor<C, T> visitor) {
 
-        val uiRow = visitor.newRow(container, bsRow);
+        var uiRow = visitor.newRow(container, bsRow);
 
-        for(val bsRowContent: bsRow.getCols()) {
+        for(var bsRowContent: bsRow.getCols()) {
             if(bsRowContent instanceof BSCol) {
 
                 visitCol((BSCol) bsRowContent, uiRow, visitor);
@@ -129,61 +128,61 @@ public class UiGridLayout implements UiModel {
     }
 
     private <C, T> void visitCol(final BSCol bSCol, final C container, final Visitor<C, T> visitor) {
-        val uiCol = visitor.newCol(container, bSCol);
+        var uiCol = visitor.newCol(container, bSCol);
 
-        val hasDomainObject = bSCol.getDomainObject()!=null;
-        val hasActions = _NullSafe.size(bSCol.getActions())>0;
-        val hasRows = _NullSafe.size(bSCol.getRows())>0;
+        var hasDomainObject = bSCol.getDomainObject()!=null;
+        var hasActions = _NullSafe.size(bSCol.getActions())>0;
+        var hasRows = _NullSafe.size(bSCol.getRows())>0;
 
         if(hasDomainObject || hasActions) {
-            val uiActionPanel = visitor.newActionPanel(uiCol);
+            var uiActionPanel = visitor.newActionPanel(uiCol);
             if(hasDomainObject) {
                 visitor.onObjectTitle(uiActionPanel, bSCol.getDomainObject());
             }
             if(hasActions) {
-                for(val action : bSCol.getActions()) {
+                for(var action : bSCol.getActions()) {
                     visitor.onAction(uiActionPanel, action);
                 }
             }
         }
 
-        for(val fieldSet : bSCol.getFieldSets()) {
+        for(var fieldSet : bSCol.getFieldSets()) {
             visitFieldSet(fieldSet, uiCol, visitor);
         }
 
-        for(val tabGroup : bSCol.getTabGroups()) {
+        for(var tabGroup : bSCol.getTabGroups()) {
             visitTabGroup(tabGroup, uiCol, visitor);
         }
 
         if(hasRows) {
-            for(val bsRow: bSCol.getRows()) {
+            for(var bsRow: bSCol.getRows()) {
                 visitRow(bsRow, uiCol, visitor);
             }
         }
 
-        for(val collectionData : bSCol.getCollections()) {
+        for(var collectionData : bSCol.getCollections()) {
             visitor.onCollection(uiCol, collectionData);
         }
 
     }
 
     private <C, T> void visitTabGroup(final BSTabGroup BSColTabGroup, final C container, final Visitor<C, T> visitor) {
-        val uiTabGroup = visitor.newTabGroup(container, BSColTabGroup);
-        for(val bsTab: BSColTabGroup.getTabs()) {
+        var uiTabGroup = visitor.newTabGroup(container, BSColTabGroup);
+        for(var bsTab: BSColTabGroup.getTabs()) {
             visitTab(bsTab, uiTabGroup, visitor);
         }
     }
 
     private <C, T> void visitTab(final BSTab bSTab, final T container, final Visitor<C, T> visitor) {
-        val uiTab = visitor.newTab(container, bSTab);
-        for(val bsRow: bSTab.getRows()) {
+        var uiTab = visitor.newTab(container, bSTab);
+        for(var bsRow: bSTab.getRows()) {
             visitRow(bsRow, uiTab, visitor);
         }
     }
 
     private <C, T> void visitFieldSet(final FieldSet cptFieldSet, final C container, final Visitor<C, T> visitor) {
-        val uiFieldSet = visitor.newFieldSet(container, cptFieldSet);
-        for(val propertyData: cptFieldSet.getProperties()) {
+        var uiFieldSet = visitor.newFieldSet(container, cptFieldSet);
+        for(var propertyData: cptFieldSet.getProperties()) {
             visitor.onProperty(uiFieldSet, propertyData);
         }
     }

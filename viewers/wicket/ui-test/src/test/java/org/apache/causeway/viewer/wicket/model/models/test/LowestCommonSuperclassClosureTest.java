@@ -27,8 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 
-import lombok.val;
-
 class LowestCommonSuperclassClosureTest {
 
     static class Animal {}
@@ -55,7 +53,7 @@ class LowestCommonSuperclassClosureTest {
     // -- HELPER
 
     private static void assertCommonOfListIs(final List<Object> list, final Class<?> expected) {
-        val commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
+        var commonSuperClassFinder = new ClassExtensions.CommonSuperclassFinder();
         list.forEach(commonSuperClassFinder::collect);
         assertEquals(expected, commonSuperClassFinder.getCommonSuperclass().get());
     }

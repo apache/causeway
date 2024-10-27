@@ -41,7 +41,6 @@ import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Default implementation of {@link SerializingAdapter}, intended as an 'internal' service.
@@ -103,7 +102,7 @@ public class SerializingAdapterDefault implements SerializingAdapter {
         // otherwise, perhaps the value itself is a ValueDecomposition, in which case we
         // re-compose the original value
         if(value instanceof ValueDecomposition) {
-            val decomposition = (ValueDecomposition) value;
+            var decomposition = (ValueDecomposition) value;
             return fromValueDecomposition(valueClass, (ValueDecomposition) value)
                     .orElseThrow(()->
                       _Exceptions.unrecoverable("cannot restore object of type %s from decomposition '%s'",

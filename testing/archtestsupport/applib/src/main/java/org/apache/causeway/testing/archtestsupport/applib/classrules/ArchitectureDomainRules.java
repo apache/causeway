@@ -58,7 +58,7 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -112,7 +112,7 @@ public class ArchitectureDomainRules {
                 .should(new ArchCondition<>("be unique") {
                     @Override
                     public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
-                        val logicalTypeName = _LogicalNaming.logicalNameFor(javaClass);
+                        var logicalTypeName = _LogicalNaming.logicalNameFor(javaClass);
 
                         final JavaClass existing = javaClassByLogicalTypeName.get(logicalTypeName);
                         if (existing != null) {
@@ -161,8 +161,8 @@ public class ArchitectureDomainRules {
                 if (!javaAnnotation.getRawType().isAssignableTo(annotationClass)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val value = properties.get("logicalTypeName");
+                var properties = javaAnnotation.getProperties();
+                var value = properties.get("logicalTypeName");
                 return value instanceof String && ((String) value).length() > 0;
             }
         };
@@ -248,7 +248,7 @@ public class ArchitectureDomainRules {
                         if (!item.isTopLevelClass() || item.isAnnotation()) {
                             return;
                         }
-                        val oneArgConstructorParameterTypeIfAny = item.getConstructors().stream()
+                        var oneArgConstructorParameterTypeIfAny = item.getConstructors().stream()
                                 .map(JavaCodeUnit::getRawParameterTypes)
                                 .filter(rawParameterTypes -> rawParameterTypes.size() == 1)
                                 .map(x -> x.get(0))
@@ -259,19 +259,19 @@ public class ArchitectureDomainRules {
                             return;
                         }
                         final JavaClass parameterType = oneArgConstructorParameterTypeIfAny.get();
-                        val constructorClassName = parameterType.getSimpleName();
-                        val requiredPrefix = constructorClassName + "_";
+                        var constructorClassName = parameterType.getSimpleName();
+                        var requiredPrefix = constructorClassName + "_";
                         if (!item.getSimpleName().startsWith(requiredPrefix)) {
                             events.add(new SimpleConditionEvent(item, false,
                                     item.getSimpleName() + " should have a prefix of '" + requiredPrefix
                                             + "'"));
                             return;
                         }
-                        val mixinMethodName = item
+                        var mixinMethodName = item
                                 .tryGetAnnotationOfType(DomainObject.class)
                                 .map(DomainObject::mixinMethod)
                                 .orElse(mixinMethodNameDefault);
-                        val mixinMethodIfAny = item.getAllMethods().stream()
+                        var mixinMethodIfAny = item.getAllMethods().stream()
                                 .filter(function.apply(mixinMethodName)).findAny();
                         if (!mixinMethodIfAny.isPresent()) {
                             events.add(new SimpleConditionEvent(item, false,
@@ -398,11 +398,11 @@ public class ArchitectureDomainRules {
         return new DescribedPredicate<JavaClass>("are serializable view models") {
             @Override
             public boolean test(final JavaClass input) {
-                val domainObjectIfAny = input.tryGetAnnotationOfType(DomainObject.class);
+                var domainObjectIfAny = input.tryGetAnnotationOfType(DomainObject.class);
                 if(!domainObjectIfAny.isPresent()) {
                     return false;
                 }
-                val domainObject = domainObjectIfAny.get();
+                var domainObject = domainObjectIfAny.get();
                 final Nature nature = domainObject.nature();
                 if(nature != Nature.VIEW_MODEL) {
                     return false;

@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public final class ManagedCollection extends ManagedMember {
 
@@ -95,7 +94,7 @@ public final class ManagedCollection extends ManagedMember {
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
     public Stream<ManagedObject> streamElements(final InteractionInitiatedBy interactionInitiatedBy) {
-        val valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
+        var valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(valueAdapter);
     }
 

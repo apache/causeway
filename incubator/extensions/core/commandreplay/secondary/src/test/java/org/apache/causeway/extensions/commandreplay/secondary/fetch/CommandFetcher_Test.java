@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.status.StatusException;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
                 CommandFetcher_Test.TestManifest.class
@@ -62,22 +60,22 @@ class CommandFetcher_Test {
     void testing_the_fetcher() throws StatusException {
 
         // given
-        val mmc = MetaModelContext_forTesting.buildDefault();
+        var mmc = MetaModelContext_forTesting.buildDefault();
 
-        val config = mmc.getConfiguration().getExtensions().getCommandReplay();
+        var config = mmc.getConfiguration().getExtensions().getCommandReplay();
         config.getPrimaryAccess().setUser(Optional.of("sven"));
         config.getPrimaryAccess().setPassword(Optional.of("pass"));
         config.getPrimaryAccess().setBaseUrlRestful(Optional.of("http://localhost:8080/restful/"));
         config.getPrimaryAccess().setBaseUrlWicket(Optional.of("http://localhost:8080/wicket/"));
         config.setBatchSize(10);
 
-        val secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
-        val useRequestDebugLogging = true;
-        val fetcher = new CommandFetcher(secondaryConfig, useRequestDebugLogging);
+        var secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
+        var useRequestDebugLogging = true;
+        var fetcher = new CommandFetcher(secondaryConfig, useRequestDebugLogging);
 
         // when
         //log.info("about to call REST endpoint ...");
-        val commands = fetcher.callPrimary(null);
+        var commands = fetcher.callPrimary(null);
         assertNotNull(commands);
         System.out.println(commands);
     }

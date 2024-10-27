@@ -37,8 +37,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class GridLoadingTest
 extends MetaModelTestAbstract {
 
@@ -54,29 +52,29 @@ extends MetaModelTestAbstract {
 
     // test blueprint, for future work
     void blueprint() {
-        val domainClassAndLayout = new GridLoaderServiceDefault.LayoutKey(Bar.class, null);
+        var domainClassAndLayout = new GridLoaderServiceDefault.LayoutKey(Bar.class, null);
         gridLoaderService.loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
 
-        val xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
+        var xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
         System.out.println(xml);
     }
 
     @Test
     void customNamed() {
 
-        val customNamed = "Hello";
+        var customNamed = "Hello";
 
-        val barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
+        var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
-        val gridFacet = barSpec.getFacet(GridFacet.class);
+        var gridFacet = barSpec.getFacet(GridFacet.class);
         assertNotNull(gridFacet);
 
         // triggers grid to be loaded (if initial or reloading supported)
-        val grid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        var grid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
         assertNotNull(grid);
 
         // verify object-action's member named facet was installed when loading Grid from XML
-        val objectAction = barSpec.getAction("createSimpleObject").orElse(null);
+        var objectAction = barSpec.getAction("createSimpleObject").orElse(null);
         assertNotNull(objectAction);
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
 
@@ -84,16 +82,16 @@ extends MetaModelTestAbstract {
         // verify however, that the number of facets stays constant
 
         // triggers grid to be re-loaded
-        val grid2 = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        var grid2 = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
         assertNotSame(grid, grid2); // verify that we actually got a new grid, indicative of a reload having taken place
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
 
-        val facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
+        var facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
         assertNotNull(facetRanking);
 
         // XML layout facets are installed at precedence HIGH
-        val xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
+        var xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
 
         // verify rank did not grow with latest layout.xml reload
         assertEquals(1, xmlFacetRank.size());

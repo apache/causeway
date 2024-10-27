@@ -36,8 +36,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import static org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter.excluding;
 import static org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter.excludingNone;
 
-import lombok.val;
-
 /**
  *
  * @since 2.0
@@ -53,7 +51,7 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
 
     @PostConstruct
     public void init() {
-        val isIgnoreDeprecated =
+        var isIgnoreDeprecated =
                 configuration.getCore().getMetaModel().getProgrammingModel().isIgnoreDeprecated();
 
         this.filterOnMarker = isIgnoreDeprecated

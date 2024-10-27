@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.properties.update.modify.Proper
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
 
-import lombok.val;
-
 /**
  * Sets up the {@link PropertySetterFacetViaSetterMethod} to invoke the
  * property's setter if available, but if none then marks the property as
@@ -51,14 +49,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val getterMethod = processMethodContext.getMethod();
+        var getterMethod = processMethodContext.getMethod();
         final String capitalizedName = _Strings.baseName(getterMethod.getName());
-        val methodNameCandidates = Can.ofSingleton(
+        var methodNameCandidates = Can.ofSingleton(
                 AccessorSemantics.SET.prefix(capitalizedName));
 
         final Class<?>[] signature = new Class[] { getterMethod.getReturnType() };
 
-        val setterMethods =
+        var setterMethods =
         MethodFinder
         .accessor(processMethodContext.getCls(), methodNameCandidates, processMethodContext.getIntrospectionPolicy())
         .withReturnTypeAnyOf(ReturnTypeCategory.VOID.getReturnTypes())

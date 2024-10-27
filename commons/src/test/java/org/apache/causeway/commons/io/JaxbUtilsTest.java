@@ -41,7 +41,6 @@ import org.apache.causeway.commons.io.JaxbUtils.JaxbOptions.JaxbOptionsBuilder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 class JaxbUtilsTest {
 
@@ -93,14 +92,14 @@ class JaxbUtilsTest {
         void typesafeUnmarshallingFromAmbiguousContext() {
 
             // when ... doing a round trip
-            val aXml = JaxbUtils.toStringUtf8(a);
-            val bXml = JaxbUtils.toStringUtf8(b);
+            var aXml = JaxbUtils.toStringUtf8(a);
+            var bXml = JaxbUtils.toStringUtf8(b);
 
             assertTrue(_Strings.isNotEmpty(aXml));
             assertTrue(_Strings.isNotEmpty(bXml));
 
-            val aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
-            val bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
+            var aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
+            var bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
 
             // then
             assertEquals(a, aRecovered);
@@ -111,13 +110,13 @@ class JaxbUtilsTest {
 
     @Test
     void toStringUtf8_with_no_options() {
-        val aXml = JaxbUtils.toStringUtf8(a);
+        var aXml = JaxbUtils.toStringUtf8(a);
         Approvals.verify(aXml);
     }
 
     @Test
     void toStringUtf8_with_no_formatted_output() {
-        val aXml = JaxbUtils.toStringUtf8(a, opt -> {
+        var aXml = JaxbUtils.toStringUtf8(a, opt -> {
             opt.formattedOutput(false);
             return opt;
         });
@@ -126,7 +125,7 @@ class JaxbUtilsTest {
 
     @Test
     void toStringUtf8_with_indent_number_overridden() {
-        val aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
+        var aXml = JaxbUtils.toStringUtf8(a, new JaxbUtils.TransformerFactoryCustomizer() {
             @Override
             public void apply(final TransformerFactory transformerFactory) {
                 transformerFactory.setAttribute("indent-number", 2);

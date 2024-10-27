@@ -43,14 +43,12 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.CollectionLa
 import org.apache.causeway.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutAnnotation;
 
-import lombok.val;
-
 class CollectionLayoutAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
 
     @Test
     void collectionLayoutAnnotation_named() {
-        val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
+        var facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         class Customer {
             @CollectionLayout(named = "1st names")
             public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }
@@ -59,7 +57,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            val facet = facetedMethod.getFacet(MemberNamedFacet.class);
+            var facet = facetedMethod.getFacet(MemberNamedFacet.class);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(MemberNamedFacetForCollectionLayoutAnnotation.class)));
             assertThat(((HasStaticText)facet).text(), is(equalTo("1st names")));
@@ -68,7 +66,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void collectionLayoutAnnotation_hidden() {
-        val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
+        var facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         class Customer {
             @CollectionLayout(hidden = Where.OBJECT_FORMS)
             public SortedSet<String> getFirstNames() { return _Sets.newTreeSet(); }

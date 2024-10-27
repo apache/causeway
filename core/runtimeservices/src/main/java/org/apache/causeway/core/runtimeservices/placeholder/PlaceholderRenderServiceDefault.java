@@ -37,7 +37,6 @@ import org.apache.causeway.commons.internal.html._BootstrapBadge;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Default implementation of {@link PlaceholderRenderService},
@@ -66,7 +65,7 @@ implements PlaceholderRenderService {
             @NonNull final PlaceholderLiteral placeholderLiteral,
             @Nullable final Map<String, String> vars) {
 
-        val href = Optional.ofNullable(vars).map(map->map.get("href"));
+        var href = Optional.ofNullable(vars).map(map->map.get("href"));
 
         return _BootstrapBadge.builder()
                 .caption(translateAndInterpolate(placeholderLiteral, vars))
@@ -79,7 +78,7 @@ implements PlaceholderRenderService {
 
     private String translateAndInterpolate(
             final PlaceholderLiteral placeholderLiteral, final Map<String, String> vars) {
-        val translatedPlainText = translationService
+        var translatedPlainText = translationService
                 .translate(TranslationContext.empty(), placeholderLiteral.getLiteral());
         return PlaceholderRenderService.interpolate(translatedPlainText, vars);
     }

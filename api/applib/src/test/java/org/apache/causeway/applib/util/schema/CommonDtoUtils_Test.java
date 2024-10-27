@@ -35,7 +35,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.val;
 
 class CommonDtoUtils_Test {
 
@@ -79,24 +78,24 @@ class CommonDtoUtils_Test {
     @Test
     void roundtripOnComposites() {
 
-        val compositeSample = new CompositeSample(123456L, "sample");
+        var compositeSample = new CompositeSample(123456L, "sample");
 
         TypedTupleDto compositeDto = CommonDtoUtils.typedTupleBuilder(compositeSample)
             .addFundamentalType(ValueType.LONG, "epochMillis", CompositeSample::getEpochMillis)
             .addFundamentalType(ValueType.STRING, "calendarName", CompositeSample::getCalendarName)
             .build();
 
-        val json = CommonDtoUtils.getCompositeValueAsJson(compositeDto);
+        var json = CommonDtoUtils.getCompositeValueAsJson(compositeDto);
 
-        val expectedJson = "{\"elements\":["
+        var expectedJson = "{\"elements\":["
                 + "{\"long\":123456,\"type\":\"long\",\"name\":\"epochMillis\"},"
                 + "{\"string\":\"sample\",\"type\":\"string\",\"name\":\"calendarName\"}],"
                 + "\"type\":\"org.apache.causeway.applib.util.schema.CommonDtoUtils_Test$CompositeSample\","
                 + "\"cardinality\":2}";
         _DocumentTester.assertJsonEqualsIgnoreOrder(expectedJson, json);
 
-        val compositeAfterRoundtrip = CommonDtoUtils.getCompositeValueFromJson(json);
-        val jsonAfterRoundtrip = CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip);
+        var compositeAfterRoundtrip = CommonDtoUtils.getCompositeValueFromJson(json);
+        var jsonAfterRoundtrip = CommonDtoUtils.getCompositeValueAsJson(compositeAfterRoundtrip);
         _DocumentTester.assertJsonEqualsIgnoreOrder(expectedJson, jsonAfterRoundtrip);
     }
 

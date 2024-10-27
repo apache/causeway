@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedI
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Delegate;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,7 +55,7 @@ public abstract class CompositeValueUpdater {
     protected abstract ManagedObject map(final ManagedObject valueType);
 
     public Identifier getFeatureIdentifier() {
-        val id = delegate.getFeatureIdentifier();
+        var id = delegate.getFeatureIdentifier();
         return Identifier
                 .actionIdentifier(
                         id.getLogicalType(),
@@ -82,10 +81,10 @@ public abstract class CompositeValueUpdater {
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
         final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
 
-        val methodFacade = delegate.getFacetedMethod().getMethod();
-        val method = methodFacade.asMethodForIntrospection();
+        var methodFacade = delegate.getFacetedMethod().getMethod();
+        var method = methodFacade.asMethodForIntrospection();
 
-        val resultPojo = CanonicalInvoker
+        var resultPojo = CanonicalInvoker
                 .invokeWithConvertedArgs(method.method(), targetPojo, 
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 

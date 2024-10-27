@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
-import lombok.val;
-
 class TypeExtractorMethodReturnTest {
 
     @Test
@@ -43,8 +41,8 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        val method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
-        val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
+        var method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
+        var classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
         assertEquals(0, classes.size());
     }
 
@@ -61,9 +59,9 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        val method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
+        var method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
 
-        val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
+        var classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
 
         assertEquals(2, classes.size());
         assertTrue(classes.contains(java.util.List.class));
@@ -85,9 +83,9 @@ class TypeExtractorMethodReturnTest {
         }
 
         final Class<?> clazz = CustomerRepository.class;
-        val method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
+        var method = _GenericResolver.testing.resolveMethod(clazz, "findCustomers");
 
-        val classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
+        var classes = TypeExtractor.streamMethodReturn(method).collect(Collectors.toSet());
 
         assertEquals(2, classes.size());
         assertTrue(classes.contains(java.util.List.class));

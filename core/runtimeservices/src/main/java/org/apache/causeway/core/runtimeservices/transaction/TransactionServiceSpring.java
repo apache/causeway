@@ -62,7 +62,6 @@ import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -113,7 +112,7 @@ implements
     @Override
     public <T> Try<T> callTransactional(final TransactionDefinition def, final Callable<T> callable) {
 
-        val platformTransactionManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
+        var platformTransactionManager = transactionManagerForElseFail(def); // always throws if configuration is wrong
 
         Try<T> result = null;
 
@@ -173,15 +172,15 @@ implements
 //    @Override
 //    public void nextTransaction() {
 //
-//        val txManager = singletonTransactionManagerElseFail();
+//        var txManager = singletonTransactionManagerElseFail();
 //
 //        try {
 //
-//            val txTemplate = new TransactionTemplate(txManager);
+//            var txTemplate = new TransactionTemplate(txManager);
 //            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 //
 //            // either reuse existing or create new
-//            val txStatus = txManager.getTransaction(txTemplate);
+//            var txStatus = txManager.getTransaction(txTemplate);
 //            if(txStatus.isNewTransaction()) {
 //                // we have created a new transaction, so we are done
 //                return;
@@ -202,7 +201,7 @@ implements
 //
 //        } catch (RuntimeException ex) {
 //
-//            val translatedEx = translateExceptionIfPossible(ex, txManager);
+//            var translatedEx = translateExceptionIfPossible(ex, txManager);
 //
 //            if(translatedEx instanceof RuntimeException) {
 //                throw ex;
@@ -226,9 +225,9 @@ implements
 
         } catch (RuntimeException ex) {
 
-            val txManager = singletonTransactionManagerElseFail();
+            var txManager = singletonTransactionManagerElseFail();
 
-            val translatedEx = translateExceptionIfPossible(ex, txManager);
+            var translatedEx = translateExceptionIfPossible(ex, txManager);
 
             if(translatedEx instanceof RuntimeException) {
                 throw ex;
@@ -245,7 +244,7 @@ implements
         return interactionLayerTrackerProvider.get().getInteractionId()
                 .map(uuid->{
                     //XXX get current transaction's persistence context (once we support multiple contexts)
-                    val persistenceContext = "";
+                    var persistenceContext = "";
                     return TransactionId.of(uuid, txCounter.get().intValue(), persistenceContext);
                 });
     }
@@ -284,7 +283,7 @@ implements
 
     private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
-            val txManager = ((TransactionTemplate)def).getTransactionManager();
+            var txManager = ((TransactionTemplate)def).getTransactionManager();
             if(txManager!=null) {
                 return txManager;
             }
@@ -309,8 +308,8 @@ implements
 
     private Optional<TransactionStatus> currentTransactionStatus() {
 
-        val txManager = singletonTransactionManagerElseFail();
-        val txTemplate = new TransactionTemplate(txManager);
+        var txManager = singletonTransactionManagerElseFail();
+        var txTemplate = new TransactionTemplate(txManager);
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_MANDATORY);
 
         // not strictly required, but to prevent stack-trace creation later on
@@ -334,7 +333,7 @@ implements
 
         if(ex instanceof RuntimeException) {
 
-            val translatedEx = persistenceExceptionTranslators.stream()
+            var translatedEx = persistenceExceptionTranslators.stream()
             //debug .peek(translator->System.out.printf("%s%n", translator.getClass().getName()))
             .map(translator->translator.translateExceptionIfPossible((RuntimeException)ex))
             .filter(_NullSafe::isPresent)
@@ -366,13 +365,13 @@ implements
         }
 
         if (!platformTransactionManagers.isEmpty()) {
-            val onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+            var onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
 
             interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
 
             platformTransactionManagers.forEach(txManager -> {
 
-                val txDefn = new TransactionTemplate(txManager); // specify the txManager in question
+                var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
                 txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
                 // either participate in existing or create new transaction

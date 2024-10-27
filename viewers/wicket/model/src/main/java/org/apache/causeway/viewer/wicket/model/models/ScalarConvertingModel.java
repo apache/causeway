@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * @param <T> foreign type
@@ -44,9 +43,9 @@ extends ChainingModel<T> {
 
     @Override
     public void setObject(final T modelValue) {
-        val scalarModel = scalarModel();
-        val value = toScalarValue(modelValue);
-        val objectAdapter = value != null
+        var scalarModel = scalarModel();
+        var value = toScalarValue(modelValue);
+        var objectAdapter = value != null
                 ? scalarModel().getMetaModelContext().getObjectManager().adapt(value)
                 : ManagedObject.empty(scalarModel.getElementType());
         scalarModel.setObject(objectAdapter);
@@ -54,7 +53,7 @@ extends ChainingModel<T> {
 
     @Override
     public T getObject() {
-        val adapter = scalarModel().getObject();
+        var adapter = scalarModel().getObject();
         final V scalarValue = !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? _Casts.uncheckedCast(adapter.getPojo())
                 : null;

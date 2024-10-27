@@ -48,7 +48,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  *
@@ -217,7 +216,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val nonNullElements = Stream.of(array)
+        var nonNullElements = Stream.of(array)
                 .filter(_NullSafe::isPresent)
                 .collect(_CanFactory.toListWithSizeUpperBound(array.length));
 
@@ -239,13 +238,13 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     public static <T> Can<T> ofCollection(final @Nullable Collection<T> collection) {
 
-        val inputSize = _NullSafe.size(collection);
+        var inputSize = _NullSafe.size(collection);
 
         if(inputSize==0) {
             return empty();
         }
 
-        val nonNullElements = collection.stream()
+        var nonNullElements = collection.stream()
                 .filter(_NullSafe::isPresent)
                 .collect(_CanFactory.toListWithSizeUpperBound(inputSize));
 
@@ -273,7 +272,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return (Can<T>)iterable;
         }
 
-        val nonNullElements = new ArrayList<T>();
+        var nonNullElements = new ArrayList<T>();
         iterable.forEach(element->{
             if(element!=null) {
                 nonNullElements.add(element);
@@ -303,9 +302,9 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val nonNullElements = new ArrayList<T>();
+        var nonNullElements = new ArrayList<T>();
         while(enumeration.hasMoreElements()) {
-            val element = enumeration.nextElement();
+            var element = enumeration.nextElement();
             if(element!=null) {
                 nonNullElements.add(element);
             }
@@ -333,7 +332,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val nonNullElements = stream
+        var nonNullElements = stream
                 .filter(_NullSafe::isPresent)
                 .collect(Collectors.toCollection(()->new ArrayList<>()));
 
@@ -355,7 +354,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 //        if(instance.isResolvable()) {
 //            return Can_Singleton.of(instance.get());
 //        }
-//        val nonNullElements = instance.stream()
+//        var nonNullElements = instance.stream()
 //                .collect(Collectors.toCollection(()->new ArrayList<>()));
 //
 //        return Can_Multiple.of(nonNullElements);
@@ -420,7 +419,7 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return empty();
         }
 
-        val nonNullMappedElements =
+        var nonNullMappedElements =
                 stream()
                 .map(mapper)
                 .filter(_NullSafe::isPresent)
@@ -473,8 +472,8 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return can;
         }
         // at this point: can is not empty and variant is not null
-        val newSize = can.size() + 1;
-        val union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
+        var newSize = can.size() + 1;
+        var union = can.stream().collect(Collectors.toCollection(()->new ArrayList<>(newSize)));
         union.add(element);
         return new Can_Multiple<>(union);
     }
@@ -696,10 +695,10 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return false;
         }
 
-        val otherIterator = other.iterator();
+        var otherIterator = other.iterator();
 
         for(T element: this) {
-            val otherElement = otherIterator.next();
+            var otherElement = otherIterator.next();
             if(!element.equals(otherElement)) {
                 return false;
             }
@@ -725,12 +724,12 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return false;
         }
 
-        val thisIterator = this.iterator();
-        val otherIterator = other.iterator();
+        var thisIterator = this.iterator();
+        var otherIterator = other.iterator();
 
         while(otherIterator.hasNext()) {
-            val otherElement = otherIterator.next();
-            val thisElement  = thisIterator.next();
+            var otherElement = otherIterator.next();
+            var thisElement  = thisIterator.next();
 
             if(!thisElement.equals(otherElement)) {
                 return false;
@@ -754,12 +753,12 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
             return false;
         }
 
-        val thisIterator = this.reverseIterator();
-        val otherIterator = other.reverseIterator();
+        var thisIterator = this.reverseIterator();
+        var otherIterator = other.reverseIterator();
 
         while(otherIterator.hasNext()) {
-            val otherElement = otherIterator.next();
-            val thisElement  = thisIterator.next();
+            var otherElement = otherIterator.next();
+            var thisElement  = thisIterator.next();
 
             if(!thisElement.equals(otherElement)) {
                 return false;

@@ -46,7 +46,7 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
+
 
 //@Log4j2
 public class SimpleMutationForProperty extends Element {
@@ -69,7 +69,7 @@ public class SimpleMutationForProperty extends Element {
 
         GraphQLOutputType type = context.typeMapper.outputTypeFor(objectSpec, SchemaType.RICH);  // setter returns void, so will return target instead.
         if (type != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name(fieldName(objectSpec, oneToOneAssociation))
                     .type(type);
             addGqlArguments(fieldBuilder);
@@ -92,10 +92,10 @@ public class SimpleMutationForProperty extends Element {
         Object target = dataFetchingEnvironment.getArgument(argumentName);
         Optional<Object> result;
         final Environment environment = new Environment.For(dataFetchingEnvironment);
-        val argumentValue1 = (Map<String, ?>) target;
-        val idValue = (String)argumentValue1.get("id");
+        var argumentValue1 = (Map<String, ?>) target;
+        var idValue = (String)argumentValue1.get("id");
         if (idValue != null) {
-            val objectSpecArg = (ObjectSpecification)argumentValue1.get("logicalTypeName");
+            var objectSpecArg = (ObjectSpecification)argumentValue1.get("logicalTypeName");
             Optional<Bookmark> bookmarkIfAny;
             if (objectSpecArg != null) {
                 bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
@@ -108,7 +108,7 @@ public class SimpleMutationForProperty extends Element {
                     .filter(Optional::isPresent)
                     .map(Optional::get);
         } else {
-            val refValue = (String)argumentValue1.get("ref");
+            var refValue = (String)argumentValue1.get("ref");
             if (refValue != null) {
                 String key = ObjectFeatureUtils.keyFor(refValue);
                 BookmarkedPojo value = environment.getGraphQlContext().get(key);
@@ -120,23 +120,23 @@ public class SimpleMutationForProperty extends Element {
         Object sourcePojo = result
                     .orElseThrow(); // TODO: better error handling if no such object found.
 
-        val managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
+        var managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(oneToOneAssociation.asciiId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
 
-        val visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
         }
 
-        val usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usableConsent.isVetoed()) {
             throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
         }
 
-        val validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new InvalidException(validityConsent);
         }
@@ -150,7 +150,7 @@ public class SimpleMutationForProperty extends Element {
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
         // add target
-        val targetArgName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        var targetArgName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
                         .name(targetArgName)

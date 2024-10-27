@@ -28,8 +28,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
 
-import lombok.val;
-
 class SourceTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -55,7 +53,7 @@ class SourceTest extends AbstractAsciiDocWriterTest {
         
         doc.setTitle("Source");
         
-        val sourceBlock = AsciiDocFactory.sourceBlock(doc, "java", "class Hello {\n}");
+        var sourceBlock = AsciiDocFactory.sourceBlock(doc, "java", "class Hello {\n}");
         
         sourceBlock.setTitle("Java Example");
         

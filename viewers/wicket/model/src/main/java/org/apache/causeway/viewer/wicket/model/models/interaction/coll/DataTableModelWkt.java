@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedO
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Bound to a BookmarkedObjectWkt, with the {@link DataTableInteractive}
@@ -58,9 +57,9 @@ implements
             final @NonNull ObjectAction actMetaModel,
             final @NonNull ManagedObject actionResult) {
 
-        val managedAction = ManagedAction
+        var managedAction = ManagedAction
                 .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
-        val tableInteractive = DataTableInteractive.forAction(
+        var tableInteractive = DataTableInteractive.forAction(
                 managedAction,
                 actionResult);
         return new DataTableModelWkt(
@@ -71,7 +70,7 @@ implements
             final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
             final @NonNull OneToManyAssociation collMetaModel) {
 
-        val tableInteractive = DataTableInteractive.forCollection(
+        var tableInteractive = DataTableInteractive.forCollection(
                 ManagedCollection
                 .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
         return new DataTableModelWkt(
@@ -105,7 +104,7 @@ implements
 
     @Override
     protected DataTableInteractive load() {
-        val tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
+        var tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
         tableMemento.setupBindings(tableInteractive);
         return tableInteractive;
     }

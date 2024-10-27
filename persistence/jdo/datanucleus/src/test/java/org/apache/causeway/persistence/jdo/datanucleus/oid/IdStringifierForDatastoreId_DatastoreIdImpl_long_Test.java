@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreIdImplValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
 
@@ -50,21 +50,21 @@ class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
     @MethodSource()
     void roundtrip(final long value, final String enstringed) {
 
-        val entityType = Customer.class;
+        var entityType = Customer.class;
 
-        val stringifier = new DnDatastoreIdImplValueSemantics();
+        var stringifier = new DnDatastoreIdImplValueSemantics();
 
-        val stringified = stringifier.enstring(new DatastoreIdImpl(entityType.getName(), value));
+        var stringified = stringifier.enstring(new DatastoreIdImpl(entityType.getName(), value));
         if(enstringed != null) {
             Assertions.assertThat(stringified).isEqualTo(enstringed);
         }
-        val parse = stringifier.destring(entityType, stringified);
+        var parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
 
-        val decomposed = stringifier.decompose(new DatastoreIdImpl(entityType.getName(), value));
-        val composed = stringifier.compose(decomposed);
+        var decomposed = stringifier.decompose(new DatastoreIdImpl(entityType.getName(), value));
+        var composed = stringifier.compose(decomposed);
 
         Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(composed.getTargetClassName()).isEqualTo(entityType.getName());

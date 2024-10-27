@@ -37,7 +37,6 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 public abstract class EncodabilityContractTest {
 
@@ -68,21 +67,21 @@ public abstract class EncodabilityContractTest {
 
     @Test
     public void shouldRoundTrip() throws IOException, ClassNotFoundException {
-        val decodedObject = doRoundTrip(serializable);
+        var decodedObject = doRoundTrip(serializable);
         assertRoundtripped(decodedObject, serializable);
     }
 
     @SneakyThrows
     private static <T extends Serializable> T doRoundTrip(final T serializable) {
 
-        val buffer = new ByteArrayOutputStream();
+        var buffer = new ByteArrayOutputStream();
 
-        try(val out = new ObjectOutputStream(buffer)) {
+        try(var out = new ObjectOutputStream(buffer)) {
             out.writeObject(serializable);
         }
 
-        try(val in = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()))) {
-            val decodedObject = in.readObject();
+        try(var in = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()))) {
+            var decodedObject = in.readObject();
             return _Casts.uncheckedCast(decodedObject);
         }
     }

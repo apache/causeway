@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -99,8 +98,8 @@ public class GridServiceDefault implements GridService {
 
     @Override
     public Grid defaultGridFor(final Class<?> domainClass) {
-        for (val gridSystemService : gridSystemServices()) {
-            val grid = gridSystemService.defaultGrid(domainClass);
+        for (var gridSystemService : gridSystemServices()) {
+            var grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
@@ -116,9 +115,9 @@ public class GridServiceDefault implements GridService {
             return grid;
         }
 
-        val domainClass = grid.getDomainClass();
+        var domainClass = grid.getDomainClass();
 
-        for (val gridSystemService : gridSystemServices()) {
+        for (var gridSystemService : gridSystemServices()) {
             gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
         }
 
@@ -133,8 +132,8 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid complete(final Grid grid) {
 
-        val domainClass = grid.getDomainClass();
-        for (val gridSystemService : gridSystemServices()) {
+        var domainClass = grid.getDomainClass();
+        for (var gridSystemService : gridSystemServices()) {
             gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
         }
 
@@ -144,8 +143,8 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid minimal(final Grid grid) {
 
-        val domainClass = grid.getDomainClass();
-        for (val gridSystemService : gridSystemServices()) {
+        var domainClass = grid.getDomainClass();
+        for (var gridSystemService : gridSystemServices()) {
             gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
         }
 
@@ -156,7 +155,7 @@ public class GridServiceDefault implements GridService {
      * Not public API, exposed only for testing.
      */
     public String tnsAndSchemaLocation(final Grid grid) {
-        val parts = _Lists.<String>newArrayList();
+        var parts = _Lists.<String>newArrayList();
 
         parts.add(COMPONENT_TNS);
         parts.add(COMPONENT_SCHEMA_LOCATION);
@@ -164,8 +163,8 @@ public class GridServiceDefault implements GridService {
         parts.add(LINKS_TNS);
         parts.add(LINKS_SCHEMA_LOCATION);
 
-        for (val gridSystemService : getGridSystemServices()) {
-            val gridImpl = gridSystemService.gridImplementation();
+        for (var gridSystemService : getGridSystemServices()) {
+            var gridImpl = gridSystemService.gridImplementation();
             if(gridImpl.isAssignableFrom(grid.getClass())) {
                 parts.add(gridSystemService.tns());
                 parts.add(gridSystemService.schemaLocation());
@@ -192,7 +191,7 @@ public class GridServiceDefault implements GridService {
 
         if (filteredGridSystemServices == null) {
 
-            val gridImplementations = _Sets.<Class<?>>newHashSet();
+            var gridImplementations = _Sets.<Class<?>>newHashSet();
 
             filteredGridSystemServices = getGridSystemServices()
                     .stream()

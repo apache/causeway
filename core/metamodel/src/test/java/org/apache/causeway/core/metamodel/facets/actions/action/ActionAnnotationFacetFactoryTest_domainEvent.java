@@ -41,14 +41,13 @@ import org.apache.causeway.core.metamodel.postprocessors.members.SynthesizeDomai
 import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 class ActionAnnotationFacetFactoryTest_domainEvent
 extends ActionAnnotationFacetFactoryTest {
 
     private void processDomainEvent(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = facetFactory.actionIfAny(processMethodContext);
+        var actionIfAny = facetFactory.actionIfAny(processMethodContext);
         facetFactory.processDomainEvent(processMethodContext, actionIfAny);
     }
 
@@ -57,15 +56,15 @@ extends ActionAnnotationFacetFactoryTest {
             final EventTypeOrigin eventTypeOrigin,
             final Class<? extends ActionDomainEvent<?>> eventType) {
 
-        val domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
+        var domainEventFacet = facetedMethod.getFacet(ActionDomainEventFacet.class);
         assertNotNull(domainEventFacet);
         assertTrue(domainEventFacet instanceof ActionDomainEventFacet);
         assertThat(domainEventFacet.getEventType(), classEqualTo(eventType));
 
-        val invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
+        var invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
         assertNotNull(invocationFacet);
         assertTrue(invocationFacet instanceof ActionInvocationFacetForAction);
-        val invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
+        var invocationFacetImpl = (ActionInvocationFacetForAction) invocationFacet;
         assertEquals(eventTypeOrigin, invocationFacetImpl.getEventTypeOrigin());
         assertThat(invocationFacetImpl.getEventType(), classEqualTo(eventType));
     }
@@ -166,7 +165,7 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test
     void withActionDomainEvent_mixedIn_annotatedOnMethod() {
-        val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+        var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
         // given
         class Customer {
@@ -197,7 +196,7 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test
     void withActionDomainEvent_mixedIn_annotatedOnMixedInType() {
-        val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+        var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
         // given
         class Customer {
@@ -228,7 +227,7 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test //TODO[CAUSEWAY-3409]
     void withActionDomainEvent_mixedIn_annotatedOnMixeeType() {
-        val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+        var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
         // given
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent.class)
@@ -260,7 +259,7 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test
     void withActionDomainEvent_mixedIn_annotatedOnMixeeAndMixedInType() {
-        val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+        var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
         // given
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent1.class)
@@ -293,7 +292,7 @@ extends ActionAnnotationFacetFactoryTest {
 
     @Test
     void withActionDomainEvent_mixedIn_annotatedOnMixeeTypeAndMixedInMethod() {
-        val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+        var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
         // given
         @DomainObject(actionDomainEvent = Customer.SomeActionDomainEvent1.class)

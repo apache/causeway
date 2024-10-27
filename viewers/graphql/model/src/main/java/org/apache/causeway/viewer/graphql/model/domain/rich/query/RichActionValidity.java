@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -52,9 +51,9 @@ public class RichActionValidity extends Element {
         super(context);
         this.actionInteractor = actionInteractor;
 
-        val objectAction = actionInteractor.getObjectMember();
+        var objectAction = actionInteractor.getObjectMember();
 
-        val fieldBuilder = newFieldDefinition()
+        var fieldBuilder = newFieldDefinition()
                 .name("validate")
                 .type((GraphQLOutputType) this.context.typeMapper.outputTypeFor(String.class));
 
@@ -67,18 +66,18 @@ public class RichActionValidity extends Element {
 
         final ObjectAction objectAction = actionInteractor.getObjectMember();
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val specificationLoader = objectAction.getSpecificationLoader();
-        val objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var specificationLoader = objectAction.getSpecificationLoader();
+        var objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val actionInteractionHead = objectAction.interactionHead(managedObject);
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var actionInteractionHead = objectAction.interactionHead(managedObject);
 
         Map<String, Object> argumentPojos = dataFetchingEnvironment.getArguments();
         Can<ObjectActionParameter> parameters = objectAction.getParameters();

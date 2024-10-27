@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract
@@ -95,13 +94,13 @@ implements MethodPrefixBasedFacetFactory {
                         return; // thats always allowed, check next
                     }
 
-                    val actionId = objectAction.getId();
+                    var actionId = objectAction.getId();
 
-                    for (val prefix : prefixes) {
+                    for (var prefix : prefixes) {
 
                         if (isPrefixed(actionId, prefix)) {
 
-                            val explanation =
+                            var explanation =
                                     objectAction.getParameterCount() > 0
                                             && (MemberSupportPrefix.HIDE.getMethodNamePrefixes().contains(prefix)
                                                     || MemberSupportPrefix.DISABLE.getMethodNamePrefixes().contains(prefix))
@@ -110,7 +109,7 @@ implements MethodPrefixBasedFacetFactory {
                                                 + "' config property)"
                                             : "";
 
-                            val messageFormat = "%s#%s: has prefix %s, is probably intended as a supporting method "
+                            var messageFormat = "%s#%s: has prefix %s, is probably intended as a supporting method "
                                     + "for a property, collection or action%s.  If the method is intended to "
                                     + "be an action, then rename and use @ActionLayout(named=\"...\") or ignore "
                                     + "completely using @Programmatic";

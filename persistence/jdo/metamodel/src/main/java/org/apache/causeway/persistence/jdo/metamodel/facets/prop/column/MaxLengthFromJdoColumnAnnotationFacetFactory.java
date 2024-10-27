@@ -35,8 +35,6 @@ import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
 public class MaxLengthFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -60,9 +58,9 @@ implements MetaModelRefiner {
             return;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
-        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        var jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         FacetUtil.addFacetIfPresent(
                 MaxLengthFacetFromJdoColumnAnnotation

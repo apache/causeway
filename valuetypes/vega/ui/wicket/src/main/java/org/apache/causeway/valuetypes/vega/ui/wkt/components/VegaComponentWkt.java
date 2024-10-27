@@ -33,7 +33,7 @@ import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaLiteJsReference;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -69,7 +69,7 @@ public class VegaComponentWkt extends MarkupComponent {
     // -- HELPER
 
     private Optional<Vega.Schema> vegaSchema() {
-        val modelObject = getDefaultModelObject();
+        var modelObject = getDefaultModelObject();
         if(modelObject==null) {
             return Optional.empty();
         }

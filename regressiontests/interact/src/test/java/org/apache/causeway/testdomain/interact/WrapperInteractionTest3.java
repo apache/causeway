@@ -50,7 +50,7 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -120,8 +120,8 @@ extends InteractionTestAbstract {
     @Test
     void mixinMemberNamedFacet_whenSharingSameAbstractMixin() {
 
-        val mixinSpec1 = specificationLoader.specForType(Task.Succeeded.class).get();
-        val mixinSpec2 = specificationLoader.specForType(Task.Failed.class).get();
+        var mixinSpec1 = specificationLoader.specForType(Task.Succeeded.class).get();
+        var mixinSpec2 = specificationLoader.specForType(Task.Failed.class).get();
 
         assertTrue(mixinSpec1.isMixin());
         assertTrue(mixinSpec2.isMixin());
@@ -129,14 +129,14 @@ extends InteractionTestAbstract {
         assertTrue(mixinSpec1.mixinFacetElseFail().isMixinFor(Task.class));
         assertTrue(mixinSpec2.mixinFacetElseFail().isMixinFor(Task.class));
 
-        val objectSpec = specificationLoader.specForType(Task.class).get();
+        var objectSpec = specificationLoader.specForType(Task.class).get();
 
         assertEquals(
                 2L,
                 objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
-                    val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    var memberNamedFacet = act.getFacet(MemberNamedFacet.class);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
                 })

@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class HasStaticTextFacetAbstract
 extends FacetAbstract
@@ -87,7 +86,7 @@ implements HasStaticText {
             return false;
         }
 
-        val otherFacet =  (HasStaticTextFacetAbstract)other;
+        var otherFacet =  (HasStaticTextFacetAbstract)other;
 
         return Objects.equals(this.originalText, otherFacet.originalText)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

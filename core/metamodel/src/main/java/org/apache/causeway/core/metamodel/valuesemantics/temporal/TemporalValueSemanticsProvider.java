@@ -57,7 +57,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Time
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -124,7 +123,7 @@ implements TemporalValueSemantics<T> {
     @Override
     public final int compare(final T a, final T b, final @NonNull Duration epsilon) {
 
-        val delta = (!a.isSupported(ChronoUnit.SECONDS))
+        var delta = (!a.isSupported(ChronoUnit.SECONDS))
                 ? Duration.ofDays(a.until(b, ChronoUnit.DAYS))
                 : Duration.between(a, b);
 
@@ -181,21 +180,21 @@ implements TemporalValueSemantics<T> {
 
     @Override
     public final T parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val temporalString = _Strings.blankToNullOrTrim(text);
+        var temporalString = _Strings.blankToNullOrTrim(text);
         if(temporalString==null) {
             return null;
         }
 
         T contextTemporal = null; //FIXME[CAUSEWAY-2882] not implemented yet
         if(contextTemporal != null) {
-            val adjusted = TemporalAdjust
+            var adjusted = TemporalAdjust
                     .parseAdjustment(adjuster, contextTemporal, temporalString);
             if(adjusted!=null) {
                 return adjusted;
             }
         }
 
-        val format = getEditingInputFormat(context);
+        var format = getEditingInputFormat(context);
 
         try {
             return format.parse(temporalString, query);
@@ -214,20 +213,20 @@ implements TemporalValueSemantics<T> {
             final ValueSemanticsProvider.Context context,
             final BadgeRenderer badgeRenderer) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
-        val datePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern();
-        val dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
-        val temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
+        var datePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern();
+        var dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
+        var temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic,
                 dateAndTimeFormatStyle.getDateFormatStyle(),
                 dateAndTimeFormatStyle.getTimeFormatStyle(),
                 datePattern, dateTimePattern);
 
-        val temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
+        var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic).orElse(null);
 
-        val timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
+        var timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
 
         return time-> {
 
@@ -333,7 +332,7 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getEditingOutputFormat(final ValueSemanticsProvider.Context context) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
                 dateAndTimeFormatStyle.getTimePrecision(),
@@ -346,7 +345,7 @@ implements TemporalValueSemantics<T> {
      */
     protected DateTimeFormatter getEditingInputFormat(final ValueSemanticsProvider.Context context) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
                 dateAndTimeFormatStyle.getTimePrecision(),
@@ -357,7 +356,7 @@ implements TemporalValueSemantics<T> {
     @Override
     public String getPattern(final ValueSemanticsProvider.Context context) {
 
-        val dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
+        var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return temporalEditingPattern()
                 .getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
@@ -385,7 +384,7 @@ implements TemporalValueSemantics<T> {
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
                 final @Nullable ValueSemanticsProvider.Context context) {
 
-            val featureIfAny = Optional.ofNullable(mmc)
+            var featureIfAny = Optional.ofNullable(mmc)
                     .map(MetaModelContext::getSpecificationLoader)
                     .flatMap(specLoader->specLoader.loadFeature(
                             Optional.ofNullable(context)
@@ -393,22 +392,22 @@ implements TemporalValueSemantics<T> {
                             .orElse(null)));
 
             // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern());
-            val dateFormatStyle = featureIfAny
+            var dateFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
                     .map(DateFormatStyleFacet::getDateFormatStyle)
                     .orElse(FormatStyle.MEDIUM);
 
-            val timeFormatStyle = featureIfAny
+            var timeFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(TimeFormatStyleFacet.class))
                     .map(TimeFormatStyleFacet::getTimeFormatStyle)
                     .orElse(FormatStyle.MEDIUM);
 
-            val timePrecision = featureIfAny
+            var timePrecision = featureIfAny
                     .flatMap(feature->feature.lookupFacet(TimeFormatPrecisionFacet.class))
                     .map(TimeFormatPrecisionFacet::getTimePrecision)
                     .orElse(TimePrecision.SECOND);
 
-            val timeZoneTranslation = featureIfAny
+            var timeZoneTranslation = featureIfAny
                     .flatMap(feature->feature.lookupFacet(TimeZoneTranslationFacet.class))
                     .map(TimeZoneTranslationFacet::getTimeZoneTranslation)
                     .orElse(TimeZoneTranslation.TO_LOCAL_TIMEZONE);

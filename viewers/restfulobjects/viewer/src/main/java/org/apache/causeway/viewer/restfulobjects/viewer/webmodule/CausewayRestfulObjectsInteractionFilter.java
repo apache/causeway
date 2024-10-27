@@ -53,7 +53,7 @@ import org.apache.causeway.core.webapp.modules.templresources.TemplateResourceCa
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyUsingSession;
 
-import lombok.val;
+
 
 /**
  * Filter for RestfulObjects.
@@ -347,8 +347,8 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
         Objects.requireNonNull(interactionService, "causewayInteractionFactory");
         Objects.requireNonNull(specificationLoader, "specificationLoader");
 
-        val httpServletRequest = (HttpServletRequest) request;
-        val httpServletResponse = (HttpServletResponse) response;
+        var httpServletRequest = (HttpServletRequest) request;
+        var httpServletResponse = (HttpServletResponse) response;
 
         // check that the app has bootstrapped; if it hasn't, then return a 503 (rather than a huge stack trace)
         try {
@@ -359,7 +359,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
         }
 
         try {
-            val queryString = httpServletRequest.getQueryString();
+            var queryString = httpServletRequest.getQueryString();
             if (queryString != null && queryString
                     .contains(CAUSEWAY_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT)) {
 
@@ -379,7 +379,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
             }
 
             // authenticate
-            val authentication =
+            var authentication =
                     authStrategy.lookupValid(httpServletRequest, httpServletResponse);
             if (authentication != null) {
 
@@ -418,7 +418,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
 
     private static void ensureMetamodelIsValid(final SpecificationLoader specificationLoader) {
         // using side-effect free access to MM validation result
-        val validationResult = specificationLoader.getValidationResult()
+        var validationResult = specificationLoader.getValidationResult()
         .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
         if(validationResult.hasFailures()) {
             throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
@@ -440,7 +440,7 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
             final CausewayRestfulObjectsInteractionFilter filter,
             final HttpServletRequest httpRequest) {
 
-        val servletPath = httpRequest.getServletPath();
+        var servletPath = httpRequest.getServletPath();
         for (final Pattern extension : filter.ignoreExtensions) {
             if (extension.matcher(servletPath).matches()) {
                 return true;

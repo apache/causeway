@@ -78,7 +78,6 @@ import org.apache.causeway.extensions.excel.applib.util.PivotUtils;
 import org.apache.causeway.extensions.excel.applib.util.SheetPivoter;
 
 import lombok.ToString;
-import lombok.val;
 
 class _ExcelConverter {
 
@@ -181,7 +180,7 @@ class _ExcelConverter {
 
         // header row
         int i = 0;
-        for (val property : propertyList) {
+        for (var property : propertyList) {
             final Cell cell = headerRow.createCell(i++);
             cell.setCellValue(property.getCanonicalFriendlyName());
         }
@@ -192,7 +191,7 @@ class _ExcelConverter {
         for (final ManagedObject objectAdapter : adapters) {
             final Row detailRow = rowFactory.newRow();
             i = 0;
-            for (val property : propertyList) {
+            for (var property : propertyList) {
                 final Cell cell = detailRow.createCell(i++);
                 if (annotatedAsHyperlink.contains(property)){
                     cellMarshaller.setCellValueForHyperlink(objectAdapter, property, cell);
@@ -211,7 +210,7 @@ class _ExcelConverter {
     File appendPivotSheet(final List<WorksheetContent> worksheetContents) throws IOException {
 
 
-        val worksheetNames = _NullSafe.stream(worksheetContents)
+        var worksheetNames = _NullSafe.stream(worksheetContents)
         .map(worksheetContent->worksheetContent==null
                 ? null
                 : worksheetContent.getSpec().getSheetName())
@@ -222,7 +221,7 @@ class _ExcelConverter {
             throw new IllegalArgumentException("Sheet names must have distinct names and cannot be empty");
         }
 
-        for (val worksheetName : worksheetNames) {
+        for (var worksheetName : worksheetNames) {
             if(worksheetName.length() > 30) {
                 throw new IllegalArgumentException(
                         String.format("Sheet name cannot exceed 30 characters (invalid name: '%s')",
@@ -503,8 +502,8 @@ class _ExcelConverter {
                     importedItems.add(imported);
 
                     if(imported instanceof RowHandler) {
-                        val rowHandler = (RowHandler<?>) imported;
-                        val rowHandlerPrev = (RowHandler<?>) previousRow;
+                        var rowHandler = (RowHandler<?>) imported;
+                        var rowHandlerPrev = (RowHandler<?>) previousRow;
 
                         rowHandler.handleRow(_Casts.uncheckedCast(rowHandlerPrev));
                     }

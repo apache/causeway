@@ -52,7 +52,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -65,10 +64,10 @@ public class CausewayModuleValAsciidocApplib {
     @ConditionalOnMissingBean(AdocToHtmlConverter.class)
     @Qualifier("Default")
     public AdocToHtmlConverter createAdocToHtmlConverter(final CausewayConfiguration config) throws MalformedURLException {
-        val asciidoctor = Asciidoctor.Factory.create();
+        var asciidoctor = Asciidoctor.Factory.create();
 
-        val krokiBaseUri = config.getValueTypes().getKroki().getBackendUrl();
-        val requestTimeout = config.getValueTypes().getKroki().getRequestTimeout();
+        var krokiBaseUri = config.getValueTypes().getKroki().getBackendUrl();
+        var requestTimeout = config.getValueTypes().getKroki().getRequestTimeout();
 
         if(krokiBaseUri!=null) {
             asciidoctor.javaExtensionRegistry().preprocessor(new OpenBlockPreProcessor());
@@ -132,7 +131,7 @@ public class CausewayModuleValAsciidocApplib {
             BEFORE_BLOCK_START,
             AFTER_BLOCK_STARTED;
             State next() {
-                val values = State.values();
+                var values = State.values();
                 return values[(this.ordinal() + 1) % values.length];
             }
         }
@@ -144,8 +143,8 @@ public class CausewayModuleValAsciidocApplib {
 
             final List<String> processedLines = new ArrayList<>();
             final List<String> lines = reader.readLines();
-            for(val line : lines) {
-                val trimmedLine = line.trim();
+            for(var line : lines) {
+                var trimmedLine = line.trim();
 
                 switch(state) {
                 case DISABLED: {
@@ -201,14 +200,14 @@ public class CausewayModuleValAsciidocApplib {
 
         @SneakyThrows
         private static String getPlantumlSvg(final String krokiBaseUri, final Duration requestTimeout, final String diagramSource) {
-            val request = HttpRequest.newBuilder()
+            var request = HttpRequest.newBuilder()
                     .uri(URI.create(krokiBaseUri + "/plantuml/svg/" + _Strings.base64UrlEncodeZlibCompressed(diagramSource)))
                     .timeout(requestTimeout)
                     .header("Content-Type", "image/svg+xml")
                     .GET()
                     .build();
 
-            val client = HttpClient.newHttpClient();
+            var client = HttpClient.newHttpClient();
             return client.send(request, BodyHandlers.ofString())
                 .body();
         }

@@ -52,7 +52,7 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -76,7 +76,7 @@ public class SimpleMutationForAction extends Element {
 
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name(fieldName(objectSpec, objectAction))
                     .type(type);
             addGqlArguments(fieldBuilder);
@@ -104,7 +104,7 @@ public class SimpleMutationForAction extends Element {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
-                val objectSpecificationOfCollectionElement = facet.elementSpec();
+                var objectSpecificationOfCollectionElement = facet.elementSpec();
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, SchemaType.RICH);
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
@@ -126,19 +126,19 @@ public class SimpleMutationForAction extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val isService = objectSpec.getBeanSort().isManagedBeanContributing();
+        var isService = objectSpec.getBeanSort().isManagedBeanContributing();
 
-        val environment = new Environment.For(dataFetchingEnvironment);
+        var environment = new Environment.For(dataFetchingEnvironment);
         Object sourcePojo;
         if (isService) {
             sourcePojo = context.serviceRegistry.lookupServiceElseFail(objectSpec.getCorrespondingClass());
         } else {
             Object target = dataFetchingEnvironment.getArgument(argumentName);
             Optional<Object> result;
-            val argumentValue = (Map<String, ?>) target;
-            val idValue = (String)argumentValue.get("id");
+            var argumentValue = (Map<String, ?>) target;
+            var idValue = (String)argumentValue.get("id");
             if (idValue != null) {
-                val objectSpecArg = (ObjectSpecification) argumentValue.get("logicalTypeName");
+                var objectSpecArg = (ObjectSpecification) argumentValue.get("logicalTypeName");
                 Optional<Bookmark> bookmarkIfAny;
                 if (objectSpecArg != null) {
                     bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
@@ -151,9 +151,9 @@ public class SimpleMutationForAction extends Element {
                         .filter(Optional::isPresent)
                         .map(Optional::get);
             } else {
-                val refValue = (String)argumentValue.get("ref");
+                var refValue = (String)argumentValue.get("ref");
                 if (refValue != null) {
-                    val key = ObjectFeatureUtils.keyFor(refValue);
+                    var key = ObjectFeatureUtils.keyFor(refValue);
                     BookmarkedPojo value = ((Environment) environment).getGraphQlContext().get(key);
                     result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
                 } else {
@@ -166,25 +166,25 @@ public class SimpleMutationForAction extends Element {
 
         ManagedObject managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
 
-        val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(objectAction.getFeatureIdentifier());
         }
 
-        val usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usableConsent.isVetoed()) {
             throw new DisabledException(objectAction.getFeatureIdentifier());
         }
 
-        val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction);
+        var head = objectAction.interactionHead(managedObject);
+        var argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction);
 
-        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
         }
 
-        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();
     }
 
@@ -192,8 +192,8 @@ public class SimpleMutationForAction extends Element {
     // TODO: adapted from SimpleAction - rationalize?
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
-        val arguments = new ArrayList<GraphQLArgument>();
-        val argName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        var arguments = new ArrayList<GraphQLArgument>();
+        var argName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
 
         // add target (if not a service)
         if (! objectSpec.getBeanSort().isManagedBeanContributing()) {
@@ -205,7 +205,7 @@ public class SimpleMutationForAction extends Element {
             );
         }
 
-        val parameters = objectAction.getParameters();
+        var parameters = objectAction.getParameters();
         parameters.stream()
                 .map(this::gqlArgumentFor)
                 .forEach(arguments::add);

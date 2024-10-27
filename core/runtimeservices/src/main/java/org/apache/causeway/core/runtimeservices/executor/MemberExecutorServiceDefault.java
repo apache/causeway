@@ -79,7 +79,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -127,7 +126,7 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        val executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+        var executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     invokeActionInternally(actionExecutor))
                 : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
@@ -150,37 +149,37 @@ implements MemberExecutorService {
 
 
         if(interactionInitiatedBy.isPassThrough()) {
-            val resultPojo = invokeMethodPassThrough(actionExecutor.getMethod(), head, argumentAdapters);
+            var resultPojo = invokeMethodPassThrough(actionExecutor.getMethod(), head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
-        val interaction = getInteractionElseFail();
+        var interaction = getInteractionElseFail();
 
         prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
 
-        val xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
+        var xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
 
-        val actionId = owningAction.getFeatureIdentifier();
+        var actionId = owningAction.getFeatureIdentifier();
         log.debug("about to invoke action {}", actionId);
 
-        val targetAdapter = head.getTarget();
-        val targetPojo = MmUnwrapUtils.single(targetAdapter);
+        var targetAdapter = head.getTarget();
+        var targetPojo = MmUnwrapUtils.single(targetAdapter);
 
-        val argumentPojos = argumentAdapters.stream()
+        var argumentPojos = argumentAdapters.stream()
                 .map(MmUnwrapUtils::single)
                 .collect(_Lists.toUnmodifiable());
 
-        val actionInvocation = new ActionInvocation(
+        var actionInvocation = new ActionInvocation(
                         interaction, actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
 
         // handle any exceptions
-        val priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
+        var priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
 
-        val returnedPojo = priorExecution.getReturned();
-        val returnedAdapter = objectManager.adapt(
+        var returnedPojo = priorExecution.getReturned();
+        var returnedAdapter = objectManager.adapt(
                 returnedPojo, owningAction::getElementType);
 
         // assert has bookmark, unless non-scalar
@@ -216,7 +215,7 @@ implements MemberExecutorService {
             executionPublisher().publishActionInvocation(priorExecution);
         }
 
-        val result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
+        var result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -225,7 +224,7 @@ implements MemberExecutorService {
     public ManagedObject setOrClearProperty(
             final @NonNull PropertyModifier propertyExecutor) {
 
-        val executionResult = propertyExecutor.getInteractionInitiatedBy().isPassThrough()
+        var executionResult = propertyExecutor.getInteractionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     setOrClearPropertyInternally(propertyExecutor))
                 : getTransactionService()
@@ -241,7 +240,7 @@ implements MemberExecutorService {
 
         final InteractionHead head = propertyModifier.getHead();
 
-        val domainObject = head.getTarget();
+        var domainObject = head.getTarget();
 
         if(propertyModifier.getInteractionInitiatedBy().isPassThrough()) {
             /* directly access property setter to prevent triggering of domain events
@@ -250,28 +249,28 @@ implements MemberExecutorService {
             return domainObject;
         }
 
-        val interaction = getInteractionElseFail();
-        val command = interaction.getCommand();
+        var interaction = getInteractionElseFail();
+        var command = interaction.getCommand();
         if( command==null ) {
             return domainObject;
         }
 
-        val owningProperty = propertyModifier.getOwningProperty();
+        var owningProperty = propertyModifier.getOwningProperty();
 
         prepareCommandForPublishing(command, head, owningProperty, propertyModifier.getFacetHolder());
 
-        val xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.getNewValue());
+        var xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.getNewValue());
 
-        val propertyId = owningProperty.getFeatureIdentifier();
+        var propertyId = owningProperty.getFeatureIdentifier();
 
-        val targetManagedObject = head.getTarget();
-        val target = MmUnwrapUtils.single(targetManagedObject);
-        val argValuePojo = MmUnwrapUtils.single(propertyModifier.getNewValue());
+        var targetManagedObject = head.getTarget();
+        var target = MmUnwrapUtils.single(targetManagedObject);
+        var argValuePojo = MmUnwrapUtils.single(propertyModifier.getNewValue());
 
-        val propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
+        var propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        val targetPojo = interaction.execute(propertyModifier, propertyEdit,
+        var targetPojo = interaction.execute(propertyModifier, propertyEdit,
                 InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
 
         // handle any exceptions
@@ -279,7 +278,7 @@ implements MemberExecutorService {
 
         // TODO: should also sync DTO's 'threw' attribute here...?
 
-        val executionExceptionIfAny = priorExecution.getThrew();
+        var executionExceptionIfAny = priorExecution.getThrew();
         if(executionExceptionIfAny != null) {
             throw executionExceptionIfAny instanceof RuntimeException
                 ? ((RuntimeException)executionExceptionIfAny)
@@ -291,7 +290,7 @@ implements MemberExecutorService {
             executionPublisher().publishPropertyEdit(priorExecution);
         }
 
-        val result = getObjectManager().adapt(targetPojo);
+        var result = getObjectManager().adapt(targetPojo);
         _Xray.exitInvocation(xrayHandle);
         return result;
 
@@ -320,7 +319,7 @@ implements MemberExecutorService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
             return;
         }
-        val entityState = resultAdapter.getEntityState();
+        var entityState = resultAdapter.getEntityState();
         if(!entityState.isPersistable()) {
             return;
         }
@@ -335,7 +334,7 @@ implements MemberExecutorService {
                     + "which is an entity: {}", resultAdapter);
             return;
         }
-        val bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
+        var bookmark = ManagedObjects.bookmarkElseFail(resultAdapter);
         command.updater().setResult(Try.success(bookmark));
     }
 

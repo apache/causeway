@@ -44,7 +44,7 @@ import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.JdoP
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-import lombok.val;
+
 
 @Component
 public class JdoProgrammingModel implements MetaModelRefiner {
@@ -54,8 +54,8 @@ public class JdoProgrammingModel implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {
 
-        val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
-        val mmc = pm.getMetaModelContext();
+        var step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
+        var mmc = pm.getMetaModelContext();
 
         // come what may, we have to ignore the PersistenceCapable supertype.
         pm.addFactory(step1, new RemoveJdoEnhancementTypesFacetFactory(mmc), Marker.JDO);
@@ -66,8 +66,8 @@ public class JdoProgrammingModel implements MetaModelRefiner {
         pm.addFactory(step1, new RemoveDnPrefixedMethodsFacetFactory(mmc), Marker.JDO);
 
 
-        val step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
-        val jdoFacetContext = mmc.getServiceRegistry().lookupServiceElseFail(JdoFacetContext.class);
+        var step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        var jdoFacetContext = mmc.getServiceRegistry().lookupServiceElseFail(JdoFacetContext.class);
 
         pm.addFactory(step2, new JdoPersistenceCapableFacetFactory(mmc, jdoFacetContext), Marker.JDO);
         pm.addFactory(step2, new JdoDatastoreIdentityAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);

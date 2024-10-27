@@ -53,7 +53,6 @@ import org.apache.causeway.core.security.authentication.manager.AuthenticationMa
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.Getter;
-import lombok.val;
 
 
 class MetaModelContext_usingSpring extends MetaModelContext {
@@ -204,7 +203,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     }
 
     private ManagedObject toManagedObject(final _SingletonBeanProvider managedBeanAdapter) {
-        val servicePojo = managedBeanAdapter.getInstanceElseFail();
+        var servicePojo = managedBeanAdapter.getInstanceElseFail();
         return getSpecificationLoader()
                 .specForType(servicePojo.getClass())
                 .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo))

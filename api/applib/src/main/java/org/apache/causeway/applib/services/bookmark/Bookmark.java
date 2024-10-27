@@ -39,7 +39,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * String representation of any persistable or re-creatable object managed by the framework.
@@ -125,7 +124,7 @@ public final class Bookmark implements Oid {
         if(_Strings.isNullOrEmpty(str)) {
             return Optional.empty();
         }
-        val tokenizer = new StringTokenizer(str, SEPARATOR);
+        var tokenizer = new StringTokenizer(str, SEPARATOR);
         int tokenCount = tokenizer.countTokens();
         if(tokenCount==1) {
             return str.endsWith(SEPARATOR)
@@ -165,7 +164,7 @@ public final class Bookmark implements Oid {
     // -- TO DTO
 
     public OidDto toOidDto() {
-        val oidDto = new OidDto();
+        var oidDto = new OidDto();
         oidDto.setType(getLogicalTypeName());
         oidDto.setId(getIdentifier());
         return oidDto;

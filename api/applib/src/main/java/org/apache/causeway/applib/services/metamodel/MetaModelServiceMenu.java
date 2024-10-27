@@ -50,8 +50,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import lombok.val;
-
 /**
  * Provides a UI to allow domain model metadata (obtained from {@link MetaModelService}) to be downloaded.
  *
@@ -71,22 +69,22 @@ public class MetaModelServiceMenu {
     public enum ExportFormat implements BiFunction<String, MetaModelServiceAndConfig, Clob>  {
         ASCII{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-                val content = _AsciiExport.toAscii(dto).toString();
+                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+                var content = _AsciiExport.toAscii(dto).toString();
                 return Clob.of(fileName, CommonMimeType.TXT, content);
             }
         },
         CSV{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-                val content = _CsvExport2.toCsv(dto);
+                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+                var content = _CsvExport2.toCsv(dto);
                 return Clob.of(fileName, CommonMimeType.CSV, content);
             }
         },
         DETAILED_CSV{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
 
-                val domainModel =  metaModelServiceAndConfig.metaModelService.getDomainModel();
+                var domainModel =  metaModelServiceAndConfig.metaModelService.getDomainModel();
                 final StringBuilder csv = _CsvExport.toCsv(domainModel);
 
                 return Clob.of(fileName, CommonMimeType.CSV, csv);
@@ -95,15 +93,15 @@ public class MetaModelServiceMenu {
         //XXX infinite recursion
 //        JSON{
 //        @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-//                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-//                val content = _Json.toString(dto);
+//                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+//                var content = _Json.toString(dto);
 //                return Clob.of(fileName, CommonMimeType.JSON, content);
 //            }
 //        },
         XML{
             @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-                val content = JaxbUtils.mapperFor(MetamodelDto.class, opts->opts
+                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+                var content = JaxbUtils.mapperFor(MetamodelDto.class, opts->opts
                         .useContextCache(true)
                         .formattedOutput(true))
                 .toString(dto);
@@ -113,8 +111,8 @@ public class MetaModelServiceMenu {
         //XXX empty
 //        YAML{
 //        @Override public Clob apply(final String fileName, final MetaModelServiceAndConfig metaModelServiceAndConfig) {
-//                val dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
-//                val content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
+//                var dto =  metaModelServiceAndConfig.metaModelService.exportMetaModel(metaModelServiceAndConfig.config);
+//                var content = _Yaml.toString(dto).ifFailureFail().getValue().orElse("");
 //                return Clob.of(fileName, CommonMimeType.YAML, content);
 //            }
 //        },
@@ -158,9 +156,9 @@ public class MetaModelServiceMenu {
                 final boolean zip
         ) {
 
-            val config = defaultConfig(includeInterfaces, namespaces);
+            var config = defaultConfig(includeInterfaces, namespaces);
 
-            val blob = exportFormat.apply(fileName, new MetaModelServiceAndConfig(metaModelService, config))
+            var blob = exportFormat.apply(fileName, new MetaModelServiceAndConfig(metaModelService, config))
                     .toBlob(UTF_8);
             return zip
                     ? blob.zip()
@@ -220,7 +218,7 @@ public class MetaModelServiceMenu {
 
         ) throws IOException {
 
-            val config = defaultConfig(includeInterfaces, namespaces);
+            var config = defaultConfig(includeInterfaces, namespaces);
 
             final MetamodelDto leftMetamodelDto =  metaModelService.exportMetaModel(config);
 
@@ -283,14 +281,14 @@ public class MetaModelServiceMenu {
     }
 
     private List<String> namespaceChoices() {
-        val domainModel = metaModelService.getDomainModel();
-        val domainMembers = domainModel.getDomainMembers();
-        val namespaces = _Sets.<String>newTreeSet();
-        for (val domainMember : domainMembers) {
-            val namespace = domainMember.getNamespace();
-            val namespaceParts = namespace.split("[.]");
-            val buf = new StringBuilder();
-            for (val part : namespaceParts) {
+        var domainModel = metaModelService.getDomainModel();
+        var domainMembers = domainModel.getDomainMembers();
+        var namespaces = _Sets.<String>newTreeSet();
+        for (var domainMember : domainMembers) {
+            var namespace = domainMember.getNamespace();
+            var namespaceParts = namespace.split("[.]");
+            var buf = new StringBuilder();
+            for (var part : namespaceParts) {
                 if(buf.length() > 0) {
                     buf.append(".");
                 }

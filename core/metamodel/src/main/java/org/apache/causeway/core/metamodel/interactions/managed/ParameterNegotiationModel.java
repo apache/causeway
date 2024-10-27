@@ -47,7 +47,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 
 /**
@@ -77,7 +76,7 @@ public class ParameterNegotiationModel {
         this.managedAction = managedAction;
         this.validationFeedbackActive = _Bindables.forValue(false);
 
-        val paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
+        var paramNrIterator = IntStream.range(0, initialParamValues.size()).iterator();
         this.paramModels = initialParamValues
                 .map(initialValue->new ParameterModel(paramNrIterator.nextInt(), this, initialValue));
 
@@ -132,7 +131,7 @@ public class ParameterNegotiationModel {
 
     public void setParamValues(final @NonNull Can<ManagedObject> paramValues) {
         // allow overflow and underflow
-        val valueIterator = paramValues.iterator();
+        var valueIterator = paramValues.iterator();
         paramModels.forEach(paramModel->{
             if(!valueIterator.hasNext()) return;
             paramModel.getBindableParamValue().setValue(valueIterator.next());
@@ -203,17 +202,17 @@ public class ParameterNegotiationModel {
 
     /** validates all, the action and each individual parameter */
     public Consent validateParameterSet() {
-        val head = this.getHead();
+        var head = this.getHead();
         return head.getMetaModel().isArgumentSetValid(head, this.getParamValues(), InteractionInitiatedBy.USER);
     }
 
     public Consent validateParameterSetForAction() {
-        val head = this.getHead();
+        var head = this.getHead();
         return head.getMetaModel().isArgumentSetValidForAction(head, this.getParamValues(), InteractionInitiatedBy.USER);
     }
 
     public Can<Consent> validateParameterSetForParameters() {
-        val head = this.getHead();
+        var head = this.getHead();
         return head.getMetaModel()
                 .isArgumentSetValidForParameters(head, this.getParamValues(), InteractionInitiatedBy.USER)
                 .stream()
@@ -240,7 +239,7 @@ public class ParameterNegotiationModel {
     }
 
     public void clearParamValue(final int paramIndex) {
-        val emptyValue = adaptParamValuePojo(paramIndex, null);
+        var emptyValue = adaptParamValuePojo(paramIndex, null);
         paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
     }
 
@@ -250,8 +249,8 @@ public class ParameterNegotiationModel {
      *      and returns the new parameter argument value also wrapped as {@link ManagedObject}
      */
     public void updateParamValue(final int paramIndex, final @NonNull UnaryOperator<ManagedObject> updater) {
-        val bindableParamValue = paramModels.getElseFail(paramIndex).getBindableParamValue();
-        val newParamValue = updater.apply(bindableParamValue.getValue());
+        var bindableParamValue = paramModels.getElseFail(paramIndex).getBindableParamValue();
+        var newParamValue = updater.apply(bindableParamValue.getValue());
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
             clearParamValue(paramIndex);
         } else {
@@ -271,7 +270,7 @@ public class ParameterNegotiationModel {
 
     @NonNull public ManagedObject adaptParamValuePojo(final int paramIndex,
             final @Nullable Object newParamValuePojo) {
-        val paramMeta = getParamMetamodel(paramIndex);
+        var paramMeta = getParamMetamodel(paramIndex);
         return ManagedObject.adaptParameter(paramMeta, newParamValuePojo);
     }
 
@@ -305,7 +304,7 @@ public class ParameterNegotiationModel {
     }
 
     private String actionValidationMessage() {
-        val validityConsentForAction = this.validateParameterSetForAction();
+        var validityConsentForAction = this.validateParameterSetForAction();
         return validityConsentForAction!=null
                 ? validityConsentForAction.getReasonAsString().orElse(null)
                 : null;
@@ -345,7 +344,7 @@ public class ParameterNegotiationModel {
                 final @NonNull ParameterNegotiationModel negotiationModel,
                 final @NonNull ManagedObject initialValue) {
 
-            val action = negotiationModel.getHead().getMetaModel();
+            var action = negotiationModel.getHead().getMetaModel();
 
             this.paramNr = paramNr;
             this.metaModel = action.getParameters().getElseFail(paramNr);

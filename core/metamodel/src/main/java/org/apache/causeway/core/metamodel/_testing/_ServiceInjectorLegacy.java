@@ -49,7 +49,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ToString;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -67,9 +66,9 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
     public <T> T injectServicesInto(final T domainObject) {
         injectServices(domainObject, injectionPoint->{
 
-            val injectionPointName = injectionPoint.toString();
-            val requiredType = injectionPoint.getDeclaredType();
-            val msg = String
+            var injectionPointName = injectionPoint.toString();
+            var requiredType = injectionPoint.getDeclaredType();
+            var msg = String
                     .format("Could not resolve injection point [%s] in target '%s' of required type '%s'",
                             injectionPointName,
                             domainObject.getClass().getName(),
@@ -92,7 +91,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
 
     private void injectServices(final Object targetPojo, final Consumer<InjectionPoint> onNotResolvable) {
 
-        val type = targetPojo.getClass();
+        var type = targetPojo.getClass();
 
 //XXX check is too slow
 //        if(serviceRegistry.isResolvableBean(type)) {
@@ -142,30 +141,30 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             return;
         }
 
-        val beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
+        var beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
 
         if(beans.isEmpty()) {
             onNotResolvable.accept(new InjectionPoint(field));
         } else if(beans.isCardinalityOne()) {
-            val bean = beans.getSingleton().get();
+            var bean = beans.getSingleton().get();
             invokeInjectorField(field, targetPojo, bean);
         } else {
 
-            val requiredAnnotations = _Arrays.combineWithExplicitType(
+            var requiredAnnotations = _Arrays.combineWithExplicitType(
                     Annotation.class,
                     _Constants.ANNOTATION_PRIMARY,
                     field.getAnnotations());
 
             // look for primary
-            val primaryBean = serviceRegistry.select(typeToBeInjected, requiredAnnotations);
+            var primaryBean = serviceRegistry.select(typeToBeInjected, requiredAnnotations);
             if(!primaryBean.isEmpty()) {
-                val bean = primaryBean.getFirst().get();
+                var bean = primaryBean.getFirst().get();
                 invokeInjectorField(field, targetPojo, bean);
                 return;
             }
 
             // fallback: pick first in list
-            val bean = beans.getFirst().get();
+            var bean = beans.getFirst().get();
             invokeInjectorField(field, targetPojo, bean);
         }
 
@@ -176,7 +175,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
      * it represents a collection and inference is possible.
      */
     private static Optional<Class<?>> inferElementType(final @NonNull Field field) {
-        val fieldType = field.getType();
+        var fieldType = field.getType();
         return _Collections.isCollectionType(fieldType)
                 || _Collections.isImmutableCollectionType(fieldType)
                 ? _Generics.streamGenericTypeArgumentsOfField(field)
@@ -194,7 +193,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
         final Class<? extends Collection<Object>> collectionTypeToBeInjected =
                 (Class<? extends Collection<Object>>) field.getType();
 
-        val beans = serviceRegistry.select(elementType, field.getAnnotations());
+        var beans = serviceRegistry.select(elementType, field.getAnnotations());
         if(!beans.isEmpty()) {
             final Collection<Object> collectionOfServices = beans.stream()
                     .filter(isOfType(elementType))
@@ -230,9 +229,9 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             return;
         }
 
-        val instance = serviceRegistry.select(typeToBeInjected, setter.getAnnotations());
+        var instance = serviceRegistry.select(typeToBeInjected, setter.getAnnotations());
         if(instance.isCardinalityOne()) {
-            val bean = instance.getSingleton().get();
+            var bean = instance.getSingleton().get();
             invokeInjectorMethod(setter, targetPojo, bean);
         } else {
             onNotResolvable.accept(new InjectionPoint(new MethodParameter(setter, 0)));
@@ -301,7 +300,7 @@ final class _ServiceInjectorLegacy implements ServiceInjector {
             final CausewayConfiguration configuration,
             final ServiceRegistry serviceRegistry,
             final _InjectorMethodEvaluator injectorMethodEvaluator) {
-        val instance = new _ServiceInjectorLegacy();
+        var instance = new _ServiceInjectorLegacy();
 
         instance.configuration = configuration;
         instance.serviceRegistry = serviceRegistry;

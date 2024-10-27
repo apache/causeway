@@ -40,8 +40,6 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 
-import lombok.val;
-
 class PropertyLayoutAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -63,7 +61,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            val facet = facetedMethod.getFacet(MemberNamedFacet.class);
+            var facet = facetedMethod.getFacet(MemberNamedFacet.class);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(NamedFacetForPropertyLayoutAnnotation.class)));
             assertThat(((HasStaticText)facet).text(), is(equalTo("1st name")));
@@ -84,7 +82,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HiddenFacetForPropertyLayoutAnnotation);
-            val propLayoutFacetAnnotation = (HiddenFacetForPropertyLayoutAnnotation) facet;
+            var propLayoutFacetAnnotation = (HiddenFacetForPropertyLayoutAnnotation) facet;
             assertEquals(Where.OBJECT_FORMS, propLayoutFacetAnnotation.where());
         });
     }
@@ -103,7 +101,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(LabelAtFacetForPropertyLayoutAnnotation.class)));
-            val layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;
+            var layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;
             assertThat(layoutAnnotation.label(), is(equalTo(LabelPosition.LEFT)));
         });
     }

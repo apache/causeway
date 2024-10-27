@@ -45,7 +45,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 record Can_Empty<T>() implements Can<T> {
 
@@ -291,7 +290,7 @@ record Can_Empty<T>() implements Can<T> {
 
     @Override
     public T[] toArray(@NonNull final Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
+        var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
 

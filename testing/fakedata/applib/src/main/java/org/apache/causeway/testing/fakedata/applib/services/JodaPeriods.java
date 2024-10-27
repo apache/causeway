@@ -20,8 +20,6 @@ package org.apache.causeway.testing.fakedata.applib.services;
 
 import org.joda.time.Period;
 
-import lombok.val;
-
 /**
  * Returns random {@link Period}s constrained to last a certain number number of days, months and/or years.
  *
@@ -58,9 +56,9 @@ public class JodaPeriods extends AbstractRandomValueGenerator{
     }
 
     public Period within(Period period) {
-        val newDays = fake.ints().between(0, period.getDays());
-        val newMonths = fake.ints().between(0, period.getMonths());
-        val newYears = fake.ints().between(0, period.getYears());
+        var newDays = fake.ints().between(0, period.getDays());
+        var newMonths = fake.ints().between(0, period.getMonths());
+        var newYears = fake.ints().between(0, period.getYears());
         return Period.years(newYears).withMonths(newMonths).withDays(newDays);
     }
 }

@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacetAbstract;
 
-import lombok.val;
-
 public class EntityChangePublishingFacetForDomainObjectAnnotation
 extends EntityChangePublishingFacetAbstract {
 
@@ -39,13 +37,13 @@ extends EntityChangePublishingFacetAbstract {
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        val publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);
+        var publish = entityChangePublishingIfAny.orElse(Publishing.AS_CONFIGURED);
 
         switch (publish) {
         case NOT_SPECIFIED:
         case AS_CONFIGURED:
 
-            val publishingPolicy = DomainObjectConfigOptions.entityChangePublishingPolicy(configuration);
+            var publishingPolicy = DomainObjectConfigOptions.entityChangePublishingPolicy(configuration);
             switch (publishingPolicy) {
             case NONE:
                 return Optional.of(entityChangePublishingIfAny.isPresent()

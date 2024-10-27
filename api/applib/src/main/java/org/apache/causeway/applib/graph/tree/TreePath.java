@@ -37,8 +37,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 
-import lombok.val;
-
 /**
  * Provides an unambiguous way to address nodes by position within a tree-structure. Examples:
  * <ul>
@@ -164,7 +162,7 @@ public class TreePath implements Serializable {
     }
 
     public Stream<TreePath> streamUpTheHierarchyStartingAtSelf() {
-        val hasMore = _Refs.booleanRef(true);
+        var hasMore = _Refs.booleanRef(true);
         return Stream.iterate((TreePath)this, __->hasMore.isTrue(), TreePath::getParentIfAny)
                 .filter(x->{
                     if(x.isRoot()) {

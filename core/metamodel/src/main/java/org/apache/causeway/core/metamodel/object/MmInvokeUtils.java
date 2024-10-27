@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -48,8 +47,8 @@ public final class MmInvokeUtils {
             final Can<ManagedObject> pendingArguments,
             final List<Object> additionalArguments) {
 
-        val pat = CanonicalInvoker.construct(patConstructor.constructor(), MmUnwrapUtils.multipleAsArray(pendingArguments));
-        val paramPojos = _Arrays.combineWithExplicitType(Object.class, pat, additionalArguments.toArray());
+        var pat = CanonicalInvoker.construct(patConstructor.constructor(), MmUnwrapUtils.multipleAsArray(pendingArguments));
+        var paramPojos = _Arrays.combineWithExplicitType(Object.class, pat, additionalArguments.toArray());
         return CanonicalInvoker.invoke(method.method(), MmUnwrapUtils.single(adapter), paramPojos);
     }
 
@@ -152,7 +151,7 @@ public final class MmInvokeUtils {
             final Can<? extends ManagedObject> pendingArgs,
             final List<Object> additionalArgValues) {
 
-        val argArray = adjust(method, pendingArgs, additionalArgValues);
+        var argArray = adjust(method, pendingArgs, additionalArgValues);
 
         return CanonicalInvoker.invoke(method, MmUnwrapUtils.single(target), argArray);
     }
@@ -173,25 +172,25 @@ public final class MmInvokeUtils {
             final Can<? extends ManagedObject> pendingArgs,
             final List<Object> additionalArgValues) {
 
-        val parameterTypes = method.getParameterTypes();
-        val paramCount = parameterTypes.length;
-        val additionalArgCount = additionalArgValues.size();
-        val pendingArgsToConsiderCount = paramCount - additionalArgCount;
+        var parameterTypes = method.getParameterTypes();
+        var paramCount = parameterTypes.length;
+        var additionalArgCount = additionalArgValues.size();
+        var pendingArgsToConsiderCount = paramCount - additionalArgCount;
 
-        val argIterator = argIteratorFrom(pendingArgs);
-        val adjusted = new Object[paramCount];
+        var argIterator = argIteratorFrom(pendingArgs);
+        var adjusted = new Object[paramCount];
         for(int i=0; i<pendingArgsToConsiderCount; i++) {
 
-            val paramType = parameterTypes[i];
-            val arg = argIterator.hasNext() ? MmUnwrapUtils.single(argIterator.next()) : null;
+            var paramType = parameterTypes[i];
+            var arg = argIterator.hasNext() ? MmUnwrapUtils.single(argIterator.next()) : null;
 
             adjusted[i] = honorPrimitiveDefaults(paramType, arg);
         }
 
         // add the additional parameter values (if any)
         int paramIndex = pendingArgsToConsiderCount;
-        for(val additionalArg : additionalArgValues) {
-            val paramType = parameterTypes[paramIndex];
+        for(var additionalArg : additionalArgValues) {
+            var paramType = parameterTypes[paramIndex];
             adjusted[paramIndex] = honorPrimitiveDefaults(paramType, additionalArg);
             ++paramIndex;
         }

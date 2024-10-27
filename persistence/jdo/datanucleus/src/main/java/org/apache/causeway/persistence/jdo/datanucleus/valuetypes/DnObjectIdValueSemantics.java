@@ -35,7 +35,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * Implementation for application-defined primary keys.
@@ -71,7 +71,7 @@ extends ValueSemanticsBasedOnIdStringifier<ObjectId> {
 
     @Override
     public ObjectId compose(final ValueDecomposition decomposition) {
-        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        var elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
         return destring(_InstanceUtil.loadClass(targetClassName), key);

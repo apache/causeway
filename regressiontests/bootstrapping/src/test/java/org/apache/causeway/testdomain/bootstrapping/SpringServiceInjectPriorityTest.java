@@ -50,7 +50,7 @@ import org.apache.causeway.core.runtimeservices.message.MessageServiceDefault;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 import lombok.Getter;
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -83,12 +83,12 @@ class SpringServiceInjectPriorityTest {
     @Test
     void injectionOnServices() throws IOException {
 
-        val messageService = dummyService.getMessageService();
+        var messageService = dummyService.getMessageService();
         assertNotNull(messageService);
         assertTrue(messageService instanceof MessageServiceDefault);
 
         // injected as per @Priority
-        val ratings = dummyService.getRatings();
+        var ratings = dummyService.getRatings();
         assertThat(ratings.get(0).getRating(), is(equalTo(1)));
         assertThat(ratings.get(1).getRating(), is(equalTo(2)));
         assertThat(ratings.get(2).getRating(), is(equalTo(3)));
@@ -111,15 +111,15 @@ class SpringServiceInjectPriorityTest {
     @Test
     void injectionOnObjects() throws IOException {
 
-        val dummyObject = new DummyObject();
+        var dummyObject = new DummyObject();
         serviceInjector.injectServicesInto(dummyObject);
 
-        val messageService = dummyObject.getMessageService();
+        var messageService = dummyObject.getMessageService();
         assertNotNull(messageService);
         assertTrue(messageService instanceof MessageServiceDefault);
 
         // injected as per @Priority
-        val ratings = dummyObject.getRatings();
+        var ratings = dummyObject.getRatings();
         assertThat(ratings.get(0).getRating(), is(equalTo(1)));
         assertThat(ratings.get(1).getRating(), is(equalTo(2)));
         assertThat(ratings.get(2).getRating(), is(equalTo(3)));

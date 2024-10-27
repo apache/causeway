@@ -44,7 +44,7 @@ import org.apache.causeway.testdomain.wrapperfactory.Counter;
 import org.apache.causeway.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 /**
  * Run "sh enhance.sh -w" first, to enhance the test JDO entities.
@@ -71,7 +71,7 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         // given
         assertThat(bookmark).isNotNull();
 
-        val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+        var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
         assertThat(counter.getNum()).isNull();
     }
 
@@ -82,9 +82,9 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
 
         // when - executing regular action
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            val asyncControl = AsyncControl.returning(Counter.class)
+            var asyncControl = AsyncControl.returning(Counter.class)
                     .with(executorService);
 
             wrapperFactory.asyncWrap(counter, asyncControl).increment();
@@ -96,16 +96,16 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
 
         // then
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
         });
 
         // when - executing mixed-in action
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
 
-            val asyncControl = AsyncControl.returning(Counter.class)
+            var asyncControl = AsyncControl.returning(Counter.class)
                     .with(executorService);
 
             // when
@@ -118,7 +118,7 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
 
         // then
         runWithNewTransaction(() -> {
-            val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter).isNotNull();
             assertThat(counter.getNum()).isEqualTo(2L);
         });

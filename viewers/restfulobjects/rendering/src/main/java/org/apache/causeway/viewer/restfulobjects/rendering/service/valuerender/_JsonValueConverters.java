@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  * Has support for JSON primitives.
@@ -82,7 +82,7 @@ final class _JsonValueConverters {
     }
 
     public static Map<Class<?>, JsonValueConverter> byClass() {
-        val converterByClass = _Maps.<Class<?>, JsonValueConverter>newLinkedHashMap();
+        var converterByClass = _Maps.<Class<?>, JsonValueConverter>newLinkedHashMap();
         new _JsonValueConverters().asList()
                 .forEach(converter->converterByClass.put(converter.getValueClass(), converter));
         return converterByClass;
@@ -90,7 +90,7 @@ final class _JsonValueConverters {
 
     private List<JsonValueConverter> asList() {
 
-        val converters = _Lists.<JsonValueConverter>newArrayList();
+        var converters = _Lists.<JsonValueConverter>newArrayList();
 
         converters.add(new JsonValueConverter.Abstract(DefaultFormat.STRING){
             @Override
@@ -103,7 +103,7 @@ final class _JsonValueConverters {
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
-                val obj = unwrapAsObjectElseNullNode(objectAdapter);
+                var obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof String) {
                     repr.mapPutString("value", (String) obj);
                 } else {
@@ -125,7 +125,7 @@ final class _JsonValueConverters {
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
-                val obj = unwrapAsObjectElseNullNode(objectAdapter);
+                var obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Boolean) {
                     repr.mapPutBooleanNullable("value", (Boolean) obj);
                 } else {
@@ -156,7 +156,7 @@ final class _JsonValueConverters {
             @Override
             public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
                     final JsonRepresentation repr) {
-                val obj = unwrapAsObjectElseNullNode(objectAdapter);
+                var obj = unwrapAsObjectElseNullNode(objectAdapter);
                 if(obj instanceof Byte) {
                     repr.mapPutByteNullable("value", (Byte) obj);
                 } else {
@@ -447,7 +447,7 @@ final class _JsonValueConverters {
                     final int scale = context.maxFractionalDigits(objectAdapter).orElse(-1);
                     if(totalDigits>-1
                             && scale>-1) {
-                        val formatOverride = String.format("big-decimal(%d,%d)", totalDigits, scale);
+                        var formatOverride = String.format("big-decimal(%d,%d)", totalDigits, scale);
                         repr.putFormat(formatOverride);
                     } else {
                         repr.putFormat(format);

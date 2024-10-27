@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Indicates whether a property should be excluded from entity change publishing (auditing).
@@ -48,14 +47,14 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
 
     static boolean isExcludedFromPublishing(final @NonNull OneToOneAssociation property) {
 
-        val policyFacetIfAny = property
+        var policyFacetIfAny = property
                 .lookupFacet(EntityPropertyChangePublishingPolicyFacet.class);
 
-        val typeOf = property.getElementType().getCorrespondingClass();
+        var typeOf = property.getElementType().getCorrespondingClass();
         if(Blob.class.equals(typeOf)
                 || Clob.class.equals(typeOf)) {
 
-            val isExplictlyAllowed = policyFacetIfAny
+            var isExplictlyAllowed = policyFacetIfAny
                     .map(EntityPropertyChangePublishingPolicyFacet::isPublishingAllowed)
                     .orElse(false);
 

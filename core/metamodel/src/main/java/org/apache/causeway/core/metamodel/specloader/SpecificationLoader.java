@@ -45,7 +45,6 @@ import static org.apache.causeway.core.metamodel.spec.IntrospectionState.FULLY_I
 import static org.apache.causeway.core.metamodel.spec.IntrospectionState.TYPE_INTROSPECTED;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
@@ -243,11 +242,11 @@ public interface SpecificationLoader {
         if(featureIdentifier==null) {
             return Optional.empty();
         }
-        val typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
+        var typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
         if(typeSpec==null) {
             return Optional.empty();
         }
-        val member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
+        var member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
         if(member==null) {
             return Optional.empty();
         }

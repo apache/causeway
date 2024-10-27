@@ -39,7 +39,7 @@ import org.apache.causeway.testdomain.model.badnoactenforce.InvalidOrphanedActio
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -77,7 +77,7 @@ class DomainModelTest_usingBadDomain_noAnnotationEnforced extends CausewayIntegr
     @Test
     void orphanedActionSupport_shouldFail() {
 
-        val tester = testerFactory.objectTester(InvalidOrphanedActionSupportNoAnnotationEnforced.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedActionSupportNoAnnotationEnforced.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideOrphaned()");

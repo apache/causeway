@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
-import lombok.val;
+
 
 public class ListeningMarkupComponent extends MarkupComponent {
 
@@ -57,7 +57,7 @@ public class ListeningMarkupComponent extends MarkupComponent {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        val htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
         replaceComponentTagBody(
                 markupStream,
                 openTag,

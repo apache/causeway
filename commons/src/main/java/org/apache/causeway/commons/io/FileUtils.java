@@ -49,7 +49,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -71,7 +70,7 @@ public class FileUtils {
      */
     public <T> Try<T> tryReadAndApply(final @Nullable File file, final @NonNull ThrowingFunction<InputStream, T> inputStreamMapper) {
         return Try.call(()->{
-            try(val inputStream = new FileInputStream(existingFileElseFail(file))){
+            try(var inputStream = new FileInputStream(existingFileElseFail(file))){
                 return inputStreamMapper.apply(inputStream);
             }
         });
@@ -87,7 +86,7 @@ public class FileUtils {
      */
     public Try<Void> tryReadAndAccept(final @Nullable File file, final @NonNull ThrowingConsumer<InputStream> inputStreamConsumer) {
         return Try.run(()->{
-            try(val inputStream = new FileInputStream(existingFileElseFail(file))){
+            try(var inputStream = new FileInputStream(existingFileElseFail(file))){
                 inputStreamConsumer.accept(inputStream);
             }
         });
@@ -131,7 +130,7 @@ public class FileUtils {
         }
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir.toPath())) {
             for (Path path : stream) {
-                val file = path.toFile();
+                var file = path.toFile();
                 if (Files.isDirectory(path)) {
                     if(dirFilter.test(file)) {
                         // go deeper
@@ -207,7 +206,7 @@ public class FileUtils {
      */
     @SneakyThrows
     public File tempDir(final String name) {
-        val tempDir =  Files.createTempDirectory(name).toFile();
+        var tempDir =  Files.createTempDirectory(name).toFile();
         tempDir.deleteOnExit();
         return tempDir;
     }

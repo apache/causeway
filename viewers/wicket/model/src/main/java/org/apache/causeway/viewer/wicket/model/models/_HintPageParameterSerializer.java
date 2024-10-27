@@ -26,8 +26,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 
-import lombok.val;
-
 class _HintPageParameterSerializer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,7 +39,7 @@ class _HintPageParameterSerializer implements Serializable {
             final Bookmark bookmark) {
 
         if(bookmark!=null) {
-            for (val hintKey : hintStore.findHintKeys(bookmark)) {
+            for (var hintKey : hintStore.findHintKeys(bookmark)) {
                 ComponentHintKey.create(hintStore, hintKey).hintTo(bookmark, pageParameters, PREFIX);
             }
         }

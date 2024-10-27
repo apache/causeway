@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class ViewModelFacetAbstract
 extends FacetAbstract
@@ -61,12 +60,12 @@ implements ViewModelFacet {
             final ObjectSpecification spec,
             final Optional<Bookmark> bookmarkIfAny) {
 
-        val bookmark = bookmarkIfAny.orElse(null);
-        val isBookmarkAvailable = bookmarkIfAny.map(Bookmark::getIdentifier)
+        var bookmark = bookmarkIfAny.orElse(null);
+        var isBookmarkAvailable = bookmarkIfAny.map(Bookmark::getIdentifier)
                 .map(_Strings::isNotEmpty)
                 .orElse(false);
 
-        val viewModel = !isBookmarkAvailable
+        var viewModel = !isBookmarkAvailable
                 ? createViewmodel(spec)
                 : createViewmodel(spec, bookmark);
 

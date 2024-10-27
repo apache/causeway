@@ -37,7 +37,7 @@ import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -59,7 +59,7 @@ implements ExecutionSubscriber {
     public void onExecution(final Execution<?, ?> execution) {
 
         @SuppressWarnings("unchecked")
-        val publishedEntries =
+        var publishedEntries =
         (List<Execution<?, ?>>) kvStore.get(this, "publishedExecutions").orElseGet(ArrayList::new);
 
         publishedEntries.add(execution);

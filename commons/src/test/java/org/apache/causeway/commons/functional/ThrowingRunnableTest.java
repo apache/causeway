@@ -27,14 +27,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
-
 class ThrowingRunnableTest {
 
     @Test
     void happyCase() throws Exception {
 
-        val counter = new LongAdder();
+        var counter = new LongAdder();
 
         var throwingRunnable = (ThrowingRunnable) counter::increment;
         throwingRunnable.toCallable().call();

@@ -22,13 +22,11 @@ package org.apache.causeway.testing.fixtures.applib.personas.fixtures;
 
 import org.apache.causeway.testing.fixtures.applib.setup.PersonaEnumPersistAll;
 
-import lombok.val;
-
 
 public class ScenarioTest {
 
 
     void setup() {
-        val persistAll = new PersonaEnumPersistAll<>(Person_persona.class);
+        var persistAll = new PersonaEnumPersistAll<>(Person_persona.class);
     }
 }

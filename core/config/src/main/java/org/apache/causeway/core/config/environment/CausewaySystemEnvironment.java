@@ -39,7 +39,6 @@ import org.apache.causeway.commons.internal.ioc._IocContainer;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -75,7 +74,7 @@ public class CausewaySystemEnvironment {
         // when bootstrapped with Spring, postConstruct() must happen before any call to get() above,
         // otherwise we copy over settings from the primed instance already created with get() above,
         // then on the _Context replace the primed with this one
-        val primed = _Context.getIfAny(CausewaySystemEnvironment.class);
+        var primed = _Context.getIfAny(CausewaySystemEnvironment.class);
         if(primed!=null) {
             _Context.remove(CausewaySystemEnvironment.class);
             this.setPrototyping(primed.isPrototyping());

@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 class WrapperFactoryDefaultTest {
 
@@ -73,7 +72,7 @@ class WrapperFactoryDefaultTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        val mmc = MetaModelContext_forTesting.builder()
+        var mmc = MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .build();
 

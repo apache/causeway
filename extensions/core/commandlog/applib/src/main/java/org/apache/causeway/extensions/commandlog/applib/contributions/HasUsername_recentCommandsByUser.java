@@ -31,8 +31,6 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
-import lombok.val;
-
 
 /**
  * Contributes the <code>recentCommandsByUser</code> collection to any domain object implementing {@link HasUsername}.
@@ -62,7 +60,7 @@ public class HasUsername_recentCommandsByUser {
     }
 
     @MemberSupport public List<? extends CommandLogEntry> coll() {
-        val username = hasUsername.getUsername();
+        var username = hasUsername.getUsername();
         return username != null
                 ? commandLogEntryRepository.findRecentByUsername(username)
                 : Collections.emptyList();

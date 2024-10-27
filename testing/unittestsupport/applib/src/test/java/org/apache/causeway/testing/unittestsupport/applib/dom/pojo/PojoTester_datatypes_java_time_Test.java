@@ -27,15 +27,13 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaL
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaLocalTimeHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.JavaOffsetDateTimeHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_java_time_Test {
 
     @Test
     public void exercise_offset_date_time() {
 
         // given
-        val holder = new JavaOffsetDateTimeHolder();
+        var holder = new JavaOffsetDateTimeHolder();
         Assertions.assertThat(holder).extracting(JavaOffsetDateTimeHolder::getOffsetDateTime).isNull();
 
         // when
@@ -51,7 +49,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_offset_local_date_time_broken() {
 
         // given
-        val holder = new JavaOffsetDateTimeHolder().butBroken();
+        var holder = new JavaOffsetDateTimeHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {
@@ -64,7 +62,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_local_date() {
 
         // given
-        val holder = new JavaLocalDateHolder();
+        var holder = new JavaLocalDateHolder();
         Assertions.assertThat(holder).extracting(JavaLocalDateHolder::getSomeLocalDate).isNull();
 
         // when
@@ -80,7 +78,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_local_date_broken() {
 
         // given
-        val holder = new JavaLocalDateHolder().butBroken();
+        var holder = new JavaLocalDateHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {
@@ -93,7 +91,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_local_date_time() {
 
         // given
-        val holder = new JavaLocalDateTimeHolder();
+        var holder = new JavaLocalDateTimeHolder();
         Assertions.assertThat(holder).extracting(JavaLocalDateTimeHolder::getSomeLocalDateTime).isNull();
 
         // when
@@ -109,7 +107,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_local_date_time_broken() {
 
         // given
-        val holder = new JavaLocalDateTimeHolder().butBroken();
+        var holder = new JavaLocalDateTimeHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {
@@ -122,7 +120,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_local_time() {
 
         // given
-        val holder = new JavaLocalTimeHolder();
+        var holder = new JavaLocalTimeHolder();
         Assertions.assertThat(holder).extracting(JavaLocalTimeHolder::getLocalTime).isNull();
 
         // when
@@ -138,7 +136,7 @@ public class PojoTester_datatypes_java_time_Test {
     public void exercise_local_time_broken() {
 
         // given
-        val holder = new JavaLocalTimeHolder().butBroken();
+        var holder = new JavaLocalTimeHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {

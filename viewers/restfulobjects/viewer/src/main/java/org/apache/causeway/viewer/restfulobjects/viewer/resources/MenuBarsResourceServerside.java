@@ -41,8 +41,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import lombok.val;
-
 @Component
 public class MenuBarsResourceServerside extends ResourceAbstract implements MenuBarsResource {
 
@@ -59,11 +57,11 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
     })
     public Response menuBars() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.MENUBARS, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val serializationStrategy = resourceContext.getSerializationStrategy();
-        val menuBarsService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
+        var serializationStrategy = resourceContext.getSerializationStrategy();
+        var menuBarsService = metaModelContext.getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
 
         final Response.ResponseBuilder builder;
         final MenuBars menuBars = menuBarsService.menuBars();

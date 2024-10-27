@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGrou
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class PropertyLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -41,8 +39,8 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val propertyLayoutIfAny = processMethodContext
+        var facetHolder = processMethodContext.getFacetHolder();
+        var propertyLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         PropertyLayout.class,
                         () -> ValidationFailureUtils

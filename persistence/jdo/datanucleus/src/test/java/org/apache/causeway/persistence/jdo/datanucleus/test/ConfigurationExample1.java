@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
-import lombok.val;
+
 
 /**
  *  Corresponds to the documents of the 'spring-jdo' module.
@@ -43,7 +43,7 @@ public class ConfigurationExample1 {
 
         _Probe.errOut("jdoSettings:\n%s", _Maps.toString(jdoSettings.getAsProperties(), "\n"));
         
-        val myPmf = new LocalPersistenceManagerFactoryBean();
+        var myPmf = new LocalPersistenceManagerFactoryBean();
         myPmf.setJdoPropertyMap(jdoSettings.getAsProperties());
         return myPmf;
     }

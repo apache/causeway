@@ -50,7 +50,7 @@ import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -85,7 +85,7 @@ public class SseServiceDefault implements SseService {
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
 
-        val executor = ForkJoinPool.commonPool();
+        var executor = ForkJoinPool.commonPool();
 
         switch(executionBehavior) {
         case SIMPLE:
@@ -110,11 +110,11 @@ public class SseServiceDefault implements SseService {
 
     private void run(SseSource task) {
 
-        val sourceType = task.getClass();
+        var sourceType = task.getClass();
 
         // 'acquires' a possibly new EventStreamLifecycle and increments its running-task-counter
-        val eventStreamLifecycle = eventStreamPool.acquireLifecycleForType(sourceType);
-        val eventStream = eventStreamLifecycle.getEventStream();
+        var eventStreamLifecycle = eventStreamPool.acquireLifecycleForType(sourceType);
+        var eventStream = eventStreamLifecycle.getEventStream();
 
         log.debug("submitting task type='{}' -> stream='{}'", sourceType, eventStream.getId());
 
@@ -144,7 +144,7 @@ public class SseServiceDefault implements SseService {
         }
 
         public synchronized EventStreamLifecycle acquireLifecycleForType(Class<?> sourceType) {
-            val eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
+            var eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
                     __->EventStreamLifecycle.of(
                             new EventStreamDefault(UUID.randomUUID(), sourceType),
                             this));
@@ -224,7 +224,7 @@ public class SseServiceDefault implements SseService {
             final List<Predicate<SseSource>> markedForRemoval = _Lists.newArrayList();
 
             defensiveCopyOfListeners.forEach(listener->{
-                val retain = listener.test(source);
+                var retain = listener.test(source);
                 if(!retain) {
                     markedForRemoval.add(listener);
                 }

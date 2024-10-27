@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutAnnotation;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
-import lombok.val;
-
 public class DomainObjectLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -39,9 +37,9 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val facetHolder = processClassContext.getFacetHolder();
-        val domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
-        val metamodelEventService = this.metamodelEventService.get();
+        var facetHolder = processClassContext.getFacetHolder();
+        var domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
+        var metamodelEventService = this.metamodelEventService.get();
 
         addFacetIfPresent(
                 TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent

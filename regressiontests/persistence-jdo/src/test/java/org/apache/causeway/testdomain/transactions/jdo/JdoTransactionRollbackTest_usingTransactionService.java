@@ -39,7 +39,7 @@ import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -91,7 +91,7 @@ class JdoTransactionRollbackTest_usingTransactionService {
             assertEquals(0, repository.allInstances(JdoBook.class).size());
         });
 
-        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        var result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
             //fixtureScripts.runPersona(JdoTestDomainPersona.InventoryWith1Book);
             lock.install();
             throw _Exceptions.unrecoverable("Test: force current tx to rollback");

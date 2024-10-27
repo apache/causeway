@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -85,7 +85,7 @@ final class _Util {
             return true;
         }
         if(specification.isPlural()) {
-            val elementSpec = Facets.elementSpec(specification).orElse(null);
+            var elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return isVisibleForPublic(elementSpec);
             }
@@ -128,7 +128,7 @@ final class _Util {
             final ObjectSpecification objectSpec,
             final Visibility visibility,
             final ClassExcluder classExcluder) {
-        val actionTypes = actionScopesFor(visibility);
+        var actionTypes = actionScopesFor(visibility);
 
         return objectSpec.streamActions(actionTypes, MixedIn.INCLUDED)
                 .filter(objectAction->

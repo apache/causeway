@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -46,7 +46,7 @@ class CommonPredicates {
         return new DescribedPredicate<>("not abstract") {
             @Override
             public boolean test(final JavaClass javaClass) {
-                val isAbstract = javaClass.getModifiers().stream().anyMatch((final JavaModifier x) -> x == JavaModifier.ABSTRACT);
+                var isAbstract = javaClass.getModifiers().stream().anyMatch((final JavaModifier x) -> x == JavaModifier.ABSTRACT);
                 return !isAbstract;
             }
         };
@@ -71,8 +71,8 @@ class CommonPredicates {
                 if (!javaAnnotation.getRawType().isAssignableTo(DomainObject.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val nature = properties.get("nature");
+                var properties = javaAnnotation.getProperties();
+                var nature = properties.get("nature");
                 return nature instanceof JavaEnumConstant &&
                         Objects.equals(((JavaEnumConstant) nature).name(), expectedNature.name());
             }
@@ -85,8 +85,8 @@ class CommonPredicates {
                 if (!javaAnnotation.getRawType().isAssignableTo(XmlJavaTypeAdapter.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val value = properties.get("value");
+                var properties = javaAnnotation.getProperties();
+                var value = properties.get("value");
                 return value instanceof JavaClass &&
                       ((JavaClass)value).isAssignableFrom(PersistentEntityAdapter.class);
             }
@@ -107,7 +107,7 @@ class CommonPredicates {
             final String attribute,
             final String attributeValue) {
 
-        val description = String
+        var description = String
                 .format("@%s(%s = %s)", annotClass.getSimpleName(), attribute, attributeValue);
         return new DescribedPredicate<JavaAnnotation<?>>(description) {
             @Override
@@ -125,14 +125,14 @@ class CommonPredicates {
     static ArchCondition<JavaClass> haveNoArgProtectedConstructor() {
         return new ArchCondition<JavaClass>("have protected no-arg constructor") {
             @Override public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
-                val noArgConstructorIfAny = javaClass.tryGetConstructor();
+                var noArgConstructorIfAny = javaClass.tryGetConstructor();
                 if (!noArgConstructorIfAny.isPresent()) {
                     conditionEvents.add(new SimpleConditionEvent(javaClass, false,
                             String.format("%s does not have a no-arg constructor", javaClass.getSimpleName())));
                     return;
                 }
-                val noArgConstructor = noArgConstructorIfAny.get();
-                val protectedModifierIfAny = noArgConstructor.getModifiers().stream()
+                var noArgConstructor = noArgConstructorIfAny.get();
+                var protectedModifierIfAny = noArgConstructor.getModifiers().stream()
                         .filter(x -> x == JavaModifier.PROTECTED).findAny();
                 if (!protectedModifierIfAny.isPresent()) {
 
@@ -149,7 +149,7 @@ class CommonPredicates {
         return new DescribedPredicate<JavaClass>("are not abstract") {
             @Override
             public boolean test(final JavaClass javaClass) {
-                val isAbstract = javaClass.getModifiers().stream().anyMatch((final JavaModifier x) -> x == JavaModifier.ABSTRACT);
+                var isAbstract = javaClass.getModifiers().stream().anyMatch((final JavaModifier x) -> x == JavaModifier.ABSTRACT);
                 return !isAbstract;
             }
         };

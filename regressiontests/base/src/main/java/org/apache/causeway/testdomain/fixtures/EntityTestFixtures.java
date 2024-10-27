@@ -56,7 +56,6 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -95,9 +94,9 @@ implements
     public final <B extends IBook, T extends InventoryJaxbVm<B>> T createViewmodelWithCurrentBooks() {
         final T inventoryJaxbVm =
                 _Casts.uncheckedCast(factoryService.viewModel(vmClass()));
-        val books = inventoryJaxbVm.listBooks();
+        var books = inventoryJaxbVm.listBooks();
         if(_NullSafe.size(books)>0) {
-            val favoriteBook = books.get(0);
+            var favoriteBook = books.get(0);
             inventoryJaxbVm.setName("Bookstore");
             inventoryJaxbVm.setBooks(books);
             inventoryJaxbVm.setFavoriteBook(favoriteBook);
@@ -145,13 +144,13 @@ implements
                 .map(i->i-1)
                 .toArray();
 
-        val expectedBookNames = BookDto.samples().collect(Can.toCan())
+        var expectedBookNames = BookDto.samples().collect(Can.toCan())
         .pickByIndex(zeroBasedIndices)
         .map(BookDto::getName)
         .sorted(_Strings::compareNullsFirst)
         .toArray(new String[0]);
 
-        val actualBookNames = products.stream()
+        var actualBookNames = products.stream()
                 .map(IBook.class::cast)
                 .map(IBook::getName)
                 .sorted()
@@ -161,7 +160,7 @@ implements
     }
 
     public final void assertHasPersistenceId(final Object entity) {
-        val bookmark = bookmarkService.bookmarkForElseFail(entity);
+        var bookmark = bookmarkService.bookmarkForElseFail(entity);
         final int id = Integer.parseInt(bookmark.getIdentifier());
         assertTrue(id>=-1, ()->String.format("expected valid id; got %d", id));
     }
@@ -170,10 +169,10 @@ implements
             final InventoryJaxbVm<? extends IBook> inventoryJaxbVm) {
         assertEquals("*InventoryJaxbVm; Bookstore; 3 products", "*" + (inventoryJaxbVm.title().substring(3)));
         assertEquals("Bookstore", inventoryJaxbVm.getName());
-        val books = inventoryJaxbVm.listBooks();
+        var books = inventoryJaxbVm.listBooks();
         assertEquals(3, books.size());
-        val favoriteBook = inventoryJaxbVm.getFavoriteBook();
-        val expectedBook = BookDto.sample();
+        var favoriteBook = inventoryJaxbVm.getFavoriteBook();
+        var expectedBook = BookDto.sample();
         assertEquals(expectedBook.getName(), favoriteBook.getName());
         assertHasPersistenceId(favoriteBook);
         inventoryJaxbVm.listBooks()
@@ -181,7 +180,7 @@ implements
     }
 
     public static Set<String> expectedBookTitles() {
-        val expectedTitles = Set.of("Dune", "The Foundation", "The Time Machine");
+        var expectedTitles = Set.of("Dune", "The Foundation", "The Time Machine");
         return expectedTitles;
     }
 
@@ -202,7 +201,7 @@ implements
 
     @SneakyThrows
     public final synchronized Lock aquireLock() {
-        val dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().getJdbcUrl();
+        var dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().getJdbcUrl();
         this.lockQueue = lockQueueByDatasource.computeIfAbsent(dsUrl, __->new LinkedBlockingQueue<>(1));
         log.info("waiting for lock {}", dsUrl);
         Lock lock;
@@ -225,7 +224,7 @@ implements
 
     @SneakyThrows
     public final Lock aquireLockAndClear() {
-        val lock = aquireLock();
+        var lock = aquireLock();
         clearRepositoryInTransaction();
         kvStoreForTesting.clearValues();
         return lock;

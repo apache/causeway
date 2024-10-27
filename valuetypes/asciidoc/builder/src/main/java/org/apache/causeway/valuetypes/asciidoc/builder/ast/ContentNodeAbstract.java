@@ -30,7 +30,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 public abstract class ContentNodeAbstract implements ContentNode {
 
@@ -83,7 +82,7 @@ public abstract class ContentNodeAbstract implements ContentNode {
 
     @Override
     public boolean setAttribute(Object name, Object value, boolean overwrite) {
-        val key = (String)name;
+        var key = (String)name;
         return overwrite
                 ? attributes.put(key, value)==null
                 : attributes.get(key)!=null

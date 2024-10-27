@@ -31,8 +31,6 @@ import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocWriter;
 
-import lombok.val;
-
 abstract class AbstractAsciiDocWriterTest {
 
     protected String adocSourceResourceLocation;
@@ -55,9 +53,9 @@ abstract class AbstractAsciiDocWriterTest {
     }
 
     protected void assertReferenceDocumentIsCorrectlyWritten() {
-        val adocRef = _Strings.readFromResource(this.getClass(), "/approved/" + adocSourceResourceLocation, StandardCharsets.UTF_8);
-        val asciidoctor = Asciidoctor.Factory.create();
-        val refDoc = asciidoctor.load(adocRef, Options.builder().build());
+        var adocRef = _Strings.readFromResource(this.getClass(), "/approved/" + adocSourceResourceLocation, StandardCharsets.UTF_8);
+        var asciidoctor = Asciidoctor.Factory.create();
+        var refDoc = asciidoctor.load(adocRef, Options.builder().build());
 
         if(debugEnabled) {
             System.out.println("==========================================");

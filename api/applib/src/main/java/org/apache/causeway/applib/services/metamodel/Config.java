@@ -24,7 +24,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.val;
 
 
 /**
@@ -56,7 +55,7 @@ public class Config {
      * Returns a copy of this config with given namespace added.
      */
     public Config withNamespacePrefix(final String namespace) {
-        val newConfig = asBuilder().build();
+        var newConfig = asBuilder().build();
         newConfig.namespacePrefixes.add(namespace);
         return newConfig;
     }

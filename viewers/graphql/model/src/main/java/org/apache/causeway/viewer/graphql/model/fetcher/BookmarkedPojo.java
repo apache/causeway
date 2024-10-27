@@ -23,7 +23,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
 import graphql.schema.DataFetchingEnvironment;
-import lombok.val;
 
 public class BookmarkedPojo {
 
@@ -39,14 +38,14 @@ public class BookmarkedPojo {
     }
 
     public static Object sourceFrom(DataFetchingEnvironment dataFetchingEnvironment) {
-        val source = dataFetchingEnvironment.getSource();
+        var source = dataFetchingEnvironment.getSource();
         return source instanceof BookmarkedPojo
                 ? ((BookmarkedPojo) source).getTargetPojo()
                 : source;
     }
 
     public static BookmarkedPojo sourceFrom(DataFetchingEnvironment dataFetchingEnvironment, Context context) {
-        val sourcePojo = sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = sourceFrom(dataFetchingEnvironment);
         return context.bookmarkService.bookmarkFor(sourcePojo)
                 .map(bookmark -> new BookmarkedPojo(bookmark, context.bookmarkService))
                 .orElseThrow();

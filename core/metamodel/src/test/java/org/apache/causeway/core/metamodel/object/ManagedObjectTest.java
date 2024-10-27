@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 class ManagedObjectTest {
 
@@ -59,37 +58,37 @@ class ManagedObjectTest {
     @ParameterizedTest
     @ValueSource(classes = {void.class, Void.class})
     void voidShouldMapToEmptyValue(final Class<?> cls) {
-        val spec = specLoader.specForTypeElseFail(cls);
+        var spec = specLoader.specForTypeElseFail(cls);
         assertTrue(spec.isVoid(), ()->"isVoid()");
         assertTrue(spec.isValue(), ()->"isValue()");
         assertFalse(spec.isAbstract(), ()->"isAbstract()");
         assertFalse(spec.isInjectable(), ()->"isInjectable()");
         assertFalse(spec.isEntityOrViewModel(), ()->"isEntityOrViewModel()");
 
-        val emptySpez = Specialization.inferFrom(spec, null);
+        var emptySpez = Specialization.inferFrom(spec, null);
         assertEquals(Specialization.EMPTY, emptySpez);
 
-        val emptyObject = ManagedObject.empty(spec);
+        var emptyObject = ManagedObject.empty(spec);
         assertNotNull(emptyObject);
     }
 
     @ParameterizedTest
     @ValueSource(classes = {int.class, Integer.class})
     void intShouldMapToValue(final Class<?> cls) {
-        val spec = specLoader.specForTypeElseFail(cls);
+        var spec = specLoader.specForTypeElseFail(cls);
         assertFalse(spec.isVoid(), ()->"isVoid()");
         assertTrue(spec.isValue(), ()->"isValue()");
         assertFalse(spec.isAbstract(), ()->"isAbstract()");
         assertFalse(spec.isInjectable(), ()->"isInjectable()");
         assertFalse(spec.isEntityOrViewModel(), ()->"isEntityOrViewModel()");
 
-        val emptySpez = Specialization.inferFrom(spec, null);
+        var emptySpez = Specialization.inferFrom(spec, null);
         assertEquals(Specialization.EMPTY, emptySpez);
 
-        val emptyObject = ManagedObject.empty(spec);
+        var emptyObject = ManagedObject.empty(spec);
         assertNotNull(emptyObject);
 
-        val presentObject = ManagedObject.adaptSingular(specLoader, 3);
+        var presentObject = ManagedObject.adaptSingular(specLoader, 3);
         assertEquals(Specialization.VALUE, presentObject.getSpecialization());
 
         presentObject.assertCompliance(6);
@@ -103,22 +102,22 @@ class ManagedObjectTest {
     @ValueSource(classes = {DomainObjectList.class})
     @SneakyThrows
     void someTypesShouldMapToViewmodel(final Class<?> cls) {
-        val spec = specLoader.specForTypeElseFail(cls);
+        var spec = specLoader.specForTypeElseFail(cls);
         assertFalse(spec.isVoid(), ()->"isVoid()");
         assertTrue(spec.isViewModel(), ()->"isViewModel()");
         assertFalse(spec.isAbstract(), ()->"isAbstract()");
         assertFalse(spec.isInjectable(), ()->"isInjectable()");
 
-        val emptySpez = Specialization.inferFrom(spec, null);
+        var emptySpez = Specialization.inferFrom(spec, null);
         assertEquals(Specialization.EMPTY, emptySpez);
 
-        val emptyObject = ManagedObject.empty(spec);
+        var emptyObject = ManagedObject.empty(spec);
         assertNotNull(emptyObject);
 
-        val constructor = cls.getConstructor(_Constants.emptyClasses);
-        val pojo = constructor.newInstance(_Constants.emptyObjects);
+        var constructor = cls.getConstructor(_Constants.emptyClasses);
+        var pojo = constructor.newInstance(_Constants.emptyObjects);
 
-        val presentObject = ManagedObject.adaptSingular(specLoader, pojo);
+        var presentObject = ManagedObject.adaptSingular(specLoader, pojo);
         assertEquals(Specialization.VIEWMODEL, presentObject.getSpecialization());
 
         presentObject.assertCompliance(pojo);
@@ -132,7 +131,7 @@ class ManagedObjectTest {
     @Test
     void comparatorShouldNotViolateItsGeneralContract() {
 
-        val stringSpec = specLoader.specForTypeElseFail(String.class);
+        var stringSpec = specLoader.specForTypeElseFail(String.class);
 
         final String[] DATA = new String[] { "fn1.ln1@vendor3.example.com", "fn2.ln2@vendor4.example.com",
                 "fn3.ln3@vendor6.example.com", "fn4.ln4@vendor10.example.com", "fn5.ln5@vendor6.example.com",

@@ -46,7 +46,6 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link SchemaValueMarshaller}.
@@ -94,7 +93,7 @@ extends SchemaValueMarshallerAbstract {
             break;
         }
 
-        val decomposedValueDto = context.getSemantics()
+        var decomposedValueDto = context.getSemantics()
                 .decompose(_Casts.uncheckedCast(value.getPojo()))
                 .leftIfAny();
 
@@ -120,13 +119,13 @@ extends SchemaValueMarshallerAbstract {
             final Context<T> context,
             final Can<ManagedObject> values) {
 
-        val elementValueType = context.getSchemaValueType();
-        val collectionDto = new CollectionDto();
+        var elementValueType = context.getSchemaValueType();
+        var collectionDto = new CollectionDto();
         collectionDto.setType(elementValueType);
 
         values.stream()
         .forEach(element->{
-            val valueDto = new ValueWithTypeDto();
+            var valueDto = new ValueWithTypeDto();
             valueDto.setType(elementValueType);
             collectionDto.getValue().add(valueDto);
             recordValue(context, valueDto, element);
@@ -150,13 +149,13 @@ extends SchemaValueMarshallerAbstract {
             @NonNull final Context<?> context,
             @NonNull final ValueWithTypeDto valueDto) {
 
-        val elementSpec = context.getElementType();
+        var elementSpec = context.getElementType();
 
-        val recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
+        var recoveredValueAsPojo = valueDto.getType()==ValueType.COMPOSITE
                 ? fromTypedTuple(context, valueDto.getComposite())
                 : context.getSemantics().compose(ValueDecomposition.ofFundamental(valueDto));
 
-        val recoveredValue = ManagedObject.value(elementSpec, recoveredValueAsPojo);
+        var recoveredValue = ManagedObject.value(elementSpec, recoveredValueAsPojo);
         return recoveredValue;
     }
 

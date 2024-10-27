@@ -37,8 +37,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonM
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonMetaTitle;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.meta.CommonMetaVersion;
 
-import lombok.val;
-
 public class CommonMeta extends ElementCustom {
 
     private final ObjectInteractor holder;
@@ -87,7 +85,7 @@ public class CommonMeta extends ElementCustom {
         addChildFieldFor(this.metaIcon = isResourceNotForbidden() ? new CommonMetaIcon(context) : null);
         addChildFieldFor(this.metaGrid = isResourceNotForbidden() ? new CommonMetaGrid(context) : null);
 
-        val fieldName = graphqlConfiguration.getMetaData().getFieldName();
+        var fieldName = graphqlConfiguration.getMetaData().getFieldName();
         buildObjectTypeAndField(fieldName, "Object metadata");
     }
 

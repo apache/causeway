@@ -67,7 +67,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -98,7 +98,7 @@ implements DomainObjectResource {
             @PathParam("domainType") final String domainType,
             final InputStream object) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.JUST_CREATED);
 
         final JsonRepresentation objectRepr = RequestParams.ofRequestBody(object).asMap();
@@ -108,7 +108,7 @@ implements DomainObjectResource {
                     .createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr));
         }
 
-        val domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
+        var domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
                 .orElse(null);
 
         if (domainTypeSpec == null) {
@@ -143,7 +143,7 @@ implements DomainObjectResource {
 
         MmEntityUtils.persistInCurrentTransaction(adapter);
 
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, adapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, adapter);
 
         return _EndpointLogging.response(log, "POST /objects/{}", domainType,
                 domainResourceHelper.objectRepresentation());
@@ -166,12 +166,12 @@ implements DomainObjectResource {
             @PathParam("domainType") final String domainType,
             @PathParam("instanceId") final String instanceId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}", domainType, instanceId, roEx));
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}", domainType, instanceId,
                 domainResourceHelper.objectRepresentation());
@@ -191,7 +191,7 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             final InputStream object) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
         final JsonRepresentation argRepr = RequestParams.ofRequestBody(object).asMap();
@@ -202,7 +202,7 @@ implements DomainObjectResource {
                             HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", argRepr));
         }
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId, roEx));
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(resourceContext, objectAdapter);
 
@@ -221,7 +221,7 @@ implements DomainObjectResource {
                             HttpStatusCode.BAD_REQUEST, argRepr, validity.getReasonAsString().orElse(null)));
         }
 
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "PUT /objects/{}/{}", domainType, instanceId,
                 domainResourceHelper.objectRepresentation());
@@ -274,9 +274,9 @@ implements DomainObjectResource {
 //        createResourceContext(
 //                RepresentationType.OBJECT_ICON, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/object-icon", domainType, instanceId, roEx));
-        val objectIcon = objectAdapter.getIcon();
+        var objectIcon = objectAdapter.getIcon();
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/object-icon", domainType, instanceId,
                 Response
@@ -303,10 +303,10 @@ implements DomainObjectResource {
             @PathParam("domainType") final String domainType,
             @PathParam("instanceId") final String instanceId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val serializationStrategy = resourceContext.getSerializationStrategy();
+        var serializationStrategy = resourceContext.getSerializationStrategy();
 
         return _EndpointLogging.response(log, "GET({}) /objects/{}/{}/object-layout", serializationStrategy.name(), domainType, instanceId,
                 layoutAsGrid(domainType, instanceId)
@@ -409,10 +409,10 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("propertyId") final String propertyId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/properties/{}", domainType, instanceId, propertyId,
@@ -435,17 +435,17 @@ implements DomainObjectResource {
             @PathParam("propertyId") final String propertyId,
             final InputStream body) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
         PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
         .checkVisibility()
         .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->{
-            val proposedNewValue = new JsonParserHelper(resourceContext, property.getElementType())
+            var proposedNewValue = new JsonParserHelper(resourceContext, property.getElementType())
                     .parseAsMapWithSingleValue(RequestParams.ofRequestBody(body));
 
             return proposedNewValue;
@@ -472,10 +472,10 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("propertyId") final String propertyId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "DELETE /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
         PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
@@ -523,13 +523,13 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("collectionId") final String collectionId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/collections/{}", domainType, instanceId, collectionId, roEx));
 
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
                 domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.READ));
@@ -615,12 +615,12 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("actionId") final String actionId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/actions/{}", domainType, instanceId, actionId, roEx));
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/actions/{}", domainType, instanceId, actionId,
                 domainResourceHelper.actionPrompt(actionId));
@@ -693,15 +693,15 @@ implements DomainObjectResource {
                 xCausewayUrlEncodedQueryString != null
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 RequestParams.ofQueryString(urlUnencodedQueryString));
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId, roEx));
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId,
                 domainResourceHelper.invokeActionQueryOnly(actionId, arguments));
@@ -721,15 +721,15 @@ implements DomainObjectResource {
             final @PathParam("actionId") String actionId,
             final InputStream body) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId, roEx));
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "PUT /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId,
                 domainResourceHelper.invokeActionIdempotent(actionId, arguments));
@@ -749,15 +749,15 @@ implements DomainObjectResource {
             @PathParam("actionId") final String actionId,
             final InputStream body) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
+        var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "POST /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId, roEx));
-        val domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
+        var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
         return _EndpointLogging.response(log, "POST /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId,
                 domainResourceHelper.invokeAction(actionId, arguments));

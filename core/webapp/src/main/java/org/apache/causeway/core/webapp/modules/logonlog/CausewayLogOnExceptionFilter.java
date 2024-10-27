@@ -28,14 +28,13 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
-import lombok.val;
 //import org.springframework.beans.factory.annotation.Autowired;
 //
 //import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType;
 //import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 //import org.apache.causeway.commons.collections.Can;
 //
-//import lombok.val;
+//
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -86,7 +85,7 @@ public class CausewayLogOnExceptionFilter implements Filter {
             }
 
             if(ex instanceof IOException) {
-                val url = ((HttpServletRequest) request).getRequestURL().toString();
+                var url = ((HttpServletRequest) request).getRequestURL().toString();
                 if(url.endsWith(".css")
                         || url.endsWith(".js")
                         || url.endsWith(".woff2")) {

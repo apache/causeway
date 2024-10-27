@@ -37,7 +37,7 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -61,19 +61,19 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     @Test
     void multiSelect() {
 
-        val tester =
+        var tester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
 
-        val expectedElements = tester.streamCollectionElements()
+        var expectedElements = tester.streamCollectionElements()
                 .map(MmUnwrapUtils::single)
                 .collect(Collectors.toList());
         assertEquals(4, expectedElements.size());
 
         tester.assertCollectionElements(expectedElements);
 
-        val tableTester = tester.tableTester();
+        var tableTester = tester.tableTester();
 
         tableTester.assertUnfilteredDataElements(expectedElements);
 
@@ -102,7 +102,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
             .getPropertyLayout().setSequencePolicyIfUnreferenced(
                     AssociationLayoutConfigOptions.SequencePolicy.AS_PER_SEQUENCE);
 
-        val tableTester =
+        var tableTester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
                 .tableTester();
 
@@ -115,7 +115,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
             .getPropertyLayout().setSequencePolicyIfUnreferenced(
                     AssociationLayoutConfigOptions.SequencePolicy.ALPHABETICALLY);
 
-        val tableTester =
+        var tableTester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
                 .tableTester();
 
@@ -126,33 +126,33 @@ class CollectionInteractionTest extends InteractionTestAbstract {
     @Test
     void choicesFromMultiselect() {
 
-        val collTester =
+        var collTester =
                 testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE);
         collTester.assertVisibilityIsNotVetoed();
         collTester.assertUsabilityIsNotVetoed();
 
-        val choiceElements = ((InteractionDemo)(collTester.getManagedCollectionIfAny().orElseThrow()
+        var choiceElements = ((InteractionDemo)(collTester.getManagedCollectionIfAny().orElseThrow()
                 .getOwner()
                 .getPojo()))
                 .getItems();
         assertEquals(4, choiceElements.size());
 
-        val tableTester = collTester.tableTester();
+        var tableTester = collTester.tableTester();
         // toggle on 'second' and 'last' item for selection
         tableTester.assertDataRowSelectionWhenToggledOn(List.of(1, 3), List.of(
                 choiceElements.get(1),
                 choiceElements.get(3)));
 
-        val table = tableTester.getDataTable();
+        var table = tableTester.getDataTable();
 
-        val actionInteraction = table
+        var actionInteraction = table
                 .startAssociatedActionInteraction("doSomethingWithItems", Where.OBJECT_FORMS);
 
-        val actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
+        var actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
         actTester.assertVisibilityIsNotVetoed();
         actTester.assertUsabilityIsNotVetoed();
 
-        val expectedParamDefault = List.of(
+        var expectedParamDefault = List.of(
                 choiceElements.get(1),
                 choiceElements.get(3));
 

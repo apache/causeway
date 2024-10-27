@@ -77,7 +77,7 @@ import org.apache.causeway.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -121,7 +121,7 @@ class DomainModelTest_usingBadDomain {
     void ambiguousTitle_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(AmbiguousTitle.class)),
-                "conflict for determining a strategy for retrieval of title");
+                "conflict for determining a strategy for retrievar of title");
     }
 
     @Test
@@ -132,7 +132,7 @@ class DomainModelTest_usingBadDomain {
                         "InvalidOrphanedActionSupport",
                         "hideOrphaned()"));
 
-        val tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedActionSupport.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
@@ -147,7 +147,7 @@ class DomainModelTest_usingBadDomain {
                         "InvalidOrphanedPropertySupport",
                         "hideMyProperty()"));
 
-        val tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedPropertySupport.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
@@ -161,7 +161,7 @@ class DomainModelTest_usingBadDomain {
                         "InvalidOrphanedCollectionSupport",
                         "hideMyCollection()"));
 
-        val tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
+        var tester = testerFactory.objectTester(InvalidOrphanedCollectionSupport.class);
 
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
@@ -226,11 +226,11 @@ class DomainModelTest_usingBadDomain {
     // since use of @Named annotation, entirely guarded by Spring ...
 //    private void assertLogicalTypeNameClashesAmong(final Can<Class<?>> types) {
 //
-//        val typeLiteralList = types.stream()
+//        var typeLiteralList = types.stream()
 //                .map(t->t.getName())
 //                .collect(Collectors.joining(", "));
 //
-//        val classIdentifiers = types.stream()
+//        var classIdentifiers = types.stream()
 //                .map(t->Identifier.classIdentifier(LogicalType.fqcn(t)))
 //                .collect(Can.toCan());
 //
@@ -288,7 +288,7 @@ class DomainModelTest_usingBadDomain {
             })
     void orphanedMemberSupportDiscovery(final Class<?> classUnderTest) {
 
-        val clsIdUnderTest = Identifier.classIdentifier(LogicalType.fqcn(classUnderTest));
+        var clsIdUnderTest = Identifier.classIdentifier(LogicalType.fqcn(classUnderTest));
 
         // namedPlaceOrder(): String = "my name"
         validator.assertAnyFailuresContaining(clsIdUnderTest, "namedPlaceOrder");
@@ -448,7 +448,7 @@ class DomainModelTest_usingBadDomain {
 //    @Test
 //    void orphanedActionSupportNotEnforced_shouldFail() {
 //
-//        val validateDomainModel = new DomainModelValidator();
+//        var validateDomainModel = new DomainModelValidator();
 //
 //        assertThrows(DomainModelException.class, validateDomainModel::run);
 //        assertTrue(validateDomainModel.anyMatchesContaining(

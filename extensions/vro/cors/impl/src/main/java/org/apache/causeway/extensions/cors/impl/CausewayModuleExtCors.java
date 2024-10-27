@@ -34,7 +34,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -68,16 +67,16 @@ public class CausewayModuleExtCors {
 
     private CorsFilter createCorsFilter(CausewayConfiguration configuration) {
 
-        val causewayCorsConfig = configuration.getExtensions().getCors();
+        var causewayCorsConfig = configuration.getExtensions().getCors();
 
-        val corsConfiguration = new CorsConfiguration();
+        var corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(causewayCorsConfig.isAllowCredentials());
         corsConfiguration.setAllowedHeaders(causewayCorsConfig.getAllowedHeaders());
         corsConfiguration.setAllowedMethods(causewayCorsConfig.getAllowedMethods());
         corsConfiguration.setAllowedOrigins(causewayCorsConfig.getAllowedOrigins());
         corsConfiguration.setExposedHeaders(causewayCorsConfig.getExposedHeaders());
 
-        val source = new UrlBasedCorsConfigurationSource();
+        var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
 
         return new CorsFilter(source);

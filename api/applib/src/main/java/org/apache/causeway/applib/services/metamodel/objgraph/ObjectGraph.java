@@ -45,7 +45,6 @@ import org.apache.causeway.commons.io.DataSource;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.With;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
@@ -176,7 +175,7 @@ public class ObjectGraph {
 
     public String render(final @Nullable ObjectGraph.Renderer renderer) {
         if(renderer==null) return "";
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         renderer.render(sb, this);
         return sb.toString();
     }

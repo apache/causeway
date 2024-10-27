@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 
-import lombok.val;
-
 class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
 
     @BeforeEach
@@ -42,21 +40,21 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
     @Test
     void roundtrip() {
 
-        val a = new _TestDummies.CustomerAsViewmodel("a");
-        val b = new _TestDummies.CustomerAsViewmodel("b");
-        val c = new _TestDummies.CustomerAsViewmodel("c");
+        var a = new _TestDummies.CustomerAsViewmodel("a");
+        var b = new _TestDummies.CustomerAsViewmodel("b");
+        var c = new _TestDummies.CustomerAsViewmodel("c");
 
-        val choiceValues = Can.of(a, b, c);
+        var choiceValues = Can.of(a, b, c);
 
-        val choices = choiceValues
+        var choices = choiceValues
                 .map(mmc.getObjectManager()::adapt);
 
-        val isRequired = true;
-        val choiceProvider = new ChoiceProviderDefault(mockScalarModel(choices, isRequired));
+        var isRequired = true;
+        var choiceProvider = new ChoiceProviderDefault(mockScalarModel(choices, isRequired));
 
-        val response = new Response<ObjectMemento>();
+        var response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);
-        val mementos = Can.ofCollection(response.getResults()); // throws null if any away
+        var mementos = Can.ofCollection(response.getResults()); // throws null if any away
 
         assertEquals(3, mementos.size());
 
@@ -68,14 +66,14 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
             System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
         });*/
 
-        val asIds = mementos.map(choiceProvider::getIdValue);
+        var asIds = mementos.map(choiceProvider::getIdValue);
 
-        val recoveredMementos = Can.ofCollection(choiceProvider.toChoices(asIds.toList()));
+        var recoveredMementos = Can.ofCollection(choiceProvider.toChoices(asIds.toList()));
 
-        val recoveredChoices = recoveredMementos
+        var recoveredChoices = recoveredMementos
                 .map(mmc.getObjectManager()::demementify);
 
-        val recoveredChoiceValues = recoveredChoices
+        var recoveredChoiceValues = recoveredChoices
                 .map(ManagedObject::getPojo);
 
         assertEquals(choiceValues, recoveredChoiceValues);

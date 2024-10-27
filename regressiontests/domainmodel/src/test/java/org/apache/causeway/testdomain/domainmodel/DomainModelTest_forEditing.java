@@ -43,7 +43,7 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -81,7 +81,7 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenEnabling_shouldSetTheDefault() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerEna.class,
+        var holderSpec = specificationLoader.loadSpecification(CustomerEna.class,
                 IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
@@ -107,12 +107,12 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenDisabling_shouldSetTheDefault() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerDis.class,
+        var holderSpec = specificationLoader.loadSpecification(CustomerDis.class,
                 IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
-        val disabledException = assertThrows(DisabledException.class,
+        var disabledException = assertThrows(DisabledException.class,
                 ()->wrapper.wrap(new CustomerDis()).setName("Bob"));
 
         assertTrue(disabledException.getMessage()
@@ -139,12 +139,12 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenEnabling_shouldBeOverridable() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerEnaDis.class,
+        var holderSpec = specificationLoader.loadSpecification(CustomerEnaDis.class,
                 IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
-        val disabledException = assertThrows(DisabledException.class,
+        var disabledException = assertThrows(DisabledException.class,
                 ()->wrapper.wrap(new CustomerEnaDis()).setName("Bob"));
 
         String message = disabledException.getMessage();
@@ -171,7 +171,7 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenDisabling_shouldBeOverridable() {
 
-        val holderSpec = specificationLoader.loadSpecification(CustomerDisEna.class,
+        var holderSpec = specificationLoader.loadSpecification(CustomerDisEna.class,
                 IntrospectionState.FULLY_INTROSPECTED);
         holderSpec.getAssociationElseFail("name");
 

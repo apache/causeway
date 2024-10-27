@@ -56,7 +56,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -169,7 +168,7 @@ public final class _ClassCache implements AutoCloseable {
 
     @SneakyThrows
     public ResolvedMethod findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
-        val matchingMethods = streamResolvedMethods(type)
+        var matchingMethods = streamResolvedMethods(type)
                 .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods.isCardinalityMultiple()
@@ -189,7 +188,7 @@ public final class _ClassCache implements AutoCloseable {
     // -- FIELD vs GETTER
 
     public Optional<ResolvedMethod> getterForField(final Class<?> type, final Field field) {
-        val capitalizedFieldName = _Strings.capitalize(field.getName());
+        var capitalizedFieldName = _Strings.capitalize(field.getName());
         return Stream.of("get", "is")
         .map(prefix->prefix + capitalizedFieldName)
         .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
@@ -217,7 +216,7 @@ public final class _ClassCache implements AutoCloseable {
             final String attributeName,
             final Predicate<ResolvedMethod> filter) {
 
-        val classModel = classModel(type);
+        var classModel = classModel(type);
 
         synchronized(classModel.declaredMethodsByAttribute) {
             return classModel.declaredMethodsByAttribute
@@ -235,7 +234,7 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?> type,
             final String attributeName,
             final String value) {
-        val classModel = classModel(type);
+        var classModel = classModel(type);
         classModel.attributeMap.put(attributeName, value);
         return this;
     }
@@ -243,7 +242,7 @@ public final class _ClassCache implements AutoCloseable {
     public Optional<String> lookupAttribute(
             final Class<?> type,
             final String attributeName) {
-        val classModel = classModel(type);
+        var classModel = classModel(type);
         return Optional.ofNullable(classModel.attributeMap.get(attributeName));
     }
 
@@ -340,7 +339,7 @@ public final class _ClassCache implements AutoCloseable {
         final Class<?> type = reloadType(_type);
 
         //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
-//                val declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
+//                var declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
 //                    .filter(cls->cls.equals(Object.class))
 //                    .flatMap(cls->{
 //                        return cls.equals(type)
@@ -350,16 +349,16 @@ public final class _ClassCache implements AutoCloseable {
 //                    })
 //                    .collect(Can.toCan());
 
-        val model = new ClassModel(
+        var model = new ClassModel(
                 Can.ofArray(type.getDeclaredFields()),
                 _Annotations.isPresent(type, XmlRootElement.class),
                 _Annotations.isPresent(type, Named.class));
 
         // process public constructors
-        val publicConstr = type.getConstructors();
-        for(val constr : publicConstr) {
-            val key = ConstructorKey.of(type, constr);
-            val resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+        var publicConstr = type.getConstructors();
+        for(var constr : publicConstr) {
+            var key = ConstructorKey.of(type, constr);
+            var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
             // collect public constructors
             model.publicConstructorsByKey.put(key, resolvedConstr);
             // collect public constructors with inject semantics
@@ -374,8 +373,8 @@ public final class _ClassCache implements AutoCloseable {
         .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .forEach(resolved->{
-            val key = MethodKey.of(type, resolved.method());
-            val methodToKeep =
+            var key = MethodKey.of(type, resolved.method());
+            var methodToKeep =
                     putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
             // collect post-construct methods
             if(isPostConstruct(methodToKeep.method())) {
@@ -389,7 +388,7 @@ public final class _ClassCache implements AutoCloseable {
         .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .forEach(resolved->{
-            val key = MethodKey.of(type, resolved.method());
+            var key = MethodKey.of(type, resolved.method());
             putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
         });
 
@@ -402,15 +401,15 @@ public final class _ClassCache implements AutoCloseable {
      */
     private static ResolvedMethod putIntoMapHonoringOverridingRelation(
             final Map<MethodKey, ResolvedMethod> map, final MethodKey key, final ResolvedMethod method) {
-        val methodWithSameKey = map.get(key); // in case the map is already populated
-        val methodToKeep = methodWithSameKey==null
+        var methodWithSameKey = map.get(key); // in case the map is already populated
+        var methodToKeep = methodWithSameKey==null
             ? method
             /* key-clash originating from one method overriding the other
              * we need to keep the most specific one */
             : methodWithSameKey.mostSpecific(method);
         map.put(key, methodToKeep);
 
-        val weaklySame = map.values().stream()
+        var weaklySame = map.values().stream()
             .filter(m->ResolvedMethod.methodsWeaklySame(methodToKeep, m))
             .collect(Can.toCan());
 
@@ -418,9 +417,9 @@ public final class _ClassCache implements AutoCloseable {
 
             map.values().removeIf(weaklySame::contains);
 
-            val winner = weaklySame.reduce(ResolvedMethod::mostSpecific)
+            var winner = weaklySame.reduce(ResolvedMethod::mostSpecific)
                     .getSingletonOrFail();
-            val winnerKey = MethodKey.of(winner.implementationClass(), winner.method());
+            var winnerKey = MethodKey.of(winner.implementationClass(), winner.method());
             map.put(winnerKey, winner);
             return winner;
         }
@@ -454,10 +453,10 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?> type,
             final Class<?>[] paramTypes) {
 
-        val model = classModel(type);
-        val key = ConstructorKey.of(type, _Arrays.emptyToNull(paramTypes));
+        var model = classModel(type);
+        var key = ConstructorKey.of(type, _Arrays.emptyToNull(paramTypes));
 
-        val publicConstructor = model.publicConstructorsByKey.get(key);
+        var publicConstructor = model.publicConstructorsByKey.get(key);
         return publicConstructor;
     }
 
@@ -470,9 +469,9 @@ public final class _ClassCache implements AutoCloseable {
 
         // we need to lookup by name then find first (weak) match
 
-        val model = classModel(type);
+        var model = classModel(type);
 
-        val publicMethod = model.publicMethodsByKey.values().stream()
+        var publicMethod = model.publicMethodsByKey.values().stream()
                 .filter(m->m.name().equals(name))
                 .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
                 .findFirst()
@@ -482,7 +481,7 @@ public final class _ClassCache implements AutoCloseable {
         }
 
         if(includeDeclaredMethods) {
-            val resolvedMethod = model.resolvedMethodsByKey.values().stream()
+            var resolvedMethod = model.resolvedMethodsByKey.values().stream()
                 .filter(m->m.name().equals(name))
                 .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
                 .findFirst()
@@ -498,11 +497,11 @@ public final class _ClassCache implements AutoCloseable {
         if(ReflectionUtils.isObjectMethod(getterCandidate)) {
             return null;
         }
-        val fieldNameCandidate = fieldNameForGetter(getterCandidate);
+        var fieldNameCandidate = fieldNameForGetter(getterCandidate);
         if(fieldNameCandidate==null) {
             return null;
         }
-        val declaringClass = getterCandidate.getDeclaringClass();
+        var declaringClass = getterCandidate.getDeclaringClass();
         return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
     }
 
@@ -513,7 +512,7 @@ public final class _ClassCache implements AutoCloseable {
         if(getter.getReturnType()==void.class) {
             return null;
         }
-        val methodName = getter.getName();
+        var methodName = getter.getName();
         String fieldName = null;
         if(methodName.startsWith("is") &&  methodName.length() > 2) {
             fieldName = methodName.substring(2);

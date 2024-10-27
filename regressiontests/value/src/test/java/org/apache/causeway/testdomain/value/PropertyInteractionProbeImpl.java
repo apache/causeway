@@ -54,7 +54,7 @@ import org.apache.causeway.testdomain.value.ValueSemanticsTester.PropertyInterac
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor
 class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
@@ -74,7 +74,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
             final ValueSemanticsProvider<T> semantics) {
 
         // composer round-trip test
-        val decomposition = semantics.decompose(example.getValue());
+        var decomposition = semantics.decompose(example.getValue());
 
         tester.assertValueEquals(
                 example.getValue(),
@@ -83,11 +83,11 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         // json roundtrip test
         {
-            val json = decomposition.toJson();
+            var json = decomposition.toJson();
             assertNotNull(json);
             assertFalse(json.isBlank());
 
-            val reconstructed = ValueDecomposition
+            var reconstructed = ValueDecomposition
                     .fromJson(semantics.getSchemaValueType(), json);
 
             assertEquals(json, reconstructed.toJson());
@@ -98,21 +98,21 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
             System.err.printf("WARN: ValueSemanticsTest for COMPOSITE %s not implemented.%n",
                     semantics);
 
-            val valueMixin = (Object)null;
+            var valueMixin = (Object)null;
             if(valueMixin!=null) {
 
-                val spec = specLoader.specForTypeElseFail(valueMixin.getClass());
-                val interaction = ActionInteraction
+                var spec = specLoader.specForTypeElseFail(valueMixin.getClass());
+                var interaction = ActionInteraction
                         .start(ManagedObject.mixin(spec,  valueMixin), "act", Where.ANYWHERE);
 
-                val pendingParams = interaction
+                var pendingParams = interaction
                         .startParameterNegotiation()
                         .get();
 
-                val managedAction = interaction.getManagedActionElseFail();
-                val typedTuple = pendingParams.getParamValues();
+                var managedAction = interaction.getManagedActionElseFail();
+                var typedTuple = pendingParams.getParamValues();
 
-                val recoveredValue = managedAction
+                var recoveredValue = managedAction
                         .invoke(typedTuple, InteractionInitiatedBy.PASS_THROUGH)
                         .getSuccessElseFail()
                         .getPojo();
@@ -133,7 +133,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         example.getParseExpectations()
         .forEach(parseExpectation->{
-            val value = parseExpectation.getValue();
+            var value = parseExpectation.getValue();
 
             if(parseExpectation.getExpectedThrows()!=null) {
 
@@ -150,7 +150,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
                 // test parsing that should not throw
                 parseExpectation.getInputSamples()
                 .forEach(in->{
-                    val parsedValue = parser.parseTextRepresentation(context, in);
+                    var parsedValue = parser.parseTextRepresentation(context, in);
 
                     if(value instanceof BigDecimal) {
                         _Assert.assertNumberEquals((BigDecimal)value, (BigDecimal)parsedValue);
@@ -175,12 +175,12 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         //TODO eventually all examples should have their ParseExpectations, so we can remove
         // Parser round-trip test
-        for(val value : example.getParserRoundtripExamples()) {
+        for(var value : example.getParserRoundtripExamples()) {
 
-            val stringified = parser.parseableTextRepresentation(context, value);
+            var stringified = parser.parseableTextRepresentation(context, value);
 
             if(valueType.equals(Password.class)) {
-                val recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
+                var recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
                 assertTrue(recoveredValue.checkPassword("(suppressed)"));
 
             } else {
@@ -198,8 +198,8 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
                         return;
                     }
 
-                    val with4digitZone = _Strings.substring(stringified, 0, -3) + "00";
-                    val with2digitZone = _Strings.substring(stringified, 0, -3);
+                    var with4digitZone = _Strings.substring(stringified, 0, -3) + "00";
+                    var with2digitZone = _Strings.substring(stringified, 0, -3);
 
                     // test alternative time-zone format with 4 digits +-HHmm
                     assertValueEqualsParsedValue(context, parser, value, with4digitZone, "parser roundtrip failed "
@@ -220,7 +220,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         example.getRenderExpectations()
         .forEach(renderExpectation->{
-            val value = renderExpectation.getValue();
+            var value = renderExpectation.getValue();
             assertEquals(renderExpectation.getTitle(), renderer.titlePresentation(context, value));
             assertEquals(renderExpectation.getHtml(), renderer.htmlPresentation(context, value));
         });
@@ -231,10 +231,10 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
             final ValueSemanticsProvider.Context context,
             final Command command) {
 
-        val propertyDto = (PropertyDto)command.getCommandDto().getMember();
-        val newValueRecordedDto = propertyDto.getNewValue();
+        var propertyDto = (PropertyDto)command.getCommandDto().getMember();
+        var newValueRecordedDto = propertyDto.getNewValue();
 
-        val newValueRecorded = valueMarshaller.recoverPropertyFrom(propertyDto);
+        var newValueRecorded = valueMarshaller.recoverPropertyFrom(propertyDto);
         assertNotNull(newValueRecorded);
 
         assertEquals(valueType, newValueRecorded.getSpecification().getCorrespondingClass(), ()->
@@ -264,7 +264,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 //        System.err.printf("using %s trying to parse '%s' to value %s%n",
 //                valueType.getName(), textRepresentation, ""+value);
 
-        val parsedValue = Try.call(()->
+        var parsedValue = Try.call(()->
             parser.parseTextRepresentation(context, textRepresentation));
 
         if(parsedValue.isFailure()) {

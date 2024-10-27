@@ -25,14 +25,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.val;
-
 class BookmarkTest {
 
     @Test
     void shouldParse_whenExactly2Token() {
 
-        val bookmark = Bookmark.parse("a:b").get();
+        var bookmark = Bookmark.parse("a:b").get();
 
         assertEquals("a", bookmark.getLogicalTypeName());
         assertEquals("b", bookmark.getIdentifier());
@@ -54,7 +52,7 @@ class BookmarkTest {
     @Test
     void shouldParse_when1Token() {
 
-        val bookmark = Bookmark.parse("a").get();
+        var bookmark = Bookmark.parse("a").get();
 
         assertEquals("a", bookmark.getLogicalTypeName());
         assertTrue(bookmark.isEmpty());
@@ -65,7 +63,7 @@ class BookmarkTest {
     @Test
     void shouldParse_whenMoreThan2Token() {
 
-        val bookmark = Bookmark.parse("a:b:c").get();
+        var bookmark = Bookmark.parse("a:b:c").get();
 
         assertEquals("a", bookmark.getLogicalTypeName());
         assertEquals("b:c", bookmark.getIdentifier());

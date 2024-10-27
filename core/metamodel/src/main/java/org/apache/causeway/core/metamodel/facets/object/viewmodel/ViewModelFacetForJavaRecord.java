@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * @since 3.0.0
@@ -72,14 +71,14 @@ extends ViewModelFacetAbstract {
             @NonNull final ObjectSpecification viewmodelSpec,
             @NonNull final Bookmark bookmark) {
 
-        val memento = parseMemento(bookmark);
+        var memento = parseMemento(bookmark);
 
         var recordComponentPojos = streamRecordComponents(viewmodelSpec)
         .map(association->{
-            val associationId = association.getId();
-            val elementType = association.getElementType();
-            val elementClass = elementType.getCorrespondingClass();
-            val associationPojo = association.isProperty()
+            var associationId = association.getId();
+            var elementType = association.getElementType();
+            var elementClass = elementType.getCorrespondingClass();
+            var associationPojo = association.isProperty()
                     ? memento.get(associationId, elementClass)
                     //TODO collection values not yet supported by memento (as workaround use Serializable record)
                     : null;
@@ -96,7 +95,7 @@ extends ViewModelFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        val viewmodelSpec = viewModel.getSpecification();
+        var viewmodelSpec = viewModel.getSpecification();
 
         streamRecordComponents(viewmodelSpec)
         .forEach(association->{
@@ -127,7 +126,7 @@ extends ViewModelFacetAbstract {
     }
 
     private void initDependencies() {
-        val serviceRegistry = getServiceRegistry();
+        var serviceRegistry = getServiceRegistry();
         this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
         this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
     }
@@ -158,7 +157,7 @@ extends ViewModelFacetAbstract {
 
     @SneakyThrows
     private static <T> Constructor<T> canonicalConstructor(final @NonNull Class<T> recordClass) {
-        val constructorParamTypes = Arrays.stream(recordClass.getRecordComponents())
+        var constructorParamTypes = Arrays.stream(recordClass.getRecordComponents())
                 .map(RecordComponent::getType)
                 .toArray(Class[]::new);
         return recordClass.getDeclaredConstructor(constructorParamTypes);

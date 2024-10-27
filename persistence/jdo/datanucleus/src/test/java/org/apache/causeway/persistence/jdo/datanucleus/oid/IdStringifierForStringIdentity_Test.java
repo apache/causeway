@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForStringIdentity_Test {
 
@@ -57,19 +57,19 @@ class IdStringifierForStringIdentity_Test {
     @MethodSource()
     void roundtrip(final String value) {
 
-        val entityType = Customer.class;
+        var entityType = Customer.class;
 
-        val stringifier = JdoStringIdentityValueSemantics.builder()
+        var stringifier = JdoStringIdentityValueSemantics.builder()
                 .idStringifierForString(new StringValueSemantics()).build();
 
-        val stringified = stringifier.enstring(new StringIdentity(entityType, value));
-        val parse = stringifier.destring(entityType, stringified);
+        var stringified = stringifier.enstring(new StringIdentity(entityType, value));
+        var parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
 
-        val decomposed = stringifier.decompose(new StringIdentity(entityType, value));
-        val composed = stringifier.compose(decomposed);
+        var decomposed = stringifier.decompose(new StringIdentity(entityType, value));
+        var composed = stringifier.compose(decomposed);
 
         Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);

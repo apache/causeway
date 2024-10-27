@@ -19,13 +19,12 @@
  */
 package org.apache.causeway.persistence.querydsl.applib.util;
 
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
-import lombok.val;
-
 import java.util.regex.Pattern;
 
 import org.springframework.lang.Nullable;
+
+import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 /**
  * Utility methods to convert between UI &quot;wildcards&quot; (meaning &quot;*&quot; and &quot;?&quot;), ANSI SQL
@@ -54,8 +53,8 @@ public class Wildcards {
             @Nullable final String searchPattern,
             final CaseSensitivity caseSensitivity
     ) {
-        val searchPatternWithWildcards = withWildcards(searchPattern);
-        val searchPatternAsRegex = wildToRegex(searchPatternWithWildcards);
+        var searchPatternWithWildcards = withWildcards(searchPattern);
+        var searchPatternAsRegex = wildToRegex(searchPatternWithWildcards);
         switch (caseSensitivity) {
             case INSENSITIVE:
                 return "(?i)".concat(searchPatternAsRegex);
@@ -65,7 +64,7 @@ public class Wildcards {
         }
     }
 
-    private String withWildcards(@Nullable String searchPattern) {
+    private String withWildcards(@Nullable final String searchPattern) {
         if(searchPattern == null || searchPattern.isEmpty()) {
             return "*";
         }
@@ -74,7 +73,7 @@ public class Wildcards {
                 : "*" + searchPattern + "*";
     }
 
-    private String wildToRegex(@NonNull String pattern) {
+    private String wildToRegex(@NonNull final String pattern) {
         return pattern.replace("*", ".*").replace("?", ".");
     }
 

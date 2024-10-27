@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class ViewModelFacetForXmlRootElementAnnotation
 extends ViewModelFacetAbstract {
@@ -66,7 +65,7 @@ extends ViewModelFacetAbstract {
                     xmlStr);
         });
 
-        val viewmodelPojo = getJaxbService().fromXml(viewmodelSpec.getCorrespondingClass(), xmlStr);
+        var viewmodelPojo = getJaxbService().fromXml(viewmodelSpec.getCorrespondingClass(), xmlStr);
         return viewmodelPojo!=null
                 ? ManagedObject.bookmarked(viewmodelSpec, viewmodelPojo, bookmark)
                 : ManagedObject.empty(viewmodelSpec);

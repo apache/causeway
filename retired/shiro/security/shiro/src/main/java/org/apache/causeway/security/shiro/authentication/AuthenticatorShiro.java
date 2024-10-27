@@ -56,7 +56,6 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.security.shiro.context.ShiroSecurityContext;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -169,7 +168,7 @@ public class AuthenticatorShiro implements Authenticator {
                 // (this is used by the Wicket viewer, for example).
                 request.streamRoles());
 
-        val user = UserMemento.ofNameAndRoleNames(request.getName(), roles)
+        var user = UserMemento.ofNameAndRoleNames(request.getName(), roles)
                 .withAuthenticationCode(validationCode);
         return InteractionContext.ofUserWithSystemDefaults(user);
     }

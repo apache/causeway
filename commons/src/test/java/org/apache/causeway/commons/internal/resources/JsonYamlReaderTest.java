@@ -35,7 +35,6 @@ import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.YamlUtils;
 
 import lombok.Data;
-import lombok.val;
 
 class JsonYamlReaderTest {
 
@@ -56,7 +55,7 @@ class JsonYamlReaderTest {
 
     @Test
     void loadCustomerFromJson() throws JsonParseException, JsonMappingException, IOException {
-        val customer = JsonUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.json"))
+        var customer = JsonUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.json"))
                 .ifFailureFail()
                 .getValue()
                 .orElse(null);
@@ -65,7 +64,7 @@ class JsonYamlReaderTest {
 
     @Test
     void loadCustomerFromYaml() {
-        val customer = YamlUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.yml"))
+        var customer = YamlUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.yml"))
                 .ifFailureFail()
                 .getValue()
                 .orElse(null);

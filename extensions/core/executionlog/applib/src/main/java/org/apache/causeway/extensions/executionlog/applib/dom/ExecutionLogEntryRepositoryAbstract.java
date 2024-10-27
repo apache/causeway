@@ -39,8 +39,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.val;
-
 /**
  * Provides supporting functionality for querying and persisting
  * {@link ExecutionLogEntry command} entities.
@@ -105,8 +103,8 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
     public List<ExecutionLogEntry> findByFromAndTo(
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {

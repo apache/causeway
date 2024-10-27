@@ -33,7 +33,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Synchronized;
 import lombok.ToString;
-import lombok.val;
 
 /**
  * Icon image data class-path resource reference.
@@ -57,8 +56,8 @@ implements Serializable {
             final String shortName,
             final URL url,
             final CommonMimeType mimeType) {
-        val id = _Strings.base64UrlEncode(url.getPath());
-        val objectIcon = new ObjectIcon(shortName, url, mimeType, id);
+        var id = _Strings.base64UrlEncode(url.getPath());
+        var objectIcon = new ObjectIcon(shortName, url, mimeType, id);
         objectIcon.asBytes(); // memoize
         return objectIcon;
     }
@@ -71,7 +70,7 @@ implements Serializable {
             final String shortName,
             final URL url,
             final CommonMimeType mimeType) {
-        val id = _Strings.base64UrlEncode(url.getPath());
+        var id = _Strings.base64UrlEncode(url.getPath());
         return new ObjectIcon(shortName, url, mimeType, id);
     }
 

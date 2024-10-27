@@ -24,7 +24,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
@@ -153,7 +152,7 @@ public interface IdStringifier<T> {
         public final T destring(
                 final @NonNull Class<?> targetEntityClass,
                 final @NonNull String stringified) {
-            val suffix = removePrefix(stringified);
+            var suffix = removePrefix(stringified);
             return doDestring(suffix, targetEntityClass);
         }
 

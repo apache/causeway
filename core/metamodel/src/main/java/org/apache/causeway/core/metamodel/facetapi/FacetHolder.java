@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -110,7 +109,7 @@ extends HasMetaModelContext, HasTranslationContext {
      * <tt>null</tt> and not a fallback.
      */
     default boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
-        val facet = getFacet(facetType);
+        var facet = getFacet(facetType);
         return facet != null
                 && !facet.getPrecedence().isFallback();
     }
@@ -120,7 +119,7 @@ extends HasMetaModelContext, HasTranslationContext {
      * facet is <i>explicit</i>, not {@link Facet.Precedence#isInferred() inferred}.
      */
     default boolean containsExplicitNonFallbackFacet(final Class<? extends Facet> facetType) {
-        val facet = getFacet(facetType);
+        var facet = getFacet(facetType);
         return facet != null
                 && !facet.getPrecedence().isFallback()
                 && !facet.getPrecedence().isInferred();

@@ -35,7 +35,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator;
 
-import lombok.val;
+
 
 /**
  * Default implementation of {@link SwaggerService}.
@@ -65,8 +65,8 @@ public class SwaggerServiceDefault implements SwaggerService {
 
         this.swaggerSpecGenerator = swaggerSpecGenerator;
 
-        val restfulPath = restEasyConfiguration.getJaxrs().getDefaultPath();
-        val restfulBase = webAppContextPath.prependContextPath(restfulPath);
+        var restfulPath = restEasyConfiguration.getJaxrs().getDefaultPath();
+        var restfulBase = webAppContextPath.prependContextPath(restfulPath);
 
         this.basePath = _Strings.suffix(restfulBase, "/");
     }

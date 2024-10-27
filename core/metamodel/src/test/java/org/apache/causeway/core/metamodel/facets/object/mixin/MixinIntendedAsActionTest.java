@@ -34,7 +34,6 @@ import org.apache.causeway.applib.annotation.Property;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 class MixinIntendedAsActionTest extends MixinIntendedAs {
 
@@ -75,7 +74,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     @Test
     void classicMixin_shouldHaveProperFacet() {
 
-        val mixinFacet = super.runTypeContextOn(Customer_mixin.class)
+        var mixinFacet = super.runTypeContextOn(Customer_mixin.class)
                 .getFacet(MixinFacet.class);
 
         // proper predicates
@@ -84,8 +83,8 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
         assertFalse(mixinFacet.isMixinFor(NoCustomer.class));
 
         // proper instantiation
-        val holderPojo = new Customer();
-        val mixinPojo = mixinFacet.instantiate(holderPojo);
+        var holderPojo = new Customer();
+        var mixinPojo = mixinFacet.instantiate(holderPojo);
         ((Customer_mixin)mixinPojo).act("hello");
         assertEquals("hello", holderPojo.getName());
 
@@ -106,7 +105,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     @Test
     void actionMixin_shouldHaveProperFacet() {
 
-        val mixinFacet = super.runTypeContextOn(Customer_action.class)
+        var mixinFacet = super.runTypeContextOn(Customer_action.class)
                 .getFacet(MixinFacet.class);
 
         // proper predicates
@@ -115,8 +114,8 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
         assertFalse(mixinFacet.isMixinFor(NoCustomer.class));
 
         // proper instantiation
-        val holderPojo = new Customer();
-        val mixinPojo = mixinFacet.instantiate(holderPojo);
+        var holderPojo = new Customer();
+        var mixinPojo = mixinFacet.instantiate(holderPojo);
         ((Customer_action)mixinPojo).$$("hello");
         assertEquals("hello", holderPojo.getName());
     }
@@ -136,7 +135,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     @Test
     void propertyMixin_shouldHaveProperFacet() {
 
-        val mixinFacet = super.runTypeContextOn(Customer_property.class)
+        var mixinFacet = super.runTypeContextOn(Customer_property.class)
                 .getFacet(MixinFacet.class);
 
         // proper predicates
@@ -161,7 +160,7 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
     @Test
     void collectionMixin_shouldHaveProperFacet() {
 
-        val mixinFacet = super.runTypeContextOn(Customer_collection.class)
+        var mixinFacet = super.runTypeContextOn(Customer_collection.class)
                 .getFacet(MixinFacet.class);
 
         // proper predicates

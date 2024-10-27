@@ -34,7 +34,7 @@ import org.apache.causeway.core.runtimeservices.eventbus.EventBusServiceSpring;
 
 import lombok.Getter;
 import lombok.Value;
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -51,7 +51,7 @@ class GenericEventPublishingTest {
     @Test
     void firedEventShouldBeReceivedImmediately() {
 
-        val history = testListener.getHistory();
+        var history = testListener.getHistory();
 
         testPublisher.fireHelloWorld();
 

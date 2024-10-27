@@ -39,8 +39,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvi
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
-import lombok.val;
-
 public abstract class EventProviderAbstract implements EventProvider {
 
     private static final long serialVersionUID = 1L;
@@ -50,7 +48,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     // //////////////////////////////////////
 
     public EventProviderAbstract(final EntityCollectionModel collectionModel, final String calendarName) {
-        val commonContext = collectionModel.getMetaModelContext();
+        var commonContext = collectionModel.getMetaModelContext();
 
         collectionModel.getDataTableModel()
         .getDataElements().getValue()
@@ -63,7 +61,7 @@ public abstract class EventProviderAbstract implements EventProvider {
     @Override
     public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
 
-        val result = eventById.values().stream()
+        var result = eventById.values().stream()
         .filter(event->!start.isAfter(JodaTimeConverters.fromJoda(event.getStart())))
         .filter(event->!end.isBefore(JodaTimeConverters.fromJoda(event.getEnd())))
         .collect(Collectors.toList());
@@ -81,8 +79,8 @@ public abstract class EventProviderAbstract implements EventProvider {
     // -- HELPER
 
     private Object dereference(final MetaModelContext commonContext, final Object domainObject) {
-        val serviceRegistry = commonContext.getServiceRegistry();
-        val services = serviceRegistry.select(CalendarableDereferencingService.class);
+        var serviceRegistry = commonContext.getServiceRegistry();
+        var services = serviceRegistry.select(CalendarableDereferencingService.class);
         for (final CalendarableDereferencingService dereferencingService : services) {
             final Object dereferencedObject = dereferencingService.dereference(domainObject);
             if (dereferencedObject != null
@@ -105,13 +103,13 @@ public abstract class EventProviderAbstract implements EventProvider {
                 return null;
             }
 
-            val timeZone = commonContext.getInteractionService()
+            var timeZone = commonContext.getInteractionService()
                     .currentInteractionContext()
                     .map(InteractionContext::getTimeZone)
                     .orElse(ZoneId.systemDefault());
 
-            val start = calendarEvent.asDateTime(timeZone);
-            val end = start;
+            var start = calendarEvent.asDateTime(timeZone);
+            var end = start;
 
             final Event event = new Event();
             event.setStart(JodaTimeConverters.toJoda(start));
@@ -120,10 +118,10 @@ public abstract class EventProviderAbstract implements EventProvider {
 
             final Object dereferencedObject = dereference(commonContext, domainObjectPojo);
 
-            val dereferencedManagedObject =
+            var dereferencedManagedObject =
                     ManagedObject.adaptSingular(commonContext.getSpecificationLoader(), dereferencedObject);
 
-            val oid = ManagedObjects.bookmark(dereferencedManagedObject).orElse(null);
+            var oid = ManagedObjects.bookmark(dereferencedManagedObject).orElse(null);
             if(oid!=null) {
 
                 final String oidStr = oid.stringify();

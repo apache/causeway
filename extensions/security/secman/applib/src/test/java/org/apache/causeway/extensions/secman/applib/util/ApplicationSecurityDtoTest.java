@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.commons.io.DataSource;
 
-import lombok.val;
+
 
 class ApplicationSecurityDtoTest {
 
@@ -35,16 +35,16 @@ class ApplicationSecurityDtoTest {
 
         if(this.getClass().getName().contains(".isis.")) return; // disabled for legacy CI build
 
-        val yamlSource = DataSource.ofInputStreamEagerly(
+        var yamlSource = DataSource.ofInputStreamEagerly(
                 getClass().getResourceAsStream("secman-permissions.yml"));
 
-        val yamlBeforeRoundtrip = yamlSource.tryReadAsStringUtf8()
+        var yamlBeforeRoundtrip = yamlSource.tryReadAsStringUtf8()
                 .valueAsNonNullElseFail();
 
         final ApplicationSecurityDto dto = ApplicationSecurityDto.tryRead(yamlSource)
                 .valueAsNonNullElseFail();
 
-        val yamlAfterRoundtrip = dto.toYaml();
+        var yamlAfterRoundtrip = dto.toYaml();
 
         _DocumentTester.assertYamlEqualsIgnoreOrder(yamlBeforeRoundtrip, yamlAfterRoundtrip);
     }

@@ -37,7 +37,6 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides the ability to download the serialized layout (eg. XML) for any domain
@@ -75,7 +74,7 @@ public class Object_downloadLayout {
             final LayoutExportStyle style,
             final CommonMimeType format) {
 
-        val xmlString = layoutService.objectLayout(holder.getClass(), style, format);
+        var xmlString = layoutService.objectLayout(holder.getClass(), style, format);
         return Clob.of(fileName, format, xmlString);
     }
 

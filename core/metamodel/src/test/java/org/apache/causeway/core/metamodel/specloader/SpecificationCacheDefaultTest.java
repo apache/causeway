@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 class SpecificationCacheDefaultTest {
 
     private LogicalType cus = _LogicalTypeTestFactory.cus();
@@ -90,14 +88,14 @@ class SpecificationCacheDefaultTest {
         specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
         specificationCache.computeIfAbsent(Order.class, __->orderSpec);
 
-        val allSpecs = specificationCache.snapshotSpecs();
+        var allSpecs = specificationCache.snapshotSpecs();
 
         assertThat(allSpecs.size(), is(2));
     }
 
     @Test
     public void getByObjectType_whenNotSet() {
-        val type = logicalTypeResolver.lookup(cus.getLogicalTypeName());
+        var type = logicalTypeResolver.lookup(cus.getLogicalTypeName());
         assertFalse(type.isPresent());
     }
 
@@ -106,7 +104,7 @@ class SpecificationCacheDefaultTest {
 
         specificationCache.computeIfAbsent(Customer.class, __->customerSpec);
 
-        val objectSpec = specificationCache.lookup(Customer.class).orElse(null);
+        var objectSpec = specificationCache.lookup(Customer.class).orElse(null);
 
         assertSame(objectSpec, customerSpec);
     }

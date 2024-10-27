@@ -23,8 +23,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.schema.common.v2.OidDto;
 
-import lombok.val;
-
 /**
  * @since 2.0 {@index}
  */
@@ -34,7 +32,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
     @Override
     public Object unmarshal(final OidDto oidDto) throws Exception {
-        val bookmark = Bookmark.forOidDto(oidDto);
+        var bookmark = Bookmark.forOidDto(oidDto);
         return bookmarkService.lookup(bookmark).orElse(null);
     }
 
@@ -43,7 +41,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
         if(domainObject == null) {
             return null;
         }
-        val bookmark = bookmarkService.bookmarkForElseFail(domainObject);
+        var bookmark = bookmarkService.bookmarkForElseFail(domainObject);
         return bookmark.toOidDto();
     }
 

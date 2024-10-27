@@ -49,8 +49,6 @@ import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryA
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.val;
-
 /**
  * Installs {@link DisabledObjectFacetViaMethod}
  * and {@link HiddenObjectFacetViaMethod} on the
@@ -96,7 +94,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
         final FacetedMethod member = processMethodContext.getFacetHolder();
         final Class<?> owningClass = processMethodContext.getCls();
-        val owningSpec = getSpecificationLoader().loadSpecification(owningClass);
+        var owningSpec = getSpecificationLoader().loadSpecification(owningClass);
 
         owningSpec.lookupFacet(DisabledObjectFacet.class)
         .map(disabledObjectFacet->disabledObjectFacet.clone(member))
@@ -111,7 +109,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 
     private void inferTitleFromToString(final ProcessClassContext processClassContext) {
 
-        val toString = ObjectSupportMethod.TO_STRING;
+        var toString = ObjectSupportMethod.TO_STRING;
 
         MethodFinder
         .publicOnly(

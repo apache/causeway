@@ -29,7 +29,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * General purpose byte data peer that acts as source and sink at the same time.
@@ -44,12 +43,12 @@ public interface DataPeer extends DataSink, DataSource {
 
     static DataPeer inMemory(final int initialBufferSize) {
 
-        val byteArrayHolder = new ArrayList<byte[]>(1);
+        var byteArrayHolder = new ArrayList<byte[]>(1);
 
         return new DataPeer() {
             @Override
             public <T> Try<T> tryReadAll(@NonNull final Function<InputStream, Try<T>> consumingMapper) {
-                val in = DataSource.ofBytes(bytes());
+                var in = DataSource.ofBytes(bytes());
                 return in.tryReadAll(consumingMapper);
             }
 
@@ -58,7 +57,7 @@ public interface DataPeer extends DataSink, DataSource {
                 if(!byteArrayHolder.isEmpty()) {
                     throw _Exceptions.illegalState("Cannot writeAll to an in-memory DataPeer, that was already written to.");
                 }
-                val out = DataSink.ofByteArrayConsumer(byteArrayHolder::add, initialBufferSize);
+                var out = DataSink.ofByteArrayConsumer(byteArrayHolder::add, initialBufferSize);
                 out.writeAll(outputStreamConsumer);
             }
 

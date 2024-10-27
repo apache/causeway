@@ -35,7 +35,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_addRole.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  *
@@ -68,8 +68,8 @@ public class ApplicationUser_addRole {
     }
 
     @MemberSupport public Collection<? extends ApplicationRole> choices0Act() {
-        val allRoles = applicationRoleRepository.allRoles();
-        val applicationRoles = _Sets.newTreeSet(allRoles);
+        var allRoles = applicationRoleRepository.allRoles();
+        var applicationRoles = _Sets.newTreeSet(allRoles);
         applicationRoles.removeAll(target.getRoles());
         return applicationRoles;
     }

@@ -26,8 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.io._TestDomain.Person;
 
-import lombok.val;
-
 class YamlUtilsTest {
 
     private Person person;
@@ -39,7 +37,7 @@ class YamlUtilsTest {
 
     @Test
     void toStringUtf8() {
-        val yaml = YamlUtils.toStringUtf8(person);
+        var yaml = YamlUtils.toStringUtf8(person);
         Approvals.verify(yaml);
     }
 

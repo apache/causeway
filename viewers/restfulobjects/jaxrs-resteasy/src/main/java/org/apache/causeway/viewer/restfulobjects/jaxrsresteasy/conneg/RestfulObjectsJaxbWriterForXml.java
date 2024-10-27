@@ -34,8 +34,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 
-import lombok.val;
-
 /**
  * @since 1.x {@index}
  */
@@ -63,9 +61,9 @@ public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
             final Annotation[] annotations,
             final MediaType mediaType) {
 
-        val adapter = serviceInjector.injectServicesInto(new PersistentEntityAdapter());
+        var adapter = serviceInjector.injectServicesInto(new PersistentEntityAdapter());
 
-        val marshaller = super.getMarshaller(type, annotations, mediaType);
+        var marshaller = super.getMarshaller(type, annotations, mediaType);
         marshaller.setAdapter(PersistentEntityAdapter.class, adapter);
         return marshaller;
     }

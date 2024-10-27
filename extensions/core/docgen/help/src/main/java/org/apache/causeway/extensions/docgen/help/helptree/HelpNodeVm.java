@@ -43,7 +43,6 @@ import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".HelpNodeVm")
@@ -93,7 +92,7 @@ public class HelpNodeVm implements ViewModel {
     }
 
     @ObjectSupport public String iconName() {
-        val type = helpNode.getHelpNodeType();
+        var type = helpNode.getHelpNodeType();
         return type!=null ? type.name() : "";
     }
 

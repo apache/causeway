@@ -28,7 +28,7 @@ import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
-import lombok.val;
+
 
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
@@ -50,7 +50,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
         @Override
         protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
-            val markupComponent = new ListeningMarkupComponent(
+            var markupComponent = new ListeningMarkupComponent(
                     id, model, getEventStreamResource(model));
             markupComponent.setEnabled(false);
             return getMetaModelContext().getServiceInjector().injectServicesInto(markupComponent);
@@ -59,7 +59,7 @@ public class ListeningMarkupPanelFactoriesForWicket {
         // -- HELPER
 
         private LocalResourcePath getEventStreamResource(final ScalarModel scalarModel) {
-            val observeFacet  = scalarModel.getMetaModel().getFacet(SseObserveFacet.class);
+            var observeFacet  = scalarModel.getMetaModel().getFacet(SseObserveFacet.class);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
                     : null;

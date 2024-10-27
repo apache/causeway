@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
-import lombok.val;
-
 /**
  * Derived by presence of an {@link Nullable} annotation.
  *
@@ -48,7 +46,7 @@ extends MandatoryFacetAbstract {
             return Optional.empty();
         }
 
-        val returnType = method.getReturnType();
+        var returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return Optional.empty();
         }

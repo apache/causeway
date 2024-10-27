@@ -28,8 +28,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
 
-import lombok.val;
-
 class CollapsibleTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -54,7 +52,7 @@ class CollapsibleTest extends AbstractAsciiDocWriterTest {
         
         doc.setTitle("Collapse");
         
-        val collapsibleBlock = AsciiDocFactory
+        var collapsibleBlock = AsciiDocFactory
                 .collapsibleBlock(doc, "Example block turns into collapsible summary/details.");
         
         collapsibleBlock.setTitle("expand to see more details");

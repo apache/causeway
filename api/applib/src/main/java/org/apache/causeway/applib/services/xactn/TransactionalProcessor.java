@@ -27,8 +27,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.val;
-
 /**
  * Provides the mechanism to run a block of code within a transaction boundary,
  * using Spring Framework's transaction primitives (such as
@@ -75,7 +73,7 @@ public interface TransactionalProcessor {
      * @return {@link Try} of calling given {@code callable}
      */
     default <T> Try<T> callTransactional(final Propagation propagation, final Callable<T> callable) {
-        val def = new DefaultTransactionDefinition();
+        var def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(propagation.value());
         return callTransactional(def, callable);
     }
@@ -108,7 +106,7 @@ public interface TransactionalProcessor {
      * @return {@link Try} of calling given {@code callable}
      */
     default <T> Try<T> callWithinCurrentTransactionElseCreateNew(final Callable<T> callable) {
-        val def = new DefaultTransactionDefinition();
+        var def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         return callTransactional(def, callable);
     }

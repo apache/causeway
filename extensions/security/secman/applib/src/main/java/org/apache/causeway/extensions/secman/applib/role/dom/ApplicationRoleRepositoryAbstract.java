@@ -41,7 +41,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.Applic
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
-import lombok.val;
+
 
 /**
  *
@@ -96,7 +96,7 @@ implements ApplicationRoleRepository {
     public Collection<ApplicationRole> findNameContaining(final String search) {
 
         if(search != null && search.length() > 0) {
-            val nameRegex = regexReplacer.asRegex(search);
+            var nameRegex = regexReplacer.asRegex(search);
             return repository.allMatches(
                     Query.named(applicationRoleClass, ApplicationRole.Nq.FIND_BY_NAME_CONTAINING)
                     .withParameter("regex", nameRegex))
@@ -160,7 +160,7 @@ implements ApplicationRoleRepository {
 
     @Override
     public boolean isAdminRole(final ApplicationRole genericRole) {
-        val adminRoleName = config.getExtensions().getSecman().getSeed().getAdmin().getRoleName();
+        var adminRoleName = config.getExtensions().getSecman().getSeed().getAdmin().getRoleName();
         final ApplicationRole adminRole = findByNameCached(adminRoleName).orElse(null);
         return Objects.equals(adminRole, genericRole);
     }
@@ -169,9 +169,9 @@ implements ApplicationRoleRepository {
     public void deleteRole(final ApplicationRole role) {
 
         role.getUsers().clear();
-        val permissions = role.getPermissions();
-        for (val permission : permissions) {
-            val deleteMixin = factoryService.mixin(ApplicationPermission_delete.class, permission);
+        var permissions = role.getPermissions();
+        for (var permission : permissions) {
+            var deleteMixin = factoryService.mixin(ApplicationPermission_delete.class, permission);
             deleteMixin.act();
         }
         repository.removeAndFlush(role);

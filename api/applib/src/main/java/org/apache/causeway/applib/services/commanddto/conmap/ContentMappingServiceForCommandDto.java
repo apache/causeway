@@ -38,8 +38,6 @@ import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
-import lombok.val;
-
 /**
  * An implementation of {@link ContentMappingService}.
  * 
@@ -65,7 +63,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
 
     @Nullable
     CommandDto asProcessedDto(final Object object) {
-        val commandDto = asCommandDto(object);
+        var commandDto = asCommandDto(object);
         return asProcessedDto(object, commandDto);
     }
 
@@ -88,7 +86,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         }
 
         // global processors
-        for (val commandDtoProcessorService : commandDtoProcessorServices) {
+        for (var commandDtoProcessorService : commandDtoProcessorServices) {
             commandDto = commandDtoProcessorService.process(domainObject, commandDto);
             if(commandDto == null) {
                 // any processor could return null, effectively breaking the chain.
@@ -97,7 +95,7 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         }
 
         // specific processor for this specific member (action or property)
-        val logicalMemberId = commandDto.getMember().getLogicalMemberIdentifier();
+        var logicalMemberId = commandDto.getMember().getLogicalMemberIdentifier();
         final CommandDtoProcessor commandDtoProcessor =
                 metaModelService.commandDtoProcessorFor(logicalMemberId);
         if (commandDtoProcessor == null) {

@@ -50,7 +50,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
+
 
 
 @jakarta.persistence.Entity
@@ -91,7 +91,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     private long version;
 
     public static SimpleObject withName(final String name) {
-        val simpleObject = new SimpleObject();
+        var simpleObject = new SimpleObject();
         simpleObject.setName(name);
         return simpleObject;
     }

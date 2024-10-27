@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstra
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class MetaModelPostProcessorAbstract
 implements MetaModelPostProcessor {
@@ -58,7 +57,7 @@ implements MetaModelPostProcessor {
      */
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        val objectMemberImpl = (ObjectMemberAbstract) objectMember;
+        var objectMemberImpl = (ObjectMemberAbstract) objectMember;
         return objectMemberImpl.getFacetedMethod();
     }
 

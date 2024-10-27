@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
+
 
 class MetaModelValidatorForJdoqlFromClause
 extends MetaModelValidatorForJdoqlAbstract {
@@ -48,12 +48,12 @@ extends MetaModelValidatorForJdoqlAbstract {
             final ObjectSpecification objectSpec,
             final String query) {
 
-        val className = objectSpec.getCorrespondingClass().getName();
+        var className = objectSpec.getCorrespondingClass().getName();
         if (Objects.equals(classNameFromClause, className)) {
             return;
         }
 
-        val fromSpecResult = Try.call(()->getSpecificationLoader()
+        var fromSpecResult = Try.call(()->getSpecificationLoader()
                     .specForType(_Context.loadClass(classNameFromClause))
                     .orElse(null));
 
@@ -71,8 +71,8 @@ extends MetaModelValidatorForJdoqlAbstract {
             return;
         }
 
-        val fromSpec = fromSpecResult.getValue().get();
-        val subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
+        var fromSpec = fromSpecResult.getValue().get();
+        var subclasses = fromSpec.subclasses(Hierarchical.Depth.TRANSITIVE);
         if(subclasses.contains(objectSpec)) {
             return;
         }

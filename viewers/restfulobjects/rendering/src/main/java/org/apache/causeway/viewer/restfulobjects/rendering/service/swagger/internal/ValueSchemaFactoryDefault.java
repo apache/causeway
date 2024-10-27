@@ -39,7 +39,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 
-import lombok.val;
+
 
 import io.swagger.v3.oas.models.media.BooleanSchema;
 import io.swagger.v3.oas.models.media.ByteArraySchema;
@@ -115,7 +115,7 @@ public class ValueSchemaFactoryDefault implements ValueSchemaFactory {
             final List<String> enumNames = _NullSafe.stream(cls.getEnumConstants())
                     .map(input->((Enum<?>)input).name())
                     .collect(Collectors.toList());
-            val schema = new StringSchema()._enum(enumNames);
+            var schema = new StringSchema()._enum(enumNames);
             return Optional.of(schema);
         }
 

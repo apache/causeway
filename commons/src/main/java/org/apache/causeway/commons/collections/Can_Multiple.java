@@ -53,7 +53,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
@@ -109,12 +108,12 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     public Optional<T> get(final int elementIndex) {
         // we do an index out of bounds check ourselves, in order to prevent any stack-traces,
         // that pollute the heap
-        val size = size();
+        var size = size();
         if(size==0) {
             return Optional.empty();
         }
-        val minIndex = 0;
-        val maxIndex = size - 1;
+        var minIndex = 0;
+        var maxIndex = size - 1;
         if(elementIndex < minIndex ||  elementIndex > maxIndex) {
             return Optional.empty();
         }
@@ -123,14 +122,14 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> sorted(@NonNull final Comparator<? super T> c) {
-        val newElements = _Lists.<T>newArrayList(elements);
+        var newElements = _Lists.<T>newArrayList(elements);
         newElements.sort(c);
         return new Can_Multiple<>(newElements);
     }
 
     @Override
     public Can<T> distinct() {
-        val set = new LinkedHashSet<T>(); // preserve order
+        var set = new LinkedHashSet<T>(); // preserve order
         set.addAll(elements);
         return Can.ofCollection(set);
     }
@@ -138,7 +137,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     @Override
     public Can<T> distinct(@NonNull final BiPredicate<T, T> equality) {
         final int initialSize = Math.min(1024, elements.size());
-        val uniqueElements = _Lists.<T>newArrayList(initialSize);
+        var uniqueElements = _Lists.<T>newArrayList(initialSize);
         elements
         .forEach(element->{
             if(!uniqueElements.stream().anyMatch(x->equality.test(x, element))) {
@@ -175,7 +174,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Can<T> reverse() {
-        val reverse = new ArrayList<T>(elements.size());
+        var reverse = new ArrayList<T>(elements.size());
         for(int i=elements.size()-1; i>=0; --i) {
             reverse.add(elements.get(i));
         }
@@ -199,7 +198,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         if(predicate==null) {
             return this; // identity
         }
-        val filteredElements =
+        var filteredElements =
                 stream()
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -214,7 +213,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public <R> void zip(@NonNull final Iterable<R> zippedIn, @NonNull final BiConsumer<? super T, ? super R> action) {
-        val zippedInIterator = zippedIn.iterator();
+        var zippedInIterator = zippedIn.iterator();
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
         });
@@ -222,13 +221,13 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public <R, Z> Can<R> zipMap(@NonNull final Iterable<Z> zippedIn, @NonNull final BiFunction<? super T, ? super Z, R> mapper) {
-        val zippedInIterator = zippedIn.iterator();
+        var zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
     }
 
     @Override
     public <R, Z> Stream<R> zipStream(@NonNull final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
-        val zippedInIterator = zippedIn.iterator();
+        var zippedInIterator = zippedIn.iterator();
         return stream()
                 .map(t->mapper.apply(t, zippedInIterator.next()))
                 .filter(_NullSafe::isPresent);
@@ -247,7 +246,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
                 || other.isEmpty()) {
             return this;
         }
-        val newElements = new ArrayList<T>(this.size() + other.size());
+        var newElements = new ArrayList<T>(this.size() + other.size());
         newElements.addAll(elements);
         other.forEach(newElements::add);
         return new Can_Multiple<>(newElements);
@@ -258,7 +257,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         if(element==null) {
             return this; // identity
         }
-        val newElements = new ArrayList<T>(elements);
+        var newElements = new ArrayList<T>(elements);
         newElements.add(index, element);
         return Can.ofCollection(newElements);
     }
@@ -268,14 +267,14 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         if(element==null) {
             return remove(index);
         }
-        val newElements = new ArrayList<T>(elements);
+        var newElements = new ArrayList<T>(elements);
         newElements.set(index, element);
         return Can.ofCollection(newElements);
     }
 
     @Override
     public Can<T> remove(final int index) {
-        val newElements = new ArrayList<T>(elements);
+        var newElements = new ArrayList<T>(elements);
         newElements.remove(index);
         return Can.ofCollection(newElements);
     }
@@ -285,7 +284,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         if(element==null) {
             return this; // identity
         }
-        val newElements = new ArrayList<T>(elements);
+        var newElements = new ArrayList<T>(elements);
         newElements.remove(element);
         return Can.ofCollection(newElements);
     }
@@ -296,7 +295,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
                 ||indices.length==0) {
             return Can.empty();
         }
-        val newElements = new ArrayList<T>(indices.length);
+        var newElements = new ArrayList<T>(indices.length);
         final int maxIndex = size()-1;
         for(int index:indices) {
             if(index>=0
@@ -312,7 +311,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         if(intStream==null) {
             return Can.empty();
         }
-        val newElements = new ArrayList<T>();
+        var newElements = new ArrayList<T>();
         final int maxIndex = size()-1;
         intStream
         .filter(index->index>=0 && index<=maxIndex)
@@ -345,7 +344,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         }
         final int n = size();
         final int subCanCount = (n - 1)/maxInnerSize + 1;
-        val newElements = new ArrayList<Can<T>>(subCanCount);
+        var newElements = new ArrayList<Can<T>>(subCanCount);
         for(int i=0; i<n; i+=maxInnerSize) {
             newElements.add(subCan(i, i + maxInnerSize)); // index overflow is ignored
         }
@@ -369,7 +368,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public String toString() {
-        val literal = stream()
+        var literal = stream()
                 .map(s->""+s)
                 .collect(Collectors.joining(", "));
         return "Can["+literal+"]";
@@ -408,24 +407,24 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         // at this point firstElementComparison is 0 and other is a multi-can
         // XXX we already compared the first elements, could skip ahead for performance reasons
         if(this.size()>=other.size()) {
-            val otherIterator = other.iterator();
+            var otherIterator = other.iterator();
             for(T left: this) {
                 if(!otherIterator.hasNext()) {
                     return 1; // the other has fewer elements hence comes first
                 }
-                val right = otherIterator.next();
+                var right = otherIterator.next();
                 int c = _Objects.compareNonNull(left, right);
                 if(c!=0) {
                     return c;
                 }
             }
         } else {
-            val thisIterator = this.iterator();
+            var thisIterator = this.iterator();
             for(T right: other) {
                 if(!thisIterator.hasNext()) {
                     return -1; // this has fewer elements hence comes first
                 }
-                val left = thisIterator.next();
+                var left = thisIterator.next();
                 int c = _Objects.compareNonNull(left, right);
                 if(c!=0) {
                     return c;
@@ -447,14 +446,14 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public Set<T> toSet() {
-        val set = _Sets.<T>newHashSet(); // serializable
+        var set = _Sets.<T>newHashSet(); // serializable
         set.addAll(elements);
         return Collections.unmodifiableSet(set); // serializable and immutable
     }
 
     @Override
     public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
-        val set = _Sets.<T>newHashSet(); // serializable
+        var set = _Sets.<T>newHashSet(); // serializable
         elements
         .forEach(s->{
             if(!set.add(s)) {
@@ -466,7 +465,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
     @Override
     public T[] toArray(@NonNull final Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
+        var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
         return elements.toArray(array);
     }
 

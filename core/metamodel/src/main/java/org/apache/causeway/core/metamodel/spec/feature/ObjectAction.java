@@ -58,7 +58,6 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedI
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
-import lombok.val;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -274,7 +273,7 @@ public interface ObjectAction extends ObjectMember {
     }
 
     default PromptStyle getPromptStyle() {
-        val promptStyle = lookupFacet(PromptStyleFacet.class)
+        var promptStyle = lookupFacet(PromptStyleFacet.class)
                 .map(PromptStyleFacet::value);
         if(getDeclaringType().isInjectable() // <-- menu actions
                 // no-arg DIALOG is correctly handled,
@@ -290,12 +289,12 @@ public interface ObjectAction extends ObjectMember {
             return PromptStyle.DIALOG;
         }
 
-        val needsFallback = promptStyle.isEmpty()
+        var needsFallback = promptStyle.isEmpty()
                 || promptStyle.get() == PromptStyle.AS_CONFIGURED;
 
         if(needsFallback) {
             // modal vs side-bar
-            val dialogModeAsConfigured = Optional.ofNullable(
+            var dialogModeAsConfigured = Optional.ofNullable(
                     getMetaModelContext().getConfiguration().getViewer().getWicket().getDialogMode())
                     .orElseGet(()->new Wicket().getDialogMode());
             switch (dialogModeAsConfigured) {
@@ -332,15 +331,15 @@ public interface ObjectAction extends ObjectMember {
         public static boolean isDirectlyAssociatedWithAnyProperty(
                 final ObjectAction action) {
 
-            val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
             if (layoutGroupFacet == null) {
                 return false;
             }
-            val layoutGroupId = layoutGroupFacet.getGroupId();
+            var layoutGroupId = layoutGroupFacet.getGroupId();
             if (_Strings.isNullOrEmpty(layoutGroupId)) {
                 return false;
             }
-            val prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
+            var prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
                     .orElse(null);
             if (prop == null) {
                 return false;
@@ -380,7 +379,7 @@ public interface ObjectAction extends ObjectMember {
         public static Stream<ObjectAction> streamTopBarActions(
                 final ManagedObject adapter) {
 
-            val spec = adapter.getSpecification();
+            var spec = adapter.getSpecification();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates
@@ -394,7 +393,7 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject adapter,
                 final ObjectAssociation association) {
 
-            val spec = adapter.getSpecification();
+            var spec = adapter.getSpecification();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates.isSameLayoutGroupAs(association))
@@ -419,11 +418,11 @@ public interface ObjectAction extends ObjectMember {
                 final @NonNull ObjectAction action,
                 final @NonNull InteractionHead head) {
 
-            val mixeeAdapter = head.getMixee().orElse(null);
+            var mixeeAdapter = head.getMixee().orElse(null);
 
             if(mixeeAdapter != null) {
-                val mixinSpec = action.getDeclaringType();
-                val ownerSpec = mixeeAdapter.getSpecification();
+                var mixinSpec = action.getDeclaringType();
+                var ownerSpec = mixeeAdapter.getSpecification();
                 return ownerSpec.lookupMixedInMember(mixinSpec)
                         .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asSupplier()))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);
@@ -453,11 +452,11 @@ public interface ObjectAction extends ObjectMember {
 
             return (final ObjectAction objectAction) -> {
 
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                 if (layoutGroupFacet == null) {
                     return false;
                 }
-                val layoutGroupId = layoutGroupFacet.getGroupId();
+                var layoutGroupId = layoutGroupFacet.getGroupId();
                 if (_Strings.isNullOrEmpty(layoutGroupId)) {
                     return false;
                 }
@@ -474,11 +473,11 @@ public interface ObjectAction extends ObjectMember {
 
             return (final ObjectAction objectAction) -> {
 
-                val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                 if (layoutGroupFacet == null) {
                     return false;
                 }
-                val layoutGroupId = layoutGroupFacet.getGroupId();
+                var layoutGroupId = layoutGroupFacet.getGroupId();
                 if (_Strings.isNullOrEmpty(layoutGroupId)) {
                     return false;
                 }
@@ -489,7 +488,7 @@ public interface ObjectAction extends ObjectMember {
         public static Predicate<ObjectAction> choicesFromAndHavingCollectionParameterFor(
                 final @NonNull OneToManyAssociation collection) {
 
-            val elementType = collection.getElementType();
+            var elementType = collection.getElementType();
 
             return new HasChoicesFrom(collection)
                     .and(new HasParameterMatching(
@@ -508,15 +507,15 @@ public interface ObjectAction extends ObjectMember {
 
             @Override
             public boolean test(final ObjectAction objectAction) {
-                val choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
+                var choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
                 if(choicesFromFacet == null) {
                     return false;
                 }
-                val choicesFromMemberName = choicesFromFacet.value();
+                var choicesFromMemberName = choicesFromFacet.value();
                 if (choicesFromMemberName == null) {
                     return false;
                 }
-                val memberNameLowerCase = choicesFromMemberName.toLowerCase();
+                var memberNameLowerCase = choicesFromMemberName.toLowerCase();
                 return Objects.equals(memberId, memberNameLowerCase);
             }
 

@@ -24,7 +24,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -85,7 +84,7 @@ public class _Debug {
         if(x!=null
                 && x.getClass().isArray()) {
 
-            val array = _NullSafe.streamAutodetect(x)
+            var array = _NullSafe.streamAutodetect(x)
             .map(e->""+e)
             .collect(Collectors.joining(", "));
 
@@ -95,7 +94,7 @@ public class _Debug {
         if(indent==0) {
             System.err.printf("%s%n", x);
         } else {
-            val suffix = _Strings.padEnd("", indent, '-');
+            var suffix = _Strings.padEnd("", indent, '-');
             System.err.printf("%s %s%n", suffix, x);
         }
 

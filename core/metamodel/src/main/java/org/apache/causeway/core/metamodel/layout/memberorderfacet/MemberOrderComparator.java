@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrde
 import org.apache.causeway.core.metamodel.layout.DeweyOrderSet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.val;
-
 /**
  * Compares by {@link ObjectMember}(s) obtained based on their {@link LayoutOrderFacet}.
  *
@@ -57,8 +55,8 @@ public class MemberOrderComparator implements Comparator<Object> {
     @Override
     public int compare(final Object o1, final Object o2) {
         if (o1 instanceof FacetHolder && o2 instanceof FacetHolder) {
-            val m1 = (FacetHolder) o1;
-            val m2 = (FacetHolder) o2;
+            var m1 = (FacetHolder) o1;
+            var m2 = (FacetHolder) o2;
             final int memberOrderComparison = memberComparator.compare(m1, m2);
             if(memberOrderComparison != 0) {
                 return memberOrderComparison;

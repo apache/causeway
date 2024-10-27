@@ -44,7 +44,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 @RequiredArgsConstructor
 class ServiceRegistry_forTesting implements ServiceRegistry {
@@ -77,7 +76,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         }
 
         // lookup the _Context
-        // XXX lombok bug, cannot use val here (https://github.com/rzwitserloot/lombok/issues/1588)
+        // XXX lombok bug, cannot use var here (https://github.com/rzwitserloot/lombok/issues/1588)
         T singleton = _Context.getIfAny(type);
         if(singleton!=null) {
             return Can.ofSingleton(singleton);
@@ -138,9 +137,9 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     private Stream<_SingletonBeanProvider> streamBeans() {
         // lookup the MetaModelContextBean's list of singletons
-        val mmc = metaModelContext;
+        var mmc = metaModelContext;
         if(mmc instanceof MetaModelContext_forTesting) {
-            val mmcb = (MetaModelContext_forTesting) mmc;
+            var mmcb = (MetaModelContext_forTesting) mmc;
             return mmcb.streamBeanAdapters();
         }
         return Stream.empty();
@@ -148,17 +147,17 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     @Override
     public void clearRegisteredBeans() {
-        val mmc = metaModelContext;
+        var mmc = metaModelContext;
         if(mmc instanceof MetaModelContext_forTesting) {
-            val mmcb = (MetaModelContext_forTesting) mmc;
+            var mmcb = (MetaModelContext_forTesting) mmc;
             mmcb.clearRegisteredBeans();
         }
     }
 
     private void postinitWhenTesting() {
-        val mmc = metaModelContext;
+        var mmc = metaModelContext;
         if(mmc instanceof MetaModelContext_forTesting) {
-            val mmcb = (MetaModelContext_forTesting) mmc;
+            var mmcb = (MetaModelContext_forTesting) mmc;
             mmcb.runPostconstruct();
         }
     }

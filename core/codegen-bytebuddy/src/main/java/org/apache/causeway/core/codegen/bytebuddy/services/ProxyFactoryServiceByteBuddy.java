@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryServiceAbstract;
 
-import lombok.val;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ImplementationDefinition;
@@ -51,7 +50,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             final Class<?>[] interfaces,
             final Class<?>[] constructorArgTypes) {
 
-        val objenesis = new ObjenesisStd();
+        var objenesis = new ObjenesisStd();
 
         final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
         nextProxyDef(base, interfaces)

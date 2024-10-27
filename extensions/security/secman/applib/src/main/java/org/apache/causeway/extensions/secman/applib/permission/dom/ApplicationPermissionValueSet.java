@@ -29,8 +29,6 @@ import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 
-import lombok.val;
-
 /**
  * A serializable value object representing a set of (anonymized)
  * {@link ApplicationPermissionValue permission}s.
@@ -145,9 +143,9 @@ public class ApplicationPermissionValueSet implements Serializable {
             final ApplicationFeatureId featureId,
             final ApplicationPermissionMode mode) {
 
-        for (val pathId : featureId.getPathIds()) {
-            val permissionValues = permissionsByFeature.get(pathId);
-            val evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
+        for (var pathId : featureId.getPathIds()) {
+            var permissionValues = permissionsByFeature.get(pathId);
+            var evaluation = permissionsEvaluationService.evaluate(featureId, mode, permissionValues);
             if(evaluation != null) {
                 return evaluation;
             }

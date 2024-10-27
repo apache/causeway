@@ -30,7 +30,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepositoryAbstract;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Contributes a <code>siblingCommands</code> collection to the {@link CommandLogEntry}), in other words those
@@ -54,11 +53,11 @@ public class CommandLogEntry_siblingCommands {
     private final CommandLogEntry commandLogEntry;
 
     @MemberSupport public List<? extends CommandLogEntry> coll() {
-        val parentLogEntry = commandLogEntry.getParent();
+        var parentLogEntry = commandLogEntry.getParent();
         if(parentLogEntry == null) {
             return Collections.emptyList();
         }
-        val siblingCommands = new ArrayList<>(commandLogEntryRepository.findByParent(parentLogEntry));
+        var siblingCommands = new ArrayList<>(commandLogEntryRepository.findByParent(parentLogEntry));
         siblingCommands.remove(commandLogEntry);
         return siblingCommands;
     }

@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.Authorizatio
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 public final class ActionInteraction
 extends MemberInteraction<ManagedAction, ActionInteraction> {
@@ -68,7 +67,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final @NonNull Where where,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        val managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
+        var managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
 
         final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
                 ? InteractionRailway.success(managedAction.get())
@@ -112,7 +111,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
         railway = railway.chain(action->{
 
-            val actionSemantics = action.getAction().getSemantics();
+            var actionSemantics = action.getAction().getSemantics();
 
             switch(semanticConstraint) {
             case NONE:
@@ -146,18 +145,18 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
     public Railway<InteractionVeto, ManagedObject> invokeWith(final ParameterNegotiationModel pendingArgs) {
         pendingArgs.activateValidationFeedback();
-        val veto = validate(pendingArgs);
+        var veto = validate(pendingArgs);
         if(veto.isPresent()) {
             return Railway.failure(veto.get());
         }
-        val action = railway.getSuccessElseFail();
-        val actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
+        var action = railway.getSuccessElseFail();
+        var actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
         return actionResultOrVeto;
     }
 
     public final ManagedObject invokeWithRuleChecking(
             final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
-        val action = railway.getSuccessElseFail();
+        var action = railway.getSuccessElseFail();
         return action.invokeWithRuleChecking(pendingArgs.getParamValues());
     }
 
@@ -167,7 +166,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         if(railway.isFailure()) {
             return railway.getFailure();
         }
-        val validityConsent = pendingArgs.validateParameterSet(); // full validation
+        var validityConsent = pendingArgs.validateParameterSet(); // full validation
         if(validityConsent!=null && validityConsent.isVetoed()) {
             return Optional.of(InteractionVeto.actionParamInvalid(validityConsent));
         }
@@ -202,11 +201,11 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final ManagedProperty associatedWithProperty,
             final String memberId,
             final Where where) {
-        val propertyOwner = associatedWithProperty.getOwner();
-        val prop = associatedWithProperty.getMetaModel();
-        val elementType = prop.getElementType();
+        var propertyOwner = associatedWithProperty.getOwner();
+        var prop = associatedWithProperty.getMetaModel();
+        var elementType = prop.getElementType();
 
-        val valueFacet = elementType.isValue()
+        var valueFacet = elementType.isValue()
                 ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
                 : null;
 
@@ -217,16 +216,16 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 // (maybe improve programming model so this cannot happen)
                 && propertyOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
-            val compositeValueNullable = prop.get(propertyOwner);
-            val compositeValue =
+            var compositeValueNullable = prop.get(propertyOwner);
+            var compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
                         valueFacet.selectDefaultsProviderForProperty(prop)
                             .orElseThrow(()->onMissingDefaultsProvider(prop))
                             .getDefaultValue());
 
-            val mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
+            var mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
             if(mixinAction.isPresent()) {
-                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
                 return ActionInteraction.wrap(managedAction);
             }
         }
@@ -241,11 +240,11 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             final String memberId,
             final Where where) {
 
-        val actionOwner = parameterNegotiationModel.getActionTarget();
-        val param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
-        val elementType = param.getMetaModel().getElementType();
+        var actionOwner = parameterNegotiationModel.getActionTarget();
+        var param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
+        var elementType = param.getMetaModel().getElementType();
 
-        val valueFacet = elementType.isValue()
+        var valueFacet = elementType.isValue()
                 ? (ValueFacet<?>) elementType.valueFacet().orElse(null)
                 : null;
         if(valueFacet!=null
@@ -255,22 +254,22 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 // (maybe improve programming model so this cannot happen)
                 && actionOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
-            val compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
-            val compositeValue =
+            var compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
+            var compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
                         valueFacet.selectDefaultsProviderForParameter(param.getMetaModel())
                             .orElseThrow(()->onMissingDefaultsProvider(param.getMetaModel()))
                             .getDefaultValue());
 
-            val mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
+            var mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
             if(mixinAction.isPresent()) {
-                val managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
                 return ActionInteraction.wrap(managedAction);
             }
         }
 
         //XXX[CAUSEWAY-3080] prior to this fix we returned... (which I'm not sure why - makes no sense to me)
-        //val paramValue = parameterNegotiationModel.getParamValue(paramIndex);
+        //var paramValue = parameterNegotiationModel.getParamValue(paramIndex);
         //return ActionInteraction.start(paramValue, memberId, where);
 
         // else if not a composite value

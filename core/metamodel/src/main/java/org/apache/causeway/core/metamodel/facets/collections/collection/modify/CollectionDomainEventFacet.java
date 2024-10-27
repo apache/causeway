@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class CollectionDomainEventFacet
 extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>
@@ -56,7 +55,7 @@ implements HidingInteractionAdvisor {
             final @NonNull Class<?> classBeingIntrospected,
             final @NonNull FacetHolder facetHolder) {
 
-        val collectionDomainEventFacet = collectionIfAny
+        var collectionDomainEventFacet = collectionIfAny
                 .map(Collection::domainEvent)
                 .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
                 .map(domainEvent ->
@@ -65,8 +64,8 @@ implements HidingInteractionAdvisor {
                 .orElseGet(()->{
 
                     /* only used to lookup {@link CollectionDomainEventDefaultFacetForDomainObjectAnnotation} */
-                    val typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
-                    val typeFromDomainObject = typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                    var typeSpec = facetHolder.getSpecificationLoader().loadSpecification(classBeingIntrospected);
+                    var typeFromDomainObject = typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
 
                     return typeFromDomainObject != null
                             ? new CollectionDomainEventFacet(

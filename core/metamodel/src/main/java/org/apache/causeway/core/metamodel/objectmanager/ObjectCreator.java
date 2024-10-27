@@ -34,7 +34,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -71,12 +70,12 @@ interface ObjectCreator {
                 log.debug("creating instance of {}", spec);
             }
 
-            val pojo = instantiate(spec); // can only be a scalar
+            var pojo = instantiate(spec); // can only be a scalar
             if(Specification.class.isAssignableFrom(spec.getCorrespondingClass())
                     || !spec.isValue()) {
                 spec.getServiceInjector().injectServicesInto(pojo);
             }
-            val domainObject = ManagedObject.adaptSingular(spec, pojo);
+            var domainObject = ManagedObject.adaptSingular(spec, pojo);
 
             // initialize new object
             domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)
@@ -93,7 +92,7 @@ interface ObjectCreator {
 
         private Object instantiate(final ObjectSpecification spec) {
 
-            val type = spec.getCorrespondingClass();
+            var type = spec.getCorrespondingClass();
             if (type.isArray()) {
                 return Array.newInstance(type.getComponentType(), 0);
             }
@@ -104,7 +103,7 @@ interface ObjectCreator {
 
             try {
 
-                val newInstance = _InstanceUtil.createInstance(type);
+                var newInstance = _InstanceUtil.createInstance(type);
                 return newInstance;
 
             } catch (Exception  e) {

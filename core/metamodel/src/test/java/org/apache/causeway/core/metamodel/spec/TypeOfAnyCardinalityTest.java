@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 class TypeOfAnyCardinalityTest {
 
@@ -54,15 +53,15 @@ class TypeOfAnyCardinalityTest {
     @Test
     void array() {
 
-        val array = new String[]{};
+        var array = new String[]{};
 
         assertEquals(
                 CollectionSemantics.ARRAY,
                 CollectionSemantics.valueOf(array.getClass())
                     .orElse(null));
 
-        val arC = new CharSequence[] {};
-        val arS = new String[] {};
+        var arC = new CharSequence[] {};
+        var arS = new String[] {};
 
         assertTypeDetected(X.class, Y.class, Z.class,
                 CharSequence.class, CharSequence.class, String.class,
@@ -130,25 +129,25 @@ class TypeOfAnyCardinalityTest {
             final Class<?> genericA, final Class<?> genericB, final Class<?> genericC,
             final Class<?> contA, final Class<?> contB, final Class<?> contC) {
 
-        val methodInA = _GenericResolver.testing.resolveMethod(a, "someStrings");
-        val methodInB = _GenericResolver.testing.resolveMethod(b, "someStrings");
-        val methodInC = _GenericResolver.testing.resolveMethod(c, "someStrings");
+        var methodInA = _GenericResolver.testing.resolveMethod(a, "someStrings");
+        var methodInB = _GenericResolver.testing.resolveMethod(b, "someStrings");
+        var methodInC = _GenericResolver.testing.resolveMethod(c, "someStrings");
 
         assertNotNull(methodInA);
         assertNotNull(methodInB);
         assertNotNull(methodInC);
 
-        val returnA = ResolvableType.forMethodReturnType(methodInA.method(), a);
-        val returnB = ResolvableType.forMethodReturnType(methodInB.method(), b);
-        val returnC = ResolvableType.forMethodReturnType(methodInC.method(), c);
+        var returnA = ResolvableType.forMethodReturnType(methodInA.method(), a);
+        var returnB = ResolvableType.forMethodReturnType(methodInB.method(), b);
+        var returnC = ResolvableType.forMethodReturnType(methodInC.method(), c);
 
-        val genericArgA = returnA.isArray()
+        var genericArgA = returnA.isArray()
                 ? returnA.getComponentType()
                 : returnA.getGeneric(0);
-        val genericArgB = returnB.isArray()
+        var genericArgB = returnB.isArray()
                 ? returnB.getComponentType()
                 : returnB.getGeneric(0);
-        val genericArgC = returnC.isArray()
+        var genericArgC = returnC.isArray()
                 ? returnC.getComponentType()
                 : returnC.getGeneric(0);
 
@@ -160,9 +159,9 @@ class TypeOfAnyCardinalityTest {
         assertEquals(genericB, genericArgB.toClass());
         assertEquals(genericC, genericArgC.toClass());
 
-        val typeA = _GenericResolver.forMethodReturn(methodInA);
-        val typeB = _GenericResolver.forMethodReturn(methodInB);
-        val typeC = _GenericResolver.forMethodReturn(methodInC);
+        var typeA = _GenericResolver.forMethodReturn(methodInA);
+        var typeB = _GenericResolver.forMethodReturn(methodInB);
+        var typeC = _GenericResolver.forMethodReturn(methodInC);
 
         assertEquals(genericA, typeA.elementType());
         assertEquals(genericB, typeB.elementType());

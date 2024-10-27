@@ -70,7 +70,6 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociati
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -154,10 +153,10 @@ implements FacetHolder {
         //
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
         final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
-        for (val interfaceType : interfaceTypes) {
-            val interfaceSubstitute = classSubstitutorRegistry.getSubstitution(interfaceType);
+        for (var interfaceType : interfaceTypes) {
+            var interfaceSubstitute = classSubstitutorRegistry.getSubstitution(interfaceType);
             if (interfaceSubstitute.isReplace()) {
-                val interfaceSpec = getSpecificationLoader().loadSpecification(interfaceSubstitute.getReplacement());
+                var interfaceSpec = getSpecificationLoader().loadSpecification(interfaceSubstitute.getReplacement());
                 interfaceSpecList.add(interfaceSpec);
             }
         }
@@ -266,12 +265,12 @@ implements FacetHolder {
             this.membersByMethod = catalogueMembers();
         }
 
-        val member = membersByMethod.get(method);
+        var member = membersByMethod.get(method);
         return Optional.ofNullable(member);
     }
 
     private Map<ResolvedMethod, ObjectMember> catalogueMembers() {
-        val membersByMethod = _Maps.<ResolvedMethod, ObjectMember>newHashMap();
+        var membersByMethod = _Maps.<ResolvedMethod, ObjectMember>newHashMap();
         cataloguePropertiesAndCollections(membersByMethod::put);
         catalogueActions(membersByMethod::put);
         return membersByMethod;

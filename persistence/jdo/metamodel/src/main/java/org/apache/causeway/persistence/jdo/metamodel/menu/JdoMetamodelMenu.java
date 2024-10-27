@@ -44,7 +44,6 @@ import org.apache.causeway.persistence.jdo.metamodel.CausewayModulePersistenceJd
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named(CausewayModulePersistenceJdoMetamodel.NAMESPACE + ".JdoMetamodelMenu")
 @DomainService
@@ -89,9 +88,9 @@ public class JdoMetamodelMenu {
 
     private byte[] zip() {
 
-        val pmFactory = getPersistenceManagerFactory();
+        var pmFactory = getPersistenceManagerFactory();
 
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var zipBuilder = ZipUtils.zipEntryBuilder();
 
         pmFactory.getManagedClasses().stream()
         .filter(jdoFacetContext::isPersistenceEnhanced)

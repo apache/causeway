@@ -28,8 +28,6 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.pam.AllSuccessfulStrategy;
 import org.apache.shiro.realm.Realm;
 
-import lombok.val;
-
 public class AuthenticationStrategyForSecMan extends AllSuccessfulStrategy {
 
     /**
@@ -49,8 +47,8 @@ public class AuthenticationStrategyForSecMan extends AllSuccessfulStrategy {
     public AuthenticationInfo beforeAllAttempts(Collection<? extends Realm> realms, AuthenticationToken token)
             throws AuthenticationException {
 
-        val authenticationInfo = (SimpleAuthenticationInfo) super.beforeAllAttempts(realms, token);
-        val principalCollection = new PrincipalCollectionWithSinglePrincipalForApplicationUserInAnyRealm();
+        var authenticationInfo = (SimpleAuthenticationInfo) super.beforeAllAttempts(realms, token);
+        var principalCollection = new PrincipalCollectionWithSinglePrincipalForApplicationUserInAnyRealm();
 
         authenticationInfo.setPrincipals(principalCollection);
         return authenticationInfo;

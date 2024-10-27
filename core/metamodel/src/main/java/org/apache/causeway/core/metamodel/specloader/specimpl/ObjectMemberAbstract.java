@@ -57,7 +57,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class ObjectMemberAbstract
 implements
@@ -104,7 +103,7 @@ implements
     @Override
     public final String getFriendlyName(final Supplier<ManagedObject> domainObjectProvider) {
 
-        val namedFacet = getFacet(MemberNamedFacet.class);
+        var namedFacet = getFacet(MemberNamedFacet.class);
 
         if(namedFacet==null) {
             throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
@@ -212,7 +211,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        val visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
+        var visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
 
@@ -242,7 +241,7 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        val usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
+        var usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
     }
 
@@ -274,14 +273,14 @@ implements
             final @NonNull Class<?> mixinType,
             final @NonNull ManagedObject mixee) {
 
-        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType);
+        var mixinSpec = getSpecificationLoader().loadSpecification(mixinType);
 
         // nullable for action parameter mixins
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee)) {
             return ManagedObject.empty(mixinSpec);
         }
 
-        val mixinPojo = getMetaModelContext().getFactoryService().mixin(mixinType, mixee.getPojo());
+        var mixinPojo = getMetaModelContext().getFactoryService().mixin(mixinType, mixee.getPojo());
         return ManagedObject.mixin(mixinSpec, mixinPojo);
     }
 
@@ -300,7 +299,7 @@ implements
             final InteractionHead head,
             final Function<UUID, CommandDto> commandDtoFactory) {
 
-        val command = getInteractionContext().currentInteractionElseFail().getCommand();
+        var command = getInteractionContext().currentInteractionElseFail().getCommand();
 
         _Assert.assertNotNull(command,
             "No command available with current thread, "
@@ -310,7 +309,7 @@ implements
             // guard here to prevent subsequent mixin actions from
             // trampling over the command's DTO
         } else {
-            val dto = commandDtoFactory.apply(command.getInteractionId());
+            var dto = commandDtoFactory.apply(command.getInteractionId());
             command.updater().setCommandDtoAndIdentifier(dto);
         }
 

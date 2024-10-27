@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInte
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import lombok.val;
+
 
 /**
  * Represents an action (a member) of an entity.
@@ -62,7 +62,7 @@ implements ActionModel {
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
-        val delegate = ActionInteractionWkt.forEntity(
+        var delegate = ActionInteractionWkt.forEntity(
                 parentEntityModel,
                 actionIdentifier,
                 where,
@@ -125,8 +125,8 @@ implements ActionModel {
 
     @Override
     public ManagedObject executeActionAndReturnResult() {
-        val pendingArgs = delegate.parameterNegotiationModel();
-        val result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
+        var pendingArgs = delegate.parameterNegotiationModel();
+        var result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
         return result;
     }
 

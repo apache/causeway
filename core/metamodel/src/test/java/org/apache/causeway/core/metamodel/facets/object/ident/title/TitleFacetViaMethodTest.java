@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class TitleFacetViaMethodTest
 extends FacetFactoryTestAbstract {
 
@@ -55,13 +53,13 @@ extends FacetFactoryTestAbstract {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .build();
 
-        val mockFacetHolder = Mockito.mock(FacetHolder.class);
+        var mockFacetHolder = Mockito.mock(FacetHolder.class);
         Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
         pojo = new DomainObjectWithProblemInItsTitleMethod();
         //mockFacetHolder = mockery.mock(FacetHolder.class);
         //mockOwningAdapter = mockery.mock(ManagedObject.class);
-        val iconNameMethod = findMethodExactOrFail(DomainObjectWithProblemInItsTitleMethod.class, "title");
+        var iconNameMethod = findMethodExactOrFail(DomainObjectWithProblemInItsTitleMethod.class, "title");
 
         facet = (TitleFacetViaTitleMethod) TitleFacetViaTitleMethod
                 .create(iconNameMethod, mockFacetHolder)

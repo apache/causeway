@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Value;
-import lombok.val;
+
 
 @RestController()
 @RequestMapping("/graphql/object")
@@ -74,7 +74,7 @@ public class ResourceController {
             @PathVariable final String id,
             @PathVariable final String propertyId
     ) {
-        val responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.getResources().getResponseType();
 
         // TODO: perhaps a filter would factor this check out?
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
@@ -85,7 +85,7 @@ public class ResourceController {
                 .filter(Blob.class::isInstance)
                 .map(Blob.class::cast)
                 .map(blob -> {
-                    val bodyBuilder = ResponseEntity.ok()
+                    var bodyBuilder = ResponseEntity.ok()
                             .contentType(MediaType.asMediaType(MimeType.valueOf(blob.getMimeType().toString())));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder
@@ -103,7 +103,7 @@ public class ResourceController {
             @PathVariable final String id,
             @PathVariable final String propertyId
     ) {
-        val responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.getResources().getResponseType();
 
         // TODO: perhaps a filter would factor this check out?
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
@@ -114,7 +114,7 @@ public class ResourceController {
                 .filter(Clob.class::isInstance)
                 .map(Clob.class::cast)
                 .map(clob -> {
-                    val bodyBuilder = ResponseEntity.ok()
+                    var bodyBuilder = ResponseEntity.ok()
                             .contentType(MediaType.asMediaType(MimeType.valueOf(clob.getMimeType().toString())));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.getName()).build().toString())
@@ -131,7 +131,7 @@ public class ResourceController {
             @PathVariable final String id,
             @PathVariable final String _meta
     ) {
-        val responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.getResources().getResponseType();
 
         // TODO: perhaps a filter would factor this check out?
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
@@ -148,7 +148,7 @@ public class ResourceController {
                 .map(JaxbUtils::toStringUtf8)
                 .map(x -> x.replaceAll("(\r\n)", "\n"))
                 .map(gridText -> {
-                    val bodyBuilder = ResponseEntity.ok()
+                    var bodyBuilder = ResponseEntity.ok()
                             .contentType(MediaType.APPLICATION_XML);
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder
@@ -167,7 +167,7 @@ public class ResourceController {
             @PathVariable final String _meta
     ) {
         // TODO: perhaps a filter would factor this check out?
-        val responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.getResources().getResponseType();
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -179,8 +179,8 @@ public class ResourceController {
                 .map(ManagedObject::getIcon)
                 .filter(Objects::nonNull)
                 .map(objectIcon -> {
-                    val bytes = objectIcon.asBytes();
-                    val bodyBuilder = ResponseEntity.ok()
+                    var bytes = objectIcon.asBytes();
+                    var bodyBuilder = ResponseEntity.ok()
                             .contentType(MediaType.parseMediaType(objectIcon.getMimeType().getMimeType().toString()));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder
@@ -194,7 +194,7 @@ public class ResourceController {
 
     @Nullable
     private static Grid gridOf(ManagedObject managedObject) {
-        val facet = managedObject.getSpecification().getFacet(GridFacet.class);
+        var facet = managedObject.getSpecification().getFacet(GridFacet.class);
         return facet != null ? facet.getGrid(managedObject) : null;
     }
 

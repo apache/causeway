@@ -35,7 +35,6 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".TableColumnVisibilityServiceForSecman")
@@ -50,14 +49,14 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
 
     @Override
     public boolean hides(final Class<?> elementType, final String memberId) {
-        val me = factoryService.mixin(MeService.me.class, meService).act();
-        val permissionSet = me.getPermissionSet();
+        var me = factoryService.mixin(MeService.me.class, meService).act();
+        var permissionSet = me.getPermissionSet();
 
         final boolean granted = specificationLoader.specForType(elementType)
             .map(ObjectSpecification::getLogicalTypeName)
             .map(logicalTypeName->{
-                //XXX lombok val issue with lambda
-                val featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
+                //XXX lombok var issue with lambda
+                var featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);
                 return permissionSet.evaluate(featureId, ApplicationPermissionMode.VIEWING).isGranted();
             })
             .orElse(false); // do not grant if elementType has no logicalTypeName

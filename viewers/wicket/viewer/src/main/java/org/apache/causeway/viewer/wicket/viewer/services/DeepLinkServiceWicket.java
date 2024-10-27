@@ -45,7 +45,6 @@ import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * An implementation of {@link org.apache.causeway.applib.services.linking.DeepLinkService}
@@ -68,9 +67,9 @@ public class DeepLinkServiceWicket implements DeepLinkService {
     @Override
     public URI deepLinkFor(final @Nullable Object domainObject) {
 
-        val requestCycle = RequestCycle.get();
+        var requestCycle = RequestCycle.get();
 
-        val pageParameters = pageParametersFor(domainObject)
+        var pageParameters = pageParametersFor(domainObject)
                 .or(()->pageParametersFor(homePageResolverService.getHomePage()))
                 .orElseThrow(()->
                     new RuntimeException("Cannot create a deep link to domain object: " + domainObject));

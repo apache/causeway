@@ -34,7 +34,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
-import lombok.val;
+
 
 public class Department_IntegTest extends Abstract_IntegTest {
 
@@ -51,10 +51,10 @@ public class Department_IntegTest extends Abstract_IntegTest {
         Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
 
         // when
-        val response = request.get();
+        var response = request.get();
 
         // then
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
 
         assertThat(response)
                 .extracting(Response::getStatus)
@@ -75,10 +75,10 @@ public class Department_IntegTest extends Abstract_IntegTest {
         Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
 
         // when
-        val response = request.get();
+        var response = request.get();
 
         // then
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
 
         assertThat(response)
                 .extracting(Response::getStatus)
@@ -99,10 +99,10 @@ public class Department_IntegTest extends Abstract_IntegTest {
         Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
 
         // when
-        val response = request.get();
+        var response = request.get();
 
         // then
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
 
         assertThat(response)
                 .extracting(Response::getStatus)
@@ -118,10 +118,10 @@ public class Department_IntegTest extends Abstract_IntegTest {
         Invocation.Builder request = restfulClient.request("/objects/university.dept.Department/9999999");
 
         // when
-        val response = request.get();
+        var response = request.get();
 
         // then
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
 
         assertThat(response)
                 .extracting(Response::getStatus)

@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-import lombok.val;
-
 class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -41,7 +39,7 @@ extends FacetFactoryTestAbstract {
 
     private void processSemantics(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processSemantics(processMethodContext, actionIfAny);
     }
 

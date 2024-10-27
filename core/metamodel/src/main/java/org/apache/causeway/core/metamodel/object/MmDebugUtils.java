@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiati
 
 import lombok.Builder;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -60,7 +59,7 @@ public final class MmDebugUtils {
     public static ParamUpdateData paramUpdateDataFor(
             final int parameterIndex,
             final ParameterNegotiationModel parameterNegotiationModel) {
-        val param = parameterNegotiationModel.getParamModels().getElseFail(parameterIndex);
+        var param = parameterNegotiationModel.getParamModels().getElseFail(parameterIndex);
         return ParamUpdateData.builder()
                 .index(parameterIndex)
                 .action(parameterNegotiationModel.getHead().getMetaModel().getId())

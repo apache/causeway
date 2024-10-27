@@ -36,7 +36,7 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.NoPermissionChecks;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -58,7 +58,7 @@ class CustomContextWithNoPermissionChecksTest extends CausewayIntegrationTestAbs
     @Test
     void shouldRunWithDefaultContext() {
 
-        val iaCtx = interactionService.currentInteractionContextElseFail();
+        var iaCtx = interactionService.currentInteractionContextElseFail();
         assertThat(iaCtx.getUser().hasSudoAccessAllRole()).isTrue();
     }
 

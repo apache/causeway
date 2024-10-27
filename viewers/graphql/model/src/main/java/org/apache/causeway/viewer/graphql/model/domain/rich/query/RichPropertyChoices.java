@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Proper
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
+
 
 public class RichPropertyChoices extends Element {
 
@@ -46,10 +46,10 @@ public class RichPropertyChoices extends Element {
         super(context);
         this.propertyInteractor = propertyInteractor;
 
-        val otoa = propertyInteractor.getObjectMember();
+        var otoa = propertyInteractor.getObjectMember();
         if (otoa.hasChoices()) {
-            val elementType = otoa.getElementType();
-            val fieldBuilder = newFieldDefinition()
+            var elementType = otoa.getElementType();
+            var fieldBuilder = newFieldDefinition()
                     .name("choices")
                     .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, SchemaType.RICH)));
             propertyInteractor.addGqlArgument(otoa, fieldBuilder, TypeMapper.InputContext.CHOICES);
@@ -62,17 +62,17 @@ public class RichPropertyChoices extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
             return null;
         }
 
-        val association = propertyInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var association = propertyInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val choicesManagedObject = association.getChoices(managedObject, InteractionInitiatedBy.USER);
+        var choicesManagedObject = association.getChoices(managedObject, InteractionInitiatedBy.USER);
         return choicesManagedObject.stream()
                     .map(ManagedObject::getPojo)
                     .collect(Collectors.toList());

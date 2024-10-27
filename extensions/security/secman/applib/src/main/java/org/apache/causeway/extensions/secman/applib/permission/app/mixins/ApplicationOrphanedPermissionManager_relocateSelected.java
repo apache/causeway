@@ -40,7 +40,7 @@ import org.apache.causeway.extensions.secman.applib.permission.app.mixins.Applic
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  *
@@ -86,11 +86,11 @@ public class ApplicationOrphanedPermissionManager_relocateSelected {
             final ApplicationPermission permission,
             final String targetNamespace) {
 
-        val appFeatureId = ApplicationFeatureId.newFeature(
+        var appFeatureId = ApplicationFeatureId.newFeature(
                 permission.getFeatureSort(),
                 permission.getFeatureFqn());
 
-        val relocatedFqn = appFeatureId
+        var relocatedFqn = appFeatureId
                 .withNamespace(targetNamespace)
                 .getFullyQualifiedName();
 

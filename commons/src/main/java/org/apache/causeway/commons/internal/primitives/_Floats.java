@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -56,7 +55,7 @@ public class _Floats {
      *      if {@code decimal} cannot not be approximated by {@link Double}.
      */
     public float convertToFloat(final @NonNull BigDecimal decimal) {
-        val floatValue = decimal.floatValue();
+        var floatValue = decimal.floatValue();
         // overflow detection
         if(!Float.isFinite(floatValue)) {
             throw new ArithmeticException("non finite BigDecimal to float conversion");

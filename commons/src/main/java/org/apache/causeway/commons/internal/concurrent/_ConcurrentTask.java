@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -55,7 +54,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     protected synchronized void preCall() {
         if(startedAtNanos>0L) {
-            val msg = String.format(
+            var msg = String.format(
                     "Cannot start task '%s' again, was already started before",
                     getName());
             throw new IllegalStateException(msg);
@@ -85,7 +84,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
             preCall();
             try {
-                val completedWith = innerCall();
+                var completedWith = innerCall();
                 postCall(completedWith, /*failedWith*/ null);
             } catch (Throwable e) {
                 postCall(/*completedWith*/ null, e);
@@ -104,7 +103,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     public _ConcurrentTask<T> withName(final @NonNull String name) {
 
-        val delegate = this;
+        var delegate = this;
 
         return new _ConcurrentTask<T>() {
 
@@ -124,7 +123,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     public _ConcurrentTask<T> withName(final @NonNull Supplier<String> nameSupplier) {
 
-        val delegate = this;
+        var delegate = this;
 
         return new _ConcurrentTask<T>() {
 
@@ -187,7 +186,7 @@ public abstract class _ConcurrentTask<T> implements Runnable {
      * see https://stackoverflow.com/a/36228195/9269480
      */
     private void runWithContextClassLoader(final ClassLoader classLoader, final Runnable runnable) {
-        val originalContextClassLoader = Thread.currentThread().getContextClassLoader();
+        var originalContextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(classLoader);
             runnable.run();

@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
+
 
 public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -52,7 +52,7 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
@@ -77,13 +77,13 @@ implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        val isValidateFromClause =
+        var isValidateFromClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isFromClause();
         if (isValidateFromClause) {
             programmingModel.addValidator(new MetaModelValidatorForJdoqlFromClause(getMetaModelContext()), Marker.JDO);
         }
 
-        val isValidateVariablesClause =
+        var isValidateVariablesClause =
                 getConfiguration().getCore().getMetaModel().getValidator().getJdoql().isVariablesClause();
         if (isValidateVariablesClause) {
             programmingModel.addValidator(new MetaModelValidatorForJdoqlVariablesClause(getMetaModelContext()), Marker.JDO);

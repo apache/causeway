@@ -42,8 +42,6 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
-import lombok.val;
-
 /**
  * Default implementation of {@link ServiceRegistry}.
  *
@@ -76,7 +74,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public <T> Can<T> select(final Class<T> type, final Annotation[] qualifiers) {
-        val iocContainer = causewaySystemEnvironment.getIocContainer();
+        var iocContainer = causewaySystemEnvironment.getIocContainer();
         return iocContainer
                 .select(type, qualifiers);
     }
@@ -92,7 +90,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
             _Lazy.threadSafe(this::enumerateContributingDomainServices);
 
     private Map<String, _SingletonBeanProvider> enumerateContributingDomainServices() {
-        val managedBeanAdapterByName = _Maps.<String, _SingletonBeanProvider>newHashMap();
+        var managedBeanAdapterByName = _Maps.<String, _SingletonBeanProvider>newHashMap();
 
         causewaySystemEnvironment.getIocContainer()
         .streamAllBeans()

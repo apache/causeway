@@ -36,8 +36,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.val;
-
 public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @Inject protected FixtureScripts fixtureScripts;
@@ -62,10 +60,10 @@ public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTe
 
         assertThat(fixtureResults.size()).isEqualTo(8);
 
-        val resultToTest = new ArrayList<DemoToDoItemRowHandler2>();
-        for (val fixtureResult : fixtureResults){
+        var resultToTest = new ArrayList<DemoToDoItemRowHandler2>();
+        for (var fixtureResult : fixtureResults){
 
-            val rowHandler = (DemoToDoItemRowHandler2) fixtureResult.getObject();
+            var rowHandler = (DemoToDoItemRowHandler2) fixtureResult.getObject();
             resultToTest.add(rowHandler);
         }
 

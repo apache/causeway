@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
-import lombok.val;
-
 public abstract class MandatoryFacetForPropertyAnnotation
 extends MandatoryFacetAbstract {
 
@@ -40,7 +38,7 @@ extends MandatoryFacetAbstract {
             return null;
         }
 
-        val returnType = method.getReturnType();
+        var returnType = method.getReturnType();
         if (returnType.isPrimitive()) {
             return java.util.Optional.of(new MandatoryFacetForPropertyAnnotation.Primitive(holder));
         }

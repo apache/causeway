@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,12 +37,12 @@ public class ClientConversationLogger implements ClientConversationFilter {
     public void onRequest(String endpoint, String method, String acceptHeaderParsing,
             Map<String, List<String>> headers, String body) {
 
-        val headersAsText = headers.entrySet().stream()
+        var headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS REQUEST -------------\n")
         .append("uri: ").append(endpoint).append("\n")
@@ -58,12 +58,12 @@ public class ClientConversationLogger implements ClientConversationFilter {
 
     @Override
     public void onResponse(int httpReturnCode, Map<String, List<String>> headers, String body) {
-        val headersAsText = headers.entrySet().stream()
+        var headersAsText = headers.entrySet().stream()
                 .map(this::toKeyValueString)
                 .map(this::obscureAuthHeader)
                 .collect(Collectors.joining(",\n\t"));
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("\n")
         .append("---------- JAX-RS RESPONSE -------------\n")
         .append("http-return-code: \n\t").append(httpReturnCode).append("\n")

@@ -31,7 +31,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  * Initializes the <i>Session Log</i> extension when the application is first bootstrapped.
@@ -59,7 +59,7 @@ public class SessionLogServiceInitializer implements MetamodelListener {
         }
 
         interactionService.runAnonymous(() -> {
-            val timestamp = clockService.getClock().nowAsJavaSqlTimestamp();
+            var timestamp = clockService.getClock().nowAsJavaSqlTimestamp();
             sessionLogEntryRepository.logoutAllSessions(timestamp);
         });
     }

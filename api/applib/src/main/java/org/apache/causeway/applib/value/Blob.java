@@ -54,7 +54,6 @@ import org.apache.causeway.commons.io.ZipUtils.ZipOptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -103,7 +102,7 @@ public final class Blob implements NamedWithMimeType {
      * @return new {@link Blob}
      */
     public static Blob of(final String name, final CommonMimeType mimeType, final byte[] content) {
-        val fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
+        var fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
         return new Blob(fileName, mimeType.getMimeType(), content);
     }
 
@@ -219,7 +218,7 @@ public final class Blob implements NamedWithMimeType {
         if(file==null) {
             return; // just ignore
         }
-        try(val os = new FileOutputStream(file)){
+        try(var os = new FileOutputStream(file)){
             writeBytesTo(os);
         }
     }
@@ -246,9 +245,9 @@ public final class Blob implements NamedWithMimeType {
      * @param zipEntryNameIfAny - if null or empty this Blob's name is used
      */
     public Blob zip(final @Nullable String zipEntryNameIfAny) {
-        val zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
+        var zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
             .orElseGet(this::getName);
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var zipBuilder = ZipUtils.zipEntryBuilder();
         zipBuilder.add(zipEntryName, getBytes());
         return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipBuilder.toBytes());
     }
@@ -358,18 +357,18 @@ public final class Blob implements NamedWithMimeType {
      */
     public Optional<BufferedImage> asImage() {
 
-        val bytes = getBytes();
+        var bytes = getBytes();
         if(bytes == null) {
             return Optional.empty();
         }
 
-        val mimeType = getMimeType();
+        var mimeType = getMimeType();
         if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
             return Optional.empty();
         }
 
         try {
-            val img = _Images.fromBytes(getBytes());
+            var img = _Images.fromBytes(getBytes());
             return Optional.ofNullable(img);
         } catch (Exception e) {
             log.error("failed to read image data", e);

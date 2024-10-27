@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGrou
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class ActionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -43,8 +41,8 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val actionLayoutIfAny = processMethodContext
+        var facetHolder = processMethodContext.getFacetHolder();
+        var actionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ActionLayout.class,
                         () -> ValidationFailureUtils
@@ -85,14 +83,14 @@ extends FacetFactoryAbstract {
                 .create(actionLayoutIfAny, getConfiguration(), facetHolder));
 
         // position
-        val actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
+        var actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder)
                 .orElseGet(()->new ActionPositionFacetFallback(facetHolder));
 
         addFacet(actionPositionFacet);
 
         // redirectPolicy
-        val redirectFacet = RedirectFacetFromActionLayoutAnnotation
+        var redirectFacet = RedirectFacetFromActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder)
                 .orElseGet(()->new RedirectFacetFallback(facetHolder));
         addFacet(redirectFacet);

@@ -24,7 +24,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -36,7 +36,7 @@ public final class JsonWriterUtil {
     }
 
     public String jsonFor(final Object object, @Nullable final CausewaySystemEnvironment systemEnvironment) {
-        val prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
+        var prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
                 ? JsonMapper.PrettyPrinting.ENABLE
                 : JsonMapper.PrettyPrinting.DISABLE;
         return jsonFor(object, prettyPrinting);

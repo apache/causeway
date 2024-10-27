@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link ServiceInjector}.
@@ -58,8 +57,8 @@ public class ServiceInjectorDefault implements ServiceInjector {
         if(domainObject!=null) {
             if(domainObject instanceof ManagedObject) {
                 // in case a ManagedObject was passed instead of the pojo.
-                val managedObject = (ManagedObject) domainObject;
-                val actualDomainObject = managedObject.getPojo();
+                var managedObject = (ManagedObject) domainObject;
+                var actualDomainObject = managedObject.getPojo();
                 if(actualDomainObject != null) {
                     injectInto(actualDomainObject);
                 }

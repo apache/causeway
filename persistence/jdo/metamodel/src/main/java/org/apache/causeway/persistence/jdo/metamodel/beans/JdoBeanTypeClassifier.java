@@ -29,7 +29,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 
-import lombok.val;
+
 
 /**
  * ServiceLoader plugin, classifies PersistenceCapable types into BeanSort.ENTITY.
@@ -40,11 +40,11 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
     @Override
     public CausewayBeanMetaData classify(final Class<?> type) {
 
-        val persistenceCapableAnnot = _Annotations
+        var persistenceCapableAnnot = _Annotations
                 .synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
         if(persistenceCapableAnnot.isPresent()) {
 
-            val embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
+            var embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
             // Whether objects of this type can only be embedded,
             // hence have no ID that binds them to the persistence layer
             final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
@@ -57,12 +57,12 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
 
             // don't trample over the @Named(=...) if present
             if(logicalType.getLogicalTypeName().equals(type.getName())) {
-                val schema = persistenceCapableAnnot.get().schema();
+                var schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {
 
-                    val table = persistenceCapableAnnot.get().table();
+                    var table = persistenceCapableAnnot.get().table();
 
-                    val logicalTypeName = String.format("%s.%s",
+                    var logicalTypeName = String.format("%s.%s",
                             schema.toLowerCase(Locale.ROOT),
                             _Strings.isNotEmpty(table)
                                 ? table

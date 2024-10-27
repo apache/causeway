@@ -78,7 +78,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -132,7 +131,7 @@ extends
 
     default ObjectMember getMemberElseFail(final String memberId) {
         return getMember(memberId).orElseThrow(()->{
-            val msg = "Member '" + memberId + "' does not correspond "
+            var msg = "Member '" + memberId + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);
         });
@@ -147,8 +146,8 @@ extends
 
     default ObjectMember getMemberElseFail(final @NonNull ResolvedMethod method) {
         return getMember(method).orElseThrow(()->{
-            val methodName = method.name();
-            val msg = "Method '" + methodName + "' does not correspond "
+            var methodName = method.name();
+            var msg = "Method '" + methodName + "' does not correspond "
                     + "to any of the object's fields or actions.";
             return new UnsupportedOperationException(msg);
         });
@@ -555,14 +554,14 @@ extends
      * @since 2.0
      */
     default Stream<FacetHolder> streamFacetHolders(){
-        val self = Stream.of(this);
-        val actions = streamAnyActions(MixedIn.EXCLUDED);
-        val actionParameters = streamAnyActions(MixedIn.EXCLUDED)
+        var self = Stream.of(this);
+        var actions = streamAnyActions(MixedIn.EXCLUDED);
+        var actionParameters = streamAnyActions(MixedIn.EXCLUDED)
                 .flatMap(action->action.getParameterCount()>0
                         ? action.getParameters().stream()
                         : Stream.empty());
-        val properties = streamProperties(MixedIn.EXCLUDED);
-        val collections = streamCollections(MixedIn.EXCLUDED);
+        var properties = streamProperties(MixedIn.EXCLUDED);
+        var collections = streamCollections(MixedIn.EXCLUDED);
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
     }
@@ -587,7 +586,7 @@ extends
      * @since 2.0
      */
     default ManagedObject createObject() {
-        val managedObject = getObjectManager().createObject(this);
+        var managedObject = getObjectManager().createObject(this);
         return managedObject;
     }
 
@@ -601,7 +600,7 @@ extends
         }
 
         if(!isPojoCompatible(pojo)) {
-            val expectedType = getCorrespondingClass();
+            var expectedType = getCorrespondingClass();
             throw _Exceptions.illegalArgument(
                     "Pojo not compatible with ObjectSpecification, " +
                     "objectSpec.correspondingClass = %s, " +
@@ -612,7 +611,7 @@ extends
     }
 
     default public boolean isAssignableFrom(final Class<?> actualType) {
-        val expectedType = getCorrespondingClass();
+        var expectedType = getCorrespondingClass();
         if(expectedType.isAssignableFrom(actualType)
                 || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
             return true;
@@ -626,15 +625,15 @@ extends
             return true;
         }
 
-        val expectedType = getCorrespondingClass();
-        val actualType = pojo.getClass();
+        var expectedType = getCorrespondingClass();
+        var actualType = pojo.getClass();
 
         if(expectedType.isAssignableFrom(actualType)
                 || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
             return true;
         }
 
-        val elementSpec = getElementSpecification()
+        var elementSpec = getElementSpecification()
                 .orElse(this);
         return _NullSafe.streamAutodetect(pojo)
                 .filter(element->!Objects.equals(element, pojo)) // to prevent infinite recursion depth
@@ -671,8 +670,8 @@ extends
             final @NonNull ObjectSpecification a,
             final @NonNull ObjectSpecification b) {
 
-        val cls_a = a.getCorrespondingClass();
-        val cls_b = b.getCorrespondingClass();
+        var cls_a = a.getCorrespondingClass();
+        var cls_b = b.getCorrespondingClass();
         if(cls_a.isAssignableFrom(cls_b)) {
             return a;
         }

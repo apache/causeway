@@ -36,7 +36,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -94,7 +93,7 @@ public final class _Lists {
         if(_NullSafe.isEmpty(list)) {
             return Collections.singletonList(element);
         }
-        val resultList = new ArrayList<T>(list.size() + 1);
+        var resultList = new ArrayList<T>(list.size() + 1);
         resultList.addAll(list);
         resultList.add(element);
         return Collections.unmodifiableList(resultList);
@@ -105,8 +104,8 @@ public final class _Lists {
      * list1 and list2.
      */
     public <T> List<T> concat(final @Nullable List<T> list1, final @Nullable List<T> list2) {
-        val isEmpty1 = _NullSafe.isEmpty(list1);
-        val isEmpty2 = _NullSafe.isEmpty(list2);
+        var isEmpty1 = _NullSafe.isEmpty(list1);
+        var isEmpty2 = _NullSafe.isEmpty(list2);
 
         if(isEmpty1) {
             return isEmpty2
@@ -119,7 +118,7 @@ public final class _Lists {
             return Collections.unmodifiableList(new ArrayList<T>(list1));
         }
 
-        val resultList = new ArrayList<T>(list1.size() + list2.size());
+        var resultList = new ArrayList<T>(list1.size() + list2.size());
         resultList.addAll(list1);
         resultList.addAll(list2);
         return Collections.unmodifiableList(resultList);
@@ -151,14 +150,14 @@ public final class _Lists {
     }
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1) {
-        val list = new ArrayList<T>(2);
+        var list = new ArrayList<T>(2);
         list.add(e0);
         list.add(e1);
         return Collections.unmodifiableList(list);
     }
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2) {
-        val list = new ArrayList<T>(3);
+        var list = new ArrayList<T>(3);
         list.add(e0);
         list.add(e1);
         list.add(e2);
@@ -166,7 +165,7 @@ public final class _Lists {
     }
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3) {
-        val list = new ArrayList<T>(4);
+        var list = new ArrayList<T>(4);
         list.add(e0);
         list.add(e1);
         list.add(e2);
@@ -176,7 +175,7 @@ public final class _Lists {
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
             final @Nullable T e4) {
-        val list = new ArrayList<T>(5);
+        var list = new ArrayList<T>(5);
         list.add(e0);
         list.add(e1);
         list.add(e2);
@@ -187,7 +186,7 @@ public final class _Lists {
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
             final @Nullable T e4, final @Nullable T e5) {
-        val list = new ArrayList<T>(6);
+        var list = new ArrayList<T>(6);
         list.add(e0);
         list.add(e1);
         list.add(e2);
@@ -199,7 +198,7 @@ public final class _Lists {
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
             final @Nullable T e4, final @Nullable T e5, final @Nullable T e6) {
-        val list = new ArrayList<T>(7);
+        var list = new ArrayList<T>(7);
         list.add(e0);
         list.add(e1);
         list.add(e2);
@@ -212,7 +211,7 @@ public final class _Lists {
 
     public <T> List<T> ofNullable(final @Nullable T e0, final @Nullable T e1, final @Nullable T e2, final @Nullable T e3,
             final @Nullable T e4, final @Nullable T e5, final @Nullable T e6, final @Nullable T e7) {
-        val list = new ArrayList<T>(8);
+        var list = new ArrayList<T>(8);
         list.add(e0);
         list.add(e1);
         list.add(e2);

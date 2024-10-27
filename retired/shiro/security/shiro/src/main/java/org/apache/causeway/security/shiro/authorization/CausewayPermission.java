@@ -27,8 +27,6 @@ import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 
-import lombok.val;
-
 /**
  * @since 1.x {@index}
  */
@@ -106,15 +104,15 @@ public class CausewayPermission extends WildcardPermission {
         if(permissionGroup == null) {
             return false;
         }
-        val vetoMultimap = CausewayPermission.VETOING_PERMISSIONS.get();
+        var vetoMultimap = CausewayPermission.VETOING_PERMISSIONS.get();
         return vetoMultimap.getOrElseEmpty(permissionGroup)
             .stream()
             .anyMatch(vetoingPermission->vetoingPermission.impliesWithoutVeto(permission));
     }
 
     private void addVeto(CausewayPermission vetoingPermission) {
-        val permissionGroup = vetoingPermission.getPermissionGroup();
-        val vetoMultimap = CausewayPermission.VETOING_PERMISSIONS.get();
+        var permissionGroup = vetoingPermission.getPermissionGroup();
+        var vetoMultimap = CausewayPermission.VETOING_PERMISSIONS.get();
         vetoMultimap.putElement(permissionGroup, vetoingPermission);
     }
 

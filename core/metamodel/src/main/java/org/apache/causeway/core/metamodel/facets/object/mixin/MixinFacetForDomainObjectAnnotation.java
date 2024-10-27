@@ -26,8 +26,6 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.val;
-
 public class MixinFacetForDomainObjectAnnotation
 extends MixinFacetAbstract {
 
@@ -41,7 +39,7 @@ extends MixinFacetAbstract {
         .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
         .map(domainObject -> {
 
-            val mixinContructors =
+            var mixinContructors =
                     ProgrammingModelConstants.MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
                     .getConstructors(candidateMixinType);
 

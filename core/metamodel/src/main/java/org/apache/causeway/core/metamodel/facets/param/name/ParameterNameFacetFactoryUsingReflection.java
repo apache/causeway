@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
-
 /**
  * Uses JDK8+ reflection API to derive the parameter name from the code.
  * <p>
@@ -55,16 +53,16 @@ extends FacetFactoryAbstract {
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
 
-        val parameterName = processParameterContext.getParameterName();
+        var parameterName = processParameterContext.getParameterName();
 
         // if not compiled with -parameters flag or synthetic, then ignore
-        val argXMatcher = argXPattern.matcher(parameterName);
+        var argXMatcher = argXPattern.matcher(parameterName);
         if (argXMatcher.matches()){
             return;
         }
 
-        val naturalName = _Strings.asNaturalName.apply(parameterName);
-        val facetHolder = processParameterContext.getFacetHolder();
+        var naturalName = _Strings.asNaturalName.apply(parameterName);
+        var facetHolder = processParameterContext.getFacetHolder();
 
         FacetUtil.addFacet(
                 new NamedFacetForParameterUsingReflection(naturalName, facetHolder));

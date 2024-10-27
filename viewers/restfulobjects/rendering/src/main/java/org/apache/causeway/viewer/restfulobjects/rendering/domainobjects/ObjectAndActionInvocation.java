@@ -38,7 +38,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectAndActionInvocation {
@@ -69,7 +69,7 @@ public class ObjectAndActionInvocation {
      */
     public ActionResultRepresentation.ResultType determineResultType() {
 
-        val returnTypeSpec = this.action.getReturnType();
+        var returnTypeSpec = this.action.getReturnType();
 
         if (returnTypeSpec.getCorrespondingClass() == void.class) {
             return ActionResultRepresentation.ResultType.VOID;
@@ -78,14 +78,14 @@ public class ObjectAndActionInvocation {
         //FIXME following decision tree should not depend on the returned runtime types
         // but on the returnTypeSpec,
         // which is introspected eagerly on application start and should be the binding contract
-        val actualReturnTypeSpec = returnedAdapter.getSpecification();
+        var actualReturnTypeSpec = returnedAdapter.getSpecification();
 
         if (ManagedObjects.isPacked(returnedAdapter)
                 || isVector(actualReturnTypeSpec)) {
 
             // though not strictly required, try to be consistent:  empty list vs populated list
             if(elementAdapters.get().isEmpty()) {
-                val isElementTypeAScalarValue = returnTypeSpec.getElementSpecification()
+                var isElementTypeAScalarValue = returnTypeSpec.getElementSpecification()
                 .map(elementSpec->isScalarValue(elementSpec))
                 .orElse(false);
                 return isElementTypeAScalarValue
@@ -94,7 +94,7 @@ public class ObjectAndActionInvocation {
             }
 
             // inspect the collection's elements
-            val isListOfDomainObjects = streamElementAdapters()
+            var isListOfDomainObjects = streamElementAdapters()
                     .allMatch(elementAdapter->!isScalarValue(elementAdapter.getSpecification()));
 
             return isListOfDomainObjects

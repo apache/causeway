@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class MemberSupportFacetFactoryAbstract
 extends MemberAndPropertySupportFacetFactoryAbstract {
@@ -52,9 +51,9 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
         if(mixinSupportExplicitlyAdded
                 && !processMethodContext.isMixinMain()) {
             // stop processing if it is not an allowed property or collection
-            val isProp = getFeatureTypes().contains(FeatureType.PROPERTY)
+            var isProp = getFeatureTypes().contains(FeatureType.PROPERTY)
                     && processMethodContext.getFeatureType().isProperty();
-            val isColl = getFeatureTypes().contains(FeatureType.COLLECTION)
+            var isColl = getFeatureTypes().contains(FeatureType.COLLECTION)
                     && processMethodContext.getFeatureType().isCollection();
             if(!(isProp
                     || isColl)) {
@@ -62,10 +61,10 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
             }
         }
 
-        val getterMethod = processMethodContext.getMethod();
-        val elementType = getterMethod.getReturnType(); // in case of an action, is never used
+        var getterMethod = processMethodContext.getMethod();
+        var elementType = getterMethod.getReturnType(); // in case of an action, is never used
 
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+        var methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::memberSupportCandidates);
 
         search(processMethodContext,

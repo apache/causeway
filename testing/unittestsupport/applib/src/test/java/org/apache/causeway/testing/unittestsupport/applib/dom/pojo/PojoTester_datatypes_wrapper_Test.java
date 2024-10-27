@@ -30,15 +30,13 @@ import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.IntWr
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.LongWrapperHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ShortWrapperHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_wrapper_Test {
 
     @Test
     public void exercise_byte_wrapper() {
 
         // given
-        val holder = new ByteWrapperHolder();
+        var holder = new ByteWrapperHolder();
         Assertions.assertThat(holder).extracting(ByteWrapperHolder::getSomeByteWrapper).isNull();
 
         // when
@@ -54,7 +52,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_byte_wrapper_broken() {
 
         // given
-        val holder = new ByteWrapperHolder().butBroken();
+        var holder = new ByteWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(ByteWrapperHolder::getSomeByteWrapper).isNull();
 
         // when, then
@@ -68,7 +66,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_short_wrapper() {
 
         // given
-        val holder = new ShortWrapperHolder();
+        var holder = new ShortWrapperHolder();
         Assertions.assertThat(holder).extracting(ShortWrapperHolder::getSomeShortWrapper).isNull();
 
         // when
@@ -84,7 +82,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_short_wrapper_broken() {
 
         // given
-        val holder = new ShortWrapperHolder().butBroken();
+        var holder = new ShortWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(ShortWrapperHolder::getSomeShortWrapper).isNull();
 
         // when, then
@@ -98,7 +96,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_int_wrapper() {
 
         // given
-        val holder = new IntWrapperHolder();
+        var holder = new IntWrapperHolder();
         Assertions.assertThat(holder).extracting(IntWrapperHolder::getSomeIntWrapper).isNull();
 
         // when
@@ -114,7 +112,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_int_wrapper_broken() {
 
         // given
-        val holder = new IntWrapperHolder().butBroken();
+        var holder = new IntWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(IntWrapperHolder::getSomeIntWrapper).isNull();
 
         // when, then
@@ -128,7 +126,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_long_wrapper() {
 
         // given
-        val holder = new LongWrapperHolder();
+        var holder = new LongWrapperHolder();
         Assertions.assertThat(holder).extracting(LongWrapperHolder::getSomeLongWrapper).isNull();
 
         // when
@@ -144,7 +142,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_long_wrapper_broken() {
 
         // given
-        val holder = new LongWrapperHolder().butBroken();
+        var holder = new LongWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(LongWrapperHolder::getSomeLongWrapper).isNull();
 
         // when, then
@@ -158,7 +156,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_float_wrapper() {
 
         // given
-        val holder = new FloatWrapperHolder();
+        var holder = new FloatWrapperHolder();
         Assertions.assertThat(holder).extracting(FloatWrapperHolder::getSomeFloatWrapper).isNull();
 
         // when
@@ -174,7 +172,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_float_wrapper_broken() {
 
         // given
-        val holder = new FloatWrapperHolder().butBroken();
+        var holder = new FloatWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(FloatWrapperHolder::getSomeFloatWrapper).isNull();
 
         // when, then
@@ -188,7 +186,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_double_wrapper() {
 
         // given
-        val holder = new DoubleWrapperHolder();
+        var holder = new DoubleWrapperHolder();
         Assertions.assertThat(holder).extracting(DoubleWrapperHolder::getSomeDoubleWrapper).isNull();
 
         // when
@@ -204,7 +202,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_double_wrapper_broken() {
 
         // given
-        val holder = new DoubleWrapperHolder().butBroken();
+        var holder = new DoubleWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(DoubleWrapperHolder::getSomeDoubleWrapper).isNull();
 
         // when, then
@@ -218,7 +216,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_boolean_wrapper() {
 
         // given
-        val holder = new BooleanWrapperHolder();
+        var holder = new BooleanWrapperHolder();
         Assertions.assertThat(holder).extracting(BooleanWrapperHolder::getSomeBooleanWrapper).isNull();
 
         // when
@@ -234,7 +232,7 @@ public class PojoTester_datatypes_wrapper_Test {
     public void exercise_boolean_wrapper_broken() {
 
         // given
-        val holder = new BooleanWrapperHolder().butBroken();
+        var holder = new BooleanWrapperHolder().butBroken();
         Assertions.assertThat(holder).extracting(BooleanWrapperHolder::getSomeBooleanWrapper).isNull();
 
         // when, then

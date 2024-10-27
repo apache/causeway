@@ -24,15 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.val;
-
 class SyncControl_Test {
 
     @Test
     public void defaults() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.control();
 
         // then
         assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
@@ -41,7 +39,7 @@ class SyncControl_Test {
     @Test
     public void check_rules() throws Exception {
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.control();
 
         // when
         control.withCheckRules();
@@ -54,7 +52,7 @@ class SyncControl_Test {
     public void skip_rules() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.control();
 
         // when
         control.withSkipRules();
@@ -67,7 +65,7 @@ class SyncControl_Test {
     public void execute() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.control();
 
         // when
         control.withExecute();
@@ -80,7 +78,7 @@ class SyncControl_Test {
     public void no_execute() throws Exception {
 
         // given
-        val control = SyncControl.control();
+        var control = SyncControl.control();
 
         // when
         control.withNoExecute();
@@ -94,7 +92,7 @@ class SyncControl_Test {
 
         ExceptionHandler exceptionHandler = ex -> null;
 
-        val control = SyncControl.control()
+        var control = SyncControl.control()
                 .withNoExecute()
                 .withSkipRules()
                 .with(exceptionHandler);

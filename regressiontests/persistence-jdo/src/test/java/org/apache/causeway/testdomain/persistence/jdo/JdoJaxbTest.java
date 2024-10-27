@@ -31,7 +31,7 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -50,8 +50,8 @@ class JdoJaxbTest extends RegressionTestWithJdoFixtures {
     @Test
     void inventoryJaxbVm_shouldRoundtripProperly() {
 
-        val xml = call(()->{
-            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
+        var xml = call(()->{
+            var inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             // assert initial reference is populated as expected
             testFixtures.assertPopulatedWithDefaults(inventoryJaxbVm);
             // start round-trip
@@ -60,7 +60,7 @@ class JdoJaxbTest extends RegressionTestWithJdoFixtures {
 
         run(()->{
             //debug System.err.printf("%s%n", xml);
-            val recoveredVm =
+            var recoveredVm =
                     serviceInjector.injectServicesInto(
                             jaxbService.fromXml(JdoInventoryJaxbVm.class, xml));
             testFixtures.assertPopulatedWithDefaults(recoveredVm);

@@ -45,7 +45,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -233,7 +232,7 @@ public class _Multimaps {
 
             @Override
             public List<V> getOrElseNew(final K key) {
-                val collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
+                var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
                 return collection;
             }
 
@@ -275,7 +274,7 @@ public class _Multimaps {
 
             @Override
             public Set<V> getOrElseNew(final K key) {
-                val collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
+                var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
                 return collection;
             }
 
@@ -316,7 +315,7 @@ public class _Multimaps {
 
             @Override
             public Map<K2, V> getOrElseNew(final K1 key) {
-                val elementMap = delegate.computeIfAbsent(key, __->elementMapFactory.get());
+                var elementMap = delegate.computeIfAbsent(key, __->elementMapFactory.get());
                 return elementMap;
             }
 

@@ -49,8 +49,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.val;
-
 /**
  * Provides reflective access to an action or a field on a domain object.
  */
@@ -237,7 +235,7 @@ public interface ObjectMember extends ObjectFeature {
 
     public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
 
-        val memberById = _Maps.<String, T>newLinkedHashMap();
+        var memberById = _Maps.<String, T>newLinkedHashMap();
         members.forEach(member->{
             // if there are multiple members with same id, just disregard
             memberById.put(member.getId(), member);
@@ -291,7 +289,7 @@ public interface ObjectMember extends ObjectFeature {
             return Optional.empty();
         }
 
-        val pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
+        var pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
                 _InstanceUtil.createInstance(sortedBy));
         getMetaModelContext().getServiceInjector().injectServicesInto(pojoComparator);
 
@@ -307,8 +305,8 @@ public interface ObjectMember extends ObjectFeature {
 
             return (m1, m2) -> {
 
-                val orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
-                val orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
+                var orderFacet1 = m1==null ? null : m1.getFacet(LayoutOrderFacet.class);
+                var orderFacet2 = m2==null ? null : m2.getFacet(LayoutOrderFacet.class);
 
                 if (orderFacet1 == null && orderFacet2 == null) {
                     return 0;
@@ -322,10 +320,10 @@ public interface ObjectMember extends ObjectFeature {
 
                 if (ensureInSameGroup) {
 
-                    val groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
-                    val groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
-                    val groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
-                    val groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
+                    var groupFacet1 = m1.getFacet(LayoutGroupFacet.class);
+                    var groupFacet2 = m2.getFacet(LayoutGroupFacet.class);
+                    var groupId1 = _Strings.nullToEmpty(groupFacet1==null ? null : groupFacet1.getGroupId());
+                    var groupId2 = _Strings.nullToEmpty(groupFacet2==null ? null : groupFacet2.getGroupId());
 
                     if(!Objects.equals(groupId1, groupId2)) {
                         throw _Exceptions.illegalArgument(

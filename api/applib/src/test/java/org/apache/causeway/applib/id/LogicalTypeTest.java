@@ -26,14 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.causeway.applib.SomeDomainClass;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
-import lombok.val;
-
 class LogicalTypeTest {
 
     @Test
     void eager() {
         
-        val original = LogicalType.fqcn(SomeDomainClass.class);
+        var original = LogicalType.fqcn(SomeDomainClass.class);
         
         _SerializationTester.assertEqualsOnRoundtrip(original);
         
@@ -49,7 +47,7 @@ class LogicalTypeTest {
     @Test
     void lazy() {
         
-        val original = LogicalType.lazy(SomeDomainClass.class, ()->"hello");
+        var original = LogicalType.lazy(SomeDomainClass.class, ()->"hello");
         
         _SerializationTester.assertEqualsOnRoundtrip(original);
         

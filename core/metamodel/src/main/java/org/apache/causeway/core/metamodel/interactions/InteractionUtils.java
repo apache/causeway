@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,17 +46,17 @@ public final class InteractionUtils {
 
     public InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
 
-        val iaResult = new InteractionResult(context.createInteractionEvent());
+        var iaResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
-        val ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
+        var ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
                 .filter(advisor->compatible(advisor, context))
                 .forEach(advisor->{
-                    val hidingReasonString = advisor.hides(context);
-                    val hidingReason = Optional.ofNullable(hidingReasonString)
+                    var hidingReasonString = advisor.hides(context);
+                    var hidingReason = Optional.ofNullable(hidingReasonString)
                             .map(Consent.VetoReason::explicit)
                             .orElse(null);
 
@@ -75,16 +74,16 @@ public final class InteractionUtils {
 
     public InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
 
-        val isResult = new InteractionResult(context.createInteractionEvent());
+        var isResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
-        val ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
+        var ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 break;
             case SHOW_AS_DISABLED:
             case SHOW_AS_DISABLED_WITH_DIAGNOSTICS:
-                val visibilityContext = context.asVisibilityContext();
+                var visibilityContext = context.asVisibilityContext();
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
                         .filter(advisor->compatible(advisor, context))
                         .forEach(advisor->{
@@ -101,7 +100,7 @@ public final class InteractionUtils {
                 break;
         }
 
-        val ifDisabledPolicy = context.getRenderPolicy().getIfDisabledPolicy();
+        var ifDisabledPolicy = context.getRenderPolicy().getIfDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
@@ -118,15 +117,15 @@ public final class InteractionUtils {
 
     public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
 
-        val iaResult = new InteractionResult(context.createInteractionEvent());
+        var iaResult = new InteractionResult(context.createInteractionEvent());
 
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            val invalidatingReasonString =
+            var invalidatingReasonString =
                     guardAgainstEmptyReasonString(advisor.invalidates(context), context.getIdentifier());
 
-            val invalidatingReason = Optional.ofNullable(invalidatingReasonString)
+            var invalidatingReason = Optional.ofNullable(invalidatingReasonString)
                     .map(Consent.VetoReason::explicit)
                     .orElse(null);
             iaResult.advise(invalidatingReason, advisor);
@@ -159,7 +158,7 @@ public final class InteractionUtils {
     private String guardAgainstEmptyReasonString(
             final @Nullable String reason, final @NonNull Identifier identifier) {
         if("".equals(reason)) {
-            val msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
+            var msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
                 .addVariable("className", identifier.getClassName())
                 .addVariable("memberName", identifier.getMemberLogicalName())
                 .buildMessage();

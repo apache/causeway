@@ -54,7 +54,6 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * just adds a validator
@@ -78,12 +77,12 @@ implements MetaModelRefiner {
 
     private void processXmlJavaTypeAdapter(final ProcessClassContext processClassContext) {
 
-        val xmlJavaTypeAdapterIfAny = processClassContext.synthesizeOnType(XmlJavaTypeAdapter.class);
+        var xmlJavaTypeAdapterIfAny = processClassContext.synthesizeOnType(XmlJavaTypeAdapter.class);
         if(!xmlJavaTypeAdapterIfAny.isPresent()) {
             return;
         }
 
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         addFacet(
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
@@ -91,12 +90,12 @@ implements MetaModelRefiner {
 
     private void processXmlAccessorTypeFacet(final ProcessClassContext processClassContext) {
 
-        val xmlAccessorTypeIfAny = processClassContext.synthesizeOnType(XmlAccessorType.class);
+        var xmlAccessorTypeIfAny = processClassContext.synthesizeOnType(XmlAccessorType.class);
         if(!xmlAccessorTypeIfAny.isPresent()) {
             return;
         }
 
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
         addFacet(
                 new XmlAccessorTypeFacetDefault(facetHolder, xmlAccessorTypeIfAny.get().value()));
     }
@@ -121,26 +120,26 @@ implements MetaModelRefiner {
 
     private void processXmlJavaTypeAdapter(final ProcessMethodContext processMethodContext, final XmlAccessType accessType) {
 
-        val xmlJavaTypeAdapterIfAny = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class);
+        var xmlJavaTypeAdapterIfAny = processMethodContext.synthesizeOnMethod(XmlJavaTypeAdapter.class);
 
         if(!xmlJavaTypeAdapterIfAny.isPresent()) {
             return;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         addFacet(
                 new XmlJavaTypeAdapterFacetDefault(facetHolder, xmlJavaTypeAdapterIfAny.get().value()));
     }
 
     private void processXmlTransient(final ProcessMethodContext processMethodContext, final XmlAccessType accessType) {
 
-        val xmlTransientIfAny = processMethodContext.synthesizeOnMethod(XmlTransient.class);
+        var xmlTransientIfAny = processMethodContext.synthesizeOnMethod(XmlTransient.class);
 
         if(!xmlTransientIfAny.isPresent()) {
             return;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         addFacet(new XmlTransientFacetDefault(facetHolder));
     }
 
@@ -241,13 +240,13 @@ implements MetaModelRefiner {
             // when referencing an entity type, either the association or the entity type
             // must be annotated with @XmlJavaTypeAdapter, unless the association is marked
             // transient with @XmlTransientFacet
-            val elementTypeSpec = propertyOrCollection.getElementType();
+            var elementTypeSpec = propertyOrCollection.getElementType();
             if (elementTypeSpec.isEntity()
                     && !propertyOrCollection.containsFacet(XmlJavaTypeAdapterFacet.class)
                     && !propertyOrCollection.containsFacet(XmlTransientFacet.class)
                     && !elementTypeSpec.containsFacet(XmlJavaTypeAdapterFacet.class)) {
 
-                val elementType = elementTypeSpec.getCorrespondingClass();
+                var elementType = elementTypeSpec.getCorrespondingClass();
                 ValidationFailure.raiseFormatted(
                         propertyOrCollection,
                         "JAXB view model '%s' %s '%s' is of entity type '%s', "
@@ -277,8 +276,8 @@ implements MetaModelRefiner {
                 final ObjectSpecification objectSpec,
                 final ObjectAssociation propertyOrCollection) {
 
-            val elementTypeSpec = propertyOrCollection.getElementType();
-            val elementType = elementTypeSpec.getCorrespondingClass();
+            var elementTypeSpec = propertyOrCollection.getElementType();
+            var elementType = elementTypeSpec.getCorrespondingClass();
             if (dateType.isAssignableFrom(elementType)
                     && !propertyOrCollection.containsFacet(XmlJavaTypeAdapterFacet.class)
                     && !propertyOrCollection.containsFacet(XmlTransientFacet.class)) {
@@ -345,9 +344,9 @@ implements MetaModelRefiner {
         @Override
         void validate(final ObjectSpecification objectSpec) {
 
-            val correspondingClass = objectSpec.getCorrespondingClass();
+            var correspondingClass = objectSpec.getCorrespondingClass();
 
-            val publicNoArgConstructors = _Reflect
+            var publicNoArgConstructors = _Reflect
                     .getPublicConstructors(correspondingClass)
                     .filter(paramCount(0));
 
@@ -355,7 +354,7 @@ implements MetaModelRefiner {
                 return; // happy case
             }
 
-            val privateNoArgConstructors = _Reflect
+            var privateNoArgConstructors = _Reflect
                     .getDeclaredConstructors(correspondingClass)
                     .filter(paramCount(0).and(isPublic().negate()));
 

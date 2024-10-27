@@ -31,8 +31,6 @@ import org.apache.causeway.core.metamodel.facets.TypedHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
-import lombok.val;
-
 public abstract class ExecutionPublishingFacetForPropertyAnnotation
 extends ExecutionPublishingFacetAbstract {
 
@@ -63,7 +61,7 @@ extends ExecutionPublishingFacetAbstract {
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        val publishingPolicy = PropertyConfigOptions.propertyExecutionPublishingPolicy(configuration);
+        var publishingPolicy = PropertyConfigOptions.propertyExecutionPublishingPolicy(configuration);
 
         return propertyIfAny
             .map(Property::executionPublishing)
@@ -102,7 +100,7 @@ extends ExecutionPublishingFacetAbstract {
                     }
                 } else {
                     // we are dealing with an action
-                    val actionPublishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
+                    var actionPublishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
                     switch (actionPublishingPolicy) {
                         case NONE:
                             return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);

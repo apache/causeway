@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -59,15 +58,15 @@ public class IdentifierUtil {
             final @NonNull Identifier.Type identifierType,
             final @NonNull String logicalMemberIdentifier) {
 
-        val stringCutter = TextUtils.cutter(logicalMemberIdentifier);
-        val logicalTypeName = stringCutter
+        var stringCutter = TextUtils.cutter(logicalMemberIdentifier);
+        var logicalTypeName = stringCutter
                 .keepBefore("#")
                 .getValue();
-        val memberId = stringCutter
+        var memberId = stringCutter
                 .keepAfter("#")
                 .getValue();
-        val typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
-        val logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
+        var typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
+        var logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
 
         if(identifierType.isAction()) {
             return Identifier.actionIdentifier(logicalType, memberId);

@@ -40,7 +40,6 @@ import org.apache.causeway.schema.metamodel.v2.Param;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 
 @Named(ParameterNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -60,7 +59,7 @@ public class ParameterNode extends MMNode {
 
     @Override
     public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
+        var title = lookupTitleAnnotation().map(Annotation::getValue)
                 .orElseGet(()->
                     String.format("%s: %s", parameter.getId(), ""+parameter.getType()));
         return title;

@@ -22,8 +22,6 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Ints.Bound;
 import org.apache.causeway.core.metamodel.facets.SingleIntValueFacet;
 
-import lombok.val;
-
 /**
  * The typical length of a property or a parameter.
  *
@@ -44,7 +42,7 @@ extends SingleIntValueFacet {
      */
     default public int bounded(final int min, final int max, final int fallback) {
         final int value = value();
-        val bounds = _Ints.Range.of(Bound.inclusive(min), Bound.inclusive(max));
+        var bounds = _Ints.Range.of(Bound.inclusive(min), Bound.inclusive(max));
         return bounds.contains(value)
                 ? value
                 : bounds.bounded(fallback);

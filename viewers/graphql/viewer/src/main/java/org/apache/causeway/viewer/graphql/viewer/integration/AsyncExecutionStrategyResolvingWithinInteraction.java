@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
-import lombok.val;
+
 
 @Service
 public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {
@@ -53,7 +53,7 @@ public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecu
             final ExecutionContext executionContext,
             final ExecutionStrategyParameters parameters) {
 
-        val userMemento = userMementoProvider.userMemento(executionContext, parameters);
+        var userMemento = userMementoProvider.userMemento(executionContext, parameters);
 
         if (userMemento != null) {
             return interactionService.call(

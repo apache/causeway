@@ -44,7 +44,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -75,7 +74,7 @@ public class LayoutServiceDefault implements LayoutService {
     public String menuBarsLayout(
             final MenuBarsService.Type type,
             final CommonMimeType format) {
-        val menuBars = menuBarsService.menuBars(type);
+        var menuBars = menuBarsService.menuBars(type);
         return menuBarsService.marshaller().marshal(_Casts.uncheckedCast(menuBars), format);
     }
 
@@ -96,15 +95,15 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public byte[] toZip(final LayoutExportStyle style, final CommonMimeType format) {
-        val domainObjectSpecs = specificationLoader.snapshotSpecifications()
+        var domainObjectSpecs = specificationLoader.snapshotSpecifications()
                 .filter(spec ->
                         !spec.isAbstract()
                         && (spec.isEntity() || spec.isViewModel()));
 
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var zipBuilder = ZipUtils.zipEntryBuilder();
 
-        for (val objectSpec : domainObjectSpecs) {
-            val domainClass = objectSpec.getCorrespondingClass();
+        for (var objectSpec : domainObjectSpecs) {
+            var domainClass = objectSpec.getCorrespondingClass();
 
             tryGridToFormatted(domainClass, style, format)
             .accept(

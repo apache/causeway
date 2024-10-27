@@ -28,7 +28,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -73,9 +72,9 @@ class Samples {
                 List<Integer[]> bs, 
                 IndexedBiConsumer<Integer[], Integer[]> probe) {
             int i=0;
-            for(val a : as) {
+            for(var a : as) {
                 int j=0;
-                for(val b : bs) {
+                for(var b : bs) {
                     probe.accept(i, j++, a, b);
                 }
                 i++;

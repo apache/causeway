@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class HasImperativeTextFacetAbstract
 extends FacetAbstract
@@ -60,7 +59,7 @@ implements
 
     @Override
     public final Try<String> text(final ManagedObject object) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         return ManagedObjects.imperativeText(object, method, translationContext);
     }
 
@@ -85,7 +84,7 @@ implements
             return false;
         }
 
-        val otherFacet = (HasImperativeTextFacetAbstract)other;
+        var otherFacet = (HasImperativeTextFacetAbstract)other;
 
         return Objects.equals(this.methods, otherFacet.methods)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

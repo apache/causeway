@@ -34,7 +34,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtC
 import org.apache.causeway.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -59,17 +58,17 @@ public class CommandReplayAnalyserResult implements CommandReplayAnalyser {
             return null;
         }
 
-        val dto = commandLogEntry.getCommandDto();
+        var dto = commandLogEntry.getCommandDto();
         if(dto.getMember().getInteractionType() == InteractionType.PROPERTY_EDIT) {
             return null;
         }
 
         // see if the outcome was the same...
         // ... either the same result when replayed
-        val primaryResultStr = CommandDtoUtils.getUserData(dto, UserDataKeys.RESULT);
+        var primaryResultStr = CommandDtoUtils.getUserData(dto, UserDataKeys.RESULT);
 
-        val secondaryResult = commandLogEntry.getResult();
-        val secondaryResultStr =
+        var secondaryResult = commandLogEntry.getResult();
+        var secondaryResultStr =
                 secondaryResult != null ? secondaryResult.toString() : null;
         return Objects.equals(primaryResultStr, secondaryResultStr)
                 ? null

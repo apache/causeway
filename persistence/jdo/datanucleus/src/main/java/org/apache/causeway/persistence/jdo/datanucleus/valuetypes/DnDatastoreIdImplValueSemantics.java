@@ -33,7 +33,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -58,7 +58,7 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreIdImpl> {
 
     @Override
     public DatastoreIdImpl compose(final ValueDecomposition decomposition) {
-        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        var elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
         return destring(_InstanceUtil.loadClass(targetClassName), key);
@@ -77,9 +77,9 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreIdImpl> {
             final @NonNull Class<?> targetEntityClass,
             final @NonNull String stringified) {
         // enString invoked toString() on the original key; invoking toString() on its stringified form does not change it
-        val proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
+        var proto = new DatastoreIdImpl(targetEntityClass.getName(), stringified);
         // now render in the form that the DataStoreImpl constructor expects; it will take it apart itself.
-        val str = proto.toString();
+        var str = proto.toString();
         return new DatastoreIdImpl(str);
     }
 

@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 class Staff_hilevel_IntegTest extends Abstract_IntegTest {
 
@@ -75,14 +75,14 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         Approvals.verify(args.getEntity(), jsonOptions());
 
         // when
-        val response = requestBuilder.post(args);
+        var response = requestBuilder.post(args);
 
         // then
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
         assertThat(response)
                 .extracting(Response::getStatus)
                 .isEqualTo(Response.Status.OK.getStatusCode());
@@ -122,14 +122,14 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         Approvals.verify(args.getEntity(), jsonOptions());
 
         // when
-        val response = requestBuilder.post(args);
+        var response = requestBuilder.post(args);
 
         // then
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
         assertThat(response)
                 .extracting(Response::getStatus)
                 .isEqualTo(Response.Status.OK.getStatusCode());
@@ -177,14 +177,14 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         Approvals.verify(args.getEntity(), jsonOptions());
 
         // when
-        val response = requestBuilder.post(args);
+        var response = requestBuilder.post(args);
 
         // then
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
         assertThat(response)
                 .extracting(Response::getStatus)
                 .isEqualTo(Response.Status.OK.getStatusCode());
@@ -237,14 +237,14 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         Approvals.verify(args.getEntity(), jsonOptions());
 
         // when
-        val response = requestBuilder.post(args);
+        var response = requestBuilder.post(args);
 
         // then
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
         assertThat(response)
                 .extracting(Response::getStatus)
                 .isEqualTo(Response.Status.OK.getStatusCode());

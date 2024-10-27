@@ -34,7 +34,7 @@ import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.jdo.entities.JdoProductComment;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -52,10 +52,10 @@ class JdoTimestampingTest extends RegressionTestWithJdoFixtures {
     @Test
     void updatedByAt_shouldBeFilledInByTheTimestampingService() {
 
-        val product = repository.allInstances(JdoProduct.class).listIterator().next();
+        var product = repository.allInstances(JdoProduct.class).listIterator().next();
         assertNotNull(product);
 
-        val comment = new JdoProductComment();
+        var comment = new JdoProductComment();
         comment.setProduct(product);
         comment.setComment("Awesome Book!");
 
@@ -66,12 +66,12 @@ class JdoTimestampingTest extends RegressionTestWithJdoFixtures {
 
         //[CAUSEWAY-3126] see if we can update the persistent entity,
         // without triggering a nested loop
-        val firstUpdate = comment.getUpdatedAt();
+        var firstUpdate = comment.getUpdatedAt();
         comment.setComment("Awesome Book, really!");
         repository.persist(comment);
 
         assertNotNull(comment.getUpdatedAt());
-        val secondUpdate = comment.getUpdatedAt();
+        var secondUpdate = comment.getUpdatedAt();
 
         assertNotEquals(firstUpdate.getNanos(), secondUpdate.getNanos());
 

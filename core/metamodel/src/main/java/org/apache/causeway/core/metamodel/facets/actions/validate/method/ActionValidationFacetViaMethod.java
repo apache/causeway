@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class ActionValidationFacetViaMethod
 extends ActionValidationFacetAbstract
@@ -64,7 +63,7 @@ implements ImperativeFacet {
     @Override
     public String invalidReason(final ManagedObject owningAdapter, final Can<ManagedObject> proposedArgumentAdapters) {
 
-        val method = methods.getFirstElseFail();
+        var method = methods.getFirstElseFail();
         final Object returnValue = MmInvokeUtils.invokeNoAutofit(patConstructor, method, owningAdapter, proposedArgumentAdapters);
 
         if(returnValue instanceof String) {

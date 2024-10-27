@@ -25,8 +25,6 @@ import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-import lombok.val;
-
 /**
  * Base class in support of non-scalar types to be proxied up.
  *
@@ -69,13 +67,13 @@ extends DelegatingInvocationHandlerDefault<P> {
         // delegate
         final Object returnValueObj = delegate(method, args);
 
-        val policy = collectionSemantics.getInvocationHandlingPolicy();
+        var policy = collectionSemantics.getInvocationHandlingPolicy();
 
         if (policy.getIntercepted().contains(method)) {
 
             resolveIfRequired(domainObject);
 
-            val event =
+            var event =
                     new CollectionMethodEvent(
                             getDelegate(),
                             getCollection().getFeatureIdentifier(),

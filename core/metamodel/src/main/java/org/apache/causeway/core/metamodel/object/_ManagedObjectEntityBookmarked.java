@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -80,9 +79,9 @@ implements _Refetchable {
 
         // refetch if required ...
 
-        val entityFacet = entityFacet();
+        var entityFacet = entityFacet();
 
-        val entityState = entityFacet.getEntityState(pojo);
+        var entityState = entityFacet.getEntityState(pojo);
         if(!entityState.isPersistable()) {
             throw _Exceptions.illegalState("not persistable %s", getSpecification());
         }
@@ -97,7 +96,7 @@ implements _Refetchable {
         }
 
         refetching = true;
-        val refetchedPojo = refetchPojo(entityState);
+        var refetchedPojo = refetchPojo(entityState);
         refetching = false;
 
         return this.pojo = assertCompliance(refetchedPojo);
@@ -105,7 +104,7 @@ implements _Refetchable {
 
     @Override
     public @NonNull EntityState getEntityState() {
-        val entityFacet = entityFacet();
+        var entityFacet = entityFacet();
         return entityFacet.getEntityState(pojo);
     }
 
@@ -115,10 +114,10 @@ implements _Refetchable {
 
     private Object refetchPojo(final EntityState entityState) {
 
-        val entityFacet = entityFacet();
+        var entityFacet = entityFacet();
 
         // triggers live-cycle events
-        val refetchedIfSuccess = entityFacet.fetchByBookmark(bookmark);
+        var refetchedIfSuccess = entityFacet.fetchByBookmark(bookmark);
 
         if(refetchedIfSuccess.isEmpty()) {
             // if cannot refetch from this special JPA state, try again later
@@ -129,7 +128,7 @@ implements _Refetchable {
             throw new ObjectNotFoundException("" + bookmark);
         }
 
-        val refetchedPojo = refetchedIfSuccess.get();
+        var refetchedPojo = refetchedIfSuccess.get();
 
         if(!entityFacet.getEntityState(refetchedPojo).hasOid()) {
             throw new ObjectNotFoundException("" + bookmark);
@@ -146,7 +145,7 @@ implements _Refetchable {
 
     @SuppressWarnings("deprecation")
     private Bookmark createBookmark() {
-        val entityFacet = entityFacet();
+        var entityFacet = entityFacet();
 
         // fail early when detached entities are detected
         // should have been re-fetched at start of this request-cycle
@@ -160,7 +159,7 @@ implements _Refetchable {
                 _Debug.log("detached entity detected %s", pojo);
             });
 
-            val msg = String.format(
+            var msg = String.format(
                     "The persistence layer does not recognize given object %s, "
                     + "meaning the object has no identifier that associates it with the persistence layer. "
                     + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",

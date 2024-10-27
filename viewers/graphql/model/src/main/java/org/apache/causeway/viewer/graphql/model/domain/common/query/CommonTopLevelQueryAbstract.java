@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Parent;
 import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 
 import lombok.Getter;
-import lombok.val;
 
 public abstract class CommonTopLevelQueryAbstract
         extends ElementCustom
@@ -54,7 +53,7 @@ public abstract class CommonTopLevelQueryAbstract
                 case ABSTRACT:
                 case VIEW_MODEL:
                 case ENTITY:
-                    val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
+                    var gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
                     addChildField(gqlvDomainObject.newField());
                     domainObjects.add(gqlvDomainObject);
                     break;
@@ -76,7 +75,7 @@ public abstract class CommonTopLevelQueryAbstract
     }
 
     public static List<ObjectSpecification> superclassesOf(final ObjectSpecification objectSpecification) {
-        val superclasses = new ArrayList<ObjectSpecification>();
+        var superclasses = new ArrayList<ObjectSpecification>();
         ObjectSpecification superclass = objectSpecification.superclass();
         while (superclass != null && superclass.getCorrespondingClass() != Object.class) {
             superclasses.add(0, superclass);

@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 
-import lombok.val;
+
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
 
@@ -34,13 +34,13 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
 
-        val bookmark = bookmarkableModel.toBookmark().orElse(null);
+        var bookmark = bookmarkableModel.toBookmark().orElse(null);
         if(bookmark == null) {
             // ignore
             return;
         }
 
-        val matchingRootNode = matchRootNode(bookmarkableModel).orElse(null);
+        var matchingRootNode = matchRootNode(bookmarkableModel).orElse(null);
 
         // MRU/LRU algorithm
         if(matchingRootNode != null) {
@@ -81,14 +81,14 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     public void remove(final UiObjectWkt entityModel) {
-        val bookmark = entityModel.getOwnerBookmark();
+        var bookmark = entityModel.getOwnerBookmark();
         rootNodes.removeIf(node->node.getBookmark().equals(bookmark));
     }
 
     // -- HELPER
 
     private Optional<BookmarkTreeNode> matchRootNode(final BookmarkableModel bookmarkableModel) {
-        for (val rootNode : rootNodes) {
+        for (var rootNode : rootNodes) {
             if(rootNode.matches(bookmarkableModel)) {
                 return Optional.of(rootNode);
             }

@@ -35,7 +35,6 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -91,13 +90,13 @@ public class _Ints {
         private final boolean empty;
         public boolean contains(final int value) {
             if(empty) return false;
-            val isBelowLower = lowerBound.isInclusive()
+            var isBelowLower = lowerBound.isInclusive()
                     ? value < lowerBound.getValue()
                     : value <= lowerBound.getValue();
             if(isBelowLower) {
                 return false;
             }
-            val isAboveUpper = upperBound.isInclusive()
+            var isAboveUpper = upperBound.isInclusive()
                     ? value > upperBound.getValue()
                     : value >= upperBound.getValue();
             if(isAboveUpper) {
@@ -322,7 +321,7 @@ public class _Ints {
                 }
                 result -= digit;
             }
-            val value = negative ? result : -result;
+            var value = negative ? result : -result;
             return value;
         } else {
             onFailure.accept(s);
@@ -335,7 +334,7 @@ public class _Ints {
     public static int[] flatten(final @NonNull int[][] nested) {
         final int n = nested.length;
         final int stride = nested[0].length;
-        val flattened = new int[n*stride];
+        var flattened = new int[n*stride];
         for(int i=0; i<n; ++i) {
             System.arraycopy(nested[i], 0, flattened, i*stride, stride);
         }
@@ -347,7 +346,7 @@ public class _Ints {
     public static int[][] partition(final @NonNull int[] flattened, final int stride) {
         final int n = flattened.length/stride;
         _Assert.assertEquals(flattened.length, n*stride, ()->"flattened.length must be divisible by stride");
-        val nested = new int[n][stride];
+        var nested = new int[n][stride];
         for(int i=0; i<n; ++i) {
             System.arraycopy(flattened, i*stride, nested[i], 0, stride);
         }
@@ -367,12 +366,12 @@ public class _Ints {
             final @NonNull IntFunction<String> cellFormatter) {
 
         final int m = array.length;
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         for(int j=0; j<m; ++j) {
             final int cellValue = array[j];
-            val cellStringFull = cellFormatter.apply(cellValue);
-            val cellStringTrimmed = _Strings.ellipsifyAtEnd(cellStringFull, columnWidth, "..");
+            var cellStringFull = cellFormatter.apply(cellValue);
+            var cellStringTrimmed = _Strings.ellipsifyAtEnd(cellStringFull, columnWidth, "..");
 
             // right align, at column end marker
             final int spacesCount = columnWidth - cellStringTrimmed.length();
@@ -398,7 +397,7 @@ public class _Ints {
             final @NonNull IntFunction<String> cellFormatter) {
 
         final int n = nested.length;
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         for(int i=0; i<n; ++i) {
             sb.append(rowForm(nested[i], columnWidth, cellFormatter));
         }

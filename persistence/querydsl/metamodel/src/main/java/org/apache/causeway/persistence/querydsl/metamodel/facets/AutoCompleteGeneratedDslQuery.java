@@ -32,12 +32,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.exceptions.RecoverableException;
@@ -46,6 +40,11 @@ import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDsl
 import org.apache.causeway.persistence.querydsl.applib.util.CaseSensitivity;
 import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
 import org.apache.causeway.persistence.querydsl.applib.util.Wildcards;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
 
 
 /**
@@ -72,6 +71,7 @@ public class AutoCompleteGeneratedDslQuery {
         String propertyId;
         Property.QueryDslAutoCompletePolicy queryDslAutoCompletePolicy;
 
+        @Override
         public String toString() {
             return propertyId + " (" + queryDslAutoCompletePolicy.getDescription() + ")";
         }
@@ -130,7 +130,7 @@ public class AutoCompleteGeneratedDslQuery {
     public <T> List<T> executeQuery(
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
-        val dslQueryIfAny = generateQuery(searchPhrase, additionalPredicate);
+        var dslQueryIfAny = generateQuery(searchPhrase, additionalPredicate);
         return dslQueryIfAny.map(query -> query.fetch()).orElse(newList());
     }
 
@@ -155,10 +155,10 @@ public class AutoCompleteGeneratedDslQuery {
             searchableProperties.forEach(se -> {
 
                 // Only string type fields are supported
-                val propertyPath = entityPath.getString(se.getPropertyId());
-                val searchReplaced = Wildcards.toAnsiSqlWildcard(searchPhrase);
+                var propertyPath = entityPath.getString(se.getPropertyId());
+                var searchReplaced = Wildcards.toAnsiSqlWildcard(searchPhrase);
 
-                val expr = DslExpressions.search(propertyPath, searchReplaced, se.getCaseSensitivity());
+                var expr = DslExpressions.search(propertyPath, searchReplaced, se.getCaseSensitivity());
                 where.or(expr);
 
                 // Build order by clause
@@ -166,7 +166,7 @@ public class AutoCompleteGeneratedDslQuery {
             });
 
             // Build query
-            val dslQuery = queryDslSupport.selectFrom(entityPath);
+            var dslQuery = queryDslSupport.selectFrom(entityPath);
 
             // add additional expression if any
             if(additionalPredicate!=null){
@@ -182,21 +182,21 @@ public class AutoCompleteGeneratedDslQuery {
         return Optional.empty();
     }
 
-    static <T> List<T> newList(T... objs) {
+    static <T> List<T> newList(final T... objs) {
         return newArrayList(objs);
     }
 
-    static <T> ArrayList<T> newArrayList(T... objs) {
+    static <T> ArrayList<T> newArrayList(final T... objs) {
         ArrayList<T> result = new ArrayList();
         Collections.addAll(result, objs);
         return result;
     }
 
-    static boolean isNotEmpty(CharSequence cs) {
+    static boolean isNotEmpty(final CharSequence cs) {
         return !isEmpty(cs);
     }
 
-    static boolean isEmpty(CharSequence cs) {
+    static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
 

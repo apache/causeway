@@ -31,8 +31,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 
-import lombok.val;
-
 @Component
 public class JpaInventoryDao {
 
@@ -40,10 +38,10 @@ public class JpaInventoryDao {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void addBook_havingIsbnA_usingRepositoryService() {
-        val inventories = repositoryService.allInstances(JpaInventory.class);
+        var inventories = repositoryService.allInstances(JpaInventory.class);
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
 
         // add a conflicting book (unique ISBN violation)

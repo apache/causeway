@@ -39,7 +39,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -80,13 +79,13 @@ implements
         Objects.requireNonNull(causewayBeanTypeClassifier,
                 "postProcessBeanFactory() called before app-ctx was made available");
 
-        val registry = (BeanDefinitionRegistry) beanFactory;
+        var registry = (BeanDefinitionRegistry) beanFactory;
 
         for (String beanDefinitionName : registry.getBeanDefinitionNames()) {
 
             log.debug("processing bean definition {}", beanDefinitionName);
 
-            val beanDefinition = registry.containsBeanDefinition(beanDefinitionName)
+            var beanDefinition = registry.containsBeanDefinition(beanDefinitionName)
                     ? registry.getBeanDefinition(beanDefinitionName)
                     : null;
 
@@ -94,7 +93,7 @@ implements
                 continue; // check next beanDefinition
             }
 
-            val typeMetaData = ScannedTypeMetaData.of(
+            var typeMetaData = ScannedTypeMetaData.of(
                     beanDefinition.getBeanClassName(),
                     beanDefinitionName);
 
@@ -104,7 +103,7 @@ implements
                 registry.removeBeanDefinition(beanDefinitionName);
                 log.debug("vetoing bean {}", beanDefinitionName);
             } else {
-                val beanNameOverride = typeMetaData.getBeanNameOverride();
+                var beanNameOverride = typeMetaData.getBeanNameOverride();
                 if(_Strings.isNotEmpty(beanNameOverride)) {
                     registry.removeBeanDefinition(beanDefinitionName);
                     registry.registerBeanDefinition(beanNameOverride, beanDefinition);

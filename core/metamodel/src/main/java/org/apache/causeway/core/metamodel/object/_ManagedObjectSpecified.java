@@ -40,7 +40,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -108,7 +107,7 @@ implements ManagedObject {
     }
 
     private ObjectMemento mementoForPacked(@NonNull final PackedManagedObject packedAdapter) {
-        val listOfMementos = packedAdapter.unpack().stream()
+        var listOfMementos = packedAdapter.unpack().stream()
                 .map(this::mementoForScalar)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMementoCollection.of(
@@ -127,14 +126,14 @@ implements ManagedObject {
         if(!(obj instanceof ManagedObject)) {
             return false;
         }
-        val other = (ManagedObject)obj;
+        var other = (ManagedObject)obj;
         if(!this.getSpecialization().equals(other.getSpecialization())) {
             return false;
         }
         if(!this.getSpecification().equals(other.getSpecification())) {
             return false;
         }
-        val canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
+        var canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
         if(canGetPojosWithoutSideeffect) {
             // expected to work for packed variant just fine, as it compares lists
             return Objects.equals(this.getPojo(), other.getPojo());
@@ -147,15 +146,15 @@ implements ManagedObject {
                     other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
         }
 
-        val a = (_Refetchable) this;
-        val b = (_Refetchable) this;
+        var a = (_Refetchable) this;
+        var b = (_Refetchable) this;
         return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
     }
 
     @Override
     public final int hashCode() {
         // make sure hashCode() is without side-effects!
-        val canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
+        var canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
         return canGetPojosWithoutSideeffect
                 // expected to work for packed variant just fine, as it compares lists
                 ? Objects.hash(getSpecification().getCorrespondingClass(), getPojo())

@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
-import lombok.val;
-
 class GivenJdoPrimaryKeyAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
@@ -54,7 +52,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        val featureTypes = facetFactory.getFeatureTypes();
+        var featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
@@ -64,7 +62,7 @@ extends AbstractFacetFactoryTest {
 
     public void testIdAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        val method = findMethod(cls, "getId");
+        var method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -75,7 +73,7 @@ extends AbstractFacetFactoryTest {
 
     public void testOptionalDerivedFromId() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        val method = findMethod(cls, "getId");
+        var method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -86,7 +84,7 @@ extends AbstractFacetFactoryTest {
 
     public void testDisabledDerivedFromId() throws Exception {
         final Class<?> cls = SimpleObjectWithPrimaryKey.class;
-        val method = findMethod(cls, "getId");
+        var method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -113,7 +111,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        val method = findMethod(cls, "getId");
+        var method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -138,7 +136,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        val method = findMethod(cls, "getId");
+        var method = findMethod(cls, "getId");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 

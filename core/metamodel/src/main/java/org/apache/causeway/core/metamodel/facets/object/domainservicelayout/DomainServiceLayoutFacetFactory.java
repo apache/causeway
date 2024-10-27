@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
-import lombok.val;
-
 public class DomainServiceLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -39,13 +37,13 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
-        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
-        val domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
+        var domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        var domainServiceLayoutIfAny = processClassContext.synthesizeOnType(DomainServiceLayout.class);
 
         // either one is enough to treat this as a domain service
-        val isAnyPresent =
+        var isAnyPresent =
                 domainServiceIfAny.isPresent() ||
                 domainServiceLayoutIfAny.isPresent();
 
@@ -53,7 +51,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val menuBar = domainServiceLayoutIfAny
+        var menuBar = domainServiceLayoutIfAny
                 .map(DomainServiceLayout::menuBar)
                 .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED) // redundant since _Annotations
                 .orElse(DomainServiceLayout.MenuBar.PRIMARY);

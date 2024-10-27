@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * This class is {@link Serializable} so that it can be injected into Wicket components.
@@ -134,8 +133,8 @@ public class WebAppContextPath implements Serializable {
         if(contextPath == null) {
             return "";
         }
-        val matcher = pattern.matcher(contextPath);
-        val path = matcher.matches()
+        var matcher = pattern.matcher(contextPath);
+        var path = matcher.matches()
                 ? matcher.group(1)
                         : "";
 

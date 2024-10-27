@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor
 public enum RestfulClientMediaType {
@@ -71,7 +71,7 @@ public enum RestfulClientMediaType {
             final String urn,
             final Class<?> dtoClass,
             final EnumSet<SuppressionType> suppressionTypes) {
-        val headerMap = _Maps.<String, String>newHashMap();
+        var headerMap = _Maps.<String, String>newHashMap();
 
         headerMap.put("profile", "urn:" + urn);
 

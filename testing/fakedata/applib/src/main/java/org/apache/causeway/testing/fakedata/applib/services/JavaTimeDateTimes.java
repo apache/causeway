@@ -22,8 +22,6 @@ import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 
-import lombok.val;
-
 /**
  * Returns a random {@link OffsetDateTime}, optionally based on the current time but constrained by a {@link Period}.
  *
@@ -50,7 +48,7 @@ public class JavaTimeDateTimes extends AbstractRandomValueGenerator {
      * Returns a random date some time before 'now', within the specified {@link Period}.
      */
     public OffsetDateTime before(final Period period) {
-        val periodWithin = fake.javaTimePeriods().within(period);
+        var periodWithin = fake.javaTimePeriods().within(period);
         return now().minus(periodWithin);
     }
 
@@ -58,7 +56,7 @@ public class JavaTimeDateTimes extends AbstractRandomValueGenerator {
      * Returns a random date/time some time after 'now', within the specified {@link Period}.
      */
     public OffsetDateTime after(final Period period) {
-        val periodWithin = fake.javaTimePeriods().within(period);
+        var periodWithin = fake.javaTimePeriods().within(period);
         return now().plus(periodWithin);
     }
 

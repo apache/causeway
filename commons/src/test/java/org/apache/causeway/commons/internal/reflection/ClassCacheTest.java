@@ -35,7 +35,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 class ClassCacheTest {
 
@@ -80,7 +79,7 @@ class ClassCacheTest {
 
     @Test
     void inhertitedMethodWhenUsingReflectionUtility() {
-        val declaredMethods = Can.ofStream(
+        var declaredMethods = Can.ofStream(
                 _NullSafe.stream(_Reflect.streamAllMethods(Concrete.class, true)));
         assertContainsMethod(declaredMethods, "commonAction");
         assertContainsMethod(declaredMethods, "specificAction");
@@ -88,7 +87,7 @@ class ClassCacheTest {
 
     @Test
     void inhertitedMethod() {
-        val declaredMethods = Can.ofStream(
+        var declaredMethods = Can.ofStream(
                 classCache.streamResolvedMethods(Concrete.class));
         assertContainsResolvedMethod(declaredMethods, "commonAction");
         assertContainsResolvedMethod(declaredMethods, "specificAction");
@@ -96,7 +95,7 @@ class ClassCacheTest {
 
     @Test
     void inhertitedMethodWhenOverride() {
-        val declaredMethods = Can.ofStream(
+        var declaredMethods = Can.ofStream(
                 classCache.streamResolvedMethods(ConcreteOverride.class));
         assertContainsResolvedMethod(declaredMethods, "commonAction");
         assertContainsResolvedMethod(declaredMethods, "specificAction");
@@ -116,16 +115,16 @@ class ClassCacheTest {
             _Mixins.Task2.Mixin.class,
     })
     void methodEnumeration(final Class<?> classUnderTest) {
-        val declaredMethods = Can.ofStream(
+        var declaredMethods = Can.ofStream(
                 classCache.streamResolvedMethods(classUnderTest));
 
-        val expectations = extractExpectations(classUnderTest);
+        var expectations = extractExpectations(classUnderTest);
         expectations.assertAll(declaredMethods);
     }
 
     @Test
     void javaLangObjectPublicMethodsAreIgnored() {
-        val javaLangObjectPublicMethods = classCache.streamPublicMethods(Object.class)
+        var javaLangObjectPublicMethods = classCache.streamPublicMethods(Object.class)
                 .collect(Can.toCan());
         assertEquals(Can.empty(), javaLangObjectPublicMethods);
     }

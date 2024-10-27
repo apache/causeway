@@ -51,8 +51,6 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
-
 public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
 
@@ -272,7 +270,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         // then
         assertThat(executionTarget1User1IfAny).hasSize(1);
         var executionTarget1User1 = executionTarget1User1IfAny.get(0);
-        val executionTarget1User1Id = executionTarget1User1.getInteractionId();
+        var executionTarget1User1Id = executionTarget1User1.getInteractionId();
 
         // when
         Optional<? extends ExecutionOutboxEntry> executionTarget1User1ById = executionOutboxEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);

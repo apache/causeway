@@ -26,7 +26,7 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 
-import lombok.val;
+
 
 public class ScenarioName extends Element {
 
@@ -44,7 +44,7 @@ public class ScenarioName extends Element {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val graphQlContext = environment.getGraphQlContext();
+        var graphQlContext = environment.getGraphQlContext();
         return graphQlContext.get(Scenario.KEY_SCENARIO_NAME);
     }
 

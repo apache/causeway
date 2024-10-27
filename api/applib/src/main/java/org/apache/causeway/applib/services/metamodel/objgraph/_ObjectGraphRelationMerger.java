@@ -26,17 +26,15 @@ import java.util.stream.Collectors;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 
-import lombok.val;
-
 class _ObjectGraphRelationMerger implements ObjectGraph.Transformer {
 
     @Override
     public ObjectGraph transform(final ObjectGraph objGraph) {
-        val transformed = new ObjectGraph();
+        var transformed = new ObjectGraph();
         transformed.objects().addAll(objGraph.objects());
 
-        val objectById = objGraph.objectById();
-        val relationsToRender = new ArrayList<ObjectGraph.Relation>(objGraph.relations());
+        var objectById = objGraph.objectById();
+        var relationsToRender = new ArrayList<ObjectGraph.Relation>(objGraph.relations());
         consolidateAssociationRelations(objectById, relationsToRender);
         consolidateBidirRelations(objectById, relationsToRender);
 

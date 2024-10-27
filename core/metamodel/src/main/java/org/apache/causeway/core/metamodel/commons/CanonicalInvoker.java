@@ -32,7 +32,6 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -50,9 +49,9 @@ public class CanonicalInvoker {
     // -- CONSTRUCT
 
     public <T> T construct(final Constructor<T> constructor, final @Nullable Object... executionParameters) {
-        val convertedExecutionParameters = 
+        var convertedExecutionParameters = 
                 ParameterConverters.DEFAULT.convertAll(constructor, executionParameters);
-        val t = _Reflect.invokeConstructor(constructor, convertedExecutionParameters)
+        var t = _Reflect.invokeConstructor(constructor, convertedExecutionParameters)
                 .mapFailure(ex->toVerboseException(ex, constructor, convertedExecutionParameters))
                 .valueAsNonNullElseFail();
         return _Casts.uncheckedCast(t);
@@ -120,10 +119,10 @@ public class CanonicalInvoker {
         // false positive
         if(e instanceof IllegalArgumentException) {
             boolean paramTypeMismatchEncountered = false;
-            val sb = new StringBuilder();
+            var sb = new StringBuilder();
             for(int j=0;j<parameterTypes.length;++j) {
                 final Class<?> parameterType = parameterTypes[j];
-                val incompatible = !isValueCompatibleWithType(
+                var incompatible = !isValueCompatibleWithType(
                         _Arrays.get(adaptedExecutionParameters, j),
                         parameterTypes[j]);
 
@@ -163,7 +162,7 @@ public class CanonicalInvoker {
             return !type.isPrimitive();
         }
 
-        val runtimeType = value.get().getClass();
+        var runtimeType = value.get().getClass();
 
         if(ClassExtensions.equalsWhenBoxing(runtimeType, type)) {
             return true;

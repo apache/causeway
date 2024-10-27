@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class TitleFacetAbstract
 extends FacetAbstract
@@ -53,7 +52,7 @@ implements TitleFacet {
             return false;
         }
 
-        val otherFacet = (TitleFacet)other;
+        var otherFacet = (TitleFacet)other;
 
         if(Objects.equals(this, otherFacet)) {
             return true;

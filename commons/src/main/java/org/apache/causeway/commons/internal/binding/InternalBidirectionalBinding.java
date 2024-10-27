@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 //@Log4j2
 abstract class InternalBidirectionalBinding<T>
@@ -35,7 +34,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     public static <T> InternalBidirectionalBinding<T> bind(final Bindable<T> left, final Bindable<T> right) {
         checkParameters(left, right);
-        val binding = new GenericBidirectionalBinding<T>(left, right);
+        var binding = new GenericBidirectionalBinding<T>(left, right);
         left.setValue(right.getValue());
         left.addListener(binding);
         right.addListener(binding);
@@ -44,14 +43,14 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     public static <T> void unbind(final Bindable<T> left, final Bindable<T> right) {
         checkParameters(left, right);
-        val binding = new UntypedBidirectionalBinding(left, right);
+        var binding = new UntypedBidirectionalBinding(left, right);
         left.removeListener(binding);
         right.removeListener(binding);
     }
 
     public static void unbind(final Object left, final Object right) {
         checkParameters(left, right);
-        val binding = new UntypedBidirectionalBinding(left, right);
+        var binding = new UntypedBidirectionalBinding(left, right);
         if (left instanceof Observable) {
             ((Observable<?>) left).removeListener(binding);
         }
@@ -146,8 +145,8 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
             if (updating) {
                 return;
             }
-            val left = getLeft();
-            val right = getRight();
+            var left = getLeft();
+            var right = getRight();
 
             if ((left == null) || (right == null)) {
                 if (left != null) {

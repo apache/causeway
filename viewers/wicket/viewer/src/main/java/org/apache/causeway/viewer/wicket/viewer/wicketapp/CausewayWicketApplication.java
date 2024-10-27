@@ -74,7 +74,6 @@ import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAd
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -177,13 +176,13 @@ implements
         super.init();
 
         // initialize Spring Dependency Injection for wicket
-        val springInjector = new SpringComponentInjector(this);
+        var springInjector = new SpringComponentInjector(this);
         getComponentInstantiationListeners().add(springInjector);
 
         // self managed dependency injection
         {
             // get the Apache Causeway ServiceInjector
-            val serviceInjectorHolder = new ServiceInjectorHolder();
+            var serviceInjectorHolder = new ServiceInjectorHolder();
             springInjector.inject(serviceInjectorHolder);
 
             // resolve injection-points on self
@@ -191,7 +190,7 @@ implements
         }
 
         // gather configuration plugins into a list of named tasks
-        val initializationTasks =
+        var initializationTasks =
                 _ConcurrentTaskList.named("Causeway Application Initialization Tasks");
         applicationInitializers
             .forEach(initializer->initializationTasks
@@ -261,9 +260,9 @@ implements
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
     protected IAuthenticationStrategy newAuthenticationStrategy(final CausewayConfiguration configuration) {
-        val rememberMe = configuration.getViewer().getWicket().getRememberMe();
-        val cookieKey = rememberMe.getCookieKey();
-        val encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
+        var rememberMe = configuration.getViewer().getWicket().getRememberMe();
+        var cookieKey = rememberMe.getCookieKey();
+        var encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
         return new DefaultAuthenticationStrategy(cookieKey, _CryptFactory.sunJceCrypt(encryptionKey));
     }
 
@@ -285,7 +284,7 @@ implements
      * Factored out for easy (informal) pluggability.
      */
     protected IRequestCycleListener createWebRequestCycleListenerForCauseway() {
-        val webRequestCycleForCauseway = new WebRequestCycleForCauseway();
+        var webRequestCycleForCauseway = new WebRequestCycleForCauseway();
         webRequestCycleForCauseway.setPageClassRegistry(getPageClassRegistry());
         return webRequestCycleForCauseway;
     }

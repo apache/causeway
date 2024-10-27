@@ -26,8 +26,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
-import lombok.val;
-
 public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimple {
 
     public static Optional<CssClassFacetOnActionFromConfiguredRegex> create(
@@ -45,7 +43,7 @@ public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimpl
     private static Optional<String> cssIfAnyFor(
             final String name, final CausewayConfiguration causewayConfiguration) {
 
-        val cssClassByPattern = causewayConfiguration.getApplib().getAnnotation().getActionLayout()
+        var cssClassByPattern = causewayConfiguration.getApplib().getAnnotation().getActionLayout()
                 .getCssClass().getPatternsAsMap();
 
         for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {

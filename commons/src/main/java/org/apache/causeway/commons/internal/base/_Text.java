@@ -34,7 +34,6 @@ import org.apache.causeway.commons.io.TextUtils;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -219,10 +218,10 @@ public final class _Text {
 
     public static void assertTextEquals(final @NonNull Can<String> a, final @NonNull Can<String> b) {
 
-        val na = normalize(a);
-        val nb = normalize(b);
+        var na = normalize(a);
+        var nb = normalize(b);
 
-        val lineNrRef = _Refs.intRef(0);
+        var lineNrRef = _Refs.intRef(0);
 
         if(na.size()<=nb.size()) {
             na.zip(nb, (left, right)->{
@@ -282,14 +281,14 @@ public final class _Text {
         if(line.length()<=maxChars) {
             return Stream.of(line);
         }
-        val tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
+        var tokens = Can.ofEnumeration(new StringTokenizer(line, " .-:/_", true))
                 .map(String.class::cast);
 
-        val constraintLines = _Lists.<String>newArrayList();
-        val partialSum = _Refs.intRef(0);
-        val partialCount = _Refs.intRef(0);
+        var constraintLines = _Lists.<String>newArrayList();
+        var partialSum = _Refs.intRef(0);
+        var partialCount = _Refs.intRef(0);
 
-        val tokenIterator = tokens.iterator();
+        var tokenIterator = tokens.iterator();
 
         tokens.stream()
         .mapToInt(String::length)

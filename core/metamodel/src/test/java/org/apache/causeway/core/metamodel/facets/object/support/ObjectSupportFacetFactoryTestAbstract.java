@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 
-import lombok.val;
-
 public abstract class ObjectSupportFacetFactoryTestAbstract
 extends FacetFactoryTestAbstract {
 
@@ -64,17 +62,17 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            val supportMethods = supportMethodEnum.getMethodNames()
+            var supportMethods = supportMethodEnum.getMethodNames()
                     .map(methodName->findMethodExactOrFail(type, methodName))
                     .map(_MethodFacades::regular)
                     .map(MethodFacade::asMethodElseFail);
 
             assertEquals(expectedSupportMethodCount, supportMethods.size());
 
-            val facet = facetHolder.getFacet(facetType);
+            var facet = facetHolder.getFacet(facetType);
             assertNotNull(facet);
             assertTrue(facet instanceof ImperativeFacet);
-            val imperativeFacet = (ImperativeFacet)facet;
+            var imperativeFacet = (ImperativeFacet)facet;
 
             supportMethods.forEach(method->{
                 assertMethodWasRemoved(method);

@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportin
 import org.apache.causeway.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
-import lombok.val;
-
 /**
  * Sets up {@link ActionParameterDisabledFacet}.
  */
@@ -44,8 +42,8 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val disableMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
+        var disableMethod = searchResult.getSupportingMethod();
+        var patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterDisabledFacetViaMethod(
                         disableMethod, patConstructor, paramAsHolder));

@@ -26,8 +26,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import lombok.val;
-
 /**
  * Produces render/response timing info when in prototyping mode.
  * <p>
@@ -51,7 +49,7 @@ implements IModel<String> {
     @Override
     public String getObject() {
 
-        val requestCycle = RequestCycle.get();
+        var requestCycle = RequestCycle.get();
         if(requestCycle==null) return ""; // guard against no RequestCycle available on current Thread
 
         final long t0Millis = requestCycle.getStartTime();

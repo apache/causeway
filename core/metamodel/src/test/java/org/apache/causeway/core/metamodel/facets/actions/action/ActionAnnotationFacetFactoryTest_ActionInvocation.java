@@ -39,8 +39,6 @@ import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterCh
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest_ActionInvocation
 extends FacetFactoryTestAbstract {
 
@@ -48,7 +46,7 @@ extends FacetFactoryTestAbstract {
 
     private void processInvocation(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processDomainEvent(processMethodContext, actionIfAny);
     }
 
@@ -74,7 +72,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof ActionInvocationFacetForAction);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
+            var actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertMethodEqualsFirstIn(actionMethod, actionInvocationFacetViaMethod);
             assertMethodWasRemoved(actionMethod);
         });
@@ -87,14 +85,14 @@ extends FacetFactoryTestAbstract {
             public void someAction() {}
         }
 
-        val voidSpec = getSpecificationLoader().loadSpecification(void.class);
+        var voidSpec = getSpecificationLoader().loadSpecification(void.class);
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
+            var actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertEquals(voidSpec, actionInvocationFacetViaMethod.getReturnType());
         });
     }
@@ -106,14 +104,14 @@ extends FacetFactoryTestAbstract {
             public String someAction() { return null; }
         }
 
-        val stringSpec = getSpecificationLoader().loadSpecification(java.lang.String.class);
+        var stringSpec = getSpecificationLoader().loadSpecification(java.lang.String.class);
 
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
+            var actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertEquals(stringSpec, actionInvocationFacetViaMethod.getReturnType());
         });
     }
@@ -125,14 +123,14 @@ extends FacetFactoryTestAbstract {
             public String someAction() { return null; }
         }
 
-        val customerSpec = getSpecificationLoader().loadSpecification(LocalCustomer.class);
+        var customerSpec = getSpecificationLoader().loadSpecification(LocalCustomer.class);
 
         actionScenario(LocalCustomer.class, "someAction", (processMethodContext, facetHolder, facetedMethod) -> {
             //when
             processInvocation(facetFactory, processMethodContext);
             //then
             final Facet facet = facetedMethod.getFacet(ActionInvocationFacet.class);
-            val actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
+            var actionInvocationFacetViaMethod = (ActionInvocationFacetForAction) facet;
             assertEquals(
                     customerSpec,
                     actionInvocationFacetViaMethod.getDeclaringType());
@@ -158,8 +156,8 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void actionsPickedUpFromSuperclassButHelpersFromSubClass() {
-        val facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(getMetaModelContext());
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory(getMetaModelContext());
+        var facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
 
         @SuppressWarnings("unused")
         class Customer {
@@ -190,19 +188,19 @@ extends FacetFactoryTestAbstract {
             final Facet facet1 = facetedMethod.getParameters().getElseFail(0).getFacet(ActionParameterChoicesFacet.class);
             assertNotNull(facet1);
             assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
-            val actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
+            var actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
             assertMethodEqualsFirstIn(choices0Method, actionChoicesFacetViaMethod0);
 
             final Facet facet2 = facetedMethod.getParameters().getElseFail(1).getFacet(ActionParameterChoicesFacet.class);
             assertNotNull(facet2);
             assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
-            val actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
+            var actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
             assertMethodEqualsFirstIn(choices1Method, actionChoicesFacetViaMethod1);
 
             final Facet facet3 = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet3);
             assertTrue(facet3 instanceof DisableForContextFacetViaMethod);
-            val disableFacetViaMethod = (DisableForContextFacetViaMethod) facet3;
+            var disableFacetViaMethod = (DisableForContextFacetViaMethod) facet3;
             assertMethodEqualsFirstIn(disableMethod, disableFacetViaMethod);
         });
     }

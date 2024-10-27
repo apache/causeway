@@ -70,8 +70,6 @@ import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePe
 import org.apache.causeway.persistence.jdo.spring.support.SpringPersistenceManagerProxyBean;
 import org.apache.causeway.persistence.jdo.spring.support.StandardPersistenceManagerProxyBean;
 
-import lombok.val;
-
 class JdoTransactionManagerTests {
 
     //private MetaModelContext mmc;
@@ -104,7 +102,7 @@ class JdoTransactionManagerTests {
 
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		TransactionTemplate tt = new TransactionTemplate(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
@@ -240,7 +238,7 @@ class JdoTransactionManagerTests {
 
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		final TransactionTemplate tt = new TransactionTemplate(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 
 		Object result = tt.execute(status -> tt.execute(status1 -> {
@@ -288,7 +286,7 @@ class JdoTransactionManagerTests {
 
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		final TransactionTemplate tt = new TransactionTemplate(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 
 		try {
@@ -317,7 +315,7 @@ class JdoTransactionManagerTests {
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		final TransactionTemplate tt = new TransactionTemplate(tm);
 		tt.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 
 		Object result = tt.execute(status -> tt.execute(status1 -> {
@@ -340,7 +338,7 @@ class JdoTransactionManagerTests {
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		final TransactionTemplate tt = new TransactionTemplate(tm);
 		tt.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 		TransactionSynchronizationManager.bindResource(pmf, new PersistenceManagerHolder(pm));
@@ -374,7 +372,7 @@ class JdoTransactionManagerTests {
 
 		JtaTransactionManager ptm = new JtaTransactionManager(ut);
 		TransactionTemplate tt = new TransactionTemplate(ptm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
@@ -412,7 +410,7 @@ class JdoTransactionManagerTests {
 		JtaTransactionManager ptm = new JtaTransactionManager(ut, tm);
 		final TransactionTemplate tt = new TransactionTemplate(ptm);
 		tt.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 		TransactionSynchronizationManager.bindResource(pmf, new PersistenceManagerHolder(pm));
@@ -451,7 +449,7 @@ class JdoTransactionManagerTests {
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		TransactionTemplate tt = new TransactionTemplate(tm);
 		tt.setPropagationBehavior(TransactionDefinition.PROPAGATION_SUPPORTS);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
@@ -491,7 +489,7 @@ class JdoTransactionManagerTests {
 
 		PlatformTransactionManager tm = new JdoTransactionManager(pmf);
 		TransactionTemplate tt = new TransactionTemplate(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.isSynchronizationActive(), "JTA synchronizations not active");
 		TransactionSynchronizationManager.bindResource(pmf, new PersistenceManagerHolder(pm));
@@ -529,7 +527,7 @@ class JdoTransactionManagerTests {
 		tm.setDataSource(ds);
 		tm.setJdoDialect(dialect);
 		tt.setTransactionManager(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
@@ -569,7 +567,7 @@ class JdoTransactionManagerTests {
 		tm.setJdoDialect(dialect);
 		tm.afterPropertiesSet();
 		tt.setTransactionManager(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
@@ -607,7 +605,7 @@ class JdoTransactionManagerTests {
 		tm.setJdoDialect(dialect);
 		tm.afterPropertiesSet();
 		tt.setTransactionManager(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 
@@ -665,7 +663,7 @@ class JdoTransactionManagerTests {
 		tm.setDataSource(ds);
 		tm.setJdoDialect(dialect);
 		tt.setTransactionManager(tm);
-		val l = new ArrayList<Object>();
+		var l = new ArrayList<Object>();
 		l.add("test");
 		assertTrue(!TransactionSynchronizationManager.hasResource(pmf), "Hasn't thread pm");
 

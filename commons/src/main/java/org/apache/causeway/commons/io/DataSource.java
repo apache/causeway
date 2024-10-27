@@ -47,7 +47,6 @@ import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * General purpose readable byte data source.
@@ -169,7 +168,7 @@ public interface DataSource {
      * (eg the decode or encode the originating input stream)
      */
     default DataSource map(final @NonNull ThrowingFunction<InputStream, InputStream> inputStreamMapper) {
-        val self = this;
+        var self = this;
         return new DataSource() {
             @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return self.tryReadAll(is->consumingMapper.apply(inputStreamMapper.apply(is)));
@@ -190,7 +189,7 @@ public interface DataSource {
     default Try<Void> tryReadAndWrite(final @NonNull DataSink dataSink, final int bufferSize) {
         return tryReadAndAccept(inputStream->{
             dataSink.writeAll(os->{
-                val buffer = new byte[bufferSize]; int n;
+                var buffer = new byte[bufferSize]; int n;
                 while((n = inputStream.read(buffer)) > -1) {
                     os.write(buffer, 0, n);
                 }

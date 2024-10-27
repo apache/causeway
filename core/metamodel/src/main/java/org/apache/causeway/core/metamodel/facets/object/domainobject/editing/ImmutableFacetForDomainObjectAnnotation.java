@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
-import lombok.val;
-
 public class ImmutableFacetForDomainObjectAnnotation
 extends ImmutableFacetAbstract {
 
@@ -47,8 +45,8 @@ extends ImmutableFacetAbstract {
                 == DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE;
 
         if(domainObjectIfAny.isPresent()) {
-            val domainObject = domainObjectIfAny.get();
-            val disabledReason = createDisabledReason(domainObject);
+            var domainObject = domainObjectIfAny.get();
+            var disabledReason = createDisabledReason(domainObject);
 
             switch (domainObject.editing()) {
             case NOT_SPECIFIED:

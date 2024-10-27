@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorizati
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-import lombok.val;
-
 public class HiddenTypeFacetFromAuthorization
 extends FacetAbstract
 implements HiddenTypeFacet {
@@ -42,7 +40,7 @@ implements HiddenTypeFacet {
 
     @Override
     public String hides(final VisibilityContext vc) {
-        val spec = (ObjectSpecification) getFacetHolder();
+        var spec = (ObjectSpecification) getFacetHolder();
 
         if(!spec.isEntityOrViewModelOrAbstract()) {
             return null;
@@ -60,21 +58,21 @@ implements HiddenTypeFacet {
             return null;
         }
 
-        val hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
+        var hasVisibleProperty = spec.streamProperties(MixedIn.INCLUDED)
                 .anyMatch(prop -> !AuthorizationFacet.hidesProperty(prop, vc));
 
         if (hasVisibleProperty) {
             return null;
         }
 
-        val hasVisibleCollection = spec.streamCollections(MixedIn.INCLUDED)
+        var hasVisibleCollection = spec.streamCollections(MixedIn.INCLUDED)
                 .anyMatch(coll -> !AuthorizationFacet.hidesCollection(coll, vc));
 
         if (hasVisibleCollection) {
             return null;
         }
 
-        val hasVisibleAction = spec.streamRuntimeActions(MixedIn.INCLUDED)
+        var hasVisibleAction = spec.streamRuntimeActions(MixedIn.INCLUDED)
                 .anyMatch(act -> !AuthorizationFacet.hidesAction(act, vc));
 
         if (hasVisibleAction) {

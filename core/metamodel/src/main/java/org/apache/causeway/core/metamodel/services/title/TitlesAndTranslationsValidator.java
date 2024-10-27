@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  *
  * @since 2.0
@@ -54,19 +52,19 @@ extends MetaModelValidatorAbstract {
 
     private void validateServiceTitles() {
 
-        val serviceRegistry = getServiceRegistry();
-        val specificationLoader = getSpecificationLoader();
-        val titleService = getTitleService();
+        var serviceRegistry = getServiceRegistry();
+        var specificationLoader = getSpecificationLoader();
+        var titleService = getTitleService();
 
         serviceRegistry.streamRegisteredBeans()
         .forEach(managedBeanAdapter->{
 
-            val domainService = managedBeanAdapter.lookupInstance().orElse(null);
-            val logicalTypeName = managedBeanAdapter.getId();
+            var domainService = managedBeanAdapter.lookupInstance().orElse(null);
+            var logicalTypeName = managedBeanAdapter.getId();
 
             if(domainService == null) {
 
-                val deficiencyOrigin = Identifier.classIdentifier(
+                var deficiencyOrigin = Identifier.classIdentifier(
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), logicalTypeName));
 
                 ValidationFailure.raise(
@@ -81,14 +79,14 @@ extends MetaModelValidatorAbstract {
 
             try {
 
-                val title = titleService.titleOf(domainService);
+                var title = titleService.titleOf(domainService);
                 _Blackhole.consume(title);
 
             } catch (Exception e) {
 
                 e.printStackTrace();
 
-                val deficiencyOrigin = Identifier.classIdentifier(
+                var deficiencyOrigin = Identifier.classIdentifier(
                         LogicalType.eager(managedBeanAdapter.getBeanClass(), logicalTypeName));
 
                 ValidationFailure.raise(
@@ -107,26 +105,26 @@ extends MetaModelValidatorAbstract {
 
     private void validateEnumTitles() {
 
-        val specificationLoader = getSpecificationLoader();
-        val titleService = getTitleService();
+        var specificationLoader = getSpecificationLoader();
+        var titleService = getTitleService();
 
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (val objSpec : specificationLoader.snapshotSpecifications()) {
-            val correspondingClass = objSpec.getCorrespondingClass();
+        for (var objSpec : specificationLoader.snapshotSpecifications()) {
+            var correspondingClass = objSpec.getCorrespondingClass();
             if(correspondingClass.isEnum()) {
                 final Object[] enumConstants = correspondingClass.getEnumConstants();
                 for (Object enumConstant : enumConstants) {
 
                     try {
 
-                        val title = titleService.titleOf(enumConstant);
+                        var title = titleService.titleOf(enumConstant);
                         _Blackhole.consume(title);
 
                     } catch (Exception e) {
 
-                        val deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
-                        val facetHolder = objSpec;
+                        var deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
+                        var facetHolder = objSpec;
 
                         ValidationFailure.raise(
                                 facetHolder.getSpecificationLoader(),
@@ -144,24 +142,24 @@ extends MetaModelValidatorAbstract {
 
     private void validateRegisteredMessageTranslation() {
 
-        val specificationLoader = getSpecificationLoader();
-        val translationService = getTranslationService();
+        var specificationLoader = getSpecificationLoader();
+        var translationService = getTranslationService();
 
         // see @ConfirmUiModel#translate()
-        val translationContext = TranslationContext.forClassName(MessageRegistry.class);
+        var translationContext = TranslationContext.forClassName(MessageRegistry.class);
 
-        val messageRegistry = new MessageRegistry();
+        var messageRegistry = new MessageRegistry();
         for (String message : messageRegistry.listMessages()) {
 
             try {
 
-                val translatedMessage = translationService.translate(translationContext, message);
+                var translatedMessage = translationService.translate(translationContext, message);
                 _Blackhole.consume(translatedMessage);
 
             } catch (Exception e) {
 
-                val spec = specificationLoader.specForTypeElseFail(MessageRegistry.class);
-                val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
+                var spec = specificationLoader.specForTypeElseFail(MessageRegistry.class);
+                var deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
 
                 ValidationFailure.raise(
                         spec.getSpecificationLoader(),

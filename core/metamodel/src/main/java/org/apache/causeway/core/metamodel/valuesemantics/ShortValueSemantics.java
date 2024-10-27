@@ -40,7 +40,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * due to auto-boxing also handles the primitive variant
@@ -120,7 +119,7 @@ implements
 
     @Override
     public Short parseTextRepresentation(final Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

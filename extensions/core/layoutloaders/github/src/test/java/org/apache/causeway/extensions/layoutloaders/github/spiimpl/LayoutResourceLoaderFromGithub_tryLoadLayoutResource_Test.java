@@ -34,7 +34,7 @@ import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayo
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 
 class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
@@ -51,15 +51,15 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @BeforeEach
     void setup() {
 
-        val causewayConfiguration = CausewayConfiguration.builder().build();
+        var causewayConfiguration = CausewayConfiguration.builder().build();
         causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setApiKey(getApiKey());
         causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setRepository("apache/causeway-app-simpleapp");
 
-        val module = new CausewayModuleExtLayoutLoadersGithub();
-        val restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);
-        val restTemplateForContent = module.restTemplateForGithubContent(causewayConfiguration);
-        val layoutLoaderMenu = new LayoutLoadersGitHubMenu(causewayConfiguration);
-        val queryResultsCache = new QueryResultsCache();
+        var module = new CausewayModuleExtLayoutLoadersGithub();
+        var restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);
+        var restTemplateForContent = module.restTemplateForGithubContent(causewayConfiguration);
+        var layoutLoaderMenu = new LayoutLoadersGitHubMenu(causewayConfiguration);
+        var queryResultsCache = new QueryResultsCache();
 
         layoutLoaderMenu.new enableDynamicLayoutLoading().act();
         Assertions.assertThat(layoutLoaderMenu.isEnabled()).isTrue();
@@ -70,7 +70,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @Test
     public void happy_case() {
 
-        val layoutResourceIfAny = loader.lookupLayoutResource(SimpleObject.class, "SimpleObject.layout.xml");
+        var layoutResourceIfAny = loader.lookupLayoutResource(SimpleObject.class, "SimpleObject.layout.xml");
         assertThat(layoutResourceIfAny).isPresent();
 
     }
@@ -78,7 +78,7 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @Test
     public void sad_case() {
 
-        val layoutResourceIfAny = loader.lookupLayoutResource(SimpleObject.class, "Unknown.layout.xml");
+        var layoutResourceIfAny = loader.lookupLayoutResource(SimpleObject.class, "Unknown.layout.xml");
         assertThat(layoutResourceIfAny).isEmpty();
 
     }

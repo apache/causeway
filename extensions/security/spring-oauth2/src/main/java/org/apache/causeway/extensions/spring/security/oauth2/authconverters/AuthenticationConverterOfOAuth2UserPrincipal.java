@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.
@@ -54,7 +54,7 @@ extends AuthenticationConverter.Abstract<OAuth2User> {
     // -- HOOKS FOR CUSTOMIZATION
 
     protected String usernameFrom(final OAuth2User oAuth2User) {
-        val loginAttr = oAuth2User.getAttributes().get("login");
+        var loginAttr = oAuth2User.getAttributes().get("login");
         return loginAttr instanceof CharSequence
                 ? ((CharSequence) loginAttr).toString()
                 : oAuth2User.getName();

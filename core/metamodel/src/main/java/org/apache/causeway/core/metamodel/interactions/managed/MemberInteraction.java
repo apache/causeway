@@ -24,7 +24,6 @@ import java.util.function.Function;
 import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class MemberInteraction<T extends ManagedMember, H extends MemberInteraction<T, ?>> {
 
@@ -72,7 +71,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
 
     public <X extends Throwable>
     H validateElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        val veto = railway.getFailure().orElse(null);
+        var veto = railway.getFailure().orElse(null);
         if (veto == null) {
             return _Casts.uncheckedCast(this);
         } else {

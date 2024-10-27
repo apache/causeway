@@ -52,7 +52,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -97,14 +96,14 @@ public class ModuleWithFixturesService {
     }
 
     public List<ModuleWithFixturesDescriptor> modules() {
-        val beans = springBeansService.beans();
-        val modules = modulesWithin(beans);
+        var beans = springBeansService.beans();
+        var modules = modulesWithin(beans);
         return sequenced(modules);
     }
 
     static List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans) {
 
-        val descriptors = new ArrayList<ModuleWithFixturesDescriptor>();
+        var descriptors = new ArrayList<ModuleWithFixturesDescriptor>();
         for (Map.Entry<String, ContextBeans> contextEntry : beans.entrySet()) {
             final String contextId = contextEntry.getKey();
             final ContextBeans contextBeans = contextEntry.getValue();
@@ -136,7 +135,7 @@ public class ModuleWithFixturesService {
                             })
                             .orElseGet(Collections::emptyMap);
 
-                    val descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);
+                    var descriptor = new ModuleWithFixturesDescriptor(contextId, beanName, module, importedModulesByBeanName);
                     descriptors.add(descriptor);
                 }
             }
@@ -172,10 +171,10 @@ public class ModuleWithFixturesService {
 
 
     static List<ModuleWithFixturesDescriptor> sequenced(final List<ModuleWithFixturesDescriptor> modules) {
-        val remaining = new ArrayList<>(modules);
-        val sequenced = new ArrayList<ModuleWithFixturesDescriptor>();
+        var remaining = new ArrayList<>(modules);
+        var sequenced = new ArrayList<ModuleWithFixturesDescriptor>();
 
-        val moduleByName = new LinkedHashMap<String, ModuleWithFixturesDescriptor>();
+        var moduleByName = new LinkedHashMap<String, ModuleWithFixturesDescriptor>();
         modules.forEach(module -> {
             moduleByName.put(module.getBeanName(), module);
         });
@@ -203,7 +202,7 @@ public class ModuleWithFixturesService {
             final LinkedHashMap<String, ModuleWithFixturesDescriptor> moduleByName) {
 
         for (ModuleWithFixturesDescriptor module : remaining) {
-            val numDependenciesNotYetEncountered =
+            var numDependenciesNotYetEncountered =
                     module.getDependenciesByName().keySet().stream()
                             .map(moduleByName::get)
                             .filter(dependency -> !result.contains(dependency)) // ignore if already known about

@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class ActionParameterChoicesFacetViaMethod
 extends ActionParameterChoicesFacetAbstract
@@ -73,13 +72,13 @@ implements ImperativeFacet {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val method = methods.getFirstElseFail();
+        var method = methods.getFirstElseFail();
         final Object collectionOrArray = MmInvokeUtils.invokeAutofit(patConstructor, method, head.getTarget(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }
 
-        val visibleChoices = ManagedObjects
+        var visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(
                         requiredSpec, collectionOrArray, interactionInitiatedBy);
 

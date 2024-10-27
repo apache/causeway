@@ -33,7 +33,6 @@ import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -74,7 +73,7 @@ public class PageRenderDomainObjectLogger implements PageRenderSubscriber {
     @Override
     public void onRenderedDomainObject(final Bookmark bookmark) {
         if(log.isInfoEnabled()) {
-            val timing = timings.get();
+            var timing = timings.get();
             // until @ActionLayout#redirectPolicy is reintroduced (if it ever is), there's no point in querying for the numberEntitiesDirtied,
             // because (for Wicket viewer at least), the rendering is in a separate request to any modifying action.
             log.info("rendered object: [ \"{}\" ]  user: {}  took: {}ms  numEntitiesLoaded: {}", bookmark.stringify(), userService.currentUserNameElseNobody(), timing.took(), metricsService.numberEntitiesLoaded());

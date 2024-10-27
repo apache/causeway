@@ -50,7 +50,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Represents a collection of domain objects (typically entity instances).
@@ -78,7 +77,7 @@ public class DataTable implements Serializable {
      */
     public static DataTable forDomainType(
             final @NonNull Class<?> domainType) {
-        val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
+        var elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
         return new DataTable(elementType);
     }
 
@@ -93,7 +92,7 @@ public class DataTable implements Serializable {
     public static DataTable forDomainType(
             final @NonNull Class<?> domainType,
             final @Nullable Predicate<ObjectAssociation> columnFilter) {
-        val elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
+        var elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(domainType);
         return new DataTable(elementType, columnFilter);
     }
 
@@ -191,8 +190,8 @@ public class DataTable implements Serializable {
     public DataTable addDataElementsFrom(final @Nullable DataTable otherTable) {
         if(otherTable==null) return this;
         { // sanity check
-            val thisType = otherTable.getElementType().getCorrespondingClass();
-            val otherType = this.getElementType().getCorrespondingClass();
+            var thisType = otherTable.getElementType().getCorrespondingClass();
+            var otherType = this.getElementType().getCorrespondingClass();
             _Assert.assertEquals(thisType, otherType, ()->
                     String.format("Other tables's element-type %s must match the this table's element-type %s.",
                             otherType,
@@ -230,7 +229,7 @@ public class DataTable implements Serializable {
      * @see #setDataElements(Iterable)
      */
     public DataTable populateEntities() {
-        val query = Query.allInstances(elementType.getCorrespondingClass());
+        var query = Query.allInstances(elementType.getCorrespondingClass());
         return populateEntities(query);
     }
 
@@ -241,15 +240,15 @@ public class DataTable implements Serializable {
      */
     public DataTable populateEntities(final Query<?> query) {
         { // sanity check
-            val requestType = query.getResultType();
-            val resultType = getElementType().getCorrespondingClass();
+            var requestType = query.getResultType();
+            var resultType = getElementType().getCorrespondingClass();
             _Assert.assertEquals(requestType, resultType, ()->
                     String.format("Query's result-type %s must match the table's element-type %s.",
                             requestType,
                             resultType));
         }
-        val queryRequest = ObjectBulkLoader.Request.of(getElementType(), query);
-        val allMatching = getElementType().getObjectManager().queryObjects(queryRequest);
+        var queryRequest = ObjectBulkLoader.Request.of(getElementType(), query);
+        var allMatching = getElementType().getObjectManager().queryObjects(queryRequest);
         return setDataElements(allMatching);
     }
 

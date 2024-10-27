@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
-
 public class JdoNotPersistentAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -68,7 +66,7 @@ extends FacetFactoryAbstract {
             return false;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new JdoNotPersistentFacetFromAnnotation(facetHolder));
         return true;
     }
@@ -85,7 +83,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(new JdoNotPersistentFacetFromAnnotation(facetHolder));
 
     }

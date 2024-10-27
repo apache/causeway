@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
-import lombok.val;
+
 
 public class ObjectActionReprRenderer
 extends AbstractObjectMemberReprRenderer<ObjectAction> {
@@ -79,7 +79,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        val where = resourceContext.getWhere();
+        var where = resourceContext.getWhere();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
@@ -111,7 +111,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     @Override
     protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
         final JsonRepresentation argMap = JsonRepresentation.newMap();
-        val parameters = objectMember.getParameters();
+        var parameters = objectMember.getParameters();
         for (int i = 0; i < objectMember.getParameterCount(); i++) {
             argMap.mapPut(parameters.getElseFail(i).getId() + ".value", argValueFor(i));
         }
@@ -130,10 +130,10 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private ObjectActionReprRenderer addParameterDetails() {
         final Map<String,Object> parameters = _Maps.newLinkedHashMap();
         if(objectMember.getParameterCount()>0) {
-            val act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
-            val paramNeg = act.startParameterNegotiation();
-            for(val paramMod : paramNeg.getParamModels()) {
-                val paramMeta = paramMod.getMetaModel();
+            var act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
+            var paramNeg = act.startParameterNegotiation();
+            for(var paramMod : paramNeg.getParamModels()) {
+                var paramMeta = paramMod.getMetaModel();
                 final Object paramDetails = paramDetails(paramMod, paramNeg);
                 parameters.put(paramMeta.getId(), paramDetails);
             }
@@ -143,7 +143,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     private Object paramDetails(final ManagedParameter paramMod, final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
+        var paramMeta = paramMod.getMetaModel();
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPutInt("num", paramMeta.getParameterIndex());
         paramRep.mapPutString("id", paramMeta.getId());
@@ -163,13 +163,13 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private Object choicesFor(
             final ManagedParameter paramMod,
             final ParameterNegotiationModel paramNeg) {
-        val paramMeta = paramMod.getMetaModel();
-        val choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
+        var paramMeta = paramMod.getMetaModel();
+        var choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
         final List<Object> list = _Lists.newArrayList();
-        for (val choiceAdapter : choiceAdapters) {
+        for (var choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();
             list.add(DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), choiceAdapter));
@@ -178,13 +178,13 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     }
 
     private Object defaultFor(final ManagedParameter paramMod) {
-        val defaultAdapter = paramMod.getValue().getValue();
+        var defaultAdapter = paramMod.getValue().getValue();
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
             return null;
         }
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
-        val paramMeta = paramMod.getMetaModel();
+        var paramMeta = paramMod.getMetaModel();
         return DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), defaultAdapter);
     }
 

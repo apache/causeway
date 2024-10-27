@@ -46,7 +46,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class HomePageFacetAnnotationFactory
 extends FacetFactoryAbstract
@@ -106,9 +105,9 @@ implements MetaModelRefiner {
                             .map(Identifier::getFullIdentityString)
                             .collect(Collectors.toCollection(HashSet::new));
 
-                    for (val objectAction : actionsHavingHomePageFacet.values()) {
-                        val actionId = objectAction.getFeatureIdentifier().getFullIdentityString();
-                        val colission = homepageActionIdSet.stream()
+                    for (var objectAction : actionsHavingHomePageFacet.values()) {
+                        var actionId = objectAction.getFeatureIdentifier().getFullIdentityString();
+                        var colission = homepageActionIdSet.stream()
                                 .filter(not(actionId::equals))
                                 .collect(Collectors.joining(", "));
 

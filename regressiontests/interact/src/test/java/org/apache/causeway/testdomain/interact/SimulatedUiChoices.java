@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.val;
+
 
 public class SimulatedUiChoices extends HasValueValidation {
 
@@ -74,7 +74,7 @@ public class SimulatedUiChoices extends HasValueValidation {
      * @param choiceIndices
      */
     public void simulateMultiChoiceSelect(final int ... choiceIndices) {
-        val newValues = choiceBox.getValue()
+        var newValues = choiceBox.getValue()
                 .pickByIndex(choiceIndices);
         selectedItem.setValue(ManagedObject.packed(valueSpecification, newValues));
     }

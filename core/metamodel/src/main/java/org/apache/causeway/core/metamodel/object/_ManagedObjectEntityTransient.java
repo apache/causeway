@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -60,7 +59,7 @@ implements Bookmarkable.NoBookmark, _Refetchable {
 
     @Override
     public @NonNull EntityState getEntityState() {
-        val entityFacet = entityFacet();
+        var entityFacet = entityFacet();
         return entityFacet.getEntityState(pojo);
     }
 

@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
-import lombok.val;
+
 
 abstract class MetaModelValidatorForJdoqlAbstract
 extends MetaModelValidatorAbstract {
@@ -46,11 +46,11 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification objectSpec) {
 
-        val jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
+        var jdoQueryFacet = objectSpec.getFacet(JdoQueryFacet.class);
         if(jdoQueryFacet == null) {
             return;
         }
-        for (val namedQuery : jdoQueryFacet.getNamedQueries()) {
+        for (var namedQuery : jdoQueryFacet.getNamedQueries()) {
             if(namedQuery.getLanguage().equals("JDOQL")) {
                 final String query = namedQuery.getQuery();
                 final String fromClassName = deriveClause(query);
@@ -68,9 +68,9 @@ extends MetaModelValidatorAbstract {
             return;
         }
 
-        val cls = objectSpec.getCorrespondingClass();
+        var cls = objectSpec.getCorrespondingClass();
 
-        val fromSpecResult = Try.call(()->getSpecificationLoader()
+        var fromSpecResult = Try.call(()->getSpecificationLoader()
                 .specForType(_Context.loadClass(typeNameFromClause))
                 .orElse(null));
 

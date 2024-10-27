@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRest
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
 import lombok.Getter;
-import lombok.val;
+
 
 /**
  * WebModule that provides the RestfulObjects Viewer.
@@ -104,7 +104,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
-        val authenticationStrategyClassName = causewayConfiguration.getViewer()
+        var authenticationStrategyClassName = causewayConfiguration.getViewer()
                 .getRestfulobjects().getAuthentication().getStrategyClassName();
 
         registerFilter(ctx, INTERACTION_FILTER_NAME, CausewayRestfulObjectsInteractionFilter.class)

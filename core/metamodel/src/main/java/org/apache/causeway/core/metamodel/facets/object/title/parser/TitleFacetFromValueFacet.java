@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 
 public final class TitleFacetFromValueFacet
 extends FacetAbstract
@@ -75,7 +74,7 @@ implements TitleFacet {
         if(renderRequest.getFeature()!=null) {
             switch(renderRequest.getFeature().getFeatureType()) {
             case PROPERTY: {
-                val prop = (OneToOneAssociation)renderRequest.getFeature();
+                var prop = (OneToOneAssociation)renderRequest.getFeature();
                 final Renderer renderer = valueFacet
                         .selectRendererForPropertyElseFallback(prop);
                 return renderer
@@ -83,7 +82,7 @@ implements TitleFacet {
                                 .createValueSemanticsContext(prop), pojo);
             }
             case COLLECTION: {
-                val coll = (OneToManyAssociation)renderRequest.getFeature();
+                var coll = (OneToManyAssociation)renderRequest.getFeature();
                 final Renderer renderer = valueFacet
                         .selectRendererForCollectionElseFallback(coll);
                 return renderer
@@ -92,7 +91,7 @@ implements TitleFacet {
             }
             case ACTION_PARAMETER_SINGULAR:
             case ACTION_PARAMETER_PLURAL:{
-                val param = (ObjectActionParameter)renderRequest.getFeature();
+                var param = (ObjectActionParameter)renderRequest.getFeature();
                 final Renderer renderer = valueFacet
                         .selectRendererForParameterElseFallback(param);
                 return renderer.titlePresentation(valueFacet.createValueSemanticsContext(param), pojo);
@@ -104,8 +103,8 @@ implements TitleFacet {
 
         // fall back to default value semantics ...
 
-        val featureId = getFacetHolder().getFeatureIdentifier();
-        val feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
+        var featureId = getFacetHolder().getFeatureIdentifier();
+        var feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
 
         return valueFacet.selectDefaultRenderer()
         .map(renderer->(Renderer) renderer)

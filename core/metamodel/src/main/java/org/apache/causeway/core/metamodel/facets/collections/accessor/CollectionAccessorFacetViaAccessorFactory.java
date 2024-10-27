@@ -31,8 +31,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 
-import lombok.val;
-
 public class CollectionAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
@@ -49,12 +47,12 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     }
 
     private void attachAccessorFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-        val accessorMethod = processMethodContext.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
+        var accessorMethod = processMethodContext.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
         processMethodContext.removeMethod(accessorMethod);
 
-        val cls = processMethodContext.getCls();
-        val typeSpec = getSpecificationLoader().loadSpecification(cls);
-        val facetHolder = processMethodContext.getFacetHolder();
+        var cls = processMethodContext.getCls();
+        var typeSpec = getSpecificationLoader().loadSpecification(cls);
+        var facetHolder = processMethodContext.getFacetHolder();
 
         addFacet(
                 new CollectionAccessorFacetViaAccessor(

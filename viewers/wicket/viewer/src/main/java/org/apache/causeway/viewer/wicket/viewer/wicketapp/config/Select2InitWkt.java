@@ -24,14 +24,12 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
-import lombok.val;
-
 @Configuration
 public class Select2InitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        val select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
+        var select2Settings = org.wicketstuff.select2.ApplicationSettings.get();
         //select2Settings.setCssReference(new Select2BootstrapCssReference());
         //select2Settings.setJavascriptReferenceFull(new Select2JsReference());
         select2Settings.setIncludeJavascriptFull(true);

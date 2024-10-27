@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 /**
  * Designed to simply filter out any synthetic methods.
  *
@@ -52,13 +50,13 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         super.process(processClassContext);
 
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
-        val isConcreteMixin = facetHolder instanceof ObjectSpecification
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
+        var isConcreteMixin = facetHolder instanceof ObjectSpecification
                 ? ((ObjectSpecification)facetHolder).getBeanSort().isMixin()
                 : false;
 
-        val isActionAnnotationRequired = processClassContext.getIntrospectionPolicy()
+        var isActionAnnotationRequired = processClassContext.getIntrospectionPolicy()
                 .getMemberAnnotationPolicy().isMemberAnnotationsRequired();
 
         getClassCache()

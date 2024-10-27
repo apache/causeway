@@ -33,8 +33,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-import lombok.val;
-
 public class RichTopLevelMutation
                 extends ElementCustom
                 implements Parent {
@@ -49,7 +47,7 @@ public class RichTopLevelMutation
             // type already exists, nothing else to do.
             return;
         }
-        val objectSpecifications = context.objectSpecifications();
+        var objectSpecifications = context.objectSpecifications();
 
         objectSpecifications.forEach(objectSpec -> {
             objectSpec.streamActions(context.getActionScope(), MixedIn.INCLUDED)
@@ -78,13 +76,13 @@ public class RichTopLevelMutation
     }
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
-        val gqlvMutationForAction = new RichMutationForAction(objectSpec, objectAction, context);
+        var gqlvMutationForAction = new RichMutationForAction(objectSpec, objectAction, context);
         addChildFieldFor(gqlvMutationForAction);
         actions.add(gqlvMutationForAction);
     }
 
     public void addProperty(ObjectSpecification objectSpec, final OneToOneAssociation property) {
-        val gqlvMutationForProperty = new RichMutationForProperty(objectSpec, property, context);
+        var gqlvMutationForProperty = new RichMutationForProperty(objectSpec, property, context);
         addChildFieldFor(gqlvMutationForProperty);
         properties.add(gqlvMutationForProperty);
     }

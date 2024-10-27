@@ -36,7 +36,7 @@ import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerFo
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -103,10 +103,10 @@ public class DatanucleusSettings {
 
     private void addFallbacks(final Map<String, Object> props) {
 
-        val connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
+        var connectionFactoryName = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
-            val connectionFactory2Name = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
-            val transactionType = (String) props.get("javax.jdo.option.TransactionType".toLowerCase());
+            var connectionFactory2Name = (String) props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
+            var transactionType = (String) props.get("javax.jdo.option.TransactionType".toLowerCase());
             // extended logging
             if(transactionType == null) {
                 log.info("found config properties to use non-JTA JNDI datasource ({})", connectionFactoryName);

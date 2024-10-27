@@ -44,7 +44,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -125,7 +125,7 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        var result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
@@ -160,11 +160,11 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         commitListener.bind(transactionAfterCompletionEvent::set);
 
-        val result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+        var result = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
             //_Probe.errOut("before tx that should trigger a rollback");
 
-            val innerResult = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
+            var innerResult = transactionService.runWithinCurrentTransactionElseCreateNew(()->{
 
                 fixtureScripts.runPersona(JpaTestDomainPersona.InventoryWith1Book);
 
@@ -181,7 +181,7 @@ class JpaTransactionRollbackTest_usingTransactionService
 
         assertTrue(result.isFailure());
 
-        val actualEvent = transactionAfterCompletionEvent.getValue().map(x -> x.transactionCompletionStatus).orElse(null);
+        var actualEvent = transactionAfterCompletionEvent.getValue().map(x -> x.transactionCompletionStatus).orElse(null);
         assertTrue(
                 actualEvent == TransactionCompletionStatus.ROLLED_BACK
                     || actualEvent == TransactionCompletionStatus.UNKNOWN);

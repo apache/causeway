@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * A {@link Facet} implementation that ultimately wraps a {@link Method} or
@@ -83,7 +82,7 @@ public interface ImperativeFacet extends Facet {
     public Intent getIntent();
 
     public static void visitAttributes(final ImperativeFacet imperativeFacet, final BiConsumer<String, Object> visitor) {
-        val methods = imperativeFacet.getMethods();
+        var methods = imperativeFacet.getMethods();
         visitor.accept("methods",
                 methods.stream()
                 .map(MethodFacade::toString)
@@ -96,7 +95,7 @@ public interface ImperativeFacet extends Facet {
     // -- UTILITIES
 
     public static Intent getIntent(final ObjectMember member, final ResolvedMethod method) {
-        val imperativeFacets = member.streamFacets(ImperativeFacet.class)
+        var imperativeFacets = member.streamFacets(ImperativeFacet.class)
                 .filter(imperativeFacet->imperativeFacet.containsMethod(method))
                 .collect(Collectors.toList());
 

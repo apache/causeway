@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-import lombok.val;
-
 public class PropertyValidateFacetViaMethodFactory
 extends MemberSupportFacetFactoryAbstract  {
 
@@ -41,8 +39,8 @@ extends MemberSupportFacetFactoryAbstract  {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        val getterMethod = processMethodContext.getMethod();
-        val argType = getterMethod.getReturnType();
+        var getterMethod = processMethodContext.getMethod();
+        var argType = getterMethod.getReturnType();
 
         methodFinder
         .streamMethodsMatchingSignature(new Class[] { argType })

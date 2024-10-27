@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -107,7 +106,7 @@ implements
                     + "... @Inject Provider<MyScopedBean> provider ...", name, _Probe.currentThreadId());
         }
 
-        val existingScopedObject = scopedObjects.get().get(name);
+        var existingScopedObject = scopedObjects.get().get(name);
         if(existingScopedObject!=null) {
 
             if(log.isDebugEnabled()) {
@@ -120,7 +119,7 @@ implements
             return existingScopedObject.getInstance();
         }
 
-        val newScopedObject = ScopedObject.of(name);
+        var newScopedObject = ScopedObject.of(name);
         scopedObjects.get().put(name, newScopedObject); // just set a stub with a name only
 
         log.debug("create new causeway-interaction scoped {}", name);
@@ -143,7 +142,7 @@ implements
 
     @Override
     public void registerDestructionCallback(final String name, final Runnable callback) {
-        val scopedObject = scopedObjects.get().get(name);
+        var scopedObject = scopedObjects.get().get(name);
         if(scopedObject!=null) {
             scopedObject.setDestructionCallback(callback);
         }

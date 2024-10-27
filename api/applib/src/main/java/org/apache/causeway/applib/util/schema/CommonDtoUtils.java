@@ -59,7 +59,6 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -73,7 +72,7 @@ public final class CommonDtoUtils {
     public static ValueWithTypeDto getFundamentalValueFromJson(
             final @NonNull ValueType valueType,
             final @Nullable String json) {
-        val valueDto = new ValueWithTypeDto();
+        var valueDto = new ValueWithTypeDto();
         valueDto.setType(valueType);
 
         if(_Strings.isNullOrEmpty(json)) {
@@ -516,12 +515,12 @@ public final class CommonDtoUtils {
             final @Nullable ValueDto valueDto) {
 
         if(valueDto instanceof ValueWithTypeDto) {
-            val downCast = (ValueWithTypeDto) valueDto;
+            var downCast = (ValueWithTypeDto) valueDto;
             _Assert.assertEquals(valueType, downCast.getType());
             return downCast;
         }
 
-        val liftedDto = new ValueWithTypeDto();
+        var liftedDto = new ValueWithTypeDto();
         liftedDto.setType(valueType);
 
         if(valueDto==null) {
@@ -551,7 +550,7 @@ public final class CommonDtoUtils {
         if(entryIfAny.isPresent()) {
             entryIfAny.get().setValue(value);
         } else {
-            val entry = new MapDto.Entry();
+            var entry = new MapDto.Entry();
             entry.setKey(key);
             entry.setValue(value);
             mapDto.getEntry().add(entry);
@@ -584,7 +583,7 @@ public final class CommonDtoUtils {
 
         public TypedTupleBuilder<T> addFundamentalType(
                 final ValueType vType, final String fieldName, final Function<T, Object> getter) {
-            val elementDto = new NamedValueWithTypeDto();
+            var elementDto = new NamedValueWithTypeDto();
             _Assert.assertTrue(_Strings.isNotEmpty(fieldName));
             elementDto.setName(fieldName);
             dto.getElements().add(
@@ -612,7 +611,7 @@ public final class CommonDtoUtils {
 
     public static Map<String, Object> typedTupleAsMap(final TypedTupleDto dto) {
 
-        val map = new LinkedHashMap<String, Object>(dto.getCardinality()); // preserve order
+        var map = new LinkedHashMap<String, Object>(dto.getCardinality()); // preserve order
 
         dto.getElements()
             .forEach(elementDto->
@@ -627,7 +626,7 @@ public final class CommonDtoUtils {
      * @param paramIdOrName - should (consistently) be either id or name, as per global configuration.
      */
     public static ParamDto paramDto(final @NonNull String paramIdOrName) {
-        val paramDto = new ParamDto();
+        var paramDto = new ParamDto();
         if(paramIdOrName.isBlank()) {
             throw _Exceptions.illegalArgument("paramIdOrName must not be blank '%s'", paramIdOrName);
         }
@@ -641,7 +640,7 @@ public final class CommonDtoUtils {
             final @NonNull ValueWithTypeDto src,
             final @NonNull ValueWithTypeDto dst) {
 
-        val valueType = src.getType();
+        var valueType = src.getType();
         dst.setType(valueType);
 
         _copy(valueType, src, dst);

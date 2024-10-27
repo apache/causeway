@@ -51,7 +51,7 @@ import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -88,10 +88,10 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
 
-            val txDef = new DefaultTransactionDefinition();
+            var txDef = new DefaultTransactionDefinition();
             txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
 
-            val txStatus = ptm.getTransaction(txDef);
+            var txStatus = ptm.getTransaction(txDef);
 
             assertNotNull(txStatus);
             assertFalse(txStatus.isCompleted());
@@ -101,11 +101,11 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Test @Order(0)
     void jpaEntities_shouldBeRecognisedAsSuch() {
-        val productSpec = specLoader.loadSpecification(JpaProduct.class);
+        var productSpec = specLoader.loadSpecification(JpaProduct.class);
         assertTrue(productSpec.isEntity());
         assertNotNull(productSpec.entityFacetElseFail());
 
-        val inventorySpec = specLoader.loadSpecification(JpaInventory.class);
+        var inventorySpec = specLoader.loadSpecification(JpaInventory.class);
         assertTrue(inventorySpec.isEntity());
         assertNotNull(inventorySpec.entityFacetElseFail());
     }
@@ -120,22 +120,22 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repositoryService.allInstances(JpaInventory.class);
+        var inventories = repositoryService.allInstances(JpaInventory.class);
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
 
-        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+        var expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        val multipleBooks = Can.ofCollection(inventory.getProducts())
+        var multipleBooks = Can.ofCollection(inventory.getProducts())
                 .filter(book->expectedBookTitles.contains(book.getName()));
 
         assertEquals(3, multipleBooks.size());
 
-        val firstProduct = inventory.getProducts().iterator().next();
+        var firstProduct = inventory.getProducts().iterator().next();
 
         testFixtures.assertHasPersistenceId(firstProduct);
     }

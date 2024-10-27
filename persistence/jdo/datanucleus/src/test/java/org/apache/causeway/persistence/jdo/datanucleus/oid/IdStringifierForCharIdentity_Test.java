@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.causeway.core.metamodel.valuesemantics.CharacterValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForCharIdentity_Test {
 
@@ -69,15 +69,15 @@ class IdStringifierForCharIdentity_Test {
     @MethodSource()
     void roundtrip(final char c) {
 
-        val entityType = Customer.class;
+        var entityType = Customer.class;
 
-        val stringifier = JdoCharIdentityValueSemantics.builder()
+        var stringifier = JdoCharIdentityValueSemantics.builder()
                 .idStringifierForCharacter(new CharacterValueSemantics())
                 .build();
 
-        val value = new CharIdentity(entityType, c);
-        val stringified = stringifier.enstring(value);
-        val parse = stringifier.destring(entityType, stringified);
+        var value = new CharIdentity(entityType, c);
+        var stringified = stringifier.enstring(value);
+        var parse = stringifier.destring(entityType, stringified);
 
         assertThat(parse).isEqualTo(value);
     }

@@ -55,7 +55,6 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "ofEventService")
@@ -63,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 public class DomainEventHelper {
 
     public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
-        val eventService = serviceRegistry.lookupServiceElseFail(MetamodelEventService.class);
+        var eventService = serviceRegistry.lookupServiceElseFail(MetamodelEventService.class);
         return ofEventService(eventService);
     }
 
@@ -139,9 +138,9 @@ public class DomainEventHelper {
                         event.setSemantics(objectAction.getSemantics());
                     }
 
-                    val parameters = objectAction.getParameters();
+                    var parameters = objectAction.getParameters();
 
-                    val parameterNames = parameters.stream()
+                    var parameterNames = parameters.stream()
                             .map(ObjectActionParameter::getCanonicalFriendlyName)
                             .collect(_Lists.toUnmodifiable());
 
@@ -181,9 +180,9 @@ public class DomainEventHelper {
         throws IllegalArgumentException,
             SecurityException {
 
-        val constructors = _Reflect.getPublicConstructors(type);
+        var constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructor = constructors
+        var noArgConstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor!=null) {
@@ -193,7 +192,7 @@ public class DomainEventHelper {
             return ade;
         }
 
-        val oneArgConstructor = constructors
+        var oneArgConstructor = constructors
                 .filter(paramCount(1)
                         .and(paramAssignableFrom(0, source.getClass())))
                 .getFirst().orElse(null);
@@ -207,7 +206,7 @@ public class DomainEventHelper {
             return ade;
         }
 
-        val threeArgConstructor = constructors
+        var threeArgConstructor = constructors
                 .filter(paramCount(3)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
@@ -217,7 +216,7 @@ public class DomainEventHelper {
                 .orElse(null);
 
         if(threeArgConstructor!=null) {
-            val event = invokeConstructor(threeArgConstructor, source, identifier, arguments);
+            var event = invokeConstructor(threeArgConstructor, source, identifier, arguments);
             return uncheckedCast(event);
         }
 
@@ -291,9 +290,9 @@ public class DomainEventHelper {
             final T newValue) throws NoSuchMethodException, SecurityException, IllegalArgumentException {
 
 
-        val constructors = _Reflect.getPublicConstructors(type);
+        var constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgonstructor = constructors
+        var noArgonstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgonstructor != null) {
@@ -304,7 +303,7 @@ public class DomainEventHelper {
             return pde;
         }
 
-        val oneArgConstructor = constructors
+        var oneArgConstructor = constructors
                 .filter(paramCount(1)
                         .and(paramAssignableFrom(0, source.getClass())))
                 .getFirst().orElse(null);
@@ -318,7 +317,7 @@ public class DomainEventHelper {
         }
 
         // else
-        val fourArgConstructor = constructors
+        var fourArgConstructor = constructors
                 .filter(paramCount(4)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
@@ -326,7 +325,7 @@ public class DomainEventHelper {
                         .and(paramAssignableFromValue(3, newValue))
                 ).getFirst().orElse(null);
         if(fourArgConstructor != null) {
-            val event = invokeConstructor(fourArgConstructor, source, identifier, oldValue, newValue);
+            var event = invokeConstructor(fourArgConstructor, source, identifier, oldValue, newValue);
             return uncheckedCast(event);
         }
 
@@ -374,9 +373,9 @@ public class DomainEventHelper {
             throws NoSuchMethodException, SecurityException,
             IllegalArgumentException {
 
-        val constructors = _Reflect.getPublicConstructors(type);
+        var constructors = _Reflect.getPublicConstructors(type);
 
-        val noArgConstructor = constructors
+        var noArgConstructor = constructors
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor != null) {
@@ -385,7 +384,7 @@ public class DomainEventHelper {
             return cde;
         }
 
-        val oneArgConstructor = constructors
+        var oneArgConstructor = constructors
                 .filter(paramCount(1)
                         .and(paramAssignableFrom(0, source.getClass())))
                 .getFirst().orElse(null);
@@ -399,14 +398,14 @@ public class DomainEventHelper {
 
         // else
         // search for constructor accepting source, identifier
-        val twoArgConstructor = constructors
+        var twoArgConstructor = constructors
                 .filter(paramCount(2)
                         .and(paramAssignableFrom(0, source.getClass()))
                         .and(paramAssignableFrom(1, Identifier.class))
                         )
                 .getFirst().orElse(null);
         if(twoArgConstructor != null) {
-            val event = invokeConstructor(twoArgConstructor, source, identifier);
+            var event = invokeConstructor(twoArgConstructor, source, identifier);
             return uncheckedCast(event);
         }
 

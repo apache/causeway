@@ -56,7 +56,6 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -105,13 +104,13 @@ implements ComponentFactoryRegistry {
      */
     protected void registerComponentFactories(final ComponentFactoryRegistrar componentFactoryRegistrar) {
 
-        val componentFactories = new ComponentFactoryList();
+        var componentFactories = new ComponentFactoryList();
 
         componentFactoryRegistrar.addComponentFactories(componentFactories);
 
-        val commonContext = metaModelContext;
+        var commonContext = metaModelContext;
 
-        for (val componentFactory : componentFactories) {
+        for (var componentFactory : componentFactories) {
             registerComponentFactory(commonContext, componentFactory);
             componentFactoriesByType.put(componentFactory.getClass(), componentFactory);
         }
@@ -133,7 +132,7 @@ implements ComponentFactoryRegistry {
     }
 
     private void ensureAllComponentTypesRegistered() {
-        for (val componentType : UiComponentType.values()) {
+        for (var componentType : UiComponentType.values()) {
 
             if(componentType.getOptionality().isOptional()) {
                 continue;
@@ -181,11 +180,11 @@ implements ComponentFactoryRegistry {
         // find all that apply, unless we find one that applies exclusively
         // in the exclusive case, we just return the exclusive one
 
-        val exclusiveIfAny = _Refs.<ComponentFactory>objectRef(null);
+        var exclusiveIfAny = _Refs.<ComponentFactory>objectRef(null);
 
-        val allThatApply = componentFactoriesByComponentType.streamElements(uiComponentType)
+        var allThatApply = componentFactoriesByComponentType.streamElements(uiComponentType)
                 .filter(componentFactory->{
-                    val advice = componentFactory.appliesTo(uiComponentType, model);
+                    var advice = componentFactory.appliesTo(uiComponentType, model);
                     if(advice.appliesExclusively()) {
                         exclusiveIfAny.set(componentFactory);
                     }
@@ -239,7 +238,7 @@ implements ComponentFactoryRegistry {
             final ComponentFactoryRegistrar componentFactoryRegistrar,
             final MetaModelContext metaModelContext,
             final List<ComponentFactory> componentFactories) {
-        val factory = new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
+        var factory = new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
         _NullSafe.stream(componentFactories)
         .forEach(componentFactory->
             factory.componentFactoriesByComponentType.putElement(

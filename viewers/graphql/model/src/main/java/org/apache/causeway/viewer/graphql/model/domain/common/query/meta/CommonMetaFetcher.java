@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
-import lombok.val;
-
 /**
  * Metadata for every domain object.
  */
@@ -67,10 +65,10 @@ public class CommonMetaFetcher {
     public String version() {
         return managedObject()
                 .map(managedObject -> {
-                    val domainPojo = managedObject.getPojo();
-                    val entityFacet = managedObject.getSpecification().getFacet(EntityFacet.class);
+                    var domainPojo = managedObject.getPojo();
+                    var entityFacet = managedObject.getSpecification().getFacet(EntityFacet.class);
                     if (entityFacet != null) {
-                        val object = entityFacet.versionOf(domainPojo);
+                        var object = entityFacet.versionOf(domainPojo);
                         return object != null ? object.toString() : null;
                     } else {
                         return null;
@@ -91,7 +89,7 @@ public class CommonMetaFetcher {
     public String cssClass() {
         return managedObject()
                 .map(managedObject -> {
-                    val facet = managedObject.getSpecification().getFacet(CssClassFacet.class);
+                    var facet = managedObject.getSpecification().getFacet(CssClassFacet.class);
                     return facet != null ? facet.cssClass(managedObject) : null;
                 })
                 .orElse(null);
@@ -100,7 +98,7 @@ public class CommonMetaFetcher {
     public String layout() {
         return managedObject()
                 .map(managedObject -> {
-                    val facet = managedObject.getSpecification().getFacet(LayoutFacet.class);
+                    var facet = managedObject.getSpecification().getFacet(LayoutFacet.class);
                     return facet != null ? facet.layout(managedObject) : null;
                 })
                 .orElse(null);

@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 
-import lombok.val;
-
 public class CollectionFacetFactory
 extends FacetFactoryAbstract {
 
@@ -39,11 +37,11 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
         CollectionSemantics.valueOf(cls)
         .ifPresent(collectionType->{
-            val facetHolder = processClassContext.getFacetHolder();
+            var facetHolder = processClassContext.getFacetHolder();
             if (collectionType.isArray()) {
                 addFacet(new JavaArrayFacet(facetHolder));
             }

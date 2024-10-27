@@ -23,8 +23,6 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
-import lombok.val;
-
 /**
  * @since 2.0
  */
@@ -35,7 +33,7 @@ public class TransactionScopeBeanFactoryPostProcessor implements BeanFactoryPost
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        val transactionScope = new StackedTransactionScope();
+        var transactionScope = new StackedTransactionScope();
         beanFactory.registerScope(SCOPE_NAME, transactionScope);
     }
 

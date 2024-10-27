@@ -64,7 +64,6 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public final class ProgrammingModelConstants {
 
@@ -199,7 +198,7 @@ public final class ProgrammingModelConstants {
 
         // while this enum only has a single value, we just provide a (quasi) static method here
         public <T> Can<Constructor<T>> getConstructors(final Class<T> candidateMixinType) {
-            val mixinContructors = _Reflect
+            var mixinContructors = _Reflect
                     .getPublicConstructors(candidateMixinType)
                     .filter(paramCount(1));
             return _Casts.uncheckedCast(mixinContructors);
@@ -582,8 +581,8 @@ public final class ProgrammingModelConstants {
 
     private static String getCapitalizedMemberName(final Member member) {
         if(member instanceof Method) {
-            val method = (Method)member;
-            val methodName = method.getName();
+            var method = (Method)member;
+            var methodName = method.getName();
             if(method.getParameterCount()>0
                     || method.getReturnType().equals(void.class)
                     || !AccessorSemantics.isCandidateGetterName(methodName)) {
@@ -601,7 +600,7 @@ public final class ProgrammingModelConstants {
             final String template,
             final Map<String, String> templateVars) {
 
-        val templateRef = _Refs.stringRef(template);
+        var templateRef = _Refs.stringRef(template);
         templateVars.forEach((k, v)->templateRef.update(str->str.replace("${" + k + "}", v)));
         return templateRef.getValue();
     }

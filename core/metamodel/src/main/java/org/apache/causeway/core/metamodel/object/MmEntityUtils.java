@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -45,7 +44,7 @@ public final class MmEntityUtils {
         if(adapter==null) {
             return Optional.empty();
         }
-        val spec = adapter.getSpecification();
+        var spec = adapter.getSpecification();
         if(spec==null || !spec.isEntity()) {
             return Optional.empty();
         }
@@ -63,15 +62,15 @@ public final class MmEntityUtils {
 
     public void persistInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        val spec = managedObject.getSpecification();
-        val entityFacet = spec.entityFacetElseFail();
+        var spec = managedObject.getSpecification();
+        var entityFacet = spec.entityFacetElseFail();
         entityFacet.persist(managedObject.getPojo());
     }
 
     public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        val spec = managedObject.getSpecification();
-        val entityFacet = spec.entityFacetElseFail();
+        var spec = managedObject.getSpecification();
+        var entityFacet = spec.entityFacetElseFail();
         entityFacet.delete(managedObject.getPojo());
     }
 
@@ -79,7 +78,7 @@ public final class MmEntityUtils {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
             throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
         }
-        val spec = managedObject.getSpecification();
+        var spec = managedObject.getSpecification();
         if(!spec.isEntity()) {
             throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
                     spec.getCorrespondingClass(),
@@ -127,7 +126,7 @@ public final class MmEntityUtils {
             ((PackedManagedObject)managedObject).unpack().forEach(MmEntityUtils::requiresAttached);
             return managedObject;
         }
-        val entityState = MmEntityUtils.getEntityState(managedObject);
+        var entityState = MmEntityUtils.getEntityState(managedObject);
         if(entityState.isPersistable()) {
             // ensure we have an attached entity
             _Assert.assertEquals(
@@ -146,7 +145,7 @@ public final class MmEntityUtils {
         if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second)) {
             return;
         }
-        val secondSpec = second.getSpecification();
+        var secondSpec = second.getSpecification();
         if(secondSpec.isParented() || !secondSpec.isEntity()) {
             return;
         }

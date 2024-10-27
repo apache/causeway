@@ -38,8 +38,6 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGrou
 import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberIdentifierComparator;
 import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 
-import lombok.val;
-
 /**
  * Represents a nested hierarchy of ordered members.
  *
@@ -84,7 +82,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // any non-annotated members go into additional nonAnnotatedGroup set.
 
         identifiedHolders.forEach(facetHolder->{
-            val layoutGroupFacet = facetHolder.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = facetHolder.getFacet(LayoutGroupFacet.class);
             if (layoutGroupFacet == null) {
                 nonAnnotatedGroup.add(facetHolder);
                 return;

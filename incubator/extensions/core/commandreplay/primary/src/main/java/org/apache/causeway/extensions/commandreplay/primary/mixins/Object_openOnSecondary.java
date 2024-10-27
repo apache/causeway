@@ -36,7 +36,6 @@ import org.apache.causeway.extensions.commandreplay.primary.CausewayModuleExtCom
 import org.apache.causeway.extensions.commandreplay.primary.config.PrimaryConfig;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -66,8 +65,8 @@ public class Object_openOnSecondary {
     @Inject BookmarkService bookmarkService;
 
     @MemberSupport public URL act() {
-        val baseUrlPrefix = lookupBaseUrlPrefix();
-        val urlSuffix = bookmarkService.bookmarkForElseFail(object).toString();
+        var baseUrlPrefix = lookupBaseUrlPrefix();
+        var urlSuffix = bookmarkService.bookmarkForElseFail(object).toString();
 
         try {
             return new URL(baseUrlPrefix + urlSuffix);

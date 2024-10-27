@@ -44,7 +44,7 @@ implements WicketApplicationInitializer {
 
         //debug
         //replace the resource locator
-//        val defaultResourceStreamLocator = webApplication.getResourceSettings()
+//        var defaultResourceStreamLocator = webApplication.getResourceSettings()
 //            .getResourceStreamLocator();
 //        webApplication.getResourceSettings()
 //            .setResourceStreamLocator(new XrayResourceStreamLocator(defaultResourceStreamLocator));
@@ -66,7 +66,7 @@ implements WicketApplicationInitializer {
 //                final String style, final String variation, final Locale locale,
 //                final String extension, final boolean strict) {
 //            if(variation!=null) {
-//                val result = delegate.locate(clazz, path, style, variation, locale, extension, strict);
+//                var result = delegate.locate(clazz, path, style, variation, locale, extension, strict);
 //                System.err.printf("variation %s:%s->%b%n", clazz.getName(), variation, result!=null);
 //            }
 //

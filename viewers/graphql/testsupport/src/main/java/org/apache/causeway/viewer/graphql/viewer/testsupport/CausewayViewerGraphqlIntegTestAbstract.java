@@ -80,7 +80,7 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 
 import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
+
 
 /**
  * Intended as a base class for integration testing.
@@ -207,7 +207,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     @SneakyThrows
     protected String submit(final Map<String,String> replacements) {
-        val httpRequest = buildRequest(testInfo, suffix, replacements);
+        var httpRequest = buildRequest(testInfo, suffix, replacements);
         return submitRequest(httpRequest);
     }
 
@@ -217,13 +217,13 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     @SneakyThrows
     protected String submit(final String variant, final Map<String,String> replacements) {
-        val httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
+        var httpRequest = buildRequest(testInfo, "._." +variant + ".gql", replacements);
         return submitRequest(httpRequest);
     }
 
     @SneakyThrows
     protected String submitFileNamed(final String fileName) {
-        val httpRequest = buildRequest(fileName, Collections.emptyMap());
+        var httpRequest = buildRequest(fileName, Collections.emptyMap());
         return submitRequest(httpRequest);
     }
 
@@ -238,8 +238,8 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
             final String resourceSuffix,
             final Map<String, String> replacements) {
 
-        val testMethodName = testInfo.getTestMethod().map(Method::getName).get();
-        val resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
+        var testMethodName = testInfo.getTestMethod().map(Method::getName).get();
+        var resourceName = getClass().getSimpleName() + "." + testMethodName + resourceSuffix;
         return buildRequest(resourceName, replacements);
     }
 
@@ -248,11 +248,11 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         String resourceContents = readResource(resourceName);
         String resourceContent = replace(resourceContents, replacements);
 
-        val uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
+        var uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
 
-        val gqlBody = new GqlBody(resourceContent);
-        val gqlBodyStr = objectMapper.writeValueAsString(gqlBody);
-        val bodyPublisher = HttpRequest.BodyPublishers.ofString(gqlBodyStr);
+        var gqlBody = new GqlBody(resourceContent);
+        var gqlBodyStr = objectMapper.writeValueAsString(gqlBody);
+        var bodyPublisher = HttpRequest.BodyPublishers.ofString(gqlBodyStr);
 
         return HttpRequest.newBuilder().
                 uri(uri).
@@ -262,7 +262,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     private static String replace(final String str, final Map<String, String> replacements) {
-        val builder = new StringBuilder(str);
+        var builder = new StringBuilder(str);
         replacements.forEach((key, value) -> {
             int index;
             int numMatches = 0;
@@ -278,9 +278,9 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     }
 
     private String submitRequest(final HttpRequest request) throws IOException, InterruptedException {
-        val responseBodyHandler = HttpResponse.BodyHandlers.ofString();
-        val httpClient = HttpClient.newBuilder().build();
-        val httpResponse = httpClient.send(request, responseBodyHandler);
+        var responseBodyHandler = HttpResponse.BodyHandlers.ofString();
+        var httpClient = HttpClient.newBuilder().build();
+        var httpResponse = httpClient.send(request, responseBodyHandler);
         return httpResponse.body();
     }
 
@@ -328,8 +328,8 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     protected Iterable<DynamicTest> each() throws IOException, URISyntaxException {
 
-        val integClassName = getClass().getSimpleName();
-        val classUrl = getClass().getResource(integClassName + ".class");
+        var integClassName = getClass().getSimpleName();
+        var classUrl = getClass().getResource(integClassName + ".class");
         Path classPath = Paths.get(classUrl.toURI());
         Path directoryPath = classPath.getParent();
 
@@ -361,7 +361,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     protected void afterEach() {}
 
     protected Blob asPdfBlob(final String fileName) {
-        val bytes = toBytes(fileName);
+        var bytes = toBytes(fileName);
         return new Blob(fileName, "application/pdf", bytes);
     }
 

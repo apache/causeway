@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -217,8 +217,8 @@ public class RepresentationService {
                 .map(s->" - "+s)
                 .collect(Collectors.joining("\n")));
 
-        for (val contentNegotiationService : contentNegotiationServices) {
-            val responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
+        for (var contentNegotiationService : contentNegotiationServices) {
+            var responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
 
                 log.debug("--> winner: {}", ()->contentNegotiationService.getClass().getSimpleName());

@@ -37,7 +37,6 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.causeway.extensions.excel.applib.AggregationType;
 import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -202,7 +201,7 @@ public class SheetPivoter {
 
     private void validateAndAdaptSourceDataIfNeeded() throws ExcelServiceDefault.Exception {
 
-        val sourceNotValid = sourceNotValid();
+        var sourceNotValid = sourceNotValid();
         if (sourceNotValid!=null){
             throw sourceNotValid;
         }

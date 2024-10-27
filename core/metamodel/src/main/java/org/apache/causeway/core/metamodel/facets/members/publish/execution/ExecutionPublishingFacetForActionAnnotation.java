@@ -27,8 +27,6 @@ import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-import lombok.val;
-
 public abstract class ExecutionPublishingFacetForActionAnnotation extends ExecutionPublishingFacetAbstract {
 
     static class Enabled extends ExecutionPublishingFacetForActionAnnotation {
@@ -58,7 +56,7 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        val publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
+        var publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
 
         return
         actionsIfAny
@@ -91,7 +89,7 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
     }
 
     static boolean hasSafeSemantics(final FacetHolder holder) {
-        val actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
+        var actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
         return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
     }
 

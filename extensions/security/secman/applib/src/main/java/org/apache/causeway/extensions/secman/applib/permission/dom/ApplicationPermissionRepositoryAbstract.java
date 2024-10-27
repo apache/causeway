@@ -47,7 +47,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  *
@@ -100,7 +99,7 @@ implements ApplicationPermissionRepository {
     }
 
     public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
-        val roleNames = userMemento.getRoles().stream()
+        var roleNames = userMemento.getRoles().stream()
                 .map(RoleMemento::getName)
                 .collect(Collectors.toList());
         return findByRoleNames(roleNames);
@@ -133,7 +132,7 @@ implements ApplicationPermissionRepository {
 
         // obtain all permissions for this user, map by its value, and
         // put into query cache (so that this method can be safely called in a tight loop)
-        val permissions =
+        var permissions =
                 queryResultsCacheProvider.get().execute(
                         this::permissionsByPermissionValue,
                         ApplicationPermissionRepositoryAbstract.class, "findByUserAndPermissionValue",
@@ -152,14 +151,14 @@ implements ApplicationPermissionRepository {
         // only username (and not permissionValue) is the key
         // (we are obtaining all the perms for this user)
 
-        val permissionsByPermissionValue =
+        var permissionsByPermissionValue =
                 _Multimaps.<ApplicationPermissionValue, ApplicationPermission>newListMultimap();
 
-        val permissions = findByUser(username);
+        var permissions = findByUser(username);
 
         _NullSafe.stream(permissions)
         .forEach(permission->{
-            val newPermissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
+            var newPermissionValue = ApplicationPermission.Functions.AS_VALUE.apply(permission);
             permissionsByPermissionValue.putElement(newPermissionValue, permission);
         });
 
@@ -251,7 +250,7 @@ implements ApplicationPermissionRepository {
             final ApplicationFeatureSort featureSort,
             final String featureFqn) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        var role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
 
         final ApplicationFeatureId featureId = ApplicationFeatureId.newFeature(featureSort, featureFqn);
         final ApplicationFeature feature = featureRepository.findFeature(featureId);
@@ -294,7 +293,7 @@ implements ApplicationPermissionRepository {
             final String featureClassName,
             final String featureMemberName) {
 
-        val featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
+        var featureId = ApplicationFeatureId.newFeature(featurePackage, featureClassName, featureMemberName);
         return newPermission(genericRole, rule, mode, featureId);
     }
 
@@ -305,17 +304,17 @@ implements ApplicationPermissionRepository {
             final ApplicationPermissionMode mode,
             final ApplicationFeatureId featureId) {
 
-        val role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
-        val featureSort = featureId.getSort();
-        val featureFqn = featureId.getFullyQualifiedName();
+        var role = _Casts.<ApplicationRole>uncheckedCast(genericRole);
+        var featureSort = featureId.getSort();
+        var featureFqn = featureId.getFullyQualifiedName();
 
-        val feature = featureRepository.findFeature(featureId);
+        var feature = featureRepository.findFeature(featureId);
         if(feature == null) {
             messages.warnUser("No such " + featureSort.name().toLowerCase() + ": " + featureFqn);
             return null;
         }
 
-        val permission = factory.detachedEntity(applicationPermissionClass);
+        var permission = factory.detachedEntity(applicationPermissionClass);
         permission.setRole(role);
         permission.setRule(rule);
         permission.setMode(mode);
@@ -340,14 +339,14 @@ implements ApplicationPermissionRepository {
     @Override
     public Collection<ApplicationPermission> findOrphaned() {
 
-        val featureNamesKnownToTheMetamodel =
+        var featureNamesKnownToTheMetamodel =
                 featureRepository.getFeatureIdentifiersByName().keySet();
 
-        val orphaned = _Lists.<ApplicationPermission>newArrayList();
+        var orphaned = _Lists.<ApplicationPermission>newArrayList();
 
-        for (val permission : allPermissions()) {
+        for (var permission : allPermissions()) {
 
-            val featId = permission.asFeatureId().orElse(null);
+            var featId = permission.asFeatureId().orElse(null);
             if(featId==null) {
                 orphaned.add(permission);
                 continue;

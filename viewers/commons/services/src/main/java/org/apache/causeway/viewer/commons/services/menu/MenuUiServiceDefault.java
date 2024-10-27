@@ -41,7 +41,6 @@ import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiMod
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".MenuUiServiceDefault")
@@ -66,10 +65,10 @@ implements MenuUiService {
 
     private NavbarSection buildNavBarSection(final MenuBar menuBarSelect) {
 
-        val menuBar = (BSMenuBar) menuBarsService.menuBars()
+        var menuBar = (BSMenuBar) menuBarsService.menuBars()
                 .menuBarFor(menuBarSelect);
 
-        val topLevelEntries = new ArrayList<MenuDropdownBuilder>();
+        var topLevelEntries = new ArrayList<MenuDropdownBuilder>();
 
         _MenuItemBuilder.buildMenuItems(metaModelContext, menuBar, new _MenuItemBuilder.Visitor() {
 
@@ -92,7 +91,7 @@ implements MenuUiService {
 
             @Override
             public void addMenuAction(final MenuItemDto menuDto) {
-                val action = menuDto.getManagedAction();
+                var action = menuDto.getManagedAction();
                 currentMenu.addAction(action);
             }
 

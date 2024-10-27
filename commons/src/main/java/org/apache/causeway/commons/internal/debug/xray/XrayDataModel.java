@@ -45,7 +45,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public abstract class XrayDataModel extends HasIdAndLabel {
 
@@ -78,16 +77,16 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             String[] columnNames = {"Key", "Value"};
             Object[][] tableData = new Object[data.size()][columnNames.length];
 
-            val rowIndex = _Refs.intRef(0);
+            var rowIndex = _Refs.intRef(0);
 
             data.forEach((k, v)->{
-                val row = tableData[rowIndex.getValue()];
+                var row = tableData[rowIndex.getValue()];
                 rowIndex.incAndGet();
                 row[0] = k;
                 row[1] = v;
             });
 
-            val table = _SwingUtil.newTable(tableData, columnNames);
+            var table = _SwingUtil.newTable(tableData, columnNames);
             table.setFillsViewportHeight(true);
 
             panel.setViewportView(table);
@@ -113,18 +112,18 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         @Override
         public void render(final JScrollPane panel) {
 
-            val layout = new BorderLayout();
-            val panel2 = new JPanel(layout);
+            var layout = new BorderLayout();
+            var panel2 = new JPanel(layout);
             layout.setHgap(10);
             layout.setVgap(10);
 
             // log message label
 
-            val logMessagePane = new JEditorPane();
+            var logMessagePane = new JEditorPane();
             logMessagePane.setEditable(false);
             logMessagePane.setText(logMessage);
 
-            val timestampLabel = new JLabel(timestamp.format(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS));
+            var timestampLabel = new JLabel(timestamp.format(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER_WITH_MILLIS));
 
             panel2.add(
                     _SwingUtil.verticalBox(
@@ -137,16 +136,16 @@ public abstract class XrayDataModel extends HasIdAndLabel {
             String[] columnNames = {"", "StackTraceElement"};
             Object[][] tableData = new Object[data.size()][columnNames.length];
 
-            val rowIndex = _Refs.intRef(0);
+            var rowIndex = _Refs.intRef(0);
 
             data.forEach(IndexedConsumer.offset(1, (index, se)->{
-                val row = tableData[rowIndex.getValue()];
+                var row = tableData[rowIndex.getValue()];
                 rowIndex.incAndGet();
                 row[0] = index;
                 row[1] = se.toString();
             }));
 
-            val table = _SwingUtil.newTable(tableData, columnNames);
+            var table = _SwingUtil.newTable(tableData, columnNames);
             table.setFillsViewportHeight(true);
 
             panel2.add(table, BorderLayout.CENTER);
@@ -187,13 +186,13 @@ public abstract class XrayDataModel extends HasIdAndLabel {
         @Override
         public void render(final JScrollPane panel) {
 
-            val canvas = _SwingUtil.canvas(g->{
+            var canvas = _SwingUtil.canvas(g->{
                 g.setColor(BACKGROUND_COLOR);
                 g.fill(g.getClip());
                 data.render(g);
             });
 
-            val dim = data.layout((Graphics2D)panel.getGraphics());
+            var dim = data.layout((Graphics2D)panel.getGraphics());
 
             if(BORDER_COLOR!=null) {
                 canvas.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));

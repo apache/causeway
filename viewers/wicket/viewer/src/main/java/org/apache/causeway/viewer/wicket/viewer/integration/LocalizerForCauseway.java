@@ -40,8 +40,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
 
-import lombok.val;
-
 /**
  * Implementation integrates Causeway' own i18n support ({@link TranslationService}) with Wicket's equivalent i18n
  * mechanism (the {@link Localizer} singleton).
@@ -130,7 +128,7 @@ public class LocalizerForCauseway extends Localizer {
         if(component instanceof Form || component instanceof Panel) {
             return Optional.of(component);
         }
-        val parent = component.getParent();
+        var parent = component.getParent();
         if(parent != null) {
             return parentFormOrPanelOf(parent);
         }

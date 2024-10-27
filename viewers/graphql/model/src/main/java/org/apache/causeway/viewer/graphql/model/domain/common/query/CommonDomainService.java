@@ -35,7 +35,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Exposes a domain service (view model or entity) via the GQL viewer.
@@ -88,8 +87,8 @@ public class CommonDomainService
 
     private void addActions() {
 
-        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        val apiScope = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiScope = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .filter(this::inApiScope)
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||

@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -69,12 +69,12 @@ class SpecLoaderTest {
     })
     void primitiveRoundtrip_shouldSucceed(final Class<?> type) {
 
-        val spec1 = specificationLoader.loadSpecification(type);
+        var spec1 = specificationLoader.loadSpecification(type);
         assertNotNull(spec1);
 
-        val logicalType = spec1.getLogicalType();
+        var logicalType = spec1.getLogicalType();
 
-        val spec2 = specificationLoader.specForLogicalType(logicalType).orElse(null);
+        var spec2 = specificationLoader.specForLogicalType(logicalType).orElse(null);
         assertNotNull(spec2);
 
         assertEquals(spec1.getLogicalType(), spec2.getLogicalType());

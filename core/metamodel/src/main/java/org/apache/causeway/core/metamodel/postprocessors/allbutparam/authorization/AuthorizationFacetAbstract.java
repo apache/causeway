@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -55,7 +54,7 @@ implements AuthorizationFacet {
             return null; // never hide value-types
         }
 
-        val hides = authorizationManager
+        var hides = authorizationManager
                 .isVisible(
                         getInteractionService().currentInteractionContextElseFail(),
                         ic.getIdentifier())
@@ -76,7 +75,7 @@ implements AuthorizationFacet {
             return Optional.empty(); // never disable value-types
         }
 
-        val disables = authorizationManager
+        var disables = authorizationManager
                 .isUsable(
                         getInteractionService().currentInteractionContextElseFail(),
                         ic.getIdentifier())

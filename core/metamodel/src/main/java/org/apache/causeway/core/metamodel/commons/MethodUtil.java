@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -52,7 +51,7 @@ public class MethodUtil {
     }
 
     public static boolean isVoid(final ResolvedMethod method) {
-        val returnType = method.returnType();
+        var returnType = method.returnType();
         return returnType.equals(void.class)
                     || returnType.equals(Void.class);
     }
@@ -91,8 +90,8 @@ public class MethodUtil {
                 final Class<?>[] parameterTypes = method.paramTypes();
 
                 for (int c = 0; c < matchingParamTypes.size(); c++) {
-                    val left = parameterTypes[paramIndexOffset + c];
-                    val right = matchingParamTypes.getElseFail(paramIndexOffset);
+                    var left = parameterTypes[paramIndexOffset + c];
+                    var right = matchingParamTypes.getElseFail(paramIndexOffset);
 
                     if(!Objects.equals(left, right)) {
                         return false;
@@ -167,7 +166,7 @@ public class MethodUtil {
                 if(method.paramCount() != paramCount) {
                     return false;
                 }
-                val type = method.returnType();
+                var type = method.returnType();
                 if(!ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type)) {
                     return false;
                 }

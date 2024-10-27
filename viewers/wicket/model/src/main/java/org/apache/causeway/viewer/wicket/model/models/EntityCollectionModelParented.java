@@ -28,7 +28,7 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTable
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+
 
 public class EntityCollectionModelParented
 extends EntityCollectionModelAbstract
@@ -47,11 +47,11 @@ implements
     public static EntityCollectionModelParented forParentObjectModel(
             final @NonNull UiObjectWkt entityModel, final @NonNull CollectionLayoutData layoutData) {
 
-        val coll = entityModel
+        var coll = entityModel
                         .getTypeOfSpecification()
                         .getCollectionElseFail(layoutData.getId()); // collection's member-id
 
-        val dataTableModel = DataTableModelWkt
+        var dataTableModel = DataTableModelWkt
                 .forCollection(entityModel.bookmarkedObjectModel(), coll);
 
         return new EntityCollectionModelParented(

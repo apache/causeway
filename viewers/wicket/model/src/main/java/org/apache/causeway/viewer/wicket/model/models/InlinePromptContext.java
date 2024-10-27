@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.functions._Functions;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor
 public class InlinePromptContext implements Serializable {
@@ -54,7 +54,7 @@ public class InlinePromptContext implements Serializable {
         memberModel
         .accept(_Functions.noopConsumer(), prop->{
             // reset the UI form input field to the untouched property value
-            val untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
+            var untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
             scalarModel.setObject(untouchedPropertyValue);
         });
 

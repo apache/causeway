@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 import io.swagger.v3.oas.models.Operation;
@@ -69,11 +69,11 @@ class _OpenApi {
             final Schema<?> ref,
             final @NonNull List<String> supportedFormats,
             final Consumer<ApiResponse> responseRefiner) {
-        val content = new Content();
+        var content = new Content();
         supportedFormats
             .forEach(format->
                 content.addMediaType(format, mediaType(ref)));
-        val response = new ApiResponse()
+        var response = new ApiResponse()
                 .content(content);
         responseRefiner.accept(response);
         return new Operation()

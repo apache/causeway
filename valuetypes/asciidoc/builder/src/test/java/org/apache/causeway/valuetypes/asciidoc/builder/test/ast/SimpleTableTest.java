@@ -29,8 +29,6 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.do
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.headCell;
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.table;
 
-import lombok.val;
-
 class SimpleTableTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -49,7 +47,7 @@ class SimpleTableTest extends AbstractAsciiDocWriterTest {
 
         // assert that we have a blank line before the title block starts
 
-        val table = table(doc);
+        var table = table(doc);
 
         headCell(table, 0, 0, "Col-1");
         headCell(table, 0, 1, "Col-2");

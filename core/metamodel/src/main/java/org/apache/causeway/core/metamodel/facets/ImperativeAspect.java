@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Value;
-import lombok.val;
 
 @Value
 public class ImperativeAspect {
@@ -62,7 +61,7 @@ public class ImperativeAspect {
     }
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
         final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), domainObject);
         return returnValue;
     }

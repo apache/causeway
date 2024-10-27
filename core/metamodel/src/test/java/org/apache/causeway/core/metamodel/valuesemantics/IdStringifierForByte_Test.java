@@ -28,8 +28,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import lombok.val;
-
 class IdStringifierForByte_Test {
 
     public static Stream<Arguments> roundtrip() {
@@ -46,7 +44,7 @@ class IdStringifierForByte_Test {
     @MethodSource()
     void roundtrip(final Byte value) {
 
-        val stringifier = new ByteValueSemantics();
+        var stringifier = new ByteValueSemantics();
 
         String stringified = stringifier.enstring(value);
         Byte parse = stringifier.destring(stringified);

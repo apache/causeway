@@ -59,7 +59,6 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedI
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public abstract class ValueFacetAbstract<T>
 extends FacetAbstract
@@ -123,7 +122,7 @@ implements ValueFacet<T> {
 
     @Override
     public ValueSemanticsProvider.Context createValueSemanticsContext(final @Nullable ObjectFeature feature) {
-        val iaProvider = super.getInteractionService();
+        var iaProvider = super.getInteractionService();
         if(iaProvider==null) {
             return null; // JUnit context
         }
@@ -357,7 +356,7 @@ implements ValueFacet<T> {
             // 3. not-empty vs. empty      ->  reject
             // 4. not-empty vs. not-empty  ->  accept when any match
 
-            val qualifiersOnBean =
+            var qualifiersOnBean =
             _Annotations
             .synthesize(valueSemantics.getClass(), Qualifier.class) //TODO memoize somewhere
             .map(Qualifier::value)

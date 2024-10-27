@@ -48,7 +48,6 @@ import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
 import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -109,17 +108,17 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             final DataSource dataSource,
             final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
             log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
 
-            try(val con = dataSource.getConnection()){
+            try(var con = dataSource.getConnection()){
 
-                val s = con.createStatement();
+                var s = con.createStatement();
 
-                for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
+                for(var schema : persistenceSchemaConf.getAutoCreateSchemas()) {
                     s.execute(String.format(persistenceSchemaConf.getCreateSchemaSqlTemplate(), schema));
                 }
 
@@ -136,7 +135,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             final JpaProperties properties,
             final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
         persistenceSchemaConf.getAdditionalOrmFiles()
         .forEach(schema->properties.getMappingResources()
@@ -154,7 +153,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
     @SuppressWarnings("serial")
     private EclipseLinkJpaDialect eclipselinkJpaDialect() {
 
-        val jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());
+        var jdbcExceptionTranslator = newJdbcExceptionTranslator(getDataSource());
 
         return new EclipseLinkJpaDialect() {
 
@@ -170,7 +169,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                         && ex.getCause() instanceof SQLException) {
 
                     //converts SQL exceptions to Spring's hierarchy
-                    val translatedEx = getJdbcExceptionTranslator()
+                    var translatedEx = getJdbcExceptionTranslator()
                             .translate(
                                     "JPA operation: " + ex.getMessage(),
                                     extractSqlStringFromException(ex),
@@ -186,7 +185,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                  * However, don't let
                  * org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(RuntimeException)
                  * translate those 2 generic ones ... */
-                val translatedEx = (ex instanceof IllegalStateException
+                var translatedEx = (ex instanceof IllegalStateException
                         || ex instanceof IllegalArgumentException)
                         ? null
                         : super.translateExceptionIfPossible(ex);
@@ -196,7 +195,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                         || JpaSystemException.class.equals(translatedEx.getClass()))
                         && getJdbcExceptionTranslator() != null) {
 
-                    val translatedSqlEx = _Exceptions.streamCausalChain(ex)
+                    var translatedSqlEx = _Exceptions.streamCausalChain(ex)
                     .filter(nextEx->nextEx instanceof SQLException)
                     .map(SQLException.class::cast)
                     //converts SQL exceptions to Spring's hierarchy

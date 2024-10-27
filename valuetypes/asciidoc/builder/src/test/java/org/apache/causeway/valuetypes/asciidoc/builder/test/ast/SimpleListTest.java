@@ -28,8 +28,6 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.do
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.list;
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.listItem;
 
-import lombok.val;
-
 class SimpleListTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -44,7 +42,7 @@ class SimpleListTest extends AbstractAsciiDocWriterTest {
     @Test
     void testList() throws IOException {
 
-        val list = list(doc);
+        var list = list(doc);
         list.setTitle("SimpleList");
 
         listItem(list, "Item-1");

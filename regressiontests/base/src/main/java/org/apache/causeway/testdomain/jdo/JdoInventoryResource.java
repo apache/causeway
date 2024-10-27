@@ -43,7 +43,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Named("testdomain.jdo.InventoryResource")
 @DomainService(
@@ -94,7 +93,7 @@ public class JdoInventoryResource {
 
     @Action //XXX improve the REST client such that the param can be of type JdoBook?
     public JdoBook storeBook(final String newBook) throws JAXBException {
-        val book = JdoBook.fromDto(BookDto.decode(newBook));
+        var book = JdoBook.fromDto(BookDto.decode(newBook));
         return repository.persist(book);
     }
 
@@ -110,13 +109,13 @@ public class JdoInventoryResource {
 
         // when running with basic-auth strategy, we don't want to create HttpSessions at all
 
-        val servletRequestAttributes =
+        var servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        val httpSession = servletRequestAttributes.getRequest().getSession(false);
+        var httpSession = servletRequestAttributes.getRequest().getSession(false);
         if(httpSession==null) {
             return "no http-session";
         }
-        val sessionAttributeNames = _NullSafe.stream(httpSession.getAttributeNames())
+        var sessionAttributeNames = _NullSafe.stream(httpSession.getAttributeNames())
         .collect(Collectors.joining(","));
 
         return String.format("http-session attribute names: {%s}", sessionAttributeNames);
@@ -125,7 +124,7 @@ public class JdoInventoryResource {
     @Action
     public BookDto recommendedBookOfTheWeekAsDto() {
         // for this test we do not care if we generate duplicates
-        val book = JdoBook
+        var book = JdoBook
                 .of("Book of the week", "An awesome Book", 12, "Author", "ISBN", "Publisher");
         return BookDto.from(book);
     }
@@ -135,15 +134,15 @@ public class JdoInventoryResource {
             @ParameterLayout(named = "") final
             int nrOfBooks) {
 
-        val books = _Lists.<BookDto>newArrayList();
+        var books = _Lists.<BookDto>newArrayList();
         createMultipleBooks("MultipleBooksAsDtoTest", nrOfBooks, newBook->books.add(BookDto.from(newBook)));
         return books;
     }
 
     @Action
     public JdoInventoryJaxbVm inventoryAsJaxbVm() {
-        val inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
-        val books = listBooks();
+        var inventoryJaxbVm = factoryService.viewModel(new JdoInventoryJaxbVm());
+        var books = listBooks();
         if(_NullSafe.size(books)>0) {
             inventoryJaxbVm.setName("Bookstore");
             inventoryJaxbVm.setBooks(books);
@@ -159,11 +158,11 @@ public class JdoInventoryResource {
             final int nrOfBooks,
             final Consumer<JdoBook> onNewBook) {
 
-        val books = _Lists.<JdoBook>newArrayList();
+        var books = _Lists.<JdoBook>newArrayList();
 
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
-            val book = JdoBook
+            var book = JdoBook
                     .of(bookTitle, "An awesome Book["+i+"]", 12, "Author", "ISBN-"+i, "Publisher");
             onNewBook.accept(book);
             books.add(book);

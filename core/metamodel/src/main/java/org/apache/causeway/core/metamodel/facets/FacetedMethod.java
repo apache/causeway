@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -53,7 +52,7 @@ extends TypedHolderAbstract {
             final MetaModelContext mmc,
             final Class<?> declaringType,
             final ResolvedMethod getterMethod) {
-        val methodFacade = _MethodFacades.regular(getterMethod);
+        var methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.PROPERTY,
                 declaringType, methodFacade, _GenericResolver.forMethodReturn(getterMethod), Can.empty());
     }
@@ -62,7 +61,7 @@ extends TypedHolderAbstract {
             final MetaModelContext mmc,
             final Class<?> declaringType,
             final ResolvedMethod getterMethod) {
-        val methodFacade = _MethodFacades.regular(getterMethod);
+        var methodFacade = _MethodFacades.regular(getterMethod);
         return new FacetedMethod(mmc, FeatureType.COLLECTION,
                 declaringType, methodFacade, _GenericResolver.forMethodReturn(getterMethod), Can.empty());
     }
@@ -86,7 +85,7 @@ extends TypedHolderAbstract {
 
         int paramIndex = -1;
 
-        for(val parameterType : actionMethod.getParameterTypes()) {
+        for(var parameterType : actionMethod.getParameterTypes()) {
 
             paramIndex++;
 
@@ -95,7 +94,7 @@ extends TypedHolderAbstract {
                     ? FeatureType.ACTION_PARAMETER_PLURAL
                     : FeatureType.ACTION_PARAMETER_SINGULAR;
 
-            val facetedMethodParam =
+            var facetedMethodParam =
                     new FacetedMethodParameter(mmc, featureType, declaringType, actionMethod, paramIndex);
 
             if(featureType != FeatureType.ACTION_PARAMETER_PLURAL) {
@@ -105,7 +104,7 @@ extends TypedHolderAbstract {
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
 
-            val facetedMethodParamToUse =
+            var facetedMethodParamToUse =
                     TypeOfFacet
                     .inferFromMethodParameter(actionMethod, paramIndex, facetedMethodParam)
                     .map(typeOfFacet->{
@@ -132,7 +131,7 @@ extends TypedHolderAbstract {
                 final MetaModelContext mmc,
                 final Class<?> declaringType,
                 final String propertyName) {
-            val method = _GenericResolver.testing
+            var method = _GenericResolver.testing
                     .resolveMethod(declaringType, "set" + _Strings.asPascalCase.apply(propertyName), String.class);
             return FacetedMethod.createForProperty(mmc, declaringType, method);
         }
@@ -141,7 +140,7 @@ extends TypedHolderAbstract {
                 final MetaModelContext mmc,
                 final Class<?> declaringType,
                 final String propertyName) {
-            val method = _GenericResolver.testing
+            var method = _GenericResolver.testing
                     .resolveMethod(declaringType, "get" + _Strings.asPascalCase.apply(propertyName));
             return FacetedMethod.createForProperty(mmc, declaringType, method);
         }
@@ -150,7 +149,7 @@ extends TypedHolderAbstract {
                 final MetaModelContext mmc,
                 final Class<?> declaringType,
                 final String collectionName) {
-            val method = _GenericResolver.testing
+            var method = _GenericResolver.testing
                     .resolveMethod(declaringType, "get" + _Strings.asPascalCase.apply(collectionName));
             return FacetedMethod.createForCollection(mmc, declaringType, method);
         }
@@ -160,7 +159,7 @@ extends TypedHolderAbstract {
                 final Class<?> declaringType,
                 final String actionName,
                 final Class<?>... parameterTypes) {
-            val methodFacade = _MethodFacades.regular(
+            var methodFacade = _MethodFacades.regular(
                     _GenericResolver.testing.resolveMethod(declaringType, actionName, parameterTypes));
             return FacetedMethod.createForAction(mmc, declaringType, methodFacade);
         }
@@ -231,7 +230,7 @@ extends TypedHolderAbstract {
             final FeatureType featureType,
             final Class<?> declaringType,
             final MethodFacade method) {
-        val logicalTypeOfDeclaringType = LogicalType.lazy(
+        var logicalTypeOfDeclaringType = LogicalType.lazy(
                 declaringType,
                 ()->specificationLoader.specForTypeElseFail(declaringType).getLogicalTypeName());
         return featureType.identifierFor(logicalTypeOfDeclaringType, method);

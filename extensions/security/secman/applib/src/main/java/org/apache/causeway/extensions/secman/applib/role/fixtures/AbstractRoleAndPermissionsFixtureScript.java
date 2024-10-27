@@ -36,8 +36,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.val;
-
 /**
  * Convenience fixture script intended to be easily subclassed in order to set up an
  * {@link org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole} with associated permissions.
@@ -103,8 +101,8 @@ implements FixtureScriptWithExecutionStrategy {
 
         final List<ApplicationFeatureId> missingFeatureIds = new ArrayList<>();
 
-        for(val featureId : featureIds) {
-            val feature = applicationFeatureRepository.findFeature(featureId);
+        for(var featureId : featureIds) {
+            var feature = applicationFeatureRepository.findFeature(featureId);
             if (feature == null) {
                 missingFeatureIds.add(featureId);
             }
@@ -112,20 +110,20 @@ implements FixtureScriptWithExecutionStrategy {
 
         if (causewayConfiguration.getExtensions().getSecman().getFixtureScripts().getAbstractRoleAndPermissionsFixtureScript().getUnknownFeatureIdCheckingPolicy().isFailFast()) {
             // ensure all featureIds specified actually exist.
-            val buf = new StringBuilder();
-            for(val featureId : missingFeatureIds) {
+            var buf = new StringBuilder();
+            for(var featureId : missingFeatureIds) {
                 buf.append("- ").append(featureId.getFullyQualifiedName()).append("\n");
             }
             throw new IllegalArgumentException(String.format("No such feature(s):\n%s", buf));
         }
 
 
-        val roleName = getRoleName();
-        val securityRole = applicationRoleRepository.findByName(roleName)
+        var roleName = getRoleName();
+        var securityRole = applicationRoleRepository.findByName(roleName)
                 .orElseGet(() -> applicationRoleRepository.newRole(roleName, getRoleDescription()));
 
-        for(val featureId : featureIds) {
-            val featureFqn = featureId.getFullyQualifiedName();
+        for(var featureId : featureIds) {
+            var featureFqn = featureId.getFullyQualifiedName();
 
             // can't use role#addPackage because that does a check for existence of the package, which is
             // not guaranteed to exist yet (the SecurityFeatures#init() may not have run).

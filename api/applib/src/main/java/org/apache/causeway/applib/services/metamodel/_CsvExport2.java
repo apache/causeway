@@ -29,14 +29,13 @@ import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 import org.apache.causeway.schema.metamodel.v2.Property;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _CsvExport2 {
 
     StringBuilder toCsv(final MetamodelDto metamodelDto) {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         sb.append(header()).append("\n");
 
@@ -72,7 +71,7 @@ class _CsvExport2 {
     }
 
     private void appendCsvRow(final DomainClassDto typeDto, final Property prop, final StringBuilder sb) {
-        val rowString =  Stream.of(
+        var rowString =  Stream.of(
                 typeDto.getId(),
                 Optional.ofNullable(typeDto.isService()).orElse(false) ? "Y" : "",
                 "prop",
@@ -85,7 +84,7 @@ class _CsvExport2 {
     }
 
     private void appendCsvRow(final DomainClassDto typeDto, final Collection coll, final StringBuilder sb) {
-        val rowString =  Stream.of(
+        var rowString =  Stream.of(
                 typeDto.getId(),
                 Optional.ofNullable(typeDto.isService()).orElse(false) ? "Y" : "",
                 "coll",
@@ -98,7 +97,7 @@ class _CsvExport2 {
     }
 
     private void appendCsvRow(final DomainClassDto typeDto, final Action act, final StringBuilder sb) {
-        val rowString =  Stream.of(
+        var rowString =  Stream.of(
                 typeDto.getId(),
                 Optional.ofNullable(typeDto.isService()).orElse(false) ? "Y" : "",
                 "act",

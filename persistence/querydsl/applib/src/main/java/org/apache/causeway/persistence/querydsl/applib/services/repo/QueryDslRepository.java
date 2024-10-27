@@ -40,16 +40,15 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.EntityPathBase;
 
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import lombok.val;
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 import org.apache.causeway.persistence.querydsl.applib.util.DslExpressions;
 
-import org.springframework.lang.Nullable;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Provides default implementation and convenience methods for querying a specific entity (hierarchy), using
@@ -126,8 +125,8 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
 
     private OrderSpecifier<? extends Comparable>[] getDefaultOrdersUnwrapped() {
         try {
-            val defaultOrdersFunc = getDefaultOrders();
-            val defaultOrders = defaultOrdersFunc.apply(entity());
+            var defaultOrdersFunc = getDefaultOrders();
+            var defaultOrders = defaultOrdersFunc.apply(entity());
             return defaultOrders == null ? null : defaultOrders.toArray(new OrderSpecifier[0]);
         } catch (Exception e) {
             throw new RuntimeException("Invalid default order!", e);
@@ -640,7 +639,7 @@ s     * @see #findFirst(Function[], Function[])
      * @see #find(Function[], Function[])
      * @see #find(Function, Function[])
      */
-    public List<T> findUsingDefaultOrder(Function<Q, Predicate>... predicates) {
+    public List<T> findUsingDefaultOrder(final Function<Q, Predicate>... predicates) {
         return find(predicates, getDefaultOrdersAsArray());
     }
 
@@ -697,7 +696,7 @@ s     * @see #findFirst(Function[], Function[])
                 .fetch();
     }
 
-//not used    
+//not used
 //    private <F> Expression<F>[] unwrapExpressions(Function<Q, Expression<F>>... expressions) {
 //        return _Casts.uncheckedCast(Arrays.stream(expressions)
 //                .map(x -> x.apply(getEntityPath()))
@@ -705,7 +704,7 @@ s     * @see #findFirst(Function[], Function[])
 //                .toArray(new Expression[0]));
 //    }
 
-    private Expression<?>[] unwrapProjections(Function<Q, Expression<?>>... projections) {
+    private Expression<?>[] unwrapProjections(final Function<Q, Expression<?>>... projections) {
         return Arrays.stream(projections)
                 .map(x -> x.apply(getEntityPath()))
                 .collect(Collectors.toUnmodifiableList())
@@ -736,7 +735,7 @@ s     * @see #findFirst(Function[], Function[])
                 .toArray(new OrderSpecifier[0]);
     }
 
-    private static <T> Class<T> getTypeParameter(Class<?> parameterizedType, int index){
+    private static <T> Class<T> getTypeParameter(final Class<?> parameterizedType, final int index){
         if(parameterizedType==null) return null;
 
         ParameterizedType pType= (ParameterizedType) parameterizedType.getGenericSuperclass();
@@ -748,18 +747,18 @@ s     * @see #findFirst(Function[], Function[])
         return (Class<T>) types[index];
     }
 
-    private static <T extends Comparable, Q extends EntityPathBase<T>> Function<Q, Predicate>[] asArray(Function<Q, Predicate> predicate) {
-        return predicate != null 
-                ? (Function<Q, Predicate>[]) new Function[] {predicate} 
+    private static <T extends Comparable, Q extends EntityPathBase<T>> Function<Q, Predicate>[] asArray(final Function<Q, Predicate> predicate) {
+        return predicate != null
+                ? (Function<Q, Predicate>[]) new Function[] {predicate}
                 : new Function[0];
     }
 
 
-    static <T> List<T> newList(T... objs) {
+    static <T> List<T> newList(final T... objs) {
         return newArrayList(objs);
     }
 
-    static <T> ArrayList<T> newArrayList(T... objs) {
+    static <T> ArrayList<T> newArrayList(final T... objs) {
         ArrayList<T> result = new ArrayList<>();
         Collections.addAll(result, objs);
         return result;

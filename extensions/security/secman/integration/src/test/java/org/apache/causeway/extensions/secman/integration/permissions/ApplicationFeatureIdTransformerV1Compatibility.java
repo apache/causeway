@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
@@ -49,13 +49,13 @@ public class ApplicationFeatureIdTransformerV1Compatibility implements Applicati
     }
 
     private ApplicationFeatureId doTransform(ApplicationFeatureId applicationFeatureId) {
-        val logicalTypeName = applicationFeatureId.getLogicalTypeName();
+        var logicalTypeName = applicationFeatureId.getLogicalTypeName();
         switch (applicationFeatureId.getSort()) {
             case NAMESPACE:
                 return applicationFeatureId;
             case TYPE:
             case MEMBER:
-                val logicalTypeNameBasedOnPhysicalName =
+                var logicalTypeNameBasedOnPhysicalName =
                         specificationLoader.specForLogicalTypeName(logicalTypeName)
                         .map(ObjectSpecification::getCorrespondingClass)
                         .map(Class::getName)

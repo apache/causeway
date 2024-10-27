@@ -60,7 +60,6 @@ import static org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.d
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 @Named("libExcelFixture.BulkUpdateManagerForDemoToDoItem")
 @DomainObject(
@@ -174,7 +173,7 @@ public class BulkUpdateManagerForDemoToDoItem {
     }
 
     private Blob toExcel(final String fileName, final List<ExcelDemoToDoItem> items) {
-        val toDoItemViewModels = items.stream()
+        var toDoItemViewModels = items.stream()
                 .map(BulkUpdateLineItemForDemoToDoItem::new)
                 .collect(Collectors.toList());
         return excelService.toExcel(new WorksheetContent(toDoItemViewModels, WORKSHEET_SPEC), fileName);

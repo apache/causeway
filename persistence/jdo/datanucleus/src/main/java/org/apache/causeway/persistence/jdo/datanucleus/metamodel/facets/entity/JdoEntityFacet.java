@@ -70,7 +70,7 @@ import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePe
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
@@ -131,8 +131,8 @@ implements EntityFacet {
      * we define another one local to the context of the associated entity class */
     private final Map<Class<?>, PrimaryKeyType<?>> primaryKeyTypesForEncoding = new ConcurrentHashMap<>();
     private final PrimaryKeyType<?> primaryKeyTypeForEncoding(final @NonNull Object oid) {
-        val actualPrimaryKeyClass = oid.getClass();
-        val primaryKeyType = primaryKeyTypesForEncoding.computeIfAbsent(actualPrimaryKeyClass, key->
+        var actualPrimaryKeyClass = oid.getClass();
+        var primaryKeyType = primaryKeyTypesForEncoding.computeIfAbsent(actualPrimaryKeyClass, key->
             idStringifierLookupService()
                 .primaryKeyTypeFor(entityClass, actualPrimaryKeyClass));
         return primaryKeyType;
@@ -151,7 +151,7 @@ implements EntityFacet {
     @Override
     public Optional<String> identifierFor(final Object pojo) {
 
-        val entityState = getEntityState(pojo);
+        var entityState = getEntityState(pojo);
 
         if (!entityState.hasOid()) {
             return Optional.empty();
@@ -164,8 +164,8 @@ implements EntityFacet {
             return DnOidStoreAndRecoverHelper.forEntity((Persistable)pojo).recoverOid();
         }
 
-        val pm = getPersistenceManager();
-        val primaryKey = pm.getObjectId(pojo);
+        var pm = getPersistenceManager();
+        var primaryKey = pm.getObjectId(pojo);
 
         _Assert.assertNotNull(primaryKey, ()->
             String.format("failed to get OID even though entity is attached %s", pojo.getClass().getName()));
@@ -174,7 +174,7 @@ implements EntityFacet {
     }
 
     public Optional<String> identifierForDnPrimaryKey(final @Nullable Object primaryKey) {
-        val idIfAny = Optional.ofNullable(primaryKey)
+        var idIfAny = Optional.ofNullable(primaryKey)
                 .map(pk->
                     primaryKeyTypeForEncoding(pk).enstringWithCast(pk));
         return idIfAny;
@@ -194,16 +194,16 @@ implements EntityFacet {
         Object entityPojo;
         try {
 
-            val persistenceManager = getPersistenceManager();
-            val primaryKey = primaryKeyTypeForDecoding().destring(bookmark.getIdentifier());
+            var persistenceManager = getPersistenceManager();
+            var primaryKey = primaryKeyTypeForDecoding().destring(bookmark.getIdentifier());
 
-            val fetchPlan = persistenceManager.getFetchPlan();
+            var fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
             entityPojo = persistenceManager.getObjectById(entityClass, primaryKey);
 
         } catch (final RuntimeException e) {
 
-            val recognition = exceptionRecognizerService.recognize(e);
+            var recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
                 if(recognition.get().getCategory() == Category.NOT_FOUND) {
                     return Optional.empty();
@@ -223,26 +223,26 @@ implements EntityFacet {
             log.debug("about to execute Query: {}", query.getDescription());
         }
 
-        val range = query.getRange();
+        var range = query.getRange();
 
         if(query instanceof AllInstancesQuery) {
 
-            val queryFindAllInstances = (AllInstancesQuery<?>) query;
-            val queryEntityType = queryFindAllInstances.getResultType();
+            var queryFindAllInstances = (AllInstancesQuery<?>) query;
+            var queryEntityType = queryFindAllInstances.getResultType();
 
             // guard against misuse
             _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
 
-            val persistenceManager = getPersistenceManager();
+            var persistenceManager = getPersistenceManager();
 
-            val typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType);
+            var typedQuery = persistenceManager.newJDOQLTypedQuery(queryEntityType);
             typedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
 
             if(!range.isUnconstrained()) {
                 typedQuery.range(range.getStart(), range.getEnd());
             }
 
-            val resultList = fetchWithinTransaction(typedQuery::executeList);
+            var resultList = fetchWithinTransaction(typedQuery::executeList);
 
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -252,13 +252,13 @@ implements EntityFacet {
 
         } else if(query instanceof NamedQuery) {
 
-            val applibNamedQuery = (NamedQuery<?>) query;
-            val queryResultType = applibNamedQuery.getResultType();
+            var applibNamedQuery = (NamedQuery<?>) query;
+            var queryResultType = applibNamedQuery.getResultType();
 
-            val persistenceManager = getPersistenceManager();
+            var persistenceManager = getPersistenceManager();
 
-            val namedParams = _Maps.<String, Object>newHashMap();
-            val namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
+            var namedParams = _Maps.<String, Object>newHashMap();
+            var namedQuery = persistenceManager.newNamedQuery(queryResultType, applibNamedQuery.getName())
                     .setNamedParameters(namedParams);
 
             namedQuery.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
@@ -269,7 +269,7 @@ implements EntityFacet {
 
             // inject services into query params; not sure if required (might be redundant)
             {
-                val injector = getServiceInjector();
+                var injector = getServiceInjector();
 
                 applibNamedQuery
                 .getParametersByName()
@@ -284,7 +284,7 @@ implements EntityFacet {
             Supplier<List<?>> executeMethod = hasResultPhrase(namedQuery)
                     ? namedQuery::executeResultList     // eg SELECT DISTINCT this.paymentMethod FROM IncomingInvoice WHERE ...
                     : namedQuery::executeList;          // eg SELECT FROM IncomingInvoice WHERE ...
-            val resultList = fetchWithinTransaction(executeMethod);
+            var resultList = fetchWithinTransaction(executeMethod);
 
             if(range.hasLimit()) {
                 _Assert.assertTrue(resultList.size()<=range.getLimit());
@@ -316,7 +316,7 @@ implements EntityFacet {
             return; // nothing to do
         }
 
-        val pm = getPersistenceManager();
+        var pm = getPersistenceManager();
 
         log.debug("about to persist entity {}", pojo);
 
@@ -334,7 +334,7 @@ implements EntityFacet {
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        val pm = getPersistenceManager();
+        var pm = getPersistenceManager();
 
         log.debug("about to refresh entity {}", pojo);
 
@@ -356,7 +356,7 @@ implements EntityFacet {
             throw _Exceptions.illegalArgument("can only delete an entity with an OID");
         }
 
-        val pm = getPersistenceManager();
+        var pm = getPersistenceManager();
 
         log.debug("about to delete entity {}", pojo);
 
@@ -424,7 +424,7 @@ implements EntityFacet {
         // lifecycle listener is not called
         if(fetchedObject instanceof Persistable) {
             // an entity
-            val entity = objectManager.adapt(fetchedObject);
+            var entity = objectManager.adapt(fetchedObject);
             objectLifecyclePublisher.onPostLoad(entity);
             return entity;
         } else {

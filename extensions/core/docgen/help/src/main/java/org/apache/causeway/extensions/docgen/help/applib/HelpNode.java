@@ -32,7 +32,6 @@ import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Represents a node in the tree made of topics and {@link HelpPage}s.
@@ -88,7 +87,7 @@ public interface HelpNode {
         private final String title;
 
         public HelpTopic subTopic(final String topic) {
-            val childTopic = HelpTopic.parented(this, topic);
+            var childTopic = HelpTopic.parented(this, topic);
             childNodes.add(childTopic);
             return childTopic;
         }
@@ -127,12 +126,12 @@ public interface HelpNode {
          * Resolves given {@link TreePath} to its corresponding {@link HelpNode} if possible.
          */
         public Optional<HelpNode> lookup(final TreePath treePath) {
-            val root = rootTopic();
+            var root = rootTopic();
             if(treePath.isRoot()) {
                 return Optional.of(root);
             }
 
-            val stack = new Stack<HelpNode>();
+            var stack = new Stack<HelpNode>();
             stack.push(root);
 
             treePath.streamPathElements()
@@ -140,8 +139,8 @@ public interface HelpNode {
             .forEach(pathElement->{
                 if(stack.isEmpty()) return; // an empty stack corresponds to a not found state
 
-                val currentNode = stack.peek();
-                val child = currentNode.getChildNode(pathElement).orElse(null);
+                var currentNode = stack.peek();
+                var child = currentNode.getChildNode(pathElement).orElse(null);
 
                 if(child!=null) {
                     stack.push(child);

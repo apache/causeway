@@ -37,7 +37,7 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -68,16 +68,16 @@ class PropertyBindingTest extends InteractionTestAbstract {
     @BeforeEach
     void setUpSimulatedUi() {
 
-        val propertyInteractionA = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
+        var propertyInteractionA = startPropertyInteractionOn(InteractionDemo.class, "stringMultiline", Where.OBJECT_FORMS);
         assertTrue(propertyInteractionA.getManagedProperty().isPresent(), "prop is expected to be editable");
 
-        val propertyInteractionB = startPropertyInteractionOn(InteractionDemo.class, "string2", Where.OBJECT_FORMS);
+        var propertyInteractionB = startPropertyInteractionOn(InteractionDemo.class, "string2", Where.OBJECT_FORMS);
         assertTrue(propertyInteractionB.getManagedProperty().isPresent(), "prop is expected to be editable");
 
-        val managedPropA = propertyInteractionA.getManagedProperty().get();
+        var managedPropA = propertyInteractionA.getManagedProperty().get();
         this.proposalA = managedPropA.startNegotiation();
 
-        val managedPropB = propertyInteractionB.getManagedProperty().get();
+        var managedPropB = propertyInteractionB.getManagedProperty().get();
         this.proposalB = managedPropB.startNegotiation();
 
         // setting up and binding all the simulated UI components

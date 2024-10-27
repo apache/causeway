@@ -49,7 +49,6 @@ import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangeP
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -94,16 +93,16 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
             return;
         }
 
-        val currentTime = clockService.getClock().nowAsJavaSqlTimestamp();
-        val currentUser = userService.currentUserNameElseNobody();
-        val currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
+        var currentTime = clockService.getClock().nowAsJavaSqlTimestamp();
+        var currentUser = userService.currentUserNameElseNobody();
+        var currentTransactionId = transactionService.currentTransactionId().orElse(TransactionId.empty());
 
-        val enlistedPropertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
+        var enlistedPropertyChanges = hasEnlistedEntityPropertyChanges().getPropertyChanges(
                 currentTime,
                 currentUser,
                 currentTransactionId);
-        val duplicates = new ArrayList<EntityPropertyChange>();
-        val uniquePropertyChanges = enlistedPropertyChanges
+        var duplicates = new ArrayList<EntityPropertyChange>();
+        var uniquePropertyChanges = enlistedPropertyChanges
                 .toSet(duplicates::add) // ensure uniqueness
                 .stream()
                 .collect(Can.toCan());
@@ -122,12 +121,12 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
 
             if (uniquePropertyChanges.size() <= causewayConfiguration.getCore().getRuntimeServices().getEntityPropertyChangePublisher().getBulk().getThreshold()) {
                 uniquePropertyChanges.forEach(propertyChange -> {
-                    for (val subscriber : enabledSubscribers) {
+                    for (var subscriber : enabledSubscribers) {
                         subscriber.onChanging(propertyChange);
                     }
                 });
             } else {
-                for (val subscriber : enabledSubscribers) {
+                for (var subscriber : enabledSubscribers) {
                     subscriber.onChanging(uniquePropertyChanges);
                 }
             }

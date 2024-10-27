@@ -49,7 +49,6 @@ import org.apache.causeway.commons.internal.testing._SerializationTester;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 
 class CanTest {
 
@@ -153,9 +152,9 @@ class CanTest {
 
         final Can<String> all = Can.<String>of("a", "b", "c");
 
-        val iterator = all.reverseIterator();
+        var iterator = all.reverseIterator();
 
-        val partialSums = Stream.iterate(
+        var partialSums = Stream.iterate(
                 Can.<String>empty(),
                 parts->parts.add(0, iterator.next()))
         .limit(4)
@@ -175,8 +174,8 @@ class CanTest {
 
     @Test
     void multiCan_toSet_should_find_duplicates() {
-        val expectedSet = _Sets.of("a", "b", "c");
-        val duplicates = _Sets.<String>newHashSet();
+        var expectedSet = _Sets.of("a", "b", "c");
+        var duplicates = _Sets.<String>newHashSet();
 
         assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet());
         assertSetEquals(expectedSet, Can.<String>of("a", "c", "b", "a").toSet(duplicates::add));

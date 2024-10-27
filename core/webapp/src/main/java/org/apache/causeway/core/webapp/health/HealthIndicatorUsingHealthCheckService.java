@@ -19,8 +19,6 @@
 package org.apache.causeway.core.webapp.health;
 
 import lombok.Builder;
-import lombok.val;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +54,7 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
         for (HealthCheckService healthCheckService : healthCheckServices) {
             org.apache.causeway.applib.services.health.Health health = interactionService.call(InteractionContextFactory.health(), healthCheckService::check);
             if (health != null) {
-                val success = health.getResult();
+                var success = health.getResult();
                 if(! success) {
                     Optional.ofNullable(health.getCause())
                             .ifPresentOrElse(ex -> builder.down(ex), () -> builder.down());

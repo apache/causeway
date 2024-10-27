@@ -43,7 +43,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class MethodFinder {
@@ -55,7 +54,7 @@ public class MethodFinder {
             final @NonNull Predicate<ResolvedMethod> mustSatisfy) {
 
         final Predicate<ResolvedMethod> isNotStatic = MethodUtil::isNotStatic;
-        val methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
+        var methodNameCandidates = methodNameCandidatesPossiblyDuplicated.distinct();
 
         return new MethodFinder(
                 correspondingClass,
@@ -151,9 +150,9 @@ public class MethodFinder {
             return streamMethodsIgnoringSignature();
         }
 
-        val type = getCorrespondingClass();
-        val classCache = _ClassCache.getInstance();
-        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        var type = getCorrespondingClass();
+        var classCache = _ClassCache.getInstance();
+        var isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
 
         if(methodNameCandidates.equals(ANY_NAME)) {
             //stream all
@@ -174,9 +173,9 @@ public class MethodFinder {
     }
 
     public Stream<ResolvedMethod> streamMethodsIgnoringSignature() {
-        val type = getCorrespondingClass();
-        val classCache = _ClassCache.getInstance();
-        val isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        var type = getCorrespondingClass();
+        var classCache = _ClassCache.getInstance();
+        var isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
         return (isEncapsulationSupported
                 ? classCache.streamResolvedMethods(type)
                 : classCache.streamPublicMethods(type))
@@ -222,7 +221,7 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final ConflictingAnnotations conflictingAnnotations) {
 
-        val finder = of(
+        var finder = of(
                 correspondingClass,
                 methodNameCandidates,
                 // support methods are always allowed private
@@ -262,10 +261,10 @@ public class MethodFinder {
             final Class<? extends Annotation> annotationType,
             final Can<Class<? extends Annotation>> conflictingAnnotations) {
 
-        val isMarkerAnnotationPresent = _Annotations.synthesize(method.method(), annotationType).isPresent();
+        var isMarkerAnnotationPresent = _Annotations.synthesize(method.method(), annotationType).isPresent();
         if(isMarkerAnnotationPresent) {
 
-            val isConflictingAnnotationPresent = conflictingAnnotations
+            var isConflictingAnnotationPresent = conflictingAnnotations
             .stream()
             .anyMatch(conflictingAnnotationType->
                     _Annotations.synthesize(method.method(), conflictingAnnotationType).isPresent());

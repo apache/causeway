@@ -35,7 +35,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -50,9 +49,9 @@ public final class MmSpecUtils {
                 || ManagedObjects.isPacked(obj)) {
             return obj;
         }
-        val pojo = ManagedObjects.peekAtPojoOf(obj);
-        val requiredType = pojo.getClass();
-        val currentSpec = obj.getSpecification();
+        var pojo = ManagedObjects.peekAtPojoOf(obj);
+        var requiredType = pojo.getClass();
+        var currentSpec = obj.getSpecification();
         if(currentSpec.getCorrespondingClass().equals(requiredType)) {
             return obj;
         }
@@ -97,7 +96,7 @@ public final class MmSpecUtils {
                 .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalType()));
 
         // export the list-multi-map to YAML format
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb.append("ObjectSpecifications:\n");
         specsBySort
             .forEach((key, list)->{

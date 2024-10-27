@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link ColumnOrderTxtFileService}.
@@ -56,7 +55,7 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
 
     @Programmatic
     public byte[] toZip(final Object domainObject) {
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var zipBuilder = ZipUtils.zipEntryBuilder();
 
         addStandaloneEntry(domainObject, zipBuilder);
         addCollectionEntries(domainObject, zipBuilder);
@@ -68,30 +67,30 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
     // HELPERS
 
     private void addStandaloneEntry(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
-        val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
-        val buf = new StringBuilder();
+        var parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
+        var buf = new StringBuilder();
 
         parentSpec.streamAssociations(MixedIn.INCLUDED)
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        val fileContents = buf.toString();
-        val fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
+        var fileContents = buf.toString();
+        var fileName = String.format("%s.columnOrder.txt", parentSpec.getShortIdentifier());
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
     private void addCollectionEntries(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
-        val parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
+        var parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         parentSpec.streamCollections(MixedIn.INCLUDED)
                 .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
     }
 
     private void addCollection(final OneToManyAssociation collection, final ObjectSpecification parentSpec, final ZipUtils.EntryBuilder zipBuilder) {
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
 
-        val collectionIdentifier = collection.getFeatureIdentifier();
-        val elementType = collection.getElementType();
+        var collectionIdentifier = collection.getFeatureIdentifier();
+        var elementType = collection.getElementType();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
                 .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(collectionIdentifier))
@@ -99,8 +98,8 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
                 .map(ObjectFeature::getId)
                 .forEach(assocId -> buf.append(assocId).append("\n"));
 
-        val fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
-        val fileContents = buf.toString();
+        var fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
+        var fileContents = buf.toString();
 
         zipBuilder.addAsUtf8(fileName, fileContents);
     }

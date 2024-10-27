@@ -45,7 +45,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -67,11 +66,11 @@ extends ViewModelFacetAbstract {
         if(!cls.isInterface()
                 && !ClassExtensions.isAbstract(cls)) {
 
-            val explicitInjectConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_WITH_INJECT_SEMANTICS.getAll(cls);
-            val publicConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY.getAll(cls);
+            var explicitInjectConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_WITH_INJECT_SEMANTICS.getAll(cls);
+            var publicConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY.getAll(cls);
 
 
-            val violation = explicitInjectConstructors.getCardinality().isMultiple()
+            var violation = explicitInjectConstructors.getCardinality().isMultiple()
                     ? ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
                     : explicitInjectConstructors.getCardinality().isZero()
                         && !publicConstructors.getCardinality().isOne()
@@ -188,9 +187,9 @@ extends ViewModelFacetAbstract {
         _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
                 + "this can only happen, if we try to deserialize an abstract type");
 
-        val memento = SpecialMemento.decode(mementoEncoded);
-        val resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
-        val viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
+        var memento = SpecialMemento.decode(mementoEncoded);
+        var resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
+        var viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
         return viewmodelPojo;
     }
 
@@ -199,8 +198,8 @@ extends ViewModelFacetAbstract {
             final ServiceRegistry serviceRegistry,
             final String memento) {
 
-        val paramTypes = Can.ofArray(constructor.paramTypes());
-        val args = new Object[constructor.paramCount()];
+        var paramTypes = Can.ofArray(constructor.paramTypes());
+        var args = new Object[constructor.paramCount()];
         paramTypes.forEach(IndexedConsumer.zeroBased((final int i, final Class<?> paramType)->{
             if(paramType.equals(String.class)) {
                 args[i] = memento; // its ok to do this never, once, or more than once per constructor, see ViewModel java-doc

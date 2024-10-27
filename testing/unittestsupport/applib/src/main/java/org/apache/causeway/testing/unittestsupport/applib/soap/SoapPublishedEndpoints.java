@@ -28,8 +28,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.val;
-
 /**
  * Collection of SOAP endpoints that have been published; will automatically assign a unique address to any
  * that have not been {@link SoapEndpoint}s whose {@link SoapEndpointSpec} does not specify an {@link SoapEndpointSpec#getEndpointAddress() address}.
@@ -101,27 +99,27 @@ public class SoapPublishedEndpoints {
     }
 
     public SoapPublishedEndpoints publishIfRequired(Class<?>... endpointClasses) {
-        val soapEndpointSpecs = stream(endpointClasses)
+        var soapEndpointSpecs = stream(endpointClasses)
                 .map(SoapEndpointSpec::asSoapEndpointSpec)
                 .collect(Collectors.toCollection(ArrayList::new));
         return publishIfRequired(soapEndpointSpecs);
     }
 
     public SoapPublishedEndpoints publishIfRequired(final List<Class<?>> endpointClasses) {
-        val soapEndpointSpecs = stream(endpointClasses)
+        var soapEndpointSpecs = stream(endpointClasses)
                 .map(SoapEndpointSpec::asSoapEndpointSpec)
                 .collect(Collectors.toCollection(ArrayList::new));
         return publishIfRequired(soapEndpointSpecs);
     }
 
     public SoapPublishedEndpoints publishIfRequired(SoapEndpointSpec... soapEndpointSpecs) {
-        val soapEndpointSpecs2 = stream(soapEndpointSpecs)
+        var soapEndpointSpecs2 = stream(soapEndpointSpecs)
                 .collect(Collectors.toCollection(ArrayList::new));
         return instance.publishIfRequired(soapEndpointSpecs2);
     }
 
     public SoapPublishedEndpoints publishIfRequired(final Iterable<SoapEndpointSpec> soapEndpointSpecs) {
-        val soapEndpointSpecs2 = stream(soapEndpointSpecs)
+        var soapEndpointSpecs2 = stream(soapEndpointSpecs)
                 .collect(Collectors.toCollection(ArrayList::new));
         return instance.publishEndpointIfRequired(soapEndpointSpecs2);
     }

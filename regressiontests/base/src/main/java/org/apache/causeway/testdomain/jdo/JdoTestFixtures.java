@@ -34,8 +34,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 
-import lombok.val;
-
 @Service
 public class JdoTestFixtures extends EntityTestFixtures {
 
@@ -72,7 +70,7 @@ public class JdoTestFixtures extends EntityTestFixtures {
         .map(JdoBook::fromDto)
         .forEach(products::add);
 
-        val inventory = JdoInventory.of("Sample Inventory", products);
+        var inventory = JdoInventory.of("Sample Inventory", products);
         repository.persistAndFlush(inventory);
     }
 
@@ -83,7 +81,7 @@ public class JdoTestFixtures extends EntityTestFixtures {
 
     @Override
     public void addInventory(Set<?> books) {
-        val inventory = JdoInventory.of("Sample Inventory", (Set<JdoProduct>) books);
+        var inventory = JdoInventory.of("Sample Inventory", (Set<JdoProduct>) books);
         repository.persistAndFlush(inventory);
     }
 

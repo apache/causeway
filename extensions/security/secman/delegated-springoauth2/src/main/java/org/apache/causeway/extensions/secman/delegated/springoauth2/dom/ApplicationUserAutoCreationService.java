@@ -45,7 +45,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationU
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateEmailAddress;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  * This service automatically creates an {@link ApplicationUser} if an end-user successfully logged in via Oauth.
@@ -71,17 +71,17 @@ public class ApplicationUserAutoCreationService {
     @EventListener(InteractiveAuthenticationSuccessEvent.class)
     public void onApplicationEvent(final InteractiveAuthenticationSuccessEvent event) {
 
-        val authentication = event.getAuthentication();
-        val principal = authentication.getPrincipal();
+        var authentication = event.getAuthentication();
+        var principal = authentication.getPrincipal();
         if (!(principal instanceof OidcUser)) {
             return;
         }
 
-        val oidcUser = (OidcUser) principal;
-        val username = oidcUser.getPreferredUsername();
-        val email = oidcUser.getEmail();
+        var oidcUser = (OidcUser) principal;
+        var username = oidcUser.getPreferredUsername();
+        var email = oidcUser.getEmail();
 
-        val secmanConfig = causewayConfiguration.getExtensions().getSecman().getDelegatedUsers();
+        var secmanConfig = causewayConfiguration.getExtensions().getSecman().getDelegatedUsers();
         switch (secmanConfig.getAutoCreatePolicy()) {
             case DO_NOT_AUTO_CREATE:
                 break;
@@ -96,9 +96,9 @@ public class ApplicationUserAutoCreationService {
 
     private void create(final String username, final String email, final List<String> initialRoleNames, final ApplicationUserStatus userStatus) {
         interactionService.runAnonymous(() -> {
-            val userIfAny = applicationUserRepository.findByUsername(username);
+            var userIfAny = applicationUserRepository.findByUsername(username);
             if (userIfAny.isEmpty()) {
-                val applicationUser = applicationUserRepository.newDelegateUser(username, userStatus);
+                var applicationUser = applicationUserRepository.newDelegateUser(username, userStatus);
                 factoryService.mixin(ApplicationUser_updateEmailAddress.class, applicationUser).act(email);
 
                 if (notEmpty(initialRoleNames)) {

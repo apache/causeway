@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * Converts value representing {@link ManagedObject}s to their corresponding JSON representation
@@ -67,7 +67,7 @@ public interface JsonValueEncoderService {
     // -- UTILITY
 
     default NullNode appendNullAndFormat(final JsonRepresentation repr, final boolean suppressExtensions) {
-        val value = NullNode.getInstance();
+        var value = NullNode.getInstance();
         repr.mapPutJsonNode("value", value);
         appendFormats(repr, "string", "string", suppressExtensions);
         return value;

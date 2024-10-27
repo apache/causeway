@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
-import lombok.val;
+
 
 public class ObjectPropertyReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
@@ -80,14 +80,14 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     // ///////////////////////////////////////////////////
 
     private void addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        var valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
 
         // use the runtime type if we have a value, otherwise fallback to the compile time type of the member
-        val valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny)
+        var valueAdapter = ManagedObjects.isSpecified(valueAdapterIfAny)
                 ? valueAdapterIfAny
                 : ManagedObject.empty(objectMember.getElementType());
 
-        val spec = valueAdapter.getSpecification();
+        var spec = valueAdapter.getSpecification();
 
         if (spec.isValue()) {
             jsonValueEncoder
@@ -174,14 +174,14 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     }
 
     private Object propertyChoices() {
-        val choiceAdapters = objectMember
+        var choiceAdapters = objectMember
                 .getChoices(objectAdapter, getInteractionInitiatedBy());
 
         if (choiceAdapters == null || choiceAdapters.isEmpty()) {
             return null;
         }
         final List<Object> list = _Lists.newArrayList();
-        for (val choiceAdapter : choiceAdapters) {
+        for (var choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();
 

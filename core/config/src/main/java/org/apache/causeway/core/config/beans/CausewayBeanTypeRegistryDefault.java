@@ -38,7 +38,6 @@ import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 @Service
 @Named(CausewayModuleCoreConfig.NAMESPACE + "..CausewayBeanTypeRegistryImpl")
@@ -93,7 +92,7 @@ implements CausewayBeanTypeRegistry {
 
         introspectableTypes.forEach(typeMeta->{
 
-            val cls = typeMeta.getCorrespondingClass();
+            var cls = typeMeta.getCorrespondingClass();
 
             introspectableTypesByClass.put(typeMeta.getCorrespondingClass(), typeMeta);
 

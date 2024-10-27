@@ -29,7 +29,6 @@ import org.springframework.util.function.ThrowingFunction;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * The {@link Railway} type represents a value of one of two possible types (a disjoint union)
@@ -70,7 +69,7 @@ public interface Railway<F, S> {
     default S getSuccessElseFail() { return getSuccess().orElseThrow(); }
     @SneakyThrows
     default S getSuccessElseFail(final Function<F, ? extends Throwable> toThrowable) {
-        val successIfAny = getSuccess();
+        var successIfAny = getSuccess();
         if(successIfAny.isPresent()) {
             return successIfAny.get();
         }

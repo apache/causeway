@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
-import lombok.val;
-
 class TypeExtractorMethodsParametersTest {
 
     @Test
@@ -48,7 +46,7 @@ class TypeExtractorMethodsParametersTest {
         final Class<?> clazz = CustomerRepository.class;
         final Method method = clazz.getMethod("filterCustomers", List.class);
 
-        val classes = TypeExtractor.streamMethodParameters(method).collect(Collectors.toSet());
+        var classes = TypeExtractor.streamMethodParameters(method).collect(Collectors.toSet());
 
         assertEquals(2, classes.size());
         assertTrue(classes.contains(java.util.List.class));

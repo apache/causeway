@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -74,7 +72,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
         final NotificationPanel feedback = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
         addOrReplace(feedback);
 
-        val config = new CalendarConfig();
+        var config = new CalendarConfig();
         config.getHeaderToolbar().setLeft("prevYear,prev,next,nextYear, today");
         config.getHeaderToolbar().setCenter("title");
         config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");

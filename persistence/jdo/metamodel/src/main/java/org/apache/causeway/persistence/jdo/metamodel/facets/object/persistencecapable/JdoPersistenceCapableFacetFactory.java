@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
+
 
 /**
  * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
@@ -56,7 +56,7 @@ implements ObjectTypeFacetFactory {
     @Override
     public void process(final ObjectTypeFacetFactory.ProcessObjectTypeContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore non enhanced classes
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
@@ -71,15 +71,15 @@ implements ObjectTypeFacetFactory {
     // -- HELPER
 
     private boolean processJdoAnnotations(final ProcessObjectTypeContext processClassContext) {
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
-        val persistenceCapableIfAny = processClassContext.synthesizeOnType(PersistenceCapable.class);
+        var persistenceCapableIfAny = processClassContext.synthesizeOnType(PersistenceCapable.class);
         if (!persistenceCapableIfAny.isPresent()) {
             return false;
         }
 
-        val embeddedOnlyIfAny = processClassContext.synthesizeOnType(EmbeddedOnly.class);
-        val facetHolder = processClassContext.getFacetHolder();
+        var embeddedOnlyIfAny = processClassContext.synthesizeOnType(EmbeddedOnly.class);
+        var facetHolder = processClassContext.getFacetHolder();
 
         return FacetUtil.addFacetIfPresent(
                 JdoPersistenceCapableFacetFromAnnotation
@@ -95,16 +95,16 @@ implements ObjectTypeFacetFactory {
     }
 
     private void processJpaAnnotations(final ProcessObjectTypeContext processClassContext) {
-        val entityIfAny = processClassContext.synthesizeOnType(Entity.class);
+        var entityIfAny = processClassContext.synthesizeOnType(Entity.class);
         if(!entityIfAny.isPresent()) {
             return;
         }
 
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
-        //val embeddedOnlyIfAny = processClassContext.synthesizeOnType(Embeddable.class);
-        val tableIfAny = processClassContext.synthesizeOnType(Table.class);
+        //var embeddedOnlyIfAny = processClassContext.synthesizeOnType(Embeddable.class);
+        var tableIfAny = processClassContext.synthesizeOnType(Table.class);
 
         FacetUtil.addFacetIfPresent(
                 JdoPersistenceCapableFacetFromAnnotation

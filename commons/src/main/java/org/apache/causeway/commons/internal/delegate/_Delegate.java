@@ -30,7 +30,6 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -90,7 +89,7 @@ public class _Delegate {
 
             // Invoke method with same signature on delegate ()
             try {
-                val delegateMethod =
+                var delegateMethod =
                         classCache.lookupResolvedMethodElseFail(delegate.getClass(),
                                 method.getName(), method.getParameterTypes());
                 return delegateMethod.method().invoke(delegate, args);

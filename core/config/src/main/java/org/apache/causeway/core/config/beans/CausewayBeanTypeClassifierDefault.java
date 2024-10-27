@@ -40,7 +40,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeE
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 //@Log4j2
@@ -88,7 +87,7 @@ implements CausewayBeanTypeClassifier {
             return CausewayBeanMetaData.notManaged(BeanSort.VETOED, type); // reject
         }
 
-        val profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
+        var profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
                 .map(Profile::value)
                 .orElse(null));
         if(profiles.isNotEmpty()
@@ -98,7 +97,7 @@ implements CausewayBeanTypeClassifier {
 
         // handle value types ...
 
-        val aValue = _Annotations.synthesize(type, org.apache.causeway.applib.annotation.Value.class)
+        var aValue = _Annotations.synthesize(type, org.apache.causeway.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
             return CausewayBeanMetaData.notManaged(BeanSort.VALUE, type);
@@ -106,9 +105,9 @@ implements CausewayBeanTypeClassifier {
 
         // handle actual bean types ...
 
-        val aDomainService = _Annotations.synthesize(type, DomainService.class);
+        var aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
-            val logicalType = LogicalType.infer(type);
+            var logicalType = LogicalType.infer(type);
             Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.set(classCache, type, "true");
             return CausewayBeanMetaData
                         .injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
@@ -120,19 +119,19 @@ implements CausewayBeanTypeClassifier {
         }
 
         // allow ServiceLoader plugins to have a say, eg. when classifying entity types
-        for(val classifier : classifierPlugins) {
-            val classification = classifier.classify(type);
+        for(var classifier : classifierPlugins) {
+            var classification = classifier.classify(type);
             if(classification!=null) {
                 return classification;
             }
         }
 
-        val entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
+        var entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
             return CausewayBeanMetaData.entity(PersistenceStack.JPA, LogicalType.infer(type));
         }
 
-        val aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
+        var aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:

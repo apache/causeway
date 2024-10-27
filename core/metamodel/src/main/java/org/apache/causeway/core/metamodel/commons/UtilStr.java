@@ -19,8 +19,6 @@
 package org.apache.causeway.core.metamodel.commons;
 
 import lombok.experimental.UtilityClass;
-import lombok.val;
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -35,8 +33,8 @@ public class UtilStr {
      * String representation of bookmark for entities (otherwise empty string is returned).
      */
     public static String entityAsStr(Bookmark bookmark, SpecificationLoader specificationLoader) {
-        val logicalTypeName = bookmark.getLogicalTypeName();
-        val isEntity = specificationLoader
+        var logicalTypeName = bookmark.getLogicalTypeName();
+        var isEntity = specificationLoader
                             .lookupLogicalType(logicalTypeName)
                             .flatMap(specificationLoader::specForLogicalType)
                             .map(ObjectSpecification::isEntity)
@@ -55,7 +53,7 @@ public class UtilStr {
         if(managedObjectIfany.isEmpty()) {
             return "<none>";
         }
-        val managedObject = managedObjectIfany.get();
+        var managedObject = managedObjectIfany.get();
         return namedArgStr(paramName, managedObject);
     }
 

@@ -33,7 +33,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -113,7 +112,7 @@ implements ManagedFeature {
     public Optional<InteractionVeto> checkVisibility() {
 
         try {
-            val visibilityConsent =
+            var visibilityConsent =
                     getMetaModel()
                     .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
 
@@ -137,7 +136,7 @@ implements ManagedFeature {
 
         try {
 
-            val usabilityConsent =
+            var usabilityConsent =
                     getMetaModel()
                     .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
 
@@ -159,7 +158,7 @@ implements ManagedFeature {
             final @NonNull Identifier.Type memberType,
             final @NonNull String memberId) {
 
-        val onwerSpec = owner.getSpecification();
+        var onwerSpec = owner.getSpecification();
         switch (memberType) {
         case ACTION:     return _Casts.uncheckedCast(onwerSpec.getAction(memberId));
         case PROPERTY:   return _Casts.uncheckedCast(onwerSpec.getProperty(memberId));

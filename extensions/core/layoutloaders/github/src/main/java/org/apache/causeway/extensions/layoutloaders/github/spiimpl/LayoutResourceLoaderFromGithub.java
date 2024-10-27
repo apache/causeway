@@ -44,7 +44,7 @@ import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayo
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 @Service
 @Named(CausewayModuleExtLayoutLoadersGithub.NAMESPACE + ".LayoutResourceLoaderFromGithub")
@@ -95,11 +95,11 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     private Try<String> search(final @NonNull String candidateResourceName) {
 
         try {
-            val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getRepository();
-            val searchParams = new HashMap<String, String>();
+            var repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getRepository();
+            var searchParams = new HashMap<String, String>();
             searchParams.put("q", String.format("%s+in:path+repo:%s", candidateResourceName, repo));
 
-            val responseEntity = restTemplateForSearch
+            var responseEntity = restTemplateForSearch
                     .exchange("/search/code?q={q}", HttpMethod.GET, null,
                             new ParameterizedTypeReference<GitHubResponse>() {}, searchParams);
 
@@ -124,8 +124,8 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
         if(path==null) return Try.empty();
 
         try {
-            val contentResponse = restTemplateForContent.exchange("/contents/" + path, HttpMethod.GET, null, String.class);
-            val content = contentResponse.getBody();
+            var contentResponse = restTemplateForContent.exchange("/contents/" + path, HttpMethod.GET, null, String.class);
+            var content = contentResponse.getBody();
 
             return StringUtils.hasLength(content)
                     ? Try.call(()->new LayoutResource(candidateResourceName, NamedWithMimeType.CommonMimeType.XML, content))

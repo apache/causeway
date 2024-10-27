@@ -39,14 +39,12 @@ import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFac
 
 import static org.apache.causeway.core.metamodel.commons.matchers.CausewayMatchers.classEqualTo;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest_TypeOf
 extends ActionAnnotationFacetFactoryTest {
 
     private void processTypeOf(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processTypeOf(processMethodContext, actionIfAny);
     }
 

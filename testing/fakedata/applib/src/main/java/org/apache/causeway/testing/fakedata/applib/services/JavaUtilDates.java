@@ -22,8 +22,6 @@ import java.time.OffsetDateTime;
 import java.time.Period;
 import java.util.Date;
 
-import lombok.val;
-
 /**
  * Returns a random {@link java.util.Date}, optionally based on the current time but constrained by a {@link Period}.
  *
@@ -68,7 +66,7 @@ public class JavaUtilDates extends AbstractRandomValueGenerator {
     }
 
     private static Date toJavaUtilDate(OffsetDateTime dateTime) {
-        val epochMillis = dateTime.toInstant().toEpochMilli();
+        var epochMillis = dateTime.toInstant().toEpochMilli();
         return new Date(epochMillis);
     }
 }

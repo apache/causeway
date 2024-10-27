@@ -43,8 +43,6 @@ import org.apache.causeway.core.metamodel.facets.members.publish.command.Command
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class ActionAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -56,7 +54,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val actionIfAny = actionIfAny(processMethodContext);
+        var actionIfAny = actionIfAny(processMethodContext);
 
         processExplicit(processMethodContext, actionIfAny);
         processDomainEvent(processMethodContext, actionIfAny);
@@ -84,7 +82,7 @@ extends FacetFactoryAbstract {
     }
 
     void processExplicit(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // check for @Action at all.
         addFacetIfPresent(
@@ -95,32 +93,32 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val actionMethod = processMethodContext.getMethod();
+        var actionMethod = processMethodContext.getMethod();
 
         final boolean isAction = !processMethodContext.isMixinMain()
                 || actionIfAny.isPresent();
 
         try {
 
-            val typeSpec = getSpecificationLoader().loadSpecification(processMethodContext.getCls());
+            var typeSpec = getSpecificationLoader().loadSpecification(processMethodContext.getCls());
             if(typeSpec==null) {
                 return;
             }
 
-            val returnType = actionMethod.getReturnType();
-            val returnSpec = getSpecificationLoader().loadSpecification(returnType);
+            var returnType = actionMethod.getReturnType();
+            var returnSpec = getSpecificationLoader().loadSpecification(returnType);
             if (returnSpec == null) {
                 return;
             }
 
-            val holder = processMethodContext.getFacetHolder();
+            var holder = processMethodContext.getFacetHolder();
 
             //
             // Set up ActionDomainEventFacet, which will act as the hiding/disabling/validating advisor
             //
 
             // search for @Action(domainEvent=...), else use the default event type
-            val actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, holder);
+            var actionDomainEventFacet = ActionDomainEventFacet.create(actionIfAny, typeSpec, holder);
             addFacet(actionDomainEventFacet);
 
             // replace the current actionInvocationFacet with one that will
@@ -143,7 +141,7 @@ extends FacetFactoryAbstract {
     }
 
     void processRestrictTo(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        val facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.getFacetHolder();
 
         // search for @Action(restrictTo=...)
         addFacetIfPresent(
@@ -154,7 +152,7 @@ extends FacetFactoryAbstract {
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
-        val facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.getFacetHolder();
 
         // check for @Action(semantics=...)
         addFacet(
@@ -166,7 +164,7 @@ extends FacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
-        val facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
@@ -186,7 +184,7 @@ extends FacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Optional<Action> actionIfAny) {
 
-        val facetedMethod = processMethodContext.getFacetHolder();
+        var facetedMethod = processMethodContext.getFacetHolder();
 
         //
         // this rule inspired by a similar rule for auditing and publishing,
@@ -209,10 +207,10 @@ extends FacetFactoryAbstract {
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val method = processMethodContext.getMethod();
-        val facetedMethod = processMethodContext.getFacetHolder();
+        var method = processMethodContext.getMethod();
+        var facetedMethod = processMethodContext.getFacetHolder();
 
-        val methodReturnType = method.getReturnType();
+        var methodReturnType = method.getReturnType();
 
         CollectionSemantics.valueOf(methodReturnType)
         .ifPresent(collectionType->{
@@ -228,7 +226,7 @@ extends FacetFactoryAbstract {
 
     void processChoicesFrom(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // check for @Action(choicesFrom=...)
         addFacetIfPresent(
@@ -243,7 +241,7 @@ extends FacetFactoryAbstract {
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // check for @Action(fileAccept=...)
         addFacetIfPresent(

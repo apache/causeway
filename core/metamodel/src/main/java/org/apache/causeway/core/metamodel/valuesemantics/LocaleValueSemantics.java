@@ -36,8 +36,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
-
 @Component
 @Named("causeway.metamodel.value.LocaleValueSemantics")
 @Priority(PriorityPrecedence.LATE)
@@ -82,14 +80,14 @@ implements
     }
 
     private String localeToString(final ValueSemanticsProvider.Context context, final Locale value) {
-        val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
+        var userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
 
-        val language = value.getDisplayLanguage(userLanguageLocale);
+        var language = value.getDisplayLanguage(userLanguageLocale);
         if(_Strings.isEmpty(language)) {
             return stringify(value);
         }
 
-        val country = value.getDisplayCountry(userLanguageLocale);
+        var country = value.getDisplayCountry(userLanguageLocale);
         if(_Strings.isEmpty(country)) {
             return language;
         }
@@ -108,7 +106,7 @@ implements
 
     @Override
     public Locale parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? fromString(input)
                 : null;

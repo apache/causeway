@@ -26,7 +26,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
 import lombok.Value;
-import lombok.val;
 
 @Value @Builder
 public final class IncludeStatement {
@@ -52,7 +51,7 @@ public final class IncludeStatement {
             throw _Exceptions.notImplemented();
         }
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         sb.append("include::")
         .append(_Strings.nullToEmpty(version).isEmpty() ? "" : version + "@")

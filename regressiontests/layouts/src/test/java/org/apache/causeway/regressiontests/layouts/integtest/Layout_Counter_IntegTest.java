@@ -72,7 +72,7 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = Layout_Counter_IntegTest.AppManifest.class
@@ -152,27 +152,27 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionNoPosition() {
 
         // given
-        val objectSpecification = specificationLoader.loadSpecification(Counter.class);
+        var objectSpecification = specificationLoader.loadSpecification(Counter.class);
 
         // when
-        val action = lookupAction("actionNoPosition");
+        var action = lookupAction("actionNoPosition");
 
         // then
         assertThat(action).isNotNull();
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNull())
         ;
@@ -183,23 +183,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionPositionBelow() {
 
         // given
-        val action = lookupAction("actionPositionBelow");
+        var action = lookupAction("actionPositionBelow");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNull())
         ;
@@ -210,23 +210,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionPositionPanel() {
 
         // given
-        val action = lookupAction("actionPositionPanel");
+        var action = lookupAction("actionPositionPanel");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNull())
         ;
@@ -237,23 +237,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionDetailsFieldSetNoPosition() {
 
         // given
-        val action = lookupAction("actionDetailsFieldSetNoPosition");
+        var action = lookupAction("actionDetailsFieldSetNoPosition");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNotNull())
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))
@@ -265,23 +265,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionDetailsFieldSetPositionBelow() {
 
         // given
-        val action = lookupAction("actionDetailsFieldSetPositionBelow");
+        var action = lookupAction("actionDetailsFieldSetPositionBelow");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("2"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNotNull())
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))
@@ -293,23 +293,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionDetailsFieldSetPositionPanel() {
 
         // given
-        val action = lookupAction("actionDetailsFieldSetPositionPanel");
+        var action = lookupAction("actionDetailsFieldSetPositionPanel");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("3"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNotNull())
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))
@@ -321,23 +321,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionDetailsFieldSetPositionPanelDropdown() {
 
         // given
-        val action = lookupAction("actionDetailsFieldSetPositionPanelDropdown");
+        var action = lookupAction("actionDetailsFieldSetPositionPanelDropdown");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("4"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).isNotNull())
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))
@@ -349,23 +349,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionEmptyFieldSetNoPosition() {
 
         // given
-        val action = lookupAction("actionEmptyFieldSetNoPosition");
+        var action = lookupAction("actionEmptyFieldSetNoPosition");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("empty"))
         ;
@@ -376,23 +376,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionEmptyFieldSetPositionBelow() {
 
         // given
-        val action = lookupAction("actionEmptyFieldSetPositionBelow");
+        var action = lookupAction("actionEmptyFieldSetPositionBelow");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("2"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("empty"))
         ;
@@ -403,23 +403,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionEmptyFieldSetPositionPanel() {
 
         // given
-        val action = lookupAction("actionEmptyFieldSetPositionPanel");
+        var action = lookupAction("actionEmptyFieldSetPositionPanel");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("3"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("empty"))
         ;
@@ -430,23 +430,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionEmptyFieldSetPositionPanelDropdown() {
 
         // given
-        val action = lookupAction("actionEmptyFieldSetPositionPanelDropdown");
+        var action = lookupAction("actionEmptyFieldSetPositionPanelDropdown");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("4"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("empty"))
         ;
@@ -457,23 +457,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyNoPosition() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyNoPosition");
+        var action = lookupAction("actionAssociatedWithNamePropertyNoPosition");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("name"))  // TODO: ?? strange, because 'name' is not a fieldset; should be 'details' ??
         ;
@@ -484,23 +484,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyBelow() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyBelow");
+        var action = lookupAction("actionAssociatedWithNamePropertyBelow");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("name"))  // TODO: ?? strange, because 'name' is not a fieldset; should be 'details' ??
         ;
@@ -511,23 +511,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyPanel() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyPanel");
+        var action = lookupAction("actionAssociatedWithNamePropertyPanel");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("name"))  // TODO: ?? strange, because 'name' is not a fieldset; should be 'details' ??
         ;
@@ -538,23 +538,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyPanelDropdown() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyPanelDropdown");
+        var action = lookupAction("actionAssociatedWithNamePropertyPanelDropdown");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("name"))  // TODO: ?? strange, because 'name' is not a fieldset; should be 'details' ??
         ;
@@ -565,23 +565,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition");
+        var action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetNoPosition");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))
         ;
@@ -592,23 +592,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNameAndDetailsFieldSetPropertyBelow() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNameAndDetailsFieldSetPropertyBelow");
+        var action = lookupAction("actionAssociatedWithNameAndDetailsFieldSetPropertyBelow");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("2"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))
         ;
@@ -619,23 +619,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyAndDetailsFieldSetPanel() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetPanel");
+        var action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetPanel");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("3"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))    // because "name" is in this fieldSet
         ;
@@ -646,23 +646,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown");
+        var action = lookupAction("actionAssociatedWithNamePropertyAndDetailsFieldSetPanelDropdown");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("4"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("details"))    // because "name" is in this fieldSet
         ;
@@ -673,23 +673,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition");
+        var action = lookupAction("actionAssociatedWithNamePropertyButEmptyFieldSetNoPosition");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("empty"))    // overrides the 'associateWith' ???
         ;
@@ -700,23 +700,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void actionAssociatedWithNamePropertyAndSequenceNoPosition() {
 
         // given
-        val action = lookupAction("actionAssociatedWithNamePropertyAndSequenceNoPosition");
+        var action = lookupAction("actionAssociatedWithNamePropertyAndSequenceNoPosition");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo("name"))  // TODO: ?? strange, because 'name' is not a fieldset
         ;
@@ -727,23 +727,23 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void openRestApi() {
 
         // given
-        val action = lookupAction("openRestApi");
+        var action = lookupAction("openRestApi");
 
         // when, then
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("750.1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(LayoutConstants.FieldSetId.METADATA))
         ;
@@ -754,32 +754,32 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     void clearHints() {
 
         // given
-        val action = lookupAction("clearHints");
+        var action = lookupAction("clearHints");
 
         // when, then
         /* not used
         List<Facet> facets = action.getFacetHolder().streamFacets().collect(Collectors.toList());
         */
 
-        val actionPositionFacet = action.getFacet(ActionPositionFacet.class);
+        var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
-        val layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
+        var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("400.1"))
         ;
 
-        val layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
+        var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
         assertThat(layoutGroupFacet)
                 .satisfies(f -> assertThat(f).extracting(LayoutGroupFacet::getGroupId).isEqualTo(LayoutConstants.FieldSetId.METADATA))
         ;
     }
 
     private ObjectAction lookupAction(final String id) {
-        val objectSpecification = specificationLoader.loadSpecification(Counter.class);
+        var objectSpecification = specificationLoader.loadSpecification(Counter.class);
         List<ObjectAction> objectActions = objectSpecification.streamAnyActions(MixedIn.INCLUDED).collect(Collectors.toList());
         return objectSpecification.streamAnyActions(MixedIn.INCLUDED).filter(x -> x.getId().equals(id)).findFirst().orElseThrow();
     }

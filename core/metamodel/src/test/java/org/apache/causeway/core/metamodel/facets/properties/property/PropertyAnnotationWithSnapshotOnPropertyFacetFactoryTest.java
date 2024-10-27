@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
 
-import lombok.val;
-
 class PropertyAnnotationWithSnapshotOnPropertyFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -46,7 +44,7 @@ extends FacetFactoryTestAbstract {
 
     private void processNotPersisted(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        var propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processSnapshot(processMethodContext, propertyIfAny);
     }
 

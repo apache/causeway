@@ -43,7 +43,6 @@ import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarsh
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Prototypical test base for the RuntimeServices module.
@@ -63,7 +62,7 @@ implements HasMetaModelContext {
 
     @BeforeEach
     final void setUp() throws Exception {
-        val mmcBuilder = MetaModelContext_forTesting.builder()
+        var mmcBuilder = MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class));
 
         // install runtime services into MMC (extend as needed)
@@ -73,7 +72,7 @@ implements HasMetaModelContext {
         mmcBuilder.singletonProvider(
                 _SingletonBeanProvider
                 .forTestingLazy(MenuBarsMarshallerService.class, ()->{
-                    val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+                    var jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     return new MenuBarsMarshallerServiceBootstrap(
                             jaxbService);
                 }));
@@ -91,10 +90,10 @@ implements HasMetaModelContext {
                 _SingletonBeanProvider
                 .forTestingLazy(MenuBarsService.class, ()->{
 
-                    val messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
-                    val jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
-                    val menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
-                    val menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
+                    var messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
+                    var jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
+                    var menuBarsMenuBarsMarshaller = getServiceRegistry().lookupServiceElseFail(MenuBarsMarshallerService.class);
+                    var menuBarsLoaderService = getServiceRegistry().lookupServiceElseFail(MenuBarsLoaderService.class);
                     return new MenuBarsServiceBootstrap(
                             menuBarsLoaderService,
                             menuBarsMenuBarsMarshaller,

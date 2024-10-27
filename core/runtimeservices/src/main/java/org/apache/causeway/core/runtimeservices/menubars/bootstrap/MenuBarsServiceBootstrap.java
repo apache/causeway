@@ -71,7 +71,6 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
@@ -114,7 +113,7 @@ implements MenuBarsService {
 
     @Override
     public BSMenuBars menuBars(final Type type) {
-        val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
+        var menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
         if(type == Type.ANNOTATED) {
             return menuBarsFromAnnotationsOnly;
         }
@@ -124,7 +123,7 @@ implements MenuBarsService {
     // -- HELPER
 
     private BSMenuBars menuBarsDefault() {
-        val menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
+        var menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
         // load (and only fallback if nothing could be loaded)...
         if(menuBars == null || loader.supportsReloading()) {
             this.menuBars = loadOrElse(menuBarsFromAnnotationsOnly);
@@ -135,19 +134,19 @@ implements MenuBarsService {
     private BSMenuBars loadOrElse(
             final BSMenuBars menuBarsFromAnnotationsOnly) {
 
-        val menuBars = loader.menuBars(marshaller)
+        var menuBars = loader.menuBars(marshaller)
                 .map(this::updateFacetsFromActionLayoutXml)
                 .map(this::addTnsAndSchemaLocation)
                 .orElse(menuBarsFromAnnotationsOnly);
 
-        val unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
+        var unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
         if (unreferencedActionsMenu == null) {
             // just use fallback
             return menuBarsFromAnnotationsOnly;
         }
 
         // add in any missing actions from the fallback
-        val referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
+        var referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
 
         menuBarsFromAnnotationsOnly.visit(BSMenuBars.VisitorAdapter.visitingMenuSections(menuSection->{
 
@@ -156,9 +155,9 @@ implements MenuBarsService {
             // unreferencedActionsMenu
             BSMenuSection section = null;
 
-            for (val serviceActionLayout : menuSection.getServiceActions()) {
-                val logicalTypeNameAndId = serviceActionLayout.getLogicalTypeNameAndId();
-                val isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(logicalTypeNameAndId);
+            for (var serviceActionLayout : menuSection.getServiceActions()) {
+                var logicalTypeNameAndId = serviceActionLayout.getLogicalTypeNameAndId();
+                var isReferencedAction = referencedActionsByObjectTypeAndId.containsKey(logicalTypeNameAndId);
 
                 if (isReferencedAction) {
                     continue; // check next
@@ -187,17 +186,17 @@ implements MenuBarsService {
         .filter(this::isVisibleAdapterForMenu)
         .forEach(serviceAdapter->{
 
-            val serviceSpec = serviceAdapter.getSpecification();
+            var serviceSpec = serviceAdapter.getSpecification();
 
             serviceSpec.streamAnyActions(MixedIn.INCLUDED)
             .forEach(objectAction->{
 
-                val serviceActionIdentifier = objectAction.getFeatureIdentifier();
+                var serviceActionIdentifier = objectAction.getFeatureIdentifier();
 
-                val actionId = serviceActionIdentifier.getLogicalTypeName()
+                var actionId = serviceActionIdentifier.getLogicalTypeName()
                         + "#" + serviceActionIdentifier.getMemberLogicalName();
 
-                val layoutData = serviceActionLayoutDataByActionId.get(actionId);
+                var layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
                 FacetUtil.updateFacetIfPresent(
                         MemberNamedFacetForMenuBarXml.create(layoutData, objectAction));
@@ -224,7 +223,7 @@ implements MenuBarsService {
     }
 
     private static BSMenuSection addSectionToMenu(final BSMenu menu) {
-        val section = new BSMenuSection();
+        var section = new BSMenuSection();
         menu.getSections().add(section);
         return section;
     }
@@ -244,14 +243,14 @@ implements MenuBarsService {
             return null;
         }
 
-        val menusWithUnreferencedActionsFlagSet = _Lists.<BSMenu>newArrayList();
+        var menusWithUnreferencedActionsFlagSet = _Lists.<BSMenu>newArrayList();
         menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
             if(Boolean.TRUE.equals(menu.isUnreferencedActions())) {
                 menusWithUnreferencedActionsFlagSet.add(menu);
             }
         }));
 
-        val size = menusWithUnreferencedActionsFlagSet.size();
+        var size = menusWithUnreferencedActionsFlagSet.size();
         if (size == 1) {
             return menusWithUnreferencedActionsFlagSet.get(0);
         }
@@ -269,7 +268,7 @@ implements MenuBarsService {
     private BSMenuBars menuBarsFromAnnotationsOnly() {
         final BSMenuBars menuBars = new BSMenuBars();
 
-        val visibleServiceAdapters = metaModelContext.streamServiceAdapters()
+        var visibleServiceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(this::isVisibleAdapterForMenu)
                 .collect(Can.toCan());
 
@@ -288,7 +287,7 @@ implements MenuBarsService {
     }
 
     private boolean isVisibleAdapterForMenu(final ManagedObject objectAdapter) {
-        val spec = objectAdapter.getSpecification();
+        var spec = objectAdapter.getSpecification();
         if (spec.isHidden()) {
             // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
             // services that have an imperative hidden() method.
@@ -303,7 +302,7 @@ implements MenuBarsService {
             final BSMenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
-        val serviceActions = _Lists.<ServiceAndAction>newArrayList();
+        var serviceActions = _Lists.<ServiceAndAction>newArrayList();
 
         // cf ServiceActionsModel & ServiceActionUtil#buildMenu in Wicket viewer
         serviceAdapters.stream()
@@ -344,12 +343,12 @@ implements MenuBarsService {
                     menuSection = new BSMenuSection();
                 }
 
-                val objectAction = serviceAndAction.getObjectAction();
-                //val service = serviceAndAction.getServiceAdapter();
-                val logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
-                val actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
+                var objectAction = serviceAndAction.getObjectAction();
+                //var service = serviceAndAction.getServiceAdapter();
+                var logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
+                var actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
-                val named = objectAction
+                var named = objectAction
                 .getFacetRanking(MemberNamedFacet.class)
                 // assuming layout from annotations never installs higher than Precedence.DEFAULT
                 .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT))
@@ -383,7 +382,7 @@ implements MenuBarsService {
 
         // first, order as defined in causeway.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
-            val serviceSpec = serviceAdapter.getSpecification();
+            var serviceSpec = serviceAdapter.getSpecification();
             // assuming services always provide singular NounForm
             String serviceName = serviceSpec.getSingularName();
             serviceNameOrder.add(serviceName);
@@ -404,7 +403,7 @@ implements MenuBarsService {
      */
     private static Map<String, List<ServiceAndAction>> groupByServiceName(
             final List<ServiceAndAction> serviceActions) {
-        val serviceActionsByName = _Maps.<String, List<ServiceAndAction>>newTreeMap();
+        var serviceActionsByName = _Maps.<String, List<ServiceAndAction>>newTreeMap();
 
         // map available services
         ManagedObject lastServiceAdapter = null;
@@ -413,7 +412,7 @@ implements MenuBarsService {
             List<ServiceAndAction> serviceActionsForName =
                     serviceActionsByName.get(serviceAction.getServiceName());
 
-            val serviceAdapter = serviceAction.getServiceAdapter();
+            var serviceAdapter = serviceAction.getServiceAdapter();
 
             if(serviceActionsForName == null) {
                 serviceActionsForName = _Lists.newArrayList();
@@ -439,7 +438,7 @@ implements MenuBarsService {
 
         return objectActions
                 .map(objectAction->{
-                    val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+                    var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
                     String serviceName = layoutGroupFacet != null
                             ? layoutGroupFacet.getGroupId()
                             : null;

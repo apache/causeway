@@ -42,7 +42,6 @@ import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -60,7 +59,7 @@ public class SpringSecurityFilter implements Filter {
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException, ServletException {
 
-        val userMemento = springAuthentication()
+        var userMemento = springAuthentication()
                 .flatMap(this::userMementoFromSpringAuthentication)
                 .orElse(null);
 
@@ -69,10 +68,10 @@ public class SpringSecurityFilter implements Filter {
             return; // either not authenticated or unknown principal type (not handled)
         }
 
-        val interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
+        var interactionContext = InteractionContext.ofUserWithSystemDefaults(userMemento)
                 .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder.getUserTimeZone());
 
-        val result = interactionService.runAndCatch(
+        var result = interactionService.runAndCatch(
                 interactionContext,
                 ()->filterChain.doFilter(servletRequest, servletResponse));
 
@@ -113,7 +112,7 @@ public class SpringSecurityFilter implements Filter {
 
         for (final AuthenticationConverter converter : converters) {
             try {
-                val userMemento = converter.convert(springAuthentication);
+                var userMemento = converter.convert(springAuthentication);
                 if(userMemento != null) {
                     return Optional.of(
                             // adds generic authorized user role to indicate 'authorized'

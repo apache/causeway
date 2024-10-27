@@ -39,7 +39,6 @@ import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -54,7 +53,7 @@ class _Sample {
 		final FeedbackPanel feedback = Wkt.ajaxEnable(new FeedbackPanel("feedback"));
 		container.addOrReplace(feedback);
 
-		val config = new CalendarConfig();
+		var config = new CalendarConfig();
 		config.getHeaderToolbar().setLeft("prevYear,prev,next,nextYear, today");
 	    config.getHeaderToolbar().setCenter("title");
 		config.getHeaderToolbar().setRight("dayGridMonth,timeGridWeek");
@@ -167,10 +166,10 @@ class _Sample {
         @Override
         public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
             eventsById.clear();
-            val duration = Duration.between(start, end);
+            var duration = Duration.between(start, end);
             for (int i = 0; i < duration.toDays() + 1; i++) {
 
-                val id = "id_" + i;
+                var id = "id_" + i;
 
                 ZonedDateTime time = start;
                 time = time.plusDays(i).withHour(
@@ -190,7 +189,7 @@ class _Sample {
 
         @Override
         public Event getEventForId(final String id) throws NoSuchElementException {
-            val event = eventsById.get(id);
+            var event = eventsById.get(id);
             if (event != null) {
                 return event;
             }

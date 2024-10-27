@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-import lombok.val;
+
 
 class MetaModelValidatorForJdoqlVariablesClause
 extends MetaModelValidatorForJdoqlAbstract {
@@ -47,7 +47,7 @@ extends MetaModelValidatorForJdoqlAbstract {
             final ObjectSpecification objectSpec,
             final String query) {
 
-        val persistenceCapableFacetIfAny = Try.call(
+        var persistenceCapableFacetIfAny = Try.call(
                 ()->getSpecificationLoader()
                     .specForType(_Context.loadClass(classNameFromClause))
                     .map(spec->spec.getFacet(JdoPersistenceCapableFacet.class))
@@ -57,7 +57,7 @@ extends MetaModelValidatorForJdoqlAbstract {
 
         if(persistenceCapableFacetIfAny.isEmpty()) {
 
-            val cls = objectSpec.getCorrespondingClass();
+            var cls = objectSpec.getCorrespondingClass();
 
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),

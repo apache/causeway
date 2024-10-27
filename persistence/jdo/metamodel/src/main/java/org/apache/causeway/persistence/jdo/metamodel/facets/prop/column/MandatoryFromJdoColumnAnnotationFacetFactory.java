@@ -43,8 +43,6 @@ import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
 
 public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
@@ -86,7 +84,7 @@ implements MetaModelRefiner {
             }
         }
 
-        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(javax.jdo.annotations.Column.class);
+        var jdoColumnIfAny = processMethodContext.synthesizeOnMethod(javax.jdo.annotations.Column.class);
         MandatoryFacet.Semantics semantics = inferSemantics(processMethodContext, jdoColumnIfAny);
         if(jdoColumnIfAny.isPresent()) {
             FacetUtil.addFacet(

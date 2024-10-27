@@ -26,8 +26,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.commons.internal.collections._Lists;
 
-import lombok.val;
-
 /**
  * @since 1.x {@index}
  */
@@ -44,7 +42,7 @@ public interface MenuBars {
     Map<String, ServiceActionLayoutData> getAllServiceActionsByObjectTypeAndId();
 
     default Stream<ServiceActionLayoutData> stream() {
-        val entries = _Lists.<ServiceActionLayoutData>newArrayList();
+        var entries = _Lists.<ServiceActionLayoutData>newArrayList();
         visit(entries::add);
         return entries.stream();
     }

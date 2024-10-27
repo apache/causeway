@@ -25,15 +25,13 @@ import org.opentest4j.AssertionFailedError;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ApplibBlobHolder;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ApplibClobHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_applib_Test {
 
     @Test
     public void exercise_blob() {
 
         // given
-        val holder = new ApplibBlobHolder();
+        var holder = new ApplibBlobHolder();
         Assertions.assertThat(holder).extracting(ApplibBlobHolder::getSomeBlob).isNull();
 
         // when
@@ -49,7 +47,7 @@ public class PojoTester_datatypes_applib_Test {
     public void exercise_blob_broken() {
 
         // given
-        val holder = new ApplibBlobHolder().butBroken();
+        var holder = new ApplibBlobHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {
@@ -62,7 +60,7 @@ public class PojoTester_datatypes_applib_Test {
     public void exercise_clob() {
 
         // given
-        val holder = new ApplibClobHolder();
+        var holder = new ApplibClobHolder();
         Assertions.assertThat(holder).extracting(ApplibClobHolder::getSomeClob).isNull();
 
         // when
@@ -78,7 +76,7 @@ public class PojoTester_datatypes_applib_Test {
     public void exercise_clob_broken() {
 
         // given
-        val holder = new ApplibClobHolder().butBroken();
+        var holder = new ApplibClobHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {

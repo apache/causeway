@@ -30,7 +30,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Value;
-import lombok.val;
 
 public interface XrayModel {
 
@@ -101,7 +100,7 @@ public interface XrayModel {
         private final String multilinelabel;
 
         public static ThreadMemento fromCurrentThread() {
-            val ct = Thread.currentThread();
+            var ct = Thread.currentThread();
             return ThreadMemento.of(
                     String.format("thread-%d-%s", ct.getId(), ct.getName()),
                     String.format("Thread-%d [%s]", ct.getId(), ct.getName()),

@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
@@ -76,7 +75,7 @@ public interface MemberExecutorService {
             @NonNull final Can<ManagedObject> argumentAdapters,
             @NonNull final ObjectAction owningAction,
             @NonNull final ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
-        val actionExecutor = ActionExecutor.forAction(
+        var actionExecutor = ActionExecutor.forAction(
                 facetHolder,
                 interactionInitiatedBy,
                 head,
@@ -96,7 +95,7 @@ public interface MemberExecutorService {
             final @NonNull PropertyClearFacet clearFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-        val propertyExecutor = PropertyModifier.forPropertyClear(
+        var propertyExecutor = PropertyModifier.forPropertyClear(
                 facetHolder, interactionInitiatedBy, head,
                 owningProperty, getterFacet, clearFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
@@ -114,7 +113,7 @@ public interface MemberExecutorService {
             final @NonNull PropertySetterFacet setterFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
-        val propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
+        var propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
                 interactionInitiatedBy, head, newValueAdapter,
                 owningProperty, getterFacet, setterFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);

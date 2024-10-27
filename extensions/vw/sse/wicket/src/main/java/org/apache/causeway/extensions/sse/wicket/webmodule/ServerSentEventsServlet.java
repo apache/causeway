@@ -37,7 +37,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -64,8 +64,8 @@ public class ServerSentEventsServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
-        val eventStreamType = parseEventStreamType(request);
-        val eventStream = eventStreamType.flatMap(sseService::lookupByType)
+        var eventStreamType = parseEventStreamType(request);
+        var eventStream = eventStreamType.flatMap(sseService::lookupByType)
                 .orElse(null);
 
         response.setStatus(200);
@@ -120,8 +120,8 @@ public class ServerSentEventsServlet extends HttpServlet {
 
     private void fork(final AsyncContext asyncContext, final SseChannel eventStream) {
 
-        val response = asyncContext.getResponse();
-        val marshaller = new Markup.JaxbToStringAdapter();
+        var response = asyncContext.getResponse();
+        var marshaller = new Markup.JaxbToStringAdapter();
 
         eventStream.listenWhile(source->{
 
@@ -131,12 +131,12 @@ public class ServerSentEventsServlet extends HttpServlet {
 
             try {
 
-                val writer = response.getWriter(); // don't close the writer, its likely to be reused
+                var writer = response.getWriter(); // don't close the writer, its likely to be reused
                 if(writer==null) {
                     return false; // stop listening
                 }
 
-                val payload = marshaller.marshal(Markup.valueOf(source.getPayload()));
+                var payload = marshaller.marshal(Markup.valueOf(source.getPayload()));
 
                 writer
                 .append("data: ")
@@ -169,7 +169,7 @@ public class ServerSentEventsServlet extends HttpServlet {
     }
 
     private Optional<Class<?>> parseEventStreamType(final HttpServletRequest request) {
-        val eventStreamId = request.getParameter("eventStream");
+        var eventStreamId = request.getParameter("eventStream");
         if(_Strings.isNullOrEmpty(eventStreamId)) {
             return Optional.empty();
         }

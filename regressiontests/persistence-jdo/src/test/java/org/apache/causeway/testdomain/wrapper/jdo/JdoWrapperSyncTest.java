@@ -43,7 +43,7 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -77,15 +77,15 @@ class JdoWrapperSyncTest extends CausewayIntegrationTestAbstract {
     @Test
     void testWrapper_waitingOnDomainEvent() throws InterruptedException, ExecutionException {
 
-        val inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
-        val sumOfPrices = repository.allInstances(JdoProduct.class)
+        var inventoryManager = facoryService.viewModel(JdoInventoryManager.class);
+        var sumOfPrices = repository.allInstances(JdoProduct.class)
                 .stream()
                 .mapToDouble(JdoProduct::getPrice)
                 .sum();
 
         assertEquals(167d, sumOfPrices, 1E-6);
 
-        val products = wrapper.wrap(inventoryManager).getAllProducts();
+        var products = wrapper.wrap(inventoryManager).getAllProducts();
 
         assertEquals(3, products.size());
         assertEquals(JdoBook.class, products.get(0).getClass());

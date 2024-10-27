@@ -58,8 +58,6 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -108,7 +106,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void shouldHaveARequestCycle() {
 
-        val entityPage = EntityPage.forPageParameters(pageParameters);
+        var entityPage = EntityPage.forPageParameters(pageParameters);
         wktTester.startPage(entityPage);
 
         assertNotNull(RequestCycle.get());
@@ -122,8 +120,8 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
-        val objectSpec = domainObject.getSpecification();
-        val entityModel = UiObjectWkt.ofAdapter(domainObject);
+        var objectSpec = domainObject.getSpecification();
+        var entityModel = UiObjectWkt.ofAdapter(domainObject);
 
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
         assertEquals(domainObject.getTitle(), entityModel.getTitle());
@@ -150,9 +148,9 @@ class InteractionTestWkt extends InteractionTestAbstract {
             }
 
             // the scalar model should be in sync with the underlying interaction API
-            val pendingPropModel = scalarModel.getPendingPropertyModel();
-            val propBackendValue = pendingPropModel.getValue().getValue();
-            val propUIValue = scalarModel.getObject();
+            var pendingPropModel = scalarModel.getPendingPropertyModel();
+            var propBackendValue = pendingPropModel.getValue().getValue();
+            var propUIValue = scalarModel.getObject();
 
             assertEquals(
                     "initial",
@@ -178,7 +176,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
 
         assertEquals(3L, propertyCount);
 
-        val managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+        var managedAction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .getManagedAction().get(); // should not throw
 
         assertFalse(managedAction.checkVisibility().isPresent()); // is visible
@@ -188,22 +186,22 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void whenEnabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val disablingUiModel = DisablingDecorationModel.of(actionInteraction);
+        var disablingUiModel = DisablingDecorationModel.of(actionInteraction);
         assertFalse(disablingUiModel.isPresent());
     }
 
     @Test
     void whenDisabled_shouldProvideProperDecoratorModels() {
 
-        val actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionDemo.class, "noArgDisabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
+        var disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
         assertEquals("Disabled for demonstration.", disablingUiModel.reason());
     }
 }

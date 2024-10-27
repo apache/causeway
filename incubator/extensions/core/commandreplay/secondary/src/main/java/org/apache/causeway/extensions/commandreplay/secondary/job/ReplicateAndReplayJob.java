@@ -34,7 +34,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryCo
 import org.apache.causeway.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -57,7 +56,7 @@ public class ReplicateAndReplayJob implements Job {
         new SecondaryStatusData(quartzContext);
 
         if(secondaryConfig.isConfigured()) {
-            val user = UserMemento.ofNameAndRoleNames(
+            var user = UserMemento.ofNameAndRoleNames(
                     secondaryConfig.getPrimaryUser(),
                     secondaryConfig.getQuartzRoles().stream());
 
@@ -70,12 +69,12 @@ public class ReplicateAndReplayJob implements Job {
 
     private void exec(final JobExecutionContext quartzContext) {
 
-        val ssh = new SecondaryStatusData(quartzContext);
-        val secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
+        var ssh = new SecondaryStatusData(quartzContext);
+        var secondaryStatus = ssh.getSecondaryStatus(SecondaryStatus.OK);
 
         switch (secondaryStatus) {
             case OK:
-                val newStatus =
+                var newStatus =
                         interactionService.call(authentication, new ReplicateAndRunCommands());
 
                 if(newStatus != null) {

@@ -44,7 +44,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class MandatoryFacetAbstract
 extends FacetAbstract
@@ -83,7 +82,7 @@ implements MandatoryFacet {
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(getSemantics().isRequired()) {
-            val pojo = MmUnwrapUtils.single(adapter);
+            var pojo = MmUnwrapUtils.single(adapter);
 
             // special case string handling.
             if(pojo instanceof String) {
@@ -99,7 +98,7 @@ implements MandatoryFacet {
     @Override
     public String invalidates(final ValidityContext context) {
 
-        val proposedHolder =
+        var proposedHolder =
                 context instanceof PropertyModifyContext
                 || context instanceof ActionArgValidityContext
                         ? (ProposedHolder) context
@@ -148,7 +147,7 @@ implements MandatoryFacet {
 
 
         if(conflictingFacets.isNotEmpty()) {
-            val holder = mandatoryFacet.getFacetHolder();
+            var holder = mandatoryFacet.getFacetHolder();
 
             ValidationFailure.raiseFormatted(holder,
                     ProgrammingModelConstants.MessageTemplate.CONFLICTING_OPTIONALITY.builder()
@@ -164,20 +163,20 @@ implements MandatoryFacet {
 
         //TODO maybe move this kind of logic to FacetRanking
 
-        val facetRanking = mandatoryFacet.getSharedFacetRanking().orElse(null);
+        var facetRanking = mandatoryFacet.getSharedFacetRanking().orElse(null);
         if(facetRanking==null) return Can.empty(); // not yet initialized
 
         // assumes that given mandatoryFacet is one of the top ranking
 
-        val isTopRanking = mandatoryFacet.getPrecedence()
+        var isTopRanking = mandatoryFacet.getPrecedence()
                 .equals(facetRanking.getTopPrecedence().orElse(null));
         if(!isTopRanking) {
             // ignore validation of lower than top-rank
             return Can.empty();
         }
 
-        val topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
-        val firstOfTopRanking = (MandatoryFacet)topRankingFacets.getFirstElseFail();
+        var topRankingFacets = facetRanking.getTopRank(mandatoryFacet.facetType());
+        var firstOfTopRanking = (MandatoryFacet)topRankingFacets.getFirstElseFail();
 
         // the top ranking mandatory facets should semantically agree
         final Can<MandatoryFacet> conflictingWithFirst = topRankingFacets.isCardinalityMultiple()

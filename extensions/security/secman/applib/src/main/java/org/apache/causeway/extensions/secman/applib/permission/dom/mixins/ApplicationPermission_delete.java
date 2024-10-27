@@ -32,7 +32,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.Applic
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  *
@@ -60,7 +60,7 @@ public class ApplicationPermission_delete {
     private final ApplicationPermission target;
 
     @MemberSupport public ApplicationRole act() {
-        val owningRole = target.getRole();
+        var owningRole = target.getRole();
         repository.remove(target);
         return owningRole;
     }

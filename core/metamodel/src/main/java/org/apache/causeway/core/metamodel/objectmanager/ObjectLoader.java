@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -65,14 +64,14 @@ public interface ObjectLoader {
         LoadService{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.getObjectSpecification();
                 return spec.isInjectable();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
-                val logicalType = spec.getLogicalType();
-                val servicePojo = spec.getServiceRegistry()
+                var spec = objectLoadRequest.getObjectSpecification();
+                var logicalType = spec.getLogicalType();
+                var servicePojo = spec.getServiceRegistry()
                     .lookupRegisteredBeanById(logicalType)
                     .flatMap(_SingletonBeanProvider::lookupInstance)
                     .orElseThrow(()->_Exceptions.noSuchElement(
@@ -84,16 +83,16 @@ public interface ObjectLoader {
         LoadValue{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.getObjectSpecification();
                 return spec.isValue();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
-                val valueFacet = spec.valueFacetElseFail();
+                var spec = objectLoadRequest.getObjectSpecification();
+                var valueFacet = spec.valueFacetElseFail();
 
-                val bookmark = objectLoadRequest.getBookmark();
-                val valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.getIdentifier());
+                var bookmark = objectLoadRequest.getBookmark();
+                var valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.getIdentifier());
 
                 return ManagedObject.value(spec, valuePojoIfAny);
             }
@@ -101,32 +100,32 @@ public interface ObjectLoader {
         LoadViewModel{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.getObjectSpecification();
                 return spec.isViewModel();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
-                val viewModelFacet = spec.viewmodelFacetElseFail();
+                var spec = objectLoadRequest.getObjectSpecification();
+                var viewModelFacet = spec.viewmodelFacetElseFail();
 
-                val bookmark = objectLoadRequest.getBookmark();
+                var bookmark = objectLoadRequest.getBookmark();
                 return viewModelFacet.instantiate(spec, Optional.of(bookmark));
             }
         },
         LoadEntity{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                val spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.getObjectSpecification();
                 return spec.isEntity();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
 
-                val spec = objectLoadRequest.getObjectSpecification();
-                val entityFacet = spec.entityFacetElseFail();
+                var spec = objectLoadRequest.getObjectSpecification();
+                var entityFacet = spec.entityFacetElseFail();
 
-                val bookmark = objectLoadRequest.getBookmark();
-                val entityPojoIfAny = entityFacet.fetchByBookmark(bookmark);
+                var bookmark = objectLoadRequest.getBookmark();
+                var entityPojoIfAny = entityFacet.fetchByBookmark(bookmark);
 
                 return entityPojoIfAny
                         .map(entityPojo->ManagedObject.entity(spec, entityPojo, Optional.of(bookmark)))

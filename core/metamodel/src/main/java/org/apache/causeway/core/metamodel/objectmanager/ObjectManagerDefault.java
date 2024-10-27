@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoFor
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -74,25 +73,25 @@ public class ObjectManagerDefault implements ObjectManager {
         }
 
         if(memento instanceof ObjectMementoForEmpty) {
-            val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
-            val logicalType = objectMementoForEmpty.getLogicalType();
+            var objectMementoForEmpty = (ObjectMementoForEmpty) memento;
+            var logicalType = objectMementoForEmpty.getLogicalType();
             /* note: we recover from (corresponding) class not logical-type-name,
              * as the latter can be ambiguous, when shared in a type hierarchy*/
-            val spec = getSpecificationLoader().specForLogicalType(logicalType);
+            var spec = getSpecificationLoader().specForLogicalType(logicalType);
             return spec.isPresent()
                     ? ManagedObject.empty(spec.get())
                     : ManagedObject.unspecified();
         }
 
         if(memento instanceof ObjectMementoCollection) {
-            val objectMementoCollection = (ObjectMementoCollection) memento;
+            var objectMementoCollection = (ObjectMementoCollection) memento;
 
-            val logicalType = objectMementoCollection.getLogicalType();
+            var logicalType = objectMementoCollection.getLogicalType();
             /* note: we recover from (corresponding) class not logical-type-name,
              * as the latter can be ambiguous, when shared in a type hierarchy*/
-            val elementSpec = getSpecificationLoader().specForLogicalTypeElseFail(logicalType);
+            var elementSpec = getSpecificationLoader().specForLogicalTypeElseFail(logicalType);
 
-            val objects = objectMementoCollection.unwrapList().stream()
+            var objects = objectMementoCollection.unwrapList().stream()
                     .map(this::demementify)
                     .collect(Can.toCan());
 
@@ -100,7 +99,7 @@ public class ObjectManagerDefault implements ObjectManager {
         }
 
         if(memento instanceof ObjectMementoForScalar) {
-            val objectMementoAdapter = (ObjectMementoForScalar) memento;
+            var objectMementoAdapter = (ObjectMementoForScalar) memento;
             return objectMementoAdapter.reconstructObject(getMetaModelContext());
         }
 
@@ -110,7 +109,7 @@ public class ObjectManagerDefault implements ObjectManager {
 
     // JUnit support
     public static ObjectManager forTesting(final MetaModelContext metaModelContext) {
-        val objectManager = new ObjectManagerDefault(metaModelContext);
+        var objectManager = new ObjectManagerDefault(metaModelContext);
         objectManager.init();
         return objectManager;
     }

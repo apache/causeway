@@ -27,7 +27,6 @@ import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public final class BookmarkedObjectWkt
 extends ModelAbstract<ManagedObject> {
@@ -38,7 +37,7 @@ extends ModelAbstract<ManagedObject> {
     /** overwrites any current cache entry, only safe when no other views/models reference the same ManagedObject */
     public static BookmarkedObjectWkt ofAdapter(
             final @NonNull ManagedObject domainObject) {
-        val bookmark = domainObject.getBookmarkElseFail();
+        var bookmark = domainObject.getBookmarkElseFail();
         return new BookmarkedObjectWkt(bookmark, domainObject);
     }
 
@@ -59,7 +58,7 @@ extends ModelAbstract<ManagedObject> {
     }
 
     public final ManagedObject asManagedObject() {
-        val entityOrViewmodel = super.getObject();
+        var entityOrViewmodel = super.getObject();
         return entityOrViewmodel;
     }
 
@@ -70,7 +69,7 @@ extends ModelAbstract<ManagedObject> {
 
     @Override
     protected final ManagedObject load() {
-        val adapter = getMetaModelContext().getObjectManager().loadObjectElseFail(bookmark);
+        var adapter = getMetaModelContext().getObjectManager().loadObjectElseFail(bookmark);
         return adapter;
     }
 

@@ -30,8 +30,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
-
 public abstract class RichAssociationGet<T extends ObjectAssociation> extends Element {
 
     final MemberInteractor<T> memberInteractor;
@@ -44,7 +42,7 @@ public abstract class RichAssociationGet<T extends ObjectAssociation> extends El
 
         GraphQLOutputType type = outputTypeFor(memberInteractor);
         if (type != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name("get")
                     .type(type);
             setField(fieldBuilder.build());
@@ -59,18 +57,18 @@ public abstract class RichAssociationGet<T extends ObjectAssociation> extends El
     protected Object fetchData(final DataFetchingEnvironment environment) {
 
         // TODO: introduce evaluator
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        val association = memberInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = association.get(managedObject);
+        var association = memberInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var resultManagedObject = association.get(managedObject);
 
         return resultManagedObject != null
                 ? resultManagedObject.getPojo()

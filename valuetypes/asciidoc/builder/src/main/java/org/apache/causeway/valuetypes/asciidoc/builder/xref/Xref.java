@@ -26,7 +26,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 @Value @Builder
 public final class Xref {
@@ -47,7 +46,7 @@ public final class Xref {
     private final @NonNull String xref = xref(); // full xref string
 
     private String xref() {
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
 
         sb.append("xref:")
         .append(location.stream().collect(Collectors.joining(":")))

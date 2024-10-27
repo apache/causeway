@@ -38,7 +38,7 @@ import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJdoForT
 import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 
 public abstract class LifecycleEventPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -61,18 +61,18 @@ extends PublishingTestAbstract {
             final ChangeScenario changeScenario,
             final VerificationStage verificationStage) {
 
-        val defaultSample = BookDto.sample();
+        var defaultSample = BookDto.sample();
 
-        val bookSamplesForCreate = Can.of(
+        var bookSamplesForCreate = Can.of(
                 defaultSample,
                 BookDto.builder().build()); // empty-defaults
-        val bookSample1 = Can.of( // initial
+        var bookSample1 = Can.of( // initial
                 defaultSample);
-        val bookSample2 = Can.of( // after property update
+        var bookSample2 = Can.of( // after property update
                 defaultSample.asBuilder()
                 .name("Book #2")
                 .build());
-        val bookSample3 = Can.of( // after action invocation
+        var bookSample3 = Can.of( // after action invocation
                 defaultSample.asBuilder()
                 .price(defaultSample.getPrice()*2.)
                 .build());
@@ -109,7 +109,7 @@ extends PublishingTestAbstract {
             case PROPERTY_UPDATE: // update the book's name -> "Book #2"
 
                 //XXX if we want to trigger callback events before PRE_COMMIT then changes need to be flushed .eg
-                //val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+                //var em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
                 //em.flush(); // in effect makes changes visible during PRE_COMMIT
                 //assertHasUpdatingLifecycleEvents(bookSample2);
 
@@ -270,14 +270,14 @@ extends PublishingTestAbstract {
             final Class<? extends AbstractLifecycleEvent<JpaBook>> eventClassWhenJpa,
             final Can<BookDto> expectedBooks) {
 
-        val jdoBooks = LifecycleEventSubscriberJdoForTesting
+        var jdoBooks = LifecycleEventSubscriberJdoForTesting
                 .getPublishedEventsJdo(kvStore, eventClassWhenJdo);
-        val jpaBooks = LifecycleEventSubscriberJpaForTesting
+        var jpaBooks = LifecycleEventSubscriberJpaForTesting
                 .getPublishedEventsJpa(kvStore, eventClassWhenJpa);
 
         assertEquals(0, jdoBooks.size() * jpaBooks.size()); // its either JDO or JPA, cannot be both
 
-        val actualBooks = jdoBooks.isEmpty()
+        var actualBooks = jdoBooks.isEmpty()
                 ? jpaBooks
                 : jdoBooks;
 

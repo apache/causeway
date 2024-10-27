@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class JavaCollectionFacetTest {
 
     private MetaModelContext metaModelContext;
@@ -49,13 +47,13 @@ class JavaCollectionFacetTest {
     @Test
     void firstElementForEmptyCollectionIsEmptyOptional() {
 
-        val mockFacetHolder = mock(FacetHolder.class);
+        var mockFacetHolder = mock(FacetHolder.class);
         when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
-        val mockCollection = mock(ManagedObject.class);
+        var mockCollection = mock(ManagedObject.class);
         when(mockCollection.getPojo()).thenReturn(new ArrayList<Object>());
 
-        val facet = new JavaCollectionFacet(mockFacetHolder);
+        var facet = new JavaCollectionFacet(mockFacetHolder);
         assertThat(facet.firstElement(mockCollection), is(Optional.empty()));
     }
 

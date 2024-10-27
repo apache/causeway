@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
-import lombok.val;
 
 public final class PropertyInteraction
 extends MemberInteraction<ManagedProperty, PropertyInteraction> {
@@ -36,7 +35,7 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        val managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
+        var managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
 
         final InteractionRailway<ManagedProperty> railway = managedProperty.isPresent()
                 ? InteractionRailway.success(managedProperty.get())

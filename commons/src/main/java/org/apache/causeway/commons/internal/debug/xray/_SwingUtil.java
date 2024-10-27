@@ -35,14 +35,13 @@ import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 final class _SwingUtil {
 
     JTable newTable(final Object[][] tableData, final String[] columnNames) {
-        val table = new JTable(tableData, columnNames) {
+        var table = new JTable(tableData, columnNames) {
             private static final long serialVersionUID = 1L;
             @Override
             public Component prepareRenderer(final TableCellRenderer renderer, final int row, final int column) {
@@ -69,7 +68,7 @@ final class _SwingUtil {
         if (!expanded && node.isRoot()) {
             return;
         }
-        val path = new TreePath(node.getPath());
+        var path = new TreePath(node.getPath());
         if (expanded) {
             tree.expandPath(path);
         } else {
@@ -79,7 +78,7 @@ final class _SwingUtil {
 
     JPanel canvas(final Consumer<Graphics2D> onRender) {
 
-        val canvas = new JPanel() {
+        var canvas = new JPanel() {
             private static final long serialVersionUID = 1L;
             @Override
             public void paintComponent(final Graphics g) {
@@ -92,14 +91,14 @@ final class _SwingUtil {
 
     public static Component verticalBox(final Component ...components) {
 
-        val panel = new JPanel(new GridBagLayout());
-        val gbc = new GridBagConstraints();
+        var panel = new JPanel(new GridBagLayout());
+        var gbc = new GridBagConstraints();
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.insets = new Insets(3, 6, 3, 6);
 
-        for(val component : components) {
+        for(var component : components) {
             panel.add(component, gbc);
         }
 

@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Wraps and unwraps the contained value within {@link ManagedObject},
@@ -55,18 +54,18 @@ extends ChainingModel<T> {
 
     @Override
     public T getObject() {
-        val objectAdapter = scalarModel().getObject();
-        val pojo = unwrap(objectAdapter);
+        var objectAdapter = scalarModel().getObject();
+        var pojo = unwrap(objectAdapter);
         return pojo;
     }
 
     @Override
     public void setObject(final T object) {
-        val scalarModel = scalarModel();
+        var scalarModel = scalarModel();
         if (object == null) {
             scalarModel.setObject(null);
         } else {
-            val objectAdapter = scalarModel.getMetaModelContext().getObjectManager().adapt(object);
+            var objectAdapter = scalarModel.getMetaModelContext().getObjectManager().adapt(object);
             scalarModel.setObject(objectAdapter);
         }
     }
@@ -74,7 +73,7 @@ extends ChainingModel<T> {
     // -- HELPER
 
     private T unwrap(final ManagedObject objectAdapter) {
-        val pojo = MmUnwrapUtils.single(objectAdapter);
+        var pojo = MmUnwrapUtils.single(objectAdapter);
         if(pojo==null
                 || !ClassUtils.resolvePrimitiveIfNecessary(type)
                         .isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(pojo.getClass()))) {

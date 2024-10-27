@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  * DomainObjects must have a non-empty namespace,
  * eg. @DomainObject(logicalTypeName="Customer") is considered invalid,
@@ -46,17 +44,17 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        val logicalType = spec.getLogicalType();
-        val logicalTypeName = logicalType.getLogicalTypeName();
+        var logicalType = spec.getLogicalType();
+        var logicalTypeName = logicalType.getLogicalTypeName();
 
-        val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
+        var nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                 .collect(Can.toCan());
 
         if(!nameParts.getCardinality().isMultiple()
                 || nameParts.stream()
                     .anyMatch(String::isEmpty)) {
 
-            val validationResponse = spec.isInjectable()
+            var validationResponse = spec.isInjectable()
                     ? ProgrammingModelConstants.MessageTemplate.DOMAIN_SERVICE_MISSING_A_NAMESPACE
                     : ProgrammingModelConstants.MessageTemplate.DOMAIN_OBJECT_MISSING_A_NAMESPACE;
 

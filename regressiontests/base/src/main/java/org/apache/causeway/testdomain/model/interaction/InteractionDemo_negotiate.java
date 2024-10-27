@@ -29,7 +29,6 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo_negotiat
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @Action
@@ -118,7 +117,7 @@ public class InteractionDemo_negotiate {
         if(IntStream.of(range.numbers()).anyMatch(e->e==x)) {
             return null;
         }
-        val paramSet = _Lists.ofNullable(p.a, p.b, p.c);
+        var paramSet = _Lists.ofNullable(p.a, p.b, p.c);
         return String.format("invalid, element not contained in %s got %d, param set %s", range.name(), x, paramSet);
     }
 

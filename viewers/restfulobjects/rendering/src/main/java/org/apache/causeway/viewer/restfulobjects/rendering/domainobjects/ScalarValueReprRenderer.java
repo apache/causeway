@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererException
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
 import lombok.Getter;
-import lombok.val;
+
 
 public class ScalarValueReprRenderer
 extends ReprRendererAbstract<ManagedObject>
@@ -69,7 +69,7 @@ implements HasObjectFeature {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.getTitle());
         }
 
-        val context = JsonValueConverter.Context.of(
+        var context = JsonValueConverter.Context.of(
                 getObjectFeature(),
                 getResourceContext().config().isSuppressMemberExtensions());
         final Object value = jsonValueEncoder.asObject(objectAdapter, context);

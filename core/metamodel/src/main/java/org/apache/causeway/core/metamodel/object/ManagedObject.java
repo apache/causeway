@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -374,8 +373,8 @@ extends
      * or they use a font awesome icon.
      */
     default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
-        val iconName = getIconName();
-        val faLayers = getSpecification().getFaLayers(this).orElse(null);
+        var iconName = getIconName();
+        var faLayers = getSpecification().getFaLayers(this).orElse(null);
         if (iconName != null
                 || faLayers == null) {
             return Either.left(getIcon());
@@ -471,7 +470,7 @@ extends
         if(pojo == null) {
             return empty(spec);
         }
-        val bookmarkIfAny = bookmarkIfKnown
+        var bookmarkIfAny = bookmarkIfKnown
                 .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
         return bookmarkIfAny
             .map(bookmark->entityHypridBookmarked(spec, pojo, bookmarkIfAny))
@@ -546,7 +545,7 @@ extends
     static ManagedObject adaptSingular(
             final @NonNull SpecificationLoader specLoader,
             final @NonNull Object pojo) {
-        val spec = specLoader.specForType(pojo.getClass()).orElse(null);
+        var spec = specLoader.specForType(pojo.getClass()).orElse(null);
         return adaptSingularInternal(spec, pojo, Optional.empty());
     }
 
@@ -601,12 +600,12 @@ extends
 
         MmAssertionUtils.assertPojoNotWrapped(pojo);
         MmAssertionUtils.assertPojoIsScalar(pojo);
-        val spec = pojo!=null
+        var spec = pojo!=null
                 && guess!=null
                     ? MmSpecUtils.quicklyResolveObjectSpecification(guess, pojo.getClass())
                     : guess;
 
-        val specialization = spec!=null
+        var specialization = spec!=null
                 ? Specialization.inferFrom(spec, pojo)
                 : Specialization.UNSPECIFIED;
 

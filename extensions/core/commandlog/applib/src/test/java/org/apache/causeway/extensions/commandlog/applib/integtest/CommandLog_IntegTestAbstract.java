@@ -56,8 +56,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
-
 public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
 
@@ -287,7 +285,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Assertions.assertThat(commandTarget1User1IfAny).isPresent();
         var commandTarget1User1 = commandTarget1User1IfAny.get();
-        val commandTarget1User1Id = commandTarget1User1.getInteractionId();
+        var commandTarget1User1Id = commandTarget1User1.getInteractionId();
 
         // given (different user, same target, same day)
         counter1 = counterRepository.findByName("counter-1");
@@ -304,7 +302,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Assertions.assertThat(commandTarget1User2IfAny).isPresent();
         var commandTarget1User2 = commandTarget1User2IfAny.get();
-        val commandTarget1User2Id = commandTarget1User2.getInteractionId();
+        var commandTarget1User2Id = commandTarget1User2.getInteractionId();
 
 
         // given (same user, same target, yesterday)
@@ -314,7 +312,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
                 InteractionContext.switchUser(
                         UserMemento.builder().name("user-1").build()),
                 () -> {
-                    val yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
                     sudoService.run(
                             InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
                             () -> {
@@ -342,7 +340,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Assertions.assertThat(commandTarget2User1IfAny).isPresent();
         var commandTarget2User1 = commandTarget2User1IfAny.get();
-        val commandTarget2User1Id = commandTarget2User1.getInteractionId();
+        var commandTarget2User1Id = commandTarget2User1.getInteractionId();
 
         // when
         Optional<? extends CommandLogEntry> commandTarget1User1ById = commandLogEntryRepository.findByInteractionId(commandTarget1User1Id);
@@ -360,13 +358,13 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // given
         commandTarget1User1 = commandTarget1User1ById.get();
         commandTarget1User2 = commandTarget1User2ById.get();
-        val commandTarget1User1Yesterday = commandTarget1User1YesterdayById.get();
+        var commandTarget1User1Yesterday = commandTarget1User1YesterdayById.get();
         commandTarget2User1 = commandTarget2User1ById.get();
 
-        val target1 = commandTarget1User1.getTarget();
-        val username1 = commandTarget1User1.getUsername();
-        val from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
-        val to = from.plusDays(1);
+        var target1 = commandTarget1User1.getTarget();
+        var username1 = commandTarget1User1.getUsername();
+        var from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
+        var to = from.plusDays(1);
 
         // when
         List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findNotYetReplayed();

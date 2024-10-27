@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class BookmarkPolicyFacetFallbackFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -69,7 +67,7 @@ implements MetaModelRefiner {
             objectSpec.streamDeclaredActions(MixedIn.EXCLUDED)
             .filter(isBookmarkable())
             .forEach(objectAction->{
-                val actionSemanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
+                var actionSemanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                 if(actionSemanticsFacet == null
                         || actionSemanticsFacet.getPrecedence().isFallback()
                         || !actionSemanticsFacet.value().isSafeInNature()) {
@@ -89,7 +87,7 @@ implements MetaModelRefiner {
 
     private static Predicate<ObjectAction> isBookmarkable() {
         return objectAction->{
-            val bookmarkPolicyFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
+            var bookmarkPolicyFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
             if(bookmarkPolicyFacet == null
                     || bookmarkPolicyFacet.getPrecedence().isFallback()
                     || bookmarkPolicyFacet.value() == BookmarkPolicy.NEVER) {

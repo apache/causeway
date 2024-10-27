@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class DomainServiceFacetAnnotationFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -42,11 +40,11 @@ implements MetaModelRefiner {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
+        var domainServiceIfAny = processClassContext.synthesizeOnType(DomainService.class);
         if (!domainServiceIfAny.isPresent()) {
             return;
         }
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         addFacetIfPresent(
                 AliasedFacetForDomainServiceAnnotation

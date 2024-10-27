@@ -29,16 +29,14 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
-
 /** package private utility */
 final class _MemberSortingUtils {
 
     // -- ASSOCIATION SORTING
 
     static List<ObjectAssociation> sortAssociationsIntoList(final Stream<ObjectAssociation> associations) {
-        val deweyOrderSet = DeweyOrderSet.createOrderSet(associations);
-        val orderedAssociations = _Lists.<ObjectAssociation> newArrayList();
+        var deweyOrderSet = DeweyOrderSet.createOrderSet(associations);
+        var orderedAssociations = _Lists.<ObjectAssociation> newArrayList();
         sortAssociations(deweyOrderSet, orderedAssociations);
         return orderedAssociations;
     }
@@ -46,8 +44,8 @@ final class _MemberSortingUtils {
     // -- ACTION SORTING
 
     static List<ObjectAction> sortActionsIntoList(final Stream<ObjectAction> actions) {
-        val deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
-        val orderedActions = _Lists.<ObjectAction>newArrayList();
+        var deweyOrderSet = DeweyOrderSet.createOrderSet(actions);
+        var orderedActions = _Lists.<ObjectAction>newArrayList();
         sortActions(deweyOrderSet, orderedActions);
         return orderedActions;
     }
@@ -71,14 +69,14 @@ final class _MemberSortingUtils {
     }
 
     private static void sortActions(final DeweyOrderSet orderSet, final List<ObjectAction> actionsToAppendTo) {
-        for (val element : orderSet) {
+        for (var element : orderSet) {
             if(element instanceof ObjectAction) {
-                val objectAction = (ObjectAction) element;
+                var objectAction = (ObjectAction) element;
                 actionsToAppendTo.add(objectAction);
             }
             else if (element instanceof DeweyOrderSet) {
-                val deweyOrderSet = ((DeweyOrderSet) element);
-                val actions = _Lists.<ObjectAction>newArrayList();
+                var deweyOrderSet = ((DeweyOrderSet) element);
+                var actions = _Lists.<ObjectAction>newArrayList();
                 sortActions(deweyOrderSet, actions);
                 actionsToAppendTo.addAll(actions);
             } else {
