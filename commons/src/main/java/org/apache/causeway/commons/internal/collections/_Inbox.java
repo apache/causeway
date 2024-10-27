@@ -24,8 +24,6 @@ import java.util.List;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.val;
-
 /**
  * Allows for thread-safe producer consumer pattern backed by {@link ArrayList}.
  *
@@ -59,7 +57,7 @@ public class _Inbox<T> implements Serializable {
 
     public Can<T> snapshotThenClear() {
         synchronized($lock) {
-            val defensiveCopy = Can.ofCollection(list);
+            var defensiveCopy = Can.ofCollection(list);
             list.clear();
             return defensiveCopy;
         }

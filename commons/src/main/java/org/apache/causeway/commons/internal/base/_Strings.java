@@ -59,7 +59,6 @@ import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -345,8 +344,8 @@ public final class _Strings {
             return true;
         }
         try {
-            val testDummyUri = new URI("http://localhost/?" + input);
-            val asQuery = testDummyUri.getQuery();
+            var testDummyUri = new URI("http://localhost/?" + input);
+            var asQuery = testDummyUri.getQuery();
             return input.equals(asQuery);
         } catch (Exception e) {
             // ignore
@@ -745,7 +744,7 @@ public final class _Strings {
     public static String print(
             final @NonNull Consumer<PrintStream> printer,
             final @NonNull Charset charset) {
-        val baos = new ByteArrayOutputStream();
+        var baos = new ByteArrayOutputStream();
         try (PrintStream ps = new PrintStream(baos, true, charset)) {
             printer.accept(ps);
         }
@@ -939,15 +938,15 @@ public final class _Strings {
      *
      */
     public static String baseName(final @NonNull String methodName) {
-        val asPrefixDropped = isNotEmpty(methodName)
+        var asPrefixDropped = isNotEmpty(methodName)
                 ? ofCodePoints(
                         methodName.codePoints()
                             .dropWhile(c->c != '_' && Character.isLowerCase(c)))
                 : "";
-        val baseName = asPrefixDropped.isEmpty()
+        var baseName = asPrefixDropped.isEmpty()
                 ? methodName
                 : asPrefixDropped;
-        val javaBaseName = _Strings.capitalize(baseName.trim());
+        var javaBaseName = _Strings.capitalize(baseName.trim());
         _Assert.assertNotEmpty(javaBaseName,
                 ()->String.format("framework bug: could not create a base name from '%s'", methodName));
         return javaBaseName;

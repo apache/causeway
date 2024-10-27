@@ -44,7 +44,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._Generics;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -277,7 +276,7 @@ public final class _Collections {
      * it represents a collection and inference is possible.
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Parameter param) {
-        val parameterType = param.getType();
+        var parameterType = param.getType();
         return _Collections.isCollectionType(parameterType)
                 || _Collections.isImmutableCollectionType(parameterType)
                 ? _Generics.streamGenericTypeArgumentsOfParameter(param)
@@ -291,7 +290,7 @@ public final class _Collections {
      * it represents a collection and inference is possible.
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Method method) {
-        val returnType = method.getReturnType();
+        var returnType = method.getReturnType();
         return _Collections.isCollectionType(returnType)
                 || _Collections.isImmutableCollectionType(returnType)
                 ? _Generics.streamGenericTypeArgumentsOfMethodReturnType(method)
@@ -304,7 +303,7 @@ public final class _Collections {
      * it represents a collection and inference is possible.
      */
     public static Optional<Class<?>> inferElementType(final @NonNull Field field) {
-        val fieldType = field.getType();
+        var fieldType = field.getType();
         return _Collections.isCollectionType(fieldType)
                 || _Collections.isImmutableCollectionType(fieldType)
                 ? _Generics.streamGenericTypeArgumentsOfField(field)

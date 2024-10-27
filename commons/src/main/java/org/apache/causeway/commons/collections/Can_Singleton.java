@@ -49,7 +49,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor(staticName="of")
 final class Can_Singleton<T> implements Can<T> {
@@ -198,7 +197,7 @@ final class Can_Singleton<T> implements Can<T> {
         if(other.isCardinalityOne()) {
             return add(other.getSingleton().orElseThrow(_Exceptions::unexpectedCodeReach));
         }
-        val newElements = new ArrayList<T>(other.size()+1);
+        var newElements = new ArrayList<T>(other.size()+1);
         newElements.add(element);
         other.forEach(newElements::add);
         return _CanFactory.ofNonNullElements(newElements);
@@ -265,7 +264,7 @@ final class Can_Singleton<T> implements Can<T> {
         if(pickCount==1) {
             return this;
         }
-        val newElements = new ArrayList<T>(pickCount);
+        var newElements = new ArrayList<T>(pickCount);
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
         }
@@ -288,7 +287,7 @@ final class Can_Singleton<T> implements Can<T> {
             throw _Exceptions.illegalArgument("pickCount %d is too large to fit into an int", pickCountL);
         }
         final int pickCount = (int) pickCountL;
-        val newElements = new ArrayList<T>(pickCount);
+        var newElements = new ArrayList<T>(pickCount);
         for(int i=0; i<pickCount; i++) {
             newElements.add(element);
         }
@@ -381,7 +380,7 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public List<T> toArrayList() {
-        val list = _Lists.<T>newArrayList();
+        var list = _Lists.<T>newArrayList();
         list.add(element);
         return list;
     }
@@ -398,7 +397,7 @@ final class Can_Singleton<T> implements Can<T> {
 
     @Override
     public T[] toArray(@NonNull final Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
+        var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
         array[0] = element;
         return array;
     }

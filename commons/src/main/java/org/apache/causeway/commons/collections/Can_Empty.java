@@ -48,7 +48,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 @Value @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class Can_Empty<T> implements Can<T> {
@@ -297,7 +296,7 @@ final class Can_Empty<T> implements Can<T> {
 
     @Override
     public T[] toArray(@NonNull final Class<T> elementType) {
-        val array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
+        var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 0));
         return array;
     }
 

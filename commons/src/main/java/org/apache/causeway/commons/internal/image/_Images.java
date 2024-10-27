@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 public class _Images {
 
@@ -46,7 +45,7 @@ public class _Images {
 
     @SneakyThrows
     public static byte[] toBytes(final @NonNull BufferedImage image){
-        try(val bos = new ByteArrayOutputStream(8 * 1024)) {
+        try(var bos = new ByteArrayOutputStream(8 * 1024)) {
             ImageIO.write(image, "png", bos); // png is lossless
             return bos.toByteArray();
         }
@@ -54,7 +53,7 @@ public class _Images {
 
     @SneakyThrows
     public static BufferedImage fromBytes(final @NonNull byte[] imageData){
-        try(val bis = new ByteArrayInputStream(imageData)){
+        try(var bis = new ByteArrayInputStream(imageData)){
             return ImageIO.read(bis);
         }
     }
@@ -69,7 +68,7 @@ public class _Images {
 
     @SneakyThrows
     public static BufferedImage fromBase64(final @NonNull String base64ImageData){
-        val imageData = _Bytes.ofUrlBase64.apply(base64ImageData.getBytes(StandardCharsets.UTF_8));
+        var imageData = _Bytes.ofUrlBase64.apply(base64ImageData.getBytes(StandardCharsets.UTF_8));
         return fromBytes(imageData);
     }
 
@@ -90,7 +89,7 @@ public class _Images {
 
         final int width = image.getWidth();
         final int height = image.getHeight();
-        val pixels = new int[height][width];
+        var pixels = new int[height][width];
         for(int lineIndex=0; lineIndex<height; ++lineIndex) {
             image.getRGB(0, lineIndex, width, 1, pixels[lineIndex], 0, width);
 
@@ -122,7 +121,7 @@ public class _Images {
 
         if(pixelCount>0) {
             // internally clones pixel data
-            val raster = createRasterARGB8888(pixels);
+            var raster = createRasterARGB8888(pixels);
             return createImageARGB8888(raster);
         } else {
             return null;
@@ -138,14 +137,14 @@ public class _Images {
     }
 
     private static WritableRaster createRasterARGB8888(final int width, final int height, final int[] dataArray){
-        val dataBuffer = new DataBufferInt(dataArray, width * height);
-        val sampleModel = new SinglePixelPackedSampleModel(
+        var dataBuffer = new DataBufferInt(dataArray, width * height);
+        var sampleModel = new SinglePixelPackedSampleModel(
                 dataBuffer.getDataType(), width, height, BitMask8888);
         return Raster.createWritableRaster(sampleModel, dataBuffer, null);
     }
 
     private static BufferedImage createImageARGB8888(final WritableRaster raster){
-        val directColorModel​ =
+        var directColorModel​ =
                 new DirectColorModel(32, BitMask8888[0], BitMask8888[1], BitMask8888[2], BitMask8888[3]);
         return new BufferedImage(directColorModel​, raster, false, null);
     }

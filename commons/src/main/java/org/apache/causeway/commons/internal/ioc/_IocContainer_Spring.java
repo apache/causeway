@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Spring specific implementation of _IocContainer (package private)
@@ -52,7 +51,7 @@ final class _IocContainer_Spring implements _IocContainer {
 
     @Override
     public <T> Optional<T> get(final @NonNull Class<T> requiredType) {
-        val provider = springContext.getBeanProvider(requiredType);
+        var provider = springContext.getBeanProvider(requiredType);
         try {
             return Optional.ofNullable(provider.getIfUnique());
         } catch (Exception cause) {
@@ -64,8 +63,8 @@ final class _IocContainer_Spring implements _IocContainer {
     public Stream<_SingletonBeanProvider> streamAllBeans() {
         return Stream.of(springContext.getBeanDefinitionNames())
                 .map(name->{
-                    val type = ClassUtils.getUserClass(springContext.getType(name));
-                    val beanAdapter = _SingletonBeanProvider.of(name, type, ()->springContext.getBean(name));
+                    var type = ClassUtils.getUserClass(springContext.getType(name));
+                    var beanAdapter = _SingletonBeanProvider.of(name, type, ()->springContext.getBean(name));
                     return beanAdapter;
                 });
     }
@@ -84,7 +83,7 @@ final class _IocContainer_Spring implements _IocContainer {
 
     @Override
     public <T> Can<T> select(final @NonNull Class<T> requiredType) {
-        val allMatchingBeans = springContext.getBeanProvider(requiredType)
+        var allMatchingBeans = springContext.getBeanProvider(requiredType)
                 .orderedStream()
                 .collect(Can.toCan());
         return allMatchingBeans;
@@ -95,21 +94,21 @@ final class _IocContainer_Spring implements _IocContainer {
             final @NonNull Class<T> requiredType,
             final @Nullable Annotation[] qualifiers) {
 
-        val qualifiersRequired = filterQualifiers(qualifiers);
+        var qualifiersRequired = filterQualifiers(qualifiers);
 
         if(_NullSafe.isEmpty(qualifiersRequired)) {
 
-            val allMatchingBeans = springContext.getBeanProvider(requiredType)
+            var allMatchingBeans = springContext.getBeanProvider(requiredType)
                     .orderedStream()
                     .collect(Can.toCan());
 
             return allMatchingBeans;
         }
 
-        val allMatchingBeans = springContext.getBeanProvider(requiredType)
+        var allMatchingBeans = springContext.getBeanProvider(requiredType)
                 .orderedStream()
                 .filter(t->{
-                    val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
+                    var qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
                     return qualifiersPresent.containsAll(qualifiersRequired);
                 })
                 .collect(Can.toCan());

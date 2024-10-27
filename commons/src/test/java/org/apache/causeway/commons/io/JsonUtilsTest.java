@@ -26,8 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.io._TestDomain.Person;
 
-import lombok.val;
-
 class JsonUtilsTest {
 
     /*
@@ -50,7 +48,7 @@ class JsonUtilsTest {
 
     @Test
     void toStringUtf8_indentedOutput() {
-        val json = JsonUtils.toStringUtf8(person, JsonUtils::indentedOutput);
+        var json = JsonUtils.toStringUtf8(person, JsonUtils::indentedOutput);
         Approvals.verify(json);
     }
 

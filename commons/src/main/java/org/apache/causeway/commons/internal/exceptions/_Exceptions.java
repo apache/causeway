@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -212,8 +211,8 @@ public final class _Exceptions {
         if(_Strings.isNotEmpty(ex.getMessage())) {
             return ex.getMessage();
         }
-        val sb = new StringBuilder();
-        val nestedMsg = streamCausalChain(ex)
+        var sb = new StringBuilder();
+        var nestedMsg = streamCausalChain(ex)
                 .peek(throwable->{
                     sb.append(throwable.getClass().getSimpleName()).append("/");
                 })
@@ -374,7 +373,7 @@ public final class _Exceptions {
         if(ex==null) {
             return Stream.empty();
         }
-        val chain = getCausalChain(ex);
+        var chain = getCausalChain(ex);
         return chain.stream();
     }
 
@@ -404,8 +403,8 @@ public final class _Exceptions {
 
     public static void silence(final Runnable runnable) {
 
-        val currentThread = Thread.currentThread();
-        val silencedHandler = currentThread.getUncaughtExceptionHandler();
+        var currentThread = Thread.currentThread();
+        var silencedHandler = currentThread.getUncaughtExceptionHandler();
 
         currentThread.setUncaughtExceptionHandler((final Thread t, final Throwable e)->{/*noop*/});
 
@@ -426,7 +425,7 @@ public final class _Exceptions {
         if(throwable==null) {
             return false;
         }
-        val throwableMessage = throwable.getMessage();
+        var throwableMessage = throwable.getMessage();
         if(throwableMessage == null || _NullSafe.isEmpty(messages)) {
             return false;
         }
@@ -451,19 +450,19 @@ public final class _Exceptions {
             );
 
     public static String abbreviate(final String className, final String...compress) {
-        val str = className;
+        var str = className;
         return Stream.concat(
                     _NullSafe.stream(compress).map(prefix->Map.entry(prefix, "")),
                     packageReplacements.entrySet().stream()
                 )
                 .filter(entry->str.startsWith(entry.getKey()))
                 .map(entry->{
-                    val replacement = entry.getValue();
+                    var replacement = entry.getValue();
                     var s = str;
                     s = s.replace(entry.getKey() + ".", replacement.isEmpty() ? "{" : replacement + ".");
-                    val cutter = TextUtils.cutter(s);
-                    val left = cutter.keepBefore(".").getValue();
-                    val right = cutter.keepAfter(".").getValue();
+                    var cutter = TextUtils.cutter(s);
+                    var left = cutter.keepBefore(".").getValue();
+                    var right = cutter.keepAfter(".").getValue();
                     s = replacement.isEmpty()
                             ? left + "}." + right
                             : left + "." + right;

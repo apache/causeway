@@ -130,7 +130,7 @@ final class _Annotations_AttributeMethods {
     /**
      * Check if values from the given annotation can be safely accessed without causing
      * any {@link TypeNotPresentException TypeNotPresentExceptions}. In particular,
-     * this method is designed to cover Google App Engine's late arrival of such
+     * this method is designed to cover Google App Engine's late arrivar of such
      * exceptions for {@code Class} values (instead of the more typical early
      * {@code Class.getAnnotations() failure}.
      * @param annotation the annotation to validate

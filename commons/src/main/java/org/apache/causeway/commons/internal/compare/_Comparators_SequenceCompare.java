@@ -25,8 +25,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Ints;
 
-import lombok.val;
-
 /**
  *
  * package private mixin for utility class {@link _Comparators}
@@ -83,13 +81,13 @@ final class _Comparators_SequenceCompare {
             }
             // we have this component on each side
 
-            val token1 = components1.nextToken();
-            val token2 = components2.nextToken();
+            var token1 = components1.nextToken();
+            var token2 = components2.nextToken();
 
             int componentCompare = 0;
 
-            val int1 = _Ints.parseInt(token1, 10);
-            val int2 = _Ints.parseInt(token2, 10);
+            var int1 = _Ints.parseInt(token1, 10);
+            var int2 = _Ints.parseInt(token2, 10);
 
             if(int1.isPresent() && int2.isPresent()) {
                 componentCompare = Integer.compare(int1.getAsInt(), int2.getAsInt());

@@ -25,14 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.TextUtils;
 
-import lombok.val;
-
 class StringDelimiterTest {
 
     @Test
     void parsing() {
 
-        val delimiter = TextUtils.delimiter(".");
+        var delimiter = TextUtils.delimiter(".");
 
         assertThatDelimiterEquals(delimiter, new String[0]);
         assertThatDelimiterEquals(delimiter.parse(null), new String[0]);
@@ -58,7 +56,7 @@ class StringDelimiterTest {
     @Test
     void joining() {
 
-        val delimiter = TextUtils.delimiter(".");
+        var delimiter = TextUtils.delimiter(".");
 
         assertThatDelimiterEquals(
                 delimiter.parse(null).join(null), new String[0]);
@@ -83,21 +81,21 @@ class StringDelimiterTest {
 
     @Test
     void asDelimitedString() {
-        val delimiter = TextUtils.delimiter(".");
+        var delimiter = TextUtils.delimiter(".");
         assertEquals("", delimiter.asDelimitedString());
         assertEquals("a.b", delimiter.parse("a.b").asDelimitedString());
     }
 
     @Test
     void withDelimiter() {
-        val delimiter = TextUtils.delimiter(".");
+        var delimiter = TextUtils.delimiter(".");
         assertEquals("", delimiter.withDelimiter("/").asDelimitedString());
         assertEquals("a/b", delimiter.parse("a.b").withDelimiter("/").asDelimitedString());
     }
 
     @Test
     void toStringMethod() {
-        val delimiter = TextUtils.delimiter(".");
+        var delimiter = TextUtils.delimiter(".");
         assertEquals("StringDelimiter[delimiter=.,elements=[]]", delimiter.toString());
         assertEquals("StringDelimiter[delimiter=.,elements=[a, b]]", delimiter.parse("a.b").toString());
     }

@@ -53,7 +53,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
@@ -95,7 +94,7 @@ public class ZipUtils {
         @Override
         public <T> Try<T> tryReadAll(@NonNull final Function<InputStream, Try<T>> consumingMapper) {
             try {
-                try(val bis = new ByteArrayInputStream(bytes)){
+                try(var bis = new ByteArrayInputStream(bytes)){
                     return consumingMapper.apply(bis);
                 }
             } catch (Throwable e) {
@@ -139,7 +138,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
+        var zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
         
         zippedSource.consumeAsFile(zipFile->{
             try (FileSystem fs = FileSystems.newFileSystem(zipFile.toPath(), null)) {
@@ -168,7 +167,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
+        var zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
 
         zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(
@@ -207,7 +206,7 @@ public class ZipUtils {
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
 
-        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList(1);
+        var zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList(1);
 
         zippedSource.tryReadAndAccept(is->{
             try(final ZipInputStream in = new ZipInputStream(
@@ -242,7 +241,7 @@ public class ZipUtils {
     // -- WRITING
 
     public static byte[] zipToBytes(final @NonNull Stream<ZipEntryDataSource> entryStream) {
-        val buffer = DataPeer.inMemory(16*1024); // 16k default
+        var buffer = DataPeer.inMemory(16*1024); // 16k default
         writeTo(entryStream, buffer);
         return buffer.bytes();
     }
@@ -250,7 +249,7 @@ public class ZipUtils {
     @SneakyThrows
     public static void writeTo(final @NonNull Stream<ZipEntryDataSource> entryStream, final @NonNull DataSink dataSink) {
         dataSink.writeAll(os->{
-            try(val zos = new ZipOutputStream(os)) {
+            try(var zos = new ZipOutputStream(os)) {
                 entryStream.forEach(entry->entry.writeTo(zos));
             }
         });

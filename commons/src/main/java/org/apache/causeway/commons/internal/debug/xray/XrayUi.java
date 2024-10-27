@@ -65,7 +65,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayModel.HasIdAndLabel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public class XrayUi extends JFrame {
 
@@ -80,7 +79,7 @@ public class XrayUi extends JFrame {
     private static CountDownLatch latch = null;
 
     public static void start(final int defaultCloseOperation) {
-        val alreadyRequested = startRequested.getAndSet(true);
+        var alreadyRequested = startRequested.getAndSet(true);
         if(!alreadyRequested) {
             latch = new CountDownLatch(1);
             SwingUtilities.invokeLater(()->new XrayUi(defaultCloseOperation));
@@ -128,23 +127,23 @@ public class XrayUi extends JFrame {
 
         tree.setShowsRootHandles(false);
 
-        val detailPanel = layoutUIAndGetDetailPanel(tree);
+        var detailPanel = layoutUIAndGetDetailPanel(tree);
 
         tree.getSelectionModel().addTreeSelectionListener((final TreeSelectionEvent e) -> {
 
-            val selPath = e.getNewLeadSelectionPath();
+            var selPath = e.getNewLeadSelectionPath();
             if(selPath==null) {
                 return; // ignore event
             }
-            val selectedNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
-            val userObject = selectedNode.getUserObject();
+            var selectedNode = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+            var userObject = selectedNode.getUserObject();
 
             //detailPanel.removeAll();
 
             if(userObject instanceof XrayDataModel) {
                 ((XrayDataModel) userObject).render(detailPanel);
             } else {
-                val infoPanel = new JPanel();
+                var infoPanel = new JPanel();
                 infoPanel.add(new JLabel("Details"));
                 detailPanel.setViewportView(infoPanel);
             }
@@ -155,9 +154,9 @@ public class XrayUi extends JFrame {
             //System.out.println("selected: " + selectedNode.toString());
         });
 
-        val popupMenu = new JPopupMenu();
+        var popupMenu = new JPopupMenu();
 
-        val clearThreadsAction = popupMenu.add(new JMenuItem("Clear Threads"));
+        var clearThreadsAction = popupMenu.add(new JMenuItem("Clear Threads"));
         clearThreadsAction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -165,7 +164,7 @@ public class XrayUi extends JFrame {
             }
         });
 
-        val callStackMergeAction = popupMenu.add(new JMenuItem("Merge Logged Call-Stack"));
+        var callStackMergeAction = popupMenu.add(new JMenuItem("Merge Logged Call-Stack"));
         callStackMergeAction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -173,7 +172,7 @@ public class XrayUi extends JFrame {
             }
         });
 
-        val deleteAction = popupMenu.add(new JMenuItem("Delete"));
+        var deleteAction = popupMenu.add(new JMenuItem("Delete"));
         deleteAction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -221,8 +220,8 @@ public class XrayUi extends JFrame {
 
         // report key bindings to the UI
         {
-            val root = xrayModel.getRootNode();
-            val env = xrayModel.addDataNode(root,
+            var root = xrayModel.getRootNode();
+            var env = xrayModel.addDataNode(root,
                     new XrayDataModel.KeyValue("causeway-xray-keys", "X-ray Keybindings", Stickiness.CANNOT_DELETE_NODE));
             env.getData().put("F5", "Clear Threads");
             env.getData().put("DELETE", "Delete Selected Nodes");
@@ -281,8 +280,8 @@ public class XrayUi extends JFrame {
     }
 
     private void doClearThreads(){
-        val root = (DefaultMutableTreeNode) tree.getModel().getRoot();
-        val threadNodes = streamChildrenOf(root)
+        var root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        var threadNodes = streamChildrenOf(root)
         .filter(node->extractUserObject(node)
                 .map(HasIdAndLabel::getId)
                 .map(id->id.startsWith("thread-"))
@@ -297,7 +296,7 @@ public class XrayUi extends JFrame {
     }
 
     private void doMergeCallStacksOnSelectedNodes() {
-        val logEntries = streamSelectedNodes()
+        var logEntries = streamSelectedNodes()
         .filter(node->node.getUserObject() instanceof XrayDataModel.LogEntry)
         .map(node->(XrayDataModel.LogEntry)node.getUserObject())
         .collect(Can.toCan());
@@ -307,13 +306,13 @@ public class XrayUi extends JFrame {
             return;
         }
 
-        val callStackMerger = new _CallStackMerger(logEntries);
+        var callStackMerger = new _CallStackMerger(logEntries);
 
         JFrame frame = new JFrame("Merged Log View");
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(true);
-//        val canvas = _SwingUtil.canvas(g->{
+//        var canvas = _SwingUtil.canvas(g->{
 //            g.setColor(Color.GRAY);
 //            g.fill(g.getClip());
 //            callStackMerger.render(g);
@@ -346,7 +345,7 @@ public class XrayUi extends JFrame {
         JScrollPane detailScrollPane = new JScrollPane();
 
         //Create a split pane with the two scroll panes in it.
-        val splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+        var splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                                    masterScrollPane, detailScrollPane);
         splitPane.setOneTouchExpandable(true);
         splitPane.setDividerLocation(260);
@@ -388,13 +387,13 @@ public class XrayUi extends JFrame {
                 final int row,
                 final boolean hasFocus) {
 
-            val label = (DefaultTreeCellRenderer)
+            var label = (DefaultTreeCellRenderer)
                     delegate.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 
             Object o = ((DefaultMutableTreeNode) value).getUserObject();
             if (o instanceof XrayDataModel) {
                 XrayDataModel dataModel = (XrayDataModel) o;
-                val imageIcon = iconCache.computeIfAbsent(dataModel.getIconResource(), iconResource->{
+                var imageIcon = iconCache.computeIfAbsent(dataModel.getIconResource(), iconResource->{
                     URL imageUrl = getClass().getResource(dataModel.getIconResource());
                     return Optional.ofNullable(imageUrl)
                             .map(ImageIcon::new);

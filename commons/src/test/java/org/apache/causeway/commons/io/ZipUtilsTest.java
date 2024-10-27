@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 class ZipUtilsTest {
 
@@ -34,7 +33,7 @@ class ZipUtilsTest {
 
     @BeforeEach
     void setup() {
-        val rd = new Random(9999); // fixed seed - reproducible tests
+        var rd = new Random(9999); // fixed seed - reproducible tests
         this.bytes = new byte[16*1024];
         rd.nextBytes(bytes);
     }
@@ -48,7 +47,7 @@ class ZipUtilsTest {
     // -- HELPER
 
     private static byte[] zip(final byte[] unzipped) {
-        val zipBuilder = ZipUtils.zipEntryBuilder();
+        var zipBuilder = ZipUtils.zipEntryBuilder();
         zipBuilder.add("test", unzipped);
         return zipBuilder.toBytes();
     }

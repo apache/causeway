@@ -43,7 +43,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -171,7 +170,7 @@ public final class _Maps {
             final @NonNull K key,
             final @NonNull V value) {
 
-        val newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
+        var newValue = map.compute(key, (k, v) -> (v==null) ? value : null);
         return newValue!=null;
     }
 
@@ -182,7 +181,7 @@ public final class _Maps {
             final @NonNull Supplier<Map<K, V1>> mapFactory,
             final @NonNull Function<V0, V1> valueMapper) {
 
-        val resultMap = mapFactory.get();
+        var resultMap = mapFactory.get();
 
         if(input==null
                 || input.isEmpty()) {
@@ -308,7 +307,7 @@ public final class _Maps {
 
             @Override
             public V get(final Object keyOrAliasKey) {
-                val v = delegate.get(keyOrAliasKey);
+                var v = delegate.get(keyOrAliasKey);
                 if(v!=null) {
                     return v;
                 }
@@ -333,10 +332,10 @@ public final class _Maps {
 
             private void putAliasKeys(final K key, final Can<K> aliasKeys, final boolean remap) {
                 if(aliasKeys.isNotEmpty()) {
-                    val keyPair = KeyPair.of(key, aliasKeys);
-                    for(val aliasKey : aliasKeys) {
+                    var keyPair = KeyPair.of(key, aliasKeys);
+                    for(var aliasKey : aliasKeys) {
 
-                        val existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
+                        var existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
                         if(existingKeyPair!=null && !remap) {
 
                             throw _Exceptions.illegalArgument(
@@ -348,7 +347,7 @@ public final class _Maps {
             }
 
             private V getByAliasKey(final Object aliasKey) {
-                val keyPair = pairByAliasKey.get(aliasKey);
+                var keyPair = pairByAliasKey.get(aliasKey);
                 if(keyPair!=null) {
                     return delegate.get(keyPair.getKey());
                 }
@@ -363,7 +362,7 @@ public final class _Maps {
                 //XXX this implementation is slow for large alias maps, since we traverse the entire map
                 pairByAliasKey.entrySet()
                 .removeIf(entry->{
-                    val keyPair = entry.getValue();
+                    var keyPair = entry.getValue();
                     return keyPair.getKey().equals(key);
                 });
 

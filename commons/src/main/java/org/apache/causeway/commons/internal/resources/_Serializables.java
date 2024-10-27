@@ -30,7 +30,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -48,8 +47,8 @@ public class _Serializables {
     @SneakyThrows
     public static byte[] write(
             final @NonNull Serializable object) {
-        val bos = new ByteArrayOutputStream(16*4096); // 16k initial buffer size
-        try(val oos = new ObjectOutputStream(bos)) {
+        var bos = new ByteArrayOutputStream(16*4096); // 16k initial buffer size
+        try(var oos = new ObjectOutputStream(bos)) {
             oos.writeObject(object);
             oos.flush();
         }
@@ -61,8 +60,8 @@ public class _Serializables {
     public static <T extends Serializable> T read(
             final @NonNull Class<T> requiredClass,
             final @NonNull InputStream content) {
-        try(val ois = new ObjectInputStream(content)){
-            val pojo = ois.readObject();
+        try(var ois = new ObjectInputStream(content)){
+            var pojo = ois.readObject();
             if(!(requiredClass.isAssignableFrom(pojo.getClass()))) {
                 throw _Exceptions.unrecoverable(
                         "de-serializion of input stream did not yield an object of required type %s",
@@ -76,7 +75,7 @@ public class _Serializables {
     public static <T extends Serializable> T read(
             final @NonNull Class<T> requiredClass,
             final @NonNull byte[] input) {
-        try(val bis = new ByteArrayInputStream(input)) {
+        try(var bis = new ByteArrayInputStream(input)) {
             return read(requiredClass, bis);
         }
     }

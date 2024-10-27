@@ -56,7 +56,6 @@ import org.apache.causeway.commons.internal.reflection._Generics;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -125,8 +124,8 @@ public class JsonUtils {
             final JsonUtils.JacksonCustomizer ... customizers) {
         return source.tryReadAll((final InputStream is)->{
             return Try.call(()->{
-                val mapper = createJacksonReader(customizers);
-                val collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
+                var mapper = createJacksonReader(customizers);
+                var collectionType = mapper.getTypeFactory().constructCollectionType(List.class, elementType);
                 return mapper.readValue(is, collectionType);
             });
         });
@@ -218,7 +217,7 @@ public class JsonUtils {
         @Override
         public Can<?> deserialize(
                 final JsonParser p, final DeserializationContext ctxt) throws IOException {
-            val listType = ctxt.getTypeFactory().constructCollectionType(List.class, elementType);
+            var listType = ctxt.getTypeFactory().constructCollectionType(List.class, elementType);
             var list = ctxt.readValue(p, listType);
             return Can.ofCollection(_Casts.uncheckedCast(list));
         }

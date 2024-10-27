@@ -30,27 +30,25 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import lombok.val;
-
 class TemporalsTest {
 
     @Test
     void roundtripOffsetTime() {
-        for(val temporal: _Temporals.sampleOffsetTime()) {
+        for(var temporal: _Temporals.sampleOffsetTime()) {
             assertEquals(temporal, _Temporals.destringAsOffsetTime(_Temporals.enstringOffsetTime(temporal)));
         }
     }
 
     @Test
     void roundtripOffsetDateTime() {
-        for(val temporal: _Temporals.sampleOffsetDateTime()) {
+        for(var temporal: _Temporals.sampleOffsetDateTime()) {
             assertEquals(temporal, _Temporals.destringAsOffsetDateTime(_Temporals.enstringOffsetDateTime(temporal)));
         }
     }
 
     @Test
     void roundtripZonedDateTime() {
-        for(val temporal: _Temporals.sampleZonedDateTime()) {
+        for(var temporal: _Temporals.sampleZonedDateTime()) {
             assertEquals(temporal, _Temporals.destringAsZonedDateTime(_Temporals.enstringZonedDateTime(temporal)));
         }
     }
@@ -80,9 +78,9 @@ class TemporalsTest {
     void timeZoneRendering() {
 
         // given
-        val dummyDate = LocalDate.of(2022, 1, 28);
-        val dummyTime = LocalTime.of(12, 31);
-        val formatter = _Temporals.DEFAULT_ZONEID_ONLY_FORMAT;
+        var dummyDate = LocalDate.of(2022, 1, 28);
+        var dummyTime = LocalTime.of(12, 31);
+        var formatter = _Temporals.DEFAULT_ZONEID_ONLY_FORMAT;
 
         // then
         assertEquals(

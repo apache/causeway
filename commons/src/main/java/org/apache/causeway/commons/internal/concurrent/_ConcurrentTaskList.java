@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(staticName = "named")
@@ -63,7 +62,7 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList addTask(final _ConcurrentTask<?> task) {
         synchronized (tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can no longer modify collection of tasks!";
+                var msg = "Tasks already started execution, can no longer modify collection of tasks!";
                 throw new IllegalStateException(msg);
             }
             tasks.add(task);
@@ -74,7 +73,7 @@ public class _ConcurrentTaskList {
     public _ConcurrentTaskList addTasks(final Collection<? extends _ConcurrentTask<?>> tasks) {
         synchronized (this.tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can no longer modify collection of tasks!";
+                var msg = "Tasks already started execution, can no longer modify collection of tasks!";
                 throw new IllegalStateException(msg);
             }
             this.tasks.addAll(tasks);
@@ -88,13 +87,13 @@ public class _ConcurrentTaskList {
 
         synchronized (tasks) {
             if(wasStarted.get()) {
-                val msg = "Tasks already started execution, can not start again!";
+                var msg = "Tasks already started execution, can not start again!";
                 throw new IllegalStateException(msg);
             }
             wasStarted.set(true);
         }
 
-        val t0 = System.nanoTime();
+        var t0 = System.nanoTime();
 
         if(context.shouldRunSequential()) {
             for(_ConcurrentTask<?> task : tasks) {
@@ -109,7 +108,7 @@ public class _ConcurrentTaskList {
 
         // else run with executor ...
 
-        val futures = new ArrayList<Future<?>>(tasks.size());
+        var futures = new ArrayList<Future<?>>(tasks.size());
 
         for(_ConcurrentTask<?> task : tasks) {
             futures.add(context.executorService.submit(task));
@@ -117,7 +116,7 @@ public class _ConcurrentTaskList {
 
         // now wait for all futures to complete on a separate thread
 
-        val thread = new Thread() {
+        var thread = new Thread() {
 
             @Override
             public void run() {
@@ -172,7 +171,7 @@ public class _ConcurrentTaskList {
 
     private void onFinished(final _ConcurrentContext context) {
 
-        for(val task: tasks) {
+        for(var task: tasks) {
             if(task.getFailedWith()!=null) {
                 log.error("----------------------------------------");
                 log.error("Failed TaskList: " + this.getName());

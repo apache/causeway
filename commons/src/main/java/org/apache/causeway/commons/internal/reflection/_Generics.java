@@ -33,7 +33,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -160,7 +159,7 @@ public final class _Generics {
             return Stream.of((Class<?>) type);
         }
         if (type instanceof WildcardType) {
-            val wildcardType = (WildcardType) type;
+            var wildcardType = (WildcardType) type;
             return Stream.concat(
                         Stream.of(wildcardType.getLowerBounds()),
                         Stream.of(wildcardType.getUpperBounds()))
@@ -172,8 +171,8 @@ public final class _Generics {
             // try to match up with the actual type argument of the owner's generic superclass.
             final Type genericSuperclass = owner.getGenericSuperclass();
             if(genericSuperclass instanceof ParameterizedType) {
-                val parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
-                val genericDeclaration = ((TypeVariable<?>) type).getGenericDeclaration();
+                var parameterizedTypeOfSuperclass = (ParameterizedType)genericSuperclass;
+                var genericDeclaration = ((TypeVariable<?>) type).getGenericDeclaration();
                 if(parameterizedTypeOfSuperclass.getRawType() == genericDeclaration) {
                     return Stream.of(parameterizedTypeOfSuperclass.getActualTypeArguments())
                         .flatMap(actualType->streamClassesOfType(owner, actualType)); // recursive call

@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -104,10 +103,10 @@ public class _MethodFacades {
             if(paramCount==0) {
                 return _Constants.emptyObjects;
             }
-            val parameterTypes = executable.getParameterTypes();
-            val adaptedExecutionParameters = new Object[paramCount];
+            var parameterTypes = executable.getParameterTypes();
+            var adaptedExecutionParameters = new Object[paramCount];
             for(int i=0; i<paramCount; ++i) {
-                val origParam = _Arrays.get(executionParameters, i).orElse(null);
+                var origParam = _Arrays.get(executionParameters, i).orElse(null);
                 adaptedExecutionParameters[i] = convert(parameterTypes[i], origParam);
             }
             return adaptedExecutionParameters;
@@ -165,7 +164,7 @@ public class _MethodFacades {
         }
 
         default ResolvedType resolveParameter(final int paramIndex) {
-            val executable = this.asExecutable();
+            var executable = this.asExecutable();
             if(executable instanceof Method) {
                 return _GenericResolver.forMethodParameter(this.asMethodForIntrospection(), paramIndex);
             }

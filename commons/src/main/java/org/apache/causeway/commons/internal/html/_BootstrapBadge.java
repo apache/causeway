@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Builder;
 import lombok.Singular;
-import lombok.val;
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -63,7 +62,7 @@ public class _BootstrapBadge {
      */
     public String noLink() {
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb
         .append("<span ")
         .append("class=\"")
@@ -102,7 +101,7 @@ public class _BootstrapBadge {
      */
     public String link() {
 
-        val sb = new StringBuilder();
+        var sb = new StringBuilder();
         sb
         .append("<a ")
         .append("class=\"")

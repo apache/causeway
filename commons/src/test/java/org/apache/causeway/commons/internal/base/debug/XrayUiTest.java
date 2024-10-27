@@ -31,14 +31,12 @@ import org.apache.causeway.commons.internal.debug.xray.XrayModel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 
-import lombok.val;
-
 class XrayUiTest {
 
     public static void main(final String[] args) throws InterruptedException {
         XrayUi.start(JFrame.EXIT_ON_CLOSE);
 
-        val ex = Executors.newSingleThreadExecutor();
+        var ex = Executors.newSingleThreadExecutor();
         ex.execute(new SampleLogs());
         ex.shutdown();
         ex.awaitTermination(1L, TimeUnit.SECONDS);
@@ -66,14 +64,14 @@ class XrayUiTest {
 
     private static void populate(final XrayModel model) {
 
-        val root = model.getRootNode();
+        var root = model.getRootNode();
 
-        val keyValueData = model.addDataNode(
+        var keyValueData = model.addDataNode(
                 root, new XrayDataModel.KeyValue("id1", "KeyValue", Stickiness.CANNOT_DELETE_NODE));
         keyValueData.getData().put("hi", "there");
         keyValueData.getData().put("how", "you");
 
-        val sequenceData = model.addDataNode(
+        var sequenceData = model.addDataNode(
                 root, new XrayDataModel.Sequence("id2", "Sequence", Stickiness.CANNOT_DELETE_NODE))
                 .getData();
 

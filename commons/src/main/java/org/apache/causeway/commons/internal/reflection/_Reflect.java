@@ -55,7 +55,6 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -166,8 +165,8 @@ public final class _Reflect {
         if(c!=0) {
             return c;
         }
-        val paramsA = a.getParameters();
-        val paramsB = b.getParameters();
+        var paramsA = a.getParameters();
+        var paramsB = b.getParameters();
         for(int i=0; i<a.getParameterCount(); ++i) {
             c = typesCompare(paramsA[i].getType(), paramsB[i].getType());
             if(c!=0) {
@@ -690,7 +689,7 @@ public final class _Reflect {
     // -- SPECIAL PREDICATES
 
     public boolean isNonFinalObjectMethod(final @NonNull Method method) {
-        for(val m : _Constants.nonFinalObjectMethods) {
+        for(var m : _Constants.nonFinalObjectMethods) {
             if(methodsSame(m, method)) return true;
         }
         return false;
@@ -708,7 +707,7 @@ public final class _Reflect {
     }
 
     public boolean isJavaApiClass(final @NonNull Class<?> cls) {
-        val className = cls.getName();
+        var className = cls.getName();
         return className.startsWith("java.")
                 || className.startsWith("sun.");
     }
@@ -731,7 +730,7 @@ public final class _Reflect {
 //    }
 //
 //    private Predicate<Method> methodMatcherOnNameAndSignature(final @NonNull Method ref) {
-//        val refSignature = ref.getParameterTypes();
+//        var refSignature = ref.getParameterTypes();
 //        return other->
 //            (!ref.getName().equals(other.getName()))
 //            ? false

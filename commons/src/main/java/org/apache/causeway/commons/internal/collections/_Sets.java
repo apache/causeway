@@ -42,7 +42,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -307,7 +306,7 @@ public final class _Sets {
             return Collections.emptySet();
         }
         if(b==null || b.isEmpty()) {
-            val copy = collectionFactory.get();
+            var copy = collectionFactory.get();
             copy.addAll(a);
             return Collections.unmodifiableSet(copy);
         }
@@ -336,7 +335,7 @@ public final class _Sets {
             return Collections.emptySortedSet();
         }
         if(b==null || b.isEmpty()) {
-            val copy = collectionFactory.get();
+            var copy = collectionFactory.get();
             copy.addAll(a);
             return Collections.unmodifiableSortedSet(copy);
         }

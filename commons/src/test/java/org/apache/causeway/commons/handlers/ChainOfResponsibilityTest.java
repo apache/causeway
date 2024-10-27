@@ -29,14 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
-
 class ChainOfResponsibilityTest {
 
     @Test
     void threeHandlers_shouldProperlyTakeResponsibilityInOrder() {
 
-        val aToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
+        var aToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -50,7 +48,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val bToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
+        var bToUpperCase = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -64,7 +62,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val finallyNoop = new ChainOfResponsibility.Handler<String, String>() {
+        var finallyNoop = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -78,7 +76,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val chainOfResponsibility = ChainOfResponsibility.of(
+        var chainOfResponsibility = ChainOfResponsibility.of(
                 Arrays.asList(aToUpperCase, bToUpperCase, finallyNoop));
 
         assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
@@ -95,7 +93,7 @@ class ChainOfResponsibilityTest {
     @Test
     void whenExtended_shouldWorkAsWell() {
 
-        val aToUpperCase = new StringHandler() {
+        var aToUpperCase = new StringHandler() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -109,9 +107,9 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val handlers = Arrays.asList(aToUpperCase);
+        var handlers = Arrays.asList(aToUpperCase);
 
-        val chainOfResponsibility = ChainOfResponsibility.of(handlers);
+        var chainOfResponsibility = ChainOfResponsibility.of(handlers);
 
         assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
         assertThrows(NoSuchElementException.class, ()->chainOfResponsibility.handle("xxx")); // not handled
@@ -120,7 +118,7 @@ class ChainOfResponsibilityTest {
     @Test
     void handlerExceptions_shouldNoBeSwallowed() {
 
-        val throwingHandler = new ChainOfResponsibility.Handler<String, String>() {
+        var throwingHandler = new ChainOfResponsibility.Handler<String, String>() {
 
             @Override
             public boolean isHandling(final String request) {
@@ -134,7 +132,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        val chainOfResponsibility = ChainOfResponsibility.of(
+        var chainOfResponsibility = ChainOfResponsibility.of(
                 Arrays.asList(throwingHandler));
 
         assertThrows(RuntimeException.class, ()->chainOfResponsibility.handle("throw"));

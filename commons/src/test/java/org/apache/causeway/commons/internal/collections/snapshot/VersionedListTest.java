@@ -26,14 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import lombok.val;
-
 class VersionedListTest {
 
     @Test
     void test() {
         
-        val vList = new _VersionedList<String>();
+        var vList = new _VersionedList<String>();
         
         assertEquals(0, vList.size());
         assertTrue(vList.isEmpty());
@@ -43,25 +41,25 @@ class VersionedListTest {
         assertEquals(1, vList.size());
         assertFalse(vList.isEmpty());
         
-        val snapshot1 = vList.snapshot();
+        var snapshot1 = vList.snapshot();
         assertEquals(1, snapshot1.stream().count());
         
         vList.add("bar");
         
-        val snapshot2 = vList.snapshot();
+        var snapshot2 = vList.snapshot();
         assertEquals(2, snapshot2.stream().count());
         assertEquals("foo,bar", snapshot2.stream().collect(Collectors.joining(",")));
         
-        val delta = vList.deltaSince(snapshot1);
+        var delta = vList.deltaSince(snapshot1);
         assertEquals(1, delta.stream().count());
         assertEquals("bar", delta.stream().collect(Collectors.joining(",")));
         
         vList.add("gru");
         
-        val snapshot3 = vList.snapshot();
+        var snapshot3 = vList.snapshot();
         assertEquals("foo,bar,gru", snapshot3.stream().collect(Collectors.joining(",")));
         
-        val snapshot4 = vList.deltaSince(snapshot3);
+        var snapshot4 = vList.deltaSince(snapshot3);
         assertTrue(snapshot4.isEmpty());
         
     }

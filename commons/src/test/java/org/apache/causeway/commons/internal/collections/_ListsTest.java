@@ -23,48 +23,46 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import lombok.val;
-
 class _ListsTest {
 
     @Test
     void varargListFactory() {
-        val nullList = _Lists.ofNullable(null);
+        var nullList = _Lists.ofNullable(null);
         assertNotNull(nullList);
         assertEquals(1, nullList.size());
 
-        val otherList = _Lists.ofNullable(4, 5);
+        var otherList = _Lists.ofNullable(4, 5);
         assertNotNull(otherList);
         assertEquals(2, otherList.size());
 
-        val biNullList = _Lists.ofNullable(null, null);
+        var biNullList = _Lists.ofNullable(null, null);
         assertNotNull(biNullList);
         assertEquals(2, biNullList.size());
     }
 
     @Test
     void singletonListFactory() {
-        val emptyList = _Lists.singletonOrElseEmpty(null);
+        var emptyList = _Lists.singletonOrElseEmpty(null);
         assertNotNull(emptyList);
         assertEquals(0, emptyList.size());
 
-        val otherList = _Lists.singletonOrElseEmpty(6);
+        var otherList = _Lists.singletonOrElseEmpty(6);
         assertNotNull(otherList);
         assertEquals(1, otherList.size());
     }
 
     @Test
     void ofArray() {
-        val emptyList = _Lists.ofArray(null);
+        var emptyList = _Lists.ofArray(null);
         assertNotNull(emptyList);
         assertEquals(0, emptyList.size());
 
-        val emptyList2 = _Lists.ofArray(new Integer[] {});
+        var emptyList2 = _Lists.ofArray(new Integer[] {});
         assertNotNull(emptyList2);
         assertEquals(0, emptyList2.size());
 
         // verify elements are actually copied
-        val array = new Integer[] {1, 2, 3};
+        var array = new Integer[] {1, 2, 3};
 
         assertEquals(_Lists.ofArray(new Integer[] {1, 2, 3}), _Lists.ofArray(array));
 

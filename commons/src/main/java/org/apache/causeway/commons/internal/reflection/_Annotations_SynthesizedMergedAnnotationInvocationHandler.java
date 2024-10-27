@@ -42,7 +42,6 @@ import org.springframework.util.ReflectionUtils;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * {@link InvocationHandler} for an {@link Annotation} that Spring has
@@ -198,10 +197,10 @@ implements InvocationHandler {
         String name = method.getName();
         Class<?> type = ClassUtils.resolvePrimitiveIfNecessary(method.getReturnType());
 
-        val defaultValue = method.getDefaultValue();
+        var defaultValue = method.getDefaultValue();
 
         // for all discovered annotations of this.type determine the effective (attribute) value
-        val attributeValue = streamAnnotations()
+        var attributeValue = streamAnnotations()
         .map(mergedAnnotation->(Object)mergedAnnotation.getValue(name, type).orElse(null))
         .filter(_NullSafe::isPresent)
         .filter(value->!value.equals(defaultValue))
@@ -217,9 +216,9 @@ implements InvocationHandler {
             final @NonNull Optional<MergedAnnotations> additional,
             final @NonNull Class<A> annotationType) {
 
-        val hasCollected = collected
+        var hasCollected = collected
                 .isPresent(annotationType);
-        val hasAdditional = additional
+        var hasAdditional = additional
                 .map(mergedAnnotations->mergedAnnotations.isPresent(annotationType))
                 .orElse(false);
 
@@ -229,17 +228,17 @@ implements InvocationHandler {
             return Optional.empty();
         }
 
-        val invocationHandler = hasCollected
+        var invocationHandler = hasCollected
                 ? new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(
                         collected, additional.orElse(null), annotationType)
                 : new _Annotations_SynthesizedMergedAnnotationInvocationHandler<>(
                         additional.get(), null, annotationType);
 
-        val classLoader = annotationType.getClassLoader();
-        val interfaces = isVisible(classLoader, SynthesizedAnnotation.class)
+        var classLoader = annotationType.getClassLoader();
+        var interfaces = isVisible(classLoader, SynthesizedAnnotation.class)
                 ? new Class<?>[] {annotationType, SynthesizedAnnotation.class}
                 : new Class<?>[] {annotationType};
-        val proxy = (A) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
+        var proxy = (A) Proxy.newProxyInstance(classLoader, interfaces, invocationHandler);
         return Optional.of(proxy);
     }
 

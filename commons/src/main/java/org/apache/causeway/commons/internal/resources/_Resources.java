@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -82,7 +81,7 @@ public final class _Resources {
             final @NonNull Class<?> contextClass,
             final @NonNull String resourceName) {
 
-        val absoluteResourceName = resolveName(contextClass, resourceName);
+        var absoluteResourceName = resolveName(contextClass, resourceName);
 
         return Optional
                 .ofNullable(contextClass.getResourceAsStream(absoluteResourceName))
@@ -104,7 +103,7 @@ public final class _Resources {
             final @NonNull String resourceName,
             final @NonNull Charset charset) {
 
-        val inputStream = load(contextClass, resourceName);
+        var inputStream = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(inputStream), charset);
     }
 

@@ -31,7 +31,6 @@ import java.util.zip.Inflater;
 import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -130,10 +129,10 @@ public final class _Bytes {
         if(intStream==null) {
             return new byte[0];
         }
-        val listOfInts = intStream
+        var listOfInts = intStream
                 .boxed()
                 .collect(Collectors.toList());
-        val bytes = new byte[listOfInts.size()];
+        var bytes = new byte[listOfInts.size()];
         IntStream.range(0, listOfInts.size())
         .forEach(index->bytes[index]=(byte)(int)listOfInts.get(index));
         return bytes;

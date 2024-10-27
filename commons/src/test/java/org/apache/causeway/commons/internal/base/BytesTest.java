@@ -35,8 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.commons.internal._Constants;
 
-import lombok.val;
-
 class BytesTest {
 
     final int n = 256;
@@ -144,7 +142,7 @@ class BytesTest {
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6}) // data indices
     void compressionRundtrip(final int dataIndex) throws Exception {
-        val input = data(dataIndex);
+        var input = data(dataIndex);
         assertArrayEquals(input,
                 _Bytes.decompress(_Bytes.compress(input)));
     }

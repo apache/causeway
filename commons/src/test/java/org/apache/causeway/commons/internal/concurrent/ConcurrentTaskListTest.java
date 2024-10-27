@@ -24,14 +24,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import lombok.val;
-
 class ConcurrentTaskListTest {
 
     @Test
     void tasksShouldAllBeExecuted() {
         
-        val counter = new LongAdder();
+        var counter = new LongAdder();
 
         _ConcurrentTaskList tasks = _ConcurrentTaskList.named("Test")
                 .addRunnable("1", counter::increment)

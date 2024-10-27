@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 
 /**
@@ -106,7 +105,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
     @Override
     public T getValue() {
         valid = true;
-        val val = observable == null
+        var val = observable == null
                 ? value
                 : observable.getValue();
         return valueRefiner.apply(val);
@@ -117,7 +116,7 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
         if (isBound()) {
             throw _Exceptions.unrecoverable("Cannot set value on a bound bindable.");
         }
-        val newValue = valueGuard.apply(proposedNewValue);
+        var newValue = valueGuard.apply(proposedNewValue);
         if (value != newValue) {
             value = newValue;
             markInvalid();
@@ -175,10 +174,10 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
             final Function<T, R> forwardMapper,
             final Function<R, T> reverseMapper) {
 
-        val isForwardUpdating = new AtomicBoolean();
-        val isReverseUpdating = new AtomicBoolean();
+        var isForwardUpdating = new AtomicBoolean();
+        var isReverseUpdating = new AtomicBoolean();
 
-        val newBindable = _Bindables.<R>forValue(forwardMapper.apply(getValue()));
+        var newBindable = _Bindables.<R>forValue(forwardMapper.apply(getValue()));
         addListener((e,o,n)->{
             if(isReverseUpdating.get()) {
                 return;

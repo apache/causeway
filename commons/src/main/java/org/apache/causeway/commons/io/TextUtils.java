@@ -45,7 +45,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -93,7 +92,7 @@ public class TextUtils {
         if(input==null) {
             return Can.empty();
         }
-        val lines = new ArrayList<String>();
+        var lines = new ArrayList<String>();
         try(Scanner scanner = new Scanner(input, charset.name())){
             scanner.useDelimiter("\\n");
             while(scanner.hasNext()) {
@@ -120,7 +119,7 @@ public class TextUtils {
             final @NonNull Class<?> resourceLocation,
             final @NonNull String resourceName,
             final @NonNull Charset charset) {
-        try(val input = resourceLocation.getResourceAsStream(resourceName)){
+        try(var input = resourceLocation.getResourceAsStream(resourceName)){
             return readLinesFromInputStream(input, charset);
         }
     }
@@ -136,7 +135,7 @@ public class TextUtils {
     public Can<String> readLinesFromUrl(
             final @NonNull URL url,
             final @NonNull Charset charset) {
-        try(val input = url.openStream()){
+        try(var input = url.openStream()){
             return readLinesFromInputStream(input, charset);
         }
     }
@@ -152,7 +151,7 @@ public class TextUtils {
     public Can<String> readLinesFromFile(
             final @NonNull File file,
             final @NonNull Charset charset) {
-        try(val input = new FileInputStream(file)){
+        try(var input = new FileInputStream(file)){
             return readLinesFromInputStream(input, charset);
         }
     }
@@ -183,8 +182,8 @@ public class TextUtils {
             final @NonNull File file,
             final @NonNull Charset charset) {
 
-        try(val bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset))) {
-            for(val line : lines) {
+        try(var bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset))) {
+            for(var line : lines) {
                 bw.append(line).append("\n");
             }
         }
@@ -200,8 +199,8 @@ public class TextUtils {
             final @NonNull Charset charset) {
 
         dataSink.writeAll(os->{
-            try(val bw = new BufferedWriter(new OutputStreamWriter(os, charset))) {
-                for(val line : lines) {
+            try(var bw = new BufferedWriter(new OutputStreamWriter(os, charset))) {
+                for(var line : lines) {
                     bw.append(line).append("\n");
                 }
             }

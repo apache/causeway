@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.debug.xray.graphics.CallStackDiagram
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 final class _CallStackMerger {
@@ -73,12 +72,12 @@ final class _CallStackMerger {
         }
         void visitDepthFirst(final IntTreeVisitor visitor) {
             visitor.accept(level, value);
-            for(val child : children) {
+            for(var child : children) {
                 child.visitDepthFirst(visitor);
             }
         }
         void visitBreadthFirst(final IntTreeVisitor visitor) {
-            val queue = new ArrayDeque<IntTreeNode>();
+            var queue = new ArrayDeque<IntTreeNode>();
             queue.add(this);
             IntTreeNode currentNode;
             while (!queue.isEmpty()) {
@@ -94,7 +93,7 @@ final class _CallStackMerger {
         }
 
         private StringBuilder print(final IntFunction<String> valueMapper) {
-            val sb = new StringBuilder();
+            var sb = new StringBuilder();
             print(valueMapper, sb, "", "");
             return sb;
         }
@@ -118,18 +117,18 @@ final class _CallStackMerger {
 
     private void initialize() {
 
-        val executionNodeSet = _Sets.<String>newHashSet(); // temporary helper
-        val executionNodeMap = _Maps.<Integer, String>newHashMap(); // StackStraceElement by unique id
+        var executionNodeSet = _Sets.<String>newHashSet(); // temporary helper
+        var executionNodeMap = _Maps.<Integer, String>newHashMap(); // StackStraceElement by unique id
 
-        val executionLanes = new ArrayList<int[]>();
+        var executionLanes = new ArrayList<int[]>();
 
         logEntries.forEach(logEntry->{
-            val executionLane = new int[logEntry.getData().size()];
+            var executionLane = new int[logEntry.getData().size()];
             executionLanes.add(executionLane);
 
             Can.ofCollection(logEntry.getData()).reverse().stream()
             .map(StackTraceElement::toString).forEach(IndexedConsumer.zeroBased((index, se)->{
-                val isNew = executionNodeSet.add(se);
+                var isNew = executionNodeSet.add(se);
                 if(isNew) {
                     final int id = executionNodeSet.size();
                     executionNodeMap.put(id, se);
@@ -145,7 +144,7 @@ final class _CallStackMerger {
             }));
         });
 
-        val root = merge(executionLanes);
+        var root = merge(executionLanes);
         callStackDiagram = new CallStackDiagram(root.print(id->{
             return _Exceptions.abbreviate(
                     executionNodeMap.getOrDefault(id, "root"),
@@ -161,11 +160,11 @@ final class _CallStackMerger {
      * ...
      */
     static IntTreeNode merge(final List<int[]> executionLanes) {
-        val root = IntTreeNode.newRoot(-1);
+        var root = IntTreeNode.newRoot(-1);
         executionLanes.forEach(lane->{
             var node = root;
             for(int id : lane) {
-                val equalNode = node.children.stream().filter(child->child.value==id).findAny();
+                var equalNode = node.children.stream().filter(child->child.value==id).findAny();
                 if(!equalNode.isPresent()) {
                     node = node.addChild(id);
                 } else {

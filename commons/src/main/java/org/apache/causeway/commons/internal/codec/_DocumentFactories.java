@@ -36,7 +36,6 @@ import org.xml.sax.InputSource;
 import org.springframework.lang.Nullable;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -54,7 +53,7 @@ import lombok.experimental.UtilityClass;
 public class _DocumentFactories {
 
     public DocumentBuilderFactory documentBuilderFactory() {
-        val df = DocumentBuilderFactory.newInstance();
+        var df = DocumentBuilderFactory.newInstance();
         df.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // XML parsers should not be vulnerable to XXE attacks
         df.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // XML parsers should not be vulnerable to XXE attacks
         return df;
@@ -67,7 +66,7 @@ public class _DocumentFactories {
     }
 
     public TransformerFactory transformerFactory() {
-        val tf = TransformerFactory.newInstance();
+        var tf = TransformerFactory.newInstance();
         tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // XML transformers should be secured
         tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); // XML transformers should be secured
         return tf;
@@ -78,7 +77,7 @@ public class _DocumentFactories {
     }
 
     public XMLInputFactory xmlInputFactory() {
-        val xmlInputFactory = XMLInputFactory.newInstance();
+        var xmlInputFactory = XMLInputFactory.newInstance();
 
         // disables DTDs entirely
         xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
@@ -90,7 +89,7 @@ public class _DocumentFactories {
 
     public SAXBuilder saxBuilder() {
         /*sonar-ignore-on*/
-        val builder = new SAXBuilder();
+        var builder = new SAXBuilder();
         /*sonar-ignore-off*/
         builder.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         builder.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");

@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -267,7 +266,7 @@ public final class _Assert {
             assertEquals(a, b, lazyMessage);
             return;
         }
-        val maxScale = Math.max(a.scale(), b.scale());
+        var maxScale = Math.max(a.scale(), b.scale());
         assertEquals(
                 a.setScale(maxScale),
                 b.setScale(maxScale),
@@ -323,7 +322,7 @@ public final class _Assert {
     // -- HELPER
 
     private static void fail(final String message, final Object expected, final Object actual) {
-        val error = _Exceptions.assertionError(
+        var error = _Exceptions.assertionError(
                 buildPrefix(message)
                 + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
         log.error(error); // in case exceptions get swallowed, make sure errors at least get logged

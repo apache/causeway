@@ -30,7 +30,6 @@ import org.apache.causeway.commons.collections.Cardinality;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -115,7 +114,7 @@ public interface _IocContainer {
      */
     default <T> T getSingletonElseFail(final @NonNull Class<T> type) {
 
-        val candidates = select(type);
+        var candidates = select(type);
         if (candidates.getCardinality() == Cardinality.ZERO) {
             throw _Exceptions.noSuchElement("Cannot resolve singleton '%s'", type);
         }

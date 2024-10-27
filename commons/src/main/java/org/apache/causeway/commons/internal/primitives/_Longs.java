@@ -29,7 +29,6 @@ import org.apache.causeway.commons.internal.primitives._Ints.BiIntFunction;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -62,13 +61,13 @@ public class _Longs {
         @NonNull Bound lowerBound;
         @NonNull Bound upperBound;
         public boolean contains(final long value) {
-            val isBelowLower = lowerBound.isInclusive()
+            var isBelowLower = lowerBound.isInclusive()
                     ? value < lowerBound.getValue()
                     : value <= lowerBound.getValue();
             if(isBelowLower) {
                 return false;
             }
-            val isAboveUpper = upperBound.isInclusive()
+            var isAboveUpper = upperBound.isInclusive()
                     ? value > upperBound.getValue()
                     : value >= upperBound.getValue();
             if(isAboveUpper) {

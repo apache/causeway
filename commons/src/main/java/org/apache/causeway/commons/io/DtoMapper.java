@@ -26,7 +26,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.functional.Try;
 
 import lombok.NonNull;
-import lombok.val;
 
 public interface DtoMapper<T> {
 
@@ -42,7 +41,7 @@ public interface DtoMapper<T> {
     @Nullable
     default String toString(final @Nullable T dto) {
         if(dto==null) return null;
-        val stringHolder = new ArrayList<String>(1);
+        var stringHolder = new ArrayList<String>(1);
         write(dto, DataSink.ofStringUtf8Consumer(stringHolder::add));
         return stringHolder.get(0);
     }
@@ -55,7 +54,7 @@ public interface DtoMapper<T> {
 
     default T clone(final @Nullable T dto) {
         if(dto==null) return dto;
-        val bytesHolder = new ArrayList<byte[]>(1);
+        var bytesHolder = new ArrayList<byte[]>(1);
         write(dto, DataSink.ofByteArrayConsumer(bytesHolder::add));
         return read(DataSource.ofBytes(bytesHolder.get(0)));
     }

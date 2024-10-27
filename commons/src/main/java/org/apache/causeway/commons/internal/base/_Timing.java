@@ -99,7 +99,7 @@ public final class _Timing {
 
         /**
          * @return elapsed nano seconds since started
-         * (or when stopped, the time interval between started and stopped)
+         * (or when stopped, the time intervar between started and stopped)
          */
         public long getNanos() {
             return stopped ? t1 - t0 : System.nanoTime() - t0 ;
@@ -107,7 +107,7 @@ public final class _Timing {
 
         /**
          * @return elapsed micro seconds since started
-         * (or when stopped, the time interval between started and stopped)
+         * (or when stopped, the time intervar between started and stopped)
          */
         public long getMicros() {
             return getNanos()/1000L;
@@ -115,7 +115,7 @@ public final class _Timing {
 
         /**
          * @return elapsed milli seconds since started
-         * (or when stopped, the time interval between started and stopped)
+         * (or when stopped, the time intervar between started and stopped)
          */
         public long getMillis() {
             return getNanos()/1000_000L;

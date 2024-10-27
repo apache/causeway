@@ -32,7 +32,6 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.val;
 
 /**
  * <h1>- internal use only -</h1>
@@ -65,7 +64,7 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
+        var collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
 
         if(collected.isPresent(annotationType)) {
             return true;
@@ -97,10 +96,10 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
+        var collected = collect(annotatedElement, SearchStrategy.TYPE_HIERARCHY);
 
         // also handle annotated fields, getter methods might be associated with
-        val associated =
+        var associated =
                 annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
                         .map(fieldForGetter->collect(fieldForGetter, SearchStrategy.TYPE_HIERARCHY));
 
@@ -124,10 +123,10 @@ public final class _Annotations {
             final Method annotatedMethod,
             final Class<A> annotationType) {
 
-        val collected = collect(annotatedMethod, SearchStrategy.TYPE_HIERARCHY);
+        var collected = collect(annotatedMethod, SearchStrategy.TYPE_HIERARCHY);
 
         // also handle containing class
-        val associatedClass = collect(annotatedMethod.getDeclaringClass(), SearchStrategy.TYPE_HIERARCHY);
+        var associatedClass = collect(annotatedMethod.getDeclaringClass(), SearchStrategy.TYPE_HIERARCHY);
 
         return _Annotations_SynthesizedMergedAnnotationInvocationHandler
                 .createProxy(collected, Optional.of(associatedClass), annotationType);
@@ -153,10 +152,10 @@ public final class _Annotations {
             final AnnotatedElement annotatedElement,
             final Class<A> annotationType) {
 
-        val collected = collect(annotatedElement, SearchStrategy.DIRECT);
+        var collected = collect(annotatedElement, SearchStrategy.DIRECT);
 
         // also handle annotated fields, getter methods might be associated with
-        val associated =
+        var associated =
                 annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
                         .map(fieldForGetter->collect(fieldForGetter, SearchStrategy.DIRECT));
 
@@ -179,10 +178,10 @@ public final class _Annotations {
             final Class<A> annotationType,
             final SearchStrategy searchStrategy) {
 
-        val collected = collect(annotatedElement, searchStrategy);
+        var collected = collect(annotatedElement, searchStrategy);
 
         // also handle annotated fields, getter methods might be associated with
-        val associated =
+        var associated =
                 annotatedFieldForAnnotatedElement(annotatedElement, annotationType)
                         .map(fieldForGetter->collect(fieldForGetter, searchStrategy));
 
@@ -196,16 +195,16 @@ public final class _Annotations {
     private static MergedAnnotations collect(
             final AnnotatedElement annotatedElement,
             final SearchStrategy searchStrategy) {
-        val collected = MergedAnnotations.from(annotatedElement, searchStrategy);
+        var collected = MergedAnnotations.from(annotatedElement, searchStrategy);
         return collected;
     }
 
     private static boolean isAnnotationAllowedOnField(final Class<? extends Annotation> annotationType) {
-        val target = annotationType.getAnnotation(Target.class);
+        var target = annotationType.getAnnotation(Target.class);
         if(target==null) {
             return false;
         }
-        for(val elementType : target.value()) {
+        for(var elementType : target.value()) {
             if(elementType == ElementType.FIELD) {
                 return true;
             }

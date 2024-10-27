@@ -45,7 +45,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
@@ -189,8 +188,8 @@ public class _GenericResolver {
             if(c!=0) {
                 return c;
             }
-            val paramsA = a.paramTypes();
-            val paramsB = b.paramTypes();
+            var paramsA = a.paramTypes();
+            var paramsB = b.paramTypes();
             for(int i=0; i<a.paramCount(); ++i) {
                 c = _Reflect.typesCompare(paramsA[i], paramsB[i]);
                 if(c!=0) {
@@ -246,8 +245,8 @@ public class _GenericResolver {
     public ResolvedType forPluralType(
             final @NonNull Class<?> pluralType,
             final @NonNull CollectionSemantics collectionSemantics) {
-        val resolvablePluralType = ResolvableType.forClass(pluralType);
-        val genericTypeArg = resolvablePluralType.isArray()
+        var resolvablePluralType = ResolvableType.forClass(pluralType);
+        var genericTypeArg = resolvablePluralType.isArray()
                 ? resolvablePluralType.getComponentType()
                 : resolvablePluralType.getGeneric(0);
         return ResolvedType.plural(
@@ -260,7 +259,7 @@ public class _GenericResolver {
      * Resolves a constructor's parameter type.
      */
     public ResolvedType forConstructorParameter(final ResolvedConstructor resolvedConstructor, final int paramIndex) {
-        val paramType = resolvedConstructor.paramType(paramIndex);
+        var paramType = resolvedConstructor.paramType(paramIndex);
         return CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
                 ResolvedType.plural(
@@ -275,7 +274,7 @@ public class _GenericResolver {
      * Resolves a method's return type.
      */
     public ResolvedType forMethodReturn(final ResolvedMethod resolvedMethod) {
-        val methodReturn = resolvedMethod.returnType();
+        var methodReturn = resolvedMethod.returnType();
         return CollectionSemantics.valueOf(methodReturn)
             .map(collectionSemantics->
                 ResolvedType.plural(
@@ -290,7 +289,7 @@ public class _GenericResolver {
      * Resolves a method's parameter type.
      */
     public ResolvedType forMethodParameter(final ResolvedMethod resolvedMethod, final int paramIndex) {
-        val paramType = resolvedMethod.paramType(paramIndex);
+        var paramType = resolvedMethod.paramType(paramIndex);
         return CollectionSemantics.valueOf(paramType)
             .map(collectionSemantics->
                 ResolvedType.plural(
@@ -386,8 +385,8 @@ public class _GenericResolver {
         }
 //        private Try<SimpleResolvedMethod> adopt(final @NonNull ClassLoader classLoader) {
 //            return Try.call(()->{
-//                val ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);
-//                val methodReloaded = ownerReloaded.getMethod(method.getName(), method.getParameterTypes());
+//                var ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);
+//                var methodReloaded = ownerReloaded.getMethod(method.getName(), method.getParameterTypes());
 //                return new SimpleResolvedMethod(methodReloaded, ownerReloaded);
 //            });
 //        }
@@ -427,8 +426,8 @@ public class _GenericResolver {
         // -- HELPER
 //        private Try<SimpleResolvedConstructor> adopt(final @NonNull ClassLoader classLoader) {
 //            return Try.call(()->{
-//                val ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);
-//                val methodReloaded = ownerReloaded.getConstructor(constructor.getParameterTypes());
+//                var ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);
+//                var methodReloaded = ownerReloaded.getConstructor(constructor.getParameterTypes());
 //                return new SimpleResolvedConstructor(methodReloaded, ownerReloaded);
 //            });
 //        }
@@ -465,9 +464,9 @@ public class _GenericResolver {
         if(a.equals(b)) return b; // an arbitrary pick
 
         // if declared types are different chose the mostSpecific type
-        val implType = _Reflect.mostSpecificType(a.implementationClass(), b.implementationClass());
+        var implType = _Reflect.mostSpecificType(a.implementationClass(), b.implementationClass());
 
-        val m = BridgeMethodResolver.findBridgedMethod(
+        var m = BridgeMethodResolver.findBridgedMethod(
                 ClassUtils.getMostSpecificMethod(a.method(), implType));
         if(m.isBridge()) {
             throw _Exceptions.unexpectedCodeReach();
@@ -487,7 +486,7 @@ public class _GenericResolver {
     }
 
     private ResolvableType genericTypeArg(final ResolvableType pluralType){
-        val genericTypeArg = pluralType.isArray()
+        var genericTypeArg = pluralType.isArray()
                 ? pluralType.getComponentType()
                 : pluralType.getGeneric(0);
         return genericTypeArg;
@@ -506,9 +505,9 @@ public class _GenericResolver {
                 final @NonNull String methodName,
                 final Class<?>... parameterTypes) {
 
-            val candidate = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(implementationClass, methodName);
-            val paramTypesFound = Can.ofArray(candidate.paramTypes());
-            val paramTypesRequested = Can.ofArray(parameterTypes);
+            var candidate = _ClassCache.getInstance().findMethodUniquelyByNameOrFail(implementationClass, methodName);
+            var paramTypesFound = Can.ofArray(candidate.paramTypes());
+            var paramTypesRequested = Can.ofArray(parameterTypes);
             _Assert.assertEquals(paramTypesFound, paramTypesRequested);
             return candidate;
         }
