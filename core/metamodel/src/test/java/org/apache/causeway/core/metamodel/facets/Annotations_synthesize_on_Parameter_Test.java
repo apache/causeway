@@ -31,11 +31,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
-
-
 @SuppressWarnings("unused")
 public class Annotations_synthesize_on_Parameter_Test {
-
 
     @Inherited
     @Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -176,7 +173,6 @@ public class Annotations_synthesize_on_Parameter_Test {
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
-
 
     @Test
     public void direct_overrides_metaMeta_2() throws Exception {

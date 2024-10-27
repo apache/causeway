@@ -87,7 +87,6 @@ extends ScalarPanelAbstract {
                         regularFrame,
                         getFormFrame()));
 
-
         FieldFragment.matching(fieldFrame)
         .ifPresent(fieldFragment ->{
 
@@ -150,7 +149,6 @@ extends ScalarPanelAbstract {
                     .createFragment(id, this, scalarValueId->
                         Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
     }
-
 
     // -- SEMANTICS
 
@@ -362,6 +360,5 @@ extends ScalarPanelAbstract {
             }
         }
     }
-
 
 }

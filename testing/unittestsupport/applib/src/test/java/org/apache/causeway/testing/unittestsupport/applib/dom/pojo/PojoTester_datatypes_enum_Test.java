@@ -55,5 +55,4 @@ public class PojoTester_datatypes_enum_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

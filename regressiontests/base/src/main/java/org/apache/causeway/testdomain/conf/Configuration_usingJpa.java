@@ -51,5 +51,4 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 })
 public class Configuration_usingJpa {
 
-
 }

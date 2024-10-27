@@ -377,7 +377,6 @@ final class _CellMarshaller {
             return (T) new DateTime(dateCellValue.getTime());
         }
 
-
         // number
         if(requiredType == double.class || requiredType == Double.class) {
             if(cellType == CellType.NUMERIC) {
@@ -482,7 +481,6 @@ final class _CellMarshaller {
         return null;
     }
 
-
     private Object getCellComment(final Cell cell, final Class<?> requiredType) {
         final Comment comment = cell.getCellComment();
         if(comment == null) {
@@ -496,6 +494,5 @@ final class _CellMarshaller {
         final Bookmark bookmark = Bookmark.parse(bookmarkStr).orElse(null);
         return bookmarkService.lookup(bookmark, requiredType).orElse(null);
     }
-
 
 }

@@ -35,8 +35,6 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.NoPermissionChecks;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,

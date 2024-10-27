@@ -63,7 +63,6 @@ public class HasInteractionId_commandLogEntry {
     public static class PropertyDomainEvent
             extends CausewayModuleExtCommandLogApplib.PropertyDomainEvent<HasInteractionId_commandLogEntry, CommandLogEntry> { }
 
-
     @MemberSupport public CommandLogEntry prop() {
         return queryResultsCacheProvider.get().execute(this::doProp, getClass(), "prop");
     }

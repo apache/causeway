@@ -105,7 +105,6 @@ class ObjectContractsTest_equals {
                     .thenUse("real", ComplexNumber::getReal)
                     .thenUse("imaginary", ComplexNumber::getImaginary);
 
-
         @Override
         public boolean equals(final Object o) {
             return contract.equals(this, o);

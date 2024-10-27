@@ -31,8 +31,6 @@ import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,

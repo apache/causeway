@@ -81,7 +81,6 @@ public interface DomainServiceResource {
     @Path("/{serviceId}")
     public Response postServiceNotAllowed(@PathParam("serviceId") final String serviceId);
 
-
     // //////////////////////////////////////////////////////////
     // domain service action
     // //////////////////////////////////////////////////////////

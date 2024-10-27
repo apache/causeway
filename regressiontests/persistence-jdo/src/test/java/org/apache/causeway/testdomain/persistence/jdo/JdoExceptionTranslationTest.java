@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
@@ -75,7 +73,6 @@ class JdoExceptionTranslationTest extends RegressionTestWithJdoFixtures {
 
                 var inventory = inventories.get(0);
                 assertNotNull(inventory);
-
 
                 // add a conflicting book (unique ISBN violation)
                 testFixtures.addABookTo(inventory);

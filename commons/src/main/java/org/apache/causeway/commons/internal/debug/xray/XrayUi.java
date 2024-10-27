@@ -227,7 +227,6 @@ public class XrayUi extends JFrame {
             env.getData().put("DELETE", "Delete Selected Nodes");
         }
 
-
         this.setDefaultCloseOperation(defaultCloseOperation);
         this.setTitle("X-ray Viewer (Apache Causeway™)");
         this.pack();
@@ -404,7 +403,5 @@ public class XrayUi extends JFrame {
             return label;
         }
     }
-
-
 
 }

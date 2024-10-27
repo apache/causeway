@@ -81,7 +81,6 @@ implements ObjectAssociation {
         return elementType;
     }
 
-
     @Override
     public boolean hasChoices() {
         return containsFacet(PropertyChoicesFacet.class);
@@ -94,7 +93,5 @@ implements ObjectAssociation {
 
     @Override
     public abstract boolean isEmpty(final ManagedObject adapter, final InteractionInitiatedBy interactionInitiatedBy);
-
-
 
 }

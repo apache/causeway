@@ -32,7 +32,6 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-
 /**
  * Provides programmatic access to otherwise protected H2 {@link WebServer} configuration.
  */
@@ -123,6 +122,5 @@ public interface H2WebServerWrapper {
         };
 
     }
-
 
 }

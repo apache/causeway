@@ -36,8 +36,6 @@ import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
-
-
 public class TenantedAuthorizationFacetDefault
 extends FacetAbstract
 implements TenantedAuthorizationFacet {
@@ -105,7 +103,6 @@ implements TenantedAuthorizationFacet {
         String dispatch(ApplicationTenancyEvaluator evaluator, Object domainObject, ApplicationUser applicationUser);
     }
 
-
     /**
      * Per {@link #findApplicationUserNoCache(String)},
      * cached for the request using the {@link QueryResultsCache}.
@@ -122,7 +119,5 @@ implements TenantedAuthorizationFacet {
     protected ApplicationUser findApplicationUserNoCache(final String userName) {
         return applicationUserRepository.findByUsername(userName).orElse(null);
     }
-
-
 
 }

@@ -37,7 +37,6 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**

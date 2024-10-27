@@ -31,7 +31,6 @@ import org.springframework.stereotype.Component;
 public class PatternOptionalStringConstraintValidator
         implements ConstraintValidator<javax.validation.constraints.Pattern, Optional<String>> {
 
-
     private final PatternValidator patternValidator = new PatternValidator();
 
     public PatternOptionalStringConstraintValidator(){

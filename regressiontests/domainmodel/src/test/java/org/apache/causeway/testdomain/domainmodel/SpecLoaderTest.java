@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,

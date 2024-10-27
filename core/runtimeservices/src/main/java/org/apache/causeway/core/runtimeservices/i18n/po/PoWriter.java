@@ -103,8 +103,6 @@ class PoWriter extends PoAbstract {
         buf.append("\n\n");
     }
 
-
-
     @Override
     public String translate(final TranslationContext context, final String msgId) {
 

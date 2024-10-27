@@ -64,7 +64,6 @@ extends PanelAbstract<String, Model<String>> {
         super(id);
     }
 
-
     @Override
     protected void onInitialize() {
         super.onInitialize();

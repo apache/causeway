@@ -60,5 +60,4 @@ public class Counter extends org.apache.causeway.extensions.commandlog.applib.in
     @Getter @Setter
     private Long num2;
 
-
 }

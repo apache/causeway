@@ -42,7 +42,6 @@ class AnnotationTripletTest {
         AnnotationTriplet t8 = new AnnotationTriplet("value", 8, 1);
         AnnotationTriplet t9 = new AnnotationTriplet("value", 9, 2);
 
-
         List<AnnotationTriplet> l = Arrays.asList(t1, t3, t5, t4, t7, t6, t9, t8, t0, t2);
 
         // when
@@ -61,6 +60,5 @@ class AnnotationTripletTest {
         Assertions.assertThat(l.get(9)).isEqualTo(t9);
 
     }
-
 
 }

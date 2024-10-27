@@ -165,7 +165,6 @@ implements
         });
     }
 
-
     // -- HELPER
 
     private ObjectMemento memento() {

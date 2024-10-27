@@ -34,8 +34,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Proper
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-
-
 public class RichPropertyChoices extends Element {
 
     final PropertyInteractor propertyInteractor;

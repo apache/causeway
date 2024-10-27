@@ -48,5 +48,4 @@ public class ExceptionRecognizerForRecoverableException extends ExceptionRecogni
         super(Category.RECOVERABLE, RecoverableException.class);
     }
 
-
 }

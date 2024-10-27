@@ -139,6 +139,4 @@ public class DatanucleusSettings {
         return key.replaceAll("-", "").toLowerCase();
     }
 
-
-
 }

@@ -41,7 +41,6 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  *
  * @since 2.0 {@index}

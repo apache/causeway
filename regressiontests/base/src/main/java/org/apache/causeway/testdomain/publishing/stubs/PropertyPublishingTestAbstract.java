@@ -32,8 +32,6 @@ import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-
-
 public abstract class PropertyPublishingTestAbstract
 extends PublishingTestAbstract {
 
@@ -110,6 +108,5 @@ extends PublishingTestAbstract {
         var actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
         CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }
-
 
 }

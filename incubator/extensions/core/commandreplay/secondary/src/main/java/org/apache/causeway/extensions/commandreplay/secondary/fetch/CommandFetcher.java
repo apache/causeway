@@ -48,7 +48,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-
 /**
  * @since 2.0 {@index}
  */

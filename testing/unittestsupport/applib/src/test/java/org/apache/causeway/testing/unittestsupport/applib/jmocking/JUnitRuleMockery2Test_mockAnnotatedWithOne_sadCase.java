@@ -50,5 +50,4 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithOne_sadCase {
         collaborating.dontCollaborateWithCollaborator();
     }
 
-
 }

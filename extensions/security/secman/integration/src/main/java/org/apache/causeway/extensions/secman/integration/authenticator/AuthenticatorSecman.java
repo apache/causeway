@@ -35,7 +35,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**

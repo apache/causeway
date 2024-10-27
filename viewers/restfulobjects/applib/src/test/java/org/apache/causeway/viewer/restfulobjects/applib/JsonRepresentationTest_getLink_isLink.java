@@ -114,5 +114,4 @@ class JsonRepresentationTest_getLink_isLink {
         assertThat(jsonRepresentation.getLink("links[rel=other]"), is(nullValue()));
     }
 
-
 }

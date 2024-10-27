@@ -67,7 +67,6 @@ public class ExceptionRecognizerForType extends ExceptionRecognizerAbstract {
         };
     }
 
-
     /**
      * A {@link Predicate} that {@link Predicate#test(Object) applies} only if at least one of the message(s)
      * supplied <i>DO</i> appear in the {@link Throwable} or any of its {@link Throwable#getCause() cause}s

@@ -46,6 +46,4 @@ public class PostponedAction implements Action {
         description.appendValue(resultSupplier.get());
     }
 
-
-
 }

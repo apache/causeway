@@ -159,7 +159,6 @@ implements
         return result;
     }
 
-
     private void registerTransactionSynchronizations(final TransactionStatus txStatus) {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
@@ -238,7 +237,6 @@ implements
         }
     }
 
-
     @Override
     public Optional<TransactionId> currentTransactionId() {
         return interactionLayerTrackerProvider.get().getInteractionId()
@@ -269,7 +267,6 @@ implements
         .orElse(TransactionState.NONE);
     }
 
-
     // -- TRANSACTION SEQUENCE TRACKING
 
     // TODO: this ThreadLocal (as with all thread-locals) should perhaps somehow be managed using
@@ -277,9 +274,7 @@ implements
     //  TransactionSynchronization
     private ThreadLocal<LongAdder> txCounter = ThreadLocal.withInitial(LongAdder::new);
 
-
     // -- SPRING INTEGRATION
-
 
     private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
@@ -349,7 +344,6 @@ implements
         return ex;
     }
 
-
     /**
      * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, sets up
      * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
@@ -383,7 +377,6 @@ implements
                 }
                 registerTransactionSynchronizations(txStatus);
 
-
                 // we have created a new transaction, so need to provide a CloseTask
                 onCloseTasks.add(
                     new CloseTask(
@@ -408,7 +401,6 @@ implements
             });
         }
     }
-
 
     /**
      * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, if

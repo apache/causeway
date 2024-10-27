@@ -538,7 +538,6 @@ public class XmlSnapshot implements Snapshot {
                 })
                 .allMatch(appendedXml->appendedXml);
 
-
             log.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
             return allFieldsNavigated;
         }
@@ -845,6 +844,5 @@ public class XmlSnapshot implements Snapshot {
     private void setXmlElement(final Element xmlElement) {
         this.xmlElement = xmlElement;
     }
-
 
 }

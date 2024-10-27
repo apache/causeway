@@ -29,7 +29,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
-
 /**
  * Acts as a fallback.  We put it last in the list
  */

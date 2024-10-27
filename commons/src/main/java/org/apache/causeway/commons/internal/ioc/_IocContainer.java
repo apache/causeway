@@ -96,7 +96,6 @@ public interface _IocContainer {
      */
     <T> Can<T> select(Class<T> requiredType, Annotation[] qualifiersRequired);
 
-
     /**
      * Requires that there is AT LEAST one implementation of the service, and returns it.
      *

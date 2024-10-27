@@ -40,7 +40,6 @@ import org.apache.causeway.extensions.secman.applib.user.man.mixins.ApplicationU
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  *
  * @since 2.0 {@index}
@@ -99,7 +98,5 @@ public class ApplicationUserManager_newDelegateUser {
                 .findByNameCached(regularUserRoleName)
                 .orElse(null);
     }
-
-
 
 }

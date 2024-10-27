@@ -27,7 +27,6 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-
 @Documented
 @Target( { ElementType.METHOD, FIELD })
 @Retention(RUNTIME)

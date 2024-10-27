@@ -61,7 +61,6 @@ public final class JdoPropertyUtils {
             return null;
         }
 
-
         final List<ObjectAssociation> propertyList = objSpec
                 .streamAssociations(MixedIn.EXCLUDED)
                 .filter(predicate)

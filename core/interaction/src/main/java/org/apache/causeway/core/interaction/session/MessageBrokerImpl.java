@@ -108,7 +108,6 @@ public class MessageBrokerImpl implements Serializable, MessageBroker {
         }
     }
 
-
     // -- HELPERS
 
     private Can<String> copyAndClear(final List<String> messages) {

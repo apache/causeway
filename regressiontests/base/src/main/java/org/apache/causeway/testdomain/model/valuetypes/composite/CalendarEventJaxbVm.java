@@ -45,7 +45,6 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSem
 import lombok.Getter;
 import lombok.Setter;
 
-
 @XmlRootElement(name = "root")
 @XmlType(
         propOrder = {"nextEvent", "events"}

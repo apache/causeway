@@ -31,8 +31,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-
-
 class JsonRepresentationTest_streamMapEntries {
 
     private JsonRepresentation jsonRepresentation;

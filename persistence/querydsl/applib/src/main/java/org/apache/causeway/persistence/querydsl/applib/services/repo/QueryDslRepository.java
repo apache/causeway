@@ -208,7 +208,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
         }
     }
 
-
     /**
      * Returns all the instances of this entity, in the preferred {@link OrderSpecifier ordering}.
      *
@@ -242,8 +241,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
         return findAll(getDefaultOrdersAsArray());
     }
 
-
-
     /**
      * Based on the given predicate(s), search for exactly zero or one entity instance.
      *
@@ -260,7 +257,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
                 .where(unwrapPredicates(predicates))
                 .fetchOne());
     }
-
 
     /**
      * Based on the given predicates search for the first entity instance based on the provided ordering.
@@ -282,7 +278,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
                 .fetchFirst());
     }
 
-
     /**
      * Based on the given predicate, search for the first entity instance based on the provided ordering.
      *
@@ -299,7 +294,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
     ) {
         return findAny(asArray(predicate), orderSpecifiers);
     }
-
 
     /**
      * Based on the given predicate function search for the first entity instance based on the
@@ -320,7 +314,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
     public Optional<T> findAnyUsingDefaultOrder(final Function<Q, Predicate>... predicates) {
         return findAny(predicates, getDefaultOrdersAsArray());
     }
-
 
     /**
      * Based on the given predicate(s), search for the first entity instance based on specified
@@ -363,7 +356,6 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
         return findFirst(asArray(predicate), orderSpecifiers);
     }
 
-
     /**
      * Based on the given predicate(s) search for the first entity instance based on specified
      * {@link OrderSpecifier ordering}.
@@ -379,7 +371,6 @@ s     * @see #findFirst(Function[], Function[])
             final Function<Q, Predicate>... predicates) {
         return findFirst(predicates, getDefaultOrdersAsArray());
     }
-
 
     /**
      * Based on the given predicate(s), search for applicable entity instances and return the distinct projection
@@ -412,7 +403,6 @@ s     * @see #findFirst(Function[], Function[])
                 .fetch();
     }
 
-
     /**
      * Based on the given predicate, search for applicable entity instances and return the distinct projection
      * (a subset of fields).
@@ -437,8 +427,6 @@ s     * @see #findFirst(Function[], Function[])
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return findFieldsDistinct(projection, asArray(predicate), orderSpecifiers);
     }
-
-
 
     /**
      * Based on the given predicate function search for applicable entity instances and return the distinct projection,
@@ -473,8 +461,6 @@ s     * @see #findFirst(Function[], Function[])
                 .orderBy(getDefaultOrdersUnwrapped())
                 .fetch();
     }
-
-
 
     /**
      * Based on the given predicate function search for applicable entity instances and return the first projection
@@ -557,8 +543,6 @@ s     * @see #findFirst(Function[], Function[])
         return findFirstFields(projection, predicates, getDefaultOrdersAsArray());
     }
 
-
-
     /**
      * Based on the given predicates search for exactly one or zero entity instance and return the projection.
      *
@@ -577,8 +561,6 @@ s     * @see #findFirst(Function[], Function[])
                 .where(unwrapPredicates(predicates))
                 .fetchOne());
     }
-
-
 
     /**
      * Based on the given predicate(s), search for applicable entity instances and apply the given
@@ -602,8 +584,6 @@ s     * @see #findFirst(Function[], Function[])
                 .fetch();
     }
 
-
-
     /**
      * Based on the given predicate(s), search for applicable entity instances and apply the given
      * {@link OrderSpecifier ordering}.
@@ -621,9 +601,6 @@ s     * @see #findFirst(Function[], Function[])
     ) {
         return find(asArray(predicate), orderSpecifiers);
     }
-
-
-
 
     /**
      * Based on the given predicate function search for applicable entity instances and apply the
@@ -643,7 +620,6 @@ s     * @see #findFirst(Function[], Function[])
     public List<T> findUsingDefaultOrder(Function<Q, Predicate>... predicates) {
         return find(predicates, getDefaultOrdersAsArray());
     }
-
 
     /**
      * Based on the given predicate search for applicable entity instances,
@@ -671,7 +647,6 @@ s     * @see #findFirst(Function[], Function[])
                 .orderBy(unwrapOrderSpecifiers(orderSpecifiers))
                 .fetch();
     }
-
 
     /**
      * Based on the given predicate search for applicable entity instances,
@@ -728,7 +703,6 @@ s     * @see #findFirst(Function[], Function[])
                 .toArray(new Predicate[0]);
     }
 
-
     private OrderSpecifier<?>[] unwrapOrderSpecifiers(final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return Arrays.stream(orderSpecifiers)
                 .map(x -> x.apply(getEntityPath()))
@@ -754,7 +728,6 @@ s     * @see #findFirst(Function[], Function[])
                 : new Function[0];
     }
 
-
     static <T> List<T> newList(T... objs) {
         return newArrayList(objs);
     }
@@ -764,7 +737,5 @@ s     * @see #findFirst(Function[], Function[])
         Collections.addAll(result, objs);
         return result;
     }
-
-
 
 }

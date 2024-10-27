@@ -63,7 +63,6 @@ public class DefaultJdoDialect implements JdoDialect, PersistenceExceptionTransl
 
 	private SQLExceptionTranslator jdbcExceptionTranslator;
 
-
 	/**
 	 * Create a new DefaultJdoDialect.
 	 */
@@ -101,7 +100,6 @@ public class DefaultJdoDialect implements JdoDialect, PersistenceExceptionTransl
 	public SQLExceptionTranslator getJdbcExceptionTranslator() {
 		return this.jdbcExceptionTranslator;
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Hooks for transaction management (used by JdoTransactionManager)
@@ -198,7 +196,6 @@ public class DefaultJdoDialect implements JdoDialect, PersistenceExceptionTransl
 			throws JDOException, SQLException {
 	}
 
-
 	//-----------------------------------------------------------------------------------
 	// Hook for exception translation (used by JdoTransactionManager)
 	//-----------------------------------------------------------------------------------
@@ -242,7 +239,6 @@ public class DefaultJdoDialect implements JdoDialect, PersistenceExceptionTransl
 	protected String extractSqlStringFromException(JDOException ex) {
 		return null;
 	}
-
 
 	/**
 	 * ConnectionHandle implementation that fetches a new JDO DataStoreConnection

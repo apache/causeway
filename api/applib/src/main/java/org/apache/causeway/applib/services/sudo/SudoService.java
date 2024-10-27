@@ -81,7 +81,6 @@ public class SudoService {
                     SudoService.class.getName() + "#accessAll",
                     "Sudo, can view and use all object members.");
 
-
     private final InteractionService interactionService;
     private final InteractionLayerTracker interactionLayerTracker;
     private final List<SudoServiceListener> sudoListeners;

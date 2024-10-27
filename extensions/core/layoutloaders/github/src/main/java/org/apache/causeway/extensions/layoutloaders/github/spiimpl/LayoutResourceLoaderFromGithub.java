@@ -45,7 +45,6 @@ import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGit
 
 import lombok.NonNull;
 
-
 @Service
 @Named(CausewayModuleExtLayoutLoadersGithub.NAMESPACE + ".LayoutResourceLoaderFromGithub")
 @Priority(PriorityPrecedence.MIDPOINT - 100)
@@ -137,4 +136,3 @@ public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
     }
 
 }
-

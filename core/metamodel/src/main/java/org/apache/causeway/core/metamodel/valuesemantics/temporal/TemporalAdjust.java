@@ -89,7 +89,6 @@ public class TemporalAdjust {
         throw _Exceptions.unsupportedOperation();
     }
 
-
     public LocalDate adjustLocalDate(final LocalDate temporal) {
         if(hours != 0 || minutes != 0) {
             throw noTime(temporal);

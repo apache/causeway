@@ -59,7 +59,6 @@ public interface SchemaStrategy {
         return context.domainServiceByTypeName.computeIfAbsent(typeNameFor, typeName -> new CommonDomainService(this, typeName, objectSpecification, servicePojo, context));
     }
 
-
     String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration);
 
     Element newProperty(

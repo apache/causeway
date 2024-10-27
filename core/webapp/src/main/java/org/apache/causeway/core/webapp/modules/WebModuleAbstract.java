@@ -46,7 +46,6 @@ public abstract class WebModuleAbstract implements WebModule {
         this.webModuleContext = ctx;
     }
 
-
     protected Optional<FilterRegistration.Dynamic> registerFilter(
             final ServletContext ctx,
             final String filterName,

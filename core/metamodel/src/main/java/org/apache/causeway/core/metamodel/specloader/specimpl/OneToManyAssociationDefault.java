@@ -125,7 +125,6 @@ implements OneToManyAssociation {
         return CollectionFacet.elementCount(collection) == 0;
     }
 
-
     // -- defaults
     @Override
     public ManagedObject getDefault(final ManagedObject ownerAdapter) {
@@ -135,7 +134,6 @@ implements OneToManyAssociation {
     @Override
     public void toDefault(final ManagedObject ownerAdapter) {
     }
-
 
     // -- choices & autoComplete
 
@@ -151,7 +149,6 @@ implements OneToManyAssociation {
     public boolean hasChoices() {
         return false;
     }
-
 
     @Override
     public boolean hasAutoComplete() {

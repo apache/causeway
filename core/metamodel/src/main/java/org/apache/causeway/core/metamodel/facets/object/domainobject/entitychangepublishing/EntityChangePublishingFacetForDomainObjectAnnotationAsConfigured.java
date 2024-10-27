@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 
 public class EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured extends EntityChangePublishingFacetForDomainObjectAnnotation {
 

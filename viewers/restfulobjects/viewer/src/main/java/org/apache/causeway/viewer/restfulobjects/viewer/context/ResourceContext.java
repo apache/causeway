@@ -58,7 +58,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-
 public class ResourceContext
 implements IResourceContext {
 
@@ -197,7 +196,6 @@ implements IResourceContext {
         return true;
     }
 
-
     public <Q> Q getArg(final RequestParameter<Q> requestParameter) {
         final JsonRepresentation queryStringJsonRepr = getQueryStringAsJsonRepr();
         return requestParameter.valueOf(queryStringJsonRepr);
@@ -247,7 +245,6 @@ implements IResourceContext {
     public List<MediaType> getAcceptableMediaTypes() {
         return httpHeaders.getAcceptableMediaTypes();
     }
-
 
     @Getter(onMethod = @__(@Override))
     @Setter //(onMethod = @__(@Override))

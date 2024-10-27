@@ -89,18 +89,15 @@ public class ApplicationRole
     @Version
     private Long version;
 
-
     @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
     @Name
     @Getter @Setter
     private String name;
 
-
     @Column(nullable = Description.NULLABLE, length = Description.MAX_LENGTH)
     @Description
     @Getter @Setter
     private String description;
-
 
     @ManyToMany(mappedBy = Users.MAPPED_BY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @Users
@@ -115,6 +112,5 @@ public class ApplicationRole
     public void addToUsers(final ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
     }
-
 
 }

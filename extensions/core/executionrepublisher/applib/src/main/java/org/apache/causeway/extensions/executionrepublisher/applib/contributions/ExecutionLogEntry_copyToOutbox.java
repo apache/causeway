@@ -64,7 +64,6 @@ public class ExecutionLogEntry_copyToOutbox {
 
     private final ExecutionLogEntry executionLogEntry;
 
-
     public static class ActionDomainEvent extends CausewayModuleExtExecutionRepublisherApplib.ActionDomainEvent<ExecutionLogEntry_copyToOutbox> { }
 
     @MemberSupport public ExecutionLogEntry act() {

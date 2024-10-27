@@ -85,5 +85,4 @@ public class PojoTester_datatypes_applib_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

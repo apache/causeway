@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.home;
 
-
-
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
 
@@ -31,7 +29,6 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 public class HomePage_IntegTest extends Abstract_IntegTest {
 

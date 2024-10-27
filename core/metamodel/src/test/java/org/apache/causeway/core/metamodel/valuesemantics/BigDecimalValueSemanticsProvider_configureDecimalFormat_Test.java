@@ -63,7 +63,6 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         // expecting
         Mockito.lenient().when(mockSpecificationLoader.loadFeature(mockIdentifier)).thenReturn(Optional.of(mockObjectFeature));
 
-
         valueSemantics = new BigDecimalValueSemantics();
         valueSemantics.setSpecificationLoader(mockSpecificationLoader);
         valueSemantics.setCausewayConfiguration(causewayConfiguration);
@@ -113,7 +112,6 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(fallbackScale);
     }
 
-
     @Test
     void min_facets_not_set_and_no_fallback() {
 
@@ -136,6 +134,5 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Assertions.assertThat(format.getMaximumFractionDigits()).isEqualTo(maxScale);
         Assertions.assertThat(format.getMinimumFractionDigits()).isEqualTo(defaultScale);
     }
-
 
 }

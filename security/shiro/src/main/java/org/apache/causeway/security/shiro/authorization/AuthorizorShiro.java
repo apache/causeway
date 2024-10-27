@@ -98,5 +98,4 @@ public class AuthorizorShiro implements Authorizor {
         return ShiroSecurityContext.getSecurityManager();
     }
 
-
 }

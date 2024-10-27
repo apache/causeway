@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Value;
 
-
 @Service
 public class ValueTypeExampleService {
 

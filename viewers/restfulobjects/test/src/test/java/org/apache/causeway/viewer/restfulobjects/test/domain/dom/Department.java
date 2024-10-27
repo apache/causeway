@@ -54,7 +54,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-
 @Entity
 @Table(
         schema = "public",
@@ -103,8 +102,6 @@ public class Department implements Comparable<Department> {
         }
     }
 
-
-
     @Getter @Setter
     @Property(editing = Editing.ENABLED) // yes, I know: this duplicates the functionality of changeDeptHead action
     @OneToOne(optional = true)
@@ -118,7 +115,6 @@ public class Department implements Comparable<Department> {
                 .filter(x -> x != getDeptHead())
                 .collect(Collectors.toList());
     }
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "deptHead")
@@ -137,7 +133,6 @@ public class Department implements Comparable<Department> {
             return null;
         }
     }
-
 
     @OneToMany(mappedBy = "department")
     private Set<StaffMember> staffMembers = new TreeSet<>();
@@ -182,7 +177,6 @@ public class Department implements Comparable<Department> {
         @Inject
         StaffMemberRepository staffMemberRepository;
     }
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(associateWith = "staffMembers")

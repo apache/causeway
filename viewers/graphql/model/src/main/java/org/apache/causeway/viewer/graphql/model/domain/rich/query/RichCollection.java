@@ -62,7 +62,6 @@ public class RichCollection
         return interactor.getObjectSpecification();
     }
 
-
     @Override
     protected void addDataFetchersForChildren() {
         if(hidden == null) {

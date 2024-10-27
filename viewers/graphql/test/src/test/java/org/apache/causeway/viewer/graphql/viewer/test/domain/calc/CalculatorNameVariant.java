@@ -149,7 +149,6 @@ public class CalculatorNameVariant {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     public boolean and(final boolean x, final boolean y) {
         return x & y;

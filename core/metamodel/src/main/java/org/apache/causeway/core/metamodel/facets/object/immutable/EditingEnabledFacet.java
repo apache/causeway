@@ -34,5 +34,4 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
  */
 public interface EditingEnabledFacet extends Facet {
 
-
 }

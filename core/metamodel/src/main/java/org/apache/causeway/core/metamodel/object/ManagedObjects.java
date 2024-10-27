@@ -207,7 +207,6 @@ public final class ManagedObjects {
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot stringify %s", managedObject));
     }
 
-
     /**
      *
      * @param managedObject
@@ -237,7 +236,6 @@ public final class ManagedObjects {
                         ? managedObject.getSpecification().getLogicalTypeName() + separator + "?"
                         : "?" + separator + "?");
     }
-
 
     // -- PACKING
 

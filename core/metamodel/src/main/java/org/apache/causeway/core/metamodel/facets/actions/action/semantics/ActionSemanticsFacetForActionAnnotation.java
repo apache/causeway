@@ -44,5 +44,4 @@ public class ActionSemanticsFacetForActionAnnotation extends ActionSemanticsFace
         super(of, holder);
     }
 
-
 }

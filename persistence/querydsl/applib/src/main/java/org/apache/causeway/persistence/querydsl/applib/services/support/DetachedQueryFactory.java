@@ -62,7 +62,6 @@ public interface DetachedQueryFactory {
         return select(exprs).distinct();
     }
 
-
     /**
      * Create a new detached {@link DslQuery} instance with the given projection 0
      *

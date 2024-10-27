@@ -31,7 +31,6 @@ import org.apache.causeway.security.spring.authconverters.AuthenticationConverte
 
 import lombok.NonNull;
 
-
 /**
  * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.
  */

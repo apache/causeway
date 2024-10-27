@@ -107,7 +107,6 @@ public final class MmUnwrapUtils {
                 .collect(_Lists.toUnmodifiable());
     }
 
-
     /**
      *
      * @param adapters

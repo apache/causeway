@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 
-
-
 public class ScenarioStep
         extends ElementCustom
         implements Parent {
@@ -75,8 +73,6 @@ public class ScenarioStep
 
         buildObjectType();
     }
-
-
 
     protected void addDataFetchersForChildren() {
         domainServices.forEach(domainService -> {

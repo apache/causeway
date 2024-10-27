@@ -32,7 +32,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 
 class ComparatorsTest {
 
-
     @Test
     void nullArgumentLeftAndRigth() throws Exception {
         assertEquals(0,
@@ -66,7 +65,6 @@ class ComparatorsTest {
                 ofL("1", "b")
                 );
     }
-
 
     @Test
     void emptySet() throws Exception {

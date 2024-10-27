@@ -130,7 +130,6 @@ public final class LocalResourcePath implements Serializable {
         }
     }
 
-
     public static class JaxbToStringAdapter extends XmlAdapter<String, LocalResourcePath> {
         @Override
         public LocalResourcePath unmarshal(final String path) {

@@ -50,7 +50,6 @@ import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;
 
-
 /**
  *
  * @since 2.0 {@index}
@@ -67,7 +66,6 @@ implements ApplicationUserRepository {
 
     // empty if no candidate is available
     @Autowired(required = false) @Qualifier("Secman") PasswordEncoder passwordEncoder;
-
 
     private final Class<U> applicationUserClass;
 
@@ -139,7 +137,6 @@ implements ApplicationUserRepository {
                 .stream()
                 .collect(_Sets.toUnmodifiableSorted());
     }
-
 
     // -- allUsers
 
@@ -246,6 +243,5 @@ implements ApplicationUserRepository {
         return user.isLocalAccount()
                 && passwordEncoder != null;
     }
-
 
 }

@@ -83,5 +83,4 @@ public class Object_openOnSecondary {
         return primaryConfig.getSecondaryBaseUrlWicket() + "entity/";
     }
 
-
 }

@@ -55,7 +55,6 @@ public class ScalarMapperUsingScalarMarshallers implements ScalarMapper {
 
     private final List<ScalarMarshaller<?>> scalarMarshallers;
 
-
     /**
      * Lazily populated cache
      */

@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 
 import lombok.Getter;
 
-
 public class ScalarValueReprRenderer
 extends ReprRendererAbstract<ManagedObject>
 implements HasObjectFeature {

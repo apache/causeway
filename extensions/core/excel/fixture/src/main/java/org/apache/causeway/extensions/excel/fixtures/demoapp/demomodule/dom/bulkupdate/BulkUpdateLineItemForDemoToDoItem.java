@@ -103,7 +103,6 @@ public class BulkUpdateLineItemForDemoToDoItem
         setOwnedBy(toDoItem.getOwnedBy());
     }
 
-
     @Getter @Setter
     private String description;
 
@@ -128,7 +127,6 @@ public class BulkUpdateLineItemForDemoToDoItem
 
     @Getter @Setter
     private String notes;
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public ExcelDemoToDoItem apply() {
@@ -165,7 +163,6 @@ public class BulkUpdateLineItemForDemoToDoItem
     public int compareTo(final BulkUpdateLineItemForDemoToDoItem other) {
         return this.toDoItem.compareTo(other.toDoItem);
     }
-
 
     @XmlTransient @Inject BulkUpdateMenuForDemoToDoItem toDoItemExportImportService;
     @XmlTransient @Inject ExcelDemoToDoItemMenu toDoItems;

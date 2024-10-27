@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
-
 /**
  * Media types including the <tt>profile</tt> parameter.
  *
@@ -69,7 +68,6 @@ public final class RestfulMediaType {
 
     public static final String APPLICATION_JSON_LAYOUT_MENUBARS = JSON_BASE + "layout-menubars" + DQ;
     public static final String APPLICATION_XML_LAYOUT_MENUBARS = XML_BASE + "layout-menubars" + DQ;
-
 
     // currently only support a subset of representations in XML format
 

@@ -113,7 +113,6 @@ implements HasLogicalType {
         };
     }
 
-
     // -- bug in wicket 8.8.0 -------------------------------------------
 
     private boolean workaround;
@@ -137,7 +136,5 @@ implements HasLogicalType {
     }
 
     // ------------------------------------------------------------------
-
-
 
 }

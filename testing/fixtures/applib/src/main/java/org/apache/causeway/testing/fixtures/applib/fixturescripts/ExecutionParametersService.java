@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
-
 /**
  * Acts as a factory by the {@link FixtureScripts} when
  * instantiating the {@link FixtureScript.ExecutionContext}, to return an

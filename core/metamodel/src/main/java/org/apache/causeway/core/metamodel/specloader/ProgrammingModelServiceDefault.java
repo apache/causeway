@@ -79,7 +79,6 @@ implements ProgrammingModelService {
             var validatorCount = programmingModel.streamValidators().count();
             var postProcessorCount = programmingModel.streamPostProcessors().count();
 
-
             log.info("Collected after asking {} refiners, and passing filter '{}':",
                     refinerCount,
                     programmingModelInitFilter.getClass());

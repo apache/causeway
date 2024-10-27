@@ -58,7 +58,6 @@ public final class WebModuleServerSentEvents extends WebModuleAbstract {
         super(serviceInjector);
     }
 
-
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
 
@@ -70,6 +69,5 @@ public final class WebModuleServerSentEvents extends WebModuleAbstract {
 
         return Can.empty(); // registers no listeners
     }
-
 
 }

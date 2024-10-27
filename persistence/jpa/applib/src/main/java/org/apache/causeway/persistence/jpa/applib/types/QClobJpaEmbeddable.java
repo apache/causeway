@@ -26,7 +26,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
 
-
 /**
  * QClobJpaEmbeddable is a Querydsl query type for ClobJpaEmbeddable
  *
@@ -68,4 +67,3 @@ public class QClobJpaEmbeddable extends BeanPath<ClobJpaEmbeddable> {
     }
 
 }
-

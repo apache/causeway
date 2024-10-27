@@ -32,7 +32,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
 
-
 @Configuration
 @Import({
         // modules

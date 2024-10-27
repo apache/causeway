@@ -181,7 +181,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
                 :null;
     }
 
-
     @Override
     public List<AuditTrailEntry> findMostRecent() {
         return findMostRecent(100);
@@ -268,7 +267,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
-
     @Override
     public List<AuditTrailEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
@@ -279,8 +277,6 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
                 )
         );
     }
-
-
 
     /**
      * intended for testing only
@@ -307,6 +303,5 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
         }
         repositoryService.removeAll(auditTrailEntryClass);
     }
-
 
 }

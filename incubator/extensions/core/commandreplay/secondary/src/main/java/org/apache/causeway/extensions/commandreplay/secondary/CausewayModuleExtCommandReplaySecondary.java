@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary;
 
-
 import javax.inject.Inject;
 
 import org.quartz.JobDetail;

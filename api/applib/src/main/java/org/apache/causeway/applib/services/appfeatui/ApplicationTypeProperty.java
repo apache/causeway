@@ -59,8 +59,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         super(memento);
     }
 
-
-
     // -- returnType
 
     @ApplicationFeatureViewModel.TypeSimpleName
@@ -88,8 +86,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
                 .orElse("<none>");
     }
 
-
-
     // -- derived
 
     @Property(
@@ -109,8 +105,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }
-
-
 
     // -- maxLength
 
@@ -142,8 +136,6 @@ public class ApplicationTypeProperty extends ApplicationTypeMember {
         }
         return !String.class.getSimpleName().equals(getReturnType());
     }
-
-
 
     // -- typicalLength
 

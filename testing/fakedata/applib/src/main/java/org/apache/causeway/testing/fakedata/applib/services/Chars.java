@@ -67,5 +67,4 @@ public class Chars extends AbstractRandomValueGenerator {
         return (char) i;
     }
 
-
 }

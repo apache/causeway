@@ -59,7 +59,6 @@ public class PageRenderDomainObjectLogger implements PageRenderSubscriber {
         return log.isDebugEnabled();
     }
 
-
     private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
 
     @Override
@@ -79,6 +78,5 @@ public class PageRenderDomainObjectLogger implements PageRenderSubscriber {
             log.info("rendered object: [ \"{}\" ]  user: {}  took: {}ms  numEntitiesLoaded: {}", bookmark.stringify(), userService.currentUserNameElseNobody(), timing.took(), metricsService.numberEntitiesLoaded());
         }
     }
-
 
 }

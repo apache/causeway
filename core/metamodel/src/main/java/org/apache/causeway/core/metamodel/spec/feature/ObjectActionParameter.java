@@ -112,7 +112,6 @@ extends ObjectFeature, CurrentHolder {
             int position,
             InteractionInitiatedBy interactionInitiatedBy);
 
-
     /**
      * Whether there is an autoComplete provided (eg <tt>autoCompleteXxx</tt> supporting
      * method) for the parameter.
@@ -133,8 +132,6 @@ extends ObjectFeature, CurrentHolder {
             ParameterNegotiationModel pendingArgs,
             String searchArg,
             InteractionInitiatedBy interactionInitiatedBy);
-
-
 
     int getAutoCompleteMinLength();
     /**

@@ -31,5 +31,4 @@ package org.apache.causeway.applib.layout.component;
  */
 public interface MemberRegion<T extends MemberRegionOwner> extends Owned<T> {
 
-
 }

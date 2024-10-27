@@ -64,7 +64,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import lombok.Getter;
 import lombok.Setter;
 
-
 /**
  * View model identified by {@link ApplicationFeatureId} and backed by an
  * {@link ApplicationFeature}.
@@ -82,7 +81,6 @@ public class UserPermissionViewModel implements ViewModel {
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".UserPermissionViewModel";
 
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<UserPermissionViewModel, T> {}
-
 
     @Inject ApplicationUserRepository applicationUserRepository;
     @Inject FactoryService factory;
@@ -102,7 +100,6 @@ public class UserPermissionViewModel implements ViewModel {
     public UserPermissionViewModel() {
         setFeatureId(ApplicationFeatureId.NAMESPACE_DEFAULT);
     }
-
 
     // -- identification
 
@@ -187,7 +184,6 @@ public class UserPermissionViewModel implements ViewModel {
         this.viewingRule = !viewingEvaluationCauseRule.isEmpty()? ApplicationPermissionRule.valueOf(viewingEvaluationCauseRule): null;
         final String viewingEvaluationCauseMode = iterator.next();
         this.viewingMode = !viewingEvaluationCauseMode.isEmpty()? ApplicationPermissionMode.valueOf(viewingEvaluationCauseMode): null;
-
 
         this.changingGranted = Boolean.parseBoolean(iterator.next());
         final String changingEvaluationCauseFeatureIdType = iterator.next();

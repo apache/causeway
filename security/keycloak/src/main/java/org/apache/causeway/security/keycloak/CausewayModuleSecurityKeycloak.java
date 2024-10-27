@@ -55,7 +55,6 @@ import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Configuration Bean to support Causeway Security using Keycloak.
  *
@@ -88,7 +87,6 @@ public class CausewayModuleSecurityKeycloak {
         return new KeycloakWebSecurityConfigurerAdapter(keycloakOidcUserService, logoutHandlers, causewayConfiguration
         );
     }
-
 
     @Bean
     KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration causewayConfiguration) {
@@ -172,6 +170,4 @@ public class CausewayModuleSecurityKeycloak {
         return decoder;
     }
 
-
 }
-

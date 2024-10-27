@@ -101,5 +101,4 @@ public class AopPatch implements ApplicationContextAware {
         return interceptor;
     }
 
-
 }

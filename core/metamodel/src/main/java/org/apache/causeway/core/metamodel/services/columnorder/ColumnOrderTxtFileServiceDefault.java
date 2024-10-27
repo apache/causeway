@@ -63,7 +63,6 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
         return zipBuilder.toBytes();
     }
 
-
     // HELPERS
 
     private void addStandaloneEntry(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {

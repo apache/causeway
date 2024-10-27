@@ -144,5 +144,4 @@ public class LocalizerForCauseway extends Localizer {
         return translationService.translate(context, key);
     }
 
-
 }

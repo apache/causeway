@@ -72,5 +72,4 @@ public class JavaTimeLocalDates extends AbstractRandomValueGenerator {
         return fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
     }
 
-
 }

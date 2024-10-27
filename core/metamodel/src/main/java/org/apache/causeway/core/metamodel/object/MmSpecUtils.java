@@ -137,5 +137,4 @@ public final class MmSpecUtils {
                 "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript");
     }
 
-
 }

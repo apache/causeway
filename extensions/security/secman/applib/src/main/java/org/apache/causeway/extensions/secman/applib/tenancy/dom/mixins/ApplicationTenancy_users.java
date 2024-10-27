@@ -46,7 +46,6 @@ public class ApplicationTenancy_users {
 
     private final ApplicationTenancy target;
 
-
     public static class DomainEvent
             extends CollectionDomainEvent<ApplicationUser> {}
 

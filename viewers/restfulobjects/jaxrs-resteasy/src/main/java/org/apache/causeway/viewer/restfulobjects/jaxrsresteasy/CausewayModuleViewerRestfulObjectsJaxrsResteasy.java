@@ -39,7 +39,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
         // @Component's
         RestfulObjectsJaxbWriterForXml.class,
 
-
 })
 public class CausewayModuleViewerRestfulObjectsJaxrsResteasy {
 

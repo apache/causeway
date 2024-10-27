@@ -43,8 +43,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
-
-
 public class TenantedAuthorizationPostProcessor
 extends MetaModelPostProcessorAbstract {
 

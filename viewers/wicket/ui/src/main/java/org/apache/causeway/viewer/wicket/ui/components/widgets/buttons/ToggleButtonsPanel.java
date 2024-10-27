@@ -147,5 +147,4 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
         }
     }
 
-
 }

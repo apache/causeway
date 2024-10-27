@@ -53,7 +53,6 @@ public class RichActionParamsParamHidden extends Element {
         setField(fieldBuilder.build());
     }
 
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

@@ -57,7 +57,6 @@ import org.apache.causeway.extensions.secman.delegated.shiro.util.ShiroUtils;
 import lombok.Getter;
 import lombok.Setter;
 
-
 /**
  * @since 2.0 {@index}
  */
@@ -96,7 +95,6 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         var usernamePasswordToken = (UsernamePasswordToken) token;
         var username = usernamePasswordToken.getUsername();
         var password = usernamePasswordToken.getPassword();
-
 
         // this code block is just an optimization, entirely optional
         {
@@ -168,7 +166,6 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
         return principals.oneByType(PrincipalForApplicationUser.class);
     }
-
 
     // -- HELPER
 
@@ -259,7 +256,6 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         });
     }
 
-
     private static enum CheckPasswordResult {
         OK,
         BAD_PASSWORD,
@@ -304,6 +300,5 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         var txTemplate = new TransactionTemplate(txMan);
         return txTemplate.execute(status->closure.get());
     }
-
 
 }

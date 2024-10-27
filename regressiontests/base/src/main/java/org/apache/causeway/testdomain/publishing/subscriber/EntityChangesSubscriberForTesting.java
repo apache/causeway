@@ -32,7 +32,6 @@ import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -98,6 +97,5 @@ implements EntityChangesSubscriber {
         var publishedObjects = getPublishedObjects(kvStore);
         return publishedObjects.stream().mapToInt(EntityChanges::getNumberPropertiesModified).sum();
     }
-
 
 }

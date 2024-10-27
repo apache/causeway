@@ -106,7 +106,6 @@ class WrapperFactoryDefaultTest {
         assertThat(createProxyCalledWithSyncControl, is(not(nullValue())));
     }
 
-
     @Test
     public void wrap_ofWrapped_sameMode_returnsUnchanged() throws Exception {
         // given

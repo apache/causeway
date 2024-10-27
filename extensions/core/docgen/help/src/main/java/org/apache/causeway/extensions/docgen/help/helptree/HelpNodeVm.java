@@ -122,7 +122,6 @@ public class HelpNodeVm implements ViewModel {
     @Getter(lazy = true)
     private final AsciiDoc helpContent = helpNode.getContent();
 
-
     @Override
     public String viewModelMemento() {
         return helpNode.getPath().stringify(PATH_DELIMITER);

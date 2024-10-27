@@ -136,5 +136,4 @@ extends FacetFactoryTestAbstract {
 
     }
 
-
 }

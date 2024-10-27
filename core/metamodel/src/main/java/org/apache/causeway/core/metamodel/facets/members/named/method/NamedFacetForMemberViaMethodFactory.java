@@ -49,5 +49,4 @@ extends MemberSupportFacetFactoryAbstract {
         });
     }
 
-
 }

@@ -33,7 +33,6 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
  */
 public interface MessageService {
 
-
     /**
      * Make the specified message available to the user, intended to be useful
      * but optional information, for a viewer to display typically in a

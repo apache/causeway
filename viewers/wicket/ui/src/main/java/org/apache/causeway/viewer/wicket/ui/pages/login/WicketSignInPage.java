@@ -66,7 +66,6 @@ public class WicketSignInPage extends AccountManagementPageAbstract {
                 SignInPanelAbstract.getJsForTimezoneSelectDefault()));
     }
 
-
     protected CausewaySignInPanel createSignInPanel() {
 
         final boolean rememberMeSuppress = getWicketViewerSettings().getRememberMe().isSuppress();

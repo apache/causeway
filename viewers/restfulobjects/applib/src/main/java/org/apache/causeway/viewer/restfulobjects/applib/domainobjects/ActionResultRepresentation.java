@@ -25,7 +25,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * @since 1.x {@index}
  */

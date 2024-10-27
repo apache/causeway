@@ -45,9 +45,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 
-
-
-
 /**
  * @since 1.x {@index}
  */
@@ -101,9 +98,6 @@ public class SwaggerServiceMenu {
         @MemberSupport public String disableAct() { return disableReasonWhenRequiresROViewer(); }
     }
 
-
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = openRestApi.ActionDomainEvent.class,
@@ -126,8 +120,6 @@ public class SwaggerServiceMenu {
         @MemberSupport public String disableAct() { return disableReasonWhenRequiresROViewer(); }
 
     }
-
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -159,7 +151,6 @@ public class SwaggerServiceMenu {
         @MemberSupport public Visibility default1Act() { return Visibility.PRIVATE; }
         @MemberSupport public Format default2Act() { return Format.YAML; }
     }
-
 
     // -- HELPER
     @Programmatic String disableReasonWhenRequiresROViewer() {

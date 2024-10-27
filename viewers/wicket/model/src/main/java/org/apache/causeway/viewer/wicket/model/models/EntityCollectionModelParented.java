@@ -29,7 +29,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTable
 import lombok.Getter;
 import lombok.NonNull;
 
-
 public class EntityCollectionModelParented
 extends EntityCollectionModelAbstract
 implements

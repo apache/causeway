@@ -51,7 +51,6 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 })
 public class Configuration_headless {
 
-
     @Bean @Singleton
     public PlatformTransactionManager platformTransactionManager() {
         return new AbstractPlatformTransactionManager() {

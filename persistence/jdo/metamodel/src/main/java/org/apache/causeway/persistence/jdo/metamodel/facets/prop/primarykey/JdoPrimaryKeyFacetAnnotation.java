@@ -20,7 +20,6 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-
 public class JdoPrimaryKeyFacetAnnotation extends JdoPrimaryKeyFacetImpl {
 
     public JdoPrimaryKeyFacetAnnotation(final FacetHolder holder) {

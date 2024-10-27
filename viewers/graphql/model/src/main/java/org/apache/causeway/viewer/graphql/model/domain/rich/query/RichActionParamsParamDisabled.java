@@ -35,7 +35,6 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.extern.log4j.Log4j2;
 
-
 @Log4j2
 public class RichActionParamsParamDisabled extends Element {
 

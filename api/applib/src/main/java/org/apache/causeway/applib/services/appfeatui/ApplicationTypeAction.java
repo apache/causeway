@@ -58,7 +58,6 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
         super(memento);
     }
 
-
     // -- returnTypeName (property)
 
     @ApplicationFeatureViewModel.TypeSimpleName
@@ -85,7 +84,6 @@ public class ApplicationTypeAction extends ApplicationTypeMember {
                 .map(Class::getSimpleName)
                 .orElse("<none>");
     }
-
 
     // -- actionSemantics (property)
 

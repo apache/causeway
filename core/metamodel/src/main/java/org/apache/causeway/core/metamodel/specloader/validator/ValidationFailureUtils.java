@@ -43,7 +43,6 @@ public final class ValidationFailureUtils {
                     .buildMessage());
     }
 
-
     public void raiseMemberIdClash(
             final ObjectSpecification declaringType,
             final ObjectMember memberA,

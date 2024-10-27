@@ -29,7 +29,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.NonNull;
 
-
 /**
  * Converts value representing {@link ManagedObject}s to their corresponding JSON representation
  * and back.

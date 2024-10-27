@@ -30,7 +30,6 @@ import org.apache.causeway.commons.internal.functions._Functions;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 public class InlinePromptContext implements Serializable {
 
@@ -62,6 +61,5 @@ public class InlinePromptContext implements Serializable {
         scalarIfRegularInlinePromptForm.setVisible(false);
 
     }
-
 
 }

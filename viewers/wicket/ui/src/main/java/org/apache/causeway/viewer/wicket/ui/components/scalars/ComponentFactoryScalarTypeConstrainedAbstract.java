@@ -47,7 +47,6 @@ extends ComponentFactoryScalarAbstract {
         this.scalarTypes = scalarTypes;
     }
 
-
     @Override
     protected final ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
 

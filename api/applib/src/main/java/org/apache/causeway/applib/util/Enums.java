@@ -44,7 +44,6 @@ public final class Enums {
                 .collect(Collectors.joining(" "));
     }
 
-
     public static String getEnumNameFromFriendly(final String anEnumFriendlyName) {
         return _Strings.splitThenStream(anEnumFriendlyName, " ")
                 .map(_Strings::upper)
@@ -106,6 +105,5 @@ public final class Enums {
         }
         return Optional.empty();
     }
-
 
 }

@@ -114,7 +114,6 @@ public class DateTimeConfig extends AbstractConfig {
      */
     private static final IKey<String> MaxDate = newKey("maxDate", null);
 
-
 //    /**
 //     * The two-letter code of the language to use for month and day names.
 //     * These will also be used as the input's value (and subsequently sent to the
@@ -135,7 +134,6 @@ public class DateTimeConfig extends AbstractConfig {
         put(Locale, locale.getLanguage());
         return this;
     }
-
 
     /**
      * The date format, combination of d, dd, m, mm, M, MM, yy, yyyy.
@@ -390,7 +388,6 @@ public class DateTimeConfig extends AbstractConfig {
         put(AutoClose, value);
         return this;
     }
-
 
     /**
      * Sets buttons.

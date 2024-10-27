@@ -32,7 +32,6 @@ class NamedQueryTest_withStart_or_withCount {
     private NamedQuery<Customer> namedQuery;
     private final static long UNLIMITED = 0L;
 
-
     static class Customer {}
 
     @BeforeEach
@@ -143,6 +142,5 @@ class NamedQueryTest_withStart_or_withCount {
         assertFalse(range.hasLimit());
 
     }
-
 
 }

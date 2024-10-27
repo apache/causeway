@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
 
-
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 

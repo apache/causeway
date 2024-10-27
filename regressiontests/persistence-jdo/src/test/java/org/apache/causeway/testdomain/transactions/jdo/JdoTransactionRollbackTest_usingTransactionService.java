@@ -38,8 +38,6 @@ import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
@@ -104,6 +102,5 @@ class JdoTransactionRollbackTest_usingTransactionService {
         });
 
     }
-
 
 }

@@ -30,5 +30,4 @@ public class JavaTimeJaxbAdapters_OffsetTimeAdapter_Test extends JaxbXmlAdapters
         );
     }
 
-
 }

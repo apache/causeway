@@ -29,7 +29,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import javax.validation.ConstraintValidator;
 
-
 @Documented
 @ConstraintValidator(CustomPatternValidator.class)
 @Target( { METHOD, FIELD })

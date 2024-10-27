@@ -39,7 +39,6 @@ public class SuccessFeedbackCookieManager {
      */
     static final String FEEDBACK_COOKIE_NAME = "causeway.feedback.success";
 
-
     /**
      * Store a cookie with name {@value #FEEDBACK_COOKIE_NAME} that is
      * used as a temporary container for stateless session scoped success feedback

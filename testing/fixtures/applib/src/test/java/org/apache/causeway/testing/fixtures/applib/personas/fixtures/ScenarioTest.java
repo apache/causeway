@@ -22,9 +22,7 @@ package org.apache.causeway.testing.fixtures.applib.personas.fixtures;
 
 import org.apache.causeway.testing.fixtures.applib.setup.PersonaEnumPersistAll;
 
-
 public class ScenarioTest {
-
 
     void setup() {
         var persistAll = new PersonaEnumPersistAll<>(Person_persona.class);

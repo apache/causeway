@@ -57,5 +57,4 @@ public class PojoTester_datatypes_bean_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

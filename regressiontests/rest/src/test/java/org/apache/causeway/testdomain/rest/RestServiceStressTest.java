@@ -41,7 +41,6 @@ import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIf
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(

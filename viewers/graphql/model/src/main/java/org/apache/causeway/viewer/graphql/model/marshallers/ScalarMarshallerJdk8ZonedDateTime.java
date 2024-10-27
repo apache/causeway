@@ -32,7 +32,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8ZonedDateTime extends ScalarMarshallerAbstract<ZonedDateTime> {

@@ -50,7 +50,6 @@ public interface ExecutionLogEntryRepository {
         }
     }
 
-
     ExecutionLogEntry createEntryAndPersist(final Execution execution);
 
     List<ExecutionLogEntry> findByInteractionId(final UUID interactionId);
@@ -83,12 +82,10 @@ public interface ExecutionLogEntryRepository {
 
     List<ExecutionLogEntry> findRecentByTarget(final Bookmark target);
 
-
     /**
      * intended for testing purposes only
      */
     List<ExecutionLogEntry> findAll();
-
 
     /**
      * intended for testing purposes only

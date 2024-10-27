@@ -26,7 +26,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityFacet;
 
-
 public class JdoDatastoreIdentityFacetAnnotation
 extends JdoDatastoreIdentityFacetAbstract {
 

@@ -39,8 +39,6 @@ import lombok.val;
 
 class ShiroSimpleTest extends AbstractShiroTest {
     
-    
-
     @BeforeAll
     static void beforeClass() {
         
@@ -71,7 +69,6 @@ class ShiroSimpleTest extends AbstractShiroTest {
         clearSubject();    	
     }
 
-
     @Test
     void loginLogoutRoundtrip() {
 
@@ -90,6 +87,5 @@ class ShiroSimpleTest extends AbstractShiroTest {
         assertFalse(subject.isAuthenticated());
 
     }
-
 
 }

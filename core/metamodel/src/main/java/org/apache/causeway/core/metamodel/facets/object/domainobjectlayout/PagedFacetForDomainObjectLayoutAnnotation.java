@@ -33,7 +33,6 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final FacetHolder holder) {
 
-
         var tableDecoratorFacet = holder.getFacet(TableDecoratorFacet.class);
         if (TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value())) {
             return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));

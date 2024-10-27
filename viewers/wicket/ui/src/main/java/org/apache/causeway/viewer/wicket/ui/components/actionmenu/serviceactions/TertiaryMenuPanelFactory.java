@@ -63,5 +63,4 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         return new TertiaryActionsPanel(id, menuItems);
     }
 
-
 }

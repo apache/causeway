@@ -32,7 +32,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-
 /**
  * Represents a nullable scalar value,
  * as used by ContentNegotiationServiceOrgApacheCausewayV2 and its clients.
@@ -58,7 +57,6 @@ public final class ScalarValueDtoV2 {
 
     private String type;
     private Object value;
-
 
     @JsonIgnore
     public boolean isNull() {

@@ -49,5 +49,4 @@ extends CommandDtoValueSemantics {
         return SyntaxHighlighter.PRISM_DEFAULT;
     }
 
-
 }

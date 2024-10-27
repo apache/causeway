@@ -65,6 +65,4 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
         return super.getManagedMemberElseThrow(onFailure);
     }
 
-
 }
-

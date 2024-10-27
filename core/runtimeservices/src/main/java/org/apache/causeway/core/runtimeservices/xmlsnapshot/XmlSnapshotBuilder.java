@@ -95,5 +95,4 @@ public class XmlSnapshotBuilder {
         return snapshot;
     }
 
-
 }

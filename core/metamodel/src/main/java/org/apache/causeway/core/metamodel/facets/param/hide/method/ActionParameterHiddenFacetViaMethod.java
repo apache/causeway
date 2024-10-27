@@ -89,5 +89,4 @@ implements ImperativeFacet {
         ImperativeFacet.visitAttributes(this, visitor);
     }
 
-
 }

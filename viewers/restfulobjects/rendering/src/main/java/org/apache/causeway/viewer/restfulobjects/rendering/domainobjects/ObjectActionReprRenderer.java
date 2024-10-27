@@ -39,8 +39,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
-
-
 public class ObjectActionReprRenderer
 extends AbstractObjectMemberReprRenderer<ObjectAction> {
 

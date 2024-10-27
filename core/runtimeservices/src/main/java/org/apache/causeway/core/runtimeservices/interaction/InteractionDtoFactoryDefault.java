@@ -122,7 +122,6 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         return actionInvocationDto;
     }
 
-
     @Override
     public PropertyEditDto asPropertyEditDto(
             final OneToOneAssociation property,

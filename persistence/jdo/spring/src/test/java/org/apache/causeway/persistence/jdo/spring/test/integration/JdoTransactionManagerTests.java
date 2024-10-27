@@ -76,7 +76,6 @@ class JdoTransactionManagerTests {
 	private PersistenceManager pm;
 	private Transaction tx;
 
-
 	@BeforeEach
 	void setUp() {
 	    //mmc = mock(MetaModelContext.class);

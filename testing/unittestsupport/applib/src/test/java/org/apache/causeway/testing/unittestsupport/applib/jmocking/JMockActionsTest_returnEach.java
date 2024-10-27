@@ -65,5 +65,4 @@ public class JMockActionsTest_returnEach {
         }
     }
 
-
 }

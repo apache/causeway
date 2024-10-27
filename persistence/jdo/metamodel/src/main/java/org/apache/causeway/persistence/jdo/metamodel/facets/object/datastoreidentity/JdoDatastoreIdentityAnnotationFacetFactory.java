@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.datastoreidentity;
 
-
 import javax.inject.Inject;
 import javax.jdo.annotations.DatastoreIdentity;
 
@@ -27,8 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
-
-
 
 public class JdoDatastoreIdentityAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -59,6 +56,5 @@ extends FacetFactoryAbstract {
                 .create(datastoreIdentityIfAny, processClassContext.getFacetHolder()));
 
     }
-
 
 }

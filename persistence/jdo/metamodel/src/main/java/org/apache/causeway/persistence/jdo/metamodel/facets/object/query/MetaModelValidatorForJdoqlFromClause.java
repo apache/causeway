@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-
-
 class MetaModelValidatorForJdoqlFromClause
 extends MetaModelValidatorForJdoqlAbstract {
 
@@ -89,6 +87,5 @@ extends MetaModelValidatorForJdoqlAbstract {
                         query)
                 );
     }
-
 
 }

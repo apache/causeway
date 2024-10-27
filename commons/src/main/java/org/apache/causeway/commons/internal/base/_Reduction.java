@@ -49,7 +49,6 @@ public final class _Reduction<T> implements Consumer<T> {
     private T result;
     private boolean initialized = false;
 
-
     /**
      * Inspired by {@link Stream#reduce(Object, BinaryOperator)}
      * @param identity
@@ -93,6 +92,5 @@ public final class _Reduction<T> implements Consumer<T> {
         }
         return Optional.ofNullable(result);
     }
-
 
 }

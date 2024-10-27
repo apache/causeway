@@ -58,7 +58,6 @@ import lombok.Setter;
         )
 public class ServiceActionLayoutData implements Serializable {
 
-
     private static final long serialVersionUID = 1L;
 
     public ServiceActionLayoutData() {
@@ -81,7 +80,6 @@ public class ServiceActionLayoutData implements Serializable {
         setLogicalTypeName(objectType);
     }
 
-
     private String id;
     /**
      * Method name.
@@ -99,8 +97,6 @@ public class ServiceActionLayoutData implements Serializable {
         this.id = id;
     }
 
-
-
     private BookmarkPolicy bookmarking;
 
     @XmlAttribute(required = false)
@@ -111,7 +107,6 @@ public class ServiceActionLayoutData implements Serializable {
     public void setBookmarking(BookmarkPolicy bookmarking) {
         this.bookmarking = bookmarking;
     }
-
 
     private String cssClass;
 
@@ -124,7 +119,6 @@ public class ServiceActionLayoutData implements Serializable {
         this.cssClass = cssClass;
     }
 
-
     private String cssClassFa;
 
     @XmlAttribute(required = false)
@@ -135,9 +129,6 @@ public class ServiceActionLayoutData implements Serializable {
     public void setCssClassFa(String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
-
-
-
 
     private String describedAs;
 
@@ -150,8 +141,6 @@ public class ServiceActionLayoutData implements Serializable {
         this.describedAs = describedAs;
     }
 
-
-
     private String named;
 
     @XmlElement(required = false)
@@ -163,8 +152,6 @@ public class ServiceActionLayoutData implements Serializable {
         this.named = named;
     }
 
-
-
     private Boolean namedEscaped;
 
     @XmlAttribute(required = false)
@@ -175,9 +162,6 @@ public class ServiceActionLayoutData implements Serializable {
     public void setNamedEscaped(Boolean namedEscaped) {
         this.namedEscaped = namedEscaped;
     }
-
-
-
 
     private ServiceActionLayoutDataOwner owner;
     /**
@@ -196,7 +180,6 @@ public class ServiceActionLayoutData implements Serializable {
         this.owner = owner;
     }
 
-
     private String metadataError;
 
     /**
@@ -210,7 +193,6 @@ public class ServiceActionLayoutData implements Serializable {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
-
 
     private Link link;
 
@@ -230,13 +212,10 @@ public class ServiceActionLayoutData implements Serializable {
         this.link = link;
     }
 
-
-
     @XmlTransient
     public String getLogicalTypeNameAndId() {
         return getLogicalTypeName() + "#" + getId();
     }
-
 
     @Override
     public String toString() {

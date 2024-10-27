@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
 
-
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-
 
 /**
  * Corresponds to annotating the class with the {@link org.apache.causeway.applib.annotation.DomainServiceLayout} annotation.

@@ -47,8 +47,6 @@ import org.apache.causeway.testdomain.model.stereotypes.MyObject_mixin;
 import org.apache.causeway.testdomain.model.stereotypes.MyService;
 import org.apache.causeway.testdomain.model.stereotypes.MyView;
 
-
-
 @SpringBootTest(
         classes = {
                 CausewaySystemEnvironment.class,

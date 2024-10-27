@@ -47,6 +47,4 @@ public class TertiaryActionsPanel extends MenuActionPanel {
         response.render(CssHeaderItem.forReference(new CssResourceReference(TertiaryActionsPanel.class, "TertiaryActionsPanel.css")));
     }
 
-
-
 }

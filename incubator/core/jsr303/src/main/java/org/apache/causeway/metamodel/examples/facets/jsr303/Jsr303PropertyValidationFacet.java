@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvi
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.spec.identifier.Identified;
 
-
 public class Jsr303PropertyValidationFacet extends FacetAbstract implements ValidatingInteractionAdvisor {
 
     private static final Class<? extends Facet> type() {
@@ -81,7 +80,6 @@ public class Jsr303PropertyValidationFacet extends FacetAbstract implements Vali
         }
         return proposedNO.getObject();
     }
-
 
     private String asString(final String memberName, final Set<InvalidConstraint<?>> constraints) {
         if (constraints.isEmpty()) {

@@ -66,7 +66,6 @@ class CausewayPermissionTest_typicalUsage {
         assertThat(viewCustomerChangeAddress, permittedBy("*"));
         assertThat(viewCustomerChangeAddress, permittedBy("*:Customer:*:r"));
 
-
         assertThat(useCustomerChangeAddress, permittedBy("com.mycompany.myapp:Customer:changeAddress:w"));
         assertThat(useCustomerChangeAddress, permittedBy("com.mycompany.myapp:Customer:changeAddress:*"));
 

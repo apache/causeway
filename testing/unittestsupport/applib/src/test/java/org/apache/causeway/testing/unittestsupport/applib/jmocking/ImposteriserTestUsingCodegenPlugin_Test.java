@@ -122,9 +122,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertFalse(imposteriser.canImposterise(void.class));
     }
 
-
     // //////////////////////////////////////
-
 
     public static abstract class AnAbstractNestedClass {
         public abstract String foo();
@@ -138,10 +136,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertEquals("result", imposter.foo());
     }
 
-
     // //////////////////////////////////////
-
-
 
     public static class AnInnerClass {
         public String foo() {return "original result";}
@@ -155,10 +150,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertEquals("result", imposter.foo());
     }
 
-
-
     // //////////////////////////////////////
-
 
     public static final class AFinalClass {
         public String foo() {return "original result";}
@@ -169,10 +161,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertFalse(imposteriser.canImposterise(AFinalClass.class));
     }
 
-
     // //////////////////////////////////////
-
-
 
     public static class AClassWithAPrivateConstructor {
         private AClassWithAPrivateConstructor(final String someArgument) {}
@@ -190,10 +179,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertEquals("result", imposter.foo());
     }
 
-
     // //////////////////////////////////////
-
-
 
     public static class ConcreteClassWithConstructorAndInstanceInitializer {
         {
@@ -223,11 +209,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertEquals("result", imposter.foo());
     }
 
-
-
     // //////////////////////////////////////
-
-
 
     public interface AnInterface {
         String foo();
@@ -242,12 +224,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         assertEquals("result", imposter.foo());
     }
 
-
-
     // //////////////////////////////////////
-
-
-
 
     @Test
     void happyCaseWhenClassInASignedJarFile() throws Exception {
@@ -266,10 +243,7 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         }
     }
 
-
-
     // //////////////////////////////////////
-
 
     public static class ClassWithFinalToStringMethod {
         @Override
@@ -292,19 +266,13 @@ class ImposteriserTestUsingCodegenPlugin_Test {
         }
     }
 
-
-
-
-
     // //////////////////////////////////////
-
 
     public interface EmptyInterface {}
 
     public interface AnInterface2 {
         String foo();
     }
-
 
     // See issue JMOCK-145
     @Test @Disabled("fails with surefire on jdk-11, not with eclipse") //TODO[2112] jdk-11 issue?
@@ -315,7 +283,6 @@ class ImposteriserTestUsingCodegenPlugin_Test {
     }
 
     // //////////////////////////////////////
-
 
     // See issue JMOCK-256 (GitHub #36)
     @Test @Disabled("fails with surefire on jdk-11, not with eclipse") //TODO[2112] jdk-11 issue?

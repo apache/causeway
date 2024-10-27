@@ -63,7 +63,6 @@ class JaxbUtilsTest {
         @Getter @Setter private String string;
     }
 
-
     private A a;
     private B b;
 
@@ -137,6 +136,5 @@ class JaxbUtilsTest {
         });
         Approvals.verify(aXml);
     }
-
 
 }

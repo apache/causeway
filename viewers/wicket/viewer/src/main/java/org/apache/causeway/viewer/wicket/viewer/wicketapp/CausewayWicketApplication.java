@@ -242,7 +242,6 @@ implements
         return new _PageFactory(this, super.newPageFactory());
     }
 
-
     /**
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
@@ -288,7 +287,6 @@ implements
         webRequestCycleForCauseway.setPageClassRegistry(getPageClassRegistry());
         return webRequestCycleForCauseway;
     }
-
 
     protected static final Function<ComponentFactory, Iterable<CssResourceReference>> getCssResourceReferences =
             (final ComponentFactory input) -> {

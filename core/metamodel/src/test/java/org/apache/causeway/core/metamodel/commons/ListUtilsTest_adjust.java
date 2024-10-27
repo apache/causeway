@@ -30,7 +30,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 class ListUtilsTest_adjust {
 
-
     @Test
     public void sameLength() throws Exception {
         final List<Integer> list = Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);

@@ -41,8 +41,6 @@ import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberF
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-
-
 public abstract class ExecutionPublishingTestAbstract
 extends PublishingTestAbstract {
 
@@ -153,7 +151,6 @@ extends PublishingTestAbstract {
     private String actionInvocationDifference(final ActionInvocation a, final ActionInvocation b) {
         return null; // no difference
     }
-
 
     private String porpertyEditDifference(final PropertyEdit a, final PropertyEdit b) {
         if(!Objects.equals(a.getNewValue(), b.getNewValue())) {

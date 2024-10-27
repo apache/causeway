@@ -162,7 +162,6 @@ public class CausewayConfiguration {
         this.buildProperties = buildProperties;
     }
 
-
     /**
      * All known configuration property names.
      *
@@ -190,7 +189,6 @@ public class CausewayConfiguration {
     public Optional<String> valueOf(final String configurationPropertyName) {
         return Optional.ofNullable(environment.getProperty(configurationPropertyName));
     }
-
 
     private final Security security = new Security();
     @Data
@@ -942,7 +940,6 @@ public class CausewayConfiguration {
                     private boolean postForDefault = true;
                 }
 
-
             }
 
             private final ActionLayout actionLayout = new ActionLayout();
@@ -992,7 +989,6 @@ public class CausewayConfiguration {
 
                     @Getter(lazy = true)
                     private final Map<Pattern, String> patternsAsMap = asMap(getPatterns());
-
 
                 }
 
@@ -1809,7 +1805,6 @@ public class CausewayConfiguration {
             }
         }
 
-
         private final Runtime runtime = new Runtime();
         @Data
         public static class Runtime {
@@ -1950,7 +1945,6 @@ public class CausewayConfiguration {
 
                     @Deprecated
                     private String password;
-
 
                     /**
                      * Specifies the password (corresponding to the {@link #getUsername() username} to connect to the
@@ -2131,7 +2125,6 @@ public class CausewayConfiguration {
         }
     }
 
-
     private final Persistence persistence = new Persistence();
     @Data
     public static class Persistence {
@@ -2187,7 +2180,6 @@ public class CausewayConfiguration {
                 private boolean enabled = true;
             }
         }
-
 
         private final Schema schema = new Schema();
         @Data
@@ -2297,7 +2289,6 @@ public class CausewayConfiguration {
          */
         private IfHiddenPolicy ifHiddenPolicy = IfHiddenPolicy.HIDE;
 
-
         public enum IfDisabledPolicy {
             /**
              * The default  behaviour: any properties, collections or actions whose usability has been vetoed
@@ -2329,7 +2320,6 @@ public class CausewayConfiguration {
          */
         private IfDisabledPolicy ifDisabledPolicy = IfDisabledPolicy.DISABLE;
     }
-
 
     private final Viewer viewer = new Viewer();
     @Data
@@ -2586,7 +2576,6 @@ public class CausewayConfiguration {
                     private boolean enableScenarioTesting = false;
                 }
             }
-
 
             public enum ApiVariant {
                 /**
@@ -3208,7 +3197,6 @@ public class CausewayConfiguration {
              */
             private boolean suppressSignUp = false;
 
-
             /**
              * Whether to suppress the password reset link on the sign-in page.
              *
@@ -3740,7 +3728,6 @@ public class CausewayConfiguration {
                  */
                 private String packagePrefix = null;
 
-
                 /**
                  * How to handle objects that are to be added into a <code>FixtureResult</code> but which are not yet
                  * persisted.
@@ -3819,7 +3806,6 @@ public class CausewayConfiguration {
                      */
                     EXECUTE;
                 }
-
 
                 /**
                  * Indicates whether, if a fixture script (or more precisely any other fixture scripts of the same
@@ -4159,7 +4145,6 @@ public class CausewayConfiguration {
              */
             private List<String> exposedHeaders = listOf("Authorization");
 
-
         }
 
         private final ExecutionLog executionLog = new ExecutionLog();
@@ -4337,7 +4322,6 @@ public class CausewayConfiguration {
                      */
                     private String userName = ADMIN_USER_NAME_DEFAULT;
 
-
                     // sonar-ignore-on (detects potential security risk, which we are aware of)
                     /**
                      * The corresponding password for {@link #getUserName() admin user}.
@@ -4395,7 +4379,6 @@ public class CausewayConfiguration {
                          * @see NamespacePermissions#getAdditional()
                          */
                         private List<String> sticky = ADMIN_STICKY_NAMESPACE_PERMISSIONS_DEFAULT;
-
 
                         /**
                          * An (optional) additional set of namespaces that the
@@ -4613,7 +4596,6 @@ public class CausewayConfiguration {
                 .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
     }
 
-
     @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
     @Retention(RUNTIME)
     @Constraint(validatedBy = AssignableFromValidator.class)
@@ -4629,7 +4611,6 @@ public class CausewayConfiguration {
 
         Class<? extends Payload>[] payload() default { };
     }
-
 
     public static class AssignableFromValidator implements ConstraintValidator<AssignableFrom, Class<?>> {
 
@@ -4671,7 +4652,6 @@ public class CausewayConfiguration {
 
         Class<? extends Payload>[] payload() default { };
     }
-
 
     public static class OneOfValidator implements ConstraintValidator<OneOf, String> {
 

@@ -51,7 +51,6 @@ public class CausewayActionsTest_returnNewTransientInstance {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-
     @Test
     public void testIt() {
 
@@ -71,7 +70,6 @@ public class CausewayActionsTest_returnNewTransientInstance {
         mockContainer.persistIfNotAlready(o);
     }
 
-
     private static <X> Matcher<Class<X>> anySubclassOf(final Class<X> cls) {
         return new TypeSafeMatcher<Class<X>>() {
 
@@ -86,6 +84,5 @@ public class CausewayActionsTest_returnNewTransientInstance {
             }
         };
     }
-
 
 }

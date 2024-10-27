@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-
-
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
  * into an{@link ManagedObject} of a specified
@@ -52,7 +50,6 @@ public class JsonParserHelper {
         this.jsonValueEncoder = resourceContext.getMetaModelContext().getServiceRegistry()
                 .lookupServiceElseFail(JsonValueEncoderService.class);
     }
-
 
     /**
      * @param bodyAsString
@@ -160,6 +157,5 @@ public class JsonParserHelper {
         // http://localhost:8080/types/xxx
         return objectSpec.getFullIdentifier();
     }
-
 
 }

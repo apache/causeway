@@ -252,7 +252,6 @@ public class JpaEntityFacet
         return null;
     }
 
-
     @Override
     public boolean isProxyEnhancement(final Method method) {
         return false;

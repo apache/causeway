@@ -102,7 +102,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             ManagedObject object,
             InteractionInitiatedBy interactionInitiatedBy);
 
-
     /**
      * Whether there are any auto-complete provided (eg <tt>autoCompleteXxx</tt> supporting
      * method) for the association.
@@ -263,7 +262,5 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return associationsByGroup.computeIfAbsent(groupName, k -> _Lists.newArrayList());
         }
     }
-
-
 
 }

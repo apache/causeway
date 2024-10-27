@@ -28,7 +28,6 @@ public class Employee implements Claimant, Approver {
         return getName();
     }
 
-
     // {{ Name
     private String name;
 

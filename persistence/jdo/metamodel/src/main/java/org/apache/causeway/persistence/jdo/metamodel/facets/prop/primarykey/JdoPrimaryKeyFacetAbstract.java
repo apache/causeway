@@ -23,7 +23,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.primarykey.JdoPrimaryKeyFacet;
 
-
 public abstract class JdoPrimaryKeyFacetAbstract
 extends FacetAbstract
 implements JdoPrimaryKeyFacet {

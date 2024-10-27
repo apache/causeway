@@ -51,5 +51,4 @@ class SimpleListTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
 
-
 }

@@ -155,10 +155,8 @@ import lombok.Setter;
 @EntityListeners(CausewayEntityListener.class)
 public class ExecutionLogEntry extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry {
 
-
     @EmbeddedId
     ExecutionLogEntryPK pk;
-
 
     @Transient
     @InteractionId
@@ -184,32 +182,27 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
         pk = new ExecutionLogEntryPK(getInteractionId(), sequence);
     }
 
-
     @Column(nullable = ExecutionType.NULLABLE, length = ExecutionType.MAX_LENGTH)
     @Enumerated(EnumType.STRING)
     @ExecutionType
     @Getter @Setter
     private ExecutionLogEntryType executionType;
 
-
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
-
 
     @Column(nullable = Timestamp.NULLABLE)
     @Timestamp
     @Getter @Setter
     private java.sql.Timestamp timestamp;
 
-
     @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
     @Getter @Setter
     private Bookmark target;
-
 
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length= LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
@@ -226,18 +219,14 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     @Getter @Setter
     private InteractionDto interactionDto;
 
-
     @Column(nullable = StartedAt.NULLABLE)
     @StartedAt
     @Getter @Setter
     private java.sql.Timestamp startedAt;
 
-
     @Column(nullable = CompletedAt.NULLABLE)
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
-
-
 
 }

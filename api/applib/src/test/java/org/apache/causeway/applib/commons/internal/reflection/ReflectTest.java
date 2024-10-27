@@ -55,7 +55,6 @@ class ReflectTest {
                 typeSet);
     }
 
-
     @Test
     void typeHierarchyAndInterfaces() {
 
@@ -109,7 +108,6 @@ class ReflectTest {
         static class B implements I {}
     }
 
-
     @Test
     void typeHierarchyAndInterfaces2() {
 
@@ -126,7 +124,6 @@ class ReflectTest {
                 "Object"), typeSet);
 
     }
-
 
     // -- HELPER
 

@@ -144,5 +144,4 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
         super(processor, holder, servicesInjector);
     }
 
-
 }

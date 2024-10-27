@@ -59,5 +59,4 @@ class AdmonitionTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
     
-
 }

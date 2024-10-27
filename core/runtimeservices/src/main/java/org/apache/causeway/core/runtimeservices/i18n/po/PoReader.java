@@ -134,7 +134,6 @@ class PoReader extends PoAbstract {
             return msgId;
         }
 
-
         final Map<ContextAndMsgId, String> translationsByKey = readAndCacheTranslationsIfRequired(targetLocale);
 
         // search for translation with a context
@@ -165,7 +164,6 @@ class PoReader extends PoAbstract {
         return msgId;
     }
 
-
     private String lookupTranslation(final Map<ContextAndMsgId, String> translationsByKey, final ContextAndMsgId key) {
         final String s = translationsByKey.get(key);
         return s != null? s.trim(): null;
@@ -183,7 +181,6 @@ class PoReader extends PoAbstract {
 
         return translationsByKey;
     }
-
 
     /**
      * @param locale - the .po file to load
@@ -244,7 +241,6 @@ class PoReader extends PoAbstract {
                 .collect(Collectors.toList());
     }
 
-
     // to avoid flooding the logs
     private void logInfoIfNotPreviously(final String infoMessage) {
         if(!loggedInfoMessages.contains(infoMessage)) {
@@ -254,6 +250,5 @@ class PoReader extends PoAbstract {
     }
 
     private final Set<String> loggedInfoMessages = _Sets.newConcurrentHashSet();
-
 
 }

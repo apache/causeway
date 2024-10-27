@@ -43,7 +43,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 import lombok.Getter;
 import lombok.Setter;
 
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -62,7 +61,6 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
 
     @Inject private WrapperFactory wrapper;
     @Inject private SpecificationLoader specificationLoader;
-
 
     // -------------------------------------------------------
     // type:ENABLED + property:NOT_SPECIFIED -> effective ENABLED
@@ -87,7 +85,6 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
         //then ... should not fail
         wrapper.wrap(new CustomerEna()).setName("Bob");
     }
-
 
     // -------------------------------------------------------
     // type:DISABLED + property:NOT_SPECIFIED -> effective DISABLED
@@ -166,7 +163,6 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
         @Getter @Setter private String name;
     }
 
-
     @Test
     void classLevelAnnotation_whenDisabling_shouldBeOverridable() {
 
@@ -177,7 +173,5 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
         //then ... should not fail
         wrapper.wrap(new CustomerDisEna()).setName("Bob");
     }
-
-
 
 }

@@ -83,6 +83,4 @@ class AuthInfoForApplicationUser implements AuthenticationInfo, AuthorizationInf
                 : new SimplePrincipalCollection(principal, realmName);
     }
 
-
-
 }

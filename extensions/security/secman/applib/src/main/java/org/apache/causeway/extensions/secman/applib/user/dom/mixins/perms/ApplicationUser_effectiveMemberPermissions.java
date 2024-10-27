@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.dom.mixins.perms;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +63,5 @@ public class ApplicationUser_effectiveMemberPermissions {
                 .map(UserPermissionViewModel.asViewModel(user, factory))
                 .collect(Collectors.toList());
     }
-
 
 }

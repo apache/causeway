@@ -32,8 +32,6 @@ import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 
-
-
 public abstract class PublishingTestAbstract
 implements HasPersistenceStandard {
 

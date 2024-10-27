@@ -92,7 +92,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.id = id;
     }
 
-
     private int span;
 
     @XmlAttribute(required = true)
@@ -103,7 +102,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     public void setSpan(final int span) {
         this.span = range1_12.bounded(span);
     }
-
 
     private Boolean unreferencedActions;
 
@@ -123,7 +121,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.unreferencedActions = unreferencedActions;
     }
 
-
     private Boolean unreferencedCollections;
     /**
      * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
@@ -141,10 +138,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.unreferencedCollections = unreferencedCollections;
     }
 
-
-
-
-
     private DomainObjectLayoutData domainObject;
 
     /**
@@ -161,7 +154,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.domainObject = domainObjectLayoutData;
     }
 
-
     private List<SizeSpan> sizeSpans = new ArrayList<>();
 
     // no wrapper
@@ -173,8 +165,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     public void setSizeSpans(final List<SizeSpan> sizeSpans) {
         this.sizeSpans = sizeSpans;
     }
-
-
 
     private List<ActionLayoutData> actions = new ArrayList<>();
 
@@ -190,8 +180,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.actions = actions;
     }
 
-
-
     private List<BSRow> rows = new ArrayList<>();
 
     // no wrapper
@@ -204,8 +192,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     public void setRows(final List<BSRow> rows) {
         this.rows = rows;
     }
-
-
 
     private List<BSTabGroup> tabGroups = new ArrayList<>();
 
@@ -220,8 +206,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.tabGroups = tabGroups;
     }
 
-
-
     private List<FieldSet> fieldSets = new ArrayList<>();
 
     // no wrapper
@@ -234,8 +218,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     public void setFieldSets(final List<FieldSet> fieldSets) {
         this.fieldSets = fieldSets;
     }
-
-
 
     private List<CollectionLayoutData> collections = new ArrayList<>();
 
@@ -250,8 +232,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
         this.collections = collections;
     }
 
-
-
     private String metadataError;
 
     /**
@@ -265,8 +245,6 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
-
-
 
     public String toCssClass() {
         final StringBuilder buf = new StringBuilder();

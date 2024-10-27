@@ -97,7 +97,6 @@ public class CommonDomainService
                 .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
     }
 
-
     @Override
     protected void addDataFetchersForChildren() {
         if (hasActions()) {

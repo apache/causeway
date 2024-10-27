@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -312,6 +311,4 @@ extends ReferentialStateManagerImpl {
         super.postCommit(tx);
     } */
 
-
 }
-

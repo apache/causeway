@@ -51,7 +51,4 @@ public class SimulatedUiComponent extends HasValueValidation {
         return value.getValue();
     }
 
-
-
-
 }

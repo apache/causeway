@@ -49,6 +49,4 @@ public class PojoTester_datatypes_no_data_factory_Test {
                 .hasMessageContaining("No test data is available for setAddress");
     }
 
-
-
 }

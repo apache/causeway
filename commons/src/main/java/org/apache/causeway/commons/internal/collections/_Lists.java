@@ -309,7 +309,6 @@ public final class _Lists {
                 ()->Collectors.<T, CopyOnWriteArrayList<T>>toCollection(CopyOnWriteArrayList::new) );
     }
 
-
     // -- TRANSFORMATIONS
 
     public <T, R> List<R> map(final @Nullable Collection<T> input, final Function<T, R> mapper) {

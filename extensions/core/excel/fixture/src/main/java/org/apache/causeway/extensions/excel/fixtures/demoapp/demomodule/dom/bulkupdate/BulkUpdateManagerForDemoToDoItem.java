@@ -102,7 +102,6 @@ public class BulkUpdateManagerForDemoToDoItem {
     @Getter @Setter @Nullable
     private boolean complete;
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public BulkUpdateManagerForDemoToDoItem changeFileName(final String fileName) {
         setFileName(fileName);
@@ -111,7 +110,6 @@ public class BulkUpdateManagerForDemoToDoItem {
     @MemberSupport public String default0ChangeFileName() {
         return getFileName();
     }
-
 
     @Action
     public BulkUpdateManagerForDemoToDoItem select(
@@ -156,7 +154,6 @@ public class BulkUpdateManagerForDemoToDoItem {
         return repositoryService.allMatches(ExcelDemoToDoItem.class,
                 thoseCompleted(isComplete()).and(thoseCategorised(getCategory(), getSubcategory())));
     }
-
 
     @Action(semantics = SemanticsOf.SAFE)
     public Blob export() {

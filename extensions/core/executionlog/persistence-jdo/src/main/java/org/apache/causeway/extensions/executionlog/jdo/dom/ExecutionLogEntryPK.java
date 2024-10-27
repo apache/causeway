@@ -74,6 +74,5 @@ public class ExecutionLogEntryPK implements Serializable {
             return new ExecutionLogEntryPK(stringified);
         }
 
-
     }
 }

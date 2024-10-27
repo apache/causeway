@@ -104,7 +104,6 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
         return commandDtoProcessor.process(commandDto);
     }
 
-
     @Inject MetaModelService metaModelService;
     @Inject List<CommandDtoProcessorService> commandDtoProcessorServices;
 

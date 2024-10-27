@@ -94,7 +94,6 @@ class JdoTransactionRollbackTest_usingTransactional {
             // expected post condition
             assertEquals(3, repository.allInstances(JdoBook.class).size());
 
-
         });
 
         _Probe.errOut("after interaction");

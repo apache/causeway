@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHead;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(50)
 @ActiveProfiles("test")
@@ -56,6 +55,5 @@ public class DeptHead_2_IntegTest extends Abstract_IntegTest {
 
         assertThat(deptHeadAfter).isNotNull();
     }
-
 
 }

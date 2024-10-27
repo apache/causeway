@@ -54,7 +54,6 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
                     metaModelContext,
                     AbstractFacetFactoryTest.jdoFacetContextForTesting());
 
-
             programmingModel
             .addFactory(FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS, facetFactory);
 
@@ -97,7 +96,6 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         assertThat(failures.getNumberOfFailures(), is(0));
     }
 
-
     @Test
     void whenHasFacetWithParentTypeHasFacet() {
 
@@ -113,7 +111,6 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         assertThat(failures.getMessages().iterator().next(),
                 CoreMatchers.containsString("@Version annotation is ambiguous within a class hierarchy"));
     }
-
 
     @Test
     void whenHasFacetWithGrandParentTypeHasFacet() {

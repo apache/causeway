@@ -110,7 +110,6 @@ public class JdoTransactionManager extends AbstractPlatformTransactionManager
 
 	private JdoDialect jdoDialect;
 
-
 	/**
 	 * Create a new JdoTransactionManager instance.
 	 * A PersistenceManagerFactory has to be set to be able to use it.
@@ -127,7 +126,6 @@ public class JdoTransactionManager extends AbstractPlatformTransactionManager
 		this.persistenceManagerFactory = pmf;
 		afterPropertiesSet();
 	}
-
 
 	/**
 	 * Set the PersistenceManagerFactory that this instance should manage transactions for.
@@ -254,7 +252,6 @@ public class JdoTransactionManager extends AbstractPlatformTransactionManager
 			}
 		}
 	}
-
 
 	@Override
 	public Object getResourceFactory() {
@@ -530,7 +527,6 @@ public class JdoTransactionManager extends AbstractPlatformTransactionManager
 		return getJdoDialect().translateException(ex);
 	}
 
-
 	/**
 	 * JDO transaction object, representing a PersistenceManagerHolder.
 	 * Used as transaction object by JdoTransactionManager.
@@ -596,7 +592,6 @@ public class JdoTransactionManager extends AbstractPlatformTransactionManager
 			}
 		}
 	}
-
 
 	/**
 	 * Holder for suspended resources.

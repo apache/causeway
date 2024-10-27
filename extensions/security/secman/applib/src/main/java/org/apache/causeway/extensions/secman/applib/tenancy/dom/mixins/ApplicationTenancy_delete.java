@@ -66,7 +66,6 @@ public class ApplicationTenancy_delete {
 
     private final ApplicationTenancy target;
 
-
     @MemberSupport public Collection<? extends ApplicationTenancy> act() {
         for (var user : applicationUserRepository.findByTenancy(target)) {
             var updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);

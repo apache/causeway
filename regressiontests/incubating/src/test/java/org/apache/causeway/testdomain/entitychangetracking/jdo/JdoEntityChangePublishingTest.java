@@ -154,8 +154,4 @@ class JdoEntityChangePublishingTest extends InteractionTestAbstract {
         return book;
     }
 
-
 }
-
-
-

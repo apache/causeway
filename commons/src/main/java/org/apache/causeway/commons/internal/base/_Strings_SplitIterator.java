@@ -79,5 +79,4 @@ class _Strings_SplitIterator {
         };
     }
 
-
 }

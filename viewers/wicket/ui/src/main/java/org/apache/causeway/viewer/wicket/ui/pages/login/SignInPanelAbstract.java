@@ -210,7 +210,6 @@ implements HasMetaModelContext {
         throw new RestartResponseException(getApplication().getHomePage());
     }
 
-
     @Getter(lazy = true) private static final ResourceReference jsForTimezoneSelectDefault =
             new JavaScriptResourceReference(SignInPanelAbstract.class,
                     "js/client-side-timezone-select.js");
@@ -238,7 +237,6 @@ implements HasMetaModelContext {
         var cookieName = rememberMe.getCookieKey()+"_tz";
         return cookieName;
     }
-
 
     /**
      * Sign in form.

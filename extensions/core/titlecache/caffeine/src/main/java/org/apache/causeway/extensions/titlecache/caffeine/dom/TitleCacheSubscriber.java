@@ -20,7 +20,6 @@ package org.apache.causeway.extensions.titlecache.caffeine.dom;
 
 import lombok.extern.log4j.Log4j2;
 
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;

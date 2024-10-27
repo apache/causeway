@@ -120,5 +120,4 @@ extends FacetFactoryAbstract {
         });
     }
 
-
 }

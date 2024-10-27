@@ -74,5 +74,4 @@ class JodaDateTimeConverterTest {
         private org.joda.time.DateTime value;
     }
 
-
 }

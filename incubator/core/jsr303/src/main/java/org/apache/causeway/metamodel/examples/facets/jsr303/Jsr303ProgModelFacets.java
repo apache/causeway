@@ -23,7 +23,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.causeway.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 
-
 /**
  * Implementation of {@link ProgrammingModelFacets} that additionally just installs support for
  * {@link Jsr303PropertyValidationFacet JSR-303} validation.
@@ -35,7 +34,6 @@ import org.apache.causeway.core.metamodel.specloader.progmodelfacets.Programming
  */
 public class Jsr303ProgModelFacets extends ProgrammingModelFacetsJava5 {
 
-	
 	public Jsr303ProgModelFacets() {
 		addFactory(Jsr303FacetFactory.class);
 	}

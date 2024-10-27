@@ -32,7 +32,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Initializes the <i>Session Log</i> extension when the application is first bootstrapped.
  *

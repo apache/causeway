@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 public enum RestfulClientMediaType {
     RO_XML("application", "xml", "org.restfulobjects:repr-types/action-result"),
@@ -93,4 +92,3 @@ public enum RestfulClientMediaType {
     }
 
 }
-

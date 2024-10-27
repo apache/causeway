@@ -69,11 +69,9 @@ public class MeService {
     final UserService userService;
     final Provider<QueryResultsCache> queryResultsCacheProvider;
 
-
     @ObjectSupport public String iconName() {
         return "applicationUser";
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -106,7 +104,6 @@ public class MeService {
         }
 
     }
-
 
     @Component
     @RequiredArgsConstructor

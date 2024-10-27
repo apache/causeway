@@ -175,7 +175,6 @@ implements
                 "notes", _Strings.htmlEscape(_Strings.nullToEmpty(v.getNotes())));
     }
 
-
     // -- EXAMPLES
 
     @Override
@@ -301,7 +300,5 @@ implements
         }
 
     }
-
-
 
 }

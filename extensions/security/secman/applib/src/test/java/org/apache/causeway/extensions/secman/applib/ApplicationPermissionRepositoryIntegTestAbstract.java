@@ -42,8 +42,6 @@ import static org.apache.causeway.applib.services.appfeat.ApplicationFeatureId.n
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode.CHANGING;
 import static org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule.ALLOW;
 
-
-
 public abstract class ApplicationPermissionRepositoryIntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     protected ApplicationUser maryUser, mungoUser, midgeUser;

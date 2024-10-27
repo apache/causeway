@@ -35,7 +35,6 @@ import org.apache.causeway.testdomain.value.ValueSemanticsTester.ActionInteracti
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
     
@@ -109,6 +108,4 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         assertNull(parameterRecorded.getPojo());
     }
     
-    
 }
-

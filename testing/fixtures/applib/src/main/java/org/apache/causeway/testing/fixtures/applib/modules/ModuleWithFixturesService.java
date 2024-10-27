@@ -169,7 +169,6 @@ public class ModuleWithFixturesService {
         });
     }
 
-
     static List<ModuleWithFixturesDescriptor> sequenced(final List<ModuleWithFixturesDescriptor> modules) {
         var remaining = new ArrayList<>(modules);
         var sequenced = new ArrayList<ModuleWithFixturesDescriptor>();

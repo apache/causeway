@@ -70,7 +70,6 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());
 
-
         this.tableDecorator = collectionModel.getTableDecoratorIfAny();
         tableDecorator.ifPresent(tableDecorator->{
             Wkt.cssAppend(outerDiv, tableDecorator.cssClass());

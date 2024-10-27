@@ -58,5 +58,4 @@ public class BrandLogo extends WebComponentBase {
         setVisible(branding.getLogoHref().isPresent());
     }
 
-
 }

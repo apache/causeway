@@ -45,7 +45,6 @@ import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
 
@@ -61,7 +60,6 @@ public class TypeMapperDefault implements TypeMapper {
 
     private final ScalarMapper scalarMapper;
     private final Provider<Context> contextProvider;
-
 
     @Override
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
@@ -123,7 +121,6 @@ public class TypeMapperDefault implements TypeMapper {
                 ? scalarType
                 : nonNull(scalarType);
     }
-
 
     @Override
     @Nullable

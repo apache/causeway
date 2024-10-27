@@ -57,7 +57,6 @@ extends
         public boolean isOutput() {return this == OUTPUT;}
     }
 
-
     @Data
     public static class TemporalDisplayPattern {
 
@@ -79,7 +78,6 @@ extends
          */
         private String dateTimePattern;
     }
-
 
     @Data
     public static class TemporalEditingPattern {

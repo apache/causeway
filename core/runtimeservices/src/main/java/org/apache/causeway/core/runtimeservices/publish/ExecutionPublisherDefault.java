@@ -117,7 +117,6 @@ implements ExecutionPublisher {
 
     }
 
-
     private boolean canPublish() {
         return enabledSubscribers.isNotEmpty()
                 && suppressionRequestCounter.longValue() < 1L;

@@ -67,7 +67,6 @@ public class ProxyContextHandler {
         return proxyCreator.instantiateProxy(invocationHandler);
     }
 
-
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
@@ -106,7 +105,5 @@ public class ProxyContextHandler {
 
         return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
     }
-
-
 
 }

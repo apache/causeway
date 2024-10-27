@@ -46,7 +46,4 @@ extends ImmutableFacetAbstract {
         return new ImmutableFacetFromConfiguration(reason, holder);
     }
 
-
-
-
 }

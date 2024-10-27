@@ -59,7 +59,6 @@ class Samples {
                 new HashSet<Integer>(actual).removeAll(expected));
     }
     
-    
     @FunctionalInterface
     interface IndexedBiConsumer<T, U> {
         void accept(int i, int j, T t, U u);

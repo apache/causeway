@@ -37,7 +37,6 @@ import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 
 import lombok.NonNull;
 
-
 @Component
 @Named(CausewayModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
 public class VegaValueSemantics

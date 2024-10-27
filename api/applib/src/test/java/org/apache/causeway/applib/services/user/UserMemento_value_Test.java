@@ -43,7 +43,6 @@ class UserMemento_value_Test extends ValueTypeContractTestAbstract<UserMemento> 
                 ;
     }
 
-
     @Override
     protected List<UserMemento> getObjectsWithSameValue() {
         return Arrays.asList(

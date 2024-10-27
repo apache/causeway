@@ -162,5 +162,4 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         }
     }
 
-
 }

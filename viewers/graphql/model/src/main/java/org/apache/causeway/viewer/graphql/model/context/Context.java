@@ -104,7 +104,6 @@ public class Context {
                 .toList();
     }
 
-
     private void computeLogicalTypeNames() {
         if (logicalTypeNames != null) {
             return;

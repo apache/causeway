@@ -74,7 +74,6 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
             JarManifest jarManifest = new JarManifest(url);
             jarManifests.add(jarManifest);
 
-
             try(var is = url.openStream()) {
                 if (is != null) {
                     manifest = new Manifest(is);

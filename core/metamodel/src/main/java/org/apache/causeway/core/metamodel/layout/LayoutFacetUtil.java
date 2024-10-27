@@ -144,7 +144,6 @@ public class LayoutFacetUtil {
         .ifPresent(hasNamed::setNamed);
     }
 
-
     private void setObjectDescribedIfAny(
             final HasDescribedAs hasDescribedAs,
             final FacetHolder facetHolder) {
@@ -180,7 +179,6 @@ public class LayoutFacetUtil {
             }
         }
     }
-
 
     private void setMemberNamedIfAny(
             final HasNamed hasNamed,
@@ -254,8 +252,6 @@ public class LayoutFacetUtil {
             }
         }
     }
-
-
 
     public void setPagedIfAny(
             final CollectionLayoutData collectionLayoutData,

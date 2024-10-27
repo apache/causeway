@@ -30,8 +30,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeatureType;
 
-
-
 public class Jsr303FacetFactoryFeatureTypes {
 
     private Jsr303FacetFactory facetFactory;
@@ -63,6 +61,5 @@ public class Jsr303FacetFactoryFeatureTypes {
         ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes, hasItemInArray(ObjectFeatureType.PROPERTY));
     }
-
 
 }

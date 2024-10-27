@@ -271,6 +271,4 @@ public class EntityPage extends PageAbstract {
         .ifPresent(breadcrumbModel->breadcrumbModel.remove(entityModel));
     }
 
-
-
 }

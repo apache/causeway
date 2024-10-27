@@ -55,5 +55,4 @@ public class PojoTester_datatypes_string_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

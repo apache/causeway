@@ -49,7 +49,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({

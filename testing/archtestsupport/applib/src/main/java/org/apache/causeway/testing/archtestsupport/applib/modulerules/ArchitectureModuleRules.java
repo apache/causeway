@@ -37,7 +37,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -200,7 +199,6 @@ public class ArchitectureModuleRules {
         }
         return otherModules;
     }
-
 
     static String nameOf(final Class<?> moduleClass, final @Nullable String subpackageName) {
         var simpleName = moduleClass.getSimpleName();

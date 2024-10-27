@@ -74,7 +74,6 @@ public final class _Hashes {
         .map(md->digest(md, new ByteArrayInputStream(bytes), Math.max(size, 4096)));
     }
 
-
     // -- HELPER
 
     @SneakyThrows
@@ -86,6 +85,5 @@ public final class _Hashes {
         }
         return md.digest();
     }
-
 
 }

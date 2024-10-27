@@ -62,7 +62,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderSc
 
 import lombok.Getter;
 
-
 /**
  * Provides the mechanism to execute {@link FixtureScript}s from the UI of
  * a domain app; and can also be used within integration testing.
@@ -89,7 +88,6 @@ public class FixtureScripts {
     @Inject private InteractionService interactionService;
 
     @Inject private EventBusService eventBusService;
-
 
     // -- Specification, nonPersistedObjectsStrategy, multipleExecutionStrategy enums
 
@@ -191,7 +189,6 @@ public class FixtureScripts {
 
     // -- constructor, init
 
-
     /**
      * Used to configure the UI menu actions, namely {@link #runFixtureScript(String, String)} and
      * {@link #recreateObjectsAndReturnFirst()}.
@@ -248,7 +245,6 @@ public class FixtureScripts {
     @Getter
     private final SortedMap<String,FixtureScript> fixtureScriptByFriendlyName;
 
-
     @Inject
     public FixtureScripts(
             final FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider,
@@ -271,9 +267,6 @@ public class FixtureScripts {
                                 TreeMap::new))
                     : _Maps.newTreeMap();
     }
-
-
-
 
     // -- runFixtureScript (using choices as the drop-down policy)
 
@@ -373,10 +366,6 @@ public class FixtureScripts {
         return fixtureScript.run(parameters, this);
     }
 
-
-
-
-
     // -- recreateObjectsAndReturnFirst
 
     /**
@@ -405,9 +394,6 @@ public class FixtureScripts {
     @MemberSupport public boolean hideRecreateObjectsAndReturnFirst() {
         return specification == null || specification.getRecreateScriptClass() == null;
     }
-
-
-
 
     // -- programmatic API
 
@@ -498,7 +484,6 @@ public class FixtureScripts {
         )
         .ifFailureFail();
     }
-
 
     /**
      * Runs the provided {@link PersonaWithBuilderScript persona fixture script}, using
@@ -611,9 +596,6 @@ public class FixtureScripts {
         return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 
-
-
-
     // -- helpers (package level)
 
     @Programmatic
@@ -669,6 +651,5 @@ public class FixtureScripts {
         };
 
     }
-
 
 }

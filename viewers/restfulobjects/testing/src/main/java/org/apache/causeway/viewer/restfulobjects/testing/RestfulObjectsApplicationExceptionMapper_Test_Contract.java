@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
 
-
-
 /**
  * contract test.
  */

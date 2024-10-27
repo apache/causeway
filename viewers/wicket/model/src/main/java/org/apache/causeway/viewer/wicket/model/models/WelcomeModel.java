@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-
 /**
  * Model providing welcome text.
  */

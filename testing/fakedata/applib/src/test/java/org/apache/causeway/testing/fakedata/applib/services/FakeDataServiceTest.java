@@ -109,7 +109,6 @@ public class FakeDataServiceTest {
             assertThat(blob.getMimeType().toString()).isEqualTo("image/jpeg");
         }
 
-
         @Test
         public void anyPdf() throws Exception {
 
@@ -157,7 +156,6 @@ public class FakeDataServiceTest {
             assertThat(clob.getChars().length()).isGreaterThan(0);
             assertThat(clob.getMimeType().toString()).isEqualTo("application/rtf");
         }
-
 
         @Test
         public void anyXml() throws Exception {
@@ -261,7 +259,6 @@ public class FakeDataServiceTest {
         assertThat(any).isNotNull();
     }
 
-
     public static class CollectionsTest extends FakeDataServiceTest {
 
         @Test
@@ -279,7 +276,6 @@ public class FakeDataServiceTest {
 
            assertThat(ints).isEmpty();
         }
-
 
         @Test
         public void anyOfObjectExcept() throws Exception {

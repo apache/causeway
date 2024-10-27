@@ -62,7 +62,6 @@ public class ApplicationTenancyMenu {
     @Inject private ApplicationTenancyRepository applicationTenancyRepository;
     @Inject private FactoryService factory;
 
-
     @ObjectSupport public String iconName() {
         return "applicationTenancy";
     }

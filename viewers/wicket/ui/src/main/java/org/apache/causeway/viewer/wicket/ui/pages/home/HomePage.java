@@ -71,6 +71,4 @@ public class HomePage extends PageAbstract {
         breadcrumbModel.visitedHomePage();
     }
 
-
-
 }

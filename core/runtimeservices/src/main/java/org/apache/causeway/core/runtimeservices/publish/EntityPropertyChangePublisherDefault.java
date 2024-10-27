@@ -135,7 +135,6 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
         }
     }
 
-
     // -- HELPER
 
     // x-ray support

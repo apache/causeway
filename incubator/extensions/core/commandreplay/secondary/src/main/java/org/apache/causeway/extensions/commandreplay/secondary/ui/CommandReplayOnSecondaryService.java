@@ -77,7 +77,6 @@ public class CommandReplayOnSecondaryService {
         }
     }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = uploadCommands.ActionDomainEvent.class,
@@ -110,4 +109,3 @@ public class CommandReplayOnSecondaryService {
     }
 
 }
-

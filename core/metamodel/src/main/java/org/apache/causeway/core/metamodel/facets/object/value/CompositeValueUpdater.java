@@ -47,7 +47,6 @@ public abstract class CompositeValueUpdater {
                 final InteractionInitiatedBy interactionInitiatedBy);
     }
 
-
     @Delegate(excludes=X.class)
     private final ObjectActionMixedIn delegate;
 

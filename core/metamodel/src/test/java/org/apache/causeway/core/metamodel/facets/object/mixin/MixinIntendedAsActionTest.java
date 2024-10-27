@@ -170,5 +170,4 @@ class MixinIntendedAsActionTest extends MixinIntendedAs {
 
     }
 
-
 }

@@ -96,7 +96,6 @@ public class DslExpressions {
         return Expressions.constant(argument);
     }
 
-
     public static Predicate and(List<? extends Predicate> predicates) {
         return and(predicates.toArray(new Predicate[0]));
     }
@@ -140,8 +139,6 @@ public class DslExpressions {
         }
         return Expressions.predicate(Ops.OR, Arrays.stream(predicates).map(ExpressionUtils::extract).toArray(Expression[]::new));
     }
-
-
 
     private static <T> T[] addAll(
             final T[] array1,

@@ -63,7 +63,6 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     protected abstract Object getRight();
 
-
     @Override
     public int hashCode() {
         return cachedHash;
@@ -117,7 +116,6 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
     private InternalBidirectionalBinding(final Object left, final Object right) {
         cachedHash = left.hashCode() * right.hashCode();
     }
-
 
     private static class GenericBidirectionalBinding<T> extends InternalBidirectionalBinding<T> {
         private final WeakReference<Bindable<T>> leftRef;
@@ -207,6 +205,5 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
             throw _Exceptions.unexpectedCodeReach();
         }
     }
-
 
 }

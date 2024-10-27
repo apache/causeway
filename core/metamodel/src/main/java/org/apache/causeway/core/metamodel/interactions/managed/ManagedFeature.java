@@ -48,7 +48,6 @@ public interface ManagedFeature {
      */
     ObjectSpecification getElementType();
 
-
     /**
      * @return The feature's underlying type.
      * For actions this is the action's return type.

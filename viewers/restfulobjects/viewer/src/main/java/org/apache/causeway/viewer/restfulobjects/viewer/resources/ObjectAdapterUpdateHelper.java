@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-
-
 /**
  * Utility class that encapsulates the logic for updating an
  * {@link ManagedObject}'s with the
@@ -51,7 +49,6 @@ public class ObjectAdapterUpdateHelper {
         this.objectAdapter = objectAdapter;
         this.resourceContext = resourceContext;
     }
-
 
     enum Intent {
         UPDATE_EXISTING,
@@ -172,6 +169,5 @@ public class ObjectAdapterUpdateHelper {
         }
         return allOk;
     }
-
 
 }

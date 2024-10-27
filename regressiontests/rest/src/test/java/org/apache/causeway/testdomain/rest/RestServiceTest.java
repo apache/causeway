@@ -44,8 +44,6 @@ import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
-
-
 @SpringBootTest(
         classes = {
                 RestEndpointService.class,

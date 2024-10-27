@@ -70,5 +70,4 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
         return string;
     }
 
-
 }

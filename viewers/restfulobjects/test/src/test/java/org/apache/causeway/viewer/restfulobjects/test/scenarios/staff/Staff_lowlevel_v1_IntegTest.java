@@ -66,7 +66,6 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-
 @DisabledIfRunningWithSurefire //XXX surefire run broken since around 2024-09-20
 @Order(value = Integer.MAX_VALUE)   // last
 @DirtiesContext
@@ -272,9 +271,4 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
     }
 
-
 }
-
-
-
-

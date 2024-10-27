@@ -102,7 +102,6 @@ class AuthenticatedWebSessionForCauseway_SignIn {
             }
         };
 
-
         // when
         webSession.signIn("john", "secret");
 

@@ -30,7 +30,6 @@ import org.apache.causeway.extensions.commandlog.jpa.integtests.model.Counter;
 @ActiveProfiles("test")
 public class BackgroundService_IntegTest extends BackgroundService_IntegTestAbstract {
 
-
     @Override
     protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();

@@ -97,7 +97,6 @@ public class DemoToDoItemRowHandler implements ExcelFixtureRowHandler {
         return date.plusDays(i);
     }
 
-
     @Inject private ExcelDemoToDoItemMenu toDoItemRepository;
     @Inject private UserService userService;
     @Inject private ClockService clockService;

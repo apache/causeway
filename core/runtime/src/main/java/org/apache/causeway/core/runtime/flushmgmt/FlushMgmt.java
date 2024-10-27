@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtime.flushmgmt;
 
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

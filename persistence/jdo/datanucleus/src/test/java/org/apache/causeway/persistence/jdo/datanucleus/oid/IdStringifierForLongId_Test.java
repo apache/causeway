@@ -30,8 +30,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics;
 
-
-
 class IdStringifierForLongId_Test {
 
     public static Stream<Arguments> roundtrip() {

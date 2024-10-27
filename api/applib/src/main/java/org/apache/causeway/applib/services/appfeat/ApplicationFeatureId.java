@@ -428,7 +428,6 @@ implements
             .thenToStringOmitIfAbsent("typeSimpleName", ApplicationFeatureId::getTypeSimpleName)
             .thenToStringOmitIfAbsent("memberName", ApplicationFeatureId::getLogicalMemberName);
 
-
     @Override
     public int compareTo(final ApplicationFeatureId other) {
         return comparator.compare(this, other);

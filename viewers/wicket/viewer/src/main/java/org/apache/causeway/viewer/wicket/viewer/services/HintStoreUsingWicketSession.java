@@ -110,7 +110,6 @@ public class HintStoreUsingWicketSession implements HintStore {
         Session.get().removeAttribute(sessionAttribute);
     }
 
-
     protected Map<String, String> hintsFor(final Bookmark bookmark) {
         final String sessionAttribute = sessionAttributeFor(bookmark);
         LinkedHashMap<String, String> hints =

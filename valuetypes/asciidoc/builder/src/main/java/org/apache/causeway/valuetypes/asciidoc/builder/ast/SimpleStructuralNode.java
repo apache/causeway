@@ -95,5 +95,4 @@ public class SimpleStructuralNode extends ContentNodeAbstract implements Structu
         return Collections.emptyList();
     }
 
-
 }

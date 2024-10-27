@@ -61,7 +61,6 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**

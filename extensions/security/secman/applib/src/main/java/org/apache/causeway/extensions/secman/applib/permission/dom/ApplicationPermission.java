@@ -50,7 +50,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -108,7 +107,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         public static final String FIND_BY_ROLE_NAMES = LOGICAL_TYPE_NAME + ".findByRoleNames";
     }
 
-
     // -- UI & DOMAIN EVENTS
 
     public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationPermission> { }
@@ -118,7 +116,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
 
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
-
 
     @Inject transient ApplicationFeatureRepository featureRepository;
 
@@ -158,8 +155,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         return buf.toString();
     }
 
-
-
     // -- ROLE
 
     @Property(
@@ -188,7 +183,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     public abstract ApplicationRole getRole();
     public abstract void setRole(ApplicationRole applicationRole);
 
-
     // -- RULE
 
     @Property(
@@ -214,7 +208,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     public abstract ApplicationPermissionRule getRule();
     public abstract void setRule(ApplicationPermissionRule rule);
 
-
     // -- MODE
 
     @Property(
@@ -239,7 +232,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     @Mode
     public abstract ApplicationPermissionMode getMode();
     public abstract void setMode(ApplicationPermissionMode mode);
-
 
     // -- SORT
 
@@ -269,7 +261,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         return e != null ? e.name(): null;
     }
 
-
     // -- FEATURE SORT
 
     @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
@@ -293,7 +284,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     @Programmatic
     public abstract ApplicationFeatureSort getFeatureSort();
     public abstract void setFeatureSort(ApplicationFeatureSort featureSort);
-
 
     // -- FQN
 
@@ -327,7 +317,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     public abstract String getFeatureFqn();
     public abstract void setFeatureFqn(String featureFqn);
 
-
     // -- FIND FEATURE
 
     @Programmatic public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
@@ -344,14 +333,12 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
                 .map(this::findFeature);
     }
 
-
     // -- HELPER
 
     @Programmatic Optional<ApplicationFeatureId> asFeatureId() {
         return Optional.ofNullable(getFeatureSort())
                 .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }
-
 
     // -- CONTRACT
 
@@ -382,7 +369,6 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         return contract.toString(this);
     }
 
-
     public static class DefaultComparator implements Comparator<ApplicationPermission> {
         @Override
         public int compare(final ApplicationPermission o1, final ApplicationPermission o2) {
@@ -398,6 +384,5 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
                         input.getRule(),
                         input.getMode());
     }
-
 
 }

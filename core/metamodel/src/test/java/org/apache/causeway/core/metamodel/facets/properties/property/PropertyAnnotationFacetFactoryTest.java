@@ -135,7 +135,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
         facetFactory.processEntityPropertyChangePublishing(processMethodContext, propertyIfAny);
     }
 
-
     @BeforeEach
     final void setUp() throws Exception {
         facetFactory = new PropertyAnnotationFacetFactory(getMetaModelContext());
@@ -507,7 +506,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                     "you cannot edit the name property");
         }
 
-
         @Test
         void withAnnotationOnBooleanGetter() {
             @SuppressWarnings("unused")
@@ -624,7 +622,6 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 return null;
             }
         }
-
 
         @Test
         void withAnnotation() {

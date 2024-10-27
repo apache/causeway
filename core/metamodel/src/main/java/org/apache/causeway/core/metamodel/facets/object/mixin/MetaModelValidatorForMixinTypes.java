@@ -71,5 +71,4 @@ public class MetaModelValidatorForMixinTypes {
         return false;
     }
 
-
 }

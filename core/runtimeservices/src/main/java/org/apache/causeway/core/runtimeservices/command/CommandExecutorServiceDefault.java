@@ -137,18 +137,15 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // delegate to the Command held within the Interaction;
         command.updater().setCommandDtoAndIdentifier(dto);
 
-
         // notify subscribers that the command is now ready for execution
         command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
         commandPublisherProvider.get().ready(command);
-
 
         // start executing
         var startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         command.updater().setStartedAt(startedAt);
         command.updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         commandPublisherProvider.get().start(command);
-
 
         Try<Bookmark> result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> {
@@ -163,10 +160,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         command.updater().setResult(result);
 
-
         // we don't need to call the final CommandSubscriber callback, as this is called for us as part of the teardown
         // of the containing Interaction.
-
 
         return result;
     }
@@ -266,7 +261,6 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // shouldn't happen
         return "";
     }
-
 
     private static ObjectAction findObjectAction(
             final ManagedObject targetAdapter,

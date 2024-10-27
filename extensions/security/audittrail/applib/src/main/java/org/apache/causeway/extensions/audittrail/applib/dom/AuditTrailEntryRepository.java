@@ -36,7 +36,6 @@ import org.apache.causeway.commons.collections.Can;
  */
 public interface AuditTrailEntryRepository {
 
-
     AuditTrailEntry createFor(final EntityPropertyChange change);
 
     default Can<AuditTrailEntry> createFor(final Can<EntityPropertyChange> entityPropertyChanges) {
@@ -78,7 +77,6 @@ public interface AuditTrailEntryRepository {
             final LocalDate to);
 
     List<AuditTrailEntry> findRecentByUsername(final String username);
-
 
     /**
      * intended for testing only

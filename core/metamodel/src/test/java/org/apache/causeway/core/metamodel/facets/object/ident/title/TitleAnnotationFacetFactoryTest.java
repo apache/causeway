@@ -239,5 +239,4 @@ extends FacetFactoryTestAbstract {
 
     }
 
-
 }

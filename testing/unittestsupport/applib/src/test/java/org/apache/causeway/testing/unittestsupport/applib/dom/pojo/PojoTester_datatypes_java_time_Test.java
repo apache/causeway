@@ -145,5 +145,4 @@ public class PojoTester_datatypes_java_time_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

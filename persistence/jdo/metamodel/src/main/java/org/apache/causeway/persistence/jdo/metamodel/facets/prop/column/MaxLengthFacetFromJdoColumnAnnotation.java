@@ -45,5 +45,4 @@ extends MaxLengthFacetAbstract {
         super(maxLength, holder);
     }
 
-
 }

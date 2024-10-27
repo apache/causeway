@@ -75,7 +75,6 @@ public abstract class TeardownFixtureJdoAbstract extends FixtureScript {
 
     protected void postDeleteFrom(final Class<?> cls) {}
 
-
     protected Integer deleteFrom(final String schema, final String table) {
         if (_Strings.isNullOrEmpty(schema)) {
             return deleteFrom(table);
@@ -87,7 +86,6 @@ public abstract class TeardownFixtureJdoAbstract extends FixtureScript {
     protected Integer deleteFrom(final String table) {
         return jdoSupport.executeUpdate(String.format("DELETE FROM \"%s\"", table));
     }
-
 
     protected Integer deleteFromWhere(String schema, String table, String column, String value) {
         if (_Strings.isNullOrEmpty(schema)) {
@@ -106,7 +104,6 @@ public abstract class TeardownFixtureJdoAbstract extends FixtureScript {
                 table, column, value);
         return this.jdoSupport.executeUpdate(sql);
     }
-
 
     private String schemaOf(final Class<?> cls) {
         TypeMetadata metadata = getPersistenceManagerFactory().getMetadata(cls.getName());
@@ -179,6 +176,5 @@ public abstract class TeardownFixtureJdoAbstract extends FixtureScript {
     }
 
     @Inject private JdoSupportService jdoSupport;
-
 
 }

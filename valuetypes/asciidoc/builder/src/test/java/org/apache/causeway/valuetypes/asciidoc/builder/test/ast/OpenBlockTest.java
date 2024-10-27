@@ -83,5 +83,4 @@ class OpenBlockTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
     
-
 }

@@ -31,5 +31,4 @@ extends PanelAbstract<String, Model<String>> {
         super(id);
     }
 
-
 }

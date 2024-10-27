@@ -244,7 +244,6 @@ public class OutboxRestClient_IntegTest  {
         });
     }
 
-
     @Inject RestEndpointService restEndpointService;
 
     @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;

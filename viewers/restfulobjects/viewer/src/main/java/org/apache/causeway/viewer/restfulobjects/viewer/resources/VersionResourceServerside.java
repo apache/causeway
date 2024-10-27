@@ -42,7 +42,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**

@@ -68,5 +68,4 @@ public class CommandLogEntry_openResultObject {
     @Inject BookmarkService bookmarkService;
     @Inject MessageService messageService;
 
-
 }

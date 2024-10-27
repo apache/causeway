@@ -67,25 +67,20 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findCompleted();
 
-
     List<CommandLogEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final @Nullable LocalDate from,
             final @Nullable LocalDate to);
 
-
     List<CommandLogEntry> findMostRecent();
 
     List<CommandLogEntry> findMostRecent(final int limit);
 
-
     List<CommandLogEntry> findRecentByUsername(final String username);
-
 
     List<CommandLogEntry> findRecentByTarget(final Bookmark target);
 
     List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult);
-
 
     /**
      * Intended to support the replay of commands on a secondary instance of
@@ -133,7 +128,6 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findRecentBackgroundByTarget(final Bookmark target);
 
-
     /**
      * The most recent replayed command previously replicated from primary to
      * secondary.
@@ -160,12 +154,9 @@ public interface CommandLogEntryRepository {
 
     List<CommandLogEntry> findNotYetReplayed();
 
-
     CommandLogEntry saveForReplay(final CommandDto dto);
 
-
     List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto);
-
 
     void persist(final CommandLogEntry commandLogEntry);
 
@@ -173,22 +164,18 @@ public interface CommandLogEntryRepository {
 
     // --
 
-
     List<CommandLogEntry> findCommandsOnPrimaryElseFail(
             final @Nullable UUID interactionId,
             final @Nullable Integer batchSize) throws NotFoundException;
-
 
     /**
      * intended for testing purposes only
      */
     List<CommandLogEntry> findAll();
 
-
     /**
      * intended for testing purposes only
      */
     void removeAll();
-
 
 }

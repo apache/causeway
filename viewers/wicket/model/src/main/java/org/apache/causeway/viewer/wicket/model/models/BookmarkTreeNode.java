@@ -36,7 +36,6 @@ import org.apache.causeway.commons.internal.functions._Functions;
 import lombok.Getter;
 import lombok.NonNull;
 
-
 public class BookmarkTreeNode
 implements
     Comparable<BookmarkTreeNode>, Serializable {
@@ -246,6 +245,5 @@ implements
 //        }
         return false;
     }
-
 
 }

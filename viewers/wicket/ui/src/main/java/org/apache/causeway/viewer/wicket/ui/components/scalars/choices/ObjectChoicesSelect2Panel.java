@@ -280,5 +280,3 @@ implements ChoiceTitleHandler {
     }
 
 }
-
-

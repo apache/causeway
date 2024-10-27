@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-
-
 public class RichPropertyAutoComplete extends Element {
 
     private static final String SEARCH_PARAM_NAME = "search";

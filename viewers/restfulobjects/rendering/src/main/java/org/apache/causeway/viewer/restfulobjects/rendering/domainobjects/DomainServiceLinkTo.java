@@ -42,7 +42,6 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
         return linkBuilder;
     }
 
-
     @Override
     protected StringBuilder linkRef(final StringBuilder buf) {
         return buf.append("services/").append(serviceId);
@@ -52,6 +51,5 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
     protected Rel defaultRel() {
         return Rel.SERVICE;
     }
-
 
 }

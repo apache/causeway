@@ -29,7 +29,6 @@ import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutDataOwner;
 import org.apache.causeway.applib.layout.menubars.MenuSection;
 
-
 /**
  * Corresponds to a domain service that contributes its serviceActions under a particular {@link BSMenuBar}.
  *
@@ -74,6 +73,5 @@ public class BSMenuSection implements MenuSection, Serializable, ServiceActionLa
     public void setServiceActions(List<ServiceActionLayoutData> actionLayoutDatas) {
         this.serviceActions = actionLayoutDatas;
     }
-
 
 }

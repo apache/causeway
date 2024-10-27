@@ -38,9 +38,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-
-
-
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(60)
 @ActiveProfiles("test")
@@ -67,7 +64,6 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
         var gridChars = gridHttpResponse.body();
         assertThat(gridChars).isNotEmpty();
 
-
         var photoBytesUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/photo/get/bytes")
                 .asText();
@@ -77,7 +73,6 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
         assertThat(photoBytesResponse.statusCode()).isEqualTo(200);
         var photoBytes = photoBytesResponse.body();
         assertThat(photoBytes).isNotEmpty();
-
 
         var iconBytesUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/icon")

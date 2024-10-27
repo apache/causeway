@@ -28,7 +28,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 
 import lombok.NonNull;
 
-
 public class InteractionFailureHandler {
 
     public static RestfulObjectsApplicationException onFailure(
@@ -94,7 +93,5 @@ public class InteractionFailureHandler {
         var argRepr = arguments.getRepresentation(paramId);
         argRepr.mapPutString("invalidReason", veto.getReasonAsString().orElse(null));
     }
-
-
 
 }

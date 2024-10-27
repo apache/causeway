@@ -58,7 +58,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-
     @BeforeAll
     static void beforeAll() {
         CausewayPresets.forcePrototyping();
@@ -86,7 +85,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     }
 
     protected abstract Counter newCounter(String name);
-
 
     @Test
     void invoke_mixin() {
@@ -180,8 +178,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(mostRecentCompleted).isEmpty();
     }
 
-
-
     @Test
     void edit() {
 
@@ -229,7 +225,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(mostRecentCompleted).isEmpty();
     }
 
-
     @Test
     void roundtrip_CLE_bookmarks() {
 
@@ -267,7 +262,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         assertThat(commandDto2).isEqualTo(commandDto);
 
-
     }
 
     @Test
@@ -303,7 +297,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         Assertions.assertThat(commandTarget1User2IfAny).isPresent();
         var commandTarget1User2 = commandTarget1User2IfAny.get();
         var commandTarget1User2Id = commandTarget1User2.getInteractionId();
-
 
         // given (same user, same target, yesterday)
         counter1 = counterRepository.findByName("counter-1");
@@ -393,7 +386,6 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Assertions.assertThat(byFromAndTo).hasSize(3);
         Assertions.assertThat(byFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
-
 
         // when
         List<? extends CommandLogEntry> byTarget1AndFromAndTo = commandLogEntryRepository.findByTargetAndFromAndTo(target1, from, to);

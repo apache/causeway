@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 
 import lombok.Getter;
 
-
 public abstract class ReprRendererAbstract<T>
 implements ReprRenderer<T> {
 
@@ -122,7 +121,6 @@ implements ReprRenderer<T> {
         return _Casts.uncheckedCast(this);
     }
 
-
     /**
      * Will lazily create links array as required
      */
@@ -171,7 +169,6 @@ implements ReprRenderer<T> {
         representation.mapPutJsonRepresentation("extensions", extensions);
         return this;
     }
-
 
     @Override
     public abstract JsonRepresentation render();

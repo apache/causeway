@@ -65,9 +65,7 @@ public class ImpersonateStopMenu {
     final UserService userService;
     final MessageService messageService;
 
-
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,

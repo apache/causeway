@@ -104,7 +104,6 @@ extends ReprRendererAbstract<ManagedMember> {
         return memberId;
     }
 
-
     @Override
     public AbstractObjectMemberReprRenderer<T> with(final ManagedMember objectAndMember) {
         this.objectAdapter = objectAndMember.getOwner();

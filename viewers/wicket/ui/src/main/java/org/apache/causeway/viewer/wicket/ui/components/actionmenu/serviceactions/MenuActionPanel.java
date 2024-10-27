@@ -95,5 +95,4 @@ public abstract class MenuActionPanel extends PanelBase {
         Wkt.cssAppend(listItem, "list-section-label");
     }
 
-
 }

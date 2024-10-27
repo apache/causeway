@@ -156,7 +156,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
         }
     }
 
-
     private static final DateTimeFormatter formatter =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -168,13 +167,11 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
                 .toString();
     }
 
-
     @DomainChangeRecord.Type
     @Override
     public ChangeType getType() {
         return ChangeType.EXECUTION;
     }
-
 
     /**
      * The unique identifier (a GUID) of the {@link org.apache.causeway.applib.services.iactn.Interaction} in which this execution occurred.
@@ -202,8 +199,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     public abstract UUID getInteractionId();
     public abstract void setInteractionId(UUID interactionId);
 
-
-
     /**
      * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
      *
@@ -229,8 +224,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     public abstract int getSequence();
     public abstract void setSequence(int sequence);
 
-
-
     @Property(
             domainEvent = ExecutionType.DomainEvent.class
     )
@@ -245,8 +238,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @ExecutionType
     public abstract ExecutionOutboxEntryType getExecutionType();
     public abstract void setExecutionType(ExecutionOutboxEntryType executionType);
-
-
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -265,8 +256,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     public abstract String getUsername();
     public abstract void setUsername(String userName);
 
-
-
     @Property(
             domainEvent = Timestamp.DomainEvent.class
     )
@@ -282,8 +271,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @Override
     public abstract java.sql.Timestamp getTimestamp();
     public abstract void setTimestamp(java.sql.Timestamp timestamp);
-
-
 
     @Property(
             domainEvent = Target.DomainEvent.class
@@ -301,8 +288,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @Target
     public abstract Bookmark getTarget();
     public abstract void setTarget(Bookmark target);
-
-
 
     /**
      * String representation of the invoked action or edited property.
@@ -332,8 +317,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
-
-
     @Property(
             domainEvent = InteractionDtoAnnot.DomainEvent.class
     )
@@ -349,8 +332,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @Override
     public abstract InteractionDto getInteractionDto();
     public abstract void setInteractionDto(InteractionDto commandDto);
-
-
 
     @Property(
             domainEvent = StartedAt.DomainEvent.class,
@@ -371,8 +352,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     public abstract java.sql.Timestamp getStartedAt();
     public abstract void setStartedAt(java.sql.Timestamp startedAt);
 
-
-
     @Property(
             domainEvent = CompletedAt.DomainEvent.class,
             editing = Editing.DISABLED,
@@ -391,8 +370,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     @CompletedAt
     public abstract java.sql.Timestamp getCompletedAt();
     public abstract void setCompletedAt(java.sql.Timestamp completedAt);
-
-
 
     @Property(
             domainEvent = Duration.DomainEvent.class,
@@ -416,12 +393,10 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
                 .orElse(null);
     }
 
-
     @Override
     public int compareTo(final ExecutionOutboxEntry other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
-
 
     static final ToString<ExecutionOutboxEntry> stringifier = ObjectContracts
             .toString("interactionId", ExecutionOutboxEntry::getInteractionId)

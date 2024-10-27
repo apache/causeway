@@ -31,7 +31,6 @@ import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommand
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
 
-
 /**
  * Contributes the <code>recentCommandsByUser</code> collection to any domain object implementing {@link HasUsername}.
  *

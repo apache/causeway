@@ -108,7 +108,6 @@ public class MemberDetection {
         @MemberSupport protected  String validate1PlaceOrder(final String y) { return "my validation-1";}
         @MemberSupport protected  String validatePlaceOrder(final String x, final String y) { return "my validation";}
 
-
         // -- PROPERTY
 
         @MemberSupport protected String namedEmail() { return "my email";}

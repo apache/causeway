@@ -86,6 +86,4 @@ extends ScalarPanelFormFieldAbstract<T> {
         };
     }
 
-
-
 }

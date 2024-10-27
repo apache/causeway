@@ -84,7 +84,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-
 @Service
 public class DomainObjectTesterFactory implements HasMetaModelContext {
 
@@ -334,8 +333,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         }
 
-
-
         public Object invokeWithPojos(final List<Object> pojoArgList) {
 
             assertExists(true);
@@ -469,8 +466,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 // when
                 pendingArgs->{
 
-
-
                 },
                 // then
                 pendingArgs->{
@@ -498,8 +493,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             assertParameterModel(checkRules,
                 // when
                 pendingArgs->{
-
-
 
                 },
                 // then
@@ -578,7 +571,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             return Can.ofCollection(capturedCommands);
         }
 
-
         /**
          * Use on non scalar results.
          */
@@ -652,7 +644,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                                     .map(Identifier::toString)
                                     .orElse("no such action")));
         }
-
 
         private void captureCommand() {
             capturedCommands.add(
@@ -867,7 +858,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         }
 
     }
-
 
     // -- COLLECTION TESTER
 
@@ -1134,7 +1124,6 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             }
         }
 
-
     }
 
     private static abstract class Tester<T> {
@@ -1165,7 +1154,5 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         }
 
     }
-
-
 
 }

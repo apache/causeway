@@ -46,8 +46,6 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
-
-
 @SpringBootTest(classes={
         Configuration_headless.class,
         CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
@@ -362,7 +360,6 @@ class JsonValueEncoderTest {
         assertThat(representation.getString("format"), is("date"));
         assertThat(representation.getString("extensions.x-causeway-format"), is("jodalocaldate"));
     }
-
 
     @Test
     void whenBlob() {

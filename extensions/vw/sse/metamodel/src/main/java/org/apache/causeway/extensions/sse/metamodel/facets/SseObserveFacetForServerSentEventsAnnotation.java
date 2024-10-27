@@ -49,5 +49,4 @@ public class SseObserveFacetForServerSentEventsAnnotation extends SseObserveFace
         super(eventStreamType, holder);
     }
 
-
 }

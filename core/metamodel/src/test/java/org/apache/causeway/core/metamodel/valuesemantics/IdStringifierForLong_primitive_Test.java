@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class IdStringifierForLong_primitive_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(Long.MAX_VALUE),

@@ -136,7 +136,6 @@ public @interface DomainObjectLayout {
         tableDecorator()
         default TableDecorator.Default.class;
 
-
     /**
      * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
      *
@@ -198,7 +197,6 @@ public @interface DomainObjectLayout {
     Class<? extends TitleUiEvent<?>>
             titleUiEvent()
             default TitleUiEvent.Default.class;
-
 
     // ...
 }

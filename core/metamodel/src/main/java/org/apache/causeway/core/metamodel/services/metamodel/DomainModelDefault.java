@@ -54,5 +54,4 @@ public class DomainModelDefault implements DomainModel {
 
     // --
 
-
 }

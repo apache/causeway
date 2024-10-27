@@ -103,7 +103,6 @@ public final class InteractionDtoUtils {
             }
         };
 
-
         public abstract MemberExecutionDto dtoFor(final Execution<?, ?> execution);
 
     }
@@ -256,7 +255,6 @@ public final class InteractionDtoUtils {
     private List<ParamDto> parameterListFor(final ActionInvocationDto invocationDto) {
         return parametersFor(invocationDto).getParameter();
     }
-
 
     // -- getParameters, getParameterNames, getParameterTypes
     public List<ParamDto> getParameters(final ActionInvocationDto ai) {

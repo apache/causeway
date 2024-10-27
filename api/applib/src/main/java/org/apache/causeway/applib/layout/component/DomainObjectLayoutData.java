@@ -60,7 +60,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public DomainObjectLayoutData() {
     }
 
-
     private BookmarkPolicy bookmarking;
 
     @Override
@@ -73,8 +72,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setBookmarking(final BookmarkPolicy bookmarking) {
         this.bookmarking = bookmarking;
     }
-
-
 
     private String cssClass;
 
@@ -89,7 +86,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         this.cssClass = cssClass;
     }
 
-
     private String cssClassFa;
 
     @Override
@@ -102,8 +98,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setCssClassFa(final String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
-
-
 
     private CssClassFaPosition cssClassFaPosition;
 
@@ -118,7 +112,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         this.cssClassFaPosition = cssClassFaPosition;
     }
 
-
     private String describedAs;
 
     @Override
@@ -131,8 +124,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setDescribedAs(final String describedAs) {
         this.describedAs = describedAs;
     }
-
-
 
     private String named;
 
@@ -147,8 +138,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         this.named = named;
     }
 
-
-
     private Integer paged;
 
     @XmlElement(required = false)
@@ -160,7 +149,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         this.paged = paged;
     }
 
-
     private Class<? extends TableDecorator> tableDecorator;
 
     @XmlElement(required = false)
@@ -171,11 +159,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
         this.tableDecorator = tableDecorator;
     }
-
-
-
-
-
 
     private String metadataError;
 
@@ -190,8 +173,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
-
-
 
     private DomainObjectLayoutDataOwner owner;
     /**
@@ -211,7 +192,6 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
         this.owner = owner;
     }
 
-
     private Link link;
 
     /**
@@ -229,9 +209,5 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     public void setLink(final Link link) {
         this.link = link;
     }
-
-
-
-
 
 }

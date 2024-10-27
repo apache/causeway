@@ -24,8 +24,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 
-
-
 public class BookmarkedPojo {
 
     private final Bookmark bookmark;

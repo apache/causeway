@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.TemporalAdjust
 
 class TemporalAdjustTest {
 
-
     final TemporalAdjust plus1Year = TemporalAdjust.of(1, 0, 0, 0, 0);
     final TemporalAdjust minus1Year = TemporalAdjust.of(-1, 0, 0, 0, 0);
 
@@ -60,7 +59,6 @@ class TemporalAdjustTest {
     final OffsetDateTime offsetDateTime = OffsetDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC);
     final ZonedDateTime zonedDateTime = ZonedDateTime.of(2015, 5, 23, 9, 54, 1, 0, ZoneOffset.UTC);
 
-
     private void assertNegates(final TemporalAdjust a, final TemporalAdjust b) {
 
         assertEquals(a, a.sign(1)); // identity
@@ -68,7 +66,6 @@ class TemporalAdjustTest {
         assertEquals(a, b.sign(-1));
         assertEquals(a.sign(-1), b);
     }
-
 
     private void assertAdjust(final long amount, final ChronoUnit unit, final TemporalAdjust adjust) {
 
@@ -94,7 +91,6 @@ class TemporalAdjustTest {
         assertEquals(zonedDateTime.plus(amount, unit), adjust.adjustZonedDateTime(zonedDateTime));
     }
 
-
     @Test
     void identityAndSign_shouldBeConsistent() {
 
@@ -117,6 +113,5 @@ class TemporalAdjustTest {
         assertAdjust(1, ChronoUnit.MINUTES, plus1Minute);
 
     }
-
 
 }

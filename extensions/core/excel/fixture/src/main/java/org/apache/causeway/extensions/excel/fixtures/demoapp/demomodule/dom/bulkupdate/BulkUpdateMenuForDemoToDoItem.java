@@ -58,7 +58,6 @@ public class BulkUpdateMenuForDemoToDoItem {
         return manager;
     }
 
-
     @XmlTransient @Inject private RepositoryService repositoryService;
     @XmlTransient @Inject private FactoryService factoryService;
     @XmlTransient @Inject private UserService userService;

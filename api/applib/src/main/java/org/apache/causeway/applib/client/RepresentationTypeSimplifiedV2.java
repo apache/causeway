@@ -107,7 +107,6 @@ public enum RepresentationTypeSimplifiedV2 {
         .filter(Objects::nonNull);
     }
 
-
     // -- HELPER
 
     private static String trimQuotesIfAny(final String s) {
@@ -137,7 +136,5 @@ public enum RepresentationTypeSimplifiedV2 {
         .findAny()
         .map(RepresentationTypeSimplifiedV2::trimQuotesIfAny);
     }
-
-
 
 }

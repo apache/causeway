@@ -53,5 +53,4 @@ public class JdoProductComment implements OnUpdatedByAndAt {
     @Property
     @Getter @Setter private Timestamp updatedAt;
 
-
 }

@@ -31,7 +31,6 @@ import lombok.experimental.Accessors;
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperParameterSupport {
 
-
     @Value @Accessors(fluent = true) // fluent so we can replace this with Java(14+) records later
     static class Parameters {
         String p0;
@@ -111,6 +110,5 @@ public class ProperParameterSupport {
     @MemberSupport public String disable2Act(Parameters p) {
         return null;
     }
-
 
 }

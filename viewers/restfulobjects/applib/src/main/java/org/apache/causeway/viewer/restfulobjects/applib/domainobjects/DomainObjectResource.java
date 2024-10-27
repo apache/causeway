@@ -79,7 +79,6 @@ public interface DomainObjectResource {
     @Path("/{domainType}/{instanceId}")
     public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
 
-
     // //////////////////////////////////////////////////////////
     // domain object image
     // //////////////////////////////////////////////////////////
@@ -95,7 +94,6 @@ public interface DomainObjectResource {
             final String domainType,
             @PathParam("instanceId")
             final String instanceId);
-
 
     // //////////////////////////////////////////////////////////
     // domain object layout
@@ -113,7 +111,6 @@ public interface DomainObjectResource {
             final String domainType,
             @PathParam("instanceId")
             final String instanceId);
-
 
     // //////////////////////////////////////////////////////////
     // domain object property
@@ -149,7 +146,6 @@ public interface DomainObjectResource {
     @POST
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     public Response postPropertyNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
-
 
     // //////////////////////////////////////////////////////////
     // domain object collection

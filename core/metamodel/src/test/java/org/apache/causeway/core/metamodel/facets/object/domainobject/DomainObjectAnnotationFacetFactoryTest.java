@@ -122,7 +122,6 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectAndAuditingSetToEnabled {
         }
 
-
         public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends EntityChangePublishing {
 
             @Test
@@ -399,7 +398,6 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectAndEditingSetToEnabled {
         }
 
-
         public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends Editing {
 
             @Test
@@ -442,12 +440,10 @@ extends FacetFactoryTestAbstract {
                     assertNotNull(facet); // default is now non-editable
                     assertTrue(facet instanceof ImmutableFacetFromConfiguration);
 
-
                     assertNoMethodsRemoved();
                 });
             }
         }
-
 
         public static class WithDomainObjectAnnotationWithEditingSetToAsConfigured extends Editing {
 

@@ -91,5 +91,4 @@ class TemporalsTest {
                 formatter.format(ZonedDateTime.of(dummyDate, dummyTime, _Temporals.UTC)));
     }
 
-
 }

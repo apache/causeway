@@ -71,5 +71,3 @@ public class TextFieldWithConverter<T> extends TextField<T> {
     }
 
 }
-
-

@@ -58,7 +58,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -283,7 +282,6 @@ public class ArchitectureDomainRules {
                 });
     }
 
-
     /**
      * This rule requires that classes annotated with the {@link Repository} annotation should follow the naming
      * convention <code>XxxRepository</code>.
@@ -347,7 +345,6 @@ public class ArchitectureDomainRules {
                 .that().haveNameMatching(".*Controller")
                 .should().beAnnotatedWith(Controller.class);
     }
-
 
     /**
      * This rule requires that injected fields in jaxb view models (that is, classes annotated with the JAXB
@@ -444,11 +441,5 @@ public class ArchitectureDomainRules {
             }
         };
     }
-
-
-
-
-
-
 
 }

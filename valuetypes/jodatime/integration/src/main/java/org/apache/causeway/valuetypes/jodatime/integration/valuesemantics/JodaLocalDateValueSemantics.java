@@ -68,5 +68,4 @@ extends TemporalSemanticsAdapter<org.joda.time.LocalDate, java.time.LocalDate>  
                 org.joda.time.LocalDate.now().plusDays(2));
     }
 
-
 }

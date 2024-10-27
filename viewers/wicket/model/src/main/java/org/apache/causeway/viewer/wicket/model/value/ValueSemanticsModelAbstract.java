@@ -44,7 +44,6 @@ implements
     protected final ViewOrEditMode scalarRepresentation;
     protected transient Either<OneToOneAssociation, ObjectActionParameter> propOrParam;
 
-
     protected ValueSemanticsModelAbstract(
             final @NonNull ObjectFeature propOrParam,
             final @NonNull ViewOrEditMode scalarRepresentation) {

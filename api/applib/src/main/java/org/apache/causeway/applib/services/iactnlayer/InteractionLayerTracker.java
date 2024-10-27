@@ -68,7 +68,6 @@ extends InteractionProvider {
                 .map(InteractionLayer::getInteractionContext);
     }
 
-
     // -- INTERACTION
 
     /**

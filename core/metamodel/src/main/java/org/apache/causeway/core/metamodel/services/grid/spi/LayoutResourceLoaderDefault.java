@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.spi;
 
-
 import javax.annotation.Priority;
 import javax.inject.Named;
 

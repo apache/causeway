@@ -39,5 +39,4 @@ public interface ServiceInjector {
      */
     <T> T injectServicesInto(final @Nullable T domainObject);
 
-
 }

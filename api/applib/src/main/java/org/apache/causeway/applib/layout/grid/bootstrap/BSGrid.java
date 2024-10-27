@@ -62,7 +62,6 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
 
     private static final long serialVersionUID = 1L;
 
-
     private String cssClass;
 
     @Override
@@ -76,7 +75,6 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
         this.cssClass = cssClass;
     }
 
-
     private List<BSRow> rows = new ArrayList<>();
 
     // no wrapper
@@ -89,8 +87,6 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
     public void setRows(final List<BSRow> rows) {
         this.rows = rows;
     }
-
-
 
     private List<String> metadataErrors = new ArrayList<>();
 
@@ -106,12 +102,8 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
         this.metadataErrors = metadataErrors;
     }
 
-
-
     @SuppressWarnings("unused")
     private BSRowOwner owner;
-
-
 
     public interface Visitor extends Grid.Visitor {
         void preVisit(final BSGrid bsGrid);
@@ -264,7 +256,6 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
         };
     }
 
-
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, BSTab> getAllTabsByName() {
@@ -278,7 +269,6 @@ public class BSGrid extends GridAbstract implements BSElement, Dto, BSRowOwner {
         });
         return tabsByName;
     }
-
 
     @Programmatic
     @XmlTransient

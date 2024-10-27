@@ -33,8 +33,6 @@ import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.jdo.entities.JdoProductComment;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class

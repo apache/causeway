@@ -52,5 +52,4 @@ public class JUnitRuleMockery2Test_autoWiring_constructorInjection_happyCase {
         assertThat(collaborating.collaborator, is(not(nullValue())));
     }
 
-
 }

@@ -82,7 +82,6 @@ final class _Xray {
                 sequenceData.activate(uiInteractionId);
             });
 
-
         });
 
     }
@@ -96,7 +95,6 @@ final class _Xray {
         final int authStackSize = beforeClose.size();
         var interactionId = beforeClose.peek().getInteraction().getInteractionId();
         var sequenceId = XrayUtil.sequenceId(interactionId);
-
 
         _XrayEvent.interactionClose("close interaction %s", interactionId);
 
@@ -121,6 +119,5 @@ final class _Xray {
         });
 
     }
-
 
 }

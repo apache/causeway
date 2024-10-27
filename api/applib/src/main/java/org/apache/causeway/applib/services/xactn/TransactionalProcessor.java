@@ -93,7 +93,6 @@ public interface TransactionalProcessor {
         return callTransactional(propagation, runnable.toCallable());
     }
 
-
     // -- SHORTCUTS - MOST FREQUENT USAGE
 
     /**

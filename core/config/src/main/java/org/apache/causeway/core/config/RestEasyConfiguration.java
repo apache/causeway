@@ -24,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import lombok.Data;
 import lombok.Getter;
 
-
 /**
  * Selected configuration for <code>resteasy-spring-boot-starter</code>, to provide IDE-support.
  *

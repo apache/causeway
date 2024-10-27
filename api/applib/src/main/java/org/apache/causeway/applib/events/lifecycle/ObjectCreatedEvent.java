@@ -63,5 +63,4 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
         super(source);
     }
 
-
 }

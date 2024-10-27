@@ -61,7 +61,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     private final Class<C> commandLogEntryClass;
 
-
     protected CommandLogEntryRepositoryAbstract(final Class<C> commandLogEntryClass) {
         this.commandLogEntryClass = commandLogEntryClass;
     }
@@ -146,7 +145,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
     public List<CommandLogEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final @Nullable LocalDate from,
@@ -180,7 +178,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return _Casts.uncheckedCast(repositoryService().allMatches(query));
     }
 
-
     @Override
     public List<CommandLogEntry> findMostRecent() {
         return findMostRecent(100);
@@ -194,7 +191,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
     @Override
     public List<CommandLogEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
@@ -204,8 +200,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                         .withLimit(30L))
         );
     }
-
-
 
     public List<CommandLogEntry> findRecentByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
@@ -226,7 +220,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     )
         );
     }
-
 
     /**
      * Intended to support the replay of commands on a secondary instance of
@@ -306,7 +299,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
     /**
      * The most recent replayed command previously replicated from primary to
      * secondary.
@@ -353,7 +345,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
-
     public C saveForReplay(final CommandDto dto) {
 
         if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
@@ -383,7 +374,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return commandJdo;
     }
 
-
     public List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto) {
         var commandDtos = commandsDto.getCommandDto();
         var commands = new ArrayList<CommandLogEntry>();
@@ -392,7 +382,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         }
         return commands;
     }
-
 
     @Override
     public void persist(final CommandLogEntry commandLogEntry) {
@@ -406,7 +395,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
     // --
 
-
     @Override
     public List<CommandLogEntry> findCommandsOnPrimaryElseFail(
             final @Nullable UUID interactionId,
@@ -418,8 +406,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         }
         return commands;
     }
-
-
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
         var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
@@ -447,10 +433,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                 : commandJdos;
     }
 
-
-
-
-
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
     }
@@ -477,7 +459,6 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return _Casts.uncheckedCast(repositoryService().allInstances(commandLogEntryClass));
     }
 
-
     /**
      * intended for testing purposes only
      */
@@ -488,6 +469,5 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         }
         repositoryService().removeAll(commandLogEntryClass);
     }
-
 
 }

@@ -23,8 +23,6 @@ import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
-
-
 public class BookmarkedPojoFetcher implements DataFetcher<Object> {
     private final BookmarkService bookmarkService;
 

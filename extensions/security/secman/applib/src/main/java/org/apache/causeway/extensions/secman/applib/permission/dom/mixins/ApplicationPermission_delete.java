@@ -33,7 +33,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  *
  * @since 2.0 {@index}

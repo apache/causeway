@@ -85,7 +85,6 @@ implements
                 : (breadcrumbModel = new BreadcrumbModel());
     }
 
-
     /**
      * lazily populated in {@link #getBookmarkedPagesModel()}
      */

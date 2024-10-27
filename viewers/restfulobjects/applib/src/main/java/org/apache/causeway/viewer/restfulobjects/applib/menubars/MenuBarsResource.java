@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 @Path("/menuBars")
 public interface MenuBarsResource {
 
-
     /**
      * Not part of the Restful Objects spec.
      */
@@ -65,6 +64,5 @@ public interface MenuBarsResource {
      */
     @POST
     public Response postMenuBarsNotAllowed();
-
 
 }

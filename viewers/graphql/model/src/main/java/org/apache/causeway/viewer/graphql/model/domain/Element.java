@@ -64,7 +64,6 @@ public abstract class Element {
         addDataFetchersForChildren();
     }
 
-
     /**
      * Use the provided fieldName rather than that of {@link #getField()}.
      *

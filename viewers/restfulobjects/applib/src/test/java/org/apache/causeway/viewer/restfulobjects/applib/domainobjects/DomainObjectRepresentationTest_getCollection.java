@@ -48,5 +48,4 @@ class DomainObjectRepresentationTest_getCollection {
         assertThat(flag.getBoolean("value"), is(true));
     }
 
-
 }

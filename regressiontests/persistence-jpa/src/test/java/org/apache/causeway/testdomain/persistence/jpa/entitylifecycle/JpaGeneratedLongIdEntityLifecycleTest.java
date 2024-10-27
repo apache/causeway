@@ -45,8 +45,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaEntityGeneratedLongId;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,

@@ -43,8 +43,6 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,

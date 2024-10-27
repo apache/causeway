@@ -50,7 +50,6 @@ public class ApprovalsOptions {
                 .collect(Collectors.joining("\n")); // UNIX line ending convention
     }
 
-
     /**
      * As the XML spec states, order of attributes has no semantic significance and hence is not
      * guaranteed to be always the same, like in

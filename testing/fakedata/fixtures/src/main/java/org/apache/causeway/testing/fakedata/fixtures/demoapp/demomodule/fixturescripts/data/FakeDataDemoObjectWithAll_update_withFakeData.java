@@ -44,7 +44,6 @@ import lombok.Setter;
 
 public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript {
 
-
     @Getter(onMethod = @__( @Programmatic )) @Setter
     private FakeDataDemoObjectWithAll fakeDataDemoObject;
 
@@ -119,7 +118,6 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
     @Getter(onMethod = @__( @Programmatic )) @Setter
     private EnumOf3 someEnumOf3;
-
 
     @Override
     protected void execute(final ExecutionContext executionContext) {

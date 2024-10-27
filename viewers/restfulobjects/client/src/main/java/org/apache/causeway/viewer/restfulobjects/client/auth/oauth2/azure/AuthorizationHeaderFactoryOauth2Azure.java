@@ -25,7 +25,6 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;
 
 import lombok.SneakyThrows;
 
-
 public class AuthorizationHeaderFactoryOauth2Azure implements AuthorizationHeaderFactory {
 
     private final TokenCache tokenCache;

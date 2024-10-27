@@ -69,7 +69,6 @@ implements FixtureAwareRowHandler<DemoToDoItemRowHandler2>, ExcelMetaDataEnabled
         executionContext.addResult(excelFixture2, this);
     }
 
-
     /**
      * To allow for usage within fixture scripts also.
      */

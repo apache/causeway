@@ -25,8 +25,6 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
-
-
 /**
  * @since 2.0 {@index}
  */

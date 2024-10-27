@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303PropertyV
 import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.causeway.core.metamodel.spec.identifier.Identified;
 
-
 @RunWith(JMock.class)
 public class Jsr303FacetValidatingInteraction {
 

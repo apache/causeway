@@ -54,5 +54,4 @@ public class UrlEncodingServiceWithCompression implements UrlEncodingService {
         return _Bytes.ofCompressedUrlBase64.apply(_Strings.toBytes(str, StandardCharsets.UTF_8));
     }
 
-
 }

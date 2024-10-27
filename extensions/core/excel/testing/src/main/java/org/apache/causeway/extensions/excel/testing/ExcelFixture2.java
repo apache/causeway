@@ -52,10 +52,8 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExcelApplib.NAMESPACE + ".ExcelFixture2";
 
-
     @Inject FactoryService factoryService;
     @Inject ExcelService excelService;
-
 
     /**
      * Input, optional: defines the name of the resource.
@@ -89,7 +87,6 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
     @Getter @Setter
     private WorksheetSpec.Sequencer sequencer;
 
-
     protected <T> WorksheetSpec.RowFactory<T> rowFactoryFor(
             final Class<T> rowClass,
             final ExecutionContext ec) {
@@ -115,14 +112,12 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
         };
     }
 
-
     /**
      * Output... a list of list of objects (each representing a row of a sheet)
      */
     @Programmatic // list of list not allowed to enter meta-model
     @Getter
     private List<List<?>> lists;
-
 
     @Override
     protected void execute(final ExecutionContext executionContext) {
@@ -134,7 +129,6 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
 
         this.lists = excelService.fromExcel(blob, matcher, sequencer);
     }
-
 
     private byte[] bytes;
     private byte[] getBytes() {
@@ -155,7 +149,6 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
             throw new IllegalArgumentException("Could not read from resource: " + getExcelResource());
         }
     }
-
 
     @Override
     public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
@@ -179,6 +172,5 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
     public int hashCode() {
         return Arrays.hashCode(getBytes());
     }
-
 
 }

@@ -79,5 +79,4 @@ class JaxbServiceTest {
         assertEquals(a.getLogicalMemberIdentifier(), b.getLogicalMemberIdentifier());
     }
 
-
 }

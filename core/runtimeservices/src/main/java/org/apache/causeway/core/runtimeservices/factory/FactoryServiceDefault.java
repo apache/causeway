@@ -62,7 +62,6 @@ public class FactoryServiceDefault implements FactoryService {
     @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
     private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
 
-
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
         var spec = loadSpecElseFail(requiredType);

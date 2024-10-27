@@ -104,8 +104,6 @@ public class FixtureResultList {
         return Collections.unmodifiableList(list);
     }
 
-
-
     // -- nextItemFor
 
     private final Map<FixtureScript, AtomicInteger> itemNumberByScript = _Maps.newHashMap();
@@ -118,9 +116,6 @@ public class FixtureResultList {
         }
         return "item-"+atomicInteger.incrementAndGet();
     }
-
-
-
 
     // -- lookup
 
@@ -138,6 +133,5 @@ public class FixtureResultList {
         }
         return _Casts.uncheckedCast(object);
     }
-
 
 }

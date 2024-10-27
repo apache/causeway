@@ -81,7 +81,6 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 import lombok.SneakyThrows;
 import lombok.Value;
 
-
 /**
  * Intended as a base class for integration testing.
  *
@@ -177,7 +176,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         assertNotNull(executionGraphQlServiceForCauseway);
     }
 
-
     /**
      * Populated automatically by JUnit5
      */
@@ -192,7 +190,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
                         .build();
         return HttpGraphQlTester.create(client);
     }
-
 
     /**
      * Builds an HTTP request based on the current {@link TestInfo}, with suffix <code>.submit.gql</code>,
@@ -324,8 +321,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
                 .forFile().withExtension(".json");
     }
 
-
-
     protected Iterable<DynamicTest> each() throws IOException, URISyntaxException {
 
         var integClassName = getClass().getSimpleName();
@@ -379,6 +374,5 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
         return buffer.toByteArray();
     }
-
 
 }

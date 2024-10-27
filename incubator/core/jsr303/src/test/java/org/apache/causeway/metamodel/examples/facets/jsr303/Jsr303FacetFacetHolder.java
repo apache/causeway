@@ -34,9 +34,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
 import org.apache.causeway.core.metamodel.facets.FacetHolder;
 
-
-
-
 @RunWith(JMock.class)
 public class Jsr303FacetFacetHolder {
 
@@ -49,7 +46,6 @@ public class Jsr303FacetFacetHolder {
     private Jsr303PropertyValidationFacet facet;
     private FacetHolder mockHolder;
 
-    
     @Before
     public void setUp() throws Exception {
         mockHolder = mockery.mock(FacetHolder.class);
@@ -61,7 +57,6 @@ public class Jsr303FacetFacetHolder {
         mockHolder = null;
         facet = null;
     }
-
 
     @Test
     public void facetHolder() {

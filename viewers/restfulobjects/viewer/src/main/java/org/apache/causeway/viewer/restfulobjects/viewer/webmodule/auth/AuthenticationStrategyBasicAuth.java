@@ -31,8 +31,6 @@ import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 
-
-
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the
  * {@link InteractionContext} onto the {@link HttpSession}.
@@ -57,7 +55,6 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
         httpServletRequest.setAttribute(
                 "org.apache.shiro.subject.support.DefaultSubjectContext.SESSION_CREATION_ENABLED",
                 Boolean.FALSE);
-
 
         var digest = getBasicAuthDigest(httpServletRequest);
         if (digest == null) {
@@ -110,6 +107,5 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
                         encodedDigest.getBytes()),
                 StandardCharsets.UTF_8);
     }
-
 
 }

@@ -88,5 +88,4 @@ implements
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }
 
-
 }

@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-
-
 class DomainResourceHelper_readBodyAsMap_Test {
 
     @Test
@@ -84,6 +82,5 @@ class DomainResourceHelper_readBodyAsMap_Test {
     private JsonRepresentation representationFor(final String input) {
         return RequestParams.ofQueryString(input).asMap();
     }
-
 
 }

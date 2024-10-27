@@ -56,7 +56,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import lombok.Getter;
 import lombok.NonNull;
 
-
 public abstract class ResourceAbstract
 implements HasMetaModelContext {
 
@@ -158,7 +157,6 @@ implements HasMetaModelContext {
                                         "Could not determine adapter for bookmark: '%s'",
                                         bookmark)));
     }
-
 
     // -- HELPER
 

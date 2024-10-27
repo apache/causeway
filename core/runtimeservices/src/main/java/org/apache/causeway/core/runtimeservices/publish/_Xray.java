@@ -74,7 +74,6 @@ final class _Xray {
         return enterCommandPublishing(iaTracker, command, enabledSubscribers, cannotPublishReasonSupplier, "completed");
     }
 
-
     private static SequenceHandle enterCommandPublishing(InteractionLayerTracker iaTracker, Command command, Can<CommandSubscriber> enabledSubscribers, Supplier<String> cannotPublishReasonSupplier, String verb) {
         if(!XrayUi.isXrayEnabled()) {
             return null;

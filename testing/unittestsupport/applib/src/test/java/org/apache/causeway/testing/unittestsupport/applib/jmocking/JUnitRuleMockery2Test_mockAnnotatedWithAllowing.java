@@ -54,5 +54,4 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithAllowing {
         collaborating.dontCollaborateWithCollaborator();
     }
 
-
 }

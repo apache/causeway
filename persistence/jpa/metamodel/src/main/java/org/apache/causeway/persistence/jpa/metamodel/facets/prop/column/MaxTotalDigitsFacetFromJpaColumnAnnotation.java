@@ -45,5 +45,4 @@ extends MaxTotalDigitsFacetAbstract {
         super(precision, holder);
     }
 
-
 }

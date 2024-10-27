@@ -55,7 +55,6 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         authorizor = new AuthorizorShiro();
     }
 
-
     @AfterEach
     void tearDown() throws Exception {
         Subject subject = ThreadContext.getSubject();

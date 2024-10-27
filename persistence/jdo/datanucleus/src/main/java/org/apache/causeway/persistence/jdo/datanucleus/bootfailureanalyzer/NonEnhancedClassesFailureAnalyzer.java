@@ -25,8 +25,6 @@ import org.datanucleus.exceptions.NucleusUserException;
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
 import org.springframework.boot.diagnostics.FailureAnalysis;
 
-
-
 public class NonEnhancedClassesFailureAnalyzer extends AbstractFailureAnalyzer<org.datanucleus.exceptions.NucleusUserException> {
 
     @Override

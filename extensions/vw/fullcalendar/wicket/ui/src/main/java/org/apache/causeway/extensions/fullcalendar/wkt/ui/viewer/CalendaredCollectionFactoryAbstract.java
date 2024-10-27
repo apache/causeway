@@ -63,7 +63,6 @@ implements
 
     protected abstract Component newComponent(final String id, final EntityCollectionModel collectionModel);
 
-
     @Override
     public IModel<String> getTitleLabel() {
         return Model.of("Calendar");

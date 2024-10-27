@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 
-
 /**
  * contract test.
  */

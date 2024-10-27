@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-
-
 public class SimpleCollection
         extends Element {
 

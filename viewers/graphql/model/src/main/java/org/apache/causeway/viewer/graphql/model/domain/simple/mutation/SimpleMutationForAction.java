@@ -52,7 +52,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -188,7 +187,6 @@ public class SimpleMutationForAction extends Element {
         return resultManagedObject.getPojo();
     }
 
-
     // TODO: adapted from SimpleAction - rationalize?
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
@@ -243,6 +241,5 @@ public class SimpleMutationForAction extends Element {
             final ObjectAction objectAction) {
         return ObjectFeatureUtils.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
-
 
 }

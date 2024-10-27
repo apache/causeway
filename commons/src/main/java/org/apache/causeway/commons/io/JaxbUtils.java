@@ -229,7 +229,6 @@ public class JaxbUtils {
         };
     }
 
-
     // -- READING
 
     /**
@@ -337,7 +336,6 @@ public class JaxbUtils {
         boolean formattedOutput = jaxbOptions.formattedOutput;
         return formattedOutput;
     }
-
 
     // -- MAPPER FACTORY
 

@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
  */
 abstract class CausewayIntegrationTestBase {
 
-
     /**
      * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}
      */
@@ -90,14 +89,12 @@ abstract class CausewayIntegrationTestBase {
         return wrapperFactory.unwrap(obj);
     }
 
-
     /**
      * Get the current {@link EntityState} of given pojo.
      */
     protected EntityState entityState(final Object obj) {
         return objectManager.adapt(obj).getEntityState();
     }
-
 
     // -- DEPENDENCIES
 

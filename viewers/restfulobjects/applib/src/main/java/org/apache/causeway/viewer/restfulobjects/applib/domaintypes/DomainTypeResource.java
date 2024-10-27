@@ -34,13 +34,10 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 @Path("/domain-types")
 public interface DomainTypeResource {
 
-
     @GET
     @Path("/")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public abstract Response domainTypes();
-
-
 
     @GET
     @Path("/{domainType}")
@@ -74,8 +71,6 @@ public interface DomainTypeResource {
     @Path("/{domainType}/actions/{actionId}/params/{paramId}")
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public abstract Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramId") final String paramId);
-
-
 
     @GET
     @Path("/{domainType}/isSubtypeOf/invoke")

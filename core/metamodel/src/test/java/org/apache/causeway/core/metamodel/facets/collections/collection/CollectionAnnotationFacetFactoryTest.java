@@ -382,11 +382,9 @@ extends FacetFactoryTestAbstract {
             });
         }
 
-
     }
 
     static class TypeOf extends CollectionAnnotationFacetFactoryTest {
-
 
         @Test
         void whenCollectionAnnotation() {

@@ -99,5 +99,4 @@ public class MmvErrorPage extends WebPageBase {
         return true;
     }
 
-
 }

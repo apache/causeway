@@ -67,13 +67,11 @@ abstract class SpecificationLoaderTestAbstract {
         assertNull(facet);
     }
 
-
     @Test
     public void testTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
         assertNull(facet);
     }
-
 
     @Test
     public void testNamedFaced() throws Exception {

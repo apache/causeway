@@ -93,7 +93,6 @@ implements AutoCompleteFacet {
         return getServiceRegistry().lookupServiceElseFail(ExecutionPublisher.class);
     }
 
-
     @Override
     public int getMinLength() {
         if(minLength == null) {

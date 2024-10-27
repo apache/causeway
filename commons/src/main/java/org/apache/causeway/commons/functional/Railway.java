@@ -267,5 +267,4 @@ public interface Railway<F, S> {
         }
     }
 
-
 }

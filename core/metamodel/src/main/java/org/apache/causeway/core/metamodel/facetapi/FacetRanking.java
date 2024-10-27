@@ -166,7 +166,6 @@ public final class FacetRanking {
                 .map(_Casts::uncheckedCast);
     }
 
-
     /**
      * Optionally returns the top ranking event facet, based on whether there was one added.
      * @param facetType - for convenience, so the caller does not need to cast the result
@@ -263,7 +262,6 @@ public final class FacetRanking {
         });
     }
 
-
     public <F extends Facet> void visitTopRankPairs(
             final @NonNull Class<F> facetType,
             final @NonNull BiConsumer<F, F> visitor) {
@@ -281,8 +279,5 @@ public final class FacetRanking {
         }
 
     }
-
-
-
 
 }

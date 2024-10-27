@@ -42,7 +42,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -94,7 +93,6 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
             postConstructCalled = true;
         }
     }
-
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     @RequiredArgsConstructor

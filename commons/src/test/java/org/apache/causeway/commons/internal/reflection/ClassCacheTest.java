@@ -158,5 +158,4 @@ class ClassCacheTest {
         assertTrue(methodCount>0);
     }
 
-
 }

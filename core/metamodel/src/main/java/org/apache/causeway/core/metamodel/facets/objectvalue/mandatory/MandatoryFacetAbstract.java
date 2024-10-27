@@ -145,7 +145,6 @@ implements MandatoryFacet {
 
         final Can<MandatoryFacet> conflictingFacets = findConflictingMandatoryFacets(mandatoryFacet);
 
-
         if(conflictingFacets.isNotEmpty()) {
             var holder = mandatoryFacet.getFacetHolder();
 

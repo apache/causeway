@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 public abstract class PromptStyleFacetAbstract extends FacetAbstract
 implements PromptStyleFacet {
 
-
     public static final Class<PromptStyleFacet> type() {
         return PromptStyleFacet.class;
     }

@@ -76,7 +76,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -147,7 +146,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
         @Test
         public void when_all_defaulted() throws Exception {
 
-
             //
             // when
             //
@@ -155,7 +153,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -200,7 +197,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeBooleanWrapper()).isNull();
 
-
             //
             // when
             //
@@ -210,14 +206,12 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
             transactionService.flushTransaction();
 
-
             //
             // then
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
             Assertions.assertThat(fakeDataDemoObject.isSomeBoolean()).isTrue();
             Assertions.assertThat(fakeDataDemoObject.getSomeBooleanWrapper()).isTrue();
-
 
             //
             // when
@@ -228,7 +222,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -237,7 +230,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeBooleanWrapper()).isFalse();
 
         }
-
 
         @Test
         public void when_char() throws Exception {
@@ -249,7 +241,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final char theChar = 'x';
 
-
             //
             // when
             //
@@ -258,7 +249,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -279,7 +269,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final byte theByte = (byte) 123;
 
-
             //
             // when
             //
@@ -288,7 +277,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -310,7 +298,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final short theShort = (short) 32123;
 
-
             //
             // when
             //
@@ -319,7 +306,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -331,7 +317,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
         public void when_int() throws Exception {
 
@@ -342,7 +327,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final int theInt = 1234578;
 
-
             //
             // when
             //
@@ -351,7 +335,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -373,7 +356,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final long theLong = 123456789012345678L;
 
-
             //
             // when
             //
@@ -382,7 +364,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -403,7 +384,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final float theFloat = 123456.789F;
 
-
             //
             // when
             //
@@ -412,7 +392,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript, null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -424,7 +403,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
         }
 
-
         @Test
         public void when_double() throws Exception {
 
@@ -435,7 +413,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final double theDouble = 123456789.012345678;
 
-
             //
             // when
             //
@@ -445,7 +422,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -454,7 +430,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeDouble()).isEqualTo(theDouble);
             Assertions.assertThat(fakeDataDemoObject.getSomeDoubleWrapper()).isEqualTo(theDouble);
         }
-
 
         @Test
         public void when_string() throws Exception {
@@ -466,7 +441,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final String theString = "(c) Apache Software Foundation";
 
-
             //
             // when
             //
@@ -476,7 +450,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -484,7 +457,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             Assertions.assertThat(fakeDataDemoObject.getSomeString()).isEqualTo(theString);
         }
-
 
         @Test
         public void when_password() throws Exception {
@@ -496,7 +468,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final Password thePassword = new Password("abc!def$ghi");
 
-
             //
             // when
             //
@@ -506,7 +477,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -515,7 +485,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomePassword()).isEqualTo(thePassword);
 
         }
-
 
         @Test
         public void when_bigdecimal() throws Exception {
@@ -527,7 +496,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final BigDecimal theBigDecimal = new BigDecimal("9876543210.9876");
 
-
             //
             // when
             //
@@ -536,7 +504,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -557,7 +524,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final BigInteger theBigInteger = new BigInteger("123456789012345678");
 
-
             //
             // when
             //
@@ -566,7 +532,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -586,7 +551,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final Blob theBlob = fakeDataService.causewayBlobs().anyPdf();
 
-
             //
             // when
             //
@@ -596,7 +560,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -617,7 +580,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final Clob theClob = fakeDataService.causewayClobs().anyXml();
 
-
             //
             // when
             //
@@ -627,7 +589,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -658,7 +619,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -667,7 +627,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isEqualTo(theDate);
 
         }
-
 
         @Test
         public void when_javaSqlDate() throws Exception {
@@ -689,7 +648,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -698,7 +656,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isEqualTo(theDate);
 
         }
-
 
         @Test
         public void when_javaSqlTimestampDateTime() throws Exception {
@@ -720,7 +677,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -729,7 +685,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isEqualTo(theTimestamp);
 
         }
-
 
         @Test
         public void when_jodaDateTime() throws Exception {
@@ -750,7 +705,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -781,7 +735,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -790,7 +743,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isEqualTo(theDate);
 
         }
-
 
         @Test
         public void when_url() throws Exception {
@@ -812,7 +764,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             transactionService.flushTransaction();
 
-
             //
             // then
             //
@@ -821,7 +772,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isEqualTo(theUrl);
 
         }
-
 
         @Test
         public void when_uuid() throws Exception {
@@ -842,7 +792,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -899,7 +848,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
 
             final EnumOf3 theEnumConstant = EnumOf3.AMEX;
 
-
             //
             // when
             //
@@ -909,7 +857,6 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fixtureScripts.runFixtureScript( updateScript,  null);
 
             transactionService.flushTransaction();
-
 
             //
             // then
@@ -921,8 +868,5 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
         }
 
     }
-
-
-
 
 }

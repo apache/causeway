@@ -106,7 +106,6 @@ implements
 
     final InteractionIdGenerator interactionIdGenerator;
 
-
     @Inject
     public InteractionServiceDefault(
             final MetamodelEventService runtimeEventService,
@@ -128,7 +127,6 @@ implements
 
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
     }
-
 
     @EventListener
     public void init(final ContextRefreshedEvent event) {
@@ -226,8 +224,6 @@ implements
     			? new CausewayInteraction(interactionIdGenerator.interactionId())
 				: _Casts.uncheckedCast(interactionLayers.firstElement().getInteraction());
     }
-
-
 
     @Override
     public void closeInteractionLayers() {
@@ -435,9 +431,6 @@ implements
             throw flushException;
         }
     }
-
-
-
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
 

@@ -189,7 +189,6 @@ public class BackgroundService {
             };
         }
 
-
         @Override
         public <T> Future<T> submit(final Runnable task, final T result) {
             throw new IllegalStateException("Not implemented");

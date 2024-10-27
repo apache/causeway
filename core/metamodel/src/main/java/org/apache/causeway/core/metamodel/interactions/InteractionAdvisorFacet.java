@@ -40,5 +40,4 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  */
 public interface InteractionAdvisorFacet extends InteractionAdvisor, Facet {
 
-
 }

@@ -56,7 +56,6 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
         super(memento);
     }
 
-
     // -- elementType
 
     @ApplicationFeatureViewModel.TypeSimpleName
@@ -84,7 +83,6 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
                 .orElse("<none>");
     }
 
-
     // -- derived
 
     @Property(
@@ -104,6 +102,5 @@ public class ApplicationTypeCollection extends ApplicationTypeMember {
     public boolean isDerived() {
         return getFeature().isPropertyOrCollectionDerived();
     }
-
 
 }

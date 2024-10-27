@@ -102,5 +102,4 @@ extends ImmutableFacetAbstract {
                 .orElseGet(()->VetoReason.editingObjectDisabledReasonNotGiven());
     }
 
-
 }

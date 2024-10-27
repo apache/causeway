@@ -107,7 +107,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtAuditTrailApplib.CollectionDomainEvent<AuditTrailEntry, T> { }
     public static abstract class ActionDomainEvent extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<AuditTrailEntry> { }
 
-
     @Programmatic
     public void init(final EntityPropertyChange change) {
         setTimestamp(change.getTimestamp());
@@ -129,13 +128,11 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         return buf.toString();
     }
 
-
     @DomainChangeRecord.Type
     @Override
     public ChangeType getType() {
         return ChangeType.AUDIT_ENTRY;
     }
-
 
     @Property(
             domainEvent = InteractionId.DomainEvent.class
@@ -155,7 +152,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public abstract UUID getInteractionId();
     public abstract void setInteractionId(UUID interactionId);
 
-
     @Property(
             domainEvent = Username.DomainEvent.class
     )
@@ -173,7 +169,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public abstract String getUsername();
     public abstract void setUsername(String userName);
 
-
     @Property(
             domainEvent = Timestamp.DomainEvent.class
     )
@@ -189,8 +184,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     @Override
     public abstract java.sql.Timestamp getTimestamp();
     public abstract void setTimestamp(java.sql.Timestamp timestamp);
-
-
 
     @Property(
             domainEvent = Target.DomainEvent.class
@@ -208,8 +201,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     @Target
     public abstract Bookmark getTarget();
     public abstract void setTarget(Bookmark target);
-
-
 
     /**
      * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
@@ -235,8 +226,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public abstract int getSequence();
     public abstract void setSequence(int sequence);
 
-
-
     @Property(
             domainEvent = LogicalMemberIdentifier.DomainEvent.class
     )
@@ -258,7 +247,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public abstract String getLogicalMemberIdentifier();
     public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
-
     @Property(
             domainEvent = PropertyId.DomainEvent.class,
             optionality = Optionality.MANDATORY
@@ -277,8 +265,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     @PropertyId
     public abstract String getPropertyId();
     public abstract void setPropertyId(String propertyId);
-
-
 
     @Property(
             domainEvent = PreValue.DomainEvent.class,
@@ -302,7 +288,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public abstract String getPreValue();
     public abstract void setPreValue(String preValue);
 
-
     @Property(
             domainEvent = PostValue.DomainEvent.class,
             editing = Editing.DISABLED
@@ -325,7 +310,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public abstract String getPostValue();
     public abstract void setPostValue(String postValue);
 
-
     private static final ObjectContracts.ObjectContract<AuditTrailEntry> contract	=
             ObjectContracts.contract(AuditTrailEntry.class)
                     .thenUse("timestamp", AuditTrailEntry::getTimestamp)
@@ -333,7 +317,6 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
                     .thenUse("target", e -> e.getTarget() != null ? e.getTarget().toString(): null)
                     .thenUse("propertyId", AuditTrailEntry::getPropertyId)
             ;
-
 
     @Override
     public String toString() {

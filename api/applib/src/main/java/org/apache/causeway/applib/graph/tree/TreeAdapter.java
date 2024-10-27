@@ -51,7 +51,6 @@ public interface TreeAdapter<T> {
     @Domain.Exclude
     Stream<T> childrenOf(T value);
 
-
     /**
      * Resolves given {@link TreePath} to its corresponding sub-node relative to given node if possible.
      * <p>

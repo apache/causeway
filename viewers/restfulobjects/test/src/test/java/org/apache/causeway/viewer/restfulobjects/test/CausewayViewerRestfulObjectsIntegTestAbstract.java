@@ -62,7 +62,6 @@ import static org.apache.causeway.commons.internal.assertions._Assert.assertNotN
 
 import lombok.SneakyThrows;
 
-
 /**
  * Intended as a base class for integration testing.
  *
@@ -137,7 +136,6 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
         assertNotNull(transactionService);
     }
 
-
     /**
      * Populated automatically by JUnit5
      */
@@ -200,7 +198,6 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
     protected void beforeEach() {}
 
     protected void afterEach() {}
-
 
     protected Blob asPdfBlob(final String fileName) {
         var bytes = toBytes(fileName);

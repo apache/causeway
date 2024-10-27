@@ -71,7 +71,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         setId(id);
     }
 
-
     private String id;
 
     /**
@@ -86,8 +85,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.id = id;
     }
 
-
-
     private String cssClass;
 
     @Override
@@ -101,8 +98,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.cssClass = cssClass;
     }
 
-
-
     private String describedAs;
 
     @Override
@@ -115,8 +110,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     public void setDescribedAs(final String describedAs) {
         this.describedAs = describedAs;
     }
-
-
 
     private String defaultView;
 
@@ -133,7 +126,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.defaultView = defaultView;
     }
 
-
     private Where hidden;
 
     @Override
@@ -146,7 +138,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     public void setHidden(final Where hidden) {
         this.hidden = hidden;
     }
-
 
     private String named;
 
@@ -161,8 +152,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.named = named;
     }
 
-
-
     private Integer paged;
 
     @XmlAttribute(required = false)
@@ -173,8 +162,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     public void setPaged(final Integer paged) {
         this.paged = paged;
     }
-
-
 
     private String sortedBy;
 
@@ -187,8 +174,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.sortedBy = sortedBy;
     }
 
-
-
     private Class<? extends TableDecorator> tableDecorator;
 
     @XmlElement(required = false)
@@ -199,8 +184,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
         this.tableDecorator = tableDecorator;
     }
-
-
 
     private List<ActionLayoutData> actions = new ArrayList<>();
 
@@ -215,8 +198,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     public void setActions(final List<ActionLayoutData> actionLayoutDatas) {
         this.actions = actionLayoutDatas;
     }
-
-
 
     private CollectionLayoutDataOwner owner;
     /**
@@ -236,7 +217,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
         this.owner = owner;
     }
 
-
     private String metadataError;
 
     /**
@@ -250,8 +230,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
-
-
 
     private Link link;
 

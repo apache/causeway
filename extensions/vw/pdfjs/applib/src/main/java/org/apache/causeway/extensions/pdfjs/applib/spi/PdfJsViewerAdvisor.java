@@ -138,7 +138,6 @@ public interface PdfJsViewerAdvisor {
         private final Integer height;
     }
 
-
     /**
      * Default implementation.
      */

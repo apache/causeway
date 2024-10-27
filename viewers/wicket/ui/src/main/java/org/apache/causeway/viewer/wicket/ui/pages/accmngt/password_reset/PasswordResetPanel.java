@@ -114,7 +114,4 @@ public class PasswordResetPanel extends PanelBase<Void> {
         return message;
     }
 
-
 }
-
-

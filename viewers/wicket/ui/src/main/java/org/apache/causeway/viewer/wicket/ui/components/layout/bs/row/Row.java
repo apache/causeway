@@ -95,12 +95,10 @@ implements HasDynamicallyVisibleContent {
 
     }
 
-
     private boolean visible = false;
     @Override
     public boolean isVisible() {
         return visible;
     }
-
 
 }

@@ -128,6 +128,4 @@ public interface ObjectLifecyclePublisher {
 
     //void onPostRemove(ManagedObject entity);
 
-
-
 }

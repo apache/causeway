@@ -242,5 +242,4 @@ public class PojoTester_datatypes_primitive_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

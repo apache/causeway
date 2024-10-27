@@ -47,5 +47,4 @@ public interface Scratchpad
      */
     public void put(Object key, Object value);
 
-
 }

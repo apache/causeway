@@ -49,5 +49,4 @@ extends ObjectNamedFacetAbstract {
         super(noun, holder);
     }
 
-
 }

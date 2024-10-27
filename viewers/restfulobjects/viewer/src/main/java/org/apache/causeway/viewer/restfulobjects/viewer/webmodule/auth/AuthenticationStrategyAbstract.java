@@ -29,8 +29,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 
-
-
 /**
  * Convenience abstract implementation.
  *
@@ -63,7 +61,6 @@ implements AuthenticationStrategy {
     protected ServletContext getServletContext(ServletRequest servletRequest) {
         return servletRequest.getServletContext();
     }
-
 
     @Override
     public final void invalidate(

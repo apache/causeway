@@ -96,5 +96,4 @@ public interface ChainOfResponsibility<X, R> {
     };
 }
 
-
 }

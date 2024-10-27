@@ -25,8 +25,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
-
-
 @Component
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".RegexReplacer")
 public class RegexReplacer implements org.apache.causeway.extensions.secman.applib.util.RegexReplacer {
@@ -36,6 +34,5 @@ public class RegexReplacer implements org.apache.causeway.extensions.secman.appl
         var search = _Strings.nullToEmpty(str).replace("*", "%").replace("?", "_");
         return _Strings.suffix(_Strings.prefix(search, "%"), "%");
     }
-
 
 }

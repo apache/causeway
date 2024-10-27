@@ -148,6 +148,4 @@ implements MethodPrefixBasedFacetFactory {
         return actionId.startsWith(prefix) && actionId.length() > prefix.length();
     }
 
-
-
 }

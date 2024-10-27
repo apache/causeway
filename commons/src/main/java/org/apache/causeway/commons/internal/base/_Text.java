@@ -319,5 +319,4 @@ public final class _Text {
         return constraintLines.stream();
     }
 
-
 }

@@ -256,7 +256,6 @@ implements HasMetaModelContext, AutoCloseable{
 
     private List<ObjectTypeFacetFactory> objectSpecIfFacetFactoryList = null;
 
-
     private List<ObjectTypeFacetFactory> getObjectSpecIfFacetFactoryList() {
         if(objectSpecIfFacetFactoryList == null) {
             var facetFactories = _Lists.<ObjectTypeFacetFactory>newArrayList();
@@ -303,7 +302,6 @@ implements HasMetaModelContext, AutoCloseable{
         factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
         .forEach(facetFactory->facetFactory.process(ctx));
     }
-
 
     /**
      * Attaches all facets applicable to the provided {@link FeatureType type of
@@ -447,6 +445,5 @@ implements HasMetaModelContext, AutoCloseable{
     private static MethodRemover removerElseNoopRemover(final MethodRemover methodRemover) {
         return methodRemover != null ? methodRemover : MethodRemover.NOOP;
     }
-
 
 }

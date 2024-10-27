@@ -28,7 +28,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.dom.CustomerReposito
 
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 public class CustomerBuilderScript extends BuilderScriptWithResult<Customer> {
 

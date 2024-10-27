@@ -96,7 +96,6 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         stackTraceDetailLists = asStackTraces(ex);
     }
 
-
     @Override
     protected List<StackTraceDetail> load() {
         return stackTraceDetailList;
@@ -120,7 +119,6 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
         }
         this.stackTraceDetailList = stackTraceDetail;
     }
-
 
     private Ticket ticket;
     public Optional<Ticket> getTicket() {
@@ -149,7 +147,6 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     public boolean isAuthorizationException() {
         return authorizationCause;
     }
-
 
     public List<StackTraceDetail> getStackTrace() {
         return stackTraceDetailList;

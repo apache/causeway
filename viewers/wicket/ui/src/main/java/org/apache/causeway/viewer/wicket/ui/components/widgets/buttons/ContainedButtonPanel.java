@@ -90,5 +90,4 @@ extends PanelAbstract<String, Model<String>> {
     public void onSubmit() {
     }
 
-
 }

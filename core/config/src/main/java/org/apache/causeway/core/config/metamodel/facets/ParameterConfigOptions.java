@@ -47,13 +47,11 @@ public final class ParameterConfigOptions {
         }
     }
 
-
     // -- FACTORIES
 
     public static PrecedingParametersPolicy precedingParametersPolicy(
             final @NonNull CausewayConfiguration configuration) {
         return configuration.getApplib().getAnnotation().getParameter().getPrecedingParametersPolicy();
     }
-
 
 }

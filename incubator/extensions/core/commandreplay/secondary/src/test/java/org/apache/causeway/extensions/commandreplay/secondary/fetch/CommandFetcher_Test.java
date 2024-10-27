@@ -80,5 +80,4 @@ class CommandFetcher_Test {
         System.out.println(commands);
     }
 
-
 }

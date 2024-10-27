@@ -393,7 +393,6 @@ public class Configuration_usingWicket {
 
     }
 
-
     // --
 
 //  @Bean

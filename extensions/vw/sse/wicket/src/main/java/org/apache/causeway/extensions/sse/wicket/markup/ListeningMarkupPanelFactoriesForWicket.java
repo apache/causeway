@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
-
-
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
  * {@link MarkupPanelFactories}, but specific to
@@ -46,7 +44,6 @@ public class ListeningMarkupPanelFactoriesForWicket {
         public Parented() {
             super(Markup.class);
         }
-
 
         @Override
         protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
@@ -84,6 +81,5 @@ public class ListeningMarkupPanelFactoriesForWicket {
         }
 
     }
-
 
 }

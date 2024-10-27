@@ -98,10 +98,8 @@ extends MetaModelValidatorAbstract {
                         );
             }
 
-
         });
     }
-
 
     private void validateEnumTitles() {
 
@@ -173,6 +171,5 @@ extends MetaModelValidatorAbstract {
         }
 
     }
-
 
 }

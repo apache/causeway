@@ -134,7 +134,6 @@ implements ObjectSpecification {
         }
     }
 
-
     // -- FIELDS
 
     private final PostProcessor postProcessor;
@@ -173,8 +172,6 @@ implements ObjectSpecification {
     private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
             _Lazy.threadSafe(()->Can.ofCollection(interfaces));
 
-
-
     private final Subclasses directSubclasses = new Subclasses();
     // built lazily
     private Subclasses transitiveSubclasses;
@@ -198,7 +195,6 @@ implements ObjectSpecification {
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
-
 
     // -- Constructor
     protected ObjectSpecificationAbstract(
@@ -542,7 +538,6 @@ implements ObjectSpecification {
         return thisClass == otherClass
                 || otherClass.isAssignableFrom(thisClass);
     }
-
 
     // -- NAME, DESCRIPTION, PERSISTABILITY
 

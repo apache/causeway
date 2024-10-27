@@ -51,5 +51,4 @@ class _LogicalNaming {
         return explicitLogicalNameFor(javaClass).isPresent();
     }
 
-
 }

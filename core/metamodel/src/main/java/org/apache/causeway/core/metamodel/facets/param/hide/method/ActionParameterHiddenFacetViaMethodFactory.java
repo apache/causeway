@@ -49,5 +49,4 @@ extends ActionParameterSupportFacetFactoryAbstract {
                         hideMethod, patConstructor, paramAsHolder));
     }
 
-
 }

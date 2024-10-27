@@ -57,7 +57,6 @@ class DomainEventHelperTest_newPropertyDomainEvent_forClear {
         assertNull(ev.getNewValue());
     }
 
-
     @Test
     public void customEventType() throws Exception {
 

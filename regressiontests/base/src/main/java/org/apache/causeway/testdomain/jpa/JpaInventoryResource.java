@@ -136,5 +136,4 @@ public class JpaInventoryResource {
         return books;
     }
 
-
 }

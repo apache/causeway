@@ -87,5 +87,4 @@ public interface DomainEventHolder<T> {
         private boolean postable;
     }
 
-
 }

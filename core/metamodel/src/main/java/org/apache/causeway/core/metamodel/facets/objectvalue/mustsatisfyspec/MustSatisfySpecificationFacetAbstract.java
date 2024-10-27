@@ -112,5 +112,4 @@ implements MustSatisfySpecificationFacet {
                 : false;
     }
 
-
 }

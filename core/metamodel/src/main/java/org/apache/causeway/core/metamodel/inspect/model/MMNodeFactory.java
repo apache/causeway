@@ -30,7 +30,6 @@ import org.apache.causeway.schema.metamodel.v2.Property;
 
 public class MMNodeFactory {
 
-
     public static MMNode annotation(final Annotation annotation, final MMNode parentNode) {
         var node = new AnnotationNode();
         node.setAnnotation(annotation);
@@ -96,6 +95,5 @@ public class MMNodeFactory {
         node.setParentNode(parentNode);
         return node;
     }
-
 
 }

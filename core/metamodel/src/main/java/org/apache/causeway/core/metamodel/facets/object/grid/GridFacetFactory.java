@@ -46,5 +46,4 @@ extends FacetFactoryAbstract {
     private final _Lazy<GridService> gridService = _Lazy.threadSafe(()->
         getServiceRegistry().lookupService(GridService.class).orElse(null));
 
-
 }

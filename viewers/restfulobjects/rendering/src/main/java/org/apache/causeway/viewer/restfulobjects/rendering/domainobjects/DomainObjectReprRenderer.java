@@ -48,8 +48,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.DomainTyp
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
-
-
 public class DomainObjectReprRenderer
 extends ReprRendererAbstract<ManagedObject> {
 
@@ -428,7 +426,6 @@ extends ReprRendererAbstract<ManagedObject> {
         return this;
     }
 
-
     private void addUpdatePropertiesLinkIfRequired() {
         if(mode.isEventSerialization()) {
             return;
@@ -452,7 +449,6 @@ extends ReprRendererAbstract<ManagedObject> {
         }
     }
 
-
     public static Object valueOrRef(
             final IResourceContext context,
             final ObjectFeature objectFeature,
@@ -472,6 +468,5 @@ extends ReprRendererAbstract<ManagedObject> {
                 .withTitle(domainObject.getTitle())
                 .build();
     }
-
 
 }

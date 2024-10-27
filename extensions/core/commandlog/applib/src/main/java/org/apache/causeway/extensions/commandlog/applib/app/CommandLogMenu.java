@@ -65,10 +65,8 @@ public class CommandLogMenu {
     public static abstract class ActionDomainEvent<T>
             extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-
     final CommandLogEntryRepository commandLogEntryRepository;
     final ClockService clockService;
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -86,7 +84,6 @@ public class CommandLogMenu {
         }
     }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findMostRecent.DomainEvent.class,
@@ -102,7 +99,6 @@ public class CommandLogMenu {
             return commandLogEntryRepository.findMostRecent();
         }
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -128,8 +124,6 @@ public class CommandLogMenu {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findAll.DomainEvent.class,
@@ -146,9 +140,6 @@ public class CommandLogMenu {
             return commandLogEntryRepository.findAll();
         }
     }
-
-
-
 
     private LocalDate now() {
         return clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());

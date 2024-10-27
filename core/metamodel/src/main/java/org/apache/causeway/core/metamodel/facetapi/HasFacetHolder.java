@@ -71,5 +71,4 @@ public interface HasFacetHolder extends FacetHolder {
         return getFacetHolder().getFacetRanking(facetType);
     }
 
-
 }

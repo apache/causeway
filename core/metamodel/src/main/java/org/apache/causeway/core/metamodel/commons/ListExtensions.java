@@ -53,8 +53,6 @@ public final class ListExtensions {
         return extendee;
     }
 
-
-
     /**
      * @see #appendDelimitedStringToList(String, String, List)
      */
@@ -107,8 +105,5 @@ public final class ListExtensions {
                 .map(ClassFunctions.castTo(type))
                 .collect(Collectors.toList());
     }
-
-
-
 
 }

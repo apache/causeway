@@ -40,8 +40,6 @@ import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLev
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.BothTopLevelQuery;
 
-
-
 @Service()
 public class GraphQlSourceForCauseway implements GraphQlSource {
 
@@ -119,7 +117,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .codeRegistry(codeRegistry)
                 .build();
     }
-
 
     private ElementCustom determineTopLevelQueryFrom(
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {

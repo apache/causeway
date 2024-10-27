@@ -28,5 +28,4 @@ public class JavaTmeJaxbAdapters_LocalTimeAdapter_Test extends JaxbXmlAdaptersCo
         super(new JavaTimeJaxbAdapters.LocalTimeToStringAdapter(), LocalTime.of(9, 54, 1));
     }
 
-
 }

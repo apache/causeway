@@ -25,7 +25,6 @@ import org.apache.causeway.testdomain.model.base.MemberDetection;
 
 public class OrphanedMemberSupportDetection {
 
-
     @DomainObject(
             nature = Nature.VIEW_MODEL,
             introspection = Introspection.ANNOTATION_OPTIONAL)

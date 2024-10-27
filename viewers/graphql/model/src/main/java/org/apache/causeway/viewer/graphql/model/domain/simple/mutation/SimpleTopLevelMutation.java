@@ -33,8 +33,6 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-
-
 public class SimpleTopLevelMutation
                 extends ElementCustom
                 implements Parent {
@@ -90,7 +88,6 @@ public class SimpleTopLevelMutation
         properties.add(gqlvMutationForProperty);
     }
 
-
     @Override
     public GraphQLObjectType getGqlObjectType() {
         return super.getGqlObjectType();
@@ -105,6 +102,5 @@ public class SimpleTopLevelMutation
         actions.forEach(simpleMutationForAction -> simpleMutationForAction.addDataFetcher(this));
         properties.forEach(simpleMutationForProperty -> simpleMutationForProperty.addDataFetcher(this));
     }
-
 
 }

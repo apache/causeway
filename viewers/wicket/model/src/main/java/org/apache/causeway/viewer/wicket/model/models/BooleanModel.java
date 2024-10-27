@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
 
-
 public class BooleanModel
 extends ChainingModel<Boolean> {
 

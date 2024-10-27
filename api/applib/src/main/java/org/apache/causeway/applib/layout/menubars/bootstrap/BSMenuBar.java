@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.menubars.MenuBar;
 
-
 /**
  * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.causeway.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
  *
@@ -47,7 +46,6 @@ public class BSMenuBar implements MenuBar, Serializable {
     public BSMenuBar() {
     }
 
-
     private List<BSMenu> menus = new ArrayList<>();
 
     // no wrapper
@@ -59,6 +57,5 @@ public class BSMenuBar implements MenuBar, Serializable {
     public void setMenus(List<BSMenu> menus) {
         this.menus = menus;
     }
-
 
 }

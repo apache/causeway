@@ -82,7 +82,6 @@ public class DomainModelValidator {
         this.validationFailures = specificationLoader.getOrAssessValidationResult();
     }
 
-
     private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment causewaySystemEnvironment) {
         final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
         switch (mode) {
@@ -140,7 +139,6 @@ public class DomainModelValidator {
             final @NonNull Identifier identifier) {
         return streamFailures(id->id.equals(identifier));
     }
-
 
     // -- JUNIT SUPPORT
 
@@ -214,7 +212,6 @@ public class DomainModelValidator {
             throw new AssertionFailedError(msg);
         }
 
-
     }
 
     // -- HELPER
@@ -230,7 +227,5 @@ public class DomainModelValidator {
             log.error(logMessage);
         }
     }
-
-
 
 }

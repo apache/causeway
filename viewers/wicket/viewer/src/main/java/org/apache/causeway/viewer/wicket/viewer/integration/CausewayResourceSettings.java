@@ -109,5 +109,4 @@ public class CausewayResourceSettings extends ResourceSettings {
         return stringResourceLoaders;
     }
 
-
 }

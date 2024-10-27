@@ -18,10 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
-
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacetAbstract;
-
 
 /**
  * If the domain object has not been annotated with

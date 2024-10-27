@@ -121,6 +121,4 @@ public class CausewayBeanMetaData {
         return causewayManaged(beanSort, LogicalType.infer(type));
     }
 
-
-
 }

@@ -128,6 +128,4 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
         return serviceRegistry!=null;
     }
 
-
-
 }

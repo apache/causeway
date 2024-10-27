@@ -67,5 +67,3 @@ public class TextAreaWithConverter<T> extends TextArea<T> {
     }
 
 }
-
-

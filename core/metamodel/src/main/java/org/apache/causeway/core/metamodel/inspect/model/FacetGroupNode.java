@@ -85,6 +85,4 @@ public class FacetGroupNode extends MMNode {
                 .sorted((a, b)->a.title().compareToIgnoreCase(b.title()));
     }
 
-
 }
-

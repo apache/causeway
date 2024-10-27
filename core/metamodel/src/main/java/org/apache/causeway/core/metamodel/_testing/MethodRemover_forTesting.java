@@ -83,5 +83,4 @@ implements MethodRemover {
         return Can.ofStream(removedMethodMethodCalls.stream());
     }
 
-
 }

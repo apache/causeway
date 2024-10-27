@@ -108,5 +108,4 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         return InteractionRailway.veto(veto);
     }
 
-
 }

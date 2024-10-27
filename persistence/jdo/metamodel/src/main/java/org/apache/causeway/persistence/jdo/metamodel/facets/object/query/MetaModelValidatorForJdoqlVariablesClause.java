@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-
-
 class MetaModelValidatorForJdoqlVariablesClause
 extends MetaModelValidatorForJdoqlAbstract {
 

@@ -176,7 +176,4 @@ final class _MenuItemBuilder {
         return userProfile.getUserProfileName();
     }
 
-
-
-
 }

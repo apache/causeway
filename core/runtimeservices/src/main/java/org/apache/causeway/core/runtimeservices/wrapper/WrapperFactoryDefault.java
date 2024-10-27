@@ -276,9 +276,7 @@ implements WrapperFactory, HasMetaModelContext {
         return possibleWrappedDomainObject;
     }
 
-
     // -- ASYNC WRAPPING
-
 
     @Override
     public <T,R> T asyncWrap(
@@ -639,7 +637,6 @@ implements WrapperFactory, HasMetaModelContext {
             return wrapperFactory.execute(this);
         }
     }
-
 
     @Override
     public <R> R execute(final AsyncCallable<R> asyncCallable) {

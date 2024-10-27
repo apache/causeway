@@ -422,8 +422,6 @@ class MetaModelExporter {
         return facetType;
     }
 
-
-
     private void addFacetAttributes(
             final Facet facet,
             final org.apache.causeway.schema.metamodel.v2.Facet facetType,
@@ -464,8 +462,5 @@ class MetaModelExporter {
     private boolean isValueType(final ObjectSpecification specification) {
         return specification.getBeanSort().isValue();
     }
-
-
-
 
 }

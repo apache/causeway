@@ -65,7 +65,6 @@ public final class BeanDescriptor {
         }
     }
 
-
     BeanDescriptor(
             final String beanName,
             final ConfigurableApplicationContext context) {

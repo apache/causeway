@@ -130,5 +130,4 @@ implements FacetHolder {
         return snapshot;
     }
 
-
 }

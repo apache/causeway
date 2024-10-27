@@ -110,7 +110,6 @@ public class CausewaySystemEnvironment {
         log.error("Application failed to start", event.getException());
     }
 
-
     // -- SHORTCUTS
 
     public _IocContainer ioc() {
@@ -138,7 +137,6 @@ public class CausewaySystemEnvironment {
         System.setProperty("PROTOTYPING", ""+isPrototyping);
     }
 
-
     public DeploymentType getDeploymentType() {
         return decideDeploymentType();
     }
@@ -150,9 +148,6 @@ public class CausewaySystemEnvironment {
     public boolean isPrototyping() {
         return getDeploymentType().isPrototyping();
     }
-
-
-
 
     // -- HELPER
 
@@ -212,5 +207,3 @@ public class CausewaySystemEnvironment {
     }
 
 }
-
-

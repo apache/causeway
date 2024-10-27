@@ -39,12 +39,10 @@ public class PersistenceManagerHolder extends ResourceHolderSupport {
 
 	private boolean transactionActive;
 
-
 	public PersistenceManagerHolder(PersistenceManager persistenceManager) {
 		Assert.notNull(persistenceManager, "PersistenceManager must not be null");
 		this.persistenceManager = persistenceManager;
 	}
-
 
 	public PersistenceManager getPersistenceManager() {
 		return this.persistenceManager;

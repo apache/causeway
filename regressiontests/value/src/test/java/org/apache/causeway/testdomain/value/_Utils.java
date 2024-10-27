@@ -27,7 +27,6 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

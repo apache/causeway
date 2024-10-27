@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.NonNull;
 
-
 class _DomainResourceHelper {
 
     private final IResourceContext resourceContext;
@@ -90,7 +89,6 @@ class _DomainResourceHelper {
 
     private final ManagedObject objectAdapter;
 
-
     // //////////////////////////////////////
     // Helpers (resource delegate here)
     // //////////////////////////////////////
@@ -122,7 +120,6 @@ class _DomainResourceHelper {
         return representationService.propertyDetails(resourceContext, property);
     }
 
-
     /**
      * Obtains the collection (checking it is visible) of the object and then delegates to the
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
@@ -139,7 +136,6 @@ class _DomainResourceHelper {
         transactionService.flushTransaction();
         return representationService.collectionDetails(resourceContext, collection);
     }
-
 
     /**
      * Obtains the action details (arguments etc), checking it is visible, of the object and then delegates to the
@@ -228,7 +224,6 @@ class _DomainResourceHelper {
 
         var hasParams = pendingArgs.getParamCount()>0;
 
-
         if(hasParams) {
 
             // parse parameters ...
@@ -307,7 +302,6 @@ class _DomainResourceHelper {
         return representationService.actionResult(resourceContext, objectAndActionInvocation);
     }
 
-
     // //////////////////////////////////////
     // dependencies (from context)
     // //////////////////////////////////////
@@ -341,4 +335,3 @@ class _DomainResourceHelper {
     }
 
 }
-

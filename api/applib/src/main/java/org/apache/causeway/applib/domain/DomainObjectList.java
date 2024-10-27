@@ -87,12 +87,10 @@ public class DomainObjectList {
     public static class CssClassUiEvent extends CausewayModuleApplib.CssClassUiEvent<DomainObjectList>{  }
     public static class LayoutUiEvent extends CausewayModuleApplib.LayoutUiEvent<DomainObjectList>{  }
 
-
     // -- domain event classes
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleApplib.PropertyDomainEvent<DomainObjectList, T> {  }
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleApplib.CollectionDomainEvent<DomainObjectList, T> {  }
     public static abstract class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<DomainObjectList> {  }
-
 
     // -- constructors
     public DomainObjectList() {
@@ -110,14 +108,12 @@ public class DomainObjectList {
         this.actionArguments = actionArguments;
     }
 
-
     // -- title
     @Getter
     private String title;
     @ObjectSupport public String title() {
         return title;
     }
-
 
     // -- property: elementObjectType
     public static class ElementObjectTypeDomainEvent extends PropertyDomainEvent<String> {  }
@@ -129,11 +125,8 @@ public class DomainObjectList {
     @Getter
     private String elementTypeFqcn;
 
-
     // -- property: actionOwningType
     public static class ActionOwningTypeDomainEvent extends PropertyDomainEvent<String> {  }
-
-
 
     @Property(
             domainEvent = ActionOwningTypeDomainEvent.class,
@@ -157,7 +150,6 @@ public class DomainObjectList {
         return actionId;
     }
 
-
     // -- property: actionArguments
     public static class ActionArgumentsDomainEvent extends PropertyDomainEvent<String> {  }
 
@@ -171,7 +163,6 @@ public class DomainObjectList {
     public String getActionArguments() {
         return actionArguments;
     }
-
 
     // -- collection: objects
     public static class ObjectsDomainEvent extends CollectionDomainEvent<Object> {  }
@@ -189,6 +180,5 @@ public class DomainObjectList {
     public void setObjects(final List<Object> objects) {
         this.objects = objects;
     }
-
 
 }

@@ -79,5 +79,4 @@ public @interface DomainServiceLayout {
     String named()
             default "";
 
-
 }

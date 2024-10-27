@@ -41,7 +41,6 @@ import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * This service exposes a set of menu actions to search and list {@link SessionLogEntry session}s, by default under
  * the &quot;Activity&quot; secondary menu.
@@ -81,8 +80,6 @@ public class SessionLogMenu {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findSessions.ActionDomainEvent.class,
@@ -108,6 +105,5 @@ public class SessionLogMenu {
             }
         }
     }
-
 
 }

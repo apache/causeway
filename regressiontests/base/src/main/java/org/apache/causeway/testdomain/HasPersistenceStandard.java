@@ -37,6 +37,4 @@ public interface HasPersistenceStandard {
                 _Strings.capitalize(getPersistenceStandard().name().toLowerCase()));
     }
 
-
-
 }

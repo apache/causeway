@@ -32,8 +32,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-
-
 public final class CollectionAssertions {
 
     public static void assertComponentWiseEquals(final Object a, final Object b) {

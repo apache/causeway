@@ -66,8 +66,6 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
         super(source);
     }
 
-
-
     /**
      * This class is the default for the
      * {@link org.apache.causeway.applib.annotation.DomainObjectLayout#iconUiEvent()}
@@ -81,14 +79,12 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      */
     public static class Default extends IconUiEvent<Object> { }
 
-
     /**
      * Convenience class to use indicating that an event should <i>not</i> be
      * posted (irrespective of the configuration property setting for the
      * {@link Default} event.
      */
     public static class Noop extends IconUiEvent<Object> { }
-
 
     // -- Doop class
 
@@ -98,8 +94,6 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * {@link Default} event..
      */
     public static class Doop extends IconUiEvent<Object> { }
-
-
 
     // -- iconName
     private String iconName;
@@ -117,6 +111,5 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     public void setIconName(final String iconName) {
         this.iconName = iconName;
     }
-
 
 }

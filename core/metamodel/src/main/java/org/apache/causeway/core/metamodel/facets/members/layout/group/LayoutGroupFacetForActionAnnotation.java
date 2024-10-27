@@ -39,5 +39,4 @@ extends LayoutGroupFacetAbstract {
         super(groupIdAndName, holder, Precedence.FALLBACK);
     }
 
-
 }

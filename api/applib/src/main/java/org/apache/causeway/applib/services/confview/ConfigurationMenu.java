@@ -55,7 +55,6 @@ public class ConfigurationMenu {
 
     final FactoryService factoryService;
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = configuration.ActionDomainEvent.class,

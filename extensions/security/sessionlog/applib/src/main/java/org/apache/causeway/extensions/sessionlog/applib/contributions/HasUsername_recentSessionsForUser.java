@@ -37,7 +37,6 @@ import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Contributes the `recentSessionsForUser` collection to any domain object implementing {@link HasUsername}.
  *

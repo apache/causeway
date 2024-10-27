@@ -59,6 +59,4 @@ public interface CommandDtoProcessorService {
      */
     CommandDto process(final Object domainObject, final @Nullable CommandDto commandDto);
 
-
 }
-

@@ -135,7 +135,6 @@ public interface EntityFacet extends Facet {
                         getEntitySpecification().getLogicalType()));
     }
 
-
     /**
      * Optionally the entity pojo corresponding to given {@link Bookmark},
      * based on whether could be found.
@@ -176,7 +175,5 @@ public interface EntityFacet extends Facet {
             final FacetHolder facetHolder) {
         return new _EntityFacetForTesting(persistenceStandard, facetHolder);
     }
-
-
 
 }

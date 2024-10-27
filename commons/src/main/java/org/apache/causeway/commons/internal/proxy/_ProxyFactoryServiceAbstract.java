@@ -62,5 +62,4 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
         return proxyFactory;
     }
 
-
 }

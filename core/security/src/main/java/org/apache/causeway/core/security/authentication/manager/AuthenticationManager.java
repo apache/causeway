@@ -154,7 +154,6 @@ public class AuthenticationManager {
         return code;
     }
 
-
     // cannot use final here, as Spring provides a transaction aware proxy for this type
     public /*final*/ boolean isSessionValid(final @Nullable InteractionContext interactionContext) {
         if(interactionContext==null) {
@@ -170,7 +169,6 @@ public class AuthenticationManager {
         final String userName = userByValidationCode.get(userMemento.getAuthenticationCode());
         return interactionContext.getUser().isCurrentUser(userName);
     }
-
 
     public void closeSession(final @Nullable UserMemento user) {
         for (var authenticator : authenticators) {
@@ -190,7 +188,6 @@ public class AuthenticationManager {
         }
         return false;
     }
-
 
     public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
         for (var registrar : this.registrars) {

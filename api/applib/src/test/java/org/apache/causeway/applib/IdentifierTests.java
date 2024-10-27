@@ -64,5 +64,4 @@ class IdentifierTests {
                 is("org.apache.causeway.applib.SomeDomainClass#placeOrder(int,java.lang.String,java.math.BigDecimal)"));
     }
 
-
 }

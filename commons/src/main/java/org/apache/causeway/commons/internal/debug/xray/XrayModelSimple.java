@@ -85,6 +85,4 @@ final class XrayModelSimple implements XrayModel {
         return nodeStacksById.computeIfAbsent(id, __->new Stack<MutableTreeNode>());
     }
 
-
-
 }

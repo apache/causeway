@@ -71,5 +71,4 @@ class SourceTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
    
-
 }

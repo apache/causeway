@@ -343,7 +343,6 @@ implements ObjectAction {
         return resultSet.createConsent();
     }
 
-
     @Override
     public InteractionResultSet isArgumentSetValidForParameters(
             final InteractionHead head,

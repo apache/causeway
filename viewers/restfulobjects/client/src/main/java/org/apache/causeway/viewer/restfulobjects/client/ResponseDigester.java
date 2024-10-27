@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-
 interface ResponseDigester {
 
     <T> T readSingle(Class<T> entityType, Response response);

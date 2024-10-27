@@ -83,7 +83,6 @@ public interface PageRenderSubscriber extends HasEnabling {
      */
     default void onRendering(final PageType pageType) {}
 
-
     /**
      * Indicates that the domain object represented by the {@link Bookmark} is about to be rendered.
      *
@@ -104,7 +103,6 @@ public interface PageRenderSubscriber extends HasEnabling {
      * @param value - the actual value that is to be rendered.
      */
     default void onRenderingValue(final @Nullable Object value) {}
-
 
     /**
      * Indicates that the domain object represented by the {@link Bookmark} has been rendered.

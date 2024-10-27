@@ -104,7 +104,6 @@ public class KVStoreForTesting {
         return getAll(caller.getClass(), keyStr);
     }
 
-
     // -- COUNTING
 
     public long incrementCounter(final Class<?> callerType, final String keyStr) {
@@ -118,7 +117,6 @@ public class KVStoreForTesting {
     }
 
     // --
-
 
     public void clear(final Class<?> callerType) {
         log.debug("clearing {}", callerType);

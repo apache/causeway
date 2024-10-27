@@ -51,7 +51,6 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
 
     private static final long serialVersionUID = 1L;
 
-
     private String id;
 
     /**
@@ -66,8 +65,6 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
     public void setId(final String id) {
         this.id = id;
     }
-
-
 
     private List<BSRowContent> cols = new ArrayList<>();
 
@@ -85,9 +82,6 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
         this.cols = cols;
     }
 
-
-
-
     private String metadataError;
 
     /**
@@ -102,9 +96,7 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
         this.metadataError = metadataError;
     }
 
-
     private BSRowOwner owner;
-
 
     /**
      * Owner.
@@ -122,8 +114,6 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
         this.owner = owner;
     }
 
-
-
     @Override
     @XmlTransient
     @Programmatic
@@ -131,12 +121,10 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
         return getOwner().getGrid();
     }
 
-
     @Override public String toString() {
         return "BSRow{" +
                 "id='" + id + '\'' +
                 '}';
     }
-
 
 }

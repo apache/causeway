@@ -24,7 +24,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.personas.dom.Person;
 import org.apache.causeway.testing.fixtures.applib.setup.PersonaEnumPersistAll;
 
-
 public class PersistAllFixtureScript extends FixtureScript {
 
     @Override

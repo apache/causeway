@@ -36,5 +36,4 @@ public class EventSourceSelector extends WebComponent implements IHeaderContribu
 		Wkt.ajaxEnable(this);
 	}
 
-
 }

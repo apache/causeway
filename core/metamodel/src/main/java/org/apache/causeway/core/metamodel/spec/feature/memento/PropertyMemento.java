@@ -78,5 +78,4 @@ public class PropertyMemento implements Serializable {
         return getIdentifier().getLogicalTypeName() + "#" + getIdentifier().getMemberLogicalName();
     }
 
-
 }

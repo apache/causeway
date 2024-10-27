@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Synchronized;
 
-
 /**
  * @since 2.0
  */
@@ -53,7 +52,6 @@ extends ModelAbstract<ManagedObject> {
         super();
         this.memento = initialMemento;
     }
-
 
     @Override
     protected ManagedObject load() {

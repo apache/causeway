@@ -79,5 +79,4 @@ class FormatTest {
         Assertions.assertEquals("isxs.persistence.\njdo-dataxnucleus.\nclass-metadata-\nloaded-listener", format("isxs.persistence.jdo-dataxnucleus.class-metadata-loaded-listener", 20));
     }
 
-
 }

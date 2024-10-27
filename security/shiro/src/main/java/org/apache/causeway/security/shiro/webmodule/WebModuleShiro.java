@@ -73,7 +73,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebModuleShiro extends WebModuleAbstract {
 
-
     private static final String SHIRO_FILTER_NAME = "ShiroFilter";
 
     @Inject
@@ -213,7 +212,5 @@ public class WebModuleShiro extends WebModuleAbstract {
         return Can.ofSingleton(listener);
 
     }
-
-
 
 }

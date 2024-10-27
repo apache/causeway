@@ -94,5 +94,3 @@ public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
     }
 
 }
-
-

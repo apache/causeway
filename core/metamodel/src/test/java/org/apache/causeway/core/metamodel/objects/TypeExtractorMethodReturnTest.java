@@ -69,7 +69,6 @@ class TypeExtractorMethodReturnTest {
 
     }
 
-
     @Test
     void shouldFindGenericTypes_thatUseAWildcard() throws Exception {
 

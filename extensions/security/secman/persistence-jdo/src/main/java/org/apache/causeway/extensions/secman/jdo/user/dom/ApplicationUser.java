@@ -100,72 +100,60 @@ public class ApplicationUser
 
     protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.user.dom.ApplicationUser";
 
-
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
-
 
     @Column(allowsNull = FamilyName.ALLOWS_NULL, length = FamilyName.MAX_LENGTH)
     @FamilyName
     @Getter @Setter
     private String familyName;
 
-
     @Column(allowsNull = GivenName.ALLOWS_NULL, length = GivenName.MAX_LENGTH)
     @GivenName
     @Getter @Setter
     private String givenName;
-
 
     @Column(allowsNull = KnownAs.ALLOWS_NULL, length = KnownAs.MAX_LENGTH)
     @KnownAs
     @Getter @Setter
     private String knownAs;
 
-
     @Column(allowsNull = EmailAddress.ALLOWS_NULL, length = EmailAddress.MAX_LENGTH)
     @EmailAddress
     @Getter @Setter
     private String emailAddress;
-
 
     @Column(allowsNull = PhoneNumber.ALLOWS_NULL, length = PhoneNumber.MAX_LENGTH)
     @PhoneNumber
     @Getter @Setter
     private String phoneNumber;
 
-
     @Column(allowsNull = FaxNumber.ALLOWS_NULL, length = FaxNumber.MAX_LENGTH)
     @FaxNumber
     @Getter @Setter
     private String faxNumber;
-
 
     @Column(allowsNull = Language.ALLOWS_NULL)
     @Language
     @Getter @Setter
     private java.util.Locale language;
 
-
     @Column(allowsNull = NumberFormat.ALLOWS_NULL)
     @NumberFormat
     @Getter @Setter
     private java.util.Locale numberFormat;
-
 
     @Column(allowsNull = TimeFormat.ALLOWS_NULL)
     @TimeFormat
     @Getter @Setter
     private java.util.Locale timeFormat;
 
-
     @Column(allowsNull = AtPath.ALLOWS_NULL, length = AtPath.MAX_LENGTH)
     @AtPath
     @Getter @Setter
     private String atPath;
-
 
     @Column(allowsNull = AccountType.ALLOWS_NULL)
     @AccountType
@@ -176,19 +164,15 @@ public class ApplicationUser
         this.accountType = accountType;
     }
 
-
     @Column(allowsNull = Status.ALLOWS_NULL)
     @Status
     @Getter @Setter
     private ApplicationUserStatus status;
 
-
     @Column(allowsNull = EncryptedPassword.ALLOWS_NULL, length = EncryptedPassword.MAX_LENGTH)
     @EncryptedPassword
     @Getter @Setter
     private String encryptedPassword;
-
-
 
     // ROLES
 

@@ -34,8 +34,6 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
-
-
 /**
  * Sets up a role for administrators (whose name is {@link Admin#getRoleName() configurable}
  * with an initial set of permissions being the union of {@link NamespacePermissions#getSticky()}

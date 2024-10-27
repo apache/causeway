@@ -159,7 +159,6 @@ public interface ObjectFeature extends Specification {
      */
     ObjectSpecification getElementType();
 
-
     /**
      * Returns a flag indicating if it can be left unset when the action can be
      * invoked.

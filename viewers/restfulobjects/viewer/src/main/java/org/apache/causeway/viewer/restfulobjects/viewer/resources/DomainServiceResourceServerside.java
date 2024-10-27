@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainS
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -275,7 +274,6 @@ implements DomainServiceResource {
         return _EndpointLogging.response(log, "GET /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeActionQueryOnly(actionId, arguments));
     }
-
 
     @Override
     @PUT

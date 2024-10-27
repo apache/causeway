@@ -113,8 +113,6 @@ import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -478,7 +476,6 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         //abstract Iterable<? extends ElementTypeConcrete> getIterableOfConcreteType();
         //override Can<? extends ElementTypeConcrete> getIterableOfConcreteType();
-
 
     }
 
@@ -939,7 +936,6 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 },
                 propNegPostCommit->{});
 
-
         // choicesEmail(): Collection<String> = List.of("my email choice")
         prop.assertValueNegotiation(
                 propNeg->{
@@ -948,7 +944,6 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                             propNeg.getChoices().getValue().map(ManagedObject::getPojo));
                 },
                 propNegPostCommit->{});
-
 
         // validateEmail(final String email): String = "my email validate"
         prop.assertValueNegotiation(
@@ -1057,6 +1052,5 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 Arguments.of("collection3", "named-imperative[collection3]", "described-imperative[collection3]")
         );
     }
-
 
 }

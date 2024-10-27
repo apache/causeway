@@ -44,5 +44,4 @@ extends MaxFractionalDigitsFacetAbstract {
        super(maxFractionalDigits, holder);
    }
 
-
 }

@@ -79,7 +79,6 @@ public class RestEndpointService {
         return newClient(useRequestDebugLogging, Can.empty());
     }
 
-
     public RestfulClient newClient(
             final boolean useRequestDebugLogging,
             final @NonNull Can<ClientConversationFilter> additionalFilters) {
@@ -157,7 +156,6 @@ public class RestEndpointService {
 
         return digest;
     }
-
 
     public Try<JdoBook> storeBook(final RestfulClient client, final JdoBook newBook) throws JAXBException {
 

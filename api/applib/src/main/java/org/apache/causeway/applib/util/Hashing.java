@@ -60,6 +60,4 @@ public class Hashing<T> {
         return result;
     }
 
-
-
 }

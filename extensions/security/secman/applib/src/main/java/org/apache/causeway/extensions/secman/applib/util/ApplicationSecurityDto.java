@@ -46,7 +46,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStat
 import lombok.Data;
 import lombok.NonNull;
 
-
 /**
  * In-memory model of users, roles and permissions.
  *

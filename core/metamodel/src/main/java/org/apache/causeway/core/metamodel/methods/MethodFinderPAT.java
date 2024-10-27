@@ -83,5 +83,4 @@ public final class MethodFinderPAT {
                 .map(constructor->MethodAndPatConstructor.of(supportingMethod, constructor));
     }
 
-
 }

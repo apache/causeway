@@ -177,7 +177,6 @@ class _ExcelConverter {
         final RowFactory rowFactory = new RowFactory(sheet);
         final Row headerRow = rowFactory.newRow();
 
-
         // header row
         int i = 0;
         for (var property : propertyList) {
@@ -208,7 +207,6 @@ class _ExcelConverter {
     }
 
     File appendPivotSheet(final List<WorksheetContent> worksheetContents) throws IOException {
-
 
         var worksheetNames = _NullSafe.stream(worksheetContents)
         .map(worksheetContent->worksheetContent==null
@@ -512,8 +510,6 @@ class _ExcelConverter {
                 }
 
             }
-
-
 
         }
         return importedItems;

@@ -44,5 +44,4 @@ implements AllInstancesQuery<T> {
         return new _AllInstancesQueryDefault<>(getResultType(), range);
     }
 
-
 }

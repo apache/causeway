@@ -61,7 +61,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     Bookmark bookmark;
 
-
     protected abstract Counter newCounter(String name);
 
     private static boolean prototypingOrig;
@@ -138,7 +137,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     }
 
-
     @SneakyThrows
     @Test
     void using_background_service() {
@@ -185,12 +183,9 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
                     .satisfies(x -> assertThat(x.getReplayStateFailureReason()).isNull());
         }).ifFailureFail();
 
-
-
         // when (simulate quartz running in the background)
         runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext);
         interactionService.nextInteraction();
-
 
         // then bumped
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
@@ -211,7 +206,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
                     .satisfies(x -> assertThat(x.getResultSummary()).isNotNull()) // changed
                     ;
         }).ifFailureFail();
-
 
     }
 

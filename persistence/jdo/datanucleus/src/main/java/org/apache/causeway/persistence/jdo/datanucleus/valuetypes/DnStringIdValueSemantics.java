@@ -36,7 +36,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.Builder;
 import lombok.NonNull;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class DnStringIdValueSemantics

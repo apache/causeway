@@ -162,6 +162,4 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-
-
 }

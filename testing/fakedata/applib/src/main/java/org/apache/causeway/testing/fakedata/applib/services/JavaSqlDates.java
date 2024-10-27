@@ -70,5 +70,4 @@ public class JavaSqlDates extends AbstractRandomValueGenerator {
         return new Date(epochMillis);
     }
 
-
 }

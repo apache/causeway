@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
 
-
 import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;

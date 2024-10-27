@@ -86,5 +86,4 @@ abstract class AbstractAsciiDocWriterTest {
         }
     }
 
-
 }

@@ -132,5 +132,4 @@ implements
 //  return BooleanModel.forScalarModel(scalarModel())
 //          .asStringModel("(not set)", "Yes", "No");
 
-
 }

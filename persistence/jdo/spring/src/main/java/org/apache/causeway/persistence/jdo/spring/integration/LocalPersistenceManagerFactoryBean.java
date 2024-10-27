@@ -125,7 +125,6 @@ public class LocalPersistenceManagerFactoryBean implements FactoryBean<Persisten
 
 	private JdoDialect jdoDialect;
 
-
 	/**
 	 * Specify the name of the desired PersistenceManagerFactory.
 	 * <p>This may either be a properties resource in the classpath if such a resource
@@ -201,7 +200,6 @@ public class LocalPersistenceManagerFactoryBean implements FactoryBean<Persisten
 		this.beanClassLoader = beanClassLoader;
 	}
 
-
 	/**
 	 * Initialize the PersistenceManagerFactory for the given location.
 	 * @throws IllegalArgumentException in case of illegal property values
@@ -273,7 +271,6 @@ public class LocalPersistenceManagerFactoryBean implements FactoryBean<Persisten
 		return JDOHelper.getPersistenceManagerFactory(props, this.beanClassLoader);
 	}
 
-
 	/**
 	 * Return the singleton PersistenceManagerFactory.
 	 */
@@ -292,7 +289,6 @@ public class LocalPersistenceManagerFactoryBean implements FactoryBean<Persisten
 	public boolean isSingleton() {
 		return true;
 	}
-
 
 	/**
 	 * Implementation of the PersistenceExceptionTranslator interface,
@@ -315,7 +311,6 @@ public class LocalPersistenceManagerFactoryBean implements FactoryBean<Persisten
 		}
 		return null;
 	}
-
 
 	/**
 	 * Close the PersistenceManagerFactory on bean factory shutdown.

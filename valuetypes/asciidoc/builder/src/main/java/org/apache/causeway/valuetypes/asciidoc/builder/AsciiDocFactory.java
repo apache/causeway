@@ -435,7 +435,6 @@ public class AsciiDocFactory {
 
     }
 
-
     // -- HELPER
 
     private static Column getOrCreateColumn(final Table table, final int colIndex) {

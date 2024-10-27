@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-
-
 public class ActionParameterDescriptionReprRenderer
 extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
 

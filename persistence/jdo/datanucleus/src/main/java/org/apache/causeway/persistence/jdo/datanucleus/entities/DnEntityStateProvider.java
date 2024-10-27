@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-
-
 @Component
 public class DnEntityStateProvider implements JdoFacetContext {
 

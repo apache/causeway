@@ -39,7 +39,6 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 
 import lombok.SneakyThrows;
 
-
 import java.util.Map;
 
 class Staff_hilevel_IntegTest extends Abstract_IntegTest {
@@ -258,7 +257,6 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-
     private Blob readFileAsBlob(final String fileName) {
         var bytes = DataSource.ofResource(Abstract_IntegTest.class, fileName)
                 .bytes();
@@ -273,6 +271,4 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
     }
 
-
 }
-

@@ -58,7 +58,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-
 @Component
 @Import({
     CommitListener.class
@@ -156,7 +155,6 @@ extends PublishingTestFactoryAbstract {
                 assertNotNull(book);
             });
             break;
-
 
         case PROPERTY_UPDATE:
 

@@ -87,7 +87,6 @@ abstract class InternalUtil<T> {
         }
     }
 
-
     // -- LISTENER ADD/REMOVE
 
     static <T> InternalUtil<T> addListener(

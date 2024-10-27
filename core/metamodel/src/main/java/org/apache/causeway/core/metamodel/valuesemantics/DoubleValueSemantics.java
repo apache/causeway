@@ -122,5 +122,4 @@ implements
         return Can.of(Double.MIN_VALUE, Double.MAX_VALUE);
     }
 
-
 }

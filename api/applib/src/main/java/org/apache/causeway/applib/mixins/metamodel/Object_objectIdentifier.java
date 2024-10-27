@@ -79,5 +79,4 @@ public class Object_objectIdentifier {
         return !metaModelService.sortOf(bookmark, MetaModelService.Mode.RELAXED).isEntity();
     }
 
-
 }

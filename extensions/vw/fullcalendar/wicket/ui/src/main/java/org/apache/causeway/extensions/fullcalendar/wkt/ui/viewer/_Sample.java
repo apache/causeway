@@ -199,5 +199,4 @@ class _Sample {
 
     }
 
-
 }

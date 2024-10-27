@@ -142,7 +142,6 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         return paramList;
     }
 
-
     /**
      * Remove any single quotes.
      */

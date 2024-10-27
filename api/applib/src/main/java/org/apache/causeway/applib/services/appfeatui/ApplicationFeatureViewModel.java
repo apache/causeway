@@ -77,7 +77,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Inject private FactoryService factory;
     @Inject private ApplicationFeatureRepository featureRepository;
 
-
     // -- constructors
 
     public static ApplicationFeatureViewModel newViewModel(
@@ -136,7 +135,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         setFeatureId(featureId);
     }
 
-
     // -- identification
     /**
      * having a title() method (rather than using @Title annotation) is necessary as a workaround to be able to use
@@ -166,8 +164,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @Setter
     private ApplicationFeatureId featureId;
 
-
-
     // -- feature (property, programmatic)
 
     @Programmatic
@@ -175,13 +171,11 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return featureRepository.findFeature(getFeatureId());
     }
 
-
     // -- fullyQualifiedName (property, programmatic)
     @Programmatic // in the title
     public String getFullyQualifiedName() {
         return getFeatureId().getFullyQualifiedName();
     }
-
 
     // -- type (programmatic)
     @Programmatic
@@ -260,7 +254,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         return getSort().isNamespace();
     }
 
-
     // -- memberName
 
     @Property(
@@ -289,7 +282,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         class DomainEvent extends PropertyDomainEvent<ApplicationFeatureViewModel, String> {}
     }
 
-
     /**
      * For packages and class names, will be null.
      */
@@ -300,8 +292,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @MemberSupport public boolean hideMemberName() {
         return !getSort().isMember();
     }
-
-
 
     // -- parent (property)
 
@@ -344,7 +334,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
                         parentId.asEncodedString()));
     }
 
-
     // -- parentPackage (property, programmatic, for packages & classes only)
 
     /**
@@ -356,7 +345,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
         .newViewModel(getFeatureId().getParentNamespaceFeatureId(), featureRepository, factory);
     }
 
-
     // -- equals, hashCode, toString
 
     private static final Equality<ApplicationFeatureViewModel> equality =
@@ -367,7 +355,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
 
     private static final ToString<ApplicationFeatureViewModel> toString =
             ObjectContracts.toString("featureId", ApplicationFeatureViewModel::getFeatureId);
-
 
     @Override
     public boolean equals(final Object obj) {
@@ -383,7 +370,6 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     public String toString() {
         return toString.toString(this);
     }
-
 
     // -- FACTORY
 

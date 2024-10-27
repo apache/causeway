@@ -75,7 +75,6 @@ public abstract class PersistenceManagerFactoryUtils {
 
 	private static final Log logger = LogFactory.getLog(PersistenceManagerFactoryUtils.class);
 
-
 	/**
 	 * Create an appropriate SQLExceptionTranslator for the given PersistenceManagerFactory.
 	 * <p>If a DataSource is found, creates a SQLErrorCodeSQLExceptionTranslator for the
@@ -287,7 +286,6 @@ public abstract class PersistenceManagerFactoryUtils {
 			pm.close();
 		}
 	}
-
 
 	/**
 	 * Callback for resource cleanup at the end of a non-JDO transaction

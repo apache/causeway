@@ -35,7 +35,6 @@ import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoProviderDefault implements UserMementoProvider {
 
@@ -50,7 +49,6 @@ public class UserMementoProviderDefault implements UserMementoProvider {
     }
 
     @Inject private final CausewayConfiguration causewayConfiguration;
-
 
     @Override
     public UserMemento userMemento(

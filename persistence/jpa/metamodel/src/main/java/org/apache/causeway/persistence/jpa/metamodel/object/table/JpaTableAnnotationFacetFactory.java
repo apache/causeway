@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel.object.table;
 
-
 import javax.inject.Inject;
 import javax.persistence.Table;
 
@@ -67,6 +66,5 @@ implements ObjectTypeFacetFactory {
                     annotationTableAttribute,
                     facetHolder));
     }
-
 
 }

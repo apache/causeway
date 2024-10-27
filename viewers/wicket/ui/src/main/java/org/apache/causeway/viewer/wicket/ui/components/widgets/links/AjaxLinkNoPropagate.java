@@ -44,7 +44,6 @@ public class AjaxLinkNoPropagate extends AjaxLink<Void> {
     @Getter @Setter
     private EventPropagation eventPropagation;
 
-
     public AjaxLinkNoPropagate(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
         this(id, EventPropagation.STOP, onClick);
     }
@@ -57,7 +56,6 @@ public class AjaxLinkNoPropagate extends AjaxLink<Void> {
         this.onClick = onClick;
         this.eventPropagation = eventPropagation;
     }
-
 
     @Override
     public final void onClick(final AjaxRequestTarget target) {

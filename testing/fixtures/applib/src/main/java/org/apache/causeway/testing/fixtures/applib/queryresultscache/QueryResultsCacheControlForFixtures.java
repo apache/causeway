@@ -31,7 +31,6 @@ import org.apache.causeway.applib.services.queryresultscache.QueryResultsCacheCo
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstalledEvent;
 import org.apache.causeway.testing.fixtures.applib.events.FixturesInstallingEvent;
 
-
 /**
  * Implementation of {@link QueryResultsCacheControl}.
  *

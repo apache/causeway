@@ -174,7 +174,6 @@ public enum ActionResultResponseHandlingStrategy {
         target.appendJavaScript(String.format("setTimeout(%s, %d);", js, millis));
     }
 
-
     /**
      * A special Ajax behavior that is used to stream the contents of a Lob after
      * an Ajax request.

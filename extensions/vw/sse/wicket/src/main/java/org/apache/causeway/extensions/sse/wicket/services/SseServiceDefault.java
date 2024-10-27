@@ -152,8 +152,6 @@ public class SseServiceDefault implements SseService {
             return eventStreamLifecycle;
         }
 
-
-
     }
 
     @RequiredArgsConstructor(staticName="of")
@@ -189,9 +187,7 @@ public class SseServiceDefault implements SseService {
             }
         }
 
-
     }
-
 
     // -- EVENT STREAM DEFAULT IMPLEMENTATION
 
@@ -237,7 +233,6 @@ public class SseServiceDefault implements SseService {
                 listeners.removeAll(markedForRemoval);
             }
 
-
         }
 
         @Override
@@ -267,7 +262,5 @@ public class SseServiceDefault implements SseService {
         }
 
     }
-
-
 
 }

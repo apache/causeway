@@ -68,7 +68,6 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
         addOrReplace(component);
     }
 
-
     private void buildEntityActionsGui() {
         final UiObjectWkt model = getModel();
         var adapter = model.getObject();
@@ -84,7 +83,5 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
             WktComponents.permanentlyHide(this, ID_ENTITY_ACTIONS);
         }
     }
-
-
 
 }

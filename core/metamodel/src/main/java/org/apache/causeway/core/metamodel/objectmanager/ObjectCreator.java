@@ -62,7 +62,6 @@ interface ObjectCreator {
             getMetaModelContext().getServiceRegistry()
                     .lookupServiceElseFail(ObjectLifecyclePublisher.class);
 
-
         @Override
         public ManagedObject createObject(final ObjectSpecification spec) {
 

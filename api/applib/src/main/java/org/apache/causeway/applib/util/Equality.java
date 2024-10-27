@@ -70,6 +70,4 @@ public class Equality<T> {
         return true;
     }
 
-
-
 }

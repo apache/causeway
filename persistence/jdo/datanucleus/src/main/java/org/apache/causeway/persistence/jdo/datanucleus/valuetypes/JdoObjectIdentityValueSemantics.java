@@ -35,7 +35,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.Builder;
 import lombok.NonNull;
 
-
 /**
  * Implementation for application-defined primary keys.
  *

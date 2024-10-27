@@ -125,7 +125,6 @@ implements
         return actionInvocationFacetAbstract.isPostable();
     }
 
-
     @SneakyThrows
     @Override
     public Object execute(final ActionInvocation currentExecution) {
@@ -167,7 +166,6 @@ implements
         } else {
             argsForInvocation = arguments;
         }
-
 
         // set event onto the execution
         currentExecution.setEvent(event);

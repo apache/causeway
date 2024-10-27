@@ -33,7 +33,6 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
     private final String key;
     private final String value;
 
-
     @Override
     public String setValue(final String value) {
         throw _Exceptions.notImplemented();

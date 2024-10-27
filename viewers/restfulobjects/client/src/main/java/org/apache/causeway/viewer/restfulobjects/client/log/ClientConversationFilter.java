@@ -31,8 +31,6 @@ import javax.ws.rs.client.ClientResponseFilter;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 
-
-
 /**
  * @since 2.0 {@index}
  */
@@ -88,6 +86,5 @@ extends ClientRequestFilter, ClientResponseFilter {
 
         onResponse(responseContext.getStatusInfo().getStatusCode(), responseContext.getHeaders(), responseBody);
     }
-
 
 }

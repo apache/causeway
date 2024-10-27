@@ -47,7 +47,6 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
 
     private static final String LOGONLOGGER_FILTER_NAME = "CausewayLogOnExceptionFilter";
 
-
     @Getter
     private final String name = "LogOn Exception Logger";
 
@@ -55,7 +54,6 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
     public WebModuleLogOnExceptionLogger(final ServiceInjector serviceInjector) {
         super(serviceInjector);
     }
-
 
     @Override
     public Can<ServletContextListener> init(ServletContext ctx) throws ServletException {
@@ -74,8 +72,6 @@ public final class WebModuleLogOnExceptionLogger extends WebModuleAbstract {
         return Can.empty(); // registers no listeners
     }
 
-
     // -- HELPER
-
 
 }

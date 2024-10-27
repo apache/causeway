@@ -57,7 +57,6 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
     public static class AppManifest {
     }
 
-
     protected org.apache.causeway.extensions.executionlog.applib.integtest.model.Counter newCounter(String name) {
         return Counter.builder().name(name).build();
     }

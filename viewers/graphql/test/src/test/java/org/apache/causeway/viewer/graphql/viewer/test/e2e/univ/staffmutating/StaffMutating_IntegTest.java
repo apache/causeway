@@ -33,9 +33,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
 
-
-
-
 // NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(130)
 @ActiveProfiles("test")

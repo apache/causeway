@@ -101,6 +101,4 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         }
     }
 
-
-
 }

@@ -188,7 +188,6 @@ public class RichAction
         return ManagedObject.adaptParameter(oap, argPojo);
     }
 
-
     public static Optional<Object> asPojo(
             final ObjectSpecification elementType,
             final Object argumentValueObj,
@@ -242,7 +241,6 @@ public class RichAction
         }
         throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
     }
-
 
     public void addGqlArguments(
             final ObjectAction objectAction,

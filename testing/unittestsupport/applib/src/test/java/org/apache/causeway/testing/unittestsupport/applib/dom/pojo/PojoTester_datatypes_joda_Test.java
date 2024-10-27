@@ -115,5 +115,4 @@ public class PojoTester_datatypes_joda_Test {
         }).isInstanceOf(AssertionFailedError.class);
     }
 
-
 }

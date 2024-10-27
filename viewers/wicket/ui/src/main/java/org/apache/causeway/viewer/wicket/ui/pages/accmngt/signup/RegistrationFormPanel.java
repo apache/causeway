@@ -106,7 +106,4 @@ public class RegistrationFormPanel extends PanelBase<Void> {
         form.add(signUpButton);
     }
 
-
-
-
 }

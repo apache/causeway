@@ -139,7 +139,6 @@ class InteractionTestWkt extends InteractionTestAbstract {
                             ViewOrEditMode.VIEWING,
                             RenderingHint.PARENTED_PROPERTY_COLUMN);
 
-
             // owner sharing (should be the same object)
             assertTrue(domainObject == scalarModel.getOwner());
 

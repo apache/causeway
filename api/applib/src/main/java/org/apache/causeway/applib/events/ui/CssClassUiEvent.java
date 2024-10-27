@@ -75,7 +75,6 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
      */
     public static class Doop extends CssClassUiEvent<Object> {}
 
-
     /**
      * If used then the framework will set state via (non-API) setters.
      *

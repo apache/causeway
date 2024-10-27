@@ -30,8 +30,6 @@ import javax.ws.rs.core.UriBuilder;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.Oauth2Creds;
 
-
-
 public class TokenCache {
 
     private final Oauth2Creds creds;

@@ -94,7 +94,6 @@ implements
                 ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
     }
 
-
     public static UiObjectWkt ofBookmark(
             final @Nullable Bookmark bookmark) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofBookmark(bookmark),
@@ -319,7 +318,5 @@ implements
     private ImageResourceCache imageResourceCache() {
         return imageResourceCache = getMetaModelContext().loadServiceIfAbsent(ImageResourceCache.class, imageResourceCache);
     }
-
-
 
 }

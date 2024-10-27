@@ -44,7 +44,6 @@ public class ErrorPage extends PageAbstract {
 
     private static final String ID_EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
-
     public ErrorPage(final ExceptionModel exceptionModel) {
         super(PageParameterUtils.newPageParameters(), null);
 

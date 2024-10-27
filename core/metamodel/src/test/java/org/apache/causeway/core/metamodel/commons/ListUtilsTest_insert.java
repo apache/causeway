@@ -79,6 +79,4 @@ class ListUtilsTest_insert {
         assertThat(list.get(4), is(Integer.valueOf(10)));
     }
 
-
-
 }

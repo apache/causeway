@@ -135,7 +135,6 @@ class ShiroSecmanLdap_restfulStressTest extends AbstractShiroTest {
 
         });
 
-
     }
 
 }

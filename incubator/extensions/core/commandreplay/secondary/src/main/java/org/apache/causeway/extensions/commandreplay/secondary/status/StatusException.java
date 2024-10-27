@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.commandreplay.secondary.status;
 
-
 public class StatusException extends Exception {
     public final SecondaryStatus secondaryStatus;
 

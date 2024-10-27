@@ -43,7 +43,3 @@ public interface BindingConverter<L, R> {
     }
 
 }
-
-
-
-

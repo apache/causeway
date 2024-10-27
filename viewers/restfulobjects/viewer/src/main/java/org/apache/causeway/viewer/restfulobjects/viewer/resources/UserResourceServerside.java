@@ -41,7 +41,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @Component

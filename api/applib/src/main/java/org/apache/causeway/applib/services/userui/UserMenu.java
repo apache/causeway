@@ -55,7 +55,6 @@ public class UserMenu {
 
     final UserService userService;
 
-
     /**
      * @since 2.0 {@index}
      */

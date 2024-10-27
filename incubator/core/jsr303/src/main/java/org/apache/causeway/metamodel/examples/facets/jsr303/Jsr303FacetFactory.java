@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.facets.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.MethodRemover;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeatureType;
 
-
 public class Jsr303FacetFactory implements FacetFactory {
 
     public ObjectFeatureType[] getFeatureTypes() {

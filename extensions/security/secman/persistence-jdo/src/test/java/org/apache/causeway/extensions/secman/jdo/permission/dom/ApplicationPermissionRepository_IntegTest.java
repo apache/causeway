@@ -54,5 +54,4 @@ class ApplicationPermissionRepository_IntegTest extends ApplicationPermissionRep
     public static class AppManifest {
     }
 
-
 }

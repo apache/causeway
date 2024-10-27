@@ -43,7 +43,6 @@ import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSession
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Implementation of the {@link SessionSubscriber} SPI, which persists a log entry to the database (the
  * {@link SessionLogEntry} entity) each time a user either logs on or logs out, or if their session expires.

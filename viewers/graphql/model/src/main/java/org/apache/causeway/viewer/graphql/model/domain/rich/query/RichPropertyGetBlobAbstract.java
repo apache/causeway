@@ -33,8 +33,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-
-
 public abstract class RichPropertyGetBlobAbstract extends Element {
 
     final MemberInteractor<OneToOneAssociation> memberInteractor;

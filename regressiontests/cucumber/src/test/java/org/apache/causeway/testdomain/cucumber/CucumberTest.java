@@ -22,7 +22,6 @@ import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectClasspathResource;
 import org.junit.platform.suite.api.Suite;
 
-
 /**
  * Cucumber will scan the package of a class annotated with @Cucumber for feature files.
  * <p>

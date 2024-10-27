@@ -48,6 +48,4 @@ public final class MinLengthUtil {
 
     public static final int MIN_LENGTH_DEFAULT = 1;
 
-
-
 }

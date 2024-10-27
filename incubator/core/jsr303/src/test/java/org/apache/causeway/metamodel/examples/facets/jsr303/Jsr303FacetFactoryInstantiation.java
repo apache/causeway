@@ -23,9 +23,7 @@ import org.junit.Test;
 
 import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303FacetFactory;
 
-
 public class Jsr303FacetFactoryInstantiation {
-
 
     @Test
     public void canInstantiate() {

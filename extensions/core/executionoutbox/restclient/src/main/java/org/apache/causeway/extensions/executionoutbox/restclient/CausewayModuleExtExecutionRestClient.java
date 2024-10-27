@@ -32,5 +32,4 @@ import org.apache.causeway.schema.CausewayModuleSchema;
 })
 public class CausewayModuleExtExecutionRestClient {
 
-
 }

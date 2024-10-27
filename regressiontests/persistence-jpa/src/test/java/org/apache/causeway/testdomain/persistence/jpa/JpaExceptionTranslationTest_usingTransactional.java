@@ -50,8 +50,6 @@ import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
@@ -75,7 +73,6 @@ extends RegressionTestWithJpaFixtures {
         // launch H2Console for troubleshooting ...
         // Util_H2Console.main(null);
     }
-
 
     @Test @Order(2)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
@@ -125,8 +122,5 @@ extends RegressionTestWithJpaFixtures {
         });
 
     }
-
-
-
 
 }

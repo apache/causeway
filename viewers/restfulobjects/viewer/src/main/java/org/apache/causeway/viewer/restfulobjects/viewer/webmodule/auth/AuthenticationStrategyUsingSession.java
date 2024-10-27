@@ -24,8 +24,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
-
-
 /**
  * Checks that an already-present {@link InteractionContext authentication} (obtained from the {@link HttpSession}) is
  * still {@link org.apache.causeway.core.security.authentication.manager.AuthenticationManager#isSessionValid(InteractionContext) valid},

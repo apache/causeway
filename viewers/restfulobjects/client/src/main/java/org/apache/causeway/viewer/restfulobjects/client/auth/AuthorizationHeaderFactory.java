@@ -22,8 +22,6 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.auth.basic.AuthorizationHeaderFactoryBasic;
 import org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure.AuthorizationHeaderFactoryOauth2Azure;
 
-
-
 public interface AuthorizationHeaderFactory {
 
     static AuthorizationHeaderFactory factoryFor(
@@ -42,7 +40,6 @@ public interface AuthorizationHeaderFactory {
                 throw new IllegalArgumentException(String.format("unknown authenticationMode '%s'", authenticationMode));
         }
     }
-
 
     String create();
 }

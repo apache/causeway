@@ -122,7 +122,6 @@ extends ReprRendererAbstract<Stream<ManagedObject>> {
         representation.mapPutJsonRepresentation("value", values);
     }
 
-
     protected void addLinkToReturnType() {
         addLink(Rel.RETURN_TYPE, returnType);
     }

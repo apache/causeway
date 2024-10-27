@@ -188,7 +188,6 @@ public class RichMutationForAction extends Element {
         return resultManagedObject.getPojo();
     }
 
-
     // TODO: adapted from SimpleAction - rationalize?
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
@@ -243,6 +242,5 @@ public class RichMutationForAction extends Element {
             final ObjectAction objectAction) {
         return RichAction.argumentManagedObjectsFor(dataFetchingEnvironment, objectAction, context);
     }
-
 
 }

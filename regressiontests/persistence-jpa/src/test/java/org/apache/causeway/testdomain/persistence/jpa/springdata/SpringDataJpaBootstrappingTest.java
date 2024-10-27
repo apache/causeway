@@ -51,8 +51,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParam
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 @DataJpaTest(
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:SpringDataJpaBootstrappingTest",
@@ -143,6 +141,5 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
     void aSecondRunShouldWorkAsWell() {
         sampleEmployeesShouldBeSetUp();
     }
-
 
 }

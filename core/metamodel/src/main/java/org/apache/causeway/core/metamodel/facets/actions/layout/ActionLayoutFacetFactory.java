@@ -102,5 +102,4 @@ extends FacetFactoryAbstract {
 
     }
 
-
 }

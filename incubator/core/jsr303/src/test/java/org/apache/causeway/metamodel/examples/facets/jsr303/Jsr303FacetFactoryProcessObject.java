@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303FacetFact
 import org.apache.causeway.core.metamodel.facets.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.MethodRemover;
 
-
 @RunWith(JMock.class)
 public class Jsr303FacetFactoryProcessObject {
 
@@ -72,6 +71,5 @@ public class Jsr303FacetFactoryProcessObject {
         facetFactory.process(domainObjectClass, mockMethodRemover, mockFacetHolder);
         fail();
     }
-
 
 }

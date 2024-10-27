@@ -41,5 +41,4 @@ public abstract class RepresentationTypeTest_getMediaType_ContractTest {
         assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
     }
 
-
 }

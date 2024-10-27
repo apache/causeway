@@ -35,8 +35,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
 
-
-
 public class ObjectCollectionReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
@@ -125,7 +123,6 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         representation.mapPut("value", list);
     }
 
-
     // ///////////////////////////////////////////////////
     // details link
     // ///////////////////////////////////////////////////
@@ -173,6 +170,5 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         final CollectionSemantics semantics = CollectionSemantics.valueOf(objectMember);
         getExtensions().mapPutString("collectionSemantics", semantics.name().toLowerCase());
     }
-
 
 }

@@ -63,5 +63,4 @@ public class JMockActionsTest_returnArgument {
         }
     }
 
-
 }

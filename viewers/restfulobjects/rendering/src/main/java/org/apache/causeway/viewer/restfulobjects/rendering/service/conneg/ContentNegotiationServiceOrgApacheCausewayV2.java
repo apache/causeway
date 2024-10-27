@@ -58,7 +58,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectP
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * @since 1.x {@index}
  */
@@ -443,6 +442,5 @@ extends ContentNegotiationServiceAbstract {
         appendPropertiesTo(resourceContext, elementAdapter, elementRepresentation, suppression);
         collectionRepresentation.arrayAdd(elementRepresentation);
     }
-
 
 }

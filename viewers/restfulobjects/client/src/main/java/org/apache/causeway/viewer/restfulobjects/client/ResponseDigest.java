@@ -76,7 +76,6 @@ class ResponseDigest<T> {
     private Can<T> entities;
     private Exception failureCause;
 
-
     protected ResponseDigest(
             final Response response, final Class<T> entityType, final GenericType<List<T>> genericType) {
         this.response = response;
@@ -211,8 +210,5 @@ class ResponseDigest<T> {
 
         return failureMessage;
     }
-
-
-
 
 }

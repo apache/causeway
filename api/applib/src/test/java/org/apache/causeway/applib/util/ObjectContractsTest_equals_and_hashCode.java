@@ -116,7 +116,6 @@ class InvoiceItem3 {
         this.quantity = quantity;
     }
 
-
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity";
     @Override
     public int hashCode() {

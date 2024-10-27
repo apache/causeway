@@ -238,10 +238,8 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
         super(commandDto, replayState, targetIndex);
     }
 
-
     @EmbeddedId
     private CommandLogEntryPK pk;
-
 
     @Transient
     @InteractionId
@@ -255,18 +253,15 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
         this.pk = new CommandLogEntryPK(interactionId);
     }
 
-
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
 
-
     @Column(nullable = Timestamp.NULLABLE)
     @Timestamp
     @Getter @Setter
     private java.sql.Timestamp timestamp;
-
 
     @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
@@ -274,13 +269,11 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private Bookmark target;
 
-
     @Column(nullable = ExecuteIn.NULLABLE, length = ExecuteIn.MAX_LENGTH)
     @Enumerated(EnumType.STRING)
     @ExecuteIn
     @Getter @Setter
     private org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn executeIn;
-
 
     @Convert(converter = JavaUtilUuidConverter.class)
     @Domain.Exclude
@@ -288,12 +281,10 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private UUID parentInteractionId;
 
-
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
     @Getter @Setter
     private String logicalMemberIdentifier;
-
 
     @Convert(converter = CausewayCommandDtoConverter.class)
     @Lob @Basic(fetch = FetchType.LAZY)
@@ -302,18 +293,15 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private CommandDto commandDto;
 
-
     @Column(nullable = StartedAt.NULLABLE)
     @StartedAt
     @Getter @Setter
     private java.sql.Timestamp startedAt;
 
-
     @Column(nullable = CompletedAt.NULLABLE)
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
-
 
     @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Result.NULLABLE, length = Result.MAX_LENGTH)
@@ -321,20 +309,17 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @Getter @Setter
     private Bookmark result;
 
-
     @Lob @Basic(fetch = FetchType.LAZY)
     @Column(nullable = Exception.NULLABLE, columnDefinition = "CLOB")
     @Exception
     @Getter @Setter
     private String exception;
 
-
     @Column(nullable = ReplayState.NULLABLE, length = ReplayState.MAX_LENGTH)
     @Enumerated(EnumType.STRING)
     @ReplayState
     @Getter @Setter
     private org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState;
-
 
     @Column(nullable = ReplayStateFailureReason.NULLABLE, length = ReplayStateFailureReason.MAX_LENGTH)
     @ReplayStateFailureReason

@@ -148,5 +148,4 @@ public class CausewayModuleApplib {
     public abstract static class PropertyDomainEvent<S,T>
     extends org.apache.causeway.applib.events.domain.PropertyDomainEvent<S,T> {}
 
-
 }

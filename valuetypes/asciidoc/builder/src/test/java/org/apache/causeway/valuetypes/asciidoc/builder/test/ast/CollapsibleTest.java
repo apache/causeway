@@ -60,5 +60,4 @@ class CollapsibleTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
     
-
 }

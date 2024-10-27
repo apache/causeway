@@ -70,7 +70,6 @@ extends FacetFactoryAbstract {
         return true;
     }
 
-
     private void processJpaAnnotations(final ProcessMethodContext processMethodContext) {
 
         //XXX ideally we would process JPA annotations only if the type has an @Entity annotation
@@ -86,6 +85,5 @@ extends FacetFactoryAbstract {
         FacetUtil.addFacet(new JdoNotPersistentFacetFromAnnotation(facetHolder));
 
     }
-
 
 }

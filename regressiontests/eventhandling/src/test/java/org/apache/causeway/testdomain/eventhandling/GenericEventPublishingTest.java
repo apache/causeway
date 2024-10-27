@@ -34,7 +34,6 @@ import org.apache.causeway.core.runtimeservices.eventbus.EventBusServiceSpring;
 import lombok.Getter;
 import lombok.Value;
 
-
 @SpringBootTest(
         classes = {
                 GenericEventPublishingTest.TestConfig.class,

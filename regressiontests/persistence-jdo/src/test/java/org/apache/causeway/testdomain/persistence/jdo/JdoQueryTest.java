@@ -41,8 +41,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
@@ -159,6 +157,5 @@ class JdoQueryTest extends RegressionTestWithJdoFixtures {
         assertEquals(0, repositoryService.allInstances(JdoInventory.class).size());
         assertEquals(0, repositoryService.allInstances(JdoProduct.class).size());
     }
-
 
 }

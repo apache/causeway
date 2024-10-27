@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-
-
 class JsonRepresentationTest_getBigInteger {
 
     private JsonRepresentation jsonRepresentation;

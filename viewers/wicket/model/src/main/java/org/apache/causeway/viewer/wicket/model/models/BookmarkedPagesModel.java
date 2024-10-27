@@ -24,8 +24,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 
-
-
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
 
     private static final long serialVersionUID = 1L;

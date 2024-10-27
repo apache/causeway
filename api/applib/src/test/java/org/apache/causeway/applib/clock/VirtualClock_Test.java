@@ -136,7 +136,6 @@ class VirtualClock_Test {
                 Instant.ofEpochMilli(virtualNow.getTime()));
     }
 
-
     // -- QUERIES
 
     @Test
@@ -205,7 +204,5 @@ class VirtualClock_Test {
                 - expectedInstant.getEpochSecond());
         assertTrue(deltaSeconds <= toleranceSeconds);
     }
-
-
 
 }

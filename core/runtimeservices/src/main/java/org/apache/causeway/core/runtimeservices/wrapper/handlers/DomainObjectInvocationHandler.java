@@ -128,7 +128,6 @@ extends DelegatingInvocationHandlerDefault<T> {
             __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
             __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
 
-
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
                     "Could not locate reserved declared methods in the WrappingObject interfaces",
@@ -300,7 +299,6 @@ extends DelegatingInvocationHandlerDefault<T> {
                 : false;
     }
 
-
     private Object handleTitleMethod(final ManagedObject targetAdapter) {
 
         resolveIfRequired(targetAdapter);
@@ -313,7 +311,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         return titleEvent.getTitle();
     }
 
-
     private Object handleSaveMethod(
             final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
 
@@ -322,7 +319,6 @@ extends DelegatingInvocationHandlerDefault<T> {
                     targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
             notifyListenersAndVetoIfRequired(interactionResult);
         });
-
 
         var spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
@@ -334,7 +330,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         return null;
 
     }
-
 
     private Object handleGetterMethodOnProperty(
             final ManagedObject targetAdapter,
@@ -356,7 +351,6 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-
             var propertyAccessEvent = new PropertyAccessEvent(
                     getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
@@ -365,8 +359,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
     }
-
-
 
     private Object handleSetterMethodOnProperty(
             final ManagedObject targetAdapter,
@@ -397,8 +389,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         });
 
     }
-
-
 
     private Object handleGetterMethodOnCollection(
             final ManagedObject targetAdapter,
@@ -468,8 +458,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         return proxyContextHandler.proxy(mapToLookup, this, otma);
     }
 
-
-
     private Object handleActionMethod(
             final ManagedObject targetAdapter,
             final Object[] args,
@@ -524,7 +512,6 @@ extends DelegatingInvocationHandlerDefault<T> {
             return arg;
         }
     }
-
 
     /**
      * REVIEW: ideally should provide some way to allow to caller to indicate the 'where' context.  Having

@@ -72,8 +72,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.viewer.wicket.applib.CausewayModuleViewerWicketApplibMixins;
 
-
-
 @SpringBootTest(
         classes = Layout_Counter_IntegTest.AppManifest.class
 )
@@ -145,7 +143,6 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     protected Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
-
 
     // @Disabled // TODO: reinstate back in CAUSEWAY-3655
     @Test
@@ -796,7 +793,6 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
         Map<String, String> facetAttrByName = facetById.get(LayoutGroupFacet.class.getCanonicalName()).getAttr().stream().collect(Collectors.toMap(FacetAttr::getName, FacetAttr::getValue));
         facetAttrByName.get("Name");
     } */
-
 
     @Inject InteractionService interactionService;
     @Inject MetaModelService metaModelService;

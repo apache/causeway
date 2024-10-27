@@ -36,5 +36,4 @@ public enum Navigable {
         return this == PARENT;
     }
 
-
 }

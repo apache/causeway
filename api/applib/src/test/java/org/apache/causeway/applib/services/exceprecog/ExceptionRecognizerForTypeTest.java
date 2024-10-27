@@ -64,5 +64,4 @@ public class ExceptionRecognizerForTypeTest {
         assertThat(ersForType.recognize(new FooException()).get().getReason(), is("pre: foo"));
     }
 
-
 }

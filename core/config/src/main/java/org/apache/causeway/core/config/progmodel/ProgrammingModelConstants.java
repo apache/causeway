@@ -109,7 +109,6 @@ public final class ProgrammingModelConstants {
         }
     }
 
-
     // -- METHOD EXCLUDE MARKERS
 
     @Getter
@@ -171,7 +170,6 @@ public final class ProgrammingModelConstants {
         private final DateTimeFormatter formatter;
 
     }
-
 
     // -- MIXIN CONSTRUCTION
 

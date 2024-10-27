@@ -232,7 +232,6 @@ public class DomainEventHelper {
                         : Collections.emptyList();
     }
 
-
     // -- postEventForProperty, newPropertyInteraction
     public <S, T> PropertyDomainEvent<S, T> postEventForProperty(
             final AbstractDomainEvent.Phase phase,
@@ -289,7 +288,6 @@ public class DomainEventHelper {
             final T oldValue,
             final T newValue) throws NoSuchMethodException, SecurityException, IllegalArgumentException {
 
-
         var constructors = _Reflect.getPublicConstructors(type);
 
         var noArgonstructor = constructors
@@ -332,7 +330,6 @@ public class DomainEventHelper {
         // else
         throw new NoSuchMethodException(type.getName()+".<init>(...)");
     }
-
 
     // -- postEventForCollection, newCollectionDomainEvent
 
@@ -425,6 +422,5 @@ public class DomainEventHelper {
                     "failed to invoke constructor %s", constructor);
         }
     }
-
 
 }

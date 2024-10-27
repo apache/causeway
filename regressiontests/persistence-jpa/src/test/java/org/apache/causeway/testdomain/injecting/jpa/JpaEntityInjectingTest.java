@@ -47,7 +47,6 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
@@ -79,7 +78,6 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
         lock.install();
         assertInjectCountRange(2, 9); //TODO either a bug or we fail to measure this accurately
     }
-
 
     @Test @Order(2)
     void sampleBook_shouldHave_injectionPointsResolved() {

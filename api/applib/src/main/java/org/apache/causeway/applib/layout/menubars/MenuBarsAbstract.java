@@ -65,5 +65,4 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
         return serviceActionsByObjectTypeAndId;
     }
 
-
 }

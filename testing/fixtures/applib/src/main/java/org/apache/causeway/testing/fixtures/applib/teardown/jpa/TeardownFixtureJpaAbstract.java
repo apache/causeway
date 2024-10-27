@@ -38,5 +38,4 @@ public abstract class TeardownFixtureJpaAbstract extends FixtureScript {
 
     protected void postDeleteFrom(final Class<?> cls) {}
 
-
 }

@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.experimental.UtilityClass;
 
-
 @UtilityClass
 public final class CausewayWicketAjaxRequestListenerUtil {
 

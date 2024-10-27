@@ -60,7 +60,6 @@ public class GraphQLTypeRegistry {
         return Collections.unmodifiableSet(graphQLTypes);
     }
 
-
     void addTypeIfNotAlreadyPresent(
             final GraphQLObjectType typeToAdd,
             final String logicalTypeName){
@@ -72,7 +71,6 @@ public class GraphQLTypeRegistry {
         }
         graphQLTypes.add(typeToAdd);
     }
-
 
     public GraphQLEnumType addEnumTypeIfNotAlreadyPresent(
             final Class<?> typeToAdd,
@@ -98,7 +96,6 @@ public class GraphQLTypeRegistry {
         add(enumType);
         return enumType;
     }
-
 
     public void addTypeIfNotAlreadyPresent(final GraphQLType typeToAdd) {
 
@@ -147,7 +144,6 @@ public class GraphQLTypeRegistry {
         add(typeToAdd);
     }
 
-
     void addTypeIfNotAlreadyPresent(final GraphQLInputObjectType typeToAdd) {
         if (isPresent(typeToAdd, GraphQLInputObjectType.class)){
             // For now we just log and skip
@@ -175,7 +171,6 @@ public class GraphQLTypeRegistry {
                 .filter(ot -> ot.getName().equals(typeName))
                 .findFirst();
     }
-
 
     private void add(GraphQLType typeToAdd) {
         graphQLTypes.add(typeToAdd);

@@ -101,5 +101,4 @@ public class LifecycleEventSubscriberJpaForTesting {
         kvStore.append(this, eventType, bookDto);
     }
 
-
 }

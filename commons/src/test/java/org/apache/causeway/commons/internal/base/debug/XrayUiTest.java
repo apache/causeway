@@ -97,6 +97,4 @@ class XrayUiTest {
 
     }
 
-
-
 }

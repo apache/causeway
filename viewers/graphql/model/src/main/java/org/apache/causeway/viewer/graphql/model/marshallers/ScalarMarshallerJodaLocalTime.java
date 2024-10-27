@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.marshallers;
 
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
@@ -33,7 +32,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbstract;
-
 
 @Component
 @Priority(PriorityPrecedence.LATE)

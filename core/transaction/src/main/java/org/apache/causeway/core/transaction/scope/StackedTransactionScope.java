@@ -29,7 +29,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 public class StackedTransactionScope implements Scope {
 
-
     @Override
     public Object get(final String name, final ObjectFactory<?> objectFactory) {
 
@@ -160,7 +159,6 @@ public class StackedTransactionScope implements Scope {
         transactionNestingLevelForThread().pop();
     }
 
-
     @Override
     @Nullable
     public Object resolveContextualObject(final String key) {
@@ -173,7 +171,6 @@ public class StackedTransactionScope implements Scope {
         return TransactionSynchronizationManager.getCurrentTransactionName();
     }
 
-
     /**
      * Holder for scoped objects.
      */
@@ -184,7 +181,6 @@ public class StackedTransactionScope implements Scope {
         ScopedObjectsHolder(UUID transactionUuid) {
             this.transactionUuid = transactionUuid;
         }
-
 
         final Map<String, Object> scopedInstances = new HashMap<>();
         final Map<String, Runnable> destructionCallbacks = new LinkedHashMap<>();
@@ -208,7 +204,6 @@ public class StackedTransactionScope implements Scope {
                     transactionUuid, registered, scopedInstances.size(), destructionCallbacks.size());
         }
     }
-
 
     private class CleanupSynchronization implements TransactionSynchronization {
 

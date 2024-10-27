@@ -41,7 +41,6 @@ public final class ClassUtil {
             float.class.getName(), float.class,
             double.class.getName(), double.class);
 
-
     final Map<Class<?>, Object> defaultByPrimitive = Map.of(
             boolean.class, false,
             byte.class, (byte)0,

@@ -34,6 +34,5 @@ public final class CollectionLayoutConfigOptions {
             return configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView();
         }
 
-
     }
 }

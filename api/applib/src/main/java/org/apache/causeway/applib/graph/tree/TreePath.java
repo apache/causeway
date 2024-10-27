@@ -172,7 +172,6 @@ public class TreePath implements Serializable {
                 });
     }
 
-
     /**
      * Parses stringified tree path of format {@code <delimiter>0<delimiter>3<delimiter>1} ...,
      * as returned by {@link TreePath#stringify(String)}.
@@ -224,6 +223,5 @@ public class TreePath implements Serializable {
     public String toString() {
         return stringify("/");
     }
-
 
 }

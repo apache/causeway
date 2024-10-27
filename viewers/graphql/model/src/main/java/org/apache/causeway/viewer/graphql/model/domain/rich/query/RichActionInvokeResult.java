@@ -135,5 +135,4 @@ public class RichActionInvokeResult extends Element {
         return resultManagedObject.getPojo();
     }
 
-
 }

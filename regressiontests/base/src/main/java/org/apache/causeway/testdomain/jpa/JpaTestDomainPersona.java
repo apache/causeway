@@ -121,11 +121,8 @@ public enum JpaTestDomainPersona
             };
         }
 
-
     },
 
-
     ;
-
 
 }

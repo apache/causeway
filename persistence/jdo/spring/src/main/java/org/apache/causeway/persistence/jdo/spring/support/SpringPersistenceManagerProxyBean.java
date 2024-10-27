@@ -70,7 +70,6 @@ public class SpringPersistenceManagerProxyBean implements FactoryBean<Persistenc
 
 	private PersistenceManager proxy;
 
-
 	/**
 	 * Set the target PersistenceManagerFactory for this proxy.
 	 */
@@ -157,7 +156,6 @@ public class SpringPersistenceManagerProxyBean implements FactoryBean<Persistenc
 				new Class<?>[] {getPersistenceManagerInterface()}, new PersistenceManagerInvocationHandler());
 	}
 
-
 	@Override
 	public PersistenceManager getObject() {
 		return this.proxy;
@@ -172,7 +170,6 @@ public class SpringPersistenceManagerProxyBean implements FactoryBean<Persistenc
 	public boolean isSingleton() {
 		return true;
 	}
-
 
 	/**
 	 * Invocation handler that delegates close calls on PersistenceManagers to

@@ -25,7 +25,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import lombok.Builder;
 import lombok.Getter;
 
-
 /**
  * Describes what to include in the export from
  * {@link MetaModelService#exportMetaModel(Config)}.
@@ -71,6 +70,5 @@ public class Config {
                 .includeTitleAnnotations(includeTitleAnnotations)
                 .namespacePrefixes(_Sets.newHashSet(namespacePrefixes));
     }
-
 
 }

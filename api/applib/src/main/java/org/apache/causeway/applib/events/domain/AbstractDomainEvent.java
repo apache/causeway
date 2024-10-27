@@ -127,7 +127,6 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
         this.mixee = mixee;
     }
 
-
     /**
      * The subject of the event, which will be either the
      * {@link #getSource() source} for a regular action, or the
@@ -486,6 +485,5 @@ public abstract class AbstractDomainEvent<S> extends EventObjectBase<S> {
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

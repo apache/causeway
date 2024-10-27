@@ -30,8 +30,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class

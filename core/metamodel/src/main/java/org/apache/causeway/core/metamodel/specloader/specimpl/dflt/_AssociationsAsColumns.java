@@ -171,6 +171,4 @@ class _AssociationsAsColumns implements HasMetaModelContext {
                 : PARENTED_TABLES;
     }
 
-
-
 }

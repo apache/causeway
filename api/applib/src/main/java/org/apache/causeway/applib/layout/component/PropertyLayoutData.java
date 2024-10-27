@@ -81,8 +81,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.id = id;
     }
 
-
-
     private String cssClass;
 
     @Override
@@ -95,7 +93,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     public void setCssClass(final String cssClass) {
         this.cssClass = cssClass;
     }
-
 
     private String describedAs;
 
@@ -110,7 +107,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.describedAs = describedAs;
     }
 
-
     private Where hidden;
 
     @Override
@@ -124,7 +120,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.hidden = hidden;
     }
 
-
     private LabelPosition labelPosition;
 
     @XmlAttribute(required = false)
@@ -136,7 +131,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.labelPosition = labelPosition;
     }
 
-
     private Integer multiLine;
 
     @XmlAttribute(required = false)
@@ -147,7 +141,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     public void setMultiLine(final Integer multiLine) {
         this.multiLine = multiLine;
     }
-
 
     private String named;
 
@@ -161,7 +154,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     public void setNamed(final String named) {
         this.named = named;
     }
-
 
     private PromptStyle promptStyle;
 
@@ -185,7 +177,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.dateRenderAdjustDays = dateRenderAdjustDays;
     }
 
-
     private Integer typicalLength;
 
     @XmlAttribute(required = false)
@@ -196,7 +187,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     public void setTypicalLength(final Integer typicalLength) {
         this.typicalLength = typicalLength;
     }
-
 
     private Repainting repainting;
 
@@ -223,7 +213,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.actions = actionLayoutDatas;
     }
 
-
     private FieldSet owner;
     /**
      * Owner.
@@ -242,8 +231,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.owner = owner;
     }
 
-
-
     private String metadataError;
 
     /**
@@ -257,8 +244,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
-
-
 
     private Link link;
 
@@ -277,7 +262,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     public void setLink(final Link link) {
         this.link = link;
     }
-
 
     @Override
     public String toString() {

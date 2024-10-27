@@ -45,8 +45,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -181,7 +179,6 @@ class _OpenApiModelFactory {
             .collect(Collectors.toList());
         }
     }
-
 
     void appendObjectPathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,
@@ -401,8 +398,6 @@ class _OpenApiModelFactory {
         return causewayModel;
     }
 
-
-
     // UNUSED
     void appendServiceActionPromptTo(final ObjectSchema serviceMembers, final ObjectAction action) {
         String actionId = action.getId();
@@ -593,7 +588,6 @@ class _OpenApiModelFactory {
                 .requestBody(_OpenApi.requestBody("application/json", bodyParam))
                 .addExtension("x-codegen-request-body-name", "body");
         }
-
 
     }
 

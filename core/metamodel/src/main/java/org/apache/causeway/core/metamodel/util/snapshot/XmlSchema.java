@@ -177,8 +177,6 @@ public final class XmlSchema {
         addNamespace(xsSchemaElement, getPrefix(), getUri());
     }
 
-
-
     /**
      * Creates an &lt;xs:element&gt; element defining the presence of the named
      * element representing a class

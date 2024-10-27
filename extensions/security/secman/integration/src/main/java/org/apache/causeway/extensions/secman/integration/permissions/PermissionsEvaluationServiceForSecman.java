@@ -47,7 +47,6 @@ import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEv
 import lombok.Builder;
 import lombok.NonNull;
 
-
 /**
  * @since 2.0 {@index}
  */
@@ -76,7 +75,6 @@ implements PermissionsEvaluationService {
         this.policy = policy;
         this.applicationFeatureIdTransformer = applicationFeatureIdTransformer;
     }
-
 
     @Inject
     public PermissionsEvaluationServiceForSecman(final CausewayConfiguration causewayConfiguration) {

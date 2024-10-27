@@ -97,15 +97,12 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
         return getLinkWithRel(Rel.PERSIST);
     }
 
-
     /**
      * Causeway extension.
      */
     public String getOid() {
         return getString("extensions.oid");
     }
-
-
 
     private DomainObjectMemberRepresentation getMember(final String id, String memberType) {
         // TODO: would be nice to use "members.%s[memberType=...]" instead
@@ -135,6 +132,5 @@ public class DomainObjectRepresentation extends DomainRepresentation  {
             }
         };
     }
-
 
 }

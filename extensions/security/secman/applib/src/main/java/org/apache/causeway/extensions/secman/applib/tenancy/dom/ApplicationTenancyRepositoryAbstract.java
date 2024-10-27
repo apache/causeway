@@ -34,7 +34,6 @@ import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
 import lombok.NonNull;
 
-
 /**
  *
  * @since 2.0 {@index}
@@ -46,7 +45,6 @@ implements ApplicationTenancyRepository {
     @Inject private RepositoryService repository;
     @Inject private RegexReplacer regexReplacer;
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;
-
 
     private final Class<T> applicationTenancyClass;
 
@@ -94,7 +92,6 @@ implements ApplicationTenancyRepository {
                 .withParameter("name", name)).orElse(null);
     }
 
-
     // -- findByPath
 
     public ApplicationTenancy findByPathCached(final String path) {
@@ -113,7 +110,6 @@ implements ApplicationTenancyRepository {
                 .withParameter("path", path))
                 .orElse(null);
     }
-
 
     // -- autoComplete
     @Override

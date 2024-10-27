@@ -26,8 +26,6 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
 
-
-
 public class ScenarioName extends Element {
 
     public ScenarioName(

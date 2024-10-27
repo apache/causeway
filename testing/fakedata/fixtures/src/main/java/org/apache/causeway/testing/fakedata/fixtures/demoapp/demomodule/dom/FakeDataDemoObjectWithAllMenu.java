@@ -31,8 +31,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
-
-
 @DomainService
 @Named("libFakeDataFixture.FakeDataDemoObjectWithAllMenu")
 @DomainServiceLayout(
@@ -40,7 +38,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 )
 @javax.annotation.Priority(PriorityPrecedence.EARLY)
 public class FakeDataDemoObjectWithAllMenu {
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(sequence = "1")

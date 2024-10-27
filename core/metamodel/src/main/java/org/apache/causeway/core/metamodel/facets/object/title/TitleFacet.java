@@ -39,7 +39,6 @@ public interface TitleFacet extends Facet {
      */
     String title(TitleRenderRequest titleRenderRequest);
 
-
     default String title(final ManagedObject targetAdapter) {
         return title(TitleRenderRequest.builder()
                 .object(targetAdapter)

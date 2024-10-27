@@ -35,7 +35,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 @TransactionScope
 public class CommitListener implements TransactionSynchronization {
 
-
     @Value
     @RequiredArgsConstructor
     public static class TransactionCompletionStatusHolder {

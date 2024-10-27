@@ -49,7 +49,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.Nq;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @PersistenceCapable(
         identityType = IdentityType.DATASTORE,
         schema = ApplicationRole.SCHEMA,
@@ -88,18 +87,15 @@ public class ApplicationRole
 
     protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.role.dom.ApplicationRole";
 
-
     @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)
     @Name
     @Getter @Setter
     private String name;
 
-
     @Column(allowsNull = Description.ALLOWS_NULL, length = Description.MAX_LENGTH)
     @Description
     @Getter @Setter
     private String description;
-
 
     @Persistent(mappedBy = Users.MAPPED_BY)
     @Users
@@ -112,6 +108,5 @@ public class ApplicationRole
     public void addToUsers(final org.apache.causeway.extensions.secman.jdo.user.dom.ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
     }
-
 
 }

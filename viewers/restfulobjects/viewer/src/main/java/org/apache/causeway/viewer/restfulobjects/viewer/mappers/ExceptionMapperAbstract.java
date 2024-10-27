@@ -131,7 +131,6 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         return recoverableIfAny;
     }
 
-
     private ExceptionDetail detailIfRequired(
             final RestfulResponse.HttpStatusCode httpStatusCode,
             final Throwable ex) {
@@ -164,6 +163,5 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
 
         return builder.build();
     }
-
 
 }

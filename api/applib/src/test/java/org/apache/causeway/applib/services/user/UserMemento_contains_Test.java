@@ -26,7 +26,6 @@ import org.apache.causeway.commons.collections.Can;
 
 class UserMemento_contains_Test {
 
-
     @Test
     void when_contains_instance() {
 

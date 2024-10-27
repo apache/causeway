@@ -23,8 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.commons.io.DataSource;
 
-
-
 class ApplicationSecurityDtoTest {
 
     /**

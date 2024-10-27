@@ -60,17 +60,14 @@ import lombok.Setter;
 )
 public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBlob> {
 
-
     public static class CssClassUiEvent
             extends org.apache.causeway.applib.services.eventbus.CssClassUiEvent<PdfJsDemoObjectWithBlob> {}
-
 
     @javax.jdo.annotations.Column(allowsNull="false")
     @Title(sequence="1")
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private String name;
-
 
     @PropertyLayout(group = "name", sequence = "1")
     public PdfJsDemoObjectWithBlob updateName(String name) {
@@ -81,14 +78,10 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
         return getName();
     }
 
-
-
     @javax.jdo.annotations.Column(allowsNull="true")
     @Property(editing = Editing.ENABLED)
     @Getter @Setter
     private String url;
-
-
 
     @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
             @javax.jdo.annotations.Column(name = "blob_name"),
@@ -106,7 +99,6 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
         return blob;
     }
 
-
     @Action(semantics = SemanticsOf.SAFE)
     @PropertyLayout(group = "url", sequence = "1")
     public URL openUrl() throws MalformedURLException {
@@ -118,8 +110,6 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
         return null;
     }
 
-
-
     @Override
     public String toString() {
         return getName();
@@ -129,6 +119,5 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
     public int compareTo(final PdfJsDemoObjectWithBlob other) {
         return Ordering.natural().onResultOf(PdfJsDemoObjectWithBlob::getName).compare(this, other);
     }
-
 
 }
