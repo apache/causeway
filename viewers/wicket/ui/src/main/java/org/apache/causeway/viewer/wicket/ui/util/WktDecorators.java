@@ -216,7 +216,7 @@ public class WktDecorators {
             // don't care if expressed twice
             WktDecorators.danger().decorate(actionLink);
         } else {
-            Wkt.cssAppend(actionLink, decorationModel.isRenderOutlined()
+            Wkt.cssAppend(actionLink, decorationModel.isLowerVisualRank()
                     ? ButtonSemantics.SECONDARY.buttonOutlineCss()
                     : ButtonSemantics.SECONDARY.buttonDefaultCss());
         }
