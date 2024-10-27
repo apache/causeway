@@ -27,7 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -50,7 +50,7 @@ public class LogoutHandlerForKeycloak implements LogoutHandler {
     }
 
     @Override public void logout() {
-        val authentication = SecurityContextHolder.getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             propagateLogoutToKeycloak((OidcUser) authentication.getPrincipal());
         }
@@ -58,13 +58,13 @@ public class LogoutHandlerForKeycloak implements LogoutHandler {
     }
     private void propagateLogoutToKeycloak(final OidcUser user) {
 
-        val endSessionEndpoint = String.format("%s/protocol/openid-connect/logout", user.getIssuer());
+        var endSessionEndpoint = String.format("%s/protocol/openid-connect/logout", user.getIssuer());
 
-        val builder = UriComponentsBuilder
+        var builder = UriComponentsBuilder
                 .fromUriString(endSessionEndpoint)
                 .queryParam("id_token_hint", user.getIdToken().getTokenValue());
 
-        val logoutResponse = restTemplate.getForEntity(builder.toUriString(), String.class);
+        var logoutResponse = restTemplate.getForEntity(builder.toUriString(), String.class);
         if (logoutResponse.getStatusCode().is2xxSuccessful()) {
             log.info("Successfully logged out in Keycloak");
         } else {

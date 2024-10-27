@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -69,7 +68,7 @@ public class DomainModelValidator {
             final CausewayConfiguration configuration,
             final CausewaySystemEnvironment causewaySystemEnvironment) {
 
-        val recreateRequired = isRecreateRequired(configuration, causewaySystemEnvironment);
+        var recreateRequired = isRecreateRequired(configuration, causewaySystemEnvironment);
         if(recreateRequired) {
             specificationLoader.createMetaModel();
             if(log.isDebugEnabled()) {
@@ -157,7 +156,7 @@ public class DomainModelValidator {
                     failure.getMessage().contains(messageSnippet));
 
         if(!matchFound) {
-            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+            var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     streamFailuresMatchingOriginatingIdentifier(identifier)
                     .map(ValidationFailure::getMessage)
@@ -173,7 +172,7 @@ public class DomainModelValidator {
             final @NonNull Class<?> domainType,
             final @NonNull String messageSnippet) {
 
-        val logicalType = specificationLoader.specForTypeElseFail(domainType)
+        var logicalType = specificationLoader.specForTypeElseFail(domainType)
             .getLogicalType();
         final Predicate<Identifier> filterByLogicalType = id->id.getLogicalType().equals(logicalType);
 
@@ -182,7 +181,7 @@ public class DomainModelValidator {
                     failure.getMessage().contains(messageSnippet));
 
         if(!matchFound) {
-            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+            var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     streamFailures(filterByLogicalType)
                     .map(ValidationFailure::getMessage)
@@ -206,7 +205,7 @@ public class DomainModelValidator {
                                 failure.getMessage().contains(messageSnippet)));
 
         if(!matchFound) {
-            val msg = String.format("validation snipped '%s' not found within messages:\n%s",
+            var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     classIdentifiers.stream()
                     .flatMap(identifier->streamFailuresMatchingOriginatingIdentifier(identifier))

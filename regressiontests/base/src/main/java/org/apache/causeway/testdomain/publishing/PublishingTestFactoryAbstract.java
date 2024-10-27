@@ -53,7 +53,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
+
 
 public abstract class PublishingTestFactoryAbstract {
 
@@ -85,7 +85,7 @@ public abstract class PublishingTestFactoryAbstract {
             @Getter private boolean debug = true;
 
             public TraceLog log(final String format, final Object...args) {
-                val msg = String.format(format, args);
+                var msg = String.format(format, args);
                 buffer.append(msg).append("\n");
                 if(debug) {
                     System.err.println(msg);
@@ -322,16 +322,16 @@ public abstract class PublishingTestFactoryAbstract {
             final PublishingTestContext testContext,
             final PublishingTestRunner testRunner) {
 
-        val displayName = String.format("%s (%s)",
+        var displayName = String.format("%s (%s)",
                 testContext.getDisplayName(),
                 testContext.getScenario().getDisplayName());
 
-        val onSuccess = VerificationStage.POST_INTERACTION;
-        val onFailure = VerificationStage.FAILURE_CASE;
+        var onSuccess = VerificationStage.POST_INTERACTION;
+        var onFailure = VerificationStage.FAILURE_CASE;
 
         return dynamicTest(displayName, ()->{
 
-            val traceLog = testContext.getTraceLog();
+            var traceLog = testContext.getTraceLog();
 
             xrayAddTest(displayName);
 
@@ -344,7 +344,7 @@ public abstract class PublishingTestFactoryAbstract {
                 assert_no_initial_tx_context();
 
                 getInteractionService().runAnonymous(()->{
-                    val currentInteraction = getInteractionService().currentInteraction();
+                    var currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
                     setupEntity(testContext);
                     xrayExitInteraction();
@@ -353,8 +353,8 @@ public abstract class PublishingTestFactoryAbstract {
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
-                val result = getInteractionService().runAnonymousAndCatch(()->{
-                    val currentInteraction = getInteractionService().currentInteraction();
+                var result = getInteractionService().runAnonymousAndCatch(()->{
+                    var currentInteraction = getInteractionService().currentInteraction();
                     xrayEnterInteraction(currentInteraction);
 
                     try {
@@ -371,8 +371,8 @@ public abstract class PublishingTestFactoryAbstract {
                 assert_no_initial_tx_context();
 
                 if(testContext.getExpectedException().isPresent()) {
-                    val expectedException = testContext.getExpectedException().get();
-                    val actualException = result.getFailure().map(Throwable::getClass).orElse(null);
+                    var expectedException = testContext.getExpectedException().get();
+                    var actualException = result.getFailure().map(Throwable::getClass).orElse(null);
                     assertEquals(expectedException, actualException);
                     testContext.runVerify(onFailure);
                     failWhenContextHasErrors(testContext);
@@ -400,7 +400,7 @@ public abstract class PublishingTestFactoryAbstract {
     }
 
     private final void assert_no_initial_tx_context() {
-        val txState = getTransactionService().currentTransactionState();
+        var txState = getTransactionService().currentTransactionState();
         assertEquals(TransactionState.NONE, txState);
     }
 
@@ -415,7 +415,7 @@ public abstract class PublishingTestFactoryAbstract {
 
     private final void xrayAddTest(final String name) {
 
-        val threadId = ThreadMemento.fromCurrentThread();
+        var threadId = ThreadMemento.fromCurrentThread();
 
         XrayUi.updateModel(model->{
             model.addContainerNode(

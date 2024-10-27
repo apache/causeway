@@ -110,7 +110,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
-import lombok.val;
 
 @Builder @Getter
 public final class MetaModelContext_forTesting
@@ -230,7 +229,7 @@ extends MetaModelContext {
 
     private Stream<Object> streamSingletons() {
 
-        val fields = Stream.of(
+        var fields = Stream.of(
                 getConfiguration(),
                 getObjectManager(),
                 getWrapperFactory(),
@@ -284,14 +283,14 @@ extends MetaModelContext {
     }
 
     private static CausewaySystemEnvironment newCausewaySystemEnvironment() {
-        val env = new CausewaySystemEnvironment();
+        var env = new CausewaySystemEnvironment();
         env.setUnitTesting(true);
         return env;
     }
 
     private static CausewayConfiguration newCausewayConfiguration() {
-        val properties = _Maps.<String, String>newHashMap();
-        val config = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
+        var properties = _Maps.<String, String>newHashMap();
+        var config = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
             @Override
             public String getProperty(final String key) {
                 return properties.get(key);
@@ -366,7 +365,7 @@ extends MetaModelContext {
     }
     private final ProgrammingModel initProgrammingModel() {
         var metamodelRefiners = refiners.map(factory->factory.apply(this));
-        val programmingModel = programmingModelFactory.apply(this, metamodelRefiners);
+        var programmingModel = programmingModelFactory.apply(this, metamodelRefiners);
 
         ((ProgrammingModelAbstract)programmingModel).init(new ProgrammingModelInitFilterDefault());
         return programmingModel;
@@ -376,15 +375,15 @@ extends MetaModelContext {
     public SpecificationLoader getSpecificationLoader() {
         if(specificationLoader==null) {
 
-            val configuration = requireNonNull(getConfiguration());
-            val environment = requireNonNull(getSystemEnvironment());
-            val serviceRegistry = requireNonNull(getServiceRegistry());
+            var configuration = requireNonNull(getConfiguration());
+            var environment = requireNonNull(getSystemEnvironment());
+            var serviceRegistry = requireNonNull(getServiceRegistry());
             @SuppressWarnings("unused")
-            val serviceInjector = requireNonNull(getServiceInjector());
-            val programmingModel = requireNonNull(getProgrammingModel());
-            val causewayBeanTypeClassifier = requireNonNull(getCausewayBeanTypeClassifier());
-            val causewayBeanTypeRegistry = requireNonNull(getCausewayBeanTypeRegistry());
-            val classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
+            var serviceInjector = requireNonNull(getServiceInjector());
+            var programmingModel = requireNonNull(getProgrammingModel());
+            var causewayBeanTypeClassifier = requireNonNull(getCausewayBeanTypeClassifier());
+            var causewayBeanTypeRegistry = requireNonNull(getCausewayBeanTypeRegistry());
+            var classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
 
             specificationLoader = SpecificationLoaderDefault.getInstance(
                     configuration,
@@ -430,10 +429,10 @@ extends MetaModelContext {
     }
 
     public void runWithConfigProperties(final Consumer<Map<String, String>> setup, final Runnable runnable) {
-        val properties = _Maps.<String, String>newHashMap();
+        var properties = _Maps.<String, String>newHashMap();
         setup.accept(properties);
 
-        val currentConfigBackup = this.configuration;
+        var currentConfigBackup = this.configuration;
         try {
 
             this.configuration = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
@@ -528,7 +527,7 @@ extends MetaModelContext {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void registerAsService(final ServiceInstance serviceInstance) {
-        val spec = serviceInstance.getSpecification();
+        var spec = serviceInstance.getSpecification();
         discoveredServices.add(_SingletonBeanProvider.forTestingLazy(
                 spec.getLogicalTypeName(),
                 (Class)spec.getCorrespondingClass(),
@@ -537,10 +536,10 @@ extends MetaModelContext {
 
     private final Map<String, ManagedObject> collectBeansOfKnownSort() {
 
-        val map = _Maps.<String, ManagedObject>newLinkedHashMap();
+        var map = _Maps.<String, ManagedObject>newLinkedHashMap();
 
         // first pass: introspect them all
-        val services = getServiceRegistry()
+        var services = getServiceRegistry()
             .streamRegisteredBeans()
             .map(this::toServiceInstance)
             .map(op->op.orElse(null))
@@ -560,7 +559,7 @@ extends MetaModelContext {
     }
 
     private Optional<ServiceInstance> toServiceInstance(final _SingletonBeanProvider managedBeanAdapter) {
-        val servicePojo = managedBeanAdapter.getInstanceElseFail();
+        var servicePojo = managedBeanAdapter.getInstanceElseFail();
 
         if(ProgrammingModelConstants.TypeExcludeMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
             return Optional.empty();
@@ -591,14 +590,14 @@ extends MetaModelContext {
      * Allows to register value-semantics.
      */
     public <T> MetaModelContext_forTesting withValueSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
-        val valueClass = valueSemantics.getCorrespondingClass();
-        val valueSpec = getSpecificationLoader().loadSpecification(valueClass);
+        var valueClass = valueSemantics.getCorrespondingClass();
+        var valueSpec = getSpecificationLoader().loadSpecification(valueClass);
         ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
             .installValueFacet(valueClass, Can.of(valueSemantics), valueSpec);
 
         if(ClassUtils.isPrimitiveWrapper(valueClass)) {
-            val primitiveType = ClassUtil.unboxPrimitiveIfNecessary(valueClass);
-            val primitiveTypeSpec = getSpecificationLoader().loadSpecification(primitiveType);
+            var primitiveType = ClassUtil.unboxPrimitiveIfNecessary(valueClass);
+            var primitiveTypeSpec = getSpecificationLoader().loadSpecification(primitiveType);
             ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
             .installValueFacet(valueClass, Can.of(valueSemantics), primitiveTypeSpec);
         }

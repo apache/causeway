@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
+
 
 public class JdoVersionAnnotationFacetFactory
 extends FacetFactoryAbstract {
@@ -50,14 +50,14 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
 
-        val versionIfAny = processClassContext.synthesizeOnType(Version.class);
+        var versionIfAny = processClassContext.synthesizeOnType(Version.class);
         FacetUtil.addFacetIfPresent(
                 JdoVersionFacetFromAnnotation
                 .create(versionIfAny, processClassContext.getFacetHolder()));
@@ -70,9 +70,9 @@ extends FacetFactoryAbstract {
     private void guardAgainstAmbiguousVersion(
             final ProcessClassContext processClassContext) {
 
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
-        val versionsFoundDirectly = _Maps.<Class<?>, Version>newLinkedHashMap();
+        var versionsFoundDirectly = _Maps.<Class<?>, Version>newLinkedHashMap();
 
         _Reflect.streamTypeHierarchy(cls, InterfacePolicy.EXCLUDE)
         .forEach(type->

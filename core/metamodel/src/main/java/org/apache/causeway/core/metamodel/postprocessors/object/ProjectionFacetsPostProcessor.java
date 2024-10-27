@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class ProjectionFacetsPostProcessor
 extends MetaModelPostProcessorAbstract {
 
@@ -52,15 +50,15 @@ extends MetaModelPostProcessorAbstract {
                 ProjectionFacetFromProjectingProperty.create(objectSpecification))
         .ifPresent(projectionFacet->{
 
-            val titleFacet = objectSpecification.getFacet(TitleFacet.class);
+            var titleFacet = objectSpecification.getFacet(TitleFacet.class);
             if(canOverwrite(titleFacet)) {
                 FacetUtil.addFacet(new TitleFacetFromProjectionFacet(projectionFacet, objectSpecification));
             }
-            val iconFacet = objectSpecification.getFacet(IconFacet.class);
+            var iconFacet = objectSpecification.getFacet(IconFacet.class);
             if(canOverwrite(iconFacet)) {
                 FacetUtil.addFacet(new IconFacetFromProjectionFacet(projectionFacet, objectSpecification));
             }
-            val cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
+            var cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
             if(canOverwrite(cssClassFacet)) {
                 FacetUtil.addFacet(new CssClassFacetFromProjectionFacet(projectionFacet, objectSpecification));
             }

@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 import lombok.NonNull;
 import lombok.Synchronized;
-import lombok.val;
 
 abstract class ValueSemanticsModelAbstract
 implements
@@ -61,7 +60,7 @@ implements
     @Synchronized
     protected ObjectFeature feature() {
         if(propOrParam==null) {
-            val feature = getSpecificationLoader().loadFeature(featureIdentifier).orElse(null);
+            var feature = getSpecificationLoader().loadFeature(featureIdentifier).orElse(null);
             this.propOrParam = (feature instanceof OneToOneAssociation)
                     ? Either.left((OneToOneAssociation)feature)
                     : Either.right(((ObjectActionParameter)feature));
@@ -72,8 +71,8 @@ implements
     }
 
     protected ValueFacet<?> valueFacet() {
-        val feature = feature();
-        val valueFacet = feature.getElementType()
+        var feature = feature();
+        var valueFacet = feature.getElementType()
                 .valueFacet()
                 .orElseThrow(()->_Exceptions.noSuchElement(
                         "Value type Property or Parameter %s is missing a ValueFacet",

@@ -38,8 +38,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptWithRes
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
-import lombok.val;
-
 public enum JpaTestDomainPersona
         implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 
@@ -76,11 +74,11 @@ public enum JpaTestDomainPersona
                 @Override
                 protected Object buildResult(final ExecutionContext ec) {
 
-                    val products = new TreeSet<JpaProduct>();
+                    var products = new TreeSet<JpaProduct>();
 
                     products.add(JpaBook.fromDto(BookDto.sample()));
 
-                    val inventory = new JpaInventory("Sample Inventory", products);
+                    var inventory = new JpaInventory("Sample Inventory", products);
                     repository.persist(inventory);
 
                     return inventory;
@@ -101,9 +99,9 @@ public enum JpaTestDomainPersona
                 @Override
                 protected void execute(final ExecutionContext ec) {
 
-                    val regularUserRoleName = causewayConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
-                    val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
-                    val username = LdapConstants.SVEN_PRINCIPAL;
+                    var regularUserRoleName = causewayConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
+                    var regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
+                    var username = LdapConstants.SVEN_PRINCIPAL;
                     ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);
                     if(svenUser==null) {
                         svenUser = applicationUserRepository

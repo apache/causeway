@@ -29,8 +29,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 import org.apache.causeway.extensions.layoutloaders.github.spiimpl.LayoutResourceLoaderFromGithub;
 
-import lombok.val;
-
 /**
  * Adds the {@link Menu} with its auto-configured menu entries.
  * @since 2.0 {@index}
@@ -81,7 +79,7 @@ public class CausewayModuleExtLayoutLoadersGithub {
     @Bean(name = "GithubSearch")
     public RestTemplate restTemplateForGithubSearch(final CausewayConfiguration causewayConfiguration) {
 
-        val apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getApiKey();
+        var apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getApiKey();
 
         return new RestTemplateBuilder()
                 .rootUri("https://api.github.com")
@@ -108,8 +106,8 @@ public class CausewayModuleExtLayoutLoadersGithub {
     @Bean(name = "GithubContent")
     public RestTemplate restTemplateForGithubContent(final CausewayConfiguration causewayConfiguration) {
 
-        val apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getApiKey();
-        val repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getRepository();
+        var apiKey = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getApiKey();
+        var repo = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().getRepository();
 
         return new RestTemplateBuilder()
                 .rootUri(String.format("https://api.github.com/repos/%s", repo))

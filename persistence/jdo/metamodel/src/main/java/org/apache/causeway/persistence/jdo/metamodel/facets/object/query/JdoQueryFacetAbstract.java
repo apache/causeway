@@ -32,7 +32,7 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.quer
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+
 
 public class JdoQueryFacetAbstract
 extends FacetAbstract
@@ -51,7 +51,7 @@ implements JdoQueryFacet {
 
         super(JdoQueryFacetAbstract.type(), holder);
 
-        val objSpec = (ObjectSpecification) getFacetHolder();
+        var objSpec = (ObjectSpecification) getFacetHolder();
         this.namedQueries = jdoNamedQueries.map(jdoNamedQuery->new JdoNamedQuery(jdoNamedQuery, objSpec));
     }
 

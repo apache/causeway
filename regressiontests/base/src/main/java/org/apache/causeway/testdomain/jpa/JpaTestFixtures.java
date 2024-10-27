@@ -34,8 +34,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 
-import lombok.val;
-
 @Service
 public class JpaTestFixtures extends EntityTestFixtures {
 
@@ -72,7 +70,7 @@ public class JpaTestFixtures extends EntityTestFixtures {
         .map(JpaBook::fromDto)
         .forEach(products::add);
 
-        val inventory = new JpaInventory("Sample Inventory", products);
+        var inventory = new JpaInventory("Sample Inventory", products);
         repository.persistAndFlush(inventory);
     }
 
@@ -83,7 +81,7 @@ public class JpaTestFixtures extends EntityTestFixtures {
 
     @Override
     public void addInventory(Set<?> books) {
-        val inventory = new JpaInventory("Sample Inventory", (Set<JpaProduct>) books);
+        var inventory = new JpaInventory("Sample Inventory", (Set<JpaProduct>) books);
         repository.persistAndFlush(inventory);
     }
 

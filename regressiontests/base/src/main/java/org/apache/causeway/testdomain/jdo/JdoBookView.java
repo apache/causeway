@@ -34,7 +34,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @XmlRootElement(name = "bookView")
@@ -47,7 +46,7 @@ import lombok.experimental.Accessors;
 public class JdoBookView implements BookView<JdoBook> {
 
     public static JdoBookView createForBook(final @NonNull FactoryService factory, final @NonNull JdoBook book) {
-        val view = factory.viewModel(new JdoBookView());
+        var view = factory.viewModel(new JdoBookView());
         view.setBook(book);
         return view;
     }

@@ -44,8 +44,6 @@ import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkP
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class DomainObjectLayoutFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -129,9 +127,9 @@ extends FacetFactoryTestAbstract {
                 assertNotNull(facet);
                 assertTrue(facet instanceof CssClassFacetForDomainObjectLayoutAnnotation);
 
-                val facetImpl =
+                var facetImpl =
                         (CssClassFacetForDomainObjectLayoutAnnotation) facet;
-                val mockAdapter = Mockito.mock(ManagedObject.class);
+                var mockAdapter = Mockito.mock(ManagedObject.class);
                 assertThat(facetImpl.cssClass(mockAdapter), is("foobar"));
 
                 assertNoMethodsRemoved();
@@ -223,7 +221,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(DomainObjectLayoutFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                val namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
+                var namedFacet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNotNull(namedFacet);
                 assertTrue(namedFacet instanceof ObjectNamedFacetForDomainObjectLayoutAnnotation);
 
@@ -238,7 +236,7 @@ extends FacetFactoryTestAbstract {
             objectScenario(CustomerWithDefaults.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
-                val facet = facetHolder.getFacet(ObjectNamedFacet.class);
+                var facet = facetHolder.getFacet(ObjectNamedFacet.class);
                 assertNull(facet);
 
                 assertNoMethodsRemoved();

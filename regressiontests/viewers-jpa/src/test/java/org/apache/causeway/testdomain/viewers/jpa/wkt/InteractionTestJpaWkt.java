@@ -59,7 +59,7 @@ import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.Enti
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -101,8 +101,8 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
     @Test
     void load_viewmodel_with_referenced_entities_directly() {
 
-        val pageParameters = call(()->{
-            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
+        var pageParameters = call(()->{
+            var inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             return wktTester.createPageParameters(inventoryJaxbVm);
         });
 
@@ -125,8 +125,8 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
     @Test
     void load_viewmodel_with_referenced_entities_via_action() {
-        val pageParameters = call(()->{
-            val testHomePage = new TestAppJpaWkt.TestHomePage();
+        var pageParameters = call(()->{
+            var testHomePage = new TestAppJpaWkt.TestHomePage();
             return wktTester.createPageParameters(testHomePage);
         });
 
@@ -167,7 +167,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
         // simulate change of a String property Name from 'Bookstore' -> 'Bookstore2'
         run(()->{
-            val form = wktTester.newFormTester(inventoryName.editInlinePromptForm());
+            var form = wktTester.newFormTester(inventoryName.editInlinePromptForm());
             form.setValue(inventoryName.scalarField(), "Bookstore2");
             form.submit();
         });
@@ -195,9 +195,9 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
     @Test
     void loadBookPage_Dune_then_change_Isbn() {
 
-        val pageParameters = call(()->{
+        var pageParameters = call(()->{
 
-            val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
+            var jpaBook = repositoryService.allInstances(JpaBook.class).stream()
             .filter(book->"Dune".equals(book.getName()))
             .findFirst()
             .orElseThrow();
@@ -234,11 +234,11 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
         // simulate change of a String property Name from 'ISBN-A' -> 'ISBN-XXXX'
         run(()->{
-            val form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
+            var form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
             form.setValue(bookIsbn.scalarField(), "ISBN-XXXX");
             form.submit();
 
-            val jpaBook = (JpaBook)bookAdapter.getPojo();
+            var jpaBook = (JpaBook)bookAdapter.getPojo();
             assertEquals("ISBN-A", jpaBook.getIsbn());
         });
 
@@ -250,7 +250,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
             System.err.printf("bookAdapter state %s%n", bookAdapter.getEntityState());
 
             System.err.printf("--- verify %n");
-            val jpaBook = (JpaBook)bookAdapter.getPojo();
+            var jpaBook = (JpaBook)bookAdapter.getPojo();
             assertEquals("ISBN-XXXX", jpaBook.getIsbn());
         });
 
@@ -262,7 +262,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
         run(()->{
             // reset
-            val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
+            var jpaBook = repositoryService.allInstances(JpaBook.class).stream()
                     .filter(book->"Dune".equals(book.getName()))
                     .findFirst()
                     .orElseThrow();
@@ -273,9 +273,9 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
     @Test
     void loadBookPage_Dune_then_delete() {
-        val pageParameters = call(()->{
+        var pageParameters = call(()->{
 
-            val jpaBook = repositoryService.allInstances(JpaBook.class).stream()
+            var jpaBook = repositoryService.allInstances(JpaBook.class).stream()
             .filter(book->"Dune".equals(book.getName()))
             .findFirst()
             .orElseThrow();
@@ -289,7 +289,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
             wktTester.clickLink(BOOK_DELETE_ACTION_JPA);
 
             // then should render a standalone collection labeled 'Delete'
-            val label = (Label)wktTester
+            var label = (Label)wktTester
                     .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
             assertEquals("Delete", label.getDefaultModelObject());
         });
@@ -297,7 +297,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
     @Test
     void loadNonExistentBookPage_shouldRender_noSuchObjectError() {
-        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+        var pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
                         LogicalType.eager(JpaBook.class, "testdomain.jpa.Book"),
                         "99"));
@@ -319,7 +319,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
     @Test
     void loadNonExistentBookBookmark_shouldRender_BookmarkNotFoundException() {
-        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+        var pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
                         LogicalType.eager(JpaBook.class, "simple.SimpleObject"),
                         "999"));

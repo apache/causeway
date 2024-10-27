@@ -46,7 +46,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Supports mixins to add and filter permissions of
@@ -86,7 +85,7 @@ public class ApplicationFeatureChoices {
             searchTerm = search.trim();
         }
 
-        val idsByName = featureRepository.getFeatureIdentifiersByName();
+        var idsByName = featureRepository.getFeatureIdentifiersByName();
 
         return idsByName.entrySet().stream()
         .filter(entry->searchRefine.test(entry.getValue()))
@@ -137,8 +136,8 @@ public class ApplicationFeatureChoices {
 
         @Override
         public int compareTo(final AppFeat o) {
-            val thisId = this.getFeatureId();
-            val otherId = o!=null ? o.getFeatureId() : null;
+            var thisId = this.getFeatureId();
+            var otherId = o!=null ? o.getFeatureId() : null;
             if(Objects.equals(thisId, otherId)) {
                 return 0;
             }

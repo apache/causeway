@@ -34,7 +34,7 @@ import org.apache.causeway.testdomain.value.ValueSemanticsTester.ActionInteracti
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor
 class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
@@ -57,17 +57,17 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         //System.err.printf("CommandDto %s %s%n", name,
         //      CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
         
-        val actionDto = (ActionDto)command.getCommandDto().getMember();
+        var actionDto = (ActionDto)command.getCommandDto().getMember();
         
         assertNotNull(actionDto.getParameters());
         assertNotNull(actionDto.getParameters().getParameter());
         assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
         
-        val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
+        var parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
         
         final Identifier paramId = context.getFeatureIdentifier();
-        val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
+        var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
         assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
@@ -89,17 +89,17 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
 //        System.err.printf("CommandDto %s %s%n", name,
 //              CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
         
-        val actionDto = (ActionDto)command.getCommandDto().getMember();
+        var actionDto = (ActionDto)command.getCommandDto().getMember();
         
         assertNotNull(actionDto.getParameters());
         assertNotNull(actionDto.getParameters().getParameter());
         assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
         
-        val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
+        var parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
         
         final Identifier paramId = context.getFeatureIdentifier();
-        val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
+        var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
         assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->

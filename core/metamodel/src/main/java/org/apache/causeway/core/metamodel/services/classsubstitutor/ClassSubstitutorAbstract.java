@@ -29,7 +29,6 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -39,7 +38,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
     @Override
     public final Substitution getSubstitution(@NonNull final Class<?> cls) {
-        val replacement = getReplacement(cls);
+        var replacement = getReplacement(cls);
         if(Objects.equals(cls, replacement)) {
             return Substitution.passThrough(); // indifferent
         }
@@ -134,7 +133,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
             return true;
         }
 
-        val className = cls.getName();
+        var className = cls.getName();
 
         try{
             return classesToIgnore.contains(cls)

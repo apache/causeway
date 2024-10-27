@@ -30,7 +30,7 @@ import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -91,7 +91,7 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
 
         final long iaStartCountBefore = totalInteractionsStarted(kvStoreForTesting);
         final long iaEndCountBefore = totalInteractionsEnded(kvStoreForTesting);
-        val result = supplier.get();
+        var result = supplier.get();
         final long iaStartCountAfter = totalInteractionsStarted(kvStoreForTesting);
         final long iaEndCountAfter = totalInteractionsEnded(kvStoreForTesting);
 
@@ -110,7 +110,7 @@ public class InteractionBoundaryProbe implements TransactionSynchronization {
     public static <T> T assertTransactional(final KVStoreForTesting kvStoreForTesting, final Supplier<T> supplier) {
 
         final long txEndCountBefore = totalTransactionsEnding(kvStoreForTesting);
-        val result = supplier.get();
+        var result = supplier.get();
         final long txEndCountAfter = totalTransactionsEnding(kvStoreForTesting);
 
         Assertions.assertEquals(1, txEndCountAfter - txEndCountBefore);

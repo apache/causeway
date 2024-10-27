@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class ViewModelFacetForDomainObjectAnnotation
 extends ViewModelFacetAbstract {
@@ -93,26 +92,26 @@ extends ViewModelFacetAbstract {
             @NonNull final ObjectSpecification viewmodelSpec,
             @NonNull final Bookmark bookmark) {
 
-        val viewmodel = viewmodelSpec.createObject();
+        var viewmodel = viewmodelSpec.createObject();
 
-        val memento = parseMemento(bookmark);
-        val mementoKeys = memento.keySet();
+        var memento = parseMemento(bookmark);
+        var mementoKeys = memento.keySet();
 
         if(mementoKeys.isEmpty()) {
             return viewmodel;
         }
 
-        val objectManager = super.getObjectManager();
+        var objectManager = super.getObjectManager();
 
         streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
 
             // we also explicitly set 'nulled' properties
 
-            val propertyId = property.getId();
-            val propertySpec = property.getElementType();
-            val propertyType = propertySpec.getCorrespondingClass();
-            val propertyPojo = memento.get(propertyId, propertyType);
+            var propertyId = property.getId();
+            var propertySpec = property.getElementType();
+            var propertyType = propertySpec.getCorrespondingClass();
+            var propertyPojo = memento.get(propertyId, propertyType);
             final ManagedObject propertyValue = propertyPojo!=null
                     ? objectManager.adapt(propertyPojo)
                     : ManagedObject.empty(propertySpec);
@@ -128,7 +127,7 @@ extends ViewModelFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        val viewmodelSpec = viewModel.getSpecification();
+        var viewmodelSpec = viewModel.getSpecification();
 
         streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
@@ -157,7 +156,7 @@ extends ViewModelFacetAbstract {
     }
 
     private void initDependencies() {
-        val serviceRegistry = getServiceRegistry();
+        var serviceRegistry = getServiceRegistry();
         this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
         this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
     }

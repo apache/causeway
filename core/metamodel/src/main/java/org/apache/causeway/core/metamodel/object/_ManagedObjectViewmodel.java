@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#VIEWMODEL}
@@ -97,7 +96,7 @@ implements
 
     @Override
     public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
-        val shouldRefresh = getTransactionService().currentTransactionId()
+        var shouldRefresh = getTransactionService().currentTransactionId()
         .map(this::shouldRefresh)
         .orElse(true); // if there is no current transaction, refresh regardless; unexpected state, might fail later
 
@@ -108,7 +107,7 @@ implements
         if(isBookmarkMemoized()) {
             reloadViewmodelFromMemoizedBookmark();
         } else {
-            val bookmark = bookmarkSupplier!=null
+            var bookmark = bookmarkSupplier!=null
                     ? bookmarkSupplier.get()
                     : null;
             if(bookmark!=null) {
@@ -131,10 +130,10 @@ implements
      * Reload current viewmodel object from memoized bookmark, otherwise does nothing.
      */
     private void reloadViewmodelFromMemoizedBookmark() {
-        val bookmark = getBookmark().get();
-        val viewModelClass = getCorrespondingClass();
+        var bookmark = getBookmark().get();
+        var viewModelClass = getCorrespondingClass();
 
-        val recreatedViewmodel =
+        var recreatedViewmodel =
                 getFactoryService().viewModel(viewModelClass, bookmark);
 
         _XrayEvent.event("Viewmodel '%s' recreated from memoized bookmark.", viewModelClass.getName());
@@ -143,8 +142,8 @@ implements
     }
 
     private void reloadViewmodelFromBookmark(final @NonNull Bookmark bookmark) {
-        val viewModelClass = getCorrespondingClass();
-        val recreatedViewmodel =
+        var viewModelClass = getCorrespondingClass();
+        var recreatedViewmodel =
                 getFactoryService().viewModel(viewModelClass, bookmark);
 
         _XrayEvent.event("Viewmodel '%s' recreated from provided bookmark.", viewModelClass.getName());

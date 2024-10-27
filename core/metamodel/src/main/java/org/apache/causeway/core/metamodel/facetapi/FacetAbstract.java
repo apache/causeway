@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
@@ -71,7 +70,7 @@ implements Facet, HasMetaModelContext {
         visitor.accept("facet", ClassUtils.getShortName(getClass()));
         visitor.accept("precedence", getPrecedence().name());
 
-        val interactionAdvisors = interactionAdvisors(", ");
+        var interactionAdvisors = interactionAdvisors(", ");
 
         // suppress 'advisors' if none
         if(!interactionAdvisors.isEmpty()) {

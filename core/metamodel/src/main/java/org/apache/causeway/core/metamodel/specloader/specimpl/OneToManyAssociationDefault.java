@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
-import lombok.val;
 
 public class OneToManyAssociationDefault
 extends ObjectAssociationAbstract
@@ -109,7 +108,7 @@ implements OneToManyAssociation {
             return null;
         }
 
-        val objectManager = super.getObjectManager();
+        var objectManager = super.getObjectManager();
 
         super.getServiceInjector().injectServicesInto(collection);
 
@@ -192,7 +191,7 @@ implements OneToManyAssociation {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().getMethod();
         return methodFacade.synthesize(Collection.class).isPresent()
                 || methodFacade.synthesize(CollectionLayout.class).isPresent();
     }

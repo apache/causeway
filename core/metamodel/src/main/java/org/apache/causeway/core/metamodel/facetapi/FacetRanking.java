@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 /**
@@ -72,11 +71,11 @@ public final class FacetRanking {
      * that is whether the winning facet should be reconsidered as a consequence of this call
      */
     public boolean add(final @NonNull Facet facet) {
-        val facetType = facet.facetType();
+        var facetType = facet.facetType();
         _Assert.assertEquals(this.facetType, facetType);
 
         // guard against invalidly mocked facets
-        val facetPreference = Objects.requireNonNull(facet.getPrecedence(),
+        var facetPreference = Objects.requireNonNull(facet.getPrecedence(),
                 ()->String.format("facet %s declares no precedence", facet.getClass()));
 
         // handle top priority (EVENT) facets separately
@@ -95,7 +94,7 @@ public final class FacetRanking {
             return true; // changes apply
         }
 
-        val currentTopOrdinal = getTopPrecedence()
+        var currentTopOrdinal = getTopPrecedence()
                 .map(Precedence::ordinal)
                 .orElse(-1);
 
@@ -103,11 +102,11 @@ public final class FacetRanking {
             topPrecedenceRef.set(facetPreference);
         }
 
-        val currentTopRankOrdinal = facetsByPrecedence.isEmpty()
+        var currentTopRankOrdinal = facetsByPrecedence.isEmpty()
                 ? -1
                 : facetsByPrecedence.asNavigableMapElseFail().lastKey().ordinal();
 
-        val changesTopRank = facetPreference.ordinal() >= currentTopRankOrdinal;
+        var changesTopRank = facetPreference.ordinal() >= currentTopRankOrdinal;
 
         // As an optimization (heap), don't store to lower ranks,
         // as these are not considered when picking a winning facet.
@@ -132,7 +131,7 @@ public final class FacetRanking {
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
     public <F extends Facet> Optional<F> getWinner(final @NonNull Class<F> facetType) {
-        val eventFacet = getEventFacet(facetType);
+        var eventFacet = getEventFacet(facetType);
         if(eventFacet.isPresent()) {
             return eventFacet;
         }
@@ -145,7 +144,7 @@ public final class FacetRanking {
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
     public <F extends Facet> Optional<F> getWinnerNonEvent(final @NonNull Class<F> facetType) {
-        val topRank = getTopRank(facetType);
+        var topRank = getTopRank(facetType);
         // TODO find winner if there are more than one
         // (also report conflicting semantics) - only historically the last one wins
         return topRank.getLast();
@@ -160,7 +159,7 @@ public final class FacetRanking {
     public <F extends Facet> Optional<F> getWinnerNonEventLowerOrEqualTo(
             final @NonNull Class<F> facetType,
             final @NonNull Precedence precedenceUpper) {
-        val selectedRank = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
+        var selectedRank = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
         return selectedRank
                 .map(facetsByPrecedence::get)
                 .map(_Lists::lastElementIfAny) // only historically the last one wins
@@ -182,7 +181,7 @@ public final class FacetRanking {
      */
     public <F extends Facet> Can<F> getTopRank(final @NonNull Class<F> facetType) {
         _Assert.assertEquals(this.facetType, facetType);
-        val topRankedFacets = facetsByPrecedence.asNavigableMapElseFail().lastEntry();
+        var topRankedFacets = facetsByPrecedence.asNavigableMapElseFail().lastEntry();
         return topRankedFacets!=null
                 ? Can.<F>ofCollection(_Casts.uncheckedCast(topRankedFacets.getValue()))
                 : Can.empty();
@@ -198,7 +197,7 @@ public final class FacetRanking {
             final @NonNull Precedence precedenceUpper) {
         _Assert.assertEquals(this.facetType, facetType);
 
-        val precedenceSelected = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
+        var precedenceSelected = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
 
         return precedenceSelected
         .map(facetsByPrecedence::get)
@@ -235,7 +234,7 @@ public final class FacetRanking {
 
         // reassess the top precedence
         final _Reduction<Facet.Precedence> top = _Reduction.of(null, (a, b)->a==null?b:a.ordinal()>b.ordinal()?a:b);
-        val markedForRemoval = _Lists.newArrayList(facetsByPrecedence.size());
+        var markedForRemoval = _Lists.newArrayList(facetsByPrecedence.size());
 
         facetsByPrecedence.forEach((precedence, facets)->{
             facets.removeIf(_Casts.uncheckedCast(filter));
@@ -269,11 +268,11 @@ public final class FacetRanking {
             final @NonNull Class<F> facetType,
             final @NonNull BiConsumer<F, F> visitor) {
 
-        val topRankingFacets = getTopRank(facetType);
+        var topRankingFacets = getTopRank(facetType);
 
         if(topRankingFacets.isCardinalityMultiple()) {
 
-            val firstOfTopRanking = topRankingFacets.getFirstElseFail();
+            var firstOfTopRanking = topRankingFacets.getFirstElseFail();
 
             topRankingFacets
             .stream()

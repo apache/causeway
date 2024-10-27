@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public interface ManagedValue {
 
     ObjectSpecification getElementType();
@@ -56,9 +54,9 @@ public interface ManagedValue {
     Observable<Can<ManagedObject>> getChoices();
 
     default void update(final UnaryOperator<ManagedObject> updater) {
-        val valueHolder = getValue();
-        val oldValue = valueHolder.getValue();
-        val newValue = updater.apply(oldValue);
+        var valueHolder = getValue();
+        var oldValue = valueHolder.getValue();
+        var newValue = updater.apply(oldValue);
         valueHolder.setValue(newValue);
     }
 

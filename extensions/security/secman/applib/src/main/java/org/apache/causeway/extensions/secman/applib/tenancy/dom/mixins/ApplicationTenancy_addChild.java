@@ -35,7 +35,7 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.ApplicationTenancy_addChild.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  *
@@ -68,7 +68,7 @@ public class ApplicationTenancy_addChild {
     }
 
     @MemberSupport public Collection<? extends ApplicationTenancy> choicesChild() {
-        val choices =_Lists.newArrayList(applicationTenancyRepository.getRootTenancies());
+        var choices =_Lists.newArrayList(applicationTenancyRepository.getRootTenancies());
         choices.removeIf(this::containsTarget); // ensure tree structure (nodes cannot contain themselves)
         return choices; }
 

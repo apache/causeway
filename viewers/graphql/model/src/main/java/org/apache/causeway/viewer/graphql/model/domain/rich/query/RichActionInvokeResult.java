@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.DisabledException;
 import org.apache.causeway.viewer.graphql.model.exceptions.HiddenException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -55,11 +54,11 @@ public class RichActionInvokeResult extends Element {
 
         this.actionInteractor = actionInteractor;
 
-        val objectAction = actionInteractor.getObjectMember();
+        var objectAction = actionInteractor.getObjectMember();
 
-        val graphQLOutputType = typeFor(objectAction);
+        var graphQLOutputType = typeFor(objectAction);
         if (graphQLOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name("results")
                     .type(graphQLOutputType);
             setField(fieldBuilder.build());
@@ -70,7 +69,7 @@ public class RichActionInvokeResult extends Element {
 
     @Nullable
     private GraphQLOutputType typeFor(final ObjectAction objectAction){
-        val objectSpecification = objectAction.getReturnType();
+        var objectSpecification = objectAction.getReturnType();
         switch (objectSpecification.getBeanSort()){
 
             case COLLECTION:
@@ -80,7 +79,7 @@ public class RichActionInvokeResult extends Element {
                     log.warn("Unable to locate TypeOfFacet for {}", objectAction.getFeatureIdentifier().getFullIdentityString());
                     return null;
                 }
-                val objectSpecificationOfCollectionElement = facet.elementSpec();
+                var objectSpecificationOfCollectionElement = facet.elementSpec();
                 GraphQLType wrappedType = context.typeMapper.outputTypeFor(objectSpecificationOfCollectionElement, actionInteractor.getSchemaType());
                 if (wrappedType == null) {
                     log.warn("Unable to create wrapped type of for {} for action {}",
@@ -102,37 +101,37 @@ public class RichActionInvokeResult extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val environment = new Environment.ForTunnelled(dataFetchingEnvironment);
+        var environment = new Environment.ForTunnelled(dataFetchingEnvironment);
 
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
         if (objectSpecification == null) {
             return null;
         }
 
-        val objectAction = actionInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var objectAction = actionInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(objectAction.getFeatureIdentifier());
         }
 
-        val usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usableConsent.isVetoed()) {
             throw new DisabledException(objectAction.getFeatureIdentifier());
         }
 
-        val head = objectAction.interactionHead(managedObject);
-        val argumentManagedObjects = actionInteractor.argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
+        var head = objectAction.interactionHead(managedObject);
+        var argumentManagedObjects = actionInteractor.argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
 
-        val validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
         }
 
-        val resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
         return resultManagedObject.getPojo();
     }
 

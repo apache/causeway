@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -69,7 +68,7 @@ public final class MethodFinderPAT {
             final ResolvedMethod supportingMethod,
             final Class<?>[] signature) {
 
-        val patCandidate = supportingMethod.paramType(0);
+        var patCandidate = supportingMethod.paramType(0);
 
         // just an optimization, not strictly required
         if(ClassUtils.isPrimitiveOrWrapper(patCandidate)
@@ -77,7 +76,7 @@ public final class MethodFinderPAT {
             return Optional.empty();
         }
 
-        val classCache = _ClassCache.getInstance();
+        var classCache = _ClassCache.getInstance();
 
         return classCache
                 .lookupPublicConstructor(patCandidate, signature)

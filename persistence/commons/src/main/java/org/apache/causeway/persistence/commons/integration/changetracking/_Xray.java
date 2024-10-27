@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.security.util.XrayUtil;
 
-import lombok.val;
-
 final class _Xray {
 
     public static void publish(
@@ -44,7 +42,7 @@ final class _Xray {
 
         final long propertyChangeRecordCount = entityChangeTrackerDefault.countPotentialPropertyChangeRecords();
 
-        val enteringLabel = String.format("consider %d entity change records for publishing",
+        var enteringLabel = String.format("consider %d entity change records for publishing",
                 propertyChangeRecordCount);
 
         XrayUtil.createSequenceHandle(interactionProviderProvider.get(), "ec-tracker")
@@ -59,7 +57,7 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                val callee = handle.getCallees().getFirstElseFail();
+                var callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 //sequenceData.activate(callee);
             });
@@ -103,7 +101,7 @@ final class _Xray {
             return;
         }
 
-        val enteringLabel = String.format("%s %s",
+        var enteringLabel = String.format("%s %s",
                 what,
                 ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
                     ? "<empty>"
@@ -120,7 +118,7 @@ final class _Xray {
 
                 sequenceData.alias("ec-tracker", "EntityChange-\nTracker-\n(Default)");
 
-                val callee = handle.getCallees().getFirstElseFail();
+                var callee = handle.getCallees().getFirstElseFail();
                 sequenceData.enter(handle.getCaller(), callee, enteringLabel);
                 //sequenceData.activate(callee);
             });

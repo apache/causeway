@@ -30,7 +30,7 @@ import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsWorkerRefer
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * A panel for rendering PDF documents inline in the page
@@ -51,7 +51,7 @@ public class PdfJsPanel extends Panel {
     public PdfJsPanel(final String id, final @NonNull PdfJsConfig config) {
         super(id);
 
-        val pdfJsCanvas = Wkt.add(this, Wkt.ajaxEnable(new WebComponent(ID_PDFJSCANVAS)));
+        var pdfJsCanvas = Wkt.add(this, Wkt.ajaxEnable(new WebComponent(ID_PDFJSCANVAS)));
 
         this.config = config
                 .withWorkerUrl(PdfJsWorkerReference.workerUrl())

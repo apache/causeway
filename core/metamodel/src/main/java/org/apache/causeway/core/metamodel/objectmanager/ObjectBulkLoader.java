@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Value;
-import lombok.val;
 
 /**
  * @since 2.0
@@ -74,7 +73,7 @@ public interface ObjectBulkLoader {
                 if(objectQuery==null) {
                     return true;
                 }
-                val spec = objectQuery.getObjectSpecification();
+                var spec = objectQuery.getObjectSpecification();
                 if(spec == null) {
                     // eg "NONEXISTENT:123"
                     return true;
@@ -91,14 +90,14 @@ public interface ObjectBulkLoader {
         BulkLoadEntity {
             @Override
             public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
-                val spec = objectQuery.getObjectSpecification();
+                var spec = objectQuery.getObjectSpecification();
                 return spec.isEntity();
             }
             @Override
             public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
-                val spec = objectQuery.getObjectSpecification();
-                val entityFacet = spec.entityFacetElseFail();
-                val entities = entityFacet.fetchByQuery(objectQuery.getQuery());
+                var spec = objectQuery.getObjectSpecification();
+                var entityFacet = spec.entityFacetElseFail();
+                var entities = entityFacet.fetchByQuery(objectQuery.getQuery());
                 return entities;
             }
         },

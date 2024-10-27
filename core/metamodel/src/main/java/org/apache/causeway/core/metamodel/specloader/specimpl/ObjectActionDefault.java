@@ -67,7 +67,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -143,7 +142,7 @@ implements ObjectAction {
     private final ObjectSpecification declaringType = loadDeclaringType();
 
     private ObjectSpecification loadDeclaringType() {
-        val declaringType = getActionInvocationFacet()
+        var declaringType = getActionInvocationFacet()
                 .map(ActionInvocationFacet::getDeclaringType);
         // JUnit support
         if(testing
@@ -169,7 +168,7 @@ implements ObjectAction {
     private ObjectSpecification loadElementType() {
         return Facets.elementSpec(getFacetedMethod())
                 .orElseGet(()->{
-                    val returnType = getReturnType();
+                    var returnType = getReturnType();
                     if(!returnType.isSingular()) {
                         log.warn("plural action return type requires a TypeOfFacet: {}", getFeatureIdentifier());
                     }
@@ -183,7 +182,7 @@ implements ObjectAction {
     private final ObjectSpecification returnType = loadReturnType();
 
     private ObjectSpecification loadReturnType() {
-        val returType = getActionInvocationFacet()
+        var returType = getActionInvocationFacet()
                 .map(ActionInvocationFacet::getReturnType);
         // JUnit support
         if(testing
@@ -242,13 +241,13 @@ implements ObjectAction {
 
     protected Can<ObjectActionParameter> determineParameters() {
 
-        val specLoader = getSpecificationLoader();
+        var specLoader = getSpecificationLoader();
 
         return getFacetedMethod().getParameters()
         .map(facetedParam->{
 
             final int paramIndex = facetedParam.getParamIndex();
-            val paramElementType = specLoader.loadSpecification(facetedParam.getType().elementType()); // preload
+            var paramElementType = specLoader.loadSpecification(facetedParam.getType().elementType()); // preload
 
             return
                     facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
@@ -285,7 +284,7 @@ implements ObjectAction {
     }
 
     ObjectActionParameter getParameter(final int position) {
-        val parameters = getParameters();
+        var parameters = getParameters();
         if (position >= parameters.size()) {
             throw new IllegalArgumentException(
                     "getParameter(int): only " + parameters.size() + " parameters, position=" + position);
@@ -364,10 +363,10 @@ implements ObjectAction {
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
 
-        val actionParameters = getParameters();
+        var actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.size(); i++) {
-                val validityContext = actionParameters.getElseFail(i)
+                var validityContext = actionParameters.getElseFail(i)
                         .createProposedArgumentInteractionContext(
                                 head, proposedArguments, i, interactionInitiatedBy);
 
@@ -394,7 +393,7 @@ implements ObjectAction {
             final InteractionInitiatedBy interactionInitiatedBy,
             final InteractionResultSet resultSet) {
 
-        val validityContext = createActionInvocationInteractionContext(
+        var validityContext = createActionInvocationInteractionContext(
                 head, proposedArguments, interactionInitiatedBy);
         InteractionUtils.isValidResultSet(this, validityContext, resultSet);
     }
@@ -421,7 +420,7 @@ implements ObjectAction {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        val target = head.getOwner();
+        var target = head.getOwner();
 
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
@@ -484,7 +483,7 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val actionInvocationFacet = getFacet(ActionInvocationFacet.class);
+        var actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
                 .invoke(this, head, argumentAdapters, interactionInitiatedBy);
     }
@@ -503,21 +502,21 @@ implements ObjectAction {
         final int parameterCount = getParameterCount();
         CanVector<ManagedObject> paramChoicesVector;
 
-        val parameters = getParameters();
+        var parameters = getParameters();
 
             // use the new choicesNXxx approach for each param in turn
             // (the reflector will have made sure both aren't installed).
 
-        val emptyPendingArgs = Can.<ManagedObject>empty();
+        var emptyPendingArgs = Can.<ManagedObject>empty();
         paramChoicesVector = new CanVector<>(parameterCount);
         for (int i = 0; i < parameterCount; i++) {
-            val param = parameters.getElseFail(i);
-            val paramSpec = param.getElementType();
-            val paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
+            var param = parameters.getElseFail(i);
+            var paramSpec = param.getElementType();
+            var paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
             if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
 
-                val visibleChoices = paramFacet.getChoices(
+                var visibleChoices = paramFacet.getChoices(
                         paramSpec,
                         interactionHead(target),
                         emptyPendingArgs,
@@ -594,8 +593,8 @@ implements ObjectAction {
             return "???"; // shouldn't happen
         }
         return parameters.stream().map(IndexedFunction.zeroBased((i, param) -> {
-            val id = param.getId();
-            val argStr = argStr(id, arguments, i);
+            var id = param.getId();
+            var argStr = argStr(id, arguments, i);
             return id + "=" + argStr;
         })).collect(Collectors.joining(","));
     }
@@ -617,7 +616,7 @@ implements ObjectAction {
     }
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().getMethod();
         return methodFacade.synthesize(Action.class).isPresent()
                 || methodFacade.synthesize(ActionLayout.class).isPresent();
     }

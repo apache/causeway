@@ -45,7 +45,6 @@ import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemant
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a PROPERTY or
@@ -122,7 +121,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      */
     @Override
     public final ManagedObject getObject() {
-        val proposedValue = proposedValue();
+        var proposedValue = proposedValue();
         return ManagedObjects.nullToEmpty(
                 proposedValue.getElementType(),
                 proposedValue.getValue().getValue());

@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class OptionsBasedOnValueSemantics
 extends ValueSemanticsModelAbstract {
@@ -41,7 +40,7 @@ extends ValueSemanticsModelAbstract {
     }
 
     public final Optional<Renderer<?>> lookupRenderer() {
-        val valueFacet = valueFacet();
+        var valueFacet = valueFacet();
         switch(scalarRepresentation) {
         case EDITING:
             return Optional.empty();

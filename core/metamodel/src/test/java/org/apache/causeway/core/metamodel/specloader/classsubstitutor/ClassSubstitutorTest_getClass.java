@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 
-import lombok.val;
-
 class ClassSubstitutorTest_getClass {
 
     private ClassSubstitutor classSubstitutor;
@@ -56,22 +54,22 @@ class ClassSubstitutorTest_getClass {
 
     @Test
     public void regularDomainObject() throws Exception {
-        val input = SomeDomainObject.class;
-        val replacement = classSubstitutorReg.getSubstitution(input).apply(input);
+        var input = SomeDomainObject.class;
+        var replacement = classSubstitutorReg.getSubstitution(input).apply(input);
         assertEquals(input, replacement);
     }
 
     @Test
     public void someEnum() throws Exception {
-        val input = SomeDomainObject.SomeEnum.class;
-        val replacement = classSubstitutorReg.getSubstitution(input).apply(input);
+        var input = SomeDomainObject.SomeEnum.class;
+        var replacement = classSubstitutorReg.getSubstitution(input).apply(input);
         assertEquals(input, replacement);
     }
 
     @Test
     public void someAnonymousSubtypeOfEnum() throws Exception {
-        val input = SomeDomainObject.SomeEnum.Foo.getClass();
-        val replacement = classSubstitutorReg.getSubstitution(input).apply(input);
+        var input = SomeDomainObject.SomeEnum.Foo.getClass();
+        var replacement = classSubstitutorReg.getSubstitution(input).apply(input);
         assertEquals(SomeDomainObject.SomeEnum.class, replacement);
     }
 

@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Object
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.Getter;
-import lombok.val;
+
 
 public class SimpleProperty
         extends Element
@@ -75,7 +75,7 @@ public class SimpleProperty
 
         final GraphQLOutputType gqlOutputType;
         if (isBlobOrClob(otoa)) {
-            val glqObjectTypeBuilder = newObject()
+            var glqObjectTypeBuilder = newObject()
                     .name(TypeNames.memberTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType()))
                     .description(otoa.getCanonicalDescription().orElse(otoa.getCanonicalFriendlyName()))
                     ;
@@ -102,7 +102,7 @@ public class SimpleProperty
         }
 
         if (gqlOutputType != null) {
-            val fieldBuilder = newFieldDefinition()
+            var fieldBuilder = newFieldDefinition()
                     .name(otoa.asciiId())
                     .type(gqlOutputType);
             setField(fieldBuilder.build());
@@ -117,7 +117,7 @@ public class SimpleProperty
             final Context context) {
 
         if(isBlobOrClob(otoa)) {
-            val typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
+            var typeName = TypeNames.propertyLobTypeNameFor(objectInteractor.getObjectSpecification(), otoa, objectInteractor.getSchemaType());
             return newObject()
                     .name(typeName)
                     .build();
@@ -158,18 +158,18 @@ public class SimpleProperty
         if(isBlobOrClob(getObjectMember())) {
             return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
         } else {
-            val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+            var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-            val sourcePojoClass = sourcePojo.getClass();
-            val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+            var sourcePojoClass = sourcePojo.getClass();
+            var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
             if (objectSpecification == null) {
                 // not expected
                 return null;
             }
 
-            val association = getObjectMember();
-            val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-            val resultManagedObject = association.get(managedObject);
+            var association = getObjectMember();
+            var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+            var resultManagedObject = association.get(managedObject);
 
             return resultManagedObject != null
                     ? resultManagedObject.getPojo()

@@ -41,7 +41,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.CommandsDto;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -91,15 +90,15 @@ public class CommandReplayOnSecondaryService {
         public class ActionDomainEvent extends CommandReplayOnSecondaryService.ActionDomainEvent<uploadCommands> { }
 
         @MemberSupport public void act(final Clob commandsDtoAsXml) {
-            val chars = commandsDtoAsXml.getChars();
+            var chars = commandsDtoAsXml.getChars();
             List<CommandDto> commandDtoList;
 
             try {
-                val commandsDto = jaxbService.fromXml(CommandsDto.class, chars.toString());
+                var commandsDto = jaxbService.fromXml(CommandsDto.class, chars.toString());
                 commandDtoList = commandsDto.getCommandDto();
 
             } catch(Exception ex) {
-                val commandDto = jaxbService.fromXml(CommandDto.class, chars.toString());
+                var commandDto = jaxbService.fromXml(CommandDto.class, chars.toString());
                 commandDtoList = Collections.singletonList(commandDto);
             }
 

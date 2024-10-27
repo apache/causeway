@@ -39,8 +39,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 
 /**
  * Acts as the Principal for the {@link CausewayModuleExtSecmanShiroRealm}, meaning that it is returned from
@@ -68,14 +66,14 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
         if(applicationUser == null) {
             return null;
         }
-        val username = applicationUser.getUsername();
-        val encryptedPassword = applicationUser.getEncryptedPassword();
-        val accountType = applicationUser.getAccountType();
-        val roles = applicationUser.getRoles()
+        var username = applicationUser.getUsername();
+        var encryptedPassword = applicationUser.getEncryptedPassword();
+        var accountType = applicationUser.getAccountType();
+        var roles = applicationUser.getRoles()
                 .stream()
                 .map(ApplicationRole::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
-        val permissionSet = applicationUser.getPermissionSet();
+        var permissionSet = applicationUser.getPermissionSet();
 
         return new PrincipalForApplicationUser(username, encryptedPassword, accountType,
                 applicationUser.getStatus(), roles, permissionSet);
@@ -116,7 +114,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
             _Lazy.threadSafe(this::createObjectPermissions);
 
     private Collection<Permission> createObjectPermissions() {
-        val permission = Permission_backedByPermissionSet.of(getPermissionSet());
+        var permission = Permission_backedByPermissionSet.of(getPermissionSet());
         return Collections.singleton(permission);
     }
 
@@ -130,7 +128,7 @@ class PrincipalForApplicationUser implements AuthorizationInfo {
             if (!(p instanceof PermissionForMember)) {
                 return false;
             }
-            val permissionForMember = (PermissionForMember) p;
+            var permissionForMember = (PermissionForMember) p;
             return permissionSet.grants(
                     permissionForMember.getFeatureId(),
                     permissionForMember.getMode());

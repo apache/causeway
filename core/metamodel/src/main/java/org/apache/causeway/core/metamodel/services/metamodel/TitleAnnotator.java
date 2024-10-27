@@ -35,7 +35,6 @@ import org.apache.causeway.schema.metamodel.v2.Property;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
@@ -108,11 +107,11 @@ public class TitleAnnotator implements MetaModelAnnotator {
     // -- HELPER
 
     private String renderTypeOf(final OneToManyFeature nonScalarFeature, final ExporterConfig exporterConfig) {
-        val toac = nonScalarFeature.getTypeOfAnyCardinality();
-        val containerType = toac.collectionSemantics()
+        var toac = nonScalarFeature.getTypeOfAnyCardinality();
+        var containerType = toac.collectionSemantics()
                 .map(CollectionSemantics::getContainerType)
                 .map(exporterConfig::simpleName).orElse("?");
-        val elementType = exporterConfig.abbrev(toac.elementType());
+        var elementType = exporterConfig.abbrev(toac.elementType());
         return String.format("%s<%s>", containerType, elementType);
     }
 

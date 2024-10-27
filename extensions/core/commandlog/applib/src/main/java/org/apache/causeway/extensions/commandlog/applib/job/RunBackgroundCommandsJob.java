@@ -53,7 +53,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -98,8 +97,8 @@ public class RunBackgroundCommandsJob implements Job {
             return;
         }
 
-        val userMemento = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
-        val interactionContext = InteractionContext.builder().user(userMemento).build();
+        var userMemento = UserMemento.ofNameAndRoleNames("scheduler_user", "admin_role");
+        var interactionContext = InteractionContext.builder().user(userMemento).build();
 
         // we obtain the list of Commands first; we use their CommandDto as it is serializable across transactions
         final Optional<List<CommandDto>> commandDtosIfAny = pendingCommandDtos(interactionContext);
@@ -110,7 +109,7 @@ public class RunBackgroundCommandsJob implements Job {
             for (CommandDto dto : commandDtos) {
                 Try<?> attempt = executeCommandWithinTransaction(dto, interactionContext);
                 if(attempt.isFailure()) {
-                    val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+                    var onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
                     if (onFailurePolicy == CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands.OnFailurePolicy.STOP_THE_LINE) {
                         break;
                     }
@@ -121,7 +120,7 @@ public class RunBackgroundCommandsJob implements Job {
 
             // an enhancement for the listener interface would be to say whether each interaction succeeded or not
             // whether his is relevant depends on the onFailurePolicy (if it's set to STOP_THE_LINE, then everything passed on will have succeeded)
-            val interactionIds = commandResults.stream()
+            var interactionIds = commandResults.stream()
                     .filter(commandAndResult -> commandAndResult.getExecutionResult().isSuccess())  // only the successes
                     .map(CommandAndResult::getCommandDto)
                     .map(CommandDto::getInteractionId)
@@ -168,12 +167,12 @@ public class RunBackgroundCommandsJob implements Job {
 
                 // previously we were creating a new transaction here with REQUIRES_NEW, but this isn't necessary
                 // (and massively complicates things) since each interaction will implictly creates its own transaction
-                val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+                var commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
                 if(commandLogEntryIfAny.isEmpty()) {
                     return Try.empty();
                 }
 
-                val commandLogEntry = commandLogEntryIfAny.get();
+                var commandLogEntry = commandLogEntryIfAny.get();
                 return commandExecutorService.executeCommand(
                             CommandExecutorService.InteractionContextPolicy.NO_SWITCH, commandDto)
                         .ifSuccess(
@@ -197,7 +196,7 @@ public class RunBackgroundCommandsJob implements Job {
         }
 
         // a failure has occurred
-        val onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+        var onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
         switch (onFailurePolicy) {
             case CONTINUE_WITH_NEXT:
                 // the result _will_ contain a failure
@@ -240,14 +239,14 @@ public class RunBackgroundCommandsJob implements Job {
 
         interactionService.run(interactionContext, () -> {
             // look up the CommandLogEntry again because we are within a new transaction.
-            val commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
+            var commandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(UUID.fromString(commandDto.getInteractionId()));
 
             // capture the error
             commandLogEntryIfAny.ifPresent(
                 commandLogEntry -> {
                     // use tunnelled info if available
                     if (throwable instanceof ThrowableWithDetailsOfAttempt) {
-                        val throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
+                        var throwableWithDetailsOfAttempt = (ThrowableWithDetailsOfAttempt) throwable;
                         commandLogEntry.setStartedAt(throwableWithDetailsOfAttempt.getStartedAt());
                         commandLogEntry.setException(throwableWithDetailsOfAttempt.getOriginal());
                     } else {

@@ -40,7 +40,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -64,15 +64,15 @@ public class ArchitectureJdoRules {
                 .and(new DescribedPredicate<>("have a @Discriminator") {
                     @Override
                     public boolean test(final JavaClass javaClass) {
-                        val discriminatorIfAny = javaClass.tryGetAnnotationOfType(Discriminator.class);
+                        var discriminatorIfAny = javaClass.tryGetAnnotationOfType(Discriminator.class);
                         return discriminatorIfAny.isPresent();
                     }
                 })
                 .should(new ArchCondition<>("be the same") {
                     @Override
                     public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
-                        val logicalTypeName = _LogicalNaming.logicalNameFor(javaClass);
-                        val discriminatorValue = javaClass.getAnnotationOfType(Discriminator.class).value();
+                        var logicalTypeName = _LogicalNaming.logicalNameFor(javaClass);
+                        var discriminatorValue = javaClass.getAnnotationOfType(Discriminator.class).value();
                         if (!Objects.equals(logicalTypeName, discriminatorValue)) {
                             conditionEvents.add(
                                     new SimpleConditionEvent(javaClass, false,
@@ -204,8 +204,8 @@ public class ArchitectureJdoRules {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val schema = properties.get("schema");
+                var properties = javaAnnotation.getProperties();
+                var schema = properties.get("schema");
                 return schema instanceof String &&
                         ((String) schema).length() > 0;
             }
@@ -219,8 +219,8 @@ public class ArchitectureJdoRules {
                 if (!javaAnnotation.getRawType().isAssignableTo(PersistenceCapable.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val identityType = properties.get("identityType");
+                var properties = javaAnnotation.getProperties();
+                var identityType = properties.get("identityType");
                 return identityType instanceof JavaEnumConstant &&
                         identityType.toString().equals("IdentityType.DATASTORE");
             }
@@ -261,13 +261,13 @@ public class ArchitectureJdoRules {
         return new DescribedPredicate<>("are subtype entities ") {
             @Override
             public boolean test(final JavaClass input) {
-                val superclassIfAny = input.getSuperclass();
+                var superclassIfAny = input.getSuperclass();
                 if (!superclassIfAny.isPresent()) {
                     return false;
                 }
-                val superType = superclassIfAny.get();
-                val superClass = superType.toErasure();
-                val persistenceCapableIfAny = superClass
+                var superType = superclassIfAny.get();
+                var superClass = superType.toErasure();
+                var persistenceCapableIfAny = superClass
                         .tryGetAnnotationOfType(PersistenceCapable.class);
                 return persistenceCapableIfAny.isPresent();
             }

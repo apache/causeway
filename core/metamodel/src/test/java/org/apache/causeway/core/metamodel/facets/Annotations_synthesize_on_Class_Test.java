@@ -33,8 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.applib.events.ui.TitleUiEvent;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
-import lombok.val;
-
 public class Annotations_synthesize_on_Class_Test {
 
 
@@ -101,7 +99,7 @@ public class Annotations_synthesize_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES)
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -114,7 +112,7 @@ public class Annotations_synthesize_on_Class_Test {
         @Published
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -127,7 +125,7 @@ public class Annotations_synthesize_on_Class_Test {
         @MetaPublished
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -141,7 +139,7 @@ public class Annotations_synthesize_on_Class_Test {
         @Published
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -155,7 +153,7 @@ public class Annotations_synthesize_on_Class_Test {
         @NotPublished // <-- should win over the other
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -170,7 +168,7 @@ public class Annotations_synthesize_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.NO) // <-- should win over the others
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -186,7 +184,7 @@ public class Annotations_synthesize_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should win over the others
         class SomeDomainObject {}
 
-        val nearest = _Annotations
+        var nearest = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
@@ -201,7 +199,7 @@ public class Annotations_synthesize_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.NOT_SPECIFIED) // <-- should be ignored
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
+        var synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(synthesized.isPresent(), is(true));
@@ -215,7 +213,7 @@ public class Annotations_synthesize_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should provide YES
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
+        var synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(synthesized.isPresent(), is(true));
@@ -232,7 +230,7 @@ public class Annotations_synthesize_on_Class_Test {
         @DomainObj(publishng = DomainObj.Publishng.YES) // <-- should provide YES
         class SomeDomainObject {}
 
-        val synthesized = _Annotations
+        var synthesized = _Annotations
                 .synthesize(SomeDomainObject.class, DomainObj.class);
 
         assertThat(synthesized.isPresent(), is(true));

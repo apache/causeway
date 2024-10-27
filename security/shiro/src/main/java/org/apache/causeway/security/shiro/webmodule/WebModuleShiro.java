@@ -57,7 +57,6 @@ import org.apache.causeway.core.webapp.modules.WebModuleContext;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -95,9 +94,9 @@ public class WebModuleShiro extends WebModuleAbstract {
     public static class IniWebEnvironmentUsingSystemProperty extends IniWebEnvironment {
         @Override
         public Ini getIni() {
-            val customShiroIniResource = System.getProperty("shiroIniResource");
+            var customShiroIniResource = System.getProperty("shiroIniResource");
             if(_Strings.isNotEmpty(customShiroIniResource)) {
-                val ini = new Ini();
+                var ini = new Ini();
                 ini.loadFromPath(customShiroIniResource);
                 return ini;
             }
@@ -143,8 +142,8 @@ public class WebModuleShiro extends WebModuleAbstract {
 
         @Override
         protected WebEnvironment createEnvironment(final ServletContext servletContext) {
-            val shiroEnvironment = super.createEnvironment(servletContext);
-            val securityManager = shiroEnvironment.getSecurityManager();
+            var shiroEnvironment = super.createEnvironment(servletContext);
+            var securityManager = shiroEnvironment.getSecurityManager();
 
             injectServicesIntoRealms(securityManager);
 
@@ -164,7 +163,7 @@ public class WebModuleShiro extends WebModuleAbstract {
                 final org.apache.shiro.mgt.SecurityManager securityManager) {
 
             // reflective access to SecurityManager.getRealms()
-            val realmsGetter = ReflectionUtils
+            var realmsGetter = ReflectionUtils
                     .findMethod(securityManager.getClass(), "getRealms");
             if(realmsGetter==null) {
                 log.warn("Could not find method 'getRealms()' with Shiro's SecurityManager. "
@@ -172,7 +171,7 @@ public class WebModuleShiro extends WebModuleAbstract {
                 return;
             }
 
-            val realms = (Collection<Realm>) realmsGetter
+            var realms = (Collection<Realm>) realmsGetter
                     .invoke(securityManager, _Constants.emptyObjects);
 
             realms.stream().forEach(serviceInjector::injectServicesInto);
@@ -188,7 +187,7 @@ public class WebModuleShiro extends WebModuleAbstract {
     @Override
     public void prepare(final WebModuleContext ctx) {
         super.prepare(ctx);
-        val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
+        var customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isEmpty(customShiroEnvironmentClassName)) {
             setShiroEnvironmentClass(IniWebEnvironmentUsingSystemProperty.class);
         }
@@ -205,12 +204,12 @@ public class WebModuleShiro extends WebModuleAbstract {
                         "/*");
             });
 
-        val customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
+        var customShiroEnvironmentClassName = System.getProperty("shiroEnvironmentClass");
         if(_Strings.isNotEmpty(customShiroEnvironmentClassName)) {
             ctx.setInitParameter("shiroEnvironmentClass", customShiroEnvironmentClassName);
         }
 
-        val listener = createListener(EnvironmentLoaderListenerForCauseway.class);
+        var listener = createListener(EnvironmentLoaderListenerForCauseway.class);
         return Can.ofSingleton(listener);
 
     }

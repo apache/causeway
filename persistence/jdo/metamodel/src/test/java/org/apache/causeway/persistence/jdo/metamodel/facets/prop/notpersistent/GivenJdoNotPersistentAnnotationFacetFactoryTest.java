@@ -31,8 +31,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodConte
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
-
 class GivenJdoNotPersistentAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
@@ -52,7 +50,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        val featureTypes = facetFactory.getFeatureTypes();
+        var featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
@@ -62,7 +60,7 @@ extends AbstractFacetFactoryTest {
 
     public void testNotPersistentAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithNotPersistentColumn.class;
-        val method = findMethod(cls, "getSomeColumn");
+        var method = findMethod(cls, "getSomeColumn");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -89,7 +87,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        val method = findMethod(cls, "getSomeColumn");
+        var method = findMethod(cls, "getSomeColumn");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -113,7 +111,7 @@ extends AbstractFacetFactoryTest {
         }
 
         final Class<?> cls = Customer.class;
-        val method = findMethod(cls, "getSomeColumn");
+        var method = findMethod(cls, "getSomeColumn");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 

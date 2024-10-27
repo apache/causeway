@@ -59,7 +59,6 @@ import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcess
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -79,7 +78,7 @@ implements HasMetaModelContext {
         @Override
         public void removeMethods(final Predicate<ResolvedMethod> removeIf, final Consumer<ResolvedMethod> onRemoval) {
             methodsRemaining.removeIf(method -> {
-                val doRemove = removeIf.test(method);
+                var doRemove = removeIf.test(method);
                 if(doRemove) {
                     onRemoval.accept(method);
                 }
@@ -135,8 +134,8 @@ implements HasMetaModelContext {
         this.inspectedTypeSpec = inspectedTypeSpec;
         this.introspectedClass = inspectedTypeSpec.getCorrespondingClass();
 
-        val classCache = _ClassCache.getInstance();
-        val methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
+        var classCache = _ClassCache.getInstance();
+        var methodsRemaining = introspectionPolicy().getEncapsulationPolicy().isEncapsulatedMembersSupported()
                 ? classCache.streamResolvedMethods(introspectedClass)
                 : classCache.streamPublicMethods(introspectedClass);
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
@@ -186,9 +185,9 @@ implements HasMetaModelContext {
             log.debug("introspecting(policy={}) {}: properties and collections", introspectionPolicy(), getClassName());
         }
 
-        val specLoader = getSpecificationLoader();
+        var specLoader = getSpecificationLoader();
 
-        val associationCandidateMethods = new HashSet<ResolvedMethod>();
+        var associationCandidateMethods = new HashSet<ResolvedMethod>();
 
         getFacetProcessor()
         .findAssociationCandidateGetters(
@@ -203,7 +202,7 @@ implements HasMetaModelContext {
         .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
 
         // now create FacetedMethods for collections and for properties
-        val associationFacetedMethods = _Lists.<FacetedMethod>newArrayList();
+        var associationFacetedMethods = _Lists.<FacetedMethod>newArrayList();
 
         findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods::add);
         findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods::add);
@@ -213,7 +212,7 @@ implements HasMetaModelContext {
 
     private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(
             final Consumer<FacetedMethod> onNewAssociationPeer) {
-        val collectionAccessors = _Lists.<ResolvedMethod>newArrayList();
+        var collectionAccessors = _Lists.<ResolvedMethod>newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
         createCollectionFacetedMethodsFromAccessors(
                 getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
@@ -224,7 +223,7 @@ implements HasMetaModelContext {
      * this will pick up the remaining reference properties.
      */
     private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final Consumer<FacetedMethod> onNewField) {
-        val propertyAccessors = _Lists.<ResolvedMethod>newArrayList();
+        var propertyAccessors = _Lists.<ResolvedMethod>newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
         methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), propertyAccessors::add);
@@ -243,10 +242,10 @@ implements HasMetaModelContext {
                 log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
 
-            val accessorMethodFacade = _MethodFacades.regular(accessorMethod);
+            var accessorMethodFacade = _MethodFacades.regular(accessorMethod);
 
             // create property and add facets
-            val facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
+            var facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
             getFacetProcessor()
             .process(
                     introspectedClass,
@@ -286,10 +285,10 @@ implements HasMetaModelContext {
             }
 
             // create a 1:1 association peer
-            val facetedMethod = FacetedMethod
+            var facetedMethod = FacetedMethod
                     .createForProperty(getMetaModelContext(), introspectedClass, accessorMethod);
 
-            val accessorMethodFacade = _MethodFacades.regular(accessorMethod);
+            var accessorMethodFacade = _MethodFacades.regular(accessorMethod);
 
             // process facets for the 1:1 association (eg. contributed properties)
             getFacetProcessor()
@@ -325,7 +324,7 @@ implements HasMetaModelContext {
         if (log.isDebugEnabled()) {
             log.debug("introspecting(policy={}) {}: actions", introspectionPolicy(), getClassName());
         }
-        val actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
+        var actionFacetedMethods = _Lists.<FacetedMethod>newArrayList();
         collectActionFacetedMethods(actionFacetedMethods::add);
         return actionFacetedMethods;
     }
@@ -339,7 +338,7 @@ implements HasMetaModelContext {
 
         methodRemover.removeMethods(method->{
 
-            val actionPeer = findActionFacetedMethod(method);
+            var actionPeer = findActionFacetedMethod(method);
 
             if (actionPeer != null) {
                 onActionFacetedMethod.accept(actionPeer);
@@ -369,7 +368,7 @@ implements HasMetaModelContext {
     private FacetedMethod createActionFacetedMethod(
             final ResolvedMethod actionMethod) {
 
-        val actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
+        var actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
 
         if (!isAllParamTypesValid(actionMethodFacade)) {
             return null;
@@ -400,8 +399,8 @@ implements HasMetaModelContext {
     }
 
     private boolean isAllParamTypesValid(final MethodFacade actionMethod) {
-        for (val paramType : actionMethod.getParameterTypes()) {
-            val paramSpec = getSpecificationLoader().loadSpecification(paramType);
+        for (var paramType : actionMethod.getParameterTypes()) {
+            var paramSpec = getSpecificationLoader().loadSpecification(paramType);
             if (paramSpec == null) {
                 return false;
             }
@@ -415,7 +414,7 @@ implements HasMetaModelContext {
         _Reflect.guardAgainstSynthetic(actionMethod.method());
 
         // ensure we can load returned element type; otherwise ignore method
-        val anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
+        var anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
         .map(typeToLoad->getSpecificationLoader().loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
         .anyMatch(Objects::isNull);
         if (anyLoadedAsNull) {
@@ -429,7 +428,7 @@ implements HasMetaModelContext {
             return true;
         }
 
-        val hasActionAnnotation = _Annotations
+        var hasActionAnnotation = _Annotations
                 .isPresent(actionMethod.method(), Action.class);
         if(hasActionAnnotation) {
             log.debug("  identified action {}", actionMethod);
@@ -469,7 +468,7 @@ implements HasMetaModelContext {
      * @param method
      */
     private boolean isMixinMain(final ResolvedMethod method) {
-        val mixinFacet = inspectedTypeSpec.lookupNonFallbackFacet(MixinFacet.class)
+        var mixinFacet = inspectedTypeSpec.lookupNonFallbackFacet(MixinFacet.class)
                 .orElse(null);
         if(mixinFacet==null) {
             return false;

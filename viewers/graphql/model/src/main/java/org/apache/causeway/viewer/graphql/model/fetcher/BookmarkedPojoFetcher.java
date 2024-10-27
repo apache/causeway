@@ -23,7 +23,7 @@ import graphql.schema.DataFetchingEnvironment;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 
-import lombok.val;
+
 
 public class BookmarkedPojoFetcher implements DataFetcher<Object> {
     private final BookmarkService bookmarkService;
@@ -35,7 +35,7 @@ public class BookmarkedPojoFetcher implements DataFetcher<Object> {
     @Override
     public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         return bookmarkService.bookmarkFor(sourcePojo)
                 .map(bookmark -> new BookmarkedPojo(bookmark, bookmarkService))

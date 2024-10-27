@@ -37,8 +37,6 @@ import org.springframework.core.io.PathResource;
 
 import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
-import lombok.val;
-
 class LocalPersistenceManagerFactoryTests {
 
 	@Test
@@ -105,7 +103,7 @@ class LocalPersistenceManagerFactoryTests {
 
 	@Test
 	void testLocalPersistenceManagerFactoryBeanWithFile() throws IOException {
-	    val configResource = new PathResource(Path.of("src/test/resources/test.properties"));
+	    var configResource = new PathResource(Path.of("src/test/resources/test.properties"));
 		LocalPersistenceManagerFactoryBean pmfb = new LocalPersistenceManagerFactoryBean() {
 			@Override
 			protected PersistenceManagerFactory newPersistenceManagerFactory(final Map<?, ?> props) {

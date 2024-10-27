@@ -111,7 +111,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link WrapperFactory}.
@@ -152,7 +151,7 @@ implements WrapperFactory, HasMetaModelContext {
 
         this.commonExecutorService = newCommonExecutorService();
 
-        val proxyCreator = new ProxyCreator(proxyFactoryService);
+        var proxyCreator = new ProxyCreator(proxyFactoryService);
         proxyContextHandler = new ProxyContextHandler(proxyCreator);
 
         putDispatcher(ObjectTitleEvent.class, InteractionListener::objectTitleRead);
@@ -192,19 +191,19 @@ implements WrapperFactory, HasMetaModelContext {
             final @NonNull T domainObject,
             final @NonNull SyncControl syncControl) {
 
-        val spec = getSpecificationLoader().specForTypeElseFail(domainObject.getClass());
+        var spec = getSpecificationLoader().specForTypeElseFail(domainObject.getClass());
         if(spec.isMixin()) {
             throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.wrapMixin(...) instead");
         }
 
         if (isWrapper(domainObject)) {
-            val wrapperObject = (WrappingObject) domainObject;
-            val executionMode = wrapperObject.__causeway_executionModes();
+            var wrapperObject = (WrappingObject) domainObject;
+            var executionMode = wrapperObject.__causeway_executionModes();
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return domainObject;
             }
-            val underlyingDomainObject = wrapperObject.__causeway_wrapped();
+            var underlyingDomainObject = wrapperObject.__causeway_wrapped();
             return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
         }
         return createProxy(domainObject, syncControl);
@@ -235,9 +234,9 @@ implements WrapperFactory, HasMetaModelContext {
         // no need to inject services into the mixin, factoryService does it for us.
 
         if (isWrapper(mixee)) {
-            val wrapperObject = (WrappingObject) mixee;
-            val executionMode = wrapperObject.__causeway_executionModes();
-            val underlyingMixee = wrapperObject.__causeway_wrapped();
+            var wrapperObject = (WrappingObject) mixee;
+            var executionMode = wrapperObject.__causeway_executionModes();
+            var underlyingMixee = wrapperObject.__causeway_wrapped();
 
             getServiceInjector().injectServicesInto(underlyingMixee);
 
@@ -253,13 +252,13 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
-        val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        var objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
         return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
     }
 
     protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
-        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        var mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
+        var mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
         return proxyContextHandler.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
     }
 
@@ -271,7 +270,7 @@ implements WrapperFactory, HasMetaModelContext {
     @Override
     public <T> T unwrap(final T possibleWrappedDomainObject) {
         if(isWrapper(possibleWrappedDomainObject)) {
-            val wrappingObject = (WrappingObject) possibleWrappedDomainObject;
+            var wrappingObject = (WrappingObject) possibleWrappedDomainObject;
             return _Casts.uncheckedCast(wrappingObject.__causeway_wrapped());
         }
         return possibleWrappedDomainObject;
@@ -286,18 +285,18 @@ implements WrapperFactory, HasMetaModelContext {
             final @NonNull T domainObject,
             final AsyncControl<R> asyncControl) {
 
-        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        var targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
         if(targetAdapter.getSpecification().isMixin()) {
             throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
 
-        val proxyFactory = proxyFactoryService
+        var proxyFactory = proxyFactoryService
                 .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
-            val resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
+            var resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
             if (isInheritedFromJavaLangObject(method)) {
@@ -305,7 +304,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (shouldCheckRules(asyncControl)) {
-                val doih = new DomainObjectInvocationHandler<>(
+                var doih = new DomainObjectInvocationHandler<>(
                         domainObject,
                         null, // mixeeAdapter ignored
                         targetAdapter,
@@ -314,7 +313,7 @@ implements WrapperFactory, HasMetaModelContext {
                 doih.invoke(null, method, args);
             }
 
-            val memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
+            var memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
             if( ! memberAndTarget.isMemberFound()) {
                 return method.invoke(domainObject, args);
             }
@@ -324,8 +323,8 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     private boolean shouldCheckRules(final AsyncControl<?> asyncControl) {
-        val executionModes = asyncControl.getExecutionModes();
-        val skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        var executionModes = asyncControl.getExecutionModes();
+        var skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
         return !skipRules;
     }
 
@@ -337,18 +336,18 @@ implements WrapperFactory, HasMetaModelContext {
 
         T mixin = factoryService.mixin(mixinClass, mixee);
 
-        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        var mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
+        var mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
 
-        val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
+        var mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
                 .getConstructorElseFail(mixinClass, mixee.getClass());
 
-        val proxyFactory = proxyFactoryService
+        var proxyFactory = proxyFactoryService
                 .factory(mixinClass, new Class[]{WrappingObject.class}, mixinConstructor.getParameterTypes());
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
-            val resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
+            var resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
             final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
@@ -357,7 +356,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (shouldCheckRules(asyncControl)) {
-                val doih = new DomainObjectInvocationHandler<>(
+                var doih = new DomainObjectInvocationHandler<>(
                         mixin,
                         mixeeAdapter,
                         mixinAdapter,
@@ -366,7 +365,7 @@ implements WrapperFactory, HasMetaModelContext {
                 doih.invoke(null, method, args);
             }
 
-            val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
+            var actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
             if (! actionAndTarget.isMemberFound()) {
                 return method.invoke(mixin, args);
             }
@@ -384,30 +383,30 @@ implements WrapperFactory, HasMetaModelContext {
             final Object[] args,
             final AsyncControl<R> asyncControl) {
 
-        val interactionLayer = currentInteractionLayer();
-        val interactionContext = interactionLayer.getInteractionContext();
-        val asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
+        var interactionLayer = currentInteractionLayer();
+        var interactionContext = interactionLayer.getInteractionContext();
+        var asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
-        val parentCommand = getInteractionService().currentInteractionElseFail().getCommand();
-        val parentInteractionId = parentCommand.getInteractionId();
+        var parentCommand = getInteractionService().currentInteractionElseFail().getCommand();
+        var parentInteractionId = parentCommand.getInteractionId();
 
-        val targetAdapter = memberAndTarget.getTarget();
-        val method = memberAndTarget.getMethod();
+        var targetAdapter = memberAndTarget.getTarget();
+        var method = memberAndTarget.getMethod();
 
-        val head = InteractionHead.regular(targetAdapter);
+        var head = InteractionHead.regular(targetAdapter);
 
-        val childInteractionId = interactionIdGenerator.interactionId();
+        var childInteractionId = interactionIdGenerator.interactionId();
         CommandDto childCommandDto;
         switch (memberAndTarget.getType()) {
             case ACTION:
-                val action = memberAndTarget.getAction();
-                val argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
+                var action = memberAndTarget.getAction();
+                var argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
-                val property = memberAndTarget.getProperty();
-                val propertyValueAdapter = ManagedObject.adaptProperty(property, args[0]);
+                var property = memberAndTarget.getProperty();
+                var propertyValueAdapter = ManagedObject.adaptProperty(property, args[0]);
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, property, propertyValueAdapter);
                 break;
@@ -415,21 +414,21 @@ implements WrapperFactory, HasMetaModelContext {
                 // shouldn't happen, already catered for this case previously
                 return null;
         }
-        val oidDto = childCommandDto.getTargets().getOid().get(0);
+        var oidDto = childCommandDto.getTargets().getOid().get(0);
 
         asyncControl.setMethod(method);
         asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
 
-        val executorService = Optional.ofNullable(asyncControl.getExecutorService())
+        var executorService = Optional.ofNullable(asyncControl.getExecutorService())
                 .orElse(commonExecutorService);
-        val asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
+        var asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
             childCommandDto,
             asyncControl.getReturnType(),
             parentInteractionId)); // this command becomes the parent of child command
 
-        val future = executorService.submit(asyncTask);
+        var future = executorService.submit(asyncTask);
         asyncControl.setFuture(future);
 
         return null;
@@ -439,7 +438,7 @@ implements WrapperFactory, HasMetaModelContext {
             final ResolvedMethod method,
             final ManagedObject targetAdapter) {
 
-        val objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
+        var objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
         if(objectMember == null) {
             return MemberAndTarget.notFound();
         }
@@ -461,13 +460,13 @@ implements WrapperFactory, HasMetaModelContext {
             final T mixee,
             final ManagedObject mixinAdapter) {
 
-        val mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
+        var mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
         if (mixinMember == null) {
             return MemberAndTarget.notFound();
         }
 
         // find corresponding action of the mixee (this is the 'real' target, the target usable for invocation).
-        val mixeeClass = mixee.getClass();
+        var mixeeClass = mixee.getClass();
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
@@ -548,9 +547,9 @@ implements WrapperFactory, HasMetaModelContext {
 
     @Override
     public void notifyListeners(final InteractionEvent interactionEvent) {
-        val dispatcher = dispatchersByEventClass.get(interactionEvent.getClass());
+        var dispatcher = dispatchersByEventClass.get(interactionEvent.getClass());
         if (dispatcher == null) {
-            val msg = String.format("Unknown InteractionEvent %s - "
+            var msg = String.format("Unknown InteractionEvent %s - "
                     + "needs registering into dispatchers map", interactionEvent.getClass());
             throw _Exceptions.unrecoverable(msg);
         }
@@ -562,7 +561,7 @@ implements WrapperFactory, HasMetaModelContext {
     private ManagedObject adaptAndGuardAgainstWrappingNotSupported(
             final @NonNull Object domainObject) {
 
-        val adapter = getObjectManager().adapt(domainObject);
+        var adapter = getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
             throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
@@ -577,7 +576,7 @@ implements WrapperFactory, HasMetaModelContext {
     private <T extends InteractionEvent> void putDispatcher(
             final Class<T> type, final BiConsumer<InteractionListener, T> onDispatch) {
 
-        val dispatcher = new InteractionEventDispatcherTypeSafe<T>() {
+        var dispatcher = new InteractionEventDispatcherTypeSafe<T>() {
             @Override
             public void dispatchTypeSafe(final T interactionEvent) {
                 for (InteractionListener l : listeners) {
@@ -662,19 +661,19 @@ implements WrapperFactory, HasMetaModelContext {
     private <R> R updateDomainObject(final AsyncCallable<R> asyncCallable) {
 
         // obtain the Command that is implicitly created (initially mainly empty) whenever an Interaction is started.
-        val childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
+        var childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
 
         // we will "take over" this Command, updating it with the parentInteractionId of the command for the action
         // that called WrapperFactory#asyncMixin in the first place.
         childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
 
-        val tryBookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto());
+        var tryBookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto());
 
         return tryBookmark.fold(
                 throwable -> null,                  // failure
                 bookmarkIfAny -> bookmarkIfAny.map( // success
                     bookmark -> {
-                        val spec = getSpecificationLoader().specForBookmark(bookmark).orElse(null);
+                        var spec = getSpecificationLoader().specForBookmark(bookmark).orElse(null);
                         if(spec==null) {
                             return null;
                         }

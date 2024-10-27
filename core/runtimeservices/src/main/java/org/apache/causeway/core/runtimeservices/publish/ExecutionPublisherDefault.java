@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link ExecutionPublisher}.
@@ -102,14 +101,14 @@ implements ExecutionPublisher {
 
     private void notifySubscribers(final Execution<?,?> execution) {
 
-        val handle = _Xray.enterExecutionPublishing(
+        var handle = _Xray.enterExecutionPublishing(
                 iaTracker,
                 execution,
                 enabledSubscribers,
                 this::getCannotPublishReason);
 
         if(canPublish()) {
-            for (val subscriber : enabledSubscribers) {
+            for (var subscriber : enabledSubscribers) {
                 subscriber.onExecution(execution);
             }
         }

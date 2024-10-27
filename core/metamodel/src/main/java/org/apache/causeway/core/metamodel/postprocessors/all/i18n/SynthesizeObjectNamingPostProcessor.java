@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynth
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class SynthesizeObjectNamingPostProcessor
 extends MetaModelPostProcessorAbstract {
 
@@ -47,14 +45,14 @@ extends MetaModelPostProcessorAbstract {
                 || objectSpecification.isInjectable();
         if(!canProcess) return;
 
-        val topRank = objectSpecification
+        var topRank = objectSpecification
                 .getFacetRanking(ObjectNamedFacet.class) // don't use lookupFacet, as that would search up the
                                                          // inheritance hierarchy (which we don't want here)
                 .map(facetRanking->facetRanking.getTopRank(ObjectNamedFacet.class))
                 .orElse(Can.empty())
                 .reverse(); // historically last have higher precedence, so when reverted we can use findFirst logic
 
-        val singular = topRank
+        var singular = topRank
                 .stream()
                 .filter(objectNamedFacet->objectNamedFacet.isNounPresent())
                 .findFirst()

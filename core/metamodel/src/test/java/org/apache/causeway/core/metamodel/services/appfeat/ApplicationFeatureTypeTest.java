@@ -28,8 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 
-import lombok.val;
-
 class ApplicationFeatureTypeTest {
 
     public static class HideClassName extends ApplicationFeatureTypeTest {
@@ -56,7 +54,7 @@ class ApplicationFeatureTypeTest {
         @Test
         public void givenPackage() throws Exception {
 
-            val applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
+            var applicationFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is(nullValue()));
@@ -66,7 +64,7 @@ class ApplicationFeatureTypeTest {
         @Test
         public void givenClass() throws Exception {
 
-            val applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
+            var applicationFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));
@@ -76,7 +74,7 @@ class ApplicationFeatureTypeTest {
         @Test
         public void givenMember() throws Exception {
 
-            val applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
+            var applicationFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar#foo");
 
             assertThat(applicationFeatureId.getNamespace(), is("com.mycompany"));
             assertThat(applicationFeatureId.getTypeSimpleName(), is("Bar"));

@@ -113,7 +113,7 @@ import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -145,14 +145,14 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
-        val config = Config.builder().build()
+        var config = Config.builder().build()
                 .withNamespacePrefix("org.apache.causeway.testdomain.");
 
         System.out.println("=== listing MM");
-        val metamodelDto = metaModelService.exportMetaModel(config);
+        var metamodelDto = metaModelService.exportMetaModel(config);
         for (DomainClassDto domainClass : metamodelDto.getDomainClassDto()) {
             System.out.println("dc: " + domainClass.getId());
-            val xmlString = jaxbService.toXml(domainClass);
+            var xmlString = jaxbService.toXml(domainClass);
             System.out.println(xmlString);
         }
         System.out.println("==============");
@@ -163,10 +163,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
 
-        val validateDomainModel = new DomainModelValidator(serviceRegistry);
+        var validateDomainModel = new DomainModelValidator(serviceRegistry);
 
         // guard against left overs from shared context
-        val validationFailures = validateDomainModel.getFailures().stream()
+        var validationFailures = validateDomainModel.getFailures().stream()
                 .filter(f->!f.getOrigin().getClassName().contains("bad"))
                 .collect(Collectors.toSet());
 
@@ -183,7 +183,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void reservedPrefixShouldBeAllowed_onExplicitAction() {
 
-        val tester = testerFactory.actionTester(ProperMemberSupport.class, "hideMe");
+        var tester = testerFactory.actionTester(ProperMemberSupport.class, "hideMe");
         tester.assertExists(true);
         tester.assertMemberId("hideMe");
     }
@@ -191,38 +191,38 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void typeLevelAnnotations_shouldBeHonored_onMixins() {
 
-        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
+        var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
-        val mx_action = holderSpec.getActionElseFail("action1"); // when @Action at type level
+        var mx_action = holderSpec.getActionElseFail("action1"); // when @Action at type level
         assertNotNull(mx_action);
         assertEquals("action1", mx_action.getId());
         assertEquals("foo", mx_action.getStaticFriendlyName().get());
         assertEquals("bar", mx_action.getStaticDescription().get());
         assertHasPublishedActionFacet(mx_action);
 
-        val mx_action2 = holderSpec.getActionElseFail("action2"); // proper mixed-in action support
+        var mx_action2 = holderSpec.getActionElseFail("action2"); // proper mixed-in action support
         assertNotNull(mx_action2);
         assertHasPublishedActionFacet(mx_action2);
 
-        val mx_property = holderSpec.getAssociationElseFail("property1"); // when @Property at type level
+        var mx_property = holderSpec.getAssociationElseFail("property1"); // when @Property at type level
         assertNotNull(mx_property);
         assertEquals("property1", mx_property.getId());
         assertEquals("foo", mx_property.getStaticFriendlyName().get());
         assertEquals("bar", mx_property.getStaticDescription().get());
 
-        val mx_property2 = holderSpec.getAssociationElseFail("property2"); // when @Property at method level
+        var mx_property2 = holderSpec.getAssociationElseFail("property2"); // when @Property at method level
         assertNotNull(mx_property2);
         assertEquals("property2", mx_property2.getId());
         assertEquals("foo", mx_property2.getStaticFriendlyName().get());
         assertEquals("bar", mx_property2.getStaticDescription().get());
 
-        val mx_collection = holderSpec.getAssociationElseFail("collection1"); // when @Collection at type level
+        var mx_collection = holderSpec.getAssociationElseFail("collection1"); // when @Collection at type level
         assertNotNull(mx_collection);
         assertEquals("collection1", mx_collection.getId());
         assertEquals("foo", mx_collection.getStaticFriendlyName().get());
         assertEquals("bar", mx_collection.getStaticDescription().get());
 
-        val mx_collection2 = holderSpec.getAssociationElseFail("collection2"); // when @Collection at method level
+        var mx_collection2 = holderSpec.getAssociationElseFail("collection2"); // when @Collection at method level
         assertNotNull(mx_collection2);
         assertEquals("collection2", mx_collection2.getId());
         assertEquals("foo", mx_collection2.getStaticFriendlyName().get());
@@ -233,9 +233,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void memberLevelAnnotations_shouldResolveUnambiguous_onMixins() {
 
-        val holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
+        var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
 
-        val mx_openRestApi = holderSpec.getDeclaredAction("openRestApi"); // built-in mixin support
+        var mx_openRestApi = holderSpec.getDeclaredAction("openRestApi"); // built-in mixin support
         assertNotNull(mx_openRestApi);
 
         assertThrows(Exception.class, ()->holderSpec.getAssociationElseFail("openRestApi")); // should not be picked up as a property
@@ -244,7 +244,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @Test
     void fullyAbstractObject_whenImplemented_shouldBeSupported() {
-        val tester = testerFactory.objectTester(ProperFullyImpl.class);
+        var tester = testerFactory.objectTester(ProperFullyImpl.class);
         tester.assertTitle("title");
         tester.assertIcon("icon");
         tester.assertCssClass("css");
@@ -257,17 +257,17 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             ProperGenericAbstract.Impl.class,
     })
     void genericBaseType_whenImplemented_shouldBeSupported(final Class<?> classUnderTest) {
-        val propTester = testerFactory.propertyTester(classUnderTest, "value");
+        var propTester = testerFactory.propertyTester(classUnderTest, "value");
         propTester.assertExists(true);
         propTester.assertValue("aValue");
 
-        val actTester = testerFactory.actionTester(classUnderTest, "sampleAction");
+        var actTester = testerFactory.actionTester(classUnderTest, "sampleAction");
         actTester.assertExists(true);
         actTester.assertInvocationResult("aValue", arg0->"aValue");
 
         // assert that we properly pickup the @Nullable annotation on arg-0
-        val argMeta = actTester.getActionMetaModelElseFail().getParameterByIndex(0);
-        val argMandatoryFacet = argMeta.lookupFacet(MandatoryFacet.class)
+        var argMeta = actTester.getActionMetaModelElseFail().getParameterByIndex(0);
+        var argMandatoryFacet = argMeta.lookupFacet(MandatoryFacet.class)
             .orElseThrow(()->_Exceptions.unrecoverable("missing MandatoryFacet on action parameter"));
         assertEquals(Semantics.OPTIONAL, argMandatoryFacet.getSemantics());
         actTester.assertInvocationResult(null, arg0->null);
@@ -277,20 +277,20 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @MethodSource("provideProperMemberInheritanceTypes")
     void titleAndIconName_shouldBeInheritable(final Class<?> type) throws Exception {
 
-        val spec = specificationLoader.specForTypeElseFail(type);
+        var spec = specificationLoader.specForTypeElseFail(type);
 
-        val titleFacet = spec.getFacet(TitleFacet.class);
+        var titleFacet = spec.getFacet(TitleFacet.class);
         assertNotNull(titleFacet);
 
-        val iconFacet = spec.getFacet(IconFacet.class);
+        var iconFacet = spec.getFacet(IconFacet.class);
         assertNotNull(iconFacet);
 
         if(!spec.isAbstract()) {
-            val instance = type.getDeclaredConstructor().newInstance();
+            var instance = type.getDeclaredConstructor().newInstance();
             assertEquals("inherited title", titleService.titleOf(instance));
             assertEquals("inherited icon", titleService.iconNameOf(instance));
 
-            val domainObject = ManagedObject.adaptSingular(spec, instance);
+            var domainObject = ManagedObject.adaptSingular(spec, instance);
             assertEquals("inherited title", domainObject.getTitle());
             assertEquals("inherited icon", iconFacet.iconName(domainObject));
         }
@@ -300,21 +300,21 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @MethodSource("provideProperMemberInheritanceTypes")
     void metamodelContributingMembers_shouldBeInheritable(final Class<?> type) {
 
-        val holderSpec = specificationLoader.specForTypeElseFail(type);
+        var holderSpec = specificationLoader.specForTypeElseFail(type);
 
-        val action = holderSpec.getActionElseFail("sampleAction");
+        var action = holderSpec.getActionElseFail("sampleAction");
         assertNotNull(action);
         assertEquals("sampleAction", action.getId());
         assertEquals("foo", action.getStaticFriendlyName().get());
         assertEquals("bar", action.getStaticDescription().get());
 
-        val property = holderSpec.getAssociationElseFail("sampleProperty");
+        var property = holderSpec.getAssociationElseFail("sampleProperty");
         assertNotNull(property);
         assertEquals("sampleProperty", property.getId());
         assertEquals("foo", property.getStaticFriendlyName().get());
         assertEquals("bar", property.getStaticDescription().get());
 
-        val collection = holderSpec.getAssociationElseFail("sampleCollection");
+        var collection = holderSpec.getAssociationElseFail("sampleCollection");
         assertNotNull(collection);
         assertEquals("sampleCollection", collection.getId());
         assertEquals("foo", collection.getStaticFriendlyName().get());
@@ -331,9 +331,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             return; // not implemented for interface that don't extend from others
         }
 
-        val holderSpec = specificationLoader.specForTypeElseFail(type);
+        var holderSpec = specificationLoader.specForTypeElseFail(type);
 
-        val super_action = holderSpec.getActionElseFail("sampleActionOverride");
+        var super_action = holderSpec.getActionElseFail("sampleActionOverride");
         assertNotNull(super_action);
         assertEquals("sampleActionOverride", super_action.getId());
         assertEquals("foo", super_action.getStaticFriendlyName().get());
@@ -354,9 +354,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             return; // not implemented for interface that don't extend from others
         }
 
-        val holderSpec = specificationLoader.specForTypeElseFail(type);
+        var holderSpec = specificationLoader.specForTypeElseFail(type);
 
-        val super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
+        var super_property = holderSpec.getAssociationElseFail("samplePropertyOverride");
         assertNotNull(super_property);
         assertEquals("samplePropertyOverride", super_property.getId());
         assertEquals("foo", super_property.getStaticFriendlyName().get());
@@ -373,10 +373,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // when using generic type (no wild-cards)
 
-        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
+        var vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
-        val concreteColl = vmSpec.getCollectionElseFail("concreteColl");
-        val concreteCollSpec = concreteColl.getElementType();
+        var concreteColl = vmSpec.getCollectionElseFail("concreteColl");
+        var concreteCollSpec = concreteColl.getElementType();
 
         assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
@@ -385,16 +385,16 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertHasProperty(concreteCollSpec, "abstractProp");
         assertHasProperty(concreteCollSpec, "interfaceProp");
 
-        val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
-        val interfaceCollSpec = interfaceColl.getElementType();
+        var interfaceColl = vmSpec.getCollectionElseFail("interfaceColl");
+        var interfaceCollSpec = interfaceColl.getElementType();
 
         assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
         assertHasAction(interfaceCollSpec, "interfaceAction");
         assertHasProperty(interfaceCollSpec, "interfaceProp");
 
-        val abstractColl = vmSpec.getCollectionElseFail("abstractColl");
-        val abstractCollSpec = abstractColl.getElementType();
+        var abstractColl = vmSpec.getCollectionElseFail("abstractColl");
+        var abstractCollSpec = abstractColl.getElementType();
 
         assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
@@ -407,15 +407,15 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // when using generic type (no wild-cards)
 
-        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
+        var vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
         // scenario 1
 
         //abstract Set<ElementTypeInterface> getSetOfInterfaceType();
         //override SortedSet<ElementTypeInterface> getSetOfInterfaceType();
 
-        val interfaceSet = vmSpec.getCollectionElseFail("setOfInterfaceType");
-        val interfaceSetSpec = interfaceSet.getElementType();
+        var interfaceSet = vmSpec.getCollectionElseFail("setOfInterfaceType");
+        var interfaceSetSpec = interfaceSet.getElementType();
 
         assertEquals(ElementTypeInterface.class, interfaceSetSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceSetSpec.getBeanSort());
@@ -425,11 +425,11 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         //abstract ImmutableCollection<ElementTypeInterface> getImmutableOfInterfaceType();
         //override Can<ElementTypeInterface> getImmutableOfInterfaceType();
 
-        val interfaceIterLookup = vmSpec.getAssociationElseFail("immutableOfInterfaceType");
+        var interfaceIterLookup = vmSpec.getAssociationElseFail("immutableOfInterfaceType");
         assertTrue(interfaceIterLookup.isOneToManyAssociation(), "required to be a coll");
 
-        val interfaceIter = vmSpec.getCollectionElseFail("immutableOfInterfaceType");
-        val interfaceIterSpec = interfaceIter.getElementType();
+        var interfaceIter = vmSpec.getCollectionElseFail("immutableOfInterfaceType");
+        var interfaceIterSpec = interfaceIter.getElementType();
 
         assertEquals(ElementTypeInterface.class, interfaceIterSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceIterSpec.getBeanSort());
@@ -441,10 +441,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // when using generic type (w/ wild-cards)
 
-        val vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
+        var vmSpec = specificationLoader.specForTypeElseFail(ProperElementTypeVm.class);
 
-        val concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
-        val concreteCollSpec = concreteColl.getElementType();
+        var concreteColl = vmSpec.getCollectionElseFail("concreteColl2");
+        var concreteCollSpec = concreteColl.getElementType();
 
         assertEquals(ElementTypeConcrete.class, concreteCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.VIEW_MODEL, concreteCollSpec.getBeanSort());
@@ -453,16 +453,16 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertHasProperty(concreteCollSpec, "abstractProp");
         assertHasProperty(concreteCollSpec, "interfaceProp");
 
-        val interfaceColl = vmSpec.getCollectionElseFail("interfaceColl2");
-        val interfaceCollSpec = interfaceColl.getElementType();
+        var interfaceColl = vmSpec.getCollectionElseFail("interfaceColl2");
+        var interfaceCollSpec = interfaceColl.getElementType();
 
         assertEquals(ElementTypeInterface.class, interfaceCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, interfaceCollSpec.getBeanSort());
         assertHasAction(interfaceCollSpec, "interfaceAction");
         assertHasProperty(interfaceCollSpec, "interfaceProp");
 
-        val abstractColl = vmSpec.getCollectionElseFail("abstractColl2");
-        val abstractCollSpec = abstractColl.getElementType();
+        var abstractColl = vmSpec.getCollectionElseFail("abstractColl2");
+        var abstractCollSpec = abstractColl.getElementType();
 
         assertEquals(ElementTypeAbstract.class, abstractCollSpec.getCorrespondingClass());
         assertEquals(BeanSort.ABSTRACT, abstractCollSpec.getBeanSort());
@@ -484,7 +484,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @Test
     void domainObjects_ifNatureNotSpecified_shouldConsiderBeanTypeClassifier() {
-        val vmSpec = specificationLoader.specForTypeElseFail(ProperViewModelInferredFromNotBeingAnEntity.class);
+        var vmSpec = specificationLoader.specForTypeElseFail(ProperViewModelInferredFromNotBeingAnEntity.class);
 
         assertEquals(BeanSort.VIEW_MODEL, vmSpec.getBeanSort());
         assertNotNull(vmSpec.getFacet(ViewModelFacet.class));
@@ -493,7 +493,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void interfaces_shouldSupport_inheritedMembers() {
 
-        val i2Spec = specificationLoader.specForTypeElseFail(ProperInterface2.class);
+        var i2Spec = specificationLoader.specForTypeElseFail(ProperInterface2.class);
 
         assertEquals(BeanSort.ABSTRACT, i2Spec.getBeanSort());
         assertHasProperty(i2Spec, "a");
@@ -508,10 +508,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void actionParamChoices_shouldBeImplicitlyBounded_whenEnum() {
 
-        val spec = specificationLoader.specForTypeElseFail(ProperActionParamterBoundingWhenUsingEnum.class);
+        var spec = specificationLoader.specForTypeElseFail(ProperActionParamterBoundingWhenUsingEnum.class);
 
-        val action = spec.getActionElseFail("sampleAction");
-        val param0 = action.getParameters().getFirstElseFail();
+        var action = spec.getActionElseFail("sampleAction");
+        var param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetFromElementType.class,
@@ -519,10 +519,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                     .map(Object::getClass)
                     .orElse(null));
 
-        val act = testerFactory
+        var act = testerFactory
                 .actionTester(ProperActionParamterBoundingWhenUsingEnum.class, "sampleAction");
 
-        val expectedParamChoices = Can.ofArray(
+        var expectedParamChoices = Can.ofArray(
                 ProperActionParamterBoundingWhenUsingEnum.SampleEnum.values());
 
         act.assertParameterChoices(true, ProperActionParamterBoundingWhenUsingEnum.SampleEnum.class,
@@ -532,10 +532,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void actionParamChoices_shouldBeAllowed_toBeDerivedFromChoicesFrom() {
 
-        val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenChoicesFrom.class);
+        var spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenChoicesFrom.class);
 
-        val action = spec.getActionElseFail("appendACharacterToCandidates");
-        val param0 = action.getParameters().getFirstElseFail();
+        var action = spec.getActionElseFail("appendACharacterToCandidates");
+        var param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetFromAction.class,
@@ -553,10 +553,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void actionParamChoices_shouldBeAvailable_whenMixedInActionHasParamSupportingMethodTypeOfString() {
 
-        val spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.class);
+        var spec = specificationLoader.specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfString.class);
 
-        val action = spec.getActionElseFail("remove");
-        val param0 = action.getParameters().getFirstElseFail();
+        var action = spec.getActionElseFail("remove");
+        var param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetViaMethod.class,
@@ -568,11 +568,11 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void actionParamChoices_shouldBeAvailable_whenMixedInActionHasParamSupportingMethodTypeOfReference() {
 
-        val spec = specificationLoader
+        var spec = specificationLoader
                 .specForTypeElseFail(ProperChoicesWhenActionHasParamSupportingMethodTypeOfReference.class);
 
-        val action = spec.getActionElseFail("remove");
-        val param0 = action.getParameters().getFirstElseFail();
+        var action = spec.getActionElseFail("remove");
+        var param0 = action.getParameters().getFirstElseFail();
 
         assertEquals(
                 ActionParameterChoicesFacetViaMethod.class,
@@ -589,13 +589,13 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void actionParamChoices_shouldBeAvailable_whenMixedInActionHasChoicesFromAnnotationAttribute() {
 
-        val actTester = testerFactory
+        var actTester = testerFactory
                 .actionTester(ProperMemberSupport.class, "action6");
         actTester.assertExists(true);
 
         // low-level MM inspection
         {
-            val action = actTester.getActionMetaModelElseFail();
+            var action = actTester.getActionMetaModelElseFail();
             action.getParameters()
             .forEach(param->{
 
@@ -603,7 +603,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                        "param %d is expected to belong to a mixed-in action",
                        param.getParameterIndex()));
 
-               val choicesFacet = param.getFacet(ActionParameterChoicesFacet.class);
+               var choicesFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
                assertNotNull(choicesFacet, ()->String.format(
                        "param %d is expected to have an ActionParameterChoicesFacet",
@@ -611,12 +611,12 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             });
         }
 
-        val mixee = actTester.getActionOwnerAs(ProperMemberSupport.class);
+        var mixee = actTester.getActionOwnerAs(ProperMemberSupport.class);
         mixee.setMyColl(List.of(
                 "Hallo",
                 "World"));
 
-        val expectedParamChoices = Can.of(
+        var expectedParamChoices = Can.of(
                 "Hallo",
                 "World");
 
@@ -632,9 +632,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @MethodSource("provideImperativelyNamed")
     void imperativelyNamedMembers(final String memberId, final String named, final String described) {
 
-        val objectSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        val member = objectSpec.getMemberElseFail(memberId);
-        val sampleObject = ManagedObject.adaptSingular(objectSpec, new ProperMemberSupport());
+        var objectSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
+        var member = objectSpec.getMemberElseFail(memberId);
+        var sampleObject = ManagedObject.adaptSingular(objectSpec, new ProperMemberSupport());
 
         assertEquals(named, member.getFriendlyName(()->sampleObject));
         assertEquals(described, member.getDescription(()->sampleObject).orElse(null));
@@ -643,9 +643,9 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void mixinsOnDomainServices_shouldBeAllowed() {
 
-        val objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithMixin.class);
+        var objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithMixin.class);
 
-        val mixinSpec = specificationLoader.specForTypeElseFail(ProperServiceWithMixin.Now.class);
+        var mixinSpec = specificationLoader.specForTypeElseFail(ProperServiceWithMixin.Now.class);
 
         assertTrue(mixinSpec.isMixin());
 
@@ -655,7 +655,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
                     //System.out.println("act: " + act);
-                    val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    var memberNamedFacet = act.getFacet(MemberNamedFacet.class);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
                 })
@@ -666,7 +666,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void aliasesOnDomainServices_shouldBeHonored() {
 
-        val objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithAlias.class);
+        var objectSpec = specificationLoader.specForTypeElseFail(ProperServiceWithAlias.class);
         assertTrue(objectSpec.isInjectable());
         assertTrue(objectSpec.getAction("now").isPresent());
 
@@ -686,7 +686,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Test
     void aliasesOnDomainObjects_shouldBeHonored() {
 
-        val objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithAlias.class);
+        var objectSpec = specificationLoader.specForTypeElseFail(ProperObjectWithAlias.class);
         assertTrue(objectSpec.isViewModel());
         assertTrue(objectSpec.getAction("now").isPresent());
 
@@ -708,12 +708,12 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // OBJECT
 
-        val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
+        var objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithEncapsulatedMembers.class);
 
-        val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        var introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
         assertNotNull(introspectionPolicyFacet);
 
-        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
+        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
         assertEquals(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());
@@ -723,7 +723,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // PRIVATE ACTION
 
-        val act = testerFactory
+        var act = testerFactory
                 .actionTester(ViewModelWithEncapsulatedMembers.class, "myAction");
         act.assertExists(true);
         act.assertIsExplicitlyAnnotated(true);
@@ -733,7 +733,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
-        val prop = testerFactory
+        var prop = testerFactory
                 .propertyTester(ViewModelWithEncapsulatedMembers.class, "propWithPrivateAccessors");
         prop.assertExists(true);
         prop.assertIsExplicitlyAnnotated(true);
@@ -744,7 +744,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // -- COLLECTION WITH PRIVATE GETTER AND SETTER
 
-        val coll = testerFactory
+        var coll = testerFactory
                 .collectionTester(ViewModelWithEncapsulatedMembers.class, "collWithPrivateAccessors");
         coll.assertExists(true);
         coll.assertIsExplicitlyAnnotated(true);
@@ -758,12 +758,12 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // OBJECT
 
-        val objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
+        var objectSpec = specificationLoader.specForTypeElseFail(ViewModelWithAnnotationOptionalUsingPrivateSupport.class);
 
-        val introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
+        var introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
         assertNotNull(introspectionPolicyFacet);
 
-        val introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
+        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
         assertEquals(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());
@@ -773,7 +773,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // PRIVATE ACTION
 
-        val act = testerFactory
+        var act = testerFactory
                 .actionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "myAction");
         act.assertExists(true);
         act.assertIsExplicitlyAnnotated(true);
@@ -784,7 +784,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // -- PROPERTY WITH PRIVATE GETTER AND SETTER
 
-        val prop = testerFactory
+        var prop = testerFactory
                 .propertyTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "propWithPrivateAccessors");
         prop.assertExists(true);
         prop.assertIsExplicitlyAnnotated(true);
@@ -796,7 +796,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // -- COLLECTION WITH PRIVATE GETTER AND SETTER
 
-        val coll = testerFactory
+        var coll = testerFactory
                 .collectionTester(ViewModelWithAnnotationOptionalUsingPrivateSupport.class, "collWithPrivateAccessors");
         coll.assertExists(true);
         coll.assertIsExplicitlyAnnotated(true);
@@ -815,11 +815,11 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             })
     void properMemberSupportDiscovery(final Class<?> classUnderTest) {
 
-        val act = testerFactory
+        var act = testerFactory
                 .actionTester(classUnderTest, "placeOrder");
-        val prop = testerFactory
+        var prop = testerFactory
                 .propertyTester(classUnderTest, "email");
-        val coll = testerFactory
+        var coll = testerFactory
                 .collectionTester(classUnderTest, "orders");
 
         act.assertExists(true);
@@ -876,7 +876,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 pendingArgsWhen->{},
                 pendingArgsThen->{
 
-                    val actualChoices =
+                    var actualChoices =
                             pendingArgsThen.getObservableParamChoices(0).getValue().map(ManagedObject::getPojo);
                     assertEquals(
                             Can.of("my choice"),
@@ -892,7 +892,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 },
                 pendingArgsThen->{
 
-                    val actualChoices =
+                    var actualChoices =
                             pendingArgsThen.getObservableParamChoices(1).getValue().map(ManagedObject::getPojo);
                     assertEquals(
                             Can.of("my search arg=hello"),
@@ -991,7 +991,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
                 .reduce((a, b)->b)
                 .orElseThrow();
 
-        val vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
+        var vmSpec = specificationLoader.specForTypeElseFail(ProperMixinContribution.class);
         assertHasAction(vmSpec, "myAction"); // regular action (just a sanity check)
         assertHasAction(vmSpec, actionName); // contributed action
         assertMissesProperty(vmSpec, actionName); // verify don't contributes as property
@@ -1001,7 +1001,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @Test
     void propMeta_shouldHonorSpecification() {
-        val propTester = testerFactory
+        var propTester = testerFactory
                 .propertyTester(ProperMemberSupport.class, "myPropWithMeta");
         propTester.assertExists(true);
         propTester.assertFriendlyName("Proper Name");
@@ -1010,7 +1010,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @Test
     void actionParamMeta_shouldHonorSpecification() {
-        val actTester = testerFactory
+        var actTester = testerFactory
                 .actionTester(ProperMemberSupport.class, "myActionWithMetaOnParam");
         actTester.assertExists(true);
         //TODO[CAUSEWAY-3326] perhaps tester needs fixing?
@@ -1033,7 +1033,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     }
 
     private void assertHasPublishedActionFacet(final FacetHolder facetHolder) {
-        val facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
+        var facet = facetHolder.getFacet(ExecutionPublishingFacet.class);
         assertNotNull(facet);
     }
 

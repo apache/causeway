@@ -54,7 +54,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
@@ -104,7 +103,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             return;
         }
         final String layoutIfAny = null;
-        val layoutKey = new LayoutKey(domainClass, layoutIfAny);
+        var layoutKey = new LayoutKey(domainClass, layoutIfAny);
         badContentByKey.remove(layoutKey);
         gridCache.remove(layoutKey);
     }
@@ -120,10 +119,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final String layoutIfAny,
             final @NonNull GridMarshallerService<T> marshaller) {
 
-        val supportedFormats = marshaller.supportedFormats();
+        var supportedFormats = marshaller.supportedFormats();
 
-        val layoutKey = new LayoutKey(domainClass, layoutIfAny);
-        val layoutResource = loadLayoutResource(layoutKey, supportedFormats).orElse(null);
+        var layoutKey = new LayoutKey(domainClass, layoutIfAny);
+        var layoutResource = loadLayoutResource(layoutKey, supportedFormats).orElse(null);
         if(layoutResource == null) {
             log.debug(
                     "Failed to locate or load layout resource for class {}, "
@@ -223,7 +222,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final @Nullable String layoutIfAny,
             final @NonNull String fileExtension) {
 
-        val typeSimpleName = domainClass.getSimpleName();
+        var typeSimpleName = domainClass.getSimpleName();
 
         return _Strings.isNotEmpty(layoutIfAny)
                 ? Stream.of(

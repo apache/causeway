@@ -28,8 +28,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 
-import lombok.val;
-
 @Named("regressiontests.BlobDemoMenu")
 @DomainService
 @DomainObjectLayout(
@@ -43,7 +41,7 @@ public class BlobDemoMenu {
     @Action
     @ActionLayout(cssClassFa="fa-cloud")
     public BlobDemo blobs(){
-        val demo = factoryService.viewModel(new BlobDemo());
+        var demo = factoryService.viewModel(new BlobDemo());
         demo.initDefaults();
         return demo;
     }

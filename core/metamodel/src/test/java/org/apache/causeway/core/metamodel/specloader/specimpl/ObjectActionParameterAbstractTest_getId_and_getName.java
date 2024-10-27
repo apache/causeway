@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.val;
-
 class ObjectActionParameterAbstractTest_getId_and_getName {
 
     @DomainObject(nature = Nature.VIEW_MODEL)
@@ -46,16 +44,16 @@ class ObjectActionParameterAbstractTest_getId_and_getName {
 
     @BeforeEach
     public void setUp() {
-        val mmc = MetaModelContext_forTesting.builder()
+        var mmc = MetaModelContext_forTesting.builder()
                 .memberExecutor(Mockito.mock(MemberExecutorService.class))
                 .build();
-        val spec = mmc.getSpecificationLoader().loadSpecification(Customer.class);
+        var spec = mmc.getSpecificationLoader().loadSpecification(Customer.class);
         action = spec.getAction("aMethod").orElseThrow();
     }
 
     @Test
     public void shouldProperlyDetectParamIdAndName() {
-        val param0 = action.getParameters().getElseFail(0);
+        var param0 = action.getParameters().getElseFail(0);
         assertThat(param0.getId(), is("someParameterName"));
         assertThat(param0.getCanonicalFriendlyName(), is("Some Parameter Name"));
     }

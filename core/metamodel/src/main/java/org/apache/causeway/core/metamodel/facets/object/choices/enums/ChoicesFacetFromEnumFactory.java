@@ -24,8 +24,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
-
 public class ChoicesFacetFromEnumFactory
 extends FacetFactoryAbstract {
 
@@ -36,8 +34,8 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
         if (!cls.isEnum()) {
             return;
         }

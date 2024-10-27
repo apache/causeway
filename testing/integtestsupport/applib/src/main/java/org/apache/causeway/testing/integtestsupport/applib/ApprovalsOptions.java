@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -64,8 +63,8 @@ public class ApprovalsOptions {
      */
     private String scrubLine(final String line) {
 
-        val magicPrefix = "<mml:param ";
-        val magicSuffix = ">";
+        var magicPrefix = "<mml:param ";
+        var magicSuffix = ">";
         int p = line.indexOf(magicPrefix);
         if(p<0) {
             return line;
@@ -73,11 +72,11 @@ public class ApprovalsOptions {
         p += magicPrefix.length(); // pointer at end of "...<mml:param "
         int q = line.lastIndexOf(magicSuffix); // pointer at start of "... >"
 
-        val chunks = _Lists.<String>newArrayList();
+        var chunks = _Lists.<String>newArrayList();
         chunks.add(line.substring(0, p-1)); // first chunk "...<mml:param"
 
         // ordered attributes
-        val attrs = _Maps.<String, _Strings.KeyValuePair>newTreeMap();
+        var attrs = _Maps.<String, _Strings.KeyValuePair>newTreeMap();
         _Strings.splitThenStream(line.substring(p, q), " ")
                 .map(attrLiteral->
                         _Strings.parseKeyValuePair(attrLiteral, '=')

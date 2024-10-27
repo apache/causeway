@@ -33,7 +33,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMember;
 
-import lombok.val;
+
 
 
 // NOT USING @Transactional since we are running server within same transaction otherwise
@@ -54,7 +54,7 @@ public class StaffMutating_IntegTest extends Abstract_IntegTest {
                         }
                 ).valueAsNonNullElseFail();
 
-        val response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
+        var response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
 
         // then payload
         Approvals.verify(response, jsonOptions());

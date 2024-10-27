@@ -57,7 +57,6 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 public abstract class SchemaValueMarshallerAbstract
 implements SchemaValueMarshaller, HasMetaModelContext {
@@ -106,9 +105,9 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ObjectAction objectAction,
             final @NonNull ManagedObject value) {
 
-        val feature = objectAction;
-        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
-        val context = newContext(elementTypeAsClass, feature);
+        var feature = objectAction;
+        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var context = newContext(elementTypeAsClass, feature);
         invocationDto.setReturned(
                 recordValue(context, new ValueWithTypeDto(), value));
         return invocationDto;
@@ -120,9 +119,9 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull ObjectAction objectAction,
             final @NonNull Can<ManagedObject> value) {
 
-        val feature = objectAction;
-        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
-        val context = newContext(elementTypeAsClass, feature);
+        var feature = objectAction;
+        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var context = newContext(elementTypeAsClass, feature);
         invocationDto.setReturned(
                 recordValues(context, new ValueWithTypeDto(), value));
         return invocationDto;
@@ -134,13 +133,13 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull OneToOneAssociation property,
             final @NonNull ManagedObject value) {
 
-        val feature = property;
-        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var feature = property;
+        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
 
         // guard against property not being a scalar
         _Assert.assertEquals(elementTypeAsClass, property.getElementType().getCorrespondingClass());
 
-        val context = newContext(elementTypeAsClass, feature);
+        var context = newContext(elementTypeAsClass, feature);
         propertyDto.setNewValue(
                 recordValue(context, new ValueWithTypeDto(), value));
         return propertyDto;
@@ -154,9 +153,9 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
         _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR);
 
-        val feature = actionParameter;
-        val elementTypeAsClass = feature.getElementType().getCorrespondingClass();
-        val context = newContext(elementTypeAsClass, feature);
+        var feature = actionParameter;
+        var elementTypeAsClass = feature.getElementType().getCorrespondingClass();
+        var context = newContext(elementTypeAsClass, feature);
 
         //          ValueType valueType = valueWrapper.getValueType();
         //
@@ -177,9 +176,9 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
         _Assert.assertTrue(actionParameter.getFeatureType() == FeatureType.ACTION_PARAMETER_PLURAL);
 
-        val feature = actionParameter;
-        val valueCls = feature.getElementType().getCorrespondingClass();
-        val context = newContext(valueCls, feature);
+        var feature = actionParameter;
+        var valueCls = feature.getElementType().getCorrespondingClass();
+        var context = newContext(valueCls, feature);
 
         recordValues(context, paramDto, values);
         return paramDto;
@@ -213,7 +212,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
     @Override
     public final ManagedObject recoverReferenceFrom(
             final @NonNull OidDto oidDto) {
-        val bookmark = Bookmark.forOidDto(oidDto);
+        var bookmark = Bookmark.forOidDto(oidDto);
         return getObjectManager()
                 .loadObject(ProtoObject.resolveElseFail(getSpecificationLoader(), bookmark));
     }
@@ -222,7 +221,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
     public final ManagedObject recoverPropertyFrom(
             final @NonNull PropertyDto propertyDto) {
         final Identifier propertyIdentifier = propertyIdentifier(propertyDto);
-        val valueWithTypeDto = propertyDto.getNewValue();
+        var valueWithTypeDto = propertyDto.getNewValue();
         return recoverValueOrReference(propertyIdentifier, valueWithTypeDto, Cardinality.ONE);
     }
 
@@ -231,7 +230,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final @NonNull Identifier paramIdentifier,
             final @NonNull ParamDto paramDto) {
 
-        val cardinalityConstraint = paramDto.getType().equals(ValueType.COLLECTION)
+        var cardinalityConstraint = paramDto.getType().equals(ValueType.COLLECTION)
                 ? Cardinality.MULTIPLE
                 : Cardinality.ONE;
         return recoverValueOrReference(paramIdentifier, paramDto, cardinalityConstraint);
@@ -301,14 +300,14 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             return Can.empty();
         }
 
-        val elementDtos = collectionDto.getValue();
-        val list = new ArrayList<ManagedObject>(elementDtos.size());
+        var elementDtos = collectionDto.getValue();
+        var list = new ArrayList<ManagedObject>(elementDtos.size());
 
-        for(val _elementDto : elementDtos) {
+        for(var _elementDto : elementDtos) {
 
-            val elementDto = CommonDtoUtils
+            var elementDto = CommonDtoUtils
                     .toValueWithTypeDto(valueTypeHelper.getSchemaValueType(), _elementDto);
-            val cardinalityConstraint = elementDto.getCollection()!=null
+            var cardinalityConstraint = elementDto.getCollection()!=null
                     ? Cardinality.MULTIPLE
                     : Cardinality.ONE;
             list.add(recoverValue(valueTypeHelper, elementDto, cardinalityConstraint));
@@ -323,10 +322,10 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             return Can.empty();
         }
 
-        val elementDtos = collectionDto.getValue();
-        val list = new ArrayList<ManagedObject>(elementDtos.size());
+        var elementDtos = collectionDto.getValue();
+        var list = new ArrayList<ManagedObject>(elementDtos.size());
 
-        for(val elementDto : elementDtos) {
+        for(var elementDto : elementDtos) {
             list.add(recoverReferenceFrom(elementDto.getReference()));
         }
         return Can.ofCollection(list);
@@ -337,7 +336,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final ValueWithTypeDto valueWithTypeDto,
             final Cardinality cardinalityConstraint) {
 
-        val feature = getSpecificationLoader().loadFeatureElseFail(featureIdentifier);
+        var feature = getSpecificationLoader().loadFeatureElseFail(featureIdentifier);
 
         if(valueWithTypeDto==null
                 || (valueWithTypeDto.isNull()!=null
@@ -347,9 +346,9 @@ implements SchemaValueMarshaller, HasMetaModelContext {
                     : ManagedObject.empty(feature.getElementType());
         }
 
-        val valueCls = feature.getElementType().getCorrespondingClass();
+        var valueCls = feature.getElementType().getCorrespondingClass();
 
-        val recoveredValueOrReference = feature.getElementType().isValue()
+        var recoveredValueOrReference = feature.getElementType().isValue()
                 ? recoverValue(newContext(valueCls, feature), valueWithTypeDto, cardinalityConstraint)
                 // assume reference otherwise
                 : recoverReference(feature, valueWithTypeDto, cardinalityConstraint);

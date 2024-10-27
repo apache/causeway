@@ -35,7 +35,6 @@ import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 
 import lombok.NonNull;
-import lombok.val;
 
 final class _Xray {
 
@@ -50,8 +49,8 @@ final class _Xray {
             return null;
         }
 
-        val participantLabel = owningAction.getFeatureIdentifier().getLogicalIdentityString("\n#");
-        val enteringLabel = argumentAdapters.isEmpty()
+        var participantLabel = owningAction.getFeatureIdentifier().getLogicalIdentityString("\n#");
+        var enteringLabel = argumentAdapters.isEmpty()
                 ? "action invocation (no args)"
                 : String.format("action invocation w/ %d args:\n  %s",
                         argumentAdapters.size(),
@@ -74,8 +73,8 @@ final class _Xray {
             return null;
         }
 
-        val participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
-        val enteringLabel = String.format("property edit -> '%s'",
+        var participantLabel = owningProperty.getFeatureIdentifier().getLogicalIdentityString("\n#");
+        var enteringLabel = String.format("property edit -> '%s'",
                 MmUnwrapUtils.single(newValueAdapter));
 
         return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
@@ -87,17 +86,17 @@ final class _Xray {
             final String participantLabel,
             final String enteringLabel) {
 
-        // val execution = interaction.getCurrentExecution(); // XXX why not populated?
+        // var execution = interaction.getCurrentExecution(); // XXX why not populated?
 
-        val handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
+        var handleIfAny = XrayUtil.createSequenceHandle(iaTracker, "executor", participantLabel);
         handleIfAny.ifPresent(handle->{
 
             handle.submit(sequenceData->{
 
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
 
-                val callee1 = handle.getCallees().getFirstElseFail();
-                val callee2 = handle.getCallees().getLastElseFail();
+                var callee1 = handle.getCallees().getFirstElseFail();
+                var callee2 = handle.getCallees().getLastElseFail();
 
                 sequenceData.enter(handle.getCaller(), callee1);
                 sequenceData.activate(callee1);
@@ -119,8 +118,8 @@ final class _Xray {
 
         handle.submit(sequenceData->{
 
-            val callee1 = handle.getCallees().getFirstElseFail();
-            val callee2 = handle.getCallees().getLastElseFail();
+            var callee1 = handle.getCallees().getFirstElseFail();
+            var callee2 = handle.getCallees().getLastElseFail();
 
             sequenceData.exit(callee2, callee1);
             sequenceData.deactivate(callee2);

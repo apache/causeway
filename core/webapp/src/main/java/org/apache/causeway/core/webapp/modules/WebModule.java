@@ -32,8 +32,6 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
-import lombok.val;
-
 /**
  * Introduced to render web.xml Filter/Listener/Servlet configurations obsolete.
  * <p>
@@ -95,7 +93,7 @@ public interface WebModule {
      * and defined by the WebModules' {@link Order} or {@link Priority} annotations
      */
     static Can<WebModule> discoverWebModules(ServiceRegistry serviceRegistry) {
-        val webModules = serviceRegistry.select(WebModule.class);
+        var webModules = serviceRegistry.select(WebModule.class);
         return webModules;
     }
 

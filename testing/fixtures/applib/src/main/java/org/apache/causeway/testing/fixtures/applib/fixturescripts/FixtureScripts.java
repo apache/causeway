@@ -61,7 +61,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstrac
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
-import lombok.val;
 
 
 /**
@@ -259,7 +258,7 @@ public class FixtureScripts {
         this.nonPersistedObjectsStrategy = specification.getNonPersistedObjectsStrategy();
         this.multipleExecutionStrategy = specification.getMultipleExecutionStrategy();
 
-        val packagePrefix = specification.getPackagePrefix();
+        var packagePrefix = specification.getPackagePrefix();
         this.fixtureScriptByFriendlyName =
                 packagePrefix != null
                     ? serviceRegistry.select(FixtureScript.class).stream()
@@ -342,11 +341,11 @@ public class FixtureScripts {
                 : null;
     }
     @MemberSupport public String default0RunFixtureScript() {
-        val defaultFixtureScript = defaultFromFixtureScriptsSpecification();
+        var defaultFixtureScript = defaultFromFixtureScriptsSpecification();
         if(defaultFixtureScript != null) {
             return defaultFixtureScript;
         }
-        val choices = choices0RunFixtureScript();
+        var choices = choices0RunFixtureScript();
         return choices.size() == 1
                 ? choices.iterator().next()
                 : null;
@@ -392,8 +391,8 @@ public class FixtureScripts {
             cssClassFa="fa fa-sync",
             sequence="20")
     public Object recreateObjectsAndReturnFirst() {
-        val recreateScriptClass =  getSpecification().getRecreateScriptClass();
-        val recreateScript = findFixtureScriptNameFor(recreateScriptClass);
+        var recreateScriptClass =  getSpecification().getRecreateScriptClass();
+        var recreateScript = findFixtureScriptNameFor(recreateScriptClass);
         if(recreateScript == null) {
             return null;
         }
@@ -442,7 +441,7 @@ public class FixtureScripts {
     @Programmatic
     public void run(final FixtureScript... fixtureScriptList) {
 
-    	val singleScript = toSingleScript(fixtureScriptList);
+    	var singleScript = toSingleScript(fixtureScriptList);
     	String parameters = null;
 
     	interactionService.runAnonymous(()->{
@@ -489,8 +488,8 @@ public class FixtureScripts {
                 runFixtureScript(new FixtureScript() {
                     @Override
                     protected void execute(final ExecutionContext executionContext) {
-                        for (val personaWithBuilderScript : personas) {
-                            val fixtureScript = personaWithBuilderScript.builder();
+                        for (var personaWithBuilderScript : personas) {
+                            var fixtureScript = personaWithBuilderScript.builder();
                             executionContext.executeChild(this, fixtureScript);
                         }
                     }
@@ -524,7 +523,7 @@ public class FixtureScripts {
      */
     @Programmatic
     public <T> T runPersona(final PersonaWithBuilderScript<T,? extends BuilderScriptAbstract<? extends T>> persona) {
-        val fixtureScript = persona.builder();
+        var fixtureScript = persona.builder();
         return runBuilder(fixtureScript);
     }
 
@@ -587,7 +586,7 @@ public class FixtureScripts {
 
     @Programmatic
     protected String findFixtureScriptNameFor(final Class<? extends FixtureScript> fixtureScriptClass) {
-        val fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
+        var fixtureScripts = getFixtureScriptByFriendlyName().entrySet();
         for (final Map.Entry<String,FixtureScript> fs : fixtureScripts) {
             if(fixtureScriptClass.isAssignableFrom(fs.getValue().getClass())) {
                 return fs.getKey();
@@ -608,7 +607,7 @@ public class FixtureScripts {
      */
     @Programmatic
     protected FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
-        val executionParameters = executionParametersService.newExecutionParameters(parameters);
+        var executionParameters = executionParametersService.newExecutionParameters(parameters);
         return FixtureScript.ExecutionContext.create(executionParameters, this);
     }
 

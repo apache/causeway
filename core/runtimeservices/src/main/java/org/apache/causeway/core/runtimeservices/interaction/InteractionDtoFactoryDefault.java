@@ -52,8 +52,6 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 
-import lombok.val;
-
 /**
  * Default implementation of {@link InteractionDtoFactory}.
  *
@@ -86,13 +84,13 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        val interaction = interactionProviderProvider.get().currentInteractionElseFail();
+        var interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
-        val owner = head.getOwner();
+        var owner = head.getOwner();
 
         // transient/detached entities have no bookmark, fail early
-        val targetBookmark = ManagedObjects.bookmarkElseFail(owner);
+        var targetBookmark = ManagedObjects.bookmarkElseFail(owner);
 
         final String currentUser = userService.currentUserNameElseNobody();
 
@@ -118,7 +116,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
             valueMarshaller.recordActionResultScalar(actionInvocationDto, objectAction, resultObject);
         } else {
             //plural
-            val values = ManagedObjects.unpack(resultObject);
+            var values = ManagedObjects.unpack(resultObject);
             valueMarshaller.recordActionResultNonScalar(actionInvocationDto, objectAction, values);
         }
         return actionInvocationDto;
@@ -137,7 +135,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         // transient/detached entities have no bookmark, fail early
-        val targetBookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
+        var targetBookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
 
         final String currentUser = userService.currentUserNameElseNobody();
 

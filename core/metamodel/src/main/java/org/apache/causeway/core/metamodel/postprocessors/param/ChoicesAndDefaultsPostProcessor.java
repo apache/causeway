@@ -48,8 +48,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.val;
-
 /**
  * Does post-processing of
  * {@link ActionParameterDefaultsFacet} and {@link ActionParameterChoicesFacet},
@@ -137,7 +135,7 @@ extends MetaModelPostProcessorAbstract {
         }
         if(!hasChoicesOrAutoComplete(prop)) {
 
-            val choicesFacetIfAny = prop.getElementType()
+            var choicesFacetIfAny = prop.getElementType()
                     .lookupNonFallbackFacet(ChoicesFacet.class);
 
             FacetUtil.addFacetIfPresent(
@@ -157,10 +155,10 @@ extends MetaModelPostProcessorAbstract {
         //
 
         // setting up filters ...
-        val elementType = coll.getElementType();
-        val whetherCollectionParamOfType =
+        var elementType = coll.getElementType();
+        var whetherCollectionParamOfType =
                 new ObjectActionParameter.Predicates.CollectionParameter(elementType);
-        val whetherScalarParamOfType =
+        var whetherScalarParamOfType =
                 new ObjectActionParameter.Predicates.ScalarParameter(elementType);
 
         // processing actions ...
@@ -168,10 +166,10 @@ extends MetaModelPostProcessorAbstract {
         .filter(ObjectAction.Predicates.choicesFromAndHavingCollectionParameterFor(coll))
         .forEach(action->{
 
-            val parameters = action.getParameters();
+            var parameters = action.getParameters();
 
-            val compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
-            val compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
+            var compatibleCollectionParams = parameters.filter(whetherCollectionParamOfType);
+            var compatibleScalarParams = parameters.filter(whetherScalarParamOfType);
 
             // for collection parameters, install a defaults facet (if there isn't one already)
             // this will cause the UI to render the collection with toggleboxes
@@ -232,7 +230,7 @@ extends MetaModelPostProcessorAbstract {
     }
 
     private void checkParamHasChoicesOrAutoCompleteWhenRequired(final ObjectActionParameter param) {
-        val elementType = param.getElementType();
+        var elementType = param.getElementType();
         if(elementType == null
                 || elementType.getBeanSort().isManagedBeanAny()
                 || elementType.getBeanSort().isMixin()

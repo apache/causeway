@@ -56,7 +56,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -449,7 +448,7 @@ public class XmlSnapshot implements Snapshot {
         final ObjectSpecification nos = object.getSpecification();
         // HACK: really want a ObjectSpecification.hasField method to
         // check first.
-        val field = nos.getAssociation(fieldName).orElse(null);
+        var field = nos.getAssociation(fieldName).orElse(null);
         if (field == null) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate field, skipping");
@@ -463,7 +462,7 @@ public class XmlSnapshot implements Snapshot {
         if (log.isDebugEnabled()) {
             log.debug("includeField(Pl, Vec, Str): locating corresponding XML element");
         }
-        val xmlFieldElements = elementsUnder(xmlElement, field.getId());
+        var xmlFieldElements = elementsUnder(xmlElement, field.getId());
         if (xmlFieldElements.size() != 1) {
             if (log.isInfoEnabled()) {
                 log.info("includeField(Pl, Vec, Str): could not locate {}",
@@ -703,14 +702,14 @@ public class XmlSnapshot implements Snapshot {
                 try {
                     value = valueAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
-                    val valueSpec = value.getSpecification();
+                    var valueSpec = value.getSpecification();
 
                     // XML
                     causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
 
                     // value as JSON
                     @SuppressWarnings("unchecked")
-                    val valueStr = fieldSpec.valueFacetElseFail()
+                    var valueStr = fieldSpec.valueFacetElseFail()
                             .enstring(Format.JSON, value.getPojo());
 
                     if (_Strings.isNotEmpty(valueStr)) {

@@ -26,41 +26,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyValuePlaceholder;
 
-import lombok.val;
-
 class PreAndPostValues_shouldAudit_Test {
 
     @Test
     public void just_created() {
-        val preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW)
+        var preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW)
                 .withPost("Foo");
 
         assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void just_deleted() {
-        val preAndPostValue = PreAndPostValue.pre("Foo")
+        var preAndPostValue = PreAndPostValue.pre("Foo")
                 .withPost(PropertyValuePlaceholder.DELETED);
 
         assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void changed() {
-        val preAndPostValue = PreAndPostValue.pre("Foo")
+        var preAndPostValue = PreAndPostValue.pre("Foo")
                 .withPost("Bar");
 
         assertTrue(preAndPostValue.shouldPublish());
     }
     @Test
     public void unchanged() {
-        val preAndPostValue = PreAndPostValue.pre("Foo")
+        var preAndPostValue = PreAndPostValue.pre("Foo")
                 .withPost("Foo");
 
         assertFalse(preAndPostValue.shouldPublish());
     }
     @Test
     public void created_and_then_deleted() {
-        val preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW)
+        var preAndPostValue = PreAndPostValue.pre(PropertyValuePlaceholder.NEW)
                 .withPost(PropertyValuePlaceholder.DELETED);
 
         assertFalse(preAndPostValue.shouldPublish());

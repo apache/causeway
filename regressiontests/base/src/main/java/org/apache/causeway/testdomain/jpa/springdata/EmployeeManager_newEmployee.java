@@ -24,7 +24,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Action
 @ActionLayout(associateWith = "allEmployees")
@@ -36,7 +35,7 @@ public class EmployeeManager_newEmployee {
     private final EmployeeManager holder;
 
     public EmployeeManager act(String firstName, String lastName) {
-        val newEmployee = new Employee(firstName, lastName);
+        var newEmployee = new Employee(firstName, lastName);
         employeeRepo.save(newEmployee);
         return holder;
     }

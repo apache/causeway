@@ -46,7 +46,6 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Default implementation of {@link JaxbService}.
@@ -65,7 +64,7 @@ public class JaxbServiceDefault extends Simple {
     @SneakyThrows
     @Override
     protected JAXBContext jaxbContextForList(@NonNull final DomainObjectList domainObjectList) {
-        val elementType = specLoader
+        var elementType = specLoader
                 .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
                 .map(ObjectSpecification::getCorrespondingClass)
                 .orElse(null);

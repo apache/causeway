@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -62,10 +61,10 @@ public class MmTitleUtils {
             final String singularName,
             final @Nullable TranslationService translationService) {
 
-        val nounTranslated = Optional.ofNullable(translationService)
+        var nounTranslated = Optional.ofNullable(translationService)
                 .map(ts->ts.translate(TranslationContext.empty(), singularName))
                 .orElse(singularName);
-        val entriesOfTranslated = Optional.ofNullable(translationService)
+        var entriesOfTranslated = Optional.ofNullable(translationService)
                 .map(ts->ts.translate(TranslationContext.empty(), "entries of"))
                 .orElse("entries of");
 

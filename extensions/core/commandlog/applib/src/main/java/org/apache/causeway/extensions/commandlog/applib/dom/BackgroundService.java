@@ -42,8 +42,6 @@ import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 
-import lombok.val;
-
 /**
  * Allows the execution of action invocations or property edits to be deferred so that they can be executed later in
  * another thread of execution.
@@ -123,28 +121,28 @@ public class BackgroundService {
 
         @Override
         public <T> Future<T> submit(final Callable<T> task) {
-            val callable = (AsyncCallable<T>) task;
-            val commandDto = callable.getCommandDto();
+            var callable = (AsyncCallable<T>) task;
+            var commandDto = callable.getCommandDto();
 
             // we'll mutate the commandDto in line with the callable, then
             // create the CommandLogEntry from that commandDto
-            val childInteractionId = UUID.randomUUID();
+            var childInteractionId = UUID.randomUUID();
             commandDto.setInteractionId(childInteractionId.toString());
 
             // copy details from requested interaction context into the commandDto
-            val interactionContext = callable.getInteractionContext();
-            val timestamp = interactionContext.getClock().nowAsJavaSqlTimestamp();
+            var interactionContext = callable.getInteractionContext();
+            var timestamp = interactionContext.getClock().nowAsJavaSqlTimestamp();
             commandDto.setTimestamp(gregorianCalendarAdapter.marshal(timestamp));
 
-            val username = interactionContext.getUser().getName();
+            var username = interactionContext.getUser().getName();
             commandDto.setUsername(username);
 
-            val periodDto = new PeriodDto();
+            var periodDto = new PeriodDto();
             periodDto.setStartedAt(null);
             periodDto.setCompletedAt(null);
             commandDto.setTimings(periodDto);
 
-            val childCommand = newCommand(commandDto);
+            var childCommand = newCommand(commandDto);
 
             commandLogEntryRepository.createEntryAndPersist(childCommand, callable.getParentInteractionId(), ExecuteIn.BACKGROUND);
 

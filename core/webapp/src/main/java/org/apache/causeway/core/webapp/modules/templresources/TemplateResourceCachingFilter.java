@@ -37,8 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FluentException;
 
-import lombok.val;
-
 public class TemplateResourceCachingFilter implements Filter {
 
     /**
@@ -112,7 +110,7 @@ public class TemplateResourceCachingFilter implements Filter {
 
     private static final DateFormat httpDateFormat() {
         // not thread-safe, so each thread should have its own instance
-        val dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        var dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         return dateFormat;
     }
@@ -180,7 +178,7 @@ public class TemplateResourceCachingFilter implements Filter {
         }
         if (this.cacheTime > 0L) {
             final long now = System.currentTimeMillis();
-            val dateFormat = httpDateFormat();
+            var dateFormat = httpDateFormat();
             httpResponse.addHeader(LAST_MODIFIED_HEADER, dateFormat.format(new Date(now)));
             httpResponse.addHeader(EXPIRES_HEADER, dateFormat.format(new Date(now + (this.cacheTime * MILLISECONDS_IN_SECOND))));
         }

@@ -42,7 +42,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
-import lombok.val;
 
 public class OneToManyAssociationMixedIn
 extends OneToManyAssociationDefault
@@ -94,11 +93,11 @@ implements MixedInMember {
     private static ObjectSpecification typeOfSpec(
             final ObjectActionDefault objectAction) {
 
-        val actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+        var actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault,
         // which ensures that there is always a TypeOfFacet for any mixedIn associations
         // created from mixin actions.
-        val type = actionTypeOfFacet != null
+        var type = actionTypeOfFacet != null
                 ? actionTypeOfFacet.value().elementType()
                 : (Class<?>)Object.class;
 
@@ -129,7 +128,7 @@ implements MixedInMember {
         FacetUtil.addFacet(disabledFacet());
 
         // adjust name if necessary
-        val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
+        var isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
                 .isPresent();
 
         if(!isExplicitlyNamed) {
@@ -142,7 +141,7 @@ implements MixedInMember {
 
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
-        val mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        var mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
         return InteractionHead.mixin(mixedInAdapter, mixinAdapter);
     }
 
@@ -187,7 +186,7 @@ implements MixedInMember {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().getMethod();
         return super.isExplicitlyAnnotated() // legacy programming style
                 || methodFacade.synthesize(Domain.Include.class).isPresent();
     }

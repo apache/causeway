@@ -36,8 +36,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.object.callbacks.CallbackFacetFactory;
 
-import lombok.val;
-
 abstract class CallbackFacetFactoryTestAbstract
 extends FacetFactoryTestAbstract {
 
@@ -67,7 +65,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processClassContext);
             //then
-            val callbackMethods = callbackMethod.getMethodNames().stream()
+            var callbackMethods = callbackMethod.getMethodNames().stream()
                     .map(methodName->findMethodExact(type, methodName))
                     .flatMap(Optional::stream)
                     .map(_MethodFacades::regular)
@@ -76,10 +74,10 @@ extends FacetFactoryTestAbstract {
 
             assertEquals(expectedCallbackCount, callbackMethods.size());
 
-            val facet = facetHolder.getFacet(facetType);
+            var facet = facetHolder.getFacet(facetType);
             assertNotNull(facet);
             assertTrue(facet instanceof ImperativeFacet);
-            val imperativeFacet = facet;
+            var imperativeFacet = facet;
 
             callbackMethods.forEach(method->{
                 assertMethodWasRemoved(method);

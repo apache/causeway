@@ -66,7 +66,6 @@ import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -127,13 +126,13 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
 
     @Programmatic
     public void init(final Execution<? extends MemberExecutionDto, ?> execution) {
-        val interactionId = execution.getInteraction().getInteractionId();
+        var interactionId = execution.getInteraction().getInteractionId();
         setInteractionId(interactionId);
 
-        val memberExecutionDto = execution.getDto();
+        var memberExecutionDto = execution.getDto();
         setSequence(memberExecutionDto.getSequence());
 
-        val interactionDto = new InteractionDto();
+        var interactionDto = new InteractionDto();
         interactionDto.setInteractionId(interactionId.toString());
         interactionDto.setExecution(memberExecutionDto);
         setInteractionDto(interactionDto);

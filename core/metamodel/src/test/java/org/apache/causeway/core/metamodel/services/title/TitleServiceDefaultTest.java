@@ -25,8 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 
-import lombok.val;
-
 class TitleServiceDefaultTest {
 
     private TitleServiceDefault titleService;
@@ -34,7 +32,7 @@ class TitleServiceDefaultTest {
     @BeforeEach
     void setUp() throws Exception {
 
-        val mmc = MetaModelContext_forTesting.buildDefault();
+        var mmc = MetaModelContext_forTesting.buildDefault();
 
         titleService = new TitleServiceDefault(null, mmc.getObjectManager());
     }
@@ -60,7 +58,7 @@ class TitleServiceDefaultTest {
 
         Object domainObject = FeaturedEnum.FIRST;
 
-        val title = titleService.titleOf(domainObject);
+        var title = titleService.titleOf(domainObject);
         assertEquals("first", title);
 
     }
@@ -77,7 +75,7 @@ class TitleServiceDefaultTest {
 
         Object domainObject = PlainEnum.FIRST;
 
-        val title = titleService.titleOf(domainObject);
+        var title = titleService.titleOf(domainObject);
         assertEquals("First", title);
 
     }

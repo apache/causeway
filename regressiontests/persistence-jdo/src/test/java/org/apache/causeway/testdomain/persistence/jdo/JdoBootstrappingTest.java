@@ -43,7 +43,7 @@ import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -81,22 +81,22 @@ class JdoBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // then - expected post condition: ONE inventory
 
-        val inventories = repositoryService.allInstances(JdoInventory.class);
+        var inventories = repositoryService.allInstances(JdoInventory.class);
         assertEquals(1, inventories.size());
 
-        val inventory = inventories.get(0);
+        var inventory = inventories.get(0);
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
 
-        val expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+        var expectedBookTitles = JdoTestFixtures.expectedBookTitles();
 
-        val multipleBooks = Can.ofCollection(inventory.getProducts())
+        var multipleBooks = Can.ofCollection(inventory.getProducts())
                 .filter(book->expectedBookTitles.contains(book.getName()));
 
         assertEquals(3, multipleBooks.size());
 
-        val firstProduct = inventory.getProducts().iterator().next();
+        var firstProduct = inventory.getProducts().iterator().next();
 
         testFixtures.assertHasPersistenceId(firstProduct);
     }

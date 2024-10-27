@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class PropertyAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
@@ -61,7 +60,7 @@ implements ImperativeFacet {
     public Object getProperty(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object referencedObject = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
 
         if(referencedObject == null) {

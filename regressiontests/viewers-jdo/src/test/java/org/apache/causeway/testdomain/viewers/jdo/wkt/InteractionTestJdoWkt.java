@@ -60,7 +60,7 @@ import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.Enti
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -104,8 +104,8 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
     @Test
     void load_viewmodel_with_referenced_entities_directly() {
 
-        val pageParameters = call(()->{
-            val inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
+        var pageParameters = call(()->{
+            var inventoryJaxbVm = testFixtures.createViewmodelWithCurrentBooks();
             return wktTester.createPageParameters(inventoryJaxbVm);
         });
 
@@ -128,8 +128,8 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Test
     void load_viewmodel_with_referenced_entities_via_action() {
-        val pageParameters = call(()->{
-            val testHomePage = new TestAppJdoWkt.TestHomePage();
+        var pageParameters = call(()->{
+            var testHomePage = new TestAppJdoWkt.TestHomePage();
             return wktTester.createPageParameters(testHomePage);
         });
 
@@ -170,7 +170,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
         // simulate change of a String property Name from 'Bookstore' -> 'Bookstore2'
         run(()->{
-            val form = wktTester.newFormTester(inventoryName.editInlinePromptForm());
+            var form = wktTester.newFormTester(inventoryName.editInlinePromptForm());
             form.setValue(inventoryName.scalarField(), "Bookstore2");
             form.submit();
         });
@@ -197,9 +197,9 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Test
     void loadBookPage_Dune_then_change_Isbn() {
-        val pageParameters = call(()->{
+        var pageParameters = call(()->{
 
-            val jdoBook = repositoryService.allInstances(JdoBook.class).stream()
+            var jdoBook = repositoryService.allInstances(JdoBook.class).stream()
             .filter(book->"Dune".equals(book.getName()))
             .findFirst()
             .orElseThrow();
@@ -236,11 +236,11 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
         // simulate change of a String property Name from 'ISBN-A' -> 'ISBN-XXXX'
         run(()->{
-            val form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
+            var form = wktTester.newFormTester(bookIsbn.editInlinePromptForm());
             form.setValue(bookIsbn.scalarField(), "ISBN-XXXX");
             form.submit();
 
-            val jpaBook = (JdoBook)bookAdapter.getPojo();
+            var jpaBook = (JdoBook)bookAdapter.getPojo();
             assertEquals("ISBN-A", jpaBook.getIsbn());
         });
 
@@ -258,7 +258,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             System.err.printf("bookAdapter state %s%n", bookAdapter.getEntityState());
 
             System.err.printf("--- verify %n");
-            val jpaBook = (JdoBook)bookAdapter.getPojo();
+            var jpaBook = (JdoBook)bookAdapter.getPojo();
             assertEquals("ISBN-XXXX", jpaBook.getIsbn());
         });
 
@@ -270,7 +270,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
         run(()->{
             // reset
-            val jdoBook = repositoryService.allInstances(JdoBook.class).stream()
+            var jdoBook = repositoryService.allInstances(JdoBook.class).stream()
                     .filter(book->"Dune".equals(book.getName()))
                     .findFirst()
                     .orElseThrow();
@@ -281,9 +281,9 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Test
     void loadBookPage_Dune_then_delete() {
-        val pageParameters = call(()->{
+        var pageParameters = call(()->{
 
-            val jdoBook = repositoryService.allInstances(JdoBook.class).stream()
+            var jdoBook = repositoryService.allInstances(JdoBook.class).stream()
             .filter(book->"Dune".equals(book.getName()))
             .findFirst()
             .orElseThrow();
@@ -297,7 +297,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
             wktTester.clickLink(BOOK_DELETE_ACTION_JDO);
 
             // then should render a standalone collection labeled 'Delete'
-            val label = (Label)wktTester
+            var label = (Label)wktTester
                     .getComponentFromLastRenderedPage(STANDALONE_COLLECTION_LABEL);
             assertEquals("Delete", label.getDefaultModelObject());
         });
@@ -305,7 +305,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Test
     void loadNonExistentBookPage_shouldRender_noSuchObjectError() {
-        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+        var pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
                         LogicalType.eager(JdoBook.class, "testdomain.jdo.Book"),
                         "99"));
@@ -327,7 +327,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Test
     void loadNonExistentBookBookmark_shouldRender_BookmarkNotFoundException() {
-        val pageParameters = PageParameterUtils.createPageParametersForBookmark(
+        var pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
                         LogicalType.eager(JpaBook.class, "simple.SimpleObject"),
                         "999"));

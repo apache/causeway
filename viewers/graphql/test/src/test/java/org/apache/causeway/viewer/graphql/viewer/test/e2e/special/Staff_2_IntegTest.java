@@ -38,7 +38,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-import lombok.val;
+
 
 
 //NOT USING @Transactional since we are running server within same transaction otherwise
@@ -53,40 +53,40 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
         String response = submit();
         Approvals.verify(response, jsonOptions());
 
-        val objectMapper = new ObjectMapper();
-        val jsonNodeRoot = objectMapper.readTree(response);
+        var objectMapper = new ObjectMapper();
+        var jsonNodeRoot = objectMapper.readTree(response);
 
-        val gridUrl = jsonNodeRoot
+        var gridUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/grid")
                 .asText();
 
         assertThat(gridUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/grid");
-        val gridHttpResponse = submitReturningString(gridUrl);
+        var gridHttpResponse = submitReturningString(gridUrl);
 
         assertThat(gridHttpResponse.statusCode()).isEqualTo(200);
-        val gridChars = gridHttpResponse.body();
+        var gridChars = gridHttpResponse.body();
         assertThat(gridChars).isNotEmpty();
 
 
-        val photoBytesUrl = jsonNodeRoot
+        var photoBytesUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/photo/get/bytes")
                 .asText();
 
         assertThat(photoBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/photo/blobBytes");
-        val photoBytesResponse = submitReturningBytes(photoBytesUrl);
+        var photoBytesResponse = submitReturningBytes(photoBytesUrl);
         assertThat(photoBytesResponse.statusCode()).isEqualTo(200);
-        val photoBytes = photoBytesResponse.body();
+        var photoBytes = photoBytesResponse.body();
         assertThat(photoBytes).isNotEmpty();
 
 
-        val iconBytesUrl = jsonNodeRoot
+        var iconBytesUrl = jsonNodeRoot
                 .at("/data/rich/university_dept_Staff/findStaffMemberByName/invoke/results/_meta/icon")
                 .asText();
 
         assertThat(iconBytesUrl).matches("///graphql/object/university.dept.StaffMember:(\\d+)/_meta/icon");
-        val iconBytesResponse = submitReturningBytes(iconBytesUrl);
+        var iconBytesResponse = submitReturningBytes(iconBytesUrl);
         assertThat(iconBytesResponse.statusCode()).isEqualTo(200);
-        val iconBytes = iconBytesResponse.body();
+        var iconBytes = iconBytesResponse.body();
         assertThat(iconBytes).isNotEmpty();
     }
 
@@ -99,8 +99,8 @@ public class Staff_2_IntegTest extends Abstract_IntegTest {
     }
 
     private <T> HttpResponse<T> submitReturningResponseHandledBy(String url, HttpResponse.BodyHandler<T> responseBodyHandler) throws IOException, InterruptedException {
-        val urlSuffix = url.substring(3); // strip off the '///' prefix
-        val uri = URI.create(String.format("http://0.0.0.0:%d/%s", port, urlSuffix));
+        var urlSuffix = url.substring(3); // strip off the '///' prefix
+        var uri = URI.create(String.format("http://0.0.0.0:%d/%s", port, urlSuffix));
 
         HttpRequest httpRequest = HttpRequest.newBuilder().
                 uri(uri).

@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class ActionParameterChoicesFacetFromAction
 extends ActionParameterChoicesFacetAbstract {
@@ -72,7 +71,7 @@ extends ActionParameterChoicesFacetAbstract {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val collectionAsObject = choicesFromCollection.get(head.getOwner(), interactionInitiatedBy);
+        var collectionAsObject = choicesFromCollection.get(head.getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
     }
 

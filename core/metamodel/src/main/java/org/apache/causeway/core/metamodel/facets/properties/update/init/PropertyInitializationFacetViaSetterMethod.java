@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class PropertyInitializationFacetViaSetterMethod
 extends PropertyInitializationFacetAbstract
@@ -52,7 +51,7 @@ implements ImperativeFacet {
 
     @Override
     public void initProperty(final ManagedObject owningAdapter, final ManagedObject initialAdapter) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         MmInvokeUtils.invokeWithSingleArg(method.method(), owningAdapter, initialAdapter);
     }
 

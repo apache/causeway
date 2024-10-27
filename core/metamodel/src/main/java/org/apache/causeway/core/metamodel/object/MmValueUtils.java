@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -64,14 +63,14 @@ public class MmValueUtils {
             return "";
         }
 
-        val spec = adapter.getSpecification();
-        val valueFacet = spec.valueFacet().orElse(null);
+        var spec = adapter.getSpecification();
+        var valueFacet = spec.valueFacet().orElse(null);
         if(valueFacet==null) {
             return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
         }
 
         @SuppressWarnings("unchecked")
-        val renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
+        var renderer = (Renderer<Object>) valueFacet.selectRendererForFeature(feature).orElse(null);
         if(renderer==null) {
             return String.format("missing Renderer %s", spec.getCorrespondingClass());
         }
@@ -106,7 +105,7 @@ public class MmValueUtils {
                 .filter(valueFacet->!ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject))
                 .flatMap(valueFacet->(Optional<TemporalSupport>)valueFacet.selectTemporalSupportForFeature(objectFeature))
                 .flatMap((final TemporalSupport temporalDecomposer)->{
-                    val pojo = MmUnwrapUtils.single(valueObject);
+                    var pojo = MmUnwrapUtils.single(valueObject);
                     return temporalDecomposer.decomposeTemporal(pojo);
                 });
     }

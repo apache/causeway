@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -148,9 +148,9 @@ class ResponseDigest<T> {
         }
 
         // see if we can extract the returned representation type (repr-type) from the header
-        val contentTypeHeaderString = response.getHeaderString("Content-Type");
+        var contentTypeHeaderString = response.getHeaderString("Content-Type");
 
-        val digester = ResponseDigester.forContentTypeHeaderString(contentTypeHeaderString).orElse(null);
+        var digester = ResponseDigester.forContentTypeHeaderString(contentTypeHeaderString).orElse(null);
         if(digester==null) {
             entities = Can.empty();
             failureCause = _Exceptions.unrecoverable(String.format(
@@ -164,7 +164,7 @@ class ResponseDigest<T> {
             if(genericType==null) {
                 // when response is a singleton
                 log.debug("readSingle({})", digester);
-                val singleton = digester.readSingle(entityType, response);
+                var singleton = digester.readSingle(entityType, response);
                 entities = singleton==null
                         ? Can.empty()
                         : Can.ofSingleton(singleton);

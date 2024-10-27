@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Responsible for processing elements of the metamodel, registered to the
@@ -278,8 +277,8 @@ public interface FacetFactory {
                 final @NonNull Class<A> annotationType,
                 final @NonNull Runnable onAmbiguity) {
 
-            val onMethod = synthesizeOnMethod(annotationType);
-            val onType = synthesizeOnType(annotationType);
+            var onMethod = synthesizeOnMethod(annotationType);
+            var onType = synthesizeOnType(annotationType);
 
             if(onMethod.isPresent()) {
                 if(onType.isPresent()) {
@@ -323,21 +322,21 @@ public interface FacetFactory {
 
         private Can<String> namingConventionForActionSupport(
                 final String prefix) {
-            val actionMethod = getMethod();
+            var actionMethod = getMethod();
             return ProgrammingModelConstants.ActionSupportNaming
                     .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<java.util.function.IntFunction<String>> namingConventionForParameterSupport(
                 final String prefix) {
-            val actionMethod = getMethod();
+            var actionMethod = getMethod();
             return ProgrammingModelConstants.ParameterSupportNaming
                     .namesFor(actionMethod, prefix, isMixinMain());
         }
 
         private Can<String> namingConventionForPropertyAndCollectionSupport(
                 final String prefix) {
-            val getterMethod = getMethod();
+            var getterMethod = getMethod();
             return ProgrammingModelConstants.MemberSupportNaming
                     .namesFor(getterMethod, prefix, isMixinMain());
         }
@@ -398,7 +397,7 @@ public interface FacetFactory {
         }
 
         public Stream<Annotation> streamParameterAnnotations() {
-            val parameterAnnotations = MethodParameter
+            var parameterAnnotations = MethodParameter
                     .forExecutable(
                             this.getMethod().asExecutable(),
                             this.getParamNum())

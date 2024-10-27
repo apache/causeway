@@ -49,7 +49,6 @@ import org.apache.causeway.core.security.authentication.standard.Registrar;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 @Service
 @Named(AuthenticationManager.LOGICAL_TYPE_NAME)
@@ -98,7 +97,7 @@ public class AuthenticationManager {
             return null;
         }
 
-        val compatibleAuthenticators = authenticators
+        var compatibleAuthenticators = authenticators
                 .filter(authenticator->authenticator.canAuthenticate(request.getClass()));
 
         if (compatibleAuthenticators.isEmpty()) {
@@ -110,15 +109,15 @@ public class AuthenticationManager {
         // we simply participate with the current transaction
         return interactionService.callAnonymous(()->{
 
-            for (val authenticator : compatibleAuthenticators) {
-                val interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
+            for (var authenticator : compatibleAuthenticators) {
+                var interactionContext = authenticator.authenticate(request, getUnusedRandomCode());
                 if (interactionContext != null) {
 
-                    val interactionContextWithTimeZone = interactionContext
+                    var interactionContextWithTimeZone = interactionContext
                             .withTimeZoneIfAny(userCurrentSessionTimeZoneHolder
                                     .flatMap(UserCurrentSessionTimeZoneHolder::getUserTimeZone));
 
-                    val userRefined = UserMementoRefiner.refine(
+                    var userRefined = UserMementoRefiner.refine(
                             interactionContext.getUser(),
                             userMementoRefiners);
 
@@ -126,7 +125,7 @@ public class AuthenticationManager {
                             userRefined.getAuthenticationCode(),
                             userRefined.getName());
 
-                    val interactionContextRefined = interactionContextWithTimeZone
+                    var interactionContextRefined = interactionContextWithTimeZone
                             .withUser(userRefined);
                     return interactionContextRefined;
                 }
@@ -138,7 +137,7 @@ public class AuthenticationManager {
 
     private String getUnusedRandomCode() {
 
-        val stopWatch = _Timing.now();
+        var stopWatch = _Timing.now();
 
         String code;
         do {
@@ -161,7 +160,7 @@ public class AuthenticationManager {
         if(interactionContext==null) {
             return false;
         }
-        val userMemento = interactionContext.getUser();
+        var userMemento = interactionContext.getUser();
         if(userMemento.getAuthenticationSource().isExternal()) {
             return true;
         }
@@ -174,7 +173,7 @@ public class AuthenticationManager {
 
 
     public void closeSession(final @Nullable UserMemento user) {
-        for (val authenticator : authenticators) {
+        for (var authenticator : authenticators) {
             authenticator.logout();
         }
         if(user==null) return;
@@ -184,7 +183,7 @@ public class AuthenticationManager {
     // -- AUTHENTICATORS
 
     public boolean register(final RegistrationDetails registrationDetails) {
-        for (val registrar : this.registrars) {
+        for (var registrar : this.registrars) {
             if (registrar.canRegister(registrationDetails.getClass())) {
                 return registrar.register(registrationDetails);
             }
@@ -194,7 +193,7 @@ public class AuthenticationManager {
 
 
     public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
-        for (val registrar : this.registrars) {
+        for (var registrar : this.registrars) {
             if (registrar.canRegister(registrationDetailsClass)) {
                 return true;
             }

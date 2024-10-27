@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -41,7 +40,7 @@ class _ValidateUtil{
 
         log.debug("Running MetaModelValidators ...");
 
-        val snapshot = specLoader.snapshotSpecifications();
+        var snapshot = specLoader.snapshotSpecifications();
 
         programmingModel.streamValidators()
         .filter(MetaModelValidator::isEnabled)
@@ -65,10 +64,10 @@ class _ValidateUtil{
 
     private void runValidator(final MetaModelValidator validator, final Can<ObjectSpecification> snapshot) {
 
-        val actionValidator = _Casts.castTo(MetaModelValidator.ActionValidator.class, validator);
-        val parameterValidator = _Casts.castTo(MetaModelValidator.ParameterValidator.class, validator);
-        val propertyValidator = _Casts.castTo(MetaModelValidator.PropertyValidator.class, validator);
-        val collectionValidator = _Casts.castTo(MetaModelValidator.CollectionValidator.class, validator);
+        var actionValidator = _Casts.castTo(MetaModelValidator.ActionValidator.class, validator);
+        var parameterValidator = _Casts.castTo(MetaModelValidator.ParameterValidator.class, validator);
+        var propertyValidator = _Casts.castTo(MetaModelValidator.PropertyValidator.class, validator);
+        var collectionValidator = _Casts.castTo(MetaModelValidator.CollectionValidator.class, validator);
 
         validator.validateEnter();
         snapshot

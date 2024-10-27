@@ -71,7 +71,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 @Configuration
@@ -241,7 +240,7 @@ public class Configuration_usingWicket {
             assertLabel(FAVORITE_BOOK_SCALAR_NAME, "Favorite Book");
             assertComponent(FAVORITE_BOOK_ENTITY_LINK, BookmarkablePageLink.class);
 
-            val expectedLinkTitle = bookFactory.apply(bookDto).title();
+            var expectedLinkTitle = bookFactory.apply(bookDto).title();
             assertLabel(FAVORITE_BOOK_ENTITY_LINK_TITLE, expectedLinkTitle);
         }
 
@@ -255,7 +254,7 @@ public class Configuration_usingWicket {
             getLastRenderedPage().visitChildren((component, visit) -> {
                 if(filter.test(component)) {
 
-                    val inversePath = new ArrayList<String>();
+                    var inversePath = new ArrayList<String>();
                     var comp = component;
 
                     while(comp!=null) {
@@ -263,7 +262,7 @@ public class Configuration_usingWicket {
                         comp = comp.getParent();
                     }
 
-                    val path = Can.ofCollection(inversePath)
+                    var path = Can.ofCollection(inversePath)
                     .reverse()
                     .stream()
                     .skip(1L)
@@ -281,8 +280,8 @@ public class Configuration_usingWicket {
          * @see #startPage(IPageProvider)
          */
         public EntityPage startEntityPage(final PageParameters pageParameters) {
-            val entityPage = EntityPage.forPageParameters(pageParameters);
-            val startedPage = startPage(entityPage);
+            var entityPage = EntityPage.forPageParameters(pageParameters);
+            var startedPage = startPage(entityPage);
             assertRenderedPage(EntityPage.class);
             return startedPage;
         }
@@ -307,7 +306,7 @@ public class Configuration_usingWicket {
     // -- HELPER -- APPLICATION (WICKET)
 
     private static WebApplication newWicketApplication(final MetaModelContext commonContext) {
-        val wicketApplication = new WicketApplication_forTesting(commonContext);
+        var wicketApplication = new WicketApplication_forTesting(commonContext);
         ThreadContext.setApplication(wicketApplication);
         return wicketApplication;
     }
@@ -433,7 +432,7 @@ public class Configuration_usingWicket {
 //                final Class<? extends IRequestablePage> pageClass,
 //                final PageParameters pageParameters) {
 //
-//            val url = Application.get().getRootRequestMapper().mapHandler(
+//            var url = Application.get().getRootRequestMapper().mapHandler(
 //                    new BookmarkablePageRequestHandler(new PageProvider(pageClass, pageParameters)));
 //
 //            final HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);

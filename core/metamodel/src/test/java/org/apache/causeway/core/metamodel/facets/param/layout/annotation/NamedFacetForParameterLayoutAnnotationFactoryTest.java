@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet;
 import org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 
-import lombok.val;
-
 class NamedFacetForParameterLayoutAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -54,7 +52,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.processParams(processParameterContext);
             //then
-            val facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
+            var facet = facetedMethodParameter.getFacet(ParamNamedFacet.class);
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(NamedFacetForParameterLayoutAnnotation.class)));
             assertEquals(NAME, facet.text());

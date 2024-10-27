@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -47,7 +46,7 @@ public class ForwardingServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 
-        val requestDispatcher = request.getRequestDispatcher(forwardTo);
+        var requestDispatcher = request.getRequestDispatcher(forwardTo);
 
         try {
             requestDispatcher.forward(request, response);

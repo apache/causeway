@@ -61,7 +61,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class DataTableInternal
 implements DataTableInteractive {
@@ -91,7 +90,7 @@ implements DataTableInteractive {
             throw _Exceptions.unexpectedCodeReach();
         }
 
-        val elements = ((PackedManagedObject)actionResult).unpack();
+        var elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
 
         return new DataTableInternal(managedAction, managedAction.getWhere(), elements);
@@ -130,8 +129,8 @@ implements DataTableInteractive {
             final Where where,
             final Can<ManagedObject> elements) {
 
-        val elementType = managedMember.getElementType();
-        //val mmc = elementType.getMetaModelContext();
+        var elementType = managedMember.getElementType();
+        //var mmc = elementType.getMetaModelContext();
 
         this.managedMember = managedMember;
         this.where = where;
@@ -353,7 +352,7 @@ implements DataTableInteractive {
 
     @Override
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
-        val featureId = managedMember.getIdentifier();
+        var featureId = managedMember.getIdentifier();
         if(!featureId.getType().isPropertyOrCollection()) {
             return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
                     + "(while searching for an associated action %s)]",
@@ -437,7 +436,7 @@ implements DataTableInteractive {
                 throw _Exceptions.illegalArgument("cannot recreate from memento for deleted object");
             }
 
-            val memberId = featureId.getMemberLogicalName();
+            var memberId = featureId.getMemberLogicalName();
 
             final ManagedMember managedMember = featureId.getType().isPropertyOrCollection()
                     ? CollectionInteraction.start(owner, memberId, where)

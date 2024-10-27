@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterCo
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
-import lombok.val;
-
 abstract class MixinIntendedAs {
 
     protected ProgrammingModel programmingModel;
@@ -61,11 +59,11 @@ abstract class MixinIntendedAs {
 
     protected FacetHolder runTypeContextOn(final Class<?> type) {
 
-        val facetHolder = FacetHolder.simple(
+        var facetHolder = FacetHolder.simple(
                 metaModelContext,
                 Identifier.classIdentifier(LogicalType.fqcn(type)));
 
-        val processClassContext = ProcessClassContext
+        var processClassContext = ProcessClassContext
                 .forTesting(type, MethodRemover.NOOP, facetHolder);
 
         programmingModel.streamFactories()
@@ -78,16 +76,16 @@ abstract class MixinIntendedAs {
 
     protected FacetedMethodParameter runScalarParameterContextOn(final ResolvedMethod actionMethod, final int paramIndex) {
 
-        val owningType = actionMethod.method().getDeclaringClass();
+        var owningType = actionMethod.method().getDeclaringClass();
 
-        val facetedMethodParameter = new FacetedMethodParameter(
+        var facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,
                 FeatureType.ACTION_PARAMETER_SINGULAR,
                 owningType,
                 _MethodFacades.regular(actionMethod),
                 0);
 
-        val processParameterContext =
+        var processParameterContext =
                 ProcessParameterContext.forTesting(
                         owningType,
                         IntrospectionPolicy.ANNOTATION_OPTIONAL,

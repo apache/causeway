@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
+
 
 public class RichProperty
         extends RichAssociation<OneToOneAssociation, ObjectInteractor>
@@ -103,7 +103,7 @@ public class RichProperty
     }
 
     private boolean isSetterAllowed() {
-        val apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         switch (apiVariant) {
             case QUERY_ONLY:
             case QUERY_AND_MUTATIONS:

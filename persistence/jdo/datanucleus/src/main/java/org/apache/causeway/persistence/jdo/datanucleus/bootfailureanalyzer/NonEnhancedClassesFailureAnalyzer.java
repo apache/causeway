@@ -25,13 +25,13 @@ import org.datanucleus.exceptions.NucleusUserException;
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
 import org.springframework.boot.diagnostics.FailureAnalysis;
 
-import lombok.val;
+
 
 public class NonEnhancedClassesFailureAnalyzer extends AbstractFailureAnalyzer<org.datanucleus.exceptions.NucleusUserException> {
 
     @Override
     protected FailureAnalysis analyze(Throwable rootFailure, NucleusUserException cause) {
-        val msg = nonEnhancedMessage(cause);
+        var msg = nonEnhancedMessage(cause);
         if (msg != null) {
             return new FailureAnalysis(descriptionOf(cause), action(cause), null);
         } else {
@@ -51,7 +51,7 @@ public class NonEnhancedClassesFailureAnalyzer extends AbstractFailureAnalyzer<o
             return null;
         }
 
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
         buf.append("Non-enhanced classes:\n\n");
         for (Throwable nestedException : cause.getNestedExceptions()) {
             String message = nestedException.getMessage();

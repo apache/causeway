@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 
-import lombok.val;
-
 public class RichActionParamsParamDatatype extends Element {
 
     private final ActionParamInteractor actionParamInteractor;
@@ -48,7 +46,7 @@ public class RichActionParamsParamDatatype extends Element {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val returnType = actionParamInteractor.getObjectActionParameter().getElementType();
+        var returnType = actionParamInteractor.getObjectActionParameter().getElementType();
         return TypeNames.objectTypeNameFor(returnType, actionParamInteractor.getSchemaType());
     }
 

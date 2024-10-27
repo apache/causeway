@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
-
 
 /**
  * Replaces {@link DisabledFacetOnPropertyFromImmutableFactory}
@@ -60,7 +58,7 @@ extends MetaModelPostProcessorAbstract {
             return;
         }
 
-        val typeSpec = property.getDeclaringType();
+        var typeSpec = property.getDeclaringType();
 
         typeSpec
         .lookupNonFallbackFacet(ImmutableFacet.class)
@@ -68,7 +66,7 @@ extends MetaModelPostProcessorAbstract {
 
             if(immutableFacet instanceof ImmutableFacetFromConfiguration) {
 
-                val isEditingEnabledOnType = typeSpec.lookupNonFallbackFacet(EditingEnabledFacet.class)
+                var isEditingEnabledOnType = typeSpec.lookupNonFallbackFacet(EditingEnabledFacet.class)
                         .isPresent();
 
                 if(isEditingEnabledOnType) {

@@ -35,7 +35,6 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.user.ImpersonateMenu;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Same as {@link org.apache.causeway.applib.services.user.ImpersonateMenu.impersonateWithRoles#act(String, List, String)},
@@ -89,7 +88,7 @@ public class Object_impersonateWithRoles {
 
     @MemberSupport public String default0Act() {
         if (holder instanceof HasUsername) {
-            val username = ((HasUsername) holder).getUsername();
+            var username = ((HasUsername) holder).getUsername();
             if (choices0Act().contains(username)) {
                 return username;
             }

@@ -31,7 +31,7 @@ import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
-import lombok.val;
+
 
 /**
  * @since 2.0 {@index}
@@ -48,7 +48,7 @@ public class CausewayModuleExtSecmanEncryptionSpring {
     @Bean @Qualifier("Secman") @Order(Ordered.LOWEST_PRECEDENCE)
     public PasswordEncoder passwordEncoder() {
         // set up the list of supported encoders and their prefixes
-        val encoders = Map.<String, PasswordEncoder>of(
+        var encoders = Map.<String, PasswordEncoder>of(
                 "bcrypt", new BCryptPasswordEncoder(),
                 "scrypt", new SCryptPasswordEncoder());
 

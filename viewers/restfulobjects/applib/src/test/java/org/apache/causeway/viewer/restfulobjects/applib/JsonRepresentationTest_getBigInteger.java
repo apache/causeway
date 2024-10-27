@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-import lombok.val;
+
 
 class JsonRepresentationTest_getBigInteger {
 
@@ -55,7 +55,7 @@ class JsonRepresentationTest_getBigInteger {
     @Test
     public void invalidFormat() throws IOException {
 
-        val expectMessage = "Value '12345678901234567890' larger than that allowed by format 'big-integer(19)'";
+        var expectMessage = "Value '12345678901234567890' larger than that allowed by format 'big-integer(19)'";
 
         assertThrows(IllegalArgumentException.class, ()->{
             assertThat(jsonRepresentation.getBigInteger("aBigInteger", "big-integer(19)"), is(new BigInteger("12345678901234567890")));
@@ -69,7 +69,7 @@ class JsonRepresentationTest_getBigInteger {
 
     @Test
     public void invalidFormattedFromPath() throws IOException {
-        val expectMessage = "Value '123' larger than that allowed by format 'big-integer(2)'";
+        var expectMessage = "Value '123' larger than that allowed by format 'big-integer(2)'";
 
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigInteger("yetAnotherSubMap.anInvalidFormattedBigInteger.value");
@@ -88,7 +88,7 @@ class JsonRepresentationTest_getBigInteger {
 
     @Test
     public void forNonParseableString() throws IOException {
-        val expectMessage = "'aString' is not a biginteger";
+        var expectMessage = "'aString' is not a biginteger";
 
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigInteger("aString");
@@ -97,7 +97,7 @@ class JsonRepresentationTest_getBigInteger {
 
     @Test
     public void forMap() throws IOException {
-        val expectMessage = "'aSubMap' is not a biginteger";
+        var expectMessage = "'aSubMap' is not a biginteger";
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigInteger("aSubMap");
         }, expectMessage);
@@ -105,7 +105,7 @@ class JsonRepresentationTest_getBigInteger {
 
     @Test
     public void forList() throws IOException {
-        val expectMessage = "'aSubList' is not a biginteger";
+        var expectMessage = "'aSubList' is not a biginteger";
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigInteger("aSubList");
         }, expectMessage);

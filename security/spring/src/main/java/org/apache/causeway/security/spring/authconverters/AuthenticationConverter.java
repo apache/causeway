@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.base._Casts;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Defines an SPI to attempt to convert a Spring {@link Authentication} into
@@ -92,7 +91,7 @@ public interface AuthenticationConverter {
 
         @Override
         public final UserMemento convert(final @NonNull Authentication authentication) {
-            val principal = authentication.getPrincipal();
+            var principal = authentication.getPrincipal();
             return _Casts.castTo(principalClass, principal)
                     .map(this::convertPrincipal)
                     .orElse(null);

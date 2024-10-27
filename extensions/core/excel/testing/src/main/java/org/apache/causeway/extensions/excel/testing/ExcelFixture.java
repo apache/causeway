@@ -50,7 +50,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 /**
  *
@@ -91,7 +90,7 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     private ExcelFixture(final List<Class<?>> classes) {
         for (Class<?> cls : classes) {
 
-            val beanSort = Optional.ofNullable(specLoader)
+            var beanSort = Optional.ofNullable(specLoader)
             .flatMap(sl->sl.specForType(cls))
             .filter(_NullSafe::isPresent)
             .map(ObjectSpecification::getBeanSort)

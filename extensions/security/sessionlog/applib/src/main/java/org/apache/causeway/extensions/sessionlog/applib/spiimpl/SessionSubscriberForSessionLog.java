@@ -42,7 +42,7 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  * Implementation of the {@link SessionSubscriber} SPI, which persists a log entry to the database (the
@@ -69,7 +69,7 @@ public class SessionSubscriberForSessionLog implements SessionSubscriber {
     public void log(final Type type, final String username, final Date date, final CausedBy causedBy, final UUID sessionGuid, final String httpSessionId) {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-                val sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
+                var sessionLogEntryIfAny = sessionLogEntryRepository.findBySessionGuid(sessionGuid);
                 if (type == Type.LOGIN) {
                     if (sessionLogEntryIfAny.isEmpty()) {
                         sessionLogEntryRepository.create(username, sessionGuid, httpSessionId, causedBy, Timestamp.from(date.toInstant()));

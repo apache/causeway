@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Provides a merged view of the <i>local</i> and the <i>shared</i> list of {@link Facet}s,
@@ -70,7 +69,7 @@ implements FacetHolder {
     @Override
     public void addFacet(@NonNull final Facet facet) {
         // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
-        val facetHolder = facet.isObjectTypeSpecific()
+        var facetHolder = facet.isObjectTypeSpecific()
                 ? local
                 : shared;
         facetHolder.addFacet(facet);
@@ -88,8 +87,8 @@ implements FacetHolder {
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        val localFacet = local.getFacet(facetType);
-        val sharedFacet = shared.getFacet(facetType);
+        var localFacet = local.getFacet(facetType);
+        var sharedFacet = shared.getFacet(facetType);
 
         if(localFacet==null) {
             return sharedFacet;
@@ -145,8 +144,8 @@ implements FacetHolder {
 
     @Override
     public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        val localFacetRanking = local.getFacetRanking(facetType);
-        val sharedFacetRanking = shared.getFacetRanking(facetType);
+        var localFacetRanking = local.getFacetRanking(facetType);
+        var sharedFacetRanking = shared.getFacetRanking(facetType);
 
         if(localFacetRanking.isEmpty()) {
             return sharedFacetRanking;
@@ -155,7 +154,7 @@ implements FacetHolder {
             return localFacetRanking;
         }
 
-        val combinedFacetRanking = new FacetRanking(facetType);
+        var combinedFacetRanking = new FacetRanking(facetType);
         // arbitrarily picking order: shared first and local last, such that if in conflict local wins
         combinedFacetRanking.addAll(sharedFacetRanking.get());
         combinedFacetRanking.addAll(localFacetRanking.get());
@@ -166,7 +165,7 @@ implements FacetHolder {
     // -- HELPER
 
     private Stream<Class<? extends Facet>> streamPopulatedFacetTypes() {
-        val facetTypes = new HashSet<Class<? extends Facet>>();
+        var facetTypes = new HashSet<Class<? extends Facet>>();
         Stream.concat(
                 shared.streamFacets(),
                 local.streamFacets())

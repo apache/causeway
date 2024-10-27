@@ -69,7 +69,6 @@ import org.apache.causeway.schema.common.v2.InteractionType;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -128,8 +127,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final InteractionContextPolicy interactionContextPolicy,
             final CommandDto dto) {
 
-        val interaction = interactionLayerTracker.currentInteractionElseFail();
-        val command = interaction.getCommand();
+        var interaction = interactionLayerTracker.currentInteractionElseFail();
+        var command = interaction.getCommand();
 
         // replace the command with that of the DTO to be executed, and also the command's identifier
         //
@@ -145,7 +144,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
 
         // start executing
-        val startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
+        var startedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         command.updater().setStartedAt(startedAt);
         command.updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         commandPublisherProvider.get().start(command);
@@ -182,30 +181,30 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                     argStrFor(dto));
         }
 
-        val memberDto = dto.getMember();
-        val logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();
+        var memberDto = dto.getMember();
+        var logicalMemberIdentifier = memberDto.getLogicalMemberIdentifier();
 
-        val oidsDto = CommandDtoUtils.targetsFor(dto);
-        val targetOidDtoList = oidsDto.getOid();
+        var oidsDto = CommandDtoUtils.targetsFor(dto);
+        var targetOidDtoList = oidsDto.getOid();
 
-        val interactionType = memberDto.getInteractionType();
+        var interactionType = memberDto.getInteractionType();
         if(interactionType == InteractionType.ACTION_INVOCATION) {
 
-            val actionDto = (ActionDto) memberDto;
+            var actionDto = (ActionDto) memberDto;
 
             // in practice there is only ever one target.
-            val targetOidDto = targetOidDtoList.get(0);
+            var targetOidDto = targetOidDtoList.get(0);
 
-            val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
-            val objectAction = findObjectAction(targetAdapter, logicalMemberIdentifier);
+            var targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
+            var objectAction = findObjectAction(targetAdapter, logicalMemberIdentifier);
 
             // we pass 'null' for the mixedInAdapter; if this action _is_ a mixin then
             // it will switch the targetAdapter to be the mixedInAdapter transparently
-            val argAdapters = argAdaptersFor(actionDto);
+            var argAdapters = argAdaptersFor(actionDto);
 
-            val interactionHead = objectAction.interactionHead(targetAdapter);
+            var interactionHead = objectAction.interactionHead(targetAdapter);
 
-            val resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+            var resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK);
 
             // flush any PersistenceCommands pending
             // (else might get transient objects for the return value)
@@ -225,20 +224,20 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             }
         } else {
 
-            val propertyDto = (PropertyDto) memberDto;
+            var propertyDto = (PropertyDto) memberDto;
 
             // in practice there is only ever one target.
-            val targetOidDto = targetOidDtoList.get(0);
+            var targetOidDto = targetOidDtoList.get(0);
 
-            val targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
+            var targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
                 throw _Exceptions.unrecoverable("cannot recreate ManagedObject from bookmark %s",
                         Bookmark.forOidDto(targetOidDto));
             }
 
-            val property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
-            val newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
+            var property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
+            var newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
             property.set(targetAdapter, newValueAdapter, InteractionInitiatedBy.FRAMEWORK);
 
             // there is no return value for property modifications.
@@ -254,14 +253,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private String argStrFor(final CommandDto dto) {
-        val memberDto = dto.getMember();
+        var memberDto = dto.getMember();
         if(memberDto instanceof ActionDto) {
-            val actionDto = (ActionDto) memberDto;
+            var actionDto = (ActionDto) memberDto;
             return paramNameArgValuesFor(actionDto);
         }
         if(memberDto instanceof PropertyDto) {
-            val propertyDto = (PropertyDto) memberDto;
-            val proposedValue = valueMarshaller.recoverPropertyFrom(propertyDto);
+            var propertyDto = (PropertyDto) memberDto;
+            var proposedValue = valueMarshaller.recoverPropertyFrom(propertyDto);
             return proposedValue.getTitle();
         }
         // shouldn't happen
@@ -273,14 +272,14 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final ManagedObject targetAdapter,
             final String logicalMemberIdentifier) throws RuntimeException {
 
-        val objectSpecification = targetAdapter.getSpecification();
+        var objectSpecification = targetAdapter.getSpecification();
 
         // we use the local identifier because the fullyQualified version includes the class name.
         // that is a problem for us if the property is inherited, because it will be the class name of the declaring
         // superclass, rather than the concrete class of the target that we are inspecting here.
-        val localActionId = localPartOf(logicalMemberIdentifier);
+        var localActionId = localPartOf(logicalMemberIdentifier);
 
-        val objectAction = findActionElseNull(objectSpecification, localActionId);
+        var objectAction = findActionElseNull(objectSpecification, localActionId);
         if(objectAction == null) {
             throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
         }
@@ -294,11 +293,11 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // we use the local identifier because the fullyQualified version includes the class name.
         // that is a problem for us if the property is inherited, because it will be the class name of the declaring
         // superclass, rather than the concrete class of the target that we are inspecting here.
-        val localPropertyId = localPartOf(logicalMemberIdentifier);
+        var localPropertyId = localPartOf(logicalMemberIdentifier);
 
-        val objectSpecification = targetAdapter.getSpecification();
+        var objectSpecification = targetAdapter.getSpecification();
 
-        val property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
+        var property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
         if(property == null) {
             throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
         }
@@ -306,7 +305,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private static String localPartOf(final String memberId) {
-        val matcher = ID_PARSER.matcher(memberId);
+        var matcher = ID_PARSER.matcher(memberId);
         return matcher.matches()
                 ? matcher.group("localId")
                 : "";
@@ -330,17 +329,17 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private String paramNameArgValuesFor(final ActionDto actionDto) {
-        val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
+        var actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
         return streamParamDtosFrom(actionDto)
                 .map(IndexedFunction.zeroBased((i, paramDto) -> {
-                    val argStr = argStr(actionIdentifier, i, paramDto);
+                    var argStr = argStr(actionIdentifier, i, paramDto);
                     return paramDto.getName() + "=" + argStr;
                 })).collect(Collectors.joining(","));
     }
 
     private String argStr(final Identifier actionIdentifier, final int i, final ParamDto paramDto) {
         String paramName = paramDto.getName();
-        val argValue = valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
+        var argValue = valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
         return UtilStr.namedArgStr(paramName, argValue);
     }
 
@@ -352,7 +351,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 //    }
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
-        val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
+        var actionIdentifier = valueMarshaller.actionIdentifier(actionDto);
         IndexedFunction<ParamDto, ManagedObject> paramDtoManagedObjectIndexedFunction = (i, paramDto) ->
                 valueMarshaller.recoverParameterFrom(actionIdentifier.withParameterIndex(i), paramDto);
         return streamParamDtosFrom(actionDto)

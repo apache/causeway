@@ -29,7 +29,6 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.NonNull;
-import lombok.val;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
@@ -46,7 +45,7 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     @Override
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
-        val beanSort = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
+        var beanSort = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
         .map(CausewayBeanMetaData::getBeanSort)
         .orElse(null);
 

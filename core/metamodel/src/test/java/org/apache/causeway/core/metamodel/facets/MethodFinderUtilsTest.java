@@ -27,8 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel._testing._TestDummies;
 
-import lombok.val;
-
 class MethodFinderUtilsTest {
 
     public static class NoPostConstruct {
@@ -41,14 +39,14 @@ class MethodFinderUtilsTest {
 
     @Test
     public void whenExists() throws Exception {
-        val methodIfAny = _ClassCache.getInstance().streamPostConstructMethods(_TestDummies.WithPostConstruct.class)
+        var methodIfAny = _ClassCache.getInstance().streamPostConstructMethods(_TestDummies.WithPostConstruct.class)
                 .findFirst();
         assertTrue(methodIfAny.isPresent());
     }
 
     @Test
     public void whenDoesNotExist() throws Exception {
-        val methodIfAny = _ClassCache.getInstance().streamPostConstructMethods(NoPostConstruct.class)
+        var methodIfAny = _ClassCache.getInstance().streamPostConstructMethods(NoPostConstruct.class)
                 .findFirst();
         assertFalse(methodIfAny.isPresent());
     }

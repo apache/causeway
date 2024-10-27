@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class PropertyDefaultFacetViaMethod
 extends PropertyDefaultFacetAbstract
@@ -54,7 +53,7 @@ implements ImperativeFacet {
 
     @Override
     public ManagedObject getDefault(final ManagedObject owningAdapter) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object result = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
         if (result == null) {
             return null;
@@ -63,7 +62,7 @@ implements ImperativeFacet {
     }
 
     private ManagedObject createAdapter(final Class<?> type, final Object object) {
-        val specification = getSpecificationLoader().loadSpecification(type);
+        var specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isSingular()) {
             return getObjectManager().adapt(object);
         } else {

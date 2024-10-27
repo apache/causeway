@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 
-import lombok.val;
-
 /**
  * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
  */
@@ -61,7 +59,7 @@ implements ObjectTypeFacetFactory {
             annotationTableAttribute = cls.getSimpleName();
         }
 
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacet(
                 new JpaTableFacetAnnotationImpl(

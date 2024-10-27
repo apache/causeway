@@ -53,7 +53,7 @@ import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExampleService.S
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -121,7 +121,7 @@ class ValueSemanticsTest {
         valueTypesKnown.remove(Markdown.class);
         valueTypesKnown.remove(AsciiDoc.class);
 
-        val valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
+        var valueTypesNotCovered = _Sets.minus(valueTypesKnown, valueTypesCovered);
 
         assertTrue(valueTypesNotCovered.isEmpty(), ()->
             String.format("value-types not covered by tests:\n\t%s",
@@ -137,12 +137,12 @@ class ValueSemanticsTest {
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
 
-        //val env = new TestEnvironment();
+        //var env = new TestEnvironment();
 
         assertNotNull(example);
 
-        val tester = createTester(example);
-        val actionInteractionProbe = serviceInjector.injectServicesInto(
+        var tester = createTester(example);
+        var actionInteractionProbe = serviceInjector.injectServicesInto(
                 new ActionInteractionProbeImpl<>(name, valueType, example, tester));
 
         tester.actionInteraction("sampleAction",
@@ -161,12 +161,12 @@ class ValueSemanticsTest {
             final Class<T> valueType,
             final ValueTypeExample<T> example) {
 
-        //val env = new TestEnvironment();
+        //var env = new TestEnvironment();
 
         assertNotNull(example);
 
-        val tester = createTester(example);
-        val propertyInteractionProbe = serviceInjector.injectServicesInto(
+        var tester = createTester(example);
+        var propertyInteractionProbe = serviceInjector.injectServicesInto(
                 new PropertyInteractionProbeImpl<>(name, valueType, example, tester));
 
         tester.propertyInteraction("value",

@@ -44,7 +44,6 @@ import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChan
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link EntityChangesPublisher}
@@ -74,15 +73,15 @@ public class EntityChangesPublisherDefault implements EntityChangesPublisher {
     @Override
     public void publishChangingEntities(HasEnlistedEntityChanges hasEnlistedEntityChanges) {
 
-        val payload = getPayload(hasEnlistedEntityChanges);
-        val handle = _Xray.enterEntityChangesPublishing(
+        var payload = getPayload(hasEnlistedEntityChanges);
+        var handle = _Xray.enterEntityChangesPublishing(
                 iaTracker,
                 payload,
                 enabledSubscribers,
                 ()->getCannotPublishReason(payload));
 
         payload.ifPresent(entityChanges->{
-            for (val subscriber : enabledSubscribers) {
+            for (var subscriber : enabledSubscribers) {
                 subscriber.onChanging(entityChanges);
             }
         });

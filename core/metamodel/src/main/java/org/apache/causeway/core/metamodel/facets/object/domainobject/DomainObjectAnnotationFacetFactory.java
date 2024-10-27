@@ -83,7 +83,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -105,7 +104,7 @@ implements
     @Override
     public void process(final ProcessObjectTypeContext processClassContext) {
 
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
+        var domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
         processAliased(domainObjectIfAny, processClassContext);
         processIntrospecion(domainObjectIfAny, processClassContext);
 
@@ -127,10 +126,10 @@ implements
             return;
         }
 
-        val domainObject = domainObjectIfAny.get();
+        var domainObject = domainObjectIfAny.get();
 
-        val facetHolder = processClassContext.getFacetHolder();
-        val cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
 
         if(cls.isInterface()) {
             ValidationFailure.raiseFormatted(facetHolder,
@@ -170,7 +169,7 @@ implements
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
+        var domainObjectIfAny = processClassContext.synthesizeOnType(DomainObject.class);
 
         processEntityChangePublishing(domainObjectIfAny, processClassContext);
         processAutoComplete(domainObjectIfAny, processClassContext);
@@ -185,11 +184,11 @@ implements
     void processEntityChangePublishing(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        //val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        //var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         // check for @DomainObject(entityChangePublishing=....)
-        val entityChangePublishing = domainObjectIfAny
+        var entityChangePublishing = domainObjectIfAny
                 .map(DomainObject::entityChangePublishing);
         addFacetIfPresent(
                 EntityChangePublishingFacetForDomainObjectAnnotation
@@ -201,8 +200,8 @@ implements
     void processAutoComplete(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(autoCompleteRepository=...)
         processClassContext.synthesizeOnType(DomainObject.class)
@@ -241,7 +240,7 @@ implements
             final Class<?> repositoryClass,
             final String methodName) {
 
-        val repoMethod = getClassCache()
+        var repoMethod = getClassCache()
             .streamPublicMethods(repositoryClass)
             .filter(method->method.name().equals(methodName))
             .filter(method->method.isSingleArg())
@@ -272,7 +271,7 @@ implements
     void processBounded(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
         FacetUtil.addFacetIfPresent(
                 ChoicesFacetForDomainObjectAnnotation
                 .create(domainObjectIfAny, facetHolder));
@@ -282,7 +281,7 @@ implements
     void processEditing(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacetIfPresent(
                 EditingEnabledFacetForDomainObjectAnnotation
@@ -298,8 +297,8 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacetIfPresent(
                 AliasedFacetForDomainObjectAnnotation
@@ -311,8 +310,8 @@ implements
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessObjectTypeContext processClassContext) {
 
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         FacetUtil.addFacetIfPresent(
                 IntrospectionPolicyFacetForDomainObjectAnnotation
@@ -324,8 +323,8 @@ implements
     void processNature(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         if(!domainObjectIfAny.isPresent()) {
             return;
@@ -350,7 +349,7 @@ implements
             return;
         }
 
-        val mixinDomainObjectIfAny =
+        var mixinDomainObjectIfAny =
                 domainObjectIfAny
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .filter(domainObject -> mixinTypeValidator.ensureMixinType(facetHolder, cls));
@@ -369,7 +368,7 @@ implements
         if(!domainObjectIfAny.isPresent()) {
             return;
         }
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         processLifecycleEventCreated(domainObjectIfAny, facetHolder);
         processLifecycleEventLoaded(domainObjectIfAny, facetHolder);
@@ -387,7 +386,7 @@ implements
         if(!domainObjectIfAny.isPresent()) {
             return;
         }
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         processDomainEventAction(domainObjectIfAny, facetHolder);
         processDomainEventProperty(domainObjectIfAny, facetHolder);
@@ -595,7 +594,7 @@ implements
 
                             // assuming, a check for proxies is only required when there is also a bean name collision
                             // where the plain class and the proxied class collide having the same logical-type-name
-                            val proxies = proxiesIn(collidingSpecs);
+                            var proxies = proxiesIn(collidingSpecs);
                             if(proxies.isNotEmpty()) {
 
                                 proxies.forEach(spec->{
@@ -629,7 +628,7 @@ implements
                 }
 
                 private boolean isProxy(final @NonNull ObjectSpecification spec) {
-                    val cls = spec.getCorrespondingClass();
+                    var cls = spec.getCorrespondingClass();
                     return !ClassUtils.getUserClass(cls).equals(cls);
                 }
 

@@ -37,7 +37,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;
-import lombok.val;
 
 @Component
 @Named("causeway.metamodel.value.TreePathValueSemantics")
@@ -99,7 +98,7 @@ implements
 
     @Override
     public TreePath parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return canonicalDestringify(input);
     }
 

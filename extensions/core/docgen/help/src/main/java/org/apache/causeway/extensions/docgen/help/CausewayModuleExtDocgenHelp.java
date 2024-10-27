@@ -31,8 +31,6 @@ import org.apache.causeway.extensions.docgen.help.topics.domainobjects.DomainEnt
 import org.apache.causeway.extensions.docgen.help.topics.domainobjects.DomainEntityDiagramPage2;
 import org.apache.causeway.extensions.docgen.help.topics.welcome.WelcomeHelpPage;
 
-import lombok.val;
-
 /**
  * Adds the {@link DocumentationMenu} with its auto-configured menu entries.
  * @since 2.0 {@index}
@@ -72,7 +70,7 @@ public class CausewayModuleExtDocgenHelp {
             final DomainEntityDiagramPage domainEntityDiagramPage,
             final DomainEntityDiagramPage2 domainEntityDiagramPage2) {
 
-        val root = HelpTopic.root("Topics");
+        var root = HelpTopic.root("Topics");
 
         root.addPage(welcomeHelpPage);
 

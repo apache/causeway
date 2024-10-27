@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 
-import lombok.val;
-
 class RegExAnnotationOnPropertyFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -49,7 +47,7 @@ extends FacetFactoryTestAbstract {
 
     private void processRegEx(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        var propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 

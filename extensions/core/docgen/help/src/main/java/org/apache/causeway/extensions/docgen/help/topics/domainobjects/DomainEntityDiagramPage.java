@@ -29,8 +29,6 @@ import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp;
 
-import lombok.val;
-
 @Component
 @Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".DomainEntityDiagramPage")
 public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
@@ -53,7 +51,7 @@ public class DomainEntityDiagramPage extends EntityDiagramPageAbstract {
     @Override
     protected boolean accept(final BeanSort beanSort, final LogicalType logicalType) {
         if(!beanSort.isEntity()) return false;
-        val ns = "" + logicalType.getNamespace();
+        var ns = "" + logicalType.getNamespace();
         return !ns.equals("causeway")
                 && !ns.startsWith("causeway.");
     }

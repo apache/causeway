@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -36,13 +35,13 @@ final class _InternalTitleUtil {
 
     String titleString(@NonNull final TitleRenderRequest titleRenderRequest) {
 
-        val managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.getObject();
 
         if(managedObject.getSpecialization().isUnspecified()) {
             return managedObject.getTitle();
         }
 
-        val objSpec = managedObject.getSpecification();
+        var objSpec = managedObject.getSpecification();
 
         return objSpec.isSingular()
             ? objectTitleString(titleRenderRequest)
@@ -59,13 +58,13 @@ final class _InternalTitleUtil {
     }
 
     private String objectTitleString(@NonNull final TitleRenderRequest titleRenderRequest) {
-        val managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.getObject();
 
         //TODO we have value-semantics now, don't skip it for strings
         if (managedObject.getPojo() instanceof String) {
             return (String) managedObject.getPojo();
         }
-        val spec = managedObject.getSpecification();
+        var spec = managedObject.getSpecification();
         return Optional.ofNullable(spec.getTitle(titleRenderRequest))
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
@@ -76,7 +75,7 @@ final class _InternalTitleUtil {
 
     private String formatAnyCardinalityAsTitle(@NonNull final ObjectSpecification objSpec, @NonNull final ManagedObject managedObject) {
         final int size = objSpec.getFacet(CollectionFacet.class).size(managedObject);
-        val elementSpec = objSpec.getElementSpecification().orElse(null);
+        var elementSpec = objSpec.getElementSpecification().orElse(null);
         objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.getCorrespondingClass()), null);
 
         final String noun = (elementSpec == null

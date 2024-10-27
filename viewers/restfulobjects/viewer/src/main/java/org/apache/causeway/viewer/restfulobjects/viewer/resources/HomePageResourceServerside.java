@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -58,10 +58,10 @@ implements HomePageResource {
         RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        val homePageReprRenderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        var homePageReprRenderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         homePageReprRenderer.includesSelf();
 
         return _EndpointLogging.response(log, "GET /",

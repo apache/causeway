@@ -25,7 +25,7 @@ import org.apache.wicket.model.Model;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 public class BooleanModel
 extends ChainingModel<Boolean> {
@@ -41,13 +41,13 @@ extends ChainingModel<Boolean> {
     protected BooleanModel(final ScalarModel scalarModel) {
         super(scalarModel);
 
-        val spec = scalarModel().getElementType();
+        var spec = scalarModel().getElementType();
         this.isPrimitive = spec.getFullIdentifier().equals("boolean");
     }
 
     @Override
     public Boolean getObject() {
-        val adapter = scalarModel().getObject();
+        var adapter = scalarModel().getObject();
         final Boolean value = adapter != null
                 ? (Boolean) adapter.getPojo()
                 : null;
@@ -59,7 +59,7 @@ extends ChainingModel<Boolean> {
 
     @Override
     public void setObject(final Boolean value) {
-        val adaptedValue = ManagedObject.value(
+        var adaptedValue = ManagedObject.value(
                 scalarModel().getElementType(),
                 (value==null
                     && isPrimitive)

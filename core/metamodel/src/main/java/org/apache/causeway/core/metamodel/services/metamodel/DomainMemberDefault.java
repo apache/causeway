@@ -56,8 +56,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.val;
-
 @XmlRootElement(name = "domain-member")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DomainMemberDefault implements DomainMember {
@@ -93,7 +91,7 @@ public class DomainMemberDefault implements DomainMember {
     @XmlElement @Override
     public String getClassType() {
 
-        val isService = Stream.concat(
+        var isService = Stream.concat(
                     Stream.of(spec),
                     spec.subclasses(Hierarchical.Depth.DIRECT).stream())
                 .anyMatch(ObjectSpecification::isInjectable);
@@ -184,7 +182,7 @@ public class DomainMemberDefault implements DomainMember {
             return "";
         case ACTION:
         default:
-            val parameters = this.action.getParameters();
+            var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
@@ -203,7 +201,7 @@ public class DomainMemberDefault implements DomainMember {
         } else if(memberType == MemberType.COLLECTION) {
             return "";
         } else {
-            val parameters = this.action.getParameters();
+            var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
@@ -220,7 +218,7 @@ public class DomainMemberDefault implements DomainMember {
         } else if(memberType == MemberType.COLLECTION) {
             return "";
         } else {
-            val parameters = this.action.getParameters();
+            var parameters = this.action.getParameters();
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);

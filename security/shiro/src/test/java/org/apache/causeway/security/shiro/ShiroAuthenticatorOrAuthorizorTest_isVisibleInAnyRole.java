@@ -38,8 +38,6 @@ import org.apache.causeway.core.security.authentication.AuthenticationRequestPas
 import org.apache.causeway.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.causeway.security.shiro.authorization.AuthorizorShiro;
 
-import lombok.val;
-
 class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     private AuthenticatorShiro authenticator;
@@ -50,7 +48,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
         // PRODUCTION
 
-        val configuration = CausewayConfiguration.builder().build();
+        var configuration = CausewayConfiguration.builder().build();
         configuration.getSecurity().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
 
         authenticator = new AuthenticatorShiro(configuration);
@@ -75,7 +73,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
-        val authentication = authenticator.authenticate(ar, "test code");
+        var authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
         Identifier changeAddressIdentifier = Identifier.actionIdentifier(
@@ -92,7 +90,7 @@ class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        val authentication = authenticator.authenticate(ar, "test code");
+        var authentication = authenticator.authenticate(ar, "test code");
 
         // when, then
         Identifier removeCustomerIdentifier = Identifier.actionIdentifier(

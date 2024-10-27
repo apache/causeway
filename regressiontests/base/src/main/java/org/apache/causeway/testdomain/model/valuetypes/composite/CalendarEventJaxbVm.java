@@ -44,7 +44,7 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSem
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
+
 
 @XmlRootElement(name = "root")
 @XmlType(
@@ -82,12 +82,12 @@ public class CalendarEventJaxbVm {
     // -- FACTORY
 
     public static CalendarEventJaxbVm setUpViewmodelWith3CalendarEvents(final FactoryService factoryService) {
-        val sampleVm = factoryService.viewModel(new CalendarEventJaxbVm());
+        var sampleVm = factoryService.viewModel(new CalendarEventJaxbVm());
 
-        val eventSamples = new CalendarEventSemantics().getExamples();
-        val a = eventSamples.getElseFail(0);
-        val b = eventSamples.getElseFail(1);
-        val c = eventSamples.getElseFail(2);
+        var eventSamples = new CalendarEventSemantics().getExamples();
+        var a = eventSamples.getElseFail(0);
+        var b = eventSamples.getElseFail(1);
+        var c = eventSamples.getElseFail(2);
 
         sampleVm.setNextEvent(a);
         sampleVm.setEvents(List.of(a, b, c));

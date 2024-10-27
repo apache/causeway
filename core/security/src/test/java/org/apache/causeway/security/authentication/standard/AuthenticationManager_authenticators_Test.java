@@ -35,8 +35,6 @@ import org.apache.causeway.core.security.authentication.manager.AuthenticationMa
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
 import org.apache.causeway.security.AuthenticatorsForTesting;
 
-import lombok.val;
-
 class AuthenticationManager_authenticators_Test {
 
     private AuthenticationManager authenticationManager;
@@ -60,7 +58,7 @@ class AuthenticationManager_authenticators_Test {
     @Test
     public void shouldBeAbleToUseAuthenticators() throws Exception {
 
-        val auth = AuthenticatorsForTesting.authenticatorAllwaysValid();
+        var auth = AuthenticatorsForTesting.authenticatorAllwaysValid();
 
         authenticationManager = new AuthenticationManager(
                 Collections.singletonList(auth),

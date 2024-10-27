@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.Tab
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class CollectionLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -41,8 +39,8 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val collectionLayoutIfAny = processMethodContext
+        var facetHolder = processMethodContext.getFacetHolder();
+        var collectionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         CollectionLayout.class,
                         () -> ValidationFailureUtils

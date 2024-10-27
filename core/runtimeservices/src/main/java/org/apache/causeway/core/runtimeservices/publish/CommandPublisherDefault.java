@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -73,7 +72,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     @Override
     public void ready(@NonNull final Command command) {
 
-        val handle = _Xray.enterCommandReadyPublishing(
+        var handle = _Xray.enterCommandReadyPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
@@ -90,7 +89,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     @Override
     public void start(@NonNull final Command command) {
 
-        val handle = _Xray.enterCommandStartedPublishing(
+        var handle = _Xray.enterCommandStartedPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,
@@ -107,7 +106,7 @@ public class CommandPublisherDefault implements CommandPublisher {
     @Override
     public void complete(final @NonNull Command command) {
 
-        val handle = _Xray.enterCommandCompletedPublishing(
+        var handle = _Xray.enterCommandCompletedPublishing(
                 interactionServiceProvider.get(),
                 command,
                 enabledSubscribers,

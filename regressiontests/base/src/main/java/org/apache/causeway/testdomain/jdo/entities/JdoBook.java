@@ -51,7 +51,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @PersistenceCapable
@@ -115,7 +114,7 @@ implements IBook {
     private MyService myService;
     @Inject
     public void setMyService(final MyService myService) {
-        val count = kvStore.incrementCounter(JdoBook.class, "injection-count");
+        var count = kvStore.incrementCounter(JdoBook.class, "injection-count");
         log.debug("INJECTION " + count);
         this.myService = myService;
     }

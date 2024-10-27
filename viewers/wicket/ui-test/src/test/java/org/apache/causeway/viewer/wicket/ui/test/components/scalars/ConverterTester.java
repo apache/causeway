@@ -55,7 +55,6 @@ import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemant
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.val;
 
 public class ConverterTester<T extends Serializable> {
 
@@ -97,8 +96,8 @@ public class ConverterTester<T extends Serializable> {
         mmc.getServiceInjector().injectServicesInto(valueSemantics);
 
         // pre-requisites for testing
-        val identifier = Identifier.classIdentifier(LogicalType.fqcn(valueType));
-        val reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
+        var identifier = Identifier.classIdentifier(LogicalType.fqcn(valueType));
+        var reg = mmc.getServiceRegistry().lookupServiceElseFail(ValueSemanticsResolver.class);
         assertNotNull(reg.selectValueSemantics(identifier, valueType));
         assertTrue(reg.selectValueSemantics(identifier, valueType).isNotEmpty());
         assertNotNull(mmc.getServiceRegistry().lookupServiceElseFail(InteractionService.class));
@@ -115,8 +114,8 @@ public class ConverterTester<T extends Serializable> {
             final Class<?> type,
             final String propertyId,
             final ViewOrEditMode representation) {
-        val customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
-        val prop = customerSpec.getPropertyElseFail("value");
+        var customerSpec = mmc.getSpecificationLoader().specForTypeElseFail(type);
+        var prop = customerSpec.getPropertyElseFail("value");
         var propType = (Class<T>) prop.getElementType().getCorrespondingClass();
         return new ConverterBasedOnValueSemantics<T>(propType, prop, representation);
     }
@@ -151,7 +150,7 @@ public class ConverterTester<T extends Serializable> {
             final @NonNull String expectedText) {
         runWithInteraction(()->{
 
-            val parsedValue = scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED);
+            var parsedValue = scenario.converter.convertToObject(valueAsText, LOCALE_NOT_USED);
 
             if(value instanceof BigDecimal) {
                 _Assert.assertNumberEquals(
@@ -182,7 +181,7 @@ public class ConverterTester<T extends Serializable> {
             final @NonNull String expectedMessage) {
 
         runWithInteraction(()->{
-            val ex = assertThrows(ConversionException.class, //TODO find a more generic exception type
+            var ex = assertThrows(ConversionException.class, //TODO find a more generic exception type
                     ()->scenario.converter.convertToObject(valueAsInvalidText, LOCALE_NOT_USED));
             assertEquals(expectedMessage, ex.getMessage());
         });

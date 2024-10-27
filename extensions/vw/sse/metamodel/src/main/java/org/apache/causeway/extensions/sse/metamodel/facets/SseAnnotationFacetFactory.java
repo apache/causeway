@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.extensions.sse.applib.annotations.ServerSentEvents;
 
-import lombok.val;
+
 
 public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
 
@@ -57,9 +57,9 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
 
 
     void processObserve(final ProcessMethodContext processMethodContext) {
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
-        val serverSentEventsIfAny = processMethodContext.synthesizeOnMethod(ServerSentEvents.class);
+        var serverSentEventsIfAny = processMethodContext.synthesizeOnMethod(ServerSentEvents.class);
 
         FacetUtil.addFacetIfPresent(
                 SseObserveFacetForServerSentEventsAnnotation

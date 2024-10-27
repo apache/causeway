@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.ActionSupport.SearchAlgorithm;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-import lombok.val;
-
 /**
  * Sets up {@link ActionParameterValidationFacetViaMethod}.
  */
@@ -48,16 +46,16 @@ extends MemberSupportFacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final MethodFinder methodFinder) {
 
-        val searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
+        var searchRequest = ActionSupport.ActionSupportingMethodSearchRequest.builder()
                 .processMethodContext(processMethodContext)
                 .methodFinder(methodFinder)
                 .searchAlgorithms(EnumSet.of(SearchAlgorithm.PAT, SearchAlgorithm.ALL_PARAM_TYPES))
                 .build();
 
         ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
-            val validateMethod = searchResult.getSupportingMethod();
+            var validateMethod = searchResult.getSupportingMethod();
             processMethodContext.removeMethod(validateMethod);
-            val patConstructor = searchResult.getPatConstructor();
+            var patConstructor = searchResult.getPatConstructor();
             addFacet(
                     new ActionValidationFacetViaMethod(
                             validateMethod, patConstructor, processMethodContext.getFacetHolder()));

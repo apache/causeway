@@ -46,7 +46,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 public final class ManagedAction extends ManagedMember {
 
@@ -167,10 +166,10 @@ public final class ManagedAction extends ManagedMember {
             return ManagedObject.empty(action.getReturnType());
         }
 
-        val resultPojo = actionResult.getPojo();
-        val objManager = mmc().getObjectManager();
+        var resultPojo = actionResult.getPojo();
+        var objManager = mmc().getObjectManager();
 
-        val resultAdapter = getRoutingServices().stream()
+        var resultAdapter = getRoutingServices().stream()
                 .filter(routingService->routingService.canRoute(resultPojo))
                 .map(routingService->routingService.route(resultPojo))
                 .filter(_NullSafe::isPresent)
@@ -223,8 +222,8 @@ public final class ManagedAction extends ManagedMember {
         private final Can<ObjectMemento> argsMementos;
 
         public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
-            val argTypes = actionMeta.getParameterTypes();
-            val objectManager = actionMeta.getMetaModelContext().getObjectManager();
+            var argTypes = actionMeta.getParameterTypes();
+            var objectManager = actionMeta.getMetaModelContext().getObjectManager();
             return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
                 objectManager.demementify(argMemento, argSpec));
         }

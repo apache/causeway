@@ -28,8 +28,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory;
 
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.doc;
 
-import lombok.val;
-
 class AdmonitionTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -52,7 +50,7 @@ class AdmonitionTest extends AbstractAsciiDocWriterTest {
     @Test
     void testAdmonition() throws IOException {
         
-        val note = AsciiDocFactory.note(doc);
+        var note = AsciiDocFactory.note(doc);
         AsciiDocFactory.block(note, "the note is multiple paragraphs, and can have all the usual styling");
         AsciiDocFactory.block(note, "also note");
         

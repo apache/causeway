@@ -42,8 +42,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 
-import lombok.val;
-
 /**
  * Convenience service that looks up (and caches) the {@link IdStringifier}
  * available for a given value class, and optionally the class of the owning entity.
@@ -93,9 +91,9 @@ public class IdStringifierLookupService {
     }
 
     public <T> Optional<IdStringifier<T>> lookupIdStringifier(final Class<T> candidateValueClass) {
-        val idStringifier = stringifierByClass.computeIfAbsent(
+        var idStringifier = stringifierByClass.computeIfAbsent(
                 ClassUtils.resolvePrimitiveIfNecessary(candidateValueClass), aClass -> {
-            for (val candidateStringifier : idStringifiers) {
+            for (var candidateStringifier : idStringifiers) {
                 if (candidateStringifier.getCorrespondingClass().isAssignableFrom(candidateValueClass)) {
                     return candidateStringifier;
                 }

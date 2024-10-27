@@ -37,7 +37,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateAtPath;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  *
@@ -69,8 +68,8 @@ public class ApplicationTenancy_delete {
 
 
     @MemberSupport public Collection<? extends ApplicationTenancy> act() {
-        for (val user : applicationUserRepository.findByTenancy(target)) {
-            val updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
+        for (var user : applicationUserRepository.findByTenancy(target)) {
+            var updateAtPathMixin = factoryService.mixin(ApplicationUser_updateAtPath.class, user);
             updateAtPathMixin.act(null);
         }
         repository.removeAndFlush(this);

@@ -45,7 +45,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".ImpersonateMenuAdvisorForSecman")
@@ -85,10 +84,10 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
         if(username == null) {
             return Collections.emptyList();
         }
-        val applicationUser =
+        var applicationUser =
                 applicationUserRepository.findByUsername(username)
                         .orElseThrow(RuntimeException::new);
-        val applicationRoles = applicationUser.getRoles();
+        var applicationRoles = applicationUser.getRoles();
         return applicationRoles
                 .stream().map(ApplicationRole::getName)
                 .collect(Collectors.toList());
@@ -99,7 +98,7 @@ public class ImpersonateMenuAdvisorForSecman implements ImpersonateMenuAdvisor {
         if(username == null) {
             return null;
         }
-        val applicationUser =
+        var applicationUser =
                 applicationUserRepository.findByUsername(username)
                         .orElseThrow(RuntimeException::new);
         return applicationUser.getAtPath();

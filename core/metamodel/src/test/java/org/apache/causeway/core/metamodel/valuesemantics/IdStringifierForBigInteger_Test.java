@@ -29,8 +29,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import lombok.val;
-
 class IdStringifierForBigInteger_Test {
 
     public static Stream<Arguments> roundtrip() {
@@ -51,7 +49,7 @@ class IdStringifierForBigInteger_Test {
     @MethodSource()
     void roundtrip(final BigInteger bigInteger) {
 
-        val stringifier = new BigIntegerValueSemantics();
+        var stringifier = new BigIntegerValueSemantics();
 
         String stringified = stringifier.enstring(bigInteger);
         BigInteger parse = stringifier.destring(stringified);

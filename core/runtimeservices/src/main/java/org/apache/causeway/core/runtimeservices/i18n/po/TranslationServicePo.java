@@ -43,7 +43,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Implementation of {@link TranslationService} that uses <code>.po</code>po file format.
@@ -130,7 +129,7 @@ public class TranslationServicePo implements TranslationService {
         if (!getMode().isWrite()) {
             return Optional.empty();
         }
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
         ((PoWriter)po).toPot(buf);
         return Optional.of(buf.toString());
     }

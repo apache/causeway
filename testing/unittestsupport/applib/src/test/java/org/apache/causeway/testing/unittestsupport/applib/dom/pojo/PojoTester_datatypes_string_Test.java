@@ -24,15 +24,13 @@ import org.opentest4j.AssertionFailedError;
 
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.StringHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_string_Test {
 
     @Test
     public void exercise_string() {
 
         // given
-        val holder = new StringHolder();
+        var holder = new StringHolder();
         Assertions.assertThat(holder).extracting(StringHolder::getSomeString).isNull();
 
         // when
@@ -48,7 +46,7 @@ public class PojoTester_datatypes_string_Test {
     public void exercise_string_broken() {
 
         // given
-        val holder = new StringHolder().butBroken();
+        var holder = new StringHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {

@@ -57,14 +57,12 @@ import org.apache.causeway.core.metamodel.facets.properties.validating.PropertyV
 import org.apache.causeway.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 
-import lombok.val;
-
 class PropertyMethodsFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     @Test
     void propertyAccessorFacetIsInstalledAndMethodRemoved() {
-        val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -78,7 +76,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-            val propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
+            var propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(propertyAccessorMethod, propertyAccessorFacetViaAccessor);
             assertMethodWasRemoved(propertyAccessorMethod);
         });
@@ -86,7 +84,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void setterFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
+        var facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -101,7 +99,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
-            val propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
+            var propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
             assertMethodEqualsFirstIn(propertySetterMethod, propertySetterFacet);
             assertMethodWasRemoved(propertySetterMethod);
         });
@@ -109,7 +107,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void initializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
-        val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
+        var facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -124,7 +122,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyInitializationFacet);
-            val propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
+            var propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
             assertMethodEqualsFirstIn(propertySetterMethod, propertySetterFacet);
             assertMethodWasRemoved(propertySetterMethod);
         });
@@ -132,7 +130,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void setterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
-        val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
+        var facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -148,7 +146,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void clearFacetViaSetterIfNoExplicitClearMethod() {
-        val facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
+        var facetFactory = new PropertySetterFacetFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -163,14 +161,14 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
-            val propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
+            var propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
             assertMethodEqualsFirstIn(propertySetterMethod, propertyClearFacet);
         });
     }
 
     @Test
     void choicesFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyChoicesFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new PropertyChoicesFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -186,7 +184,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
-            val propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
+            var propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyChoicesMethod, propertyChoicesFacet);
             assertMethodWasRemoved(propertyChoicesMethod);
         });
@@ -194,7 +192,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void autoCompleteFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyAutoCompleteFacetMethodFactory(getMetaModelContext());
+        var facetFactory = new PropertyAutoCompleteFacetMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -210,7 +208,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyAutoCompleteFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAutoCompleteFacetMethod);
-            val propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
+            var propertyAutoCompleteFacet = (PropertyAutoCompleteFacetMethod) facet;
             assertMethodEqualsFirstIn(propertyAutoCompleteMethod, propertyAutoCompleteFacet);
             assertMethodWasRemoved(propertyAutoCompleteMethod);
         });
@@ -218,7 +216,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void defaultFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyDefaultFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new PropertyDefaultFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -234,7 +232,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
-            val propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
+            var propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyDefaultMethod, propertyDefaultFacet);
             assertMethodWasRemoved(propertyDefaultMethod);
         });
@@ -242,7 +240,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void validateFacetFoundAndMethodRemoved() {
-        val facetFactory = new PropertyValidateFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new PropertyValidateFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -258,7 +256,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyValidateFacetViaMethod);
-            val propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
+            var propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyValidateMethod, propertyValidateFacet);
             assertMethodWasRemoved(propertyValidateMethod);
         });
@@ -266,7 +264,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void disableFacetFoundAndMethodRemoved() {
-        val facetFactory = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -282,7 +280,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof DisableForContextFacetViaMethod);
-            val disableForContextFacet = (DisableForContextFacetViaMethod) facet;
+            var disableForContextFacet = (DisableForContextFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyDisableMethod, disableForContextFacet);
             assertMethodWasRemoved(propertyDisableMethod);
         });
@@ -290,7 +288,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void disableFacetNoArgsFoundAndMethodRemoved() {
-        val facetFactory = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -306,7 +304,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof DisableForContextFacetViaMethod);
-            val disableForContextFacet = (DisableForContextFacetViaMethod) facet;
+            var disableForContextFacet = (DisableForContextFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyDisableMethod, disableForContextFacet);
             assertMethodWasRemoved(propertyDisableMethod);
         });
@@ -314,7 +312,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void hiddenFacetFoundAndMethodRemoved() {
-        val facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -330,7 +328,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
-            val hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            var hideForContextFacet = (HideForContextFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
             assertMethodWasRemoved(propertyHideMethod);
         });
@@ -338,7 +336,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void hiddenFacetWithNoArgFoundAndMethodRemoved() {
-        val facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -354,7 +352,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
-            val hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            var hideForContextFacet = (HideForContextFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
             assertMethodWasRemoved(propertyHideMethod);
         });
@@ -362,7 +360,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void propertyFoundOnSuperclass() {
-        val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -379,7 +377,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-            val accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
+            var accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(propertyAccessorMethod, accessorFacet);
         });
 
@@ -387,9 +385,9 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void propertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
-        val facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
-        val facetFactoryForHide = new HideForContextFacetViaMethodFactory(getMetaModelContext());
-        val facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactoryForHide = new HideForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -414,13 +412,13 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HideForContextFacetViaMethod);
-            val hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            var hideForContextFacet = (HideForContextFacetViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
 
             final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
             assertNotNull(facet2);
             assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
-            val disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
+            var disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
             assertMethodEqualsFirstIn(propertyDisableMethod, disableForContextFacet);
         });
     }

@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class DisabledObjectFacetViaMethod
 extends DisabledObjectFacetAbstract
@@ -69,7 +68,7 @@ implements HasImperativeAspect {
 
     @Override
     public Optional<VetoReason> disabledReason(final ManagedObject domainObject) {
-        val returnValue = imperativeAspect.eval(domainObject, null);
+        var returnValue = imperativeAspect.eval(domainObject, null);
 
         final String reasonString = returnValue instanceof String
                 ? (String) returnValue

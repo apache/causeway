@@ -51,7 +51,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.ExecutionParam
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScriptsSpecificationProviderAutoConfiguration;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 @DataJpaTest(
         properties = {
@@ -98,10 +98,10 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
         assertTrue(platformTransactionManager.isPresent());
         platformTransactionManager.ifPresent(ptm->{
 
-            val txDef = new DefaultTransactionDefinition();
+            var txDef = new DefaultTransactionDefinition();
             txDef.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_MANDATORY);
 
-            val txStatus = ptm.getTransaction(txDef);
+            var txStatus = ptm.getTransaction(txDef);
 
             assertNotNull(txStatus);
             assertFalse(txStatus.isCompleted());
@@ -111,7 +111,7 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
     @Test @Order(0)
     void jpaEntities_shouldBeRecognisedAsSuch() {
-        val productSpec = specLoader.loadSpecification(Employee.class);
+        var productSpec = specLoader.loadSpecification(Employee.class);
         assertTrue(productSpec.isEntity());
         assertNotNull(productSpec.entityFacetElseFail());
     }
@@ -130,10 +130,10 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
 
         // then - expected post condition: 4 employees
 
-        val employees = repository.allInstances(Employee.class);
+        var employees = repository.allInstances(Employee.class);
         assertEquals(4, employees.size());
 
-        val employee = employees.get(0);
+        var employee = employees.get(0);
         assertNotNull(employee);
         assertNotNull(employee.getLastName());
 

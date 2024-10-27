@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
-import lombok.val;
 
 public class OneToOneAssociationMixedIn
 extends OneToOneAssociationDefault
@@ -109,7 +108,7 @@ implements MixedInMember {
         FacetUtil.addFacet(disabledFacet());
 
         // adjust name if necessary
-        val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
+        var isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
                 .isPresent();
 
         if(!isExplicitlyNamed) {
@@ -142,7 +141,7 @@ implements MixedInMember {
             final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val head = headFor(mixedInAdapter);
+        var head = headFor(mixedInAdapter);
 
         return executionPublisher().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(head, Can.empty(), interactionInitiatedBy)
@@ -170,7 +169,7 @@ implements MixedInMember {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().getMethod();
         return super.isExplicitlyAnnotated() // legacy programming style
                 || methodFacade.synthesize(Domain.Include.class).isPresent();
     }

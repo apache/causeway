@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.services;
 
-import lombok.val;
-
 import javax.inject.Named;
 
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
@@ -47,7 +45,7 @@ public class BookmarkUiServiceWicket implements BookmarkUiService {
 
     @Override
     public void clear() {
-        val session = AuthenticatedWebSessionForCauseway.get();
+        var session = AuthenticatedWebSessionForCauseway.get();
         if (session == null) {
             return;
         }

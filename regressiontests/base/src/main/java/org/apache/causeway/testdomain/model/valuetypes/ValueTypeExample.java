@@ -84,7 +84,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.Singular;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 public abstract class ValueTypeExample<T> {
 
@@ -113,10 +113,10 @@ public abstract class ValueTypeExample<T> {
      */
     @Programmatic
     public final String getName() {
-        val nameSuffix = extractSuffix(getClass().getSimpleName())
+        var nameSuffix = extractSuffix(getClass().getSimpleName())
                 .map(s->"_" + s)
                 .orElse("");
-        val name = String.format("%s%s", getValueType().getName(), nameSuffix);
+        var name = String.format("%s%s", getValueType().getName(), nameSuffix);
         return name;
     }
 
@@ -316,7 +316,7 @@ public abstract class ValueTypeExample<T> {
         private Markup updateValue = markupSemantics.getExamples().getElseFail(1);
         @Override
         public Can<ParseExpectation<Markup>> getParseExpectations() {
-            val htmlSample = "<a href=\"https://www.apache.org\" rel=\"nofollow\">link</a>";
+            var htmlSample = "<a href=\"https://www.apache.org\" rel=\"nofollow\">link</a>";
             return Can.of(
                     ParseExpectation.<Markup>builder()
                         .value(new Markup(htmlSample))

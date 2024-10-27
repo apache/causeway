@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
-import lombok.val;
+
 
 public final class Responses {
 
@@ -108,7 +108,7 @@ public final class Responses {
     public static JsonMapper.PrettyPrinting inferPrettyPrinting(final ReprRenderer<?> renderer) {
 
         if(renderer instanceof ReprRendererAbstract) {
-            val systemEnvironment =  ((ReprRendererAbstract<?>) renderer).getResourceContext()
+            var systemEnvironment =  ((ReprRendererAbstract<?>) renderer).getResourceContext()
                     .getMetaModelContext().getSystemEnvironment();
             return systemEnvironment.isPrototyping()
                     ? JsonMapper.PrettyPrinting.ENABLE

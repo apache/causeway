@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetA
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 public class CssClassFacetFromProjectionFacet 
 extends CssClassFacetAbstract {
 
@@ -42,8 +40,8 @@ extends CssClassFacetAbstract {
 
     @Override
     public String cssClass(final ManagedObject targetAdapter) {
-        val projectedAdapter = projectionFacet.projected(targetAdapter);
-        val cssClassFacet = projectedAdapter.getSpecification().getFacet(CssClassFacet.class);
+        var projectedAdapter = projectionFacet.projected(targetAdapter);
+        var cssClassFacet = projectedAdapter.getSpecification().getFacet(CssClassFacet.class);
         return cssClassFacet != null 
                 ? cssClassFacet.cssClass(projectedAdapter) 
                 : null;

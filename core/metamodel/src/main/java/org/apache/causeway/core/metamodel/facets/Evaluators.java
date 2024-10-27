@@ -44,7 +44,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 //@Log4j2
 public final class Evaluators  {
@@ -72,14 +71,14 @@ public final class Evaluators  {
             final Class<?> cls,
             final Predicate<AnnotatedElement> memberFilter) {
 
-        val classCache = _ClassCache.getInstance();
+        var classCache = _ClassCache.getInstance();
 
         // if it so happens (eg. lombok) that both the field and its getter are annotated,
         // don't duplicate, let the method win
 
-        val methodEvaluators = streamMethodEvaluators(cls, memberFilter, classCache)
+        var methodEvaluators = streamMethodEvaluators(cls, memberFilter, classCache)
                 .collect(Can.toCan());
-        val fieldEvaluators = streamFieldEvaluators(cls, memberFilter, classCache)
+        var fieldEvaluators = streamFieldEvaluators(cls, memberFilter, classCache)
                 .filter(fieldEvaluator->!fieldEvaluator.isSameAsAnyOf(methodEvaluators));
 
         return Stream.concat(
@@ -135,7 +134,7 @@ public final class Evaluators  {
         @Override
         public Object value(final Object obj) {
 
-            val mh = getMethodHandleRef()
+            var mh = getMethodHandleRef()
             .mapFailure(this::failure)
             .ifFailureFail()
             .getValue()
@@ -198,7 +197,7 @@ public final class Evaluators  {
 
         @Override
         protected MethodHandle createMethodHandle() throws IllegalAccessException {
-            val getter = correspondingGetter.orElse(null);
+            var getter = correspondingGetter.orElse(null);
             return getter!=null
                     ? MethodHandles.lookup().unreflect(getter.method())
                     : MethodHandles.lookup().unreflectGetter(field);

@@ -36,7 +36,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Writes an (AsciiDoc) Document Model to a given {@link Writer}.
@@ -60,8 +59,8 @@ public class AsciiDocWriter {
         if(doc==null) {
             return "";
         }
-        val adocWriter = new AsciiDocWriter();
-        val stringWriter = new StringWriter();
+        var adocWriter = new AsciiDocWriter();
+        var stringWriter = new StringWriter();
         adocWriter.write(doc, stringWriter);
         return stringWriter.toString();
     }
@@ -77,7 +76,7 @@ public class AsciiDocWriter {
                 || file==null) {
             return;
         }
-        val adocWriter = new AsciiDocWriter();
+        var adocWriter = new AsciiDocWriter();
         try(FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8)) {
             adocWriter.write(doc, writer);
         } catch (FileNotFoundException e) {
@@ -96,8 +95,8 @@ public class AsciiDocWriter {
                 || out==null) {
             return;
         }
-        val adocWriter = new AsciiDocWriter();
-        try(val writer = new PrintWriter(out)) {
+        var adocWriter = new AsciiDocWriter();
+        try(var writer = new PrintWriter(out)) {
             adocWriter.write(doc, writer);
         }
     }
@@ -121,7 +120,7 @@ public class AsciiDocWriter {
             return;
         }
 
-        val nodeWriter = new NodeWriter(writer);
+        var nodeWriter = new NodeWriter(writer);
         StructuralNodeTraversor.depthFirst(nodeWriter, doc);
         writer.flush();
     }

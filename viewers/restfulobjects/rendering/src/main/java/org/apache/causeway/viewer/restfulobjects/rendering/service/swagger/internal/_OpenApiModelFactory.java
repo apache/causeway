@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.val;
+
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -150,23 +150,23 @@ class _OpenApiModelFactory {
         final LinkedHashMap<String, PathItem> sorted = new LinkedHashMap<>();
         entries.forEach(entry -> sorted.put(entry.getKey(), entry.getValue()));
 
-        val _paths = new Paths();
+        var _paths = new Paths();
         _paths.putAll(sorted);
         return _paths;
     }
 
     void appendServicePathsAndDefinitions() {
 
-        for (val spec : specificationLoader.snapshotSpecifications()) {
+        for (var spec : specificationLoader.snapshotSpecifications()) {
 
-            val serviceActions = _Util.actionsOf(spec, visibility, classExcluder);
+            var serviceActions = _Util.actionsOf(spec, visibility, classExcluder);
             if(serviceActions.isEmpty()) {
                 continue;
             }
 
             appendServicePath(spec);
 
-            for (val serviceAction : serviceActions) {
+            for (var serviceAction : serviceActions) {
                 appendServiceActionInvokePath(spec, serviceAction);
             }
         }
@@ -215,7 +215,7 @@ class _OpenApiModelFactory {
                     && objectCollections.isEmpty()) {
                 continue;
             }
-            val causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
+            var causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
             updateObjectModel(causewayModel, objectSpec, objectProperties, objectCollections);
 
             for (final OneToManyAssociation objectCollection : objectCollections) {
@@ -343,7 +343,7 @@ class _OpenApiModelFactory {
                     .addTagsItem(tag)
                     .description(RoSpec.DOMAIN_SERVICE_GET.fqSection()));
 
-        val model =
+        var model =
                 newModel(RoSpec.DOMAIN_SERVICE_GET_SUCCESS.fqSection("representation of " + serviceId))
                 .addProperty("title", stringProperty())
                 .addProperty("serviceId", stringProperty()._default(serviceId))
@@ -356,8 +356,8 @@ class _OpenApiModelFactory {
 
         final String logicalTypeName = objectSpec.getLogicalTypeName();
 
-        val causewayModel = new ObjectSchema();
-        val causewayModelDefinition = logicalTypeName + "Repr";
+        var causewayModel = new ObjectSchema();
+        var causewayModelDefinition = logicalTypeName + "Repr";
         addDefinition(causewayModelDefinition, causewayModel);
 
         final PathItem path = new PathItem();
@@ -430,7 +430,7 @@ class _OpenApiModelFactory {
         final String serviceId = serviceSpec.getLogicalTypeName();
         final String actionId = serviceAction.getId();
 
-        val parameters = serviceAction.getParameters();
+        var parameters = serviceAction.getParameters();
         final PathItem path = new PathItem();
         oa3.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
@@ -452,7 +452,7 @@ class _OpenApiModelFactory {
 
             for (final ObjectActionParameter parameter : parameters) {
 
-                val describedAs = parameter.getStaticDescription().orElse(null);
+                var describedAs = parameter.getStaticDescription().orElse(null);
 
                 invokeOperation
                 .addParametersItem(_OpenApi.queryParameter()
@@ -474,12 +474,12 @@ class _OpenApiModelFactory {
                 path.post(invokeOperation);
             }
 
-            val bodyParam = new ObjectSchema();
+            var bodyParam = new ObjectSchema();
             for (final ObjectActionParameter parameter : parameters) {
 
                 // TODO: need to switch on parameter's type and create appropriate impl of valueProperty
                 // if(parameter.getSpecification().isValue()) ...
-                val valueProperty = stringProperty();
+                var valueProperty = stringProperty();
 
                 bodyParam
                 .addProperty(parameter.getId(),
@@ -527,7 +527,7 @@ class _OpenApiModelFactory {
         final String logicalTypeName = objectSpec.getLogicalTypeName();
         final String actionId = objectAction.getId();
 
-        val parameters = objectAction.getParameters();
+        var parameters = objectAction.getParameters();
         final PathItem path = new PathItem();
         oa3.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", logicalTypeName, actionId), path);
 
@@ -551,7 +551,7 @@ class _OpenApiModelFactory {
 
             for (final ObjectActionParameter parameter : parameters) {
 
-                val describedAs = parameter.getStaticDescription().orElse(null);
+                var describedAs = parameter.getStaticDescription().orElse(null);
 
                 invokeOperation
                 .addParametersItem(
@@ -575,11 +575,11 @@ class _OpenApiModelFactory {
                 path.post(invokeOperation);
             }
 
-            val bodyParam = new ObjectSchema();
+            var bodyParam = new ObjectSchema();
             for (final ObjectActionParameter parameter : parameters) {
 
                 final ObjectSpecification specification = parameter.getElementType();
-                val valueProperty = specification.isValue()
+                var valueProperty = specification.isValue()
                         ? schemaFor(specification)
                         : refToLinkModel() ;
                 bodyParam
@@ -624,7 +624,7 @@ class _OpenApiModelFactory {
     }
 
     private Schema<?> schemaFor(final @Nullable ObjectSpecification specification) {
-        val cls = specification!=null
+        var cls = specification!=null
                 ? specification.getCorrespondingClass()
                 : null;
         if(cls == null
@@ -634,7 +634,7 @@ class _OpenApiModelFactory {
             return new ObjectSchema();
         }
         if(specification.isPlural()) {
-            val elementSpec = Facets.elementSpec(specification).orElse(null);
+            var elementSpec = Facets.elementSpec(specification).orElse(null);
             if(elementSpec != null) {
                 return arrayPropertyOf(elementSpec);
             }
@@ -643,7 +643,7 @@ class _OpenApiModelFactory {
             return valueSchemaFactory.schemaForValue(specification).orElseThrow();
         }
         if(specification.isValue()) {
-            val valueSchema = valueSchemaFactory.schemaForValue(specification);
+            var valueSchema = valueSchemaFactory.schemaForValue(specification);
             if(valueSchema.isPresent()) {
                 return valueSchema.get();
             }
@@ -757,7 +757,7 @@ class _OpenApiModelFactory {
     }
 
     Set<String> getReferencesWithoutDefinition() {
-        val referencesCopy = _Sets.<String>newLinkedHashSet(references);
+        var referencesCopy = _Sets.<String>newLinkedHashSet(references);
         referencesCopy.removeAll(definitions);
         return referencesCopy;
     }
@@ -775,7 +775,7 @@ class _OpenApiModelFactory {
             final Caching caching,
             final Schema<?> responsRef,
             final Consumer<ApiResponse> responseRefiner) {
-        val operation = _OpenApi.operation(200,
+        var operation = _OpenApi.operation(200,
                 responsRef,
                 supportedFormats(reprTypes),
                 response->{
@@ -788,9 +788,9 @@ class _OpenApiModelFactory {
     // -- CONTENT NEGOTIATION
 
     private static List<String> supportedFormats(final List<String> reprTypes) {
-        val supportedFormats = _Lists.<String>newArrayList();
+        var supportedFormats = _Lists.<String>newArrayList();
         supportedFormats.add("application/json");
-        val supportsV1 = _Refs.booleanRef(false);
+        var supportsV1 = _Refs.booleanRef(false);
         reprTypes.forEach(reprType->{
             if(reprType.equals("object")
                     || reprType.equals("action-result")) {

@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class GridFacetDefault
 extends FacetAbstract
@@ -107,7 +106,7 @@ implements GridFacet {
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "";
         }
-        val layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
+        var layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
         return layoutName;
     }
 
@@ -117,9 +116,9 @@ implements GridFacet {
 
     private Grid load(final @NonNull String layoutName) {
 
-        val domainClass = getSpecification().getCorrespondingClass();
+        var domainClass = getSpecification().getCorrespondingClass();
 
-        val grid = Optional.ofNullable(
+        var grid = Optional.ofNullable(
                 // loads from object's XML if available
                 gridService.load(domainClass, _Strings.emptyToNull(layoutName)))
                 // loads from default-XML if available

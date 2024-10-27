@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -44,8 +43,8 @@ public class MmSortUtils {
                 : NATURAL_NULL_FIRST.reversed();
 
         return (p, q) -> {
-            val pSort = sortProperty.get(p, InteractionInitiatedBy.PASS_THROUGH);
-            val qSort = sortProperty.get(q, InteractionInitiatedBy.PASS_THROUGH);
+            var pSort = sortProperty.get(p, InteractionInitiatedBy.PASS_THROUGH);
+            var qSort = sortProperty.get(q, InteractionInitiatedBy.PASS_THROUGH);
             return comparator.compare(pSort, qSort);
         };
     }
@@ -58,8 +57,8 @@ public class MmSortUtils {
 
     final Comparator<ManagedObject> NATURAL_NULL_FIRST = (a, b) -> {
 
-        val aPojo = MmUnwrapUtils.single(a);
-        val bPojo = MmUnwrapUtils.single(b);
+        var aPojo = MmUnwrapUtils.single(a);
+        var bPojo = MmUnwrapUtils.single(b);
         if(Objects.equals(aPojo, bPojo)) {
             return 0;
         }

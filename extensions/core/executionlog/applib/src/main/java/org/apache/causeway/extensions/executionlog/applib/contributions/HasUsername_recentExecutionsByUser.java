@@ -32,8 +32,6 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 
 /**
  * Contributes the <code>recentExecutionsByUser</code> collection to any domain object implementing {@link HasUsername}.
@@ -60,7 +58,7 @@ public class HasUsername_recentExecutionsByUser {
     private final HasUsername hasUsername;
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
-        val username = hasUsername.getUsername();
+        var username = hasUsername.getUsername();
         return username != null
                 ? executionLogEntryRepository.findRecentByUsername(username)
                 : Collections.emptyList();

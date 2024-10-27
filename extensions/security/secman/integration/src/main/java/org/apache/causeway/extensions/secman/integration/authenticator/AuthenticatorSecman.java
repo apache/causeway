@@ -35,7 +35,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -75,9 +75,9 @@ public class AuthenticatorSecman implements Authenticator {
 
     @Override
     public InteractionContext authenticate(final AuthenticationRequest request, final String code) {
-        val authRequest = (AuthenticationRequestPassword) request;
-        val username = authRequest.getName();
-        val rawPassword = authRequest.getPassword();
+        var authRequest = (AuthenticationRequestPassword) request;
+        var username = authRequest.getName();
+        var rawPassword = authRequest.getPassword();
         if(username == null) {
             log.info("login failed: username is null");
             return null;
@@ -90,10 +90,10 @@ public class AuthenticatorSecman implements Authenticator {
                 .filter(appUser -> appUser.isHasPassword())
                 .filter(appUser -> passwordEncoder.matches(rawPassword, appUser.getEncryptedPassword()))
                 .map(appUser -> {
-                    val roleNames = Stream.concat(
+                    var roleNames = Stream.concat(
                             appUser.getRoles().stream().map(ApplicationRole::getName),
                             request.streamRoles());
-                    val user = UserMemento.ofNameAndRoleNames(username, roleNames)
+                    var user = UserMemento.ofNameAndRoleNames(username, roleNames)
                             .withAuthenticationCode(code);
                     return InteractionContext.ofUserWithSystemDefaults(user);
                 })

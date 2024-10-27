@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -53,7 +52,7 @@ public class RichActionInvokeArgs
             return;
         }
 
-        val idx = new AtomicInteger(0);
+        var idx = new AtomicInteger(0);
         actionInteractor.getObjectMember().getParameters().forEach(objectActionParameter -> {
             args.add(addChildFieldFor(new RichActionInvokeArgsArg(actionInteractor, objectActionParameter, this.context, idx.getAndIncrement())));
         });

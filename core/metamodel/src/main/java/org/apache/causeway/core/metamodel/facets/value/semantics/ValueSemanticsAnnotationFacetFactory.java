@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigi
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class ValueSemanticsAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -45,14 +43,14 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        val valueSemanticsIfAny = processMethodContext
+        var valueSemanticsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ValueSemantics.class,
                         () -> ValidationFailureUtils
                             .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), ValueSemantics.class));
 
         // support for @javax.validation.constraints.Digits
-        val digitsIfAny = processMethodContext
+        var digitsIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         Digits.class,
                         () -> ValidationFailureUtils
@@ -63,10 +61,10 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
+        var valueSemanticsIfAny = processParameterContext.synthesizeOnParameter(ValueSemantics.class);
 
         // support for @javax.validation.constraints.Digits
-        val digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
+        var digitsIfAny = processParameterContext.synthesizeOnParameter(Digits.class);
 
         processAll(processParameterContext.getFacetHolder(), valueSemanticsIfAny, digitsIfAny);
     }

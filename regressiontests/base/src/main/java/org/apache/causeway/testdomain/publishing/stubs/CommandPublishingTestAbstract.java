@@ -37,7 +37,7 @@ import org.apache.causeway.testdomain.publishing.subscriber.CommandSubscriberFor
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 
 public abstract class CommandPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -68,14 +68,14 @@ extends PublishingTestAbstract {
             break;
         case POST_COMMIT:
 
-            val command = new Command(UUID.randomUUID());
-            val commandDto = new CommandDto();
+            var command = new Command(UUID.randomUUID());
+            var commandDto = new CommandDto();
             commandDto.setInteractionId(command.getInteractionId().toString());
 
             switch(changeScenario) {
             case PROPERTY_UPDATE:
 
-                val propertyDto = new PropertyDto();
+                var propertyDto = new PropertyDto();
                 propertyDto.setLogicalMemberIdentifier(
                         formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#name"));
 
@@ -86,7 +86,7 @@ extends PublishingTestAbstract {
                 break;
             case ACTION_INVOCATION:
 
-                val actionDto = new ActionDto();
+                var actionDto = new ActionDto();
                 actionDto.setLogicalMemberIdentifier(
                         formatPersistenceStandardSpecificLowerCase("testdomain.%s.Book#doubleThePrice"));
 
@@ -109,7 +109,7 @@ extends PublishingTestAbstract {
     // -- HELPER
 
     private void assertHasCommandEntries(final Can<Command> expectedCommands) {
-        val actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
+        var actualCommands = CommandSubscriberForTesting.getPublishedCommands(kvStore);
         CollectionAssertions.assertComponentWiseEquals(
                 expectedCommands, actualCommands, this::commandDifference);
     }

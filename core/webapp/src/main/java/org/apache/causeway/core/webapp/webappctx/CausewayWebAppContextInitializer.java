@@ -39,7 +39,6 @@ import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -86,13 +85,13 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
         // CausewayWicketApplication#init() or others, that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
 
-        val contextPath = servletContext.getContextPath();
+        var contextPath = servletContext.getContextPath();
 
         log.info("=== PHASE 1 === Setting up ServletContext parameters, contextPath = " + contextPath);
 
         webAppContextPath.setContextPath(contextPath);
 
-        val webModuleContext = new WebModuleContext(servletContext, causewayConfiguration, serviceRegistry);
+        var webModuleContext = new WebModuleContext(servletContext, causewayConfiguration, serviceRegistry);
         webModuleContext.prepare();
 
         log.info("=== PHASE 2 === Initializing the ServletContext");

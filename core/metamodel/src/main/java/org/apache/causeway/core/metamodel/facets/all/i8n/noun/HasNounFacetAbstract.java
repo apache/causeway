@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class HasNounFacetAbstract
 extends FacetAbstract
@@ -98,7 +97,7 @@ implements HasNoun {
             return false;
         }
 
-        val otherFacet =  (HasNounFacetAbstract)other;
+        var otherFacet =  (HasNounFacetAbstract)other;
 
         return Objects.equals(this.noun, otherFacet.noun)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

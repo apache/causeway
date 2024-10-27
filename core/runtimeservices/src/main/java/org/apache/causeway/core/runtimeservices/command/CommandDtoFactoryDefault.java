@@ -51,8 +51,6 @@ import org.apache.causeway.schema.cmd.v2.PropertyDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 import org.apache.causeway.schema.common.v2.OidsDto;
 
-import lombok.val;
-
 /**
  * Default implementation of {@link CommandDtoFactory}.
  *
@@ -83,9 +81,9 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
-        val commandDto = asCommandDto(interactionId, targetHead);
+        var commandDto = asCommandDto(interactionId, targetHead);
 
-        val actionDto = new ActionDto();
+        var actionDto = new ActionDto();
         actionDto.setInteractionType(InteractionType.ACTION_INVOCATION);
         commandDto.setMember(actionDto);
 
@@ -121,13 +119,13 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
         actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(head, objectAction));
 
-        val actionParameters = objectAction.getParameters();
+        var actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
             final ObjectActionParameter actionParameter = actionParameters.getElseFail(paramNum);
 
-            val argAdapter = argAdapters.getElseFail(paramNum);
+            var argAdapter = argAdapters.getElseFail(paramNum);
 
-            val paramDto = CommonDtoUtils.paramDto(
+            var paramDto = CommonDtoUtils.paramDto(
                                             isParamIdentifierStrategySetToUseId()
                                                 ? actionParameter.getId()
                                                 : actionParameter.getCanonicalFriendlyName()
@@ -140,7 +138,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
                 valueMarshaller.recordParamScalar(paramDto, actionParameter, argAdapter);
             } else {
                 //non-scalar
-                val values = ManagedObjects.unpack(argAdapter);
+                var values = ManagedObjects.unpack(argAdapter);
                 valueMarshaller.recordParamNonScalar(paramDto, actionParameter, values);
             }
 
@@ -166,7 +164,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     private CommandDto asCommandDto(final UUID interactionId, final InteractionHead targetHead) {
 
-        val dto = new CommandDto();
+        var dto = new CommandDto();
         dto.setMajorVersion("2");
         dto.setMinorVersion("0");
 
@@ -175,7 +173,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
         // transient/detached entities have no bookmark, fail early
-        val bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+        var bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
         final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
         targetOids.getOid().add(bookmark.toOidDto());
 

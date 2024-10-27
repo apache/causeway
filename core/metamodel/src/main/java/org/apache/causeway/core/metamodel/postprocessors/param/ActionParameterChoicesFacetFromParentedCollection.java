@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-import lombok.val;
-
 public class ActionParameterChoicesFacetFromParentedCollection
 extends ActionParameterChoicesFacetAbstract {
 
@@ -51,7 +49,7 @@ extends ActionParameterChoicesFacetAbstract {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val collectionAsObject = coll.get(head.getOwner(), interactionInitiatedBy);
+        var collectionAsObject = coll.get(head.getOwner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
     }
 

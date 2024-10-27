@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.persistence.jdo.datanucleus.metamodel.facets.entity.JdoEntityFacet;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
+
 
 @Component
 public class DnEntityStateProvider implements JdoFacetContext {
@@ -68,14 +68,14 @@ public class DnEntityStateProvider implements JdoFacetContext {
             return EntityState.NOT_PERSISTABLE;
         }
 
-        val persistable = (Persistable) pojo;
-        val isDeleted = persistable.dnIsDeleted();
+        var persistable = (Persistable) pojo;
+        var isDeleted = persistable.dnIsDeleted();
         if(isDeleted) {
             return EntityState.REMOVED;
         }
-        val isPersistent = persistable.dnIsPersistent();
+        var isPersistent = persistable.dnIsPersistent();
         if(isPersistent) {
-            val oid = persistable.dnGetObjectId();
+            var oid = persistable.dnGetObjectId();
             return oid!=null
                     ? EntityState.ATTACHED
                     : EntityState.ATTACHED_NO_OID;

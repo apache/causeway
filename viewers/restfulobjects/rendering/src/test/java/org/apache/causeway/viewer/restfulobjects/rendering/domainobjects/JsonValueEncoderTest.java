@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
-import lombok.val;
+
 
 class JsonValueEncoderTest
 extends JsonValueEncoderTestAbstract {
@@ -62,7 +62,7 @@ extends JsonValueEncoderTestAbstract {
 
     @Test
     void whenSpecIsNull() throws Exception {
-        val representation = new JsonRepresentation(TextNode.valueOf("aString"));
+        var representation = new JsonRepresentation(TextNode.valueOf("aString"));
         assertThrows(IllegalArgumentException.class, ()->{
             jsonValueEncoder.asAdapter(null, representation, null);
         });
@@ -70,13 +70,13 @@ extends JsonValueEncoderTestAbstract {
 
     @Test
     void whenReprIsNull() throws Exception {
-        val spec = specFor(Object.class);
+        var spec = specFor(Object.class);
         assertThat(jsonValueEncoder.asAdapter(spec, null, null), is(Matchers.nullValue()));
     }
 
     @Test
     void whenReprIsAnArray() throws Exception {
-        val spec = specFor(Integer.class); // arbitrary value class, pick any
+        var spec = specFor(Integer.class); // arbitrary value class, pick any
         assertThrows(IllegalArgumentException.class, ()->{
             jsonValueEncoder.asAdapter(spec, JsonRepresentation.newArray(), null);
         });
@@ -84,7 +84,7 @@ extends JsonValueEncoderTestAbstract {
 
     @Test
     void whenReprIsAMap() throws Exception {
-        val spec = specFor(Integer.class); // arbitrary value class, pick any
+        var spec = specFor(Integer.class); // arbitrary value class, pick any
         assertThrows(IllegalArgumentException.class, ()->{
             assertNull(jsonValueEncoder.asAdapter(spec, JsonRepresentation.newMap(), null));
         });
@@ -92,8 +92,8 @@ extends JsonValueEncoderTestAbstract {
 
     @Test
     void whenSpecDoesNotHaveAnEncodableFacet() throws Exception {
-        val representation = new JsonRepresentation(TextNode.valueOf("aString"));
-        val spec = specFor(Object.class); // arbitrary non-value class, pick any
+        var representation = new JsonRepresentation(TextNode.valueOf("aString"));
+        var spec = specFor(Object.class); // arbitrary non-value class, pick any
         assertThrows(IllegalArgumentException.class, ()->{
             assertNull(jsonValueEncoder.asAdapter(spec, representation, null));
         });
@@ -112,17 +112,17 @@ extends JsonValueEncoderTestAbstract {
             BigInteger.class, BigDecimal.class,})
     void whenObjectSpecIsIncompatibleWithRepr(final Class<?> correspondingClass) {
         // given
-        val spec = specFor(correspondingClass);
+        var spec = specFor(correspondingClass);
 
         // when repr is 'string'
         assertThrows(IllegalArgumentException.class, ()->{
-            val representation = new JsonRepresentation(TextNode.valueOf("aString"));
+            var representation = new JsonRepresentation(TextNode.valueOf("aString"));
             jsonValueEncoder.asAdapter(spec, representation, null);
         });
 
         // when repr is 'map'
         assertThrows(IllegalArgumentException.class, ()->{
-            val representation = JsonRepresentation.newMap("foo", "bar");
+            var representation = JsonRepresentation.newMap("foo", "bar");
             jsonValueEncoder.asAdapter(spec, representation, null);
         });
     }
@@ -132,11 +132,11 @@ extends JsonValueEncoderTestAbstract {
     void whenReprIsBoolean(final Class<?> correspondingClass) {
         // given
         final boolean value = true;
-        val representation = new JsonRepresentation(BooleanNode.valueOf(value));
-        val spec = specFor(boolean.class);
+        var representation = new JsonRepresentation(BooleanNode.valueOf(value));
+        var spec = specFor(boolean.class);
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());
@@ -146,12 +146,12 @@ extends JsonValueEncoderTestAbstract {
     @ValueSource(classes = {int.class, Integer.class})
     void whenReprIsInteger(final Class<?> correspondingClass) {
         // given
-        val spec = specFor(correspondingClass);
+        var spec = specFor(correspondingClass);
         final int value = 123;
-        val representation = new JsonRepresentation(IntNode.valueOf(value));
+        var representation = new JsonRepresentation(IntNode.valueOf(value));
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());
@@ -161,12 +161,12 @@ extends JsonValueEncoderTestAbstract {
     @ValueSource(classes = {long.class, Long.class})
     void whenReprIsLong(final Class<?> correspondingClass) {
         // given
-        val spec = specFor(correspondingClass);
+        var spec = specFor(correspondingClass);
         final long value = 1234567890L;
-        val representation = new JsonRepresentation(LongNode.valueOf(value));
+        var representation = new JsonRepresentation(LongNode.valueOf(value));
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());
@@ -176,12 +176,12 @@ extends JsonValueEncoderTestAbstract {
     @ValueSource(classes = {double.class, Double.class})
     void whenReprIsDouble(final Class<?> correspondingClass) {
         // given
-        val spec = specFor(correspondingClass);
+        var spec = specFor(correspondingClass);
         final double value = 123.45;
-        val representation = new JsonRepresentation(DoubleNode.valueOf(value));
+        var representation = new JsonRepresentation(DoubleNode.valueOf(value));
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());
@@ -190,12 +190,12 @@ extends JsonValueEncoderTestAbstract {
     @Test
     void whenReprIsBigInteger() throws Exception {
         // given
-        val spec = specFor(BigInteger.class);
+        var spec = specFor(BigInteger.class);
         final BigInteger value = BigInteger.valueOf(123);
-        val representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
+        var representation = new JsonRepresentation(BigIntegerNode.valueOf(value));
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());
@@ -204,12 +204,12 @@ extends JsonValueEncoderTestAbstract {
     @Test
     void whenReprIsBigDecimal() throws Exception {
         // given
-        val spec = specFor(BigDecimal.class);
+        var spec = specFor(BigDecimal.class);
         final BigDecimal value = new BigDecimal("123234234.45612312343535");
-        val representation = new JsonRepresentation(DecimalNode.valueOf(value));
+        var representation = new JsonRepresentation(DecimalNode.valueOf(value));
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());
@@ -219,11 +219,11 @@ extends JsonValueEncoderTestAbstract {
     @Test
     void whenReprIsString() throws Exception {
         // given
-        val spec = specFor(String.class);
-        val representation = new JsonRepresentation(TextNode.valueOf("aString"));
+        var spec = specFor(String.class);
+        var representation = new JsonRepresentation(TextNode.valueOf("aString"));
 
         // when
-        val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
+        var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
         assertSame(spec, adapter.getSpecification());

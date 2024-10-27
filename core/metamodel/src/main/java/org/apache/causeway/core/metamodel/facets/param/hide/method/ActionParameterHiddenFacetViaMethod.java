@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class ActionParameterHiddenFacetViaMethod
 extends ActionParameterHiddenFacetAbstract
@@ -63,7 +62,7 @@ implements ImperativeFacet {
             final ManagedObject owningAdapter,
             final Can<ManagedObject> argumentAdapters) {
 
-        val method = methods.getFirstElseFail();
+        var method = methods.getFirstElseFail();
         final Object returnValue = MmInvokeUtils.invokeAutofit(patConstructor, method, owningAdapter, argumentAdapters);
         if(returnValue instanceof Boolean) {
             return (Boolean) returnValue;
@@ -79,7 +78,7 @@ implements ImperativeFacet {
             return false;
         }
 
-        val other = (ActionParameterHiddenFacetViaMethod)otherFacet;
+        var other = (ActionParameterHiddenFacetViaMethod)otherFacet;
         return this.patConstructor.equals(other.patConstructor)
                 && this.getMethods().equals(other.getMethods());
     }

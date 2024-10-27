@@ -29,14 +29,12 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest_Semantics
 extends ActionAnnotationFacetFactoryTest {
 
     private void processSemantics(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processSemantics(processMethodContext, actionIfAny);
     }
 

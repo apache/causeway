@@ -92,7 +92,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -389,7 +388,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
             final ComponentFactoryList componentFactories) {
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
-        val registeredScalarTypes =
+        var registeredScalarTypes =
                 componentFactories.stream(ComponentFactoryScalarTypeConstrainedAbstract.class)
                 .flatMap(f->f.getScalarTypes().stream())
                 .collect(Collectors.toSet());
@@ -407,7 +406,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
         // if the valueType is a wrapper type, also append its unboxed variant
         if(ClassUtils.isPrimitiveWrapper(valueTypeClass)) {
-            val unboxed = org.apache.causeway.core.metamodel.commons.ClassUtil
+            var unboxed = org.apache.causeway.core.metamodel.commons.ClassUtil
                     .unboxPrimitiveIfNecessary(valueTypeClass);
             valueTypeClasses = valueTypeClasses.add(unboxed);
         }

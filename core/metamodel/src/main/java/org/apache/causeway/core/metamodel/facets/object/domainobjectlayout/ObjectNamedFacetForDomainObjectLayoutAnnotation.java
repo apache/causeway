@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
-import lombok.val;
-
 public class ObjectNamedFacetForDomainObjectLayoutAnnotation
 extends ObjectNamedFacetAbstract {
 
@@ -40,11 +38,11 @@ extends ObjectNamedFacetAbstract {
             return Optional.empty();
         }
 
-        val domainObjectLayout = domainObjectLayoutIfAny.get();
+        var domainObjectLayout = domainObjectLayoutIfAny.get();
 
-        val singular = _Strings.emptyToNull(domainObjectLayout.named());
+        var singular = _Strings.emptyToNull(domainObjectLayout.named());
 
-        val noun = Noun.singular(singular);
+        var noun = Noun.singular(singular);
 
         if(!noun.isLiteralPresent()) {
             return Optional.empty();

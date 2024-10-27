@@ -48,7 +48,6 @@ import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -88,9 +87,9 @@ public class JpaEntityFacet
             return Optional.empty();
         }
 
-        val entityManager = getEntityManager();
-        val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
-        val primaryKeyIfAny = persistenceUnitUtil.getIdentifier(pojo);
+        var entityManager = getEntityManager();
+        var persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
+        var primaryKeyIfAny = persistenceUnitUtil.getIdentifier(pojo);
 
         return Optional.ofNullable(primaryKeyIfAny)
                 .map(primaryKey->
@@ -108,10 +107,10 @@ public class JpaEntityFacet
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        val primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
+        var primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
 
-        val entityManager = getEntityManager();
-        val entityPojo = entityManager.find(entityClass, primaryKey);
+        var entityManager = getEntityManager();
+        var entityPojo = entityManager.find(entityClass, primaryKey);
         return Optional.ofNullable(entityPojo);
     }
 
@@ -122,24 +121,24 @@ public class JpaEntityFacet
     @Override
     public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
-        val range = query.getRange();
+        var range = query.getRange();
 
         if (query instanceof AllInstancesQuery) {
 
-            val queryFindAllInstances = (AllInstancesQuery<?>) query;
-            val queryEntityType = queryFindAllInstances.getResultType();
+            var queryFindAllInstances = (AllInstancesQuery<?>) query;
+            var queryEntityType = queryFindAllInstances.getResultType();
 
             // guard against misuse
             _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
 
-            val entityManager = getEntityManager();
+            var entityManager = getEntityManager();
 
-            val cb = entityManager.getCriteriaBuilder();
-            val cr = cb.createQuery(entityClass);
+            var cb = entityManager.getCriteriaBuilder();
+            var cr = cb.createQuery(entityClass);
 
             cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
 
-            val typedQuery = entityManager
+            var typedQuery = entityManager
                     .createQuery(cr);
 
             if (range.hasOffset()) {
@@ -149,19 +148,19 @@ public class JpaEntityFacet
                 typedQuery.setMaxResults(range.getLimitAsInt());
             }
 
-            val entitySpec = getEntitySpecification();
+            var entitySpec = getEntitySpecification();
             return Can.ofStream(
                     typedQuery.getResultStream()
                             .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
 
         } else if (query instanceof NamedQuery) {
 
-            val applibNamedQuery = (NamedQuery<?>) query;
-            val queryResultType = applibNamedQuery.getResultType();
+            var applibNamedQuery = (NamedQuery<?>) query;
+            var queryResultType = applibNamedQuery.getResultType();
 
-            val entityManager = getEntityManager();
+            var entityManager = getEntityManager();
 
-            val namedQuery = entityManager
+            var namedQuery = entityManager
                     .createNamedQuery(applibNamedQuery.getName(), queryResultType);
 
             if (range.hasOffset()) {
@@ -176,7 +175,7 @@ public class JpaEntityFacet
                     .forEach((paramName, paramValue) ->
                             namedQuery.setParameter(paramName, paramValue));
 
-            val entitySpec = getEntitySpecification();
+            var entitySpec = getEntitySpecification();
             return Can.ofStream(
                     namedQuery.getResultStream()
                             .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
@@ -196,7 +195,7 @@ public class JpaEntityFacet
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        val entityManager = getEntityManager();
+        var entityManager = getEntityManager();
 
         log.debug("about to persist entity {}", pojo);
 
@@ -212,7 +211,7 @@ public class JpaEntityFacet
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        val entityManager = getEntityManager();
+        var entityManager = getEntityManager();
         entityManager.refresh(pojo);
     }
 
@@ -225,7 +224,7 @@ public class JpaEntityFacet
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        val entityManager = getEntityManager();
+        var entityManager = getEntityManager();
         entityManager.remove(pojo);
     }
 
@@ -237,8 +236,8 @@ public class JpaEntityFacet
             return EntityState.NOT_PERSISTABLE;
         }
 
-        val entityManager = getEntityManager();
-        val persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
+        var entityManager = getEntityManager();
+        var persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
 
         return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
     }

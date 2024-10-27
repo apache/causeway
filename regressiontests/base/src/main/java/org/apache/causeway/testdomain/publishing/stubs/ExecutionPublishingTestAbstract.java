@@ -41,7 +41,7 @@ import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberF
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 
 public abstract class ExecutionPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -72,7 +72,7 @@ extends PublishingTestAbstract {
             break;
         case POST_COMMIT:
 
-            val bookClass = bookClass();
+            var bookClass = bookClass();
             final Interaction interaction = null;
             final Object target = null;
 
@@ -90,7 +90,7 @@ extends PublishingTestAbstract {
             case ACTION_INVOCATION: {
                 Identifier actionId = Identifier.actionIdentifier(
                         LogicalType.fqcn(bookClass), "doubleThePrice");
-                val args = Collections.<Object>emptyList();
+                var args = Collections.<Object>emptyList();
 
                 assertHasExecutionEntries(Can.of(
                         new ActionInvocation(interaction, actionId, target, args)
@@ -123,7 +123,7 @@ extends PublishingTestAbstract {
     }
 
     private void assertHasExecutionEntries(final Can<Execution<?, ?>> expectedExecutions) {
-        val actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
+        var actualExecutions = ExecutionSubscriberForTesting.getPublishedExecutions(kvStore);
         CollectionAssertions.assertComponentWiseEquals(
                 expectedExecutions, actualExecutions, this::executionDifference);
     }

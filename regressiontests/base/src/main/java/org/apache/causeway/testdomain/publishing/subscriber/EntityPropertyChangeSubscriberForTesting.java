@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -63,12 +63,12 @@ implements EntityPropertyChangeSubscriber {
 
         PersistenceStack persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
 
-        val target = entityPropertyChange.getTarget();
-        val targetLogicalTypeName = target.getLogicalTypeName();
-        val targetLogicalType = specificationLoader.lookupLogicalTypeElseFail(targetLogicalTypeName);
-        val targetSimpleName = targetLogicalType.getLogicalTypeSimpleName();
+        var target = entityPropertyChange.getTarget();
+        var targetLogicalTypeName = target.getLogicalTypeName();
+        var targetLogicalType = specificationLoader.lookupLogicalTypeElseFail(targetLogicalTypeName);
+        var targetSimpleName = targetLogicalType.getLogicalTypeSimpleName();
 
-        val propertyChangeEntry = String.format("%s %s/%s: '%s' -> '%s'",
+        var propertyChangeEntry = String.format("%s %s/%s: '%s' -> '%s'",
                 persistenceStack.titleCase(),
                 targetSimpleName,
                 entityPropertyChange.getPropertyId(),
@@ -76,7 +76,7 @@ implements EntityPropertyChangeSubscriber {
                 entityPropertyChange.getPostValue());
 
         @SuppressWarnings("unchecked")
-        val propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
+        var propertyChangeEntries = (List<String>) kvStore.get(this, "propertyChangeEntries")
             .orElseGet(ArrayList::new);
         kvStore.put(this, "propertyChangeEntries", propertyChangeEntries);
 

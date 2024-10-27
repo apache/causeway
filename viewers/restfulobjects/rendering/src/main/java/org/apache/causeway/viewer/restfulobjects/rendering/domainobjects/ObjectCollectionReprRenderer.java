@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
 
-import lombok.val;
+
 
 public class ObjectCollectionReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
@@ -91,7 +91,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     // ///////////////////////////////////////////////////
 
     private void addValue(final LinkFollowSpecs linkFollower) {
-        val valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
+        var valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
         if (valueAdapter == null) {
             return;
         }
@@ -109,7 +109,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer
                     .newLinkToBuilder(resourceContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
-                val domainObjectReprRenderer =
+                var domainObjectReprRenderer =
                         new DomainObjectReprRenderer(getResourceContext(), followHref, JsonRepresentation.newMap())
                         .with(elementAdapter);
                 if(mode.isEventSerialization()) {
@@ -135,9 +135,9 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        val where = resourceContext.getWhere();
-        val jsonRepresentation = JsonRepresentation.newMap();
-        val objectCollectionReprRenderer =
+        var where = resourceContext.getWhere();
+        var jsonRepresentation = JsonRepresentation.newMap();
+        var objectCollectionReprRenderer =
                 new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, jsonRepresentation)
                 .with(ManagedCollection.of(objectAdapter, objectMember, where))
                 .asFollowed();

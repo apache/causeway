@@ -34,8 +34,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
-
 @Component
 @Named("causeway.metamodel.value.ApplicationFeatureIdValueSemantics")
 @Priority(PriorityPrecedence.LATE)
@@ -83,7 +81,7 @@ implements
 
     @Override
     public ApplicationFeatureId parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         return input!=null
                 ? ApplicationFeatureId.parse(input)
                 : null;

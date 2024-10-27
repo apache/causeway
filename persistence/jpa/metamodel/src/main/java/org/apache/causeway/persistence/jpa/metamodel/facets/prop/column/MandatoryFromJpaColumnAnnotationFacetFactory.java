@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.MandatoryFromXxxColumnAnnotationMetaModelRefinerUtil;
 
-import lombok.val;
-
 public class MandatoryFromJpaColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -59,10 +57,10 @@ implements MetaModelRefiner {
             return;
         }
 
-        val nullable = nullable1.orElseGet(nullable2::get);
-        val semantics = Semantics.required(!nullable);
+        var nullable = nullable1.orElseGet(nullable2::get);
+        var semantics = Semantics.required(!nullable);
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(
                 new MandatoryFacetFromJpaColumnAnnotation(semantics, facetHolder));
     }

@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -176,14 +175,14 @@ extends ObjectFeature, CurrentHolder {
      * Reassessment can be switch off by means of {@link org.apache.causeway.applib.annotation.Parameter#precedingParamsPolicy()}.
      */
     default boolean reassessDefault(final ParameterNegotiationModel pendingArgs) {
-        val changed = _Refs.booleanRef(false);
-        val paramIndex = getParameterIndex();
-        val bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
+        var changed = _Refs.booleanRef(false);
+        var paramIndex = getParameterIndex();
+        var bindableParamDirtyFlag = pendingArgs.getBindableParamValueDirtyFlag(paramIndex);
         if(Facets.precedingParametersPolicy(this).isReset()
                 // always allow when not dirtied by the user (UI)
                 || ! bindableParamDirtyFlag.getValue().booleanValue() ) {
             // reassess defaults honoring defaults semantics
-            val paramDefaultValue = this.getDefault(pendingArgs);
+            var paramDefaultValue = this.getDefault(pendingArgs);
             pendingArgs.updateParamValue(paramIndex, paramOldValue->{
                 if(!ManagedObjects.pojoEquals(paramOldValue, paramDefaultValue)) {
                     changed.setValue(true);

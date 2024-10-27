@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.graphql.model.domain.simple.query.SimpleTopLev
 import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.toplevel.BothTopLevelQuery;
 
-import lombok.val;
+
 
 @Service()
 public class GraphQlSourceForCauseway implements GraphQlSource {
@@ -96,19 +96,19 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
     @Override
     public GraphQLSchema schema() {
 
-        val fullyIntrospected = specificationLoader.isMetamodelFullyIntrospected();
+        var fullyIntrospected = specificationLoader.isMetamodelFullyIntrospected();
         if (!fullyIntrospected) {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        val topLevelQuery = determineTopLevelQueryFrom(graphqlConfiguration.getSchemaStyle());
-        val topLevelMutation = determineTopLevelMutationFrom(graphqlConfiguration.getSchemaStyle());
+        var topLevelQuery = determineTopLevelQueryFrom(graphqlConfiguration.getSchemaStyle());
+        var topLevelMutation = determineTopLevelMutationFrom(graphqlConfiguration.getSchemaStyle());
 
         topLevelQuery.addDataFetchers();
         topLevelMutation.addDataFetchers();
 
         // finalize the fetcher/mutator code that's been added
-        val codeRegistry = context.codeRegistryBuilder.build();
+        var codeRegistry = context.codeRegistryBuilder.build();
 
         // build the schema
         return GraphQLSchema.newSchema()

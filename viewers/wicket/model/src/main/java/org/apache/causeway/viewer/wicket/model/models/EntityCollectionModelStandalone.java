@@ -23,7 +23,7 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObje
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 public class EntityCollectionModelStandalone
 extends EntityCollectionModelAbstract {
@@ -36,7 +36,7 @@ extends EntityCollectionModelAbstract {
             final @NonNull PackedManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel) {
 
-        val action = actionModel.getAction();
+        var action = actionModel.getAction();
 
         return new EntityCollectionModelStandalone(
                 DataTableModelWkt.forActionModel(

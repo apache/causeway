@@ -55,8 +55,6 @@ import org.apache.causeway.core.metamodel.facets.properties.update.clear.Propert
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
-import lombok.val;
-
 public class PropertyAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -68,7 +66,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val propertyIfAny = propertyIfAny(processMethodContext);
+        var propertyIfAny = propertyIfAny(processMethodContext);
 
         if(processMethodContext.isMixinMain()) {
             propertyIfAny.ifPresent(property->{
@@ -107,8 +105,8 @@ extends FacetFactoryAbstract {
 
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val cls = processMethodContext.getCls();
-        val holder = processMethodContext.getFacetHolder();
+        var cls = processMethodContext.getCls();
+        var holder = processMethodContext.getFacetHolder();
 
         /*
          * immutable properties as well as mixed-in ones have no setter, hence phases:
@@ -119,7 +117,7 @@ extends FacetFactoryAbstract {
          * EXECUTED n/a for events
          */
 
-        val getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
+        var getterFacetIfAny = holder.lookupFacet(PropertyOrCollectionAccessorFacet.class);
 
         final boolean isProperty = getterFacetIfAny.isPresent()
                 || (processMethodContext.isMixinMain()
@@ -132,7 +130,7 @@ extends FacetFactoryAbstract {
         //
 
         // search for @Property(domainEvent=...), else use default event type
-        val propertyDomainEventFacet = PropertyDomainEventFacet
+        var propertyDomainEventFacet = PropertyDomainEventFacet
                 .create(propertyIfAny, cls, getterFacetIfAny, holder);
 
         addFacet(propertyDomainEventFacet);
@@ -164,7 +162,7 @@ extends FacetFactoryAbstract {
     }
 
     void processEditing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
         // search for @Property(editing=...)
         addFacetIfPresent(
@@ -175,7 +173,7 @@ extends FacetFactoryAbstract {
     void processCommandPublishing(
             final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
@@ -201,7 +199,7 @@ extends FacetFactoryAbstract {
 
     void processProjecting(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
         addFacetIfPresent(
                 ProjectingFacetFromPropertyAnnotation
@@ -213,7 +211,7 @@ extends FacetFactoryAbstract {
             final ProcessMethodContext processMethodContext,
             final Optional<Property> propertyIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // skip if a facet is already installed
         // (this is because - despite its name - this facet factory runs for both properties and actions;
@@ -242,7 +240,7 @@ extends FacetFactoryAbstract {
 
     void processMaxLength(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // search for @Property(maxLength=...)
         addFacetIfPresent(
@@ -251,7 +249,7 @@ extends FacetFactoryAbstract {
     }
 
     void processMustSatisfy(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // search for @Property(mustSatisfy=...)
         addFacetIfPresent(
@@ -260,7 +258,7 @@ extends FacetFactoryAbstract {
     }
 
     void processEntityPropertyChangePublishing(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // search for @Property(entityPropertyChangePublishing=...)
         addFacetIfPresent(
@@ -269,7 +267,7 @@ extends FacetFactoryAbstract {
     }
 
     void processSnapshot(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // search for @Property(notPersisted=...)
         addFacetIfPresent(
@@ -279,11 +277,11 @@ extends FacetFactoryAbstract {
 
     void processOptional(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
-        val method = processMethodContext.getMethod();
-        val holder = processMethodContext.getFacetHolder();
+        var method = processMethodContext.getMethod();
+        var holder = processMethodContext.getFacetHolder();
 
         // check for @Nullable
-        val hasNullable = method.isAnnotatedAsNullable();
+        var hasNullable = method.isAnnotatedAsNullable();
 
         addFacetIfPresent(
                 MandatoryFacetInvertedByNullableAnnotationOnProperty
@@ -296,11 +294,11 @@ extends FacetFactoryAbstract {
     }
 
     void processRegEx(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
-        val returnType = processMethodContext.getMethod().getReturnType();
+        var holder = processMethodContext.getFacetHolder();
+        var returnType = processMethodContext.getMethod().getReturnType();
 
         // check for @Pattern first
-        val patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
+        var patternIfAny = processMethodContext.synthesizeOnMethod(Pattern.class);
         if (addFacetIfPresent(
                 RegExFacetForPatternAnnotationOnProperty
                 .create(patternIfAny, returnType, holder))
@@ -315,7 +313,7 @@ extends FacetFactoryAbstract {
     }
 
     void processFileAccept(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
-        val holder = processMethodContext.getFacetHolder();
+        var holder = processMethodContext.getFacetHolder();
 
         // check for @Property(maxLength=...)
         addFacetIfPresent(

@@ -23,8 +23,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 
 /**
  * Corresponds to annotating the entity class with
@@ -45,7 +43,7 @@ public interface EntityChangePublishingFacet extends Facet {
             }
         }
 
-        val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+        var entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
         return entityChangePublishingFacet != null
                 && entityChangePublishingFacet.isEnabled();
     }

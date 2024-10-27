@@ -43,8 +43,6 @@ import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 
-import lombok.val;
-
 class OneToManyAssociationDefaultTest
 extends MetaModelTestAbstract {
 
@@ -62,13 +60,13 @@ extends MetaModelTestAbstract {
     @Override
     protected void afterSetUp() {
 
-        val mockHasStaticText = mock(HasStaticText.class);
+        var mockHasStaticText = mock(HasStaticText.class);
         when(mockHasStaticText.translated()).thenReturn("My name");
 
-        val mockNamedFacet = mock(MemberNamedFacet.class);
+        var mockNamedFacet = mock(MemberNamedFacet.class);
         when(mockNamedFacet.getSpecialization()).thenReturn(Either.left(mockHasStaticText));
 
-        val mockPeer = mock(FacetedMethod.class);
+        var mockPeer = mock(FacetedMethod.class);
         doReturn(TOAC).when(mockPeer).getType();
         when(mockPeer.getMetaModelContext()).thenReturn(getMetaModelContext());
         when(mockPeer.getFeatureIdentifier()).thenReturn(

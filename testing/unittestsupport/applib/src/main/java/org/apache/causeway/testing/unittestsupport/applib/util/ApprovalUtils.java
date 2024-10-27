@@ -30,7 +30,7 @@ import lombok.experimental.UtilityClass;
 public class ApprovalUtils {
 
     /**
-     * Enables approval testing's text compare for given file extension.
+     * Enables approvar testing's text compare for given file extension.
      * @param ext - should include the leading dot '.' like in say {@code .yaml}
      */
     public void registerFileExtensionForTextCompare(final String ext) {

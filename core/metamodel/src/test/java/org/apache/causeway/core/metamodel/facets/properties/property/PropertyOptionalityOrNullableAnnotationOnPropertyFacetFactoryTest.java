@@ -36,8 +36,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.Mandatory
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 
-import lombok.val;
-
 class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -50,7 +48,7 @@ extends FacetFactoryTestAbstract {
 
     private void processOptional(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        var propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 

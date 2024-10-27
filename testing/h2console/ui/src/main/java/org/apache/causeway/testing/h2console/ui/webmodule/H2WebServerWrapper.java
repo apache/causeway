@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 /**
  * Provides programmatic access to otherwise protected H2 {@link WebServer} configuration.
@@ -65,7 +65,7 @@ public interface H2WebServerWrapper {
             final @NonNull WebServlet webServlet,
             final @NonNull Consumer<H2WebServerWrapper> onConfiguration) {
         try {
-            val serverWrapper = H2WebServerWrapper.wrap(webServlet);
+            var serverWrapper = H2WebServerWrapper.wrap(webServlet);
             onConfiguration.accept(serverWrapper);
         } catch (Throwable cause) {
             // if for any reason wrapping fails, we fail hard to harden against potential security issues
@@ -86,7 +86,7 @@ public interface H2WebServerWrapper {
             @SneakyThrows
             @Override
             public void setConnectionInfo(final ConnectionInfo connectionInfo) {
-                val updateSettingMethod = WebServer.class.getDeclaredMethod("updateSetting",
+                var updateSettingMethod = WebServer.class.getDeclaredMethod("updateSetting",
                         ConnectionInfo.class);
                 _Reflect.invokeMethodOn(updateSettingMethod, webServer, connectionInfo);
             }
@@ -94,7 +94,7 @@ public interface H2WebServerWrapper {
             @SneakyThrows
             @Override
             public void setAllowOthers(boolean b) {
-                val method = WebServer.class.getDeclaredMethod("setAllowOthers",
+                var method = WebServer.class.getDeclaredMethod("setAllowOthers",
                         boolean.class);
                 _Reflect.invokeMethodOn(method, webServer, b);
 
@@ -105,7 +105,7 @@ public interface H2WebServerWrapper {
             @SneakyThrows
             @Override
             public boolean getAllowOthers() {
-                val method = WebServer.class.getDeclaredMethod("getAllowOthers",
+                var method = WebServer.class.getDeclaredMethod("getAllowOthers",
                         _Constants.emptyClasses);
                 return (boolean)_Reflect.invokeMethodOn(method, webServer,
                         _Constants.emptyObjects)
@@ -115,7 +115,7 @@ public interface H2WebServerWrapper {
             @SneakyThrows
             @Override
             public void setAdminPassword(String password) {
-                val method = WebServer.class.getDeclaredMethod("setAdminPassword",
+                var method = WebServer.class.getDeclaredMethod("setAdminPassword",
                         String.class);
                 _Reflect.invokeMethodOn(method, webServer, password);
             }

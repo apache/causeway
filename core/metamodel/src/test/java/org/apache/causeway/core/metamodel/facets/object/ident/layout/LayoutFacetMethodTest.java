@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class LayoutFacetMethodTest {
 
     private LayoutFacetViaLayoutMethod facet;
@@ -52,7 +50,7 @@ class LayoutFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInLayoutMethod();
 
-        val iconNameMethod = _GenericResolver.testing
+        var iconNameMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
         facet = (LayoutFacetViaLayoutMethod) LayoutFacetViaLayoutMethod
                     .create(iconNameMethod, Mockito.mock(FacetHolder.class))

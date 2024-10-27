@@ -25,7 +25,6 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -86,7 +85,7 @@ public final class ClassUtil {
      */
     public Class<?> unboxPrimitiveIfNecessary(final @NonNull Class<?> clazz) {
         // an optimization, to skip the lookup if possible
-        val firstPass = clazz.isPrimitive()
+        var firstPass = clazz.isPrimitive()
                 || !clazz.getPackageName().equals("java.lang")
                 ? clazz
                 : primitiveByWrapper.get(clazz); //null-able
@@ -143,7 +142,7 @@ public final class ClassUtil {
         if (_Strings.isNullOrEmpty(fullName)) {
             return null;
         }
-        val primitiveClass = primitiveByName.get(fullName);
+        var primitiveClass = primitiveByName.get(fullName);
         if(primitiveClass!=null) {
             return primitiveClass;
         }
@@ -161,7 +160,7 @@ public final class ClassUtil {
      * @return non-null
      */
     public String getCanonicalName_friendlyToInnerClasses(final @NonNull Class<?> cls) {
-        val name = cls.getCanonicalName();
+        var name = cls.getCanonicalName();
         if(name==null) {
             return cls.getName().replace("$", ".$").replace("..", ".");
         }

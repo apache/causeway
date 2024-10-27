@@ -34,7 +34,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -81,7 +80,7 @@ public class WebModuleContext {
 
     public void init() {
 
-        val event = new ServletContextEvent(servletContext);
+        var event = new ServletContextEvent(servletContext);
 
         webModules.stream()
         .filter(module->module.isApplicable(this)) // filter those WebModules that are applicable

@@ -101,8 +101,6 @@ import org.apache.causeway.core.metamodel.postprocessors.properties.DisabledFrom
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
-import lombok.val;
-
 public final class ProgrammingModelFacetsJava11
 extends ProgrammingModelAbstract {
 
@@ -122,14 +120,14 @@ extends ProgrammingModelAbstract {
 
         addValidators();
         
-        for (val metaModelRefiner : refiners) {
+        for (var metaModelRefiner : refiners) {
             metaModelRefiner.refineProgrammingModel(this);
         }
     }
 
     private void addFacetFactories() {
 
-        val mmc = getMetaModelContext();
+        var mmc = getMetaModelContext();
 
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
@@ -249,7 +247,7 @@ extends ProgrammingModelAbstract {
 
     private void addPostProcessors() {
 
-        val mmc = getMetaModelContext();
+        var mmc = getMetaModelContext();
 
         // must run before Object nouns are used
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeObjectNamingPostProcessor(mmc));
@@ -273,7 +271,7 @@ extends ProgrammingModelAbstract {
 
     private void addValidators() {
 
-        val mmc = getMetaModelContext();
+        var mmc = getMetaModelContext();
 
         addValidator(ValidationOrder.A1_BUILTIN, new SanityChecksValidator(mmc));
         addValidator(ValidationOrder.A1_BUILTIN, new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));

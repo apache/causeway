@@ -47,8 +47,6 @@ import static org.mockito.Mockito.mock;
 
 import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 
-import lombok.val;
-
 /**
  * Requires resource {@code javax/servlet/http/LocalStrings.properties} for Cookie testing.
  */
@@ -93,13 +91,13 @@ class CryptFactoryTest {
             final String displayName,
             final Function<String, ICrypt> cryptFactory) {
 
-        val encryptionKey = "any other than FIXED_SALT_FOR_PROTOTYPING";
+        var encryptionKey = "any other than FIXED_SALT_FOR_PROTOTYPING";
 
-        val strategy =
+        var strategy =
                 new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
         strategy.save("hello", "world", "appendix");
 
-        val data = strategy.load();
+        var data = strategy.load();
 
         assertNotNull(data);
         assertEquals(2, data.length);
@@ -108,9 +106,9 @@ class CryptFactoryTest {
 
         // simulated application restart
 
-        val strategy2 =
+        var strategy2 =
                 new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
-        val data2 = strategy2.load();
+        var data2 = strategy2.load();
 
         //XXX occasionally fails with surefire
         assertNull(data2);
@@ -122,17 +120,17 @@ class CryptFactoryTest {
             final String displayName,
             final Function<String, ICrypt> cryptFactory) {
 
-        val encryptionKey = _CryptFactory.FIXED_SALT_FOR_PROTOTYPING;
+        var encryptionKey = _CryptFactory.FIXED_SALT_FOR_PROTOTYPING;
 
-        val strategy1 =
+        var strategy1 =
                 new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
         strategy1.save("hello", "world", "appendix");
 
         // simulated application restart
 
-        val strategy2 =
+        var strategy2 =
                 new DefaultAuthenticationStrategy("cookieKey", cryptFactory.apply(encryptionKey));
-        val data = strategy2.load();
+        var data = strategy2.load();
 
         assertNotNull(data);
         assertEquals(2, data.length);

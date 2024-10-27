@@ -92,7 +92,6 @@ import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -132,7 +131,7 @@ implements
             PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
 
         if(log.isDebugEnabled()) {
-            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
             log.debug("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
         }
 
@@ -175,9 +174,9 @@ implements
     }
 
     private Changes evaluateChanges() {
-        val changedProperties = evaluateChangedProperties();
+        var changedProperties = evaluateChangedProperties();
 
-        val isCountersAndDetail = causewayConfiguration.getApplib().getService().getMetricsService().getLevel().isCountersAndDetail();
+        var isCountersAndDetail = causewayConfiguration.getApplib().getService().getMetricsService().getLevel().isCountersAndDetail();
         Set<Bookmark> loadedBookmarks =
                 isCountersAndDetail
                         ? enlistedPropertyChangeRecordsById.keySet()
@@ -267,7 +266,7 @@ implements
     public void destroy() {
 
         if(log.isDebugEnabled()) {
-            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -333,7 +332,7 @@ implements
         _Xray.publish(this, interactionProviderProvider);
 
         if(log.isDebugEnabled()) {
-            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.beforeCommit(readOnly={}) xactn={} interactionId={} thread={}", readOnly, transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -348,7 +347,7 @@ implements
     public void afterCompletion(int status) {
 
         if(log.isDebugEnabled()) {
-            val interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.afterCompletion(status={}) xactn={} interactionId={} thread={}", decodeStatus(status), transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -363,10 +362,10 @@ implements
     }
 
     private void enableCommandPublishing() {
-        val alreadySet = persistentChangesEncountered.getAndSet(true);
+        var alreadySet = persistentChangesEncountered.getAndSet(true);
         if(!alreadySet) {
             // has side effects
-            val command = currentInteraction().getCommand();
+            var command = currentInteraction().getCommand();
         }
     }
 
@@ -376,7 +375,7 @@ implements
             final String userName) {
 
         // a defensive copy of
-        val changeKindByEnlistedAdapter = (Map<Bookmark, EntityChangeKind>) new HashMap<>(this.changeKindByEnlistedAdapter);
+        var changeKindByEnlistedAdapter = (Map<Bookmark, EntityChangeKind>) new HashMap<>(this.changeKindByEnlistedAdapter);
         if(changeKindByEnlistedAdapter.isEmpty()) {
             return Optional.empty();
         }
@@ -388,12 +387,12 @@ implements
         // such that cannot enlist on top of it
         final int numberEntityPropertiesModified = memoizeChangesIfRequired().dirtiedProperties.size();
 
-        val interactionId = interaction.getInteractionId();
+        var interactionId = interaction.getInteractionId();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
 
         // side-effect: it locks the result for this transaction,
         // such that cannot enlist on top of it
-        val changingEntities = (EntityChanges) new _SimpleChangingEntities(
+        var changingEntities = (EntityChanges) new _SimpleChangingEntities(
                 interactionId, nextEventSequence,
                 userName, timestamp,
                 numberEntitiesLoaded1,
@@ -416,13 +415,13 @@ implements
             final int numberEntityPropertiesModified,
             final Map<Bookmark, EntityChangeKind> changeKindByEnlistedEntity) {
 
-        val objectsDto = new ObjectsDto();
+        var objectsDto = new ObjectsDto();
         objectsDto.setCreated(new OidsDto());
         objectsDto.setUpdated(new OidsDto());
         objectsDto.setDeleted(new OidsDto());
 
         changeKindByEnlistedEntity.forEach((bookmark, kind)->{
-            val oidDto = bookmark.toOidDto();
+            var oidDto = bookmark.toOidDto();
             if(oidDto==null) {
                 return;
             }
@@ -442,7 +441,7 @@ implements
         objectsDto.setLoaded(numberEntitiesLoaded);
         objectsDto.setPropertiesModified(numberEntityPropertiesModified);
 
-        val changesDto = new ChangesDto();
+        var changesDto = new ChangesDto();
 
         changesDto.setMajorVersion("2");
         changesDto.setMinorVersion("0");
@@ -491,9 +490,9 @@ implements
         entityChangeEventCount.increment();
         enableCommandPublishing();
 
-        val bookmark = ManagedObjects.bookmarkElseFail(entity);
+        var bookmark = ManagedObjects.bookmarkElseFail(entity);
 
-        val previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
+        var previousChangeKind = changeKindByEnlistedAdapter.get(bookmark);
         if(previousChangeKind == null) {
             changeKindByEnlistedAdapter.put(bookmark, changeKind);
             return true;

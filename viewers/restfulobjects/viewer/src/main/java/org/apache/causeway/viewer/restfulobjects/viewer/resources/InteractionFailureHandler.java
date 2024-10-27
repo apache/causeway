@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 public class InteractionFailureHandler {
 
@@ -90,8 +90,8 @@ public class InteractionFailureHandler {
             final @NonNull InteractionVeto veto,
             final @NonNull JsonRepresentation arguments) {
 
-        val paramId = paramMeta.getId();
-        val argRepr = arguments.getRepresentation(paramId);
+        var paramId = paramMeta.getId();
+        var argRepr = arguments.getRepresentation(paramId);
         argRepr.mapPutString("invalidReason", veto.getReasonAsString().orElse(null));
     }
 

@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
 
-import lombok.val;
+
 
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
@@ -47,7 +47,7 @@ public class MarkdownPanelFactoriesWkt {
 
         @Override
         protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
-            val markupComponent = new MarkdownComponentWkt(id, model);
+            var markupComponent = new MarkdownComponentWkt(id, model);
             markupComponent.setEnabled(false);
             return markupComponent;
         }

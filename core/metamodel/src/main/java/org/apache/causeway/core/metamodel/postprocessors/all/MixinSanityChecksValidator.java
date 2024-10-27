@@ -37,8 +37,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  * Checks various preconditions for a sane meta-model.
  * <ul>
@@ -97,10 +95,10 @@ implements
     // -- HELPER
 
     private void checkMixinSort(final ObjectSpecification objSpec, final FacetedMethod facetedMethod) {
-        val expectedContributing = facetedMethod.lookupFacet(ContributingFacet.class)
+        var expectedContributing = facetedMethod.lookupFacet(ContributingFacet.class)
             .map(ContributingFacet::contributed)
             .orElse(Contributing.AS_ACTION); // if not specified, defaults to action
-        val actualContributing = this.contributing;
+        var actualContributing = this.contributing;
 
         if(actualContributing!=expectedContributing) {
             ValidationFailure.raiseFormatted(objSpec,
@@ -114,10 +112,10 @@ implements
     }
 
     private void checkMixinMainMethod(final ObjectSpecification objSpec, final Identifier memberIdentifier) {
-        val mixinFacet = ((ObjectSpecificationAbstract)objSpec).mixinFacet().orElseThrow();
+        var mixinFacet = ((ObjectSpecificationAbstract)objSpec).mixinFacet().orElseThrow();
 
-        val expectedMethodName = mixinFacet.getMainMethodName();
-        val actualMethodName = memberIdentifier.getMemberLogicalName();
+        var expectedMethodName = mixinFacet.getMainMethodName();
+        var actualMethodName = memberIdentifier.getMemberLogicalName();
 
         if(!expectedMethodName.equals(actualMethodName)) {
             ValidationFailure.raiseFormatted(objSpec,

@@ -44,7 +44,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Default implementation of {@link FactoryService}.
@@ -66,7 +65,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T getOrCreate(final @NonNull Class<T> requiredType) {
-        val spec = loadSpecElseFail(requiredType);
+        var spec = loadSpecElseFail(requiredType);
         if(spec.isInjectable()) {
             return get(requiredType);
         }
@@ -82,7 +81,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T detachedEntity(final @NonNull Class<T> domainClass) {
-        val entitySpec = loadSpecElseFail(domainClass);
+        var entitySpec = loadSpecElseFail(domainClass);
         if(!entitySpec.isEntity()) {
             throw _Exceptions.illegalArgument("Class '%s' is not an entity", domainClass.getName());
         }
@@ -91,8 +90,8 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T detachedEntity(final @NonNull T entityPojo) {
-        val entityClass = entityPojo.getClass();
-        val spec = loadSpecElseFail(entityClass);
+        var entityClass = entityPojo.getClass();
+        var spec = loadSpecElseFail(entityClass);
         if(!spec.isEntity()) {
             throw _Exceptions.illegalArgument("Type '%s' is not recognized as an entity type by the framework.",
                     entityClass);
@@ -103,8 +102,8 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T mixin(final @NonNull Class<T> mixinClass, final @NonNull Object mixee) {
-        val mixinSpec = loadSpecElseFail(mixinClass);
-        val mixinFacet = mixinSpec.getFacet(MixinFacet.class);
+        var mixinSpec = loadSpecElseFail(mixinClass);
+        var mixinFacet = mixinSpec.getFacet(MixinFacet.class);
         if(mixinFacet == null) {
             throw _Exceptions.illegalArgument("Class '%s' is not a mixin",
                     mixinClass.getName());
@@ -113,14 +112,14 @@ public class FactoryServiceDefault implements FactoryService {
             throw _Exceptions.illegalArgument("Cannot instantiate abstract type '%s' as a mixin",
                     mixinClass.getName());
         }
-        val mixin = mixinFacet.instantiate(mixee);
+        var mixin = mixinFacet.instantiate(mixee);
         return _Casts.uncheckedCast(mixin);
     }
 
     @Override
     public <T> T viewModel(final @NonNull T viewModelPojo) {
-        val viewModelClass = viewModelPojo.getClass();
-        val spec = loadSpecElseFail(viewModelClass);
+        var viewModelClass = viewModelPojo.getClass();
+        var spec = loadSpecElseFail(viewModelClass);
         if(!spec.isViewModel()) {
             throw _Exceptions.illegalArgument("Type '%s' is not recognized as a ViewModel by the framework.",
                     viewModelClass);
@@ -132,13 +131,13 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T viewModel(final @NonNull Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
-        val spec = loadSpecElseFail(viewModelClass);
+        var spec = loadSpecElseFail(viewModelClass);
         return createViewModelElseFail(viewModelClass, spec, Optional.ofNullable(bookmark));
     }
 
     @Override
     public <T> T create(final @NonNull Class<T> domainClass) {
-        val spec = loadSpecElseFail(domainClass);
+        var spec = loadSpecElseFail(domainClass);
         if(spec.isInjectable()) {
             throw _Exceptions.illegalArgument(
                     "Class '%s' is managed by Spring, use get() instead", domainClass.getName());
@@ -167,7 +166,7 @@ public class FactoryServiceDefault implements FactoryService {
         return Optional.of(objectSpecification)
         .filter(ObjectSpecification::isViewModel)
         .<T>map(spec->{
-            val viewModel = spec.viewmodelFacetElseFail().instantiate(spec, bookmarkIfAny);
+            var viewModel = spec.viewmodelFacetElseFail().instantiate(spec, bookmarkIfAny);
             objectLifecyclePublisher().onPostCreate(viewModel);
             return _Casts.uncheckedCast(viewModel.getPojo());
         })
@@ -179,7 +178,7 @@ public class FactoryServiceDefault implements FactoryService {
     private <T> T createObject(
             final @NonNull Class<?> type,
             final @NonNull ObjectSpecification spec) {
-        val domainObject = spec.createObject();
+        var domainObject = spec.createObject();
         return _Casts.uncheckedCast(domainObject.getPojo());
     }
 

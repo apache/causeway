@@ -35,8 +35,6 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.core.security.authorization.Authorizor;
 import org.apache.causeway.security.shiro.context.ShiroSecurityContext;
 
-import lombok.val;
-
 /**
  * If Shiro is configured for both authentication and authorization (as recommended), then this class is
  * in the role of {@link Authorizor}.
@@ -86,7 +84,7 @@ public class AuthorizorShiro implements Authorizor {
     }
 
     private String asPermissionsString(Identifier identifier) {
-        val logicalTypeName = identifier.getLogicalType().getLogicalTypeNameFormatted(":", ":");
+        var logicalTypeName = identifier.getLogicalType().getLogicalTypeNameFormatted(":", ":");
         return logicalTypeName + ":" + identifier.getMemberLogicalName();
     }
 

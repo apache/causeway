@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public class PostProcessor implements AutoCloseable {
@@ -46,7 +45,7 @@ public class PostProcessor implements AutoCloseable {
 
     public void postProcess(final ObjectSpecification objectSpecification) {
 
-        for (val postProcessor : enabledPostProcessors) {
+        for (var postProcessor : enabledPostProcessors) {
 
             if(!postProcessor.getFilter().test(objectSpecification)) {
                 continue;

@@ -28,8 +28,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.internal.base._Casts;
 
-import lombok.val;
-
 /**
  * Boolean {@link IModel} to bind to the associated {@code T} model`s
  * bindable boolean value.
@@ -63,7 +61,7 @@ extends ChainingModel<Boolean> {
      * For DataRowToggleWkt returns its DataRow.
      */
     protected T modelObject() {
-        val model = _Casts.<IModel<T>>uncheckedCast(super.getTarget());
+        var model = _Casts.<IModel<T>>uncheckedCast(super.getTarget());
         return model.getObject();
     }
 

@@ -52,7 +52,7 @@ import static org.apache.causeway.testing.archtestsupport.applib.classrules.Comm
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.CommonPredicates.ofAnEnum;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -111,8 +111,8 @@ public class ArchitectureJpaRules {
                 if (!javaAnnotation.getRawType().isAssignableTo(EntityListeners.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val listeners = properties.get("value");
+                var properties = javaAnnotation.getProperties();
+                var listeners = properties.get("value");
                 return listeners instanceof JavaClass[] && containsCausewayEntityListener((JavaClass[]) listeners);
             }
 
@@ -240,14 +240,14 @@ public class ArchitectureJpaRules {
                 .should(new ArchCondition<JavaClass>(
                         String.format("have a field named '%s' annotated with '@%s'", fieldName, fieldAnnotation)) {
                     @Override public void check(final JavaClass javaClass, final ConditionEvents conditionEvents) {
-                        val javaFieldIfAny = javaClass.getAllFields().stream()
+                        var javaFieldIfAny = javaClass.getAllFields().stream()
                                 .filter(x -> Objects.equals(x.getName(), fieldName)).findAny();
                         if(!javaFieldIfAny.isPresent()) {
                             conditionEvents.add(new SimpleConditionEvent(javaClass, false,
                                     String.format("%s does not have a field named '%s'", javaClass.getSimpleName(), fieldName)));
                             return;
                         }
-                        val javaField = javaFieldIfAny.get();
+                        var javaField = javaFieldIfAny.get();
                         if(!javaField.isAnnotatedWith(annotationClass)) {
                             conditionEvents.add(new SimpleConditionEvent(javaClass, false,
                                     String.format("%s has field named '%s' but it is not annotated with '@%s'",
@@ -264,8 +264,8 @@ public class ArchitectureJpaRules {
                 if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val schema = properties.get("schema");
+                var properties = javaAnnotation.getProperties();
+                var schema = properties.get("schema");
                 return schema instanceof String &&
                         ((String) schema).length() > 0;
             }
@@ -287,8 +287,8 @@ public class ArchitectureJpaRules {
                 if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
                     return false;
                 }
-                val properties = javaAnnotation.getProperties();
-                val uniqueConstraints = properties.get("uniqueConstraints");
+                var properties = javaAnnotation.getProperties();
+                var uniqueConstraints = properties.get("uniqueConstraints");
                 return uniqueConstraints instanceof JavaAnnotation[] &&
                         ((JavaAnnotation<?>[]) uniqueConstraints).length > 0;
             }
@@ -314,13 +314,13 @@ public class ArchitectureJpaRules {
     static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
         return new DescribedPredicate<JavaClass>("are subtype entities ") {
             @Override public boolean test(final JavaClass input) {
-                val superclassIfAny = input.getSuperclass();
+                var superclassIfAny = input.getSuperclass();
                 if(!superclassIfAny.isPresent()) {
                     return false;
                 }
-                val superType = superclassIfAny.get();
-                val superClass = superType.toErasure();
-                val entityIfAny = superClass
+                var superType = superclassIfAny.get();
+                var superClass = superType.toErasure();
+                var entityIfAny = superClass
                         .tryGetAnnotationOfType(Entity.class);
                 return entityIfAny.isPresent();
             }

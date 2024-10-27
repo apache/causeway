@@ -34,7 +34,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.val;
 
 @EqualsAndHashCode(of = {"id"})
 @ToString(of = {"id"})
@@ -82,8 +81,8 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     }
 
     public String getLogicalMemberIdentifier() {
-        val target = getBookmark();
-        val propertyId = getPropertyId();
+        var target = getBookmark();
+        var propertyId = getPropertyId();
         return target.getLogicalTypeName() + "#" + propertyId;
     }
 
@@ -147,12 +146,12 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
             final String username,
             final TransactionId txId) {
 
-        val target = getBookmark();
-        val propertyId = getPropertyId();
-        val preValue = getPreAndPostValue().getPreString();
-        val postValue = getPreAndPostValue().getPostString();
-        val interactionId = txId.getInteractionId();
-        val sequence = txId.getSequence();
+        var target = getBookmark();
+        var propertyId = getPropertyId();
+        var preValue = getPreAndPostValue().getPreString();
+        var postValue = getPreAndPostValue().getPostString();
+        var interactionId = txId.getInteractionId();
+        var sequence = txId.getSequence();
 
         String logicalMemberId = getLogicalMemberIdentifier();
         return EntityPropertyChange.of(
@@ -165,7 +164,7 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     // -- HELPER
 
     private Object getPropertyValue() {
-        val referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.PASS_THROUGH);
+        var referencedAdapter = getProperty().get(getEntity(), InteractionInitiatedBy.PASS_THROUGH);
         return MmUnwrapUtils.single(referencedAdapter);
     }
 

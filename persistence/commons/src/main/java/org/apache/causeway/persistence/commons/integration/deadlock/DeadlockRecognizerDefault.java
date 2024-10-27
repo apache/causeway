@@ -20,8 +20,6 @@ package org.apache.causeway.persistence.commons.integration.deadlock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.val;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 
@@ -48,7 +46,7 @@ public class DeadlockRecognizerDefault implements DeadlockRecognizer {
 
     @Override
     public boolean isDeadlock(Throwable ex) {
-        val whetherDeadlock = ex instanceof DeadlockLoserDataAccessException || isMessage(ex, SQL_SERVER_DEADLOCK_MESSAGE);
+        var whetherDeadlock = ex instanceof DeadlockLoserDataAccessException || isMessage(ex, SQL_SERVER_DEADLOCK_MESSAGE);
         if (whetherDeadlock) {
             log.warn("Detected deadlock");
             log.debug("Detected deadlock details:", ex);

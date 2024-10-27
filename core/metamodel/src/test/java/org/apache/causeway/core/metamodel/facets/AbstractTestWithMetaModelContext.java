@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 
 import lombok.Getter;
-import lombok.val;
 
 public abstract class AbstractTestWithMetaModelContext
 implements HasMetaModelContext {
@@ -48,7 +47,7 @@ implements HasMetaModelContext {
     protected final void setupWithProgrammingModel(final BiConsumer<MetaModelContext, ProgrammingModelAbstract> factory) {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .programmingModelFactory((mmc, refiners)->{
-                    val progModel = new ProgrammingModelAbstract(mmc) {
+                    var progModel = new ProgrammingModelAbstract(mmc) {
                         @Override protected void assertNotInitialized(){}
                     };
                     factory.accept(mmc, progModel);

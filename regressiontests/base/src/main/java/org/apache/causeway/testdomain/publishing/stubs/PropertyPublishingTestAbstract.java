@@ -32,7 +32,7 @@ import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.val;
+
 
 public abstract class PropertyPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -62,7 +62,7 @@ extends PublishingTestAbstract {
             break;
         case POST_COMMIT:
 
-            val defaultBook = BookDto.sample();
+            var defaultBook = BookDto.sample();
 
             switch(changeScenario) {
             case ENTITY_CREATION:
@@ -98,7 +98,7 @@ extends PublishingTestAbstract {
     // -- HELPER
 
     private void assertContainsPropertyChangeEntries(final Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
+        var actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
         expectedAuditEntries.forEach(expectedAuditEntry->{
             assertTrue(actualAuditEntries.contains(expectedAuditEntry),
                     ()->String.format("expectedAuditEntry (%s) not found in %s", expectedAuditEntry, actualAuditEntries));
@@ -107,7 +107,7 @@ extends PublishingTestAbstract {
     }
 
     private void assertHasPropertyChangeEntries(final Can<String> expectedAuditEntries) {
-        val actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
+        var actualAuditEntries = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStore);
         CollectionAssertions.assertComponentWiseEquals(expectedAuditEntries, actualAuditEntries);
     }
 

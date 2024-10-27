@@ -34,7 +34,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -83,7 +82,7 @@ class _Utils {
     }
 
     Can<ResolvedMethod> findMethodsByName(final Class<?> type, final String methodName) {
-        val matchingMethods = _ClassCache.getInstance().streamResolvedMethods(type)
+        var matchingMethods = _ClassCache.getInstance().streamResolvedMethods(type)
                 .filter(method->method.name().equals(methodName))
                 .collect(Can.toCan());
         return matchingMethods;
@@ -99,7 +98,7 @@ class _Utils {
     }
 
     ResolvedMethod findGetterOrFail(final Class<?> declaringClass, final String propertyName) {
-        val getter = findGetter(declaringClass, propertyName)
+        var getter = findGetter(declaringClass, propertyName)
                     .orElseThrow(()->
                         _Exceptions.noSuchElement("getter '%s' not found in %s", propertyName, declaringClass));
         return getter;
@@ -110,8 +109,8 @@ class _Utils {
         assertEquals(a.paramCount(), b.paramCount());
         assertArrayEquals(a.paramTypes(), b.paramTypes());
 
-        val ownerA = a.method().getDeclaringClass();
-        val ownerB = b.method().getDeclaringClass();
+        var ownerA = a.method().getDeclaringClass();
+        var ownerB = b.method().getDeclaringClass();
 
         assertTrue(ownerA.isAssignableFrom(ownerB)
                 || ownerB.isAssignableFrom(ownerA));

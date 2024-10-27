@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.collections.snapshot._VersionedList;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 
 
 class SpecificationCacheDefault<T extends ObjectSpecification> implements SpecificationCache<T> {
@@ -111,8 +110,8 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
         if(spec==null) {
             return;
         }
-        val cls = spec.getCorrespondingClass();
-        val existing = specByClass.put(cls, spec);
+        var cls = spec.getCorrespondingClass();
+        var existing = specByClass.put(cls, spec);
         if(existing==null) {
             vList.add(spec); // add to vList only if we don't have it already
         }

@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link TitleService}.
@@ -59,8 +58,8 @@ public class TitleServiceDefault implements TitleService {
             return "" + domainObject;
         }
 
-        val pojo = unwrapped(domainObject);
-        val objectAdapter = objectManager.adapt(pojo);
+        var pojo = unwrapped(domainObject);
+        var objectAdapter = objectManager.adapt(pojo);
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "[UNSPECIFIED]";
@@ -84,8 +83,8 @@ public class TitleServiceDefault implements TitleService {
             return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
         }
 
-        val pojo = unwrapped(domainObject);
-        val objectAdapter = objectManager.adapt(pojo);
+        var pojo = unwrapped(domainObject);
+        var objectAdapter = objectManager.adapt(pojo);
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "unspecified";

@@ -31,8 +31,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 
-import lombok.val;
-
 abstract class ChoiceProviderTestAbstract {
 
     protected MetaModelContext mmc;
@@ -48,7 +46,7 @@ abstract class ChoiceProviderTestAbstract {
     }
 
     protected ScalarModel mockScalarModel(final Can<ManagedObject> choices, final boolean isRequired) {
-        val mockScalarModel = mock(ScalarModel.class);
+        var mockScalarModel = mock(ScalarModel.class);
         when(mockScalarModel.getChoices()).thenReturn(choices);
         when(mockScalarModel.isRequired()).thenReturn(isRequired);
         when(mockScalarModel.hasChoices()).thenReturn(true);

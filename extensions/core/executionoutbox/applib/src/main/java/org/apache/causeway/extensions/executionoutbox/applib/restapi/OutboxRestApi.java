@@ -36,7 +36,6 @@ import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutbox
 import org.apache.causeway.extensions.executionoutbox.applib.spiimpl.ContentMappingServiceForOutboxEvents;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Provides a server-side REST API for the <i>outbox rest client</i> to call, to first obtain {@link #pending() pending}
@@ -68,7 +67,7 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public OutboxEvents pending() {
-        val outboxEvents = factoryService.viewModel(new OutboxEvents());
+        var outboxEvents = factoryService.viewModel(new OutboxEvents());
         List<? extends ExecutionOutboxEntry> entries = executionOutboxEntryRepository.findOldest();
         outboxEvents.getExecutions().addAll(entries);
         return outboxEvents;
@@ -89,11 +88,11 @@ public class OutboxRestApi  {
             commandPublishing = Publishing.DISABLED
     )
     public void deleteMany(final String interactionsDtoXml) {
-        val interactionsDto = InteractionsDtoUtils.dtoMapper().read(interactionsDtoXml);
+        var interactionsDto = InteractionsDtoUtils.dtoMapper().read(interactionsDtoXml);
         interactionsDto.getInteractionDto().
                 forEach(interactionType -> {
-                    val interactionId = interactionType.getInteractionId();
-                    val sequence = interactionType.getExecution().getSequence();
+                    var interactionId = interactionType.getInteractionId();
+                    var sequence = interactionType.getExecution().getSequence();
                     executionOutboxEntryRepository.deleteByInteractionIdAndSequence(UUID.fromString(interactionId), sequence);
                 });
     }

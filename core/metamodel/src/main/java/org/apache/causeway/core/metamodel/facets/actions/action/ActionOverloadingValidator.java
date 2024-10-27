@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Rationale:
@@ -54,7 +53,7 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final @NonNull ObjectSpecification spec) {
 
-        val overloadedNames = _Sets.<String>newHashSet();
+        var overloadedNames = _Sets.<String>newHashSet();
 
         _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
                 spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{

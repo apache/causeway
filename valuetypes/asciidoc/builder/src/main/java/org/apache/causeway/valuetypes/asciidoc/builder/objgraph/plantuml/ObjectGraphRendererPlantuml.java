@@ -21,8 +21,6 @@ package org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml;
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.val;
-
 public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
 
     @Override
@@ -54,7 +52,7 @@ public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
     }
 
     protected String render(final ObjectGraph.Object obj) {
-        val sb = new StringBuilder()
+        var sb = new StringBuilder()
                 .append(String.format("object %s as %s",
                     doubleQuoted(obj.name()),
                     obj.stereotype()

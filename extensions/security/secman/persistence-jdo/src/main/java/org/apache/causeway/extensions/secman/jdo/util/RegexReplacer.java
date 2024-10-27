@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 
-import lombok.val;
+
 
 @Component
 @Named(CausewayModuleExtSecmanApplib.NAMESPACE + ".RegexReplacer")
@@ -33,7 +33,7 @@ public class RegexReplacer implements org.apache.causeway.extensions.secman.appl
 
     @Override
     public String asRegex(String str) {
-        val search = _Strings.nullToEmpty(str).replace("*", ".*").replace("?", ".");
+        var search = _Strings.nullToEmpty(str).replace("*", ".*").replace("?", ".");
         return String.format("(?i).*%s.*", search);
     }
 

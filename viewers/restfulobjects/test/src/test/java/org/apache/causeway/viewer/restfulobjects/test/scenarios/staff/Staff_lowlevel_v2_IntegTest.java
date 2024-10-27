@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
 
@@ -96,10 +96,10 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
         Approvals.verify(bodyJson, jsonOptions());
 
         // and when send request
-        val response = requestBuilder.post(Entity.entity(bodyJson, "application/json"));
+        var response = requestBuilder.post(Entity.entity(bodyJson, "application/json"));
 
         // then
-        val entity = response.readEntity(String.class);
+        var entity = response.readEntity(String.class);
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 

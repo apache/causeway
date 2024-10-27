@@ -29,7 +29,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.persistence.jdo.spring.integration.DefaultJdoDialect;
 import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
 
-import lombok.val;
+
 
 /**
  * Vendor (<i>Datanucleus</i>) specific implementation of <i>Spring's</i> {@link JdoDialect}
@@ -47,7 +47,7 @@ public class DnJdoDialect extends DefaultJdoDialect {
     @Override
     public DataAccessException translateExceptionIfPossible(final RuntimeException cause) {
 
-        val translatedException =
+        var translatedException =
 
         Try.failure(cause)
 

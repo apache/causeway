@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFa
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 
-import lombok.val;
-
 public class MemberDescribedFacetFromType
 extends MemberDescribedFacetWithStaticTextAbstract {
 
@@ -35,7 +33,7 @@ extends MemberDescribedFacetWithStaticTextAbstract {
             final ObjectDescribedFacet objectDescribedFacet,
             final FacetHolder holder) {
 
-        val describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
+        var describedIfAny = _Strings.emptyToNull(objectDescribedFacet.text());
 
         return Optional.ofNullable(describedIfAny)
         .map(described->

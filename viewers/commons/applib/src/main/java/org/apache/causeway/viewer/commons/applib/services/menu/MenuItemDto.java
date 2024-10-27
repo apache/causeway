@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 @Value(staticConstructor = "of")
 public class MenuItemDto {
@@ -50,7 +49,7 @@ public class MenuItemDto {
     }
 
     public static MenuItemDto subMenu(@NonNull final ManagedAction managedAction, final String named, final String cssClassFa) {
-        val name = _Strings.isNotEmpty(named)
+        var name = _Strings.isNotEmpty(named)
                 ? named
                 : managedAction.getFriendlyName();
         return of(name, cssClassFa, managedAction, false);

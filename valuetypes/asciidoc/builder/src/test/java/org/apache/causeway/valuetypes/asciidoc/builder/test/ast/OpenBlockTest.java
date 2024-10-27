@@ -32,8 +32,6 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.li
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.listItem;
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.openBlock;
 
-import lombok.val;
-
 class OpenBlockTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -67,20 +65,20 @@ class OpenBlockTest extends AbstractAsciiDocWriterTest {
     @Test
     void testOpenBlock() throws IOException {
         
-        val list = list(doc);
+        var list = list(doc);
         
-        val item1 = listItem(list, "ListItem 1");
-        val item2 = listItem(list, "ListItem 2");
+        var item1 = listItem(list, "ListItem 1");
+        var item2 = listItem(list, "ListItem 2");
         
-        val openBlock1 = openBlock(item1);
-        val openBlock2 = openBlock(item2);
+        var openBlock1 = openBlock(item1);
+        var openBlock2 = openBlock(item2);
         
-        val block11 = block(openBlock1, "Here's an example of a document title:");
-        val block12 = AsciiDocFactory.listingBlock(openBlock1, "= Document Title");
-        val block13 = block(openBlock1, "NOTE: The header is optional.");
+        var block11 = block(openBlock1, "Here's an example of a document title:");
+        var block12 = AsciiDocFactory.listingBlock(openBlock1, "= Document Title");
+        var block13 = block(openBlock1, "NOTE: The header is optional.");
         
-        val block21 = block(openBlock2, "paragr 1");
-        val block22 = block(openBlock2, "paragr 2");
+        var block21 = block(openBlock2, "paragr 1");
+        var block22 = block(openBlock2, "paragr 2");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

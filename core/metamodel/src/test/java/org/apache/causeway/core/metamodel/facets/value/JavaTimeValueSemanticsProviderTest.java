@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeV
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Testing the LocalDateTimeValueSemantics under the hood.
@@ -63,55 +62,55 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test
     void rendering() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.titlePresentation(_context , date));
     }
 
     @Test // support omitted parts on input
     void parseNoMinutes() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
         assertEquals(date.getTime() - 3540_000L - 3000L, parsedDate.getTime());
     }
 
     @Test // support omitted parts on input
     void parseNoSeconds() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
         assertEquals(date.getTime() - 3000L, parsedDate.getTime());
     }
 
     @Test
     void parseSeconds() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
         assertEquals(date.getTime(), parsedDate.getTime());
     }
 
     @Test
     void parseMillis() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.MILLI_SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
 
     @Test
     void parseMicros() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.MICRO_SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456");
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
 
     @Test
     void parseNanos() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.NANO_SECOND));
-        val _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
-        val parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");
+        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
 

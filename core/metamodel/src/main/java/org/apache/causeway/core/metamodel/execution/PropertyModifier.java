@@ -45,7 +45,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -66,7 +65,7 @@ implements
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertyClearFacet clearFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
-        val emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
+        var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
         return new PropertyModifier(owningProperty.getMetaModelContext(), facetHolder,
                 ModificationVariant.CLEAR, interactionInitiatedBy, head,
                 owningProperty, emptyValueAdapter, getterFacet, null, clearFacet,
@@ -149,11 +148,11 @@ implements
         // One way this might occur is if using excel module to populate an entity representing each line of the spreadsheet;
         // but the entity will be transient at the point.  But there's probably very little value in creating DTOs in such a scenario.
         //
-        val ownerAdapter = head.getOwner();
-        val ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
+        var ownerAdapter = head.getOwner();
+        var ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
 
         if (ownerHasBookmark) {
-            val propertyEditDto =
+            var propertyEditDto =
                     getInteractionDtoServiceInternal().asPropertyEditDto(owningProperty, head, newValue);
             currentExecution.setDto(propertyEditDto);
         }
@@ -165,18 +164,18 @@ implements
         }
 
         // ... post the executing event
-        val oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
-        val newValuePojo = MmUnwrapUtils.single(newValue);
+        var oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
+        var newValuePojo = MmUnwrapUtils.single(newValue);
 
-        val propertyDomainEvent =
+        var propertyDomainEvent =
                 getDomainEventHelper().postEventForProperty(
                         AbstractDomainEvent.Phase.EXECUTING,
                         getEventType(), null,
                         propertySetterOrClearFacetForDomainEventAbstract.getFacetHolder(), head,
                         oldValuePojo, newValuePojo);
 
-        val newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
-        val isValueModifiedByEvent = !Objects.equals(newValuePojoPossiblyUpdated, newValuePojo);
+        var newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
+        var isValueModifiedByEvent = !Objects.equals(newValuePojoPossiblyUpdated, newValuePojo);
 
         final ManagedObject newValueAfterEventPolling =
                 isValueModifiedByEvent
@@ -191,7 +190,7 @@ implements
         executeClearOrSetWithoutEvents(newValueAfterEventPolling);
 
         // reading the actual value from the target object, playing it safe...
-        val actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
+        var actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
         if (!Objects.equals(oldValuePojo, actualNewValue)) {
 
             // ... post the executed event

@@ -45,7 +45,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStat
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * In-memory model of users, roles and permissions.
@@ -59,7 +59,7 @@ public class ApplicationSecurityDto {
     public static class PermissionDto {
 
         static PermissionDto from(final ApplicationPermission permission) {
-            val permissionDto = new PermissionDto();
+            var permissionDto = new PermissionDto();
             permissionDto.setFeatureFqn(permission.getFeatureFqn());
             permissionDto.setFeatureSort(permission.getFeatureSort());
             permissionDto.setMode(permission.getMode());
@@ -77,7 +77,7 @@ public class ApplicationSecurityDto {
     public static class RoleDto {
 
         static RoleDto from(final ApplicationRole role) {
-            val roleDto = new RoleDto();
+            var roleDto = new RoleDto();
             roleDto.set__name(role.getName());
             roleDto.setDescription(role.getDescription());
             role.getPermissions().stream()
@@ -95,7 +95,7 @@ public class ApplicationSecurityDto {
     public static class UserDto {
 
         static UserDto from(final ApplicationUser user, Function<Locale, String> localeStringifier) {
-            val userDto = new UserDto();
+            var userDto = new UserDto();
             userDto.set__username(user.getUsername());
             userDto.setEncryptedPassword(user.getEncryptedPassword());
             userDto.setAccountType(user.getAccountType());
@@ -142,7 +142,7 @@ public class ApplicationSecurityDto {
     public static class TenancyDto {
 
         static TenancyDto from(final ApplicationTenancy tenancy) {
-            val tenancyDto = new TenancyDto();
+            var tenancyDto = new TenancyDto();
             tenancyDto.set__name(tenancy.getName());
             tenancyDto.setPath(tenancy.getPath());
 
@@ -162,7 +162,7 @@ public class ApplicationSecurityDto {
             final @NonNull ApplicationUserRepository applicationUserRepository,
             final @NonNull ApplicationTenancyRepository applicationTenancyRepository,
             final @NonNull ValueSemanticsProvider<Locale> localeSemantics) {
-        val model = new ApplicationSecurityDto();
+        var model = new ApplicationSecurityDto();
 
         applicationRoleRepository.allRoles().stream()
         .map(RoleDto::from)

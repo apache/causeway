@@ -42,7 +42,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
  import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
  @Log4j2
@@ -58,10 +57,10 @@ import lombok.extern.log4j.Log4j2;
          super(context);
          this.actionParamInteractor = actionParamInteractor;
 
-         val objectActionParameter = actionParamInteractor.getObjectActionParameter();
+         var objectActionParameter = actionParamInteractor.getObjectActionParameter();
          if (objectActionParameter.hasAutoComplete()) {
-             val elementType = objectActionParameter.getElementType();
-             val fieldBuilder = newFieldDefinition()
+             var elementType = objectActionParameter.getElementType();
+             var fieldBuilder = newFieldDefinition()
                      .name("autoComplete")
                      .type(GraphQLList.list(context.typeMapper.outputTypeFor(elementType, actionParamInteractor.getSchemaType())));
              actionParamInteractor.addGqlArguments(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.AUTOCOMPLETE, actionParamInteractor.getParamNum());
@@ -78,23 +77,23 @@ import lombok.extern.log4j.Log4j2;
      @Override
      protected List<Object> fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-         val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
-         val objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
+         var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
          if (objectSpecification == null) {
              return Collections.emptyList();
          }
 
-         val objectAction = actionParamInteractor.getObjectMember();
-         val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+         var objectAction = actionParamInteractor.getObjectMember();
+         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
          final ObjectFeature objectFeature = actionParamInteractor.getObjectActionParameter();
-         val objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
-         val argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
+         var objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
+         var argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
-         val managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
-         val pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
-         val searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
-         val autoCompleteManagedObjects = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
+         var managedAction = ManagedAction.of(managedObject, objectAction, Where.ANYWHERE);
+         var pendingArgs = ParameterNegotiationModel.of(managedAction, argumentManagedObjects);
+         var searchArg = dataFetchingEnvironment.<String>getArgument(SEARCH_PARAM_NAME);
+         var autoCompleteManagedObjects = objectActionParameter.getAutoComplete(pendingArgs, searchArg, InteractionInitiatedBy.USER);
 
          return autoCompleteManagedObjects.stream()
                     .map(ManagedObject::getPojo)

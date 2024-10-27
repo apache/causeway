@@ -22,8 +22,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 
-import lombok.val;
-
 /**
  * Returns a random {@link LocalDate}, optionally based on the current time but constrained by a {@link Period}.
  *
@@ -50,7 +48,7 @@ public class JavaTimeLocalDates extends AbstractRandomValueGenerator {
      * Returns a random date some time before 'now', within the specified {@link Period}.
      */
     public LocalDate before(final Period period) {
-        val periodWithin = fake.javaTimePeriods().within(period);
+        var periodWithin = fake.javaTimePeriods().within(period);
         return now().minus(periodWithin);
     }
 
@@ -58,7 +56,7 @@ public class JavaTimeLocalDates extends AbstractRandomValueGenerator {
      * Returns a random date some time after 'now', within the specified {@link Period}.
      */
     public LocalDate after(final Period period) {
-        val periodWithin = fake.javaTimePeriods().within(period);
+        var periodWithin = fake.javaTimePeriods().within(period);
         return now().plus(periodWithin);
     }
 
@@ -66,7 +64,7 @@ public class JavaTimeLocalDates extends AbstractRandomValueGenerator {
      * Returns a random date 5 years around 'now'.
      */
     public LocalDate any() {
-        val periodUpTo5Years = fake.javaTimePeriods().yearsUpTo(5);
+        var periodUpTo5Years = fake.javaTimePeriods().yearsUpTo(5);
         return around(periodUpTo5Years);
     }
 

@@ -26,7 +26,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -47,7 +46,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     @Override
     public ObjectSpecification register(final @NonNull ObjectSpecification spec) {
 
-        val logicalTypeName = spec.getLogicalTypeName();
+        var logicalTypeName = spec.getLogicalTypeName();
 
         if(logicalTypeByName.containsKey(logicalTypeName)) {
             return spec;
@@ -91,7 +90,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
 
         if(previousMapping!=null
                 && !spec.getLogicalType().equals(previousMapping)) {
-            val msg = String.format("Overriding existing mapping\n"
+            var msg = String.format("Overriding existing mapping\n"
                     + "%s -> %s,\n"
                     + "with\n "
                     + "%s -> %s\n "

@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForLongId_Test {
 
@@ -50,18 +50,18 @@ class IdStringifierForLongId_Test {
     @MethodSource()
     void roundtrip(final long value) {
 
-        val entityType = Customer.class;
+        var entityType = Customer.class;
 
-        val stringifier = new DnLongIdValueSemantics();
+        var stringifier = new DnLongIdValueSemantics();
 
-        val stringified = stringifier.enstring(new LongId(entityType, value));
-        val parse = stringifier.destring(entityType, stringified);
+        var stringified = stringifier.enstring(new LongId(entityType, value));
+        var parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
 
-        val decomposed = stringifier.decompose(new LongId(entityType, value));
-        val composed = stringifier.compose(decomposed);
+        var decomposed = stringifier.decompose(new LongId(entityType, value));
+        var composed = stringifier.compose(decomposed);
 
         Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(composed.getTargetClassName()).isEqualTo(entityType.getName());

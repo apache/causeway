@@ -27,8 +27,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 
-import lombok.val;
-
 //@Log4j2
 final class _Xray {
 
@@ -40,29 +38,29 @@ final class _Xray {
 
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.size();
-        val interactionId = afterEnter.peek().getInteraction().getInteractionId();
-        val executionContext = afterEnter.peek().getInteractionContext();
+        var interactionId = afterEnter.peek().getInteraction().getInteractionId();
+        var executionContext = afterEnter.peek().getInteractionContext();
 
         _XrayEvent.interactionOpen("open interaction %s", interactionId);
 
-        val threadId = ThreadMemento.fromCurrentThread();
+        var threadId = ThreadMemento.fromCurrentThread();
 
         XrayUi.updateModel(model->{
 
-            val sequenceId = XrayUtil.sequenceId(interactionId);
-            val iaLabel = String.format("Interaction-%s", interactionId);
-            val iaLabelMultiline = String.format("Interaction\n%s", interactionId);
-            val iaOpeningLabel = String.format("open interaction\n%s",
+            var sequenceId = XrayUtil.sequenceId(interactionId);
+            var iaLabel = String.format("Interaction-%s", interactionId);
+            var iaLabelMultiline = String.format("Interaction\n%s", interactionId);
+            var iaOpeningLabel = String.format("open interaction\n%s",
                     executionContext.getUser().toString().replace(", ", ",\n"));
 
-            val uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
+            var uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
 
             if(authStackSize==1) {
-                val uiThreadNode = model.getThreadNode(threadId);
+                var uiThreadNode = model.getThreadNode(threadId);
 
-                //val uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, iaLabel);
+                //var uiTopAuthLayerNode = model.addContainerNode(uiThreadNode, iaLabel);
 
-                val sequenceData = model.addDataNode(
+                var sequenceData = model.addDataNode(
                             uiThreadNode,//uiTopAuthLayerNode,
                             new XrayDataModel.Sequence(sequenceId, iaLabel))
                         .getData();
@@ -78,7 +76,7 @@ final class _Xray {
 
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
-                val sequenceData = sequence.getData();
+                var sequenceData = sequence.getData();
                 sequenceData
                 .enter(XrayUtil.nestedInteractionId(authStackSize-1), uiInteractionId, iaOpeningLabel);
                 sequenceData.activate(uiInteractionId);
@@ -96,19 +94,19 @@ final class _Xray {
         }
 
         final int authStackSize = beforeClose.size();
-        val interactionId = beforeClose.peek().getInteraction().getInteractionId();
-        val sequenceId = XrayUtil.sequenceId(interactionId);
+        var interactionId = beforeClose.peek().getInteraction().getInteractionId();
+        var sequenceId = XrayUtil.sequenceId(interactionId);
 
 
         _XrayEvent.interactionClose("close interaction %s", interactionId);
 
         XrayUi.updateModel(model->{
 
-            val uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
+            var uiInteractionId = XrayUtil.nestedInteractionId(authStackSize);
 
             model.lookupSequence(sequenceId)
             .ifPresent(sequence->{
-                val sequenceData = sequence.getData();
+                var sequenceData = sequence.getData();
 
                 if(authStackSize==1) {
                     sequenceData.exit(uiInteractionId, "thread", "close");

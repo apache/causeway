@@ -46,7 +46,6 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 
@@ -102,24 +101,24 @@ public class CommandFetcher {
 
         log.debug("finding commands on primary ...");
 
-        val commands = callPrimary(transactionId);
+        var commands = callPrimary(transactionId);
         return commands;
     }
 
     // package private in support of JUnit
     Can<CommandDto> callPrimary(final @Nullable UUID interactionId) throws StatusException {
 
-        val client = newClient(secondaryConfig, useRequestDebugLogging);
-        val request = client.request(URL_SUFFIX)
+        var client = newClient(secondaryConfig, useRequestDebugLogging);
+        var request = client.request(URL_SUFFIX)
                 .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(CommandDto.class, EnumSet.of(SuppressionType.RO)));
 
-        val args = client.arguments()
+        var args = client.arguments()
                 .addActionParameter("interactionId", interactionId!=null ? interactionId.toString() : null)
                 .addActionParameter("batchSize", secondaryConfig.getBatchSize())
                 .build();
 
         final Response response = request.post(args);
-        val digest = client.digestList(response, CommandDto.class, new GenericType<List<CommandDto>>(){})
+        var digest = client.digestList(response, CommandDto.class, new GenericType<List<CommandDto>>(){})
                 .mapFailure(failure->{
                     log.warn("rest call failed", failure);
                     return new StatusException(SecondaryStatus.REST_CALL_FAILING);
@@ -133,7 +132,7 @@ public class CommandFetcher {
             final SecondaryConfig secondaryConfig,
             final boolean useRequestDebugLogging) {
 
-        val clientConfig = RestfulClientConfig.builder()
+        var clientConfig = RestfulClientConfig.builder()
                 .restfulBaseUrl(secondaryConfig.getPrimaryBaseUrlRestful())
                 .authenticationMode(AuthenticationMode.BASIC)
                 .basicAuthUser(secondaryConfig.getPrimaryUser())
@@ -142,7 +141,7 @@ public class CommandFetcher {
                 .useRequestDebugLogging(useRequestDebugLogging)
                 .build();
 
-        val client = RestfulClient.ofConfig(clientConfig);
+        var client = RestfulClient.ofConfig(clientConfig);
         return client;
     }
 

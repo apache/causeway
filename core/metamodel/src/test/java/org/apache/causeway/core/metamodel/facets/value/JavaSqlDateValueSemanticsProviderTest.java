@@ -34,8 +34,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
 
-import lombok.val;
-
 class JavaSqlDateValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<Date> {
 
@@ -78,7 +76,7 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
 
     @Test
     void parse() throws Exception {
-        val parsedDate = value.parseTextRepresentation(null, "1980-01-01");
+        var parsedDate = value.parseTextRepresentation(null, "1980-01-01");
         assertEquals("1980-01-01", parsedDate.toString());
     }
 

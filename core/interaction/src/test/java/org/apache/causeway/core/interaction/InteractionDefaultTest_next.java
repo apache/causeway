@@ -27,13 +27,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
 
-import lombok.val;
-
 class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        val interaction = new CausewayInteraction(UUID.randomUUID());
+        var interaction = new CausewayInteraction(UUID.randomUUID());
 
         assertThat(interaction.getThenIncrementExecutionSequence(), is(0));
         assertThat(interaction.getThenIncrementExecutionSequence(), is(1));

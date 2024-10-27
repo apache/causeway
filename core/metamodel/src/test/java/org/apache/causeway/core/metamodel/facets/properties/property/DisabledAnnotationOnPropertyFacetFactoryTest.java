@@ -36,8 +36,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-import lombok.val;
-
 class DisabledAnnotationOnPropertyFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -55,7 +53,7 @@ extends FacetFactoryTestAbstract {
 
     private void processEditing(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
+        var propertyIfAny = processMethodContext.synthesizeOnMethod(Property.class);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
 

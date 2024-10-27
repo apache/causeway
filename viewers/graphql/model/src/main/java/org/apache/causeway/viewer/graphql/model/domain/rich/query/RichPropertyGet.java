@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 
-import lombok.val;
+
 
 public class RichPropertyGet extends RichAssociationGet<OneToOneAssociation> {
 
@@ -36,7 +36,7 @@ public class RichPropertyGet extends RichAssociationGet<OneToOneAssociation> {
 
     @Override
     GraphQLOutputType outputTypeFor(MemberInteractor<OneToOneAssociation> holder) {
-        val oneToOneAssociation = holder.getObjectMember();
+        var oneToOneAssociation = holder.getObjectMember();
         return context.typeMapper.outputTypeFor(oneToOneAssociation, holder.getSchemaType());
     }
 

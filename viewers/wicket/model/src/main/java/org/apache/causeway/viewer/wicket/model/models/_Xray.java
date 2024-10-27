@@ -25,7 +25,6 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -35,9 +34,9 @@ final class _Xray {
             final ScalarModel scalarModel, final ManagedObject oldValue, final ManagedObject newValue) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        val oldPojo = MmUnwrapUtils.single(oldValue);
-        val newPojo = MmUnwrapUtils.single(newValue);
-        val changed = !Objects.equals(oldPojo, newPojo);
+        var oldPojo = MmUnwrapUtils.single(oldValue);
+        var newPojo = MmUnwrapUtils.single(newValue);
+        var changed = !Objects.equals(oldPojo, newPojo);
 
         final String updatingWhat = scalarModel.getSpecialization()
                 .fold(

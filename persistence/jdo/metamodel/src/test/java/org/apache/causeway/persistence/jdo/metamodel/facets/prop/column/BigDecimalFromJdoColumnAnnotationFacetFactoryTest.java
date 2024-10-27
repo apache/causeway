@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractiona
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacet;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
-import lombok.val;
-
 class BigDecimalFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
@@ -44,7 +42,7 @@ extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        val mmc = MetaModelContext_forTesting.buildDefault();
+        var mmc = MetaModelContext_forTesting.buildDefault();
         facetFactory = new BigDecimalFromJdoColumnAnnotationFacetFactory(mmc);
     }
 
@@ -55,7 +53,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        val featureTypes = facetFactory.getFeatureTypes();
+        var featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
@@ -65,7 +63,7 @@ extends AbstractFacetFactoryTest {
 
     public void testAnnotationPickedUpOnProperty() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        val method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotation");
+        var method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -74,7 +72,7 @@ extends AbstractFacetFactoryTest {
 
     public void testAnnotationDefaultsLengthIfMissing() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        val method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotationMissingLength");
+        var method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotationMissingLength");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -83,7 +81,7 @@ extends AbstractFacetFactoryTest {
 
     public void testAnnotationDefaultsScaleIfMissing() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        val method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotationMissingScale");
+        var method = findMethod(cls, "getBigDecimalPropertyWithColumnAnnotationMissingScale");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -92,7 +90,7 @@ extends AbstractFacetFactoryTest {
 
     public void testNoFacetIfPropertyTypeIsNotBigDecimal() throws Exception {
         final Class<?> cls = SimpleObjectWithBigDecimalColumnAnnotations.class;
-        val method = findMethod(cls, "getStringPropertyWithColumnAnnotation");
+        var method = findMethod(cls, "getStringPropertyWithColumnAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 

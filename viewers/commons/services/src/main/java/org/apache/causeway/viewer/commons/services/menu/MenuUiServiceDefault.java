@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Service
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".MenuUiServiceDefault")
@@ -66,8 +65,8 @@ implements MenuUiService {
             final MenuUiModel menuUiModel,
             final MenuVisitor menuBuilder) {
 
-        val menuBars = menuBarsService.menuBars();
-        val menuBar = (BSMenuBar) menuBars.menuBarFor(menuUiModel.getMenuBarSelect());
+        var menuBars = menuBarsService.menuBars();
+        var menuBar = (BSMenuBar) menuBars.menuBarFor(menuUiModel.getMenuBarSelect());
 
         _MenuItemBuilder.buildMenuItems(
                 metaModelContext,

@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -76,8 +75,8 @@ public final class MmVisibilityUtils {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Class<?> requiredContainerType) {
 
-        val visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
-        val autofittedObjectContainer = CollectionFacet.AutofitUtils
+        var visiblePojoStream = streamVisiblePojos(collectionAdapter, interactionInitiatedBy);
+        var autofittedObjectContainer = CollectionFacet.AutofitUtils
                 .collect(visiblePojoStream, requiredContainerType);
         return autofittedObjectContainer;
     }
@@ -96,7 +95,7 @@ public final class MmVisibilityUtils {
             // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
         }
-        val spec = adapter.getSpecification();
+        var spec = adapter.getSpecification();
         if(spec.isEntity()) {
             if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
                 return false;
@@ -105,7 +104,7 @@ public final class MmVisibilityUtils {
         if(!interactionInitiatedBy.isUser()) {
             return true;
         }
-        val visibilityContext = createVisibleInteractionContext(
+        var visibilityContext = createVisibleInteractionContext(
                 adapter,
                 InteractionInitiatedBy.USER,
                 Where.OBJECT_FORMS);

@@ -45,7 +45,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 import static org.apache.causeway.commons.internal.collections._Collections.toStringJoiningNewLine;
 import static org.apache.causeway.commons.internal.collections._Sets.intersectSorted;
 
-import lombok.val;
+
 
 //import org.apache.causeway.testdomain.Incubating;
 
@@ -82,7 +82,7 @@ class SpringServiceProvisioningTest {
                 .sorted()
                 .collect(Collectors.toList());
 
-        val beansFound = toStringJoiningNewLine(beans);
+        var beansFound = toStringJoiningNewLine(beans);
         System.out.println("--- Beans discovered by Causeway ---");
         System.out.println(beansFound);
         System.out.println("--------------------------------");
@@ -91,20 +91,20 @@ class SpringServiceProvisioningTest {
     @Test @Disabled("constantly changing")
     void builtInServices_shouldBeSetUp() throws IOException {
 
-        val managedServices = serviceRegistry.streamRegisteredBeans()
+        var managedServices = serviceRegistry.streamRegisteredBeans()
                 .map(_SingletonBeanProvider::getBeanClass)
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        val singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
-        val expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
+        var singletonListing = _Resources.loadAsStringUtf8(this.getClass(), "builtin-domain-services.list");
+        var expectedSingletons = _Strings.splitThenStreamTrimmed(singletonListing, "\n")
                 .filter(entry->!entry.startsWith("#"))
                 .filter(entry->!entry.startsWith("org.apache.causeway.testdomain."))
                 .collect(Collectors.toCollection(TreeSet::new));
         
         assertFalse(expectedSingletons.isEmpty());
         
-        val servicesFound = toStringJoiningNewLine(managedServices);
+        var servicesFound = toStringJoiningNewLine(managedServices);
         System.out.println("--- Services discovered by Causeway ---");
         System.out.println(servicesFound);
         System.out.println("--------------------------------");

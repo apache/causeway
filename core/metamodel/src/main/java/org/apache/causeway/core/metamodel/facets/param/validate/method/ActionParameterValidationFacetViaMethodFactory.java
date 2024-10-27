@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.facets.ParameterSupport.SearchAlgorith
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.param.validate.ActionParameterValidationFacet;
 
-import lombok.val;
-
 /**
  * Sets up {@link ActionParameterValidationFacet}. */
 public class ActionParameterValidationFacetViaMethodFactory
@@ -48,8 +46,8 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val validateMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
+        var validateMethod = searchResult.getSupportingMethod();
+        var patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterValidationFacetViaMethod(
                         validateMethod, patConstructor, paramAsHolder));

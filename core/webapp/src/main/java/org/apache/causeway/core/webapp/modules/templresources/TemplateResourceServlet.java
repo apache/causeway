@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.commons.ResourceUtil;
 
 import static org.apache.causeway.commons.internal.base._Strings.pair;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -81,7 +80,7 @@ public class TemplateResourceServlet extends HttpServlet {
         final String servletPath = _Strings.removePrefix(request.getServletPath(), "/");
         log.debug("request: {}", servletPath);
 
-        val resourceInputStream = Optional
+        var resourceInputStream = Optional
                 .ofNullable(loadFromFileSystem(request)) // try to load from file-system first
                 .orElseGet(()->loadFromClassPath(servletPath)); // otherwise, try to load from class-path
 
@@ -105,10 +104,10 @@ public class TemplateResourceServlet extends HttpServlet {
     }
 
     private InputStream loadFromFileSystem(final HttpServletRequest request) {
-        val inputStream = _Util.getResourceAsStream(request);
+        var inputStream = _Util.getResourceAsStream(request);
 
         if(log.isDebugEnabled()) {
-            val realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
+            var realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
             if(inputStream!=null) {
                 log.debug("request: {} loaded from fileSystem {}", request.getServletPath(), realPath);
             } else {
@@ -120,7 +119,7 @@ public class TemplateResourceServlet extends HttpServlet {
     }
 
     private InputStream loadFromClassPath(final String path) {
-        val inputStream = ResourceUtil.getResourceAsStream(path);
+        var inputStream = ResourceUtil.getResourceAsStream(path);
         if(log.isDebugEnabled()) {
             if(inputStream!=null) {
                 log.debug("request: {} loaded from classpath", path);

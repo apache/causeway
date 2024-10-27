@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 class RecreatableObjectFacetFactoryTest
 extends FacetFactoryTestAbstract {
@@ -86,13 +85,13 @@ extends FacetFactoryTestAbstract {
 
             // do a little roundtrip test
             {
-                val customerPojo = new Customer("Hallo World!:/?|");
+                var customerPojo = new Customer("Hallo World!:/?|");
                 assertFalse(isUrlSafeChunk(customerPojo.viewModelMemento()));
 
-                val customer = facetFactory.getObjectManager().adapt(customerPojo);
-                val customerBookmark = viewModelFacet.serializeToBookmark(customer);
+                var customer = facetFactory.getObjectManager().adapt(customerPojo);
+                var customerBookmark = viewModelFacet.serializeToBookmark(customer);
 
-                val customerRecreated = viewModelFacet.instantiate(
+                var customerRecreated = viewModelFacet.instantiate(
                         customer.getSpecification(), Optional.of(customerBookmark));
 
                 assertEquals(customerPojo.getName(), ((Customer)(customerRecreated.getPojo())).getName());

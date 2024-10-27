@@ -43,7 +43,7 @@ import org.apache.causeway.testdomain.model.interaction.InteractionNpmDemo;
 import org.apache.causeway.testdomain.model.interaction.InteractionNpmDemo_biArgEnabled;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -75,14 +75,14 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @ValueSource(strings = {"biArgEnabled", "patEnabled"})
     void paramAnnotations_whenNpm_shouldBeRecognized(final String mixinName) {
 
-        val param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
+        var param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
                 .getMetamodel().get().getParameters().getElseFail(0);
 
         // as with first param's @Parameter(maxLength = 2)
-        val maxLengthFacet = param0Metamodel.getFacet(MaxLengthFacet.class);
+        var maxLengthFacet = param0Metamodel.getFacet(MaxLengthFacet.class);
 
         // as with first param's @ParameterLayout(describedAs = "first")
-        val describedAsFacet = param0Metamodel.getFacet(ParamDescribedFacet.class);
+        var describedAsFacet = param0Metamodel.getFacet(ParamDescribedFacet.class);
 
         assertNotNull(maxLengthFacet);
         assertNotNull(describedAsFacet);
@@ -94,16 +94,16 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withParams_shouldProduceCorrectResult() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
-        val params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
+        var params = Can.of(objectManager.adapt(12), objectManager.adapt(34));
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        var pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());
 
         assertEquals(46, (int)resultOrVeto.getSuccessElseFail().getPojo());
@@ -112,16 +112,16 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooManyParams_shouldIgnoreOverflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
-        val params =  Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
+        var params =  Can.of(objectManager.adapt(12), objectManager.adapt(34), objectManager.adapt(99));
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        var pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());
 
         assertEquals(46, (int)resultOrVeto.getSuccessElseFail().getPojo());
@@ -130,16 +130,16 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_withTooLittleParams_shouldIgnoreUnderflow() throws Throwable {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
         .checkVisibility()
         .checkUsability();
 
-        val params = Can.<ManagedObject>of();
+        var params = Can.<ManagedObject>of();
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().get();
+        var pendingArgs = actionInteraction.startParameterNegotiation().get();
         pendingArgs.setParamValues(params);
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
 
         assertTrue(resultOrVeto.isSuccess());
 
@@ -149,17 +149,17 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @Test
     void actionInteraction_shouldProvideParameterDefaults() {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, "biArgEnabled", Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
-        val managedAction = actionInteraction.getManagedAction().get(); // should not throw
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get(); // should not throw
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val expectedDefaults = Can.of(
+        var expectedDefaults = Can.of(
                 new InteractionDemo_biArgEnabled(null).defaultA(null),
                 0);
-        val actualDefaults = pendingArgs.getParamValues().stream()
+        var actualDefaults = pendingArgs.getParamValues().stream()
                 .map(ManagedObject::getPojo)
                 .collect(Collectors.toList());
 
@@ -170,22 +170,22 @@ class NewParameterModelTest extends InteractionTestAbstract {
     @ValueSource(strings = {"biArgEnabled", "patEnabled"})
     void actionInteraction_shouldProvideChoices(final String mixinName) {
 
-        val actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
+        var actionInteraction = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
                 .checkVisibility()
                 .checkUsability();
 
         assertTrue(actionInteraction.getManagedAction().isPresent(), "action is expected to be usable");
 
-        val managedAction = actionInteraction.getManagedAction().get();
-        val pendingArgs = managedAction.startParameterNegotiation();
+        var managedAction = actionInteraction.getManagedAction().get();
+        var pendingArgs = managedAction.startParameterNegotiation();
 
-        val param0Choices = pendingArgs.getObservableParamChoices(0); // observable
-        val param1Choices = pendingArgs.getObservableParamChoices(1); // observable
+        var param0Choices = pendingArgs.getObservableParamChoices(0); // observable
+        var param1Choices = pendingArgs.getObservableParamChoices(1); // observable
 
         assertTrue(param0Choices.getValue().isEmpty());
 
-        val expectedChoices = new InteractionNpmDemo_biArgEnabled(null).choicesB(null);
-        val actualChoices = param1Choices.getValue();
+        var expectedChoices = new InteractionNpmDemo_biArgEnabled(null).choicesB(null);
+        var actualChoices = param1Choices.getValue();
 
         assertComponentWiseUnwrappedEquals(expectedChoices, actualChoices);
 

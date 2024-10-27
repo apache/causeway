@@ -30,7 +30,6 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 
@@ -58,7 +57,7 @@ public final class CausewayWicketAjaxRequestListenerUtil {
                                     ((ListenerRequestHandler)handler).getPage();
 
                             if(iRequestablePage instanceof PageAbstract) {
-                                val pageAbstract = (PageAbstract) iRequestablePage;
+                                var pageAbstract = (PageAbstract) iRequestablePage;
                                 pageAbstract.onNewRequestCycle();
                             }
 

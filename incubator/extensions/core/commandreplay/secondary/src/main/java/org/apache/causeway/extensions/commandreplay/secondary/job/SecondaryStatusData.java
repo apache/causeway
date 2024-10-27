@@ -22,8 +22,6 @@ import org.quartz.JobExecutionContext;
 
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 
-import lombok.val;
-
 /**
  * @since 2.0 {@index}
  */
@@ -42,7 +40,7 @@ class SecondaryStatusData {
     }
 
     SecondaryStatus getSecondaryStatus(final SecondaryStatus defaultStatus) {
-        val mode = jobExecutionData.getString( KEY_SECONDARY_STATUS, defaultStatus.name());
+        var mode = jobExecutionData.getString( KEY_SECONDARY_STATUS, defaultStatus.name());
         return SecondaryStatus.valueOf(mode);
     }
 

@@ -31,7 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * Represents a nullable scalar value,
@@ -52,7 +52,7 @@ public final class ScalarValueDtoV2 {
     }
 
     public static <T> ScalarValueDtoV2 forValue(final @NonNull T value, final @NonNull ValueSemanticsProvider<T> valueSemantics) {
-        val valDecomp = valueSemantics.decompose(value);
+        var valDecomp = valueSemantics.decompose(value);
         return new ScalarValueDtoV2(VALUE_DECOMPOSITION_TYPE_NAME, valDecomp.stringify());
     }
 
@@ -75,7 +75,7 @@ public final class ScalarValueDtoV2 {
         if(isValueDecomposition()
                 && (value instanceof String)) {
             try {
-                val stringifiedComposite = (String)getValue();
+                var stringifiedComposite = (String)getValue();
                 this.value = ValueDecomposition.destringify(ValueType.COMPOSITE, stringifiedComposite);
             } catch (Exception e) {
                 e.printStackTrace();

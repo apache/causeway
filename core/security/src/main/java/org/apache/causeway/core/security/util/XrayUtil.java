@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 public final class XrayUtil {
 
@@ -63,9 +62,9 @@ public final class XrayUtil {
         }
 
         final int authStackSize = interactionProvider.getInteractionLayerCount();
-        val interactionId = interactionProvider.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
+        var interactionId = interactionProvider.getInteractionId().orElseThrow(_Exceptions::unexpectedCodeReach);
 
-        val handle = SequenceHandle.builder()
+        var handle = SequenceHandle.builder()
                 .sequenceId(XrayUtil.sequenceId(interactionId))
                 .caller(authStackSize>0
                         ? XrayUtil.nestedInteractionId(authStackSize)

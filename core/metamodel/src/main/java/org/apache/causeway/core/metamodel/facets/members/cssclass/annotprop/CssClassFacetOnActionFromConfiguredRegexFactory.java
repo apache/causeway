@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 
-import lombok.val;
-
 public class CssClassFacetOnActionFromConfiguredRegexFactory
 extends FacetFactoryAbstract {
 
@@ -49,7 +47,7 @@ extends FacetFactoryAbstract {
         }
 
         // the name which we match the regex against
-        val actionName = processMethodContext.getMethod().getName();
+        var actionName = processMethodContext.getMethod().getName();
 
         addFacetIfPresent(
                 CssClassFacetOnActionFromConfiguredRegex

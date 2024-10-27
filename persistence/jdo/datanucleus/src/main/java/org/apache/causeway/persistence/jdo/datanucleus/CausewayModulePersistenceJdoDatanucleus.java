@@ -77,7 +77,7 @@ import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceMa
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.SneakyThrows;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -147,18 +147,18 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
         autoCreateSchemas(dataSource, causewayConfiguration);
 
-        val lpmfBean = new LocalPersistenceManagerFactoryBean() {
+        var lpmfBean = new LocalPersistenceManagerFactoryBean() {
             @Override
             protected PersistenceManagerFactory newPersistenceManagerFactory(final java.util.Map<?,?> props) {
-                val pu = createDefaultPersistenceUnit(beanTypeRegistry);
-                val pmf = new JDOPersistenceManagerFactory(pu, props);
+                var pu = createDefaultPersistenceUnit(beanTypeRegistry);
+                var pmf = new JDOPersistenceManagerFactory(pu, props);
                 pmf.setConnectionFactory(dataSource);
                 integrateWithApplicationLayer(metaModelContext, objectLifecyclePublisher, pmf);
                 return pmf;
             }
             @Override
             protected PersistenceManagerFactory newPersistenceManagerFactory(final String name) {
-                val pmf = super.newPersistenceManagerFactory(name);
+                var pmf = super.newPersistenceManagerFactory(name);
                 pmf.setConnectionFactory(dataSource); //might be too late, anyway, not sure if this is ever called
                 integrateWithApplicationLayer(metaModelContext, objectLifecyclePublisher, pmf);
                 return pmf;
@@ -177,11 +177,11 @@ public class CausewayModulePersistenceJdoDatanucleus {
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
             final DatanucleusSettings dnSettings) {
 
-        val pmf = localPmfBean.getObject(); // created once per application lifecycle
+        var pmf = localPmfBean.getObject(); // created once per application lifecycle
 
         notifyJdoEntityDiscoveryListeners(pmf, beanTypeRegistry, jdoEntityDiscoveryListeners, dnSettings);
 
-        val tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        var tapmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         tapmfProxy.setTargetPersistenceManagerFactory(pmf);
         tapmfProxy.setAllowCreate(false);
         return tapmfProxy;
@@ -194,8 +194,8 @@ public class CausewayModulePersistenceJdoDatanucleus {
             final @Qualifier("jdo-dialect") JdoDialect jdoDialect,
             final @Qualifier("local-pmf-proxy") LocalPersistenceManagerFactoryBean localPmfBean) {
 
-        val pmf = localPmfBean.getObject(); // created once per application lifecycle
-        val txManager = new JdoTransactionManager(pmf);
+        var pmf = localPmfBean.getObject(); // created once per application lifecycle
+        var txManager = new JdoTransactionManager(pmf);
         txManager.setJdoDialect(jdoDialect);
         return txManager;
     }
@@ -213,11 +213,11 @@ public class CausewayModulePersistenceJdoDatanucleus {
                 super.completeTransactionAfterThrowing(txInfo, ex);
 
                 if(ex instanceof RuntimeException) {
-                    val txManager = txInfo.getTransactionManager();
+                    var txManager = txInfo.getTransactionManager();
                     if(txManager instanceof JdoTransactionManager) {
-                        val jdoDialect = ((JdoTransactionManager)txManager).getJdoDialect();
+                        var jdoDialect = ((JdoTransactionManager)txManager).getJdoDialect();
                         if(jdoDialect instanceof PersistenceExceptionTranslator) {
-                            val translatedEx = ((PersistenceExceptionTranslator)jdoDialect)
+                            var translatedEx = ((PersistenceExceptionTranslator)jdoDialect)
                                     .translateExceptionIfPossible((RuntimeException)ex);
 
                             if(translatedEx!=null) {
@@ -227,7 +227,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
                         }
 
                         if(ex instanceof JDOException) {
-                            val translatedEx = jdoDialect.translateException((JDOException)ex);
+                            var translatedEx = jdoDialect.translateException((JDOException)ex);
 
                             if(translatedEx!=null) {
                                 throw translatedEx;
@@ -251,12 +251,12 @@ public class CausewayModulePersistenceJdoDatanucleus {
             return;
         }
         // assuming, as we instantiate a DN PMF, all entities discovered are JDO entities
-        val jdoEntityTypes = beanTypeRegistry.getEntityTypes();
+        var jdoEntityTypes = beanTypeRegistry.getEntityTypes();
         if(_NullSafe.isEmpty(jdoEntityTypes)) {
             return;
         }
-        val jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes.keySet());
-        val dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
+        var jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes.keySet());
+        var dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
         jdoEntityDiscoveryListeners
             .forEach(listener->
                     listener.onEntitiesDiscovered(pmf, jdoEntityTypesView, dnProps));
@@ -270,23 +270,23 @@ public class CausewayModulePersistenceJdoDatanucleus {
             final DataSource dataSource,
             final CausewayConfiguration causewayConfiguration) {
 
-        val persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
 
         if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
 
-            val createSchemaSqlTemplate = persistenceSchemaConf.getCreateSchemaSqlTemplate();
+            var createSchemaSqlTemplate = persistenceSchemaConf.getCreateSchemaSqlTemplate();
 
             log.info("About to create db schema(s) {} with template '{}'",
                     persistenceSchemaConf.getAutoCreateSchemas(),
                     createSchemaSqlTemplate);
 
-            try(val con = dataSource.getConnection()){
+            try(var con = dataSource.getConnection()){
 
-                val s = con.createStatement();
+                var s = con.createStatement();
 
-                for(val schema : persistenceSchemaConf.getAutoCreateSchemas()) {
+                for(var schema : persistenceSchemaConf.getAutoCreateSchemas()) {
                     // in case there are multiple placeholders, we specify the string multiple times.
-                    val sql = String.format(createSchemaSqlTemplate, schema, schema, schema, schema, schema, schema, schema);
+                    var sql = String.format(createSchemaSqlTemplate, schema, schema, schema, schema, schema, schema, schema);
                     log.info("SQL '{}'", sql);
                     s.execute(sql);
                 }
@@ -299,7 +299,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
     private static PersistenceUnitMetaData createDefaultPersistenceUnit (
             final CausewayBeanTypeRegistry beanTypeRegistry) {
-        val pumd = new PersistenceUnitMetaData(
+        var pumd = new PersistenceUnitMetaData(
                 "dynamic-unit", "RESOURCE_LOCAL", null);
         pumd.setExcludeUnlistedClasses(false);
         beanTypeRegistry.getEntityTypes().keySet().stream()
@@ -315,7 +315,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
         // install JDO specific entity change listeners ...
 
-        val jdoLifecycleListener =
+        var jdoLifecycleListener =
                 new JdoLifecycleListener(metaModelContext, objectLifecyclePublisher);
         pmf.addInstanceLifecycleListener(jdoLifecycleListener, (Class[]) null);
 

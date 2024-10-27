@@ -30,8 +30,6 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateTimeValueSemantics;
 
-import lombok.val;
-
 public class JodaLocalDateTimeValueSemanticsProviderTest {
 
     private JodaLocalDateTimeValueSemantics valueSemantics;
@@ -39,7 +37,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        val delegate = new LocalDateTimeValueSemantics();
+        var delegate = new LocalDateTimeValueSemantics();
 
         valueSemantics = new JodaLocalDateTimeValueSemantics() {
             @Override
@@ -54,7 +52,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
 
         final LocalDateTime t0 = LocalDateTime.now();
 
-        val encoded = valueSemantics.decompose(t0);
+        var encoded = valueSemantics.decompose(t0);
         final LocalDateTime t1 = valueSemantics.compose(encoded);
 
         assertThat(t0, is(equalTo(t1)));

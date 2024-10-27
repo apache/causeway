@@ -35,7 +35,7 @@ import org.apache.causeway.persistence.commons.metamodel.facets.prop.column.BigD
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-import lombok.val;
+
 
 public class BigDecimalFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
@@ -55,7 +55,7 @@ implements MetaModelRefiner {
 
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
-        val jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
+        var jdoColumnIfAny = processMethodContext.synthesizeOnMethod(Column.class);
 
         addFacetIfPresent(
                 MaxTotalDigitsFacetFromJdoColumnAnnotation.create(jdoColumnIfAny, holder));

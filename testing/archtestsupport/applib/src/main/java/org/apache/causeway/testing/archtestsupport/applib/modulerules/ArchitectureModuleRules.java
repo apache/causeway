@@ -37,7 +37,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -61,7 +61,7 @@ public class ArchitectureModuleRules {
      * @see #code_dependencies_follow_module_Imports_and_subpackage_rules(List, List)
      */
     public static List<Class<?>> analyzeClasses_packagesOf(final Class<?> clazz) {
-        val analyzeClassesAnnot = AnnotationUtils.findAnnotation(clazz, AnalyzeClasses.class);
+        var analyzeClassesAnnot = AnnotationUtils.findAnnotation(clazz, AnalyzeClasses.class);
         return Arrays.stream(analyzeClassesAnnot.packagesOf())
                 .filter(x -> x.getSimpleName().endsWith("Module"))
                 .collect(Collectors.toList());
@@ -89,23 +89,23 @@ public class ArchitectureModuleRules {
      */
     public static Architectures.LayeredArchitecture code_dependencies_follow_module_Imports_and_subpackage_rules(
             final List<Class<?>> moduleClasses, final List<Subpackage> subpackages) {
-        val layeredArchitecture = Architectures.layeredArchitecture().consideringAllDependencies();
+        var layeredArchitecture = Architectures.layeredArchitecture().consideringAllDependencies();
 
         defineLayers(moduleClasses, layeredArchitecture, subpackages);
 
-        val directDependenciesByImported = new HashMap<Class<?>, Set<Class<?>>>();
-        val directDependenciesByImporting = new HashMap<Class<?>, Set<Class<?>>>();
+        var directDependenciesByImported = new HashMap<Class<?>, Set<Class<?>>>();
+        var directDependenciesByImporting = new HashMap<Class<?>, Set<Class<?>>>();
         computeDirectDependencies(moduleClasses, directDependenciesByImported,
                 directDependenciesByImporting);
 
-        val transitiveDependenciesByImporting = new HashMap<Class<?>, Set<Class<?>>>();
+        var transitiveDependenciesByImporting = new HashMap<Class<?>, Set<Class<?>>>();
         computeTransitiveDependencies(moduleClasses, directDependenciesByImporting,
                 transitiveDependenciesByImporting);
 
-        val transitiveDependenciesByImported = invert(transitiveDependenciesByImporting);
+        var transitiveDependenciesByImported = invert(transitiveDependenciesByImporting);
         checkLayerAccess(layeredArchitecture, transitiveDependenciesByImported, subpackages);
 
-        val importingClassesNotImported = new LinkedHashSet<>(
+        var importingClassesNotImported = new LinkedHashSet<>(
                 transitiveDependenciesByImporting.keySet());
         importingClassesNotImported.removeAll(transitiveDependenciesByImported.keySet());
 
@@ -118,7 +118,7 @@ public class ArchitectureModuleRules {
             final List<Subpackage> subpackages) {
         moduleClasses.forEach(moduleClass ->
                 subpackages.forEach(subpackage -> {
-                    val subpackageName = subpackage.getName();
+                    var subpackageName = subpackage.getName();
                     layeredArchitecture.optionalLayer(nameOf(moduleClass, subpackageName))
                             .definedBy(packageIdentifierFor(moduleClass, subpackage));
                 }));
@@ -132,12 +132,12 @@ public class ArchitectureModuleRules {
                 moduleClass -> {
                     final Import importAnnotation = AnnotationUtils.findAnnotation(moduleClass, Import.class);
                     if (importAnnotation != null) {
-                        val importedClassesFromAnnot = importAnnotation.value();
-                        val importedClasses = new LinkedHashSet<>(Arrays.asList(importedClassesFromAnnot));
+                        var importedClassesFromAnnot = importAnnotation.value();
+                        var importedClasses = new LinkedHashSet<>(Arrays.asList(importedClassesFromAnnot));
                         directDependenciesByImporting.put(moduleClass, importedClasses);
                         importedClasses.forEach(
                                 importedClass -> {
-                                    val importingClasses = directDependenciesByImported
+                                    var importingClasses = directDependenciesByImported
                                             .computeIfAbsent(importedClass, k -> new LinkedHashSet<>());
                                     importingClasses.add(moduleClass);
                                 }
@@ -152,7 +152,7 @@ public class ArchitectureModuleRules {
             final Map<Class<?>, Set<Class<?>>> directDependenciesByImporting,
             final Map<Class<?>, Set<Class<?>>> transitiveDependenciesByImporting) {
         moduleClasses.forEach((moduleClass) -> {
-            val transitiveDependencies = new LinkedHashSet<Class<?>>();
+            var transitiveDependencies = new LinkedHashSet<Class<?>>();
             accumulateTransitiveDependencies(moduleClass, directDependenciesByImporting,
                     transitiveDependencies);
             transitiveDependenciesByImporting.put(moduleClass, transitiveDependencies);
@@ -167,13 +167,13 @@ public class ArchitectureModuleRules {
 
             subpackages.forEach(subpackage -> {
 
-                val localModule = asArray(subpackage.mayBeAccessedBySubpackagesInSameModule(), subpackages);
-                val otherModules = asArray(subpackage.mayBeAccessedBySubpackagesInReferencingModules(), subpackages);
+                var localModule = asArray(subpackage.mayBeAccessedBySubpackagesInSameModule(), subpackages);
+                var otherModules = asArray(subpackage.mayBeAccessedBySubpackagesInReferencingModules(), subpackages);
 
                 final String moduleName = nameOf(importedModule, subpackage.getName());
-                val localModulePackageNames = namesOf(importedModule, localModule);
-                val importingModulePackageNames = namesOf(importingModules, otherModules);
-                val accessingModules = both(localModulePackageNames, importingModulePackageNames);
+                var localModulePackageNames = namesOf(importedModule, localModule);
+                var importingModulePackageNames = namesOf(importingModules, otherModules);
+                var accessingModules = both(localModulePackageNames, importingModulePackageNames);
                 if(accessingModules.length > 0) {
                     layeredArchitecture
                             .whereLayer(moduleName)
@@ -203,20 +203,20 @@ public class ArchitectureModuleRules {
 
 
     static String nameOf(final Class<?> moduleClass, final @Nullable String subpackageName) {
-        val simpleName = moduleClass.getSimpleName();
-        val moduleName = simpleName.replace("Module", "");
+        var simpleName = moduleClass.getSimpleName();
+        var moduleName = simpleName.replace("Module", "");
         return moduleName + (subpackageName != null ? (" " + subpackageName) : "");
     }
 
     static String[] namesOf(final Class<?> moduleClass, final String... subpackageNames) {
-        val names = Arrays.stream(subpackageNames)
+        var names = Arrays.stream(subpackageNames)
                 .map(subpackageName -> nameOf(moduleClass, subpackageName))
                 .collect(Collectors.toList());
         return names.toArray(new String[] {});
     }
 
     static String[] namesOf(final Set<Class<?>> importingClasses, final String... subpackageNames) {
-        val names = new ArrayList<String>();
+        var names = new ArrayList<String>();
         importingClasses.forEach(importingClass -> {
             Stream.of(subpackageNames).forEach(subpackageName ->
                     names.add(nameOf(importingClass, subpackageName)));
@@ -234,24 +234,24 @@ public class ArchitectureModuleRules {
     }
 
     static String[] both(final String str, final String[] arr) {
-        val strings = new ArrayList<String>();
+        var strings = new ArrayList<String>();
         strings.add(str);
         strings.addAll(Arrays.asList(arr));
         return strings.toArray(new String[] {});
     }
 
     static String[] both(final String[] arr1, final String[] arr2) {
-        val strings = new ArrayList<String>();
+        var strings = new ArrayList<String>();
         strings.addAll(Arrays.asList(arr1));
         strings.addAll(Arrays.asList(arr2));
         return strings.toArray(new String[] {});
     }
 
     static <T> Map<T, Set<T>> invert(final Map<T, Set<T>> valueSetByKey) {
-        val inverted = new LinkedHashMap<T, Set<T>>();
+        var inverted = new LinkedHashMap<T, Set<T>>();
         valueSetByKey.forEach((key, values) ->
                 values.forEach(value -> {
-                    val keySet = inverted.computeIfAbsent(value, k -> new LinkedHashSet<>());
+                    var keySet = inverted.computeIfAbsent(value, k -> new LinkedHashSet<>());
                     keySet.add(key);
                 }));
         return inverted;
@@ -261,7 +261,7 @@ public class ArchitectureModuleRules {
             final Class<?> referringClass,
             final Map<Class<?>, Set<Class<?>>> directDependenciesByReferringClass,
             final Set<Class<?>> transitiveDependenciesOfReferringClass) {
-        val directDependencies = directDependenciesByReferringClass
+        var directDependencies = directDependenciesByReferringClass
                 .getOrDefault(referringClass, Collections.emptySet());
         transitiveDependenciesOfReferringClass.addAll(directDependencies);
         directDependencies.forEach(directDependency ->

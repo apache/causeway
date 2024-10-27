@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
 
-import lombok.val;
-
 public class MustSatisfySpecificationFacetForPropertyAnnotation
 extends MustSatisfySpecificationFacetAbstract {
 
@@ -38,7 +36,7 @@ extends MustSatisfySpecificationFacetAbstract {
             final FacetHolder holder,
             final FactoryService factoryService) {
 
-        val specifications = propertyIfAny
+        var specifications = propertyIfAny
                 .map(Property::mustSatisfy)
                 .map(classes -> toSpecifications(factoryService, classes))
                 .orElseGet(Can::empty);

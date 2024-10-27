@@ -42,7 +42,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -97,7 +96,7 @@ public class TranslationsResolverDefault implements TranslationsResolver {
             return Collections.emptyList();
         }
 
-        val acceptedLines = TextUtils.readLinesFromUrl(url, StandardCharsets.UTF_8)
+        var acceptedLines = TextUtils.readLinesFromUrl(url, StandardCharsets.UTF_8)
         .stream()
         .filter(input->input != null && nonEmpty.matcher(input).matches())
         .collect(Collectors.toList());

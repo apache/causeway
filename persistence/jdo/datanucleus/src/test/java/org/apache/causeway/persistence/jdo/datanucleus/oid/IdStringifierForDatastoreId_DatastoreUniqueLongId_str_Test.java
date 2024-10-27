@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForDatastoreId_DatastoreUniqueLongId_str_Test {
 
@@ -50,20 +50,20 @@ class IdStringifierForDatastoreId_DatastoreUniqueLongId_str_Test {
     @MethodSource()
     void roundtrip(final long value) {
 
-        //val entityType = Customer.class;
+        //var entityType = Customer.class;
 
         String strValue = "" + value;
-        val stringifier = new DnDatastoreUniqueLongIdValueSemantics();
+        var stringifier = new DnDatastoreUniqueLongIdValueSemantics();
 
-        val stringified = stringifier.enstring(new DatastoreUniqueLongId(strValue));
-        val parse = stringifier.destring(stringified); // no need to pass entityType
+        var stringified = stringifier.enstring(new DatastoreUniqueLongId(strValue));
+        var parse = stringifier.destring(stringified); // no need to pass entityType
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         // UnsupportedOperationException if attempt this.
         // Assertions.assertThat(parse.getTargetClassName()).isEqualTo(entityType.getName());
 
-        val decomposed = stringifier.decompose(new DatastoreUniqueLongId(strValue));
-        val composed = stringifier.compose(decomposed);
+        var decomposed = stringifier.decompose(new DatastoreUniqueLongId(strValue));
+        var composed = stringifier.compose(decomposed);
 
         Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
         //Assertions.assertThat(composed.getTargetClassName()).isEqualTo(entityType.getName());

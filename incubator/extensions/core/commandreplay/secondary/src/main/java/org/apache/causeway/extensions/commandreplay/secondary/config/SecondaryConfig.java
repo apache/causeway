@@ -29,7 +29,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -50,9 +49,9 @@ public class SecondaryConfig {
     @Getter final List<String> quartzRoles;
 
     public SecondaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
-        val config = causewayConfiguration.getExtensions().getCommandReplay();
+        var config = causewayConfiguration.getExtensions().getCommandReplay();
 
-        val primaryAccess = config.getPrimaryAccess();
+        var primaryAccess = config.getPrimaryAccess();
         primaryUser = primaryAccess.getUser().orElse(null);
         primaryPassword = primaryAccess.getPassword().orElse(null);
         primaryBaseUrlRestful = primaryAccess.getBaseUrlRestful().orElse(null);

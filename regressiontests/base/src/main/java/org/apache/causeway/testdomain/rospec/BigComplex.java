@@ -27,7 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.val;
+
 
 /**
  * Example (composite) type for testing.
@@ -63,7 +63,7 @@ public final class BigComplex {
         if(!(obj instanceof BigComplex)) {
             return false;
         }
-        val other = (BigComplex) obj;
+        var other = (BigComplex) obj;
         return this.re.compareTo(other.re) == 0
                 && this.im.compareTo(other.im) == 0;
     }

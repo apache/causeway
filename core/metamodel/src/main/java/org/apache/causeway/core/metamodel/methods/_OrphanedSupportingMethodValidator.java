@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificatio
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.NonNull;
-import lombok.val;
 
 class _OrphanedSupportingMethodValidator {
 
@@ -47,7 +46,7 @@ class _OrphanedSupportingMethodValidator {
             return; // ignore
         }
 
-        val potentialOrphans = spec.getPotentialOrphans();
+        var potentialOrphans = spec.getPotentialOrphans();
         if(potentialOrphans.isEmpty()) {
             return; // nothing to do
         }
@@ -59,7 +58,7 @@ class _OrphanedSupportingMethodValidator {
         .filter(Predicate.not(supportMethods::contains))
         .forEach(orphanedMethod->{
 
-            val methodIdentifier = Identifier
+            var methodIdentifier = Identifier
                     .methodIdentifier(spec.getFeatureIdentifier().getLogicalType(), orphanedMethod);
 
             ValidationFailure.raise(

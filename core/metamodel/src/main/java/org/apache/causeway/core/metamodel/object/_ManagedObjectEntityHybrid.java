@@ -29,7 +29,6 @@ import org.apache.causeway.commons.internal.base._Blackhole;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Synchronized;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -106,8 +105,8 @@ implements _Refetchable {
     @Override
     public @NonNull EntityState getEntityState() {
 
-        val entityState = variant.getEntityState();
-        val newMorphState = MorphState.valueOf(entityState);
+        var entityState = variant.getEntityState();
+        var newMorphState = MorphState.valueOf(entityState);
 
         if(this.morphState!=newMorphState) {
             log.debug("about to transition to {} variant given {}", newMorphState.name(), entityState);
@@ -130,7 +129,7 @@ implements _Refetchable {
 
         // handle the 'deleted' / 'not found' case gracefully ...
         try {
-            val pojo = variant.getPojo();
+            var pojo = variant.getPojo();
             triggerReassessment();
             //if(pojo==null) makeRemoved(); seems reasonable, not tested yet
             return pojo;
@@ -197,7 +196,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeBookmarked(final Object pojo) {
-        val attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, Optional.empty());
+        var attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, Optional.empty());
         this.variant = attached;
         _Assert.assertTrue(attached.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
@@ -205,7 +204,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeRemoved() {
-        val removed = new _ManagedObjectEntityRemoved(getSpecification());
+        var removed = new _ManagedObjectEntityRemoved(getSpecification());
         this.variant = removed;
     }
 

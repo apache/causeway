@@ -28,8 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.services.appfeat.ApplicationMemberSort;
 
-import lombok.val;
-
 class ApplicationFeatureTest {
 
     public static class GetContents_and_AddToContents extends ApplicationFeatureTest {
@@ -40,9 +38,9 @@ class ApplicationFeatureTest {
 
         @Test
         public void givenPackage_whenAddPackageAndClass() throws Exception {
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
-            val packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.flob");
-            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            var packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany.flob");
+            var classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
             applicationFeature.addToContents(packageFeatureId);
             applicationFeature.addToContents(classFeatureId);
@@ -53,8 +51,8 @@ class ApplicationFeatureTest {
 
         @Test
         public void givenPackage_whenAddMember() throws Exception {
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
-            val memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            var memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToContents(memberFeatureId));
@@ -62,16 +60,16 @@ class ApplicationFeatureTest {
 
         @Test
         public void givenClass() throws Exception {
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
-            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            var classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToContents(classFeatureId));
         }
 
         @Test
         public void givenMember() throws Exception {
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
-            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
+            var classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToContents(classFeatureId));
         }
@@ -86,8 +84,8 @@ class ApplicationFeatureTest {
 
         @Test
         public void givenPackage() throws Exception {
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
-            val memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newNamespace("com.mycompany"));
+            var memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
 
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToMembers(memberFeatureId, ApplicationMemberSort.PROPERTY));
@@ -96,9 +94,9 @@ class ApplicationFeatureTest {
         @Test
         public void givenClass_whenAddMember() throws Exception {
 
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
-            val memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
-            val memberFeatureId2 = ApplicationFeatureId.newMember("com.mycompany.Bar", "boz");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            var memberFeatureId = ApplicationFeatureId.newMember("com.mycompany.Bar", "foo");
+            var memberFeatureId2 = ApplicationFeatureId.newMember("com.mycompany.Bar", "boz");
 
             applicationFeature.addToMembers(memberFeatureId, ApplicationMemberSort.PROPERTY);
             applicationFeature.addToMembers(memberFeatureId2, ApplicationMemberSort.PROPERTY);
@@ -110,8 +108,8 @@ class ApplicationFeatureTest {
         @Test
         public void givenClass_whenAddPackage() throws Exception {
 
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
-            val packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            var packageFeatureId = ApplicationFeatureId.newNamespace("com.mycompany");
 
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToMembers(packageFeatureId, ApplicationMemberSort.PROPERTY));
@@ -120,8 +118,8 @@ class ApplicationFeatureTest {
         @Test
         public void givenClass_whenAddClass() throws Exception {
 
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
-            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bop");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newType("com.mycompany.Bar"));
+            var classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bop");
 
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToMembers(classFeatureId, ApplicationMemberSort.PROPERTY));
@@ -130,8 +128,8 @@ class ApplicationFeatureTest {
         @Test
         public void givenMember() throws Exception {
 
-            val applicationFeature = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
-            val classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
+            var applicationFeature = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Bar", "foo"));
+            var classFeatureId = ApplicationFeatureId.newType("com.mycompany.flob.Bar");
 
             assertThrows(IllegalStateException.class, ()->
                 applicationFeature.addToMembers(classFeatureId, ApplicationMemberSort.PROPERTY));
@@ -147,7 +145,7 @@ class ApplicationFeatureTest {
 
         @Test
         public void getFullyQualifiedName() throws Exception {
-            val input = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
+            var input = newApplicationFeature(ApplicationFeatureId.newMember("com.mycompany.Foo#bar"));
             assertThat(input.getFullyQualifiedName(), is("com.mycompany.Foo#bar"));
         }
     }

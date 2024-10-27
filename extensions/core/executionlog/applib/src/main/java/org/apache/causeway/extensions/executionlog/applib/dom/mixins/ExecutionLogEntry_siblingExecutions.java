@@ -30,7 +30,6 @@ import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Contributes a <code>siblingExecutions</code> collection to {@link ExecutionLogEntry}.
@@ -50,7 +49,7 @@ public class ExecutionLogEntry_siblingExecutions {
 
 
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
-        val entries = new ArrayList<>(executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId()));
+        var entries = new ArrayList<>(executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId()));
         entries.remove(executionLogEntry);
         return entries;
     }

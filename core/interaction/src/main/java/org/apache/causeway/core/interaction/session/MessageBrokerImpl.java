@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 
 import lombok.NoArgsConstructor;
-import lombok.val;
 
 /**
  * Holder of queued up messages, to be accessed/drained cross interaction boundary.
@@ -114,7 +113,7 @@ public class MessageBrokerImpl implements Serializable, MessageBroker {
 
     private Can<String> copyAndClear(final List<String> messages) {
         synchronized ($lock) {
-            val copy = Can.ofCollection(messages);
+            var copy = Can.ofCollection(messages);
             messages.clear();
             return copy;
         }

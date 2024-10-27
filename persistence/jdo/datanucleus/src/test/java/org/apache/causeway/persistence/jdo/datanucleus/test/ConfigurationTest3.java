@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -52,10 +52,10 @@ class ConfigurationTest3 {
 
         assertNotNull(exampleDaoProvider);
 
-        val dao = exampleDaoProvider.get();
+        var dao = exampleDaoProvider.get();
         assertNotNull(dao);
 
-        val pmf = dao.getPersistenceManagerFactory();
+        var pmf = dao.getPersistenceManagerFactory();
         assertNotNull(pmf);
 
         assertTrue(pmf.getClass().getName().contains("Proxy"));

@@ -83,7 +83,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Setter;
-import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
@@ -240,33 +239,33 @@ extends GridSystemServiceAbstract<BSGrid> {
             final Grid grid,
             final Class<?> domainClass) {
 
-        val bsGrid = (BSGrid) grid;
-        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+        var bsGrid = (BSGrid) grid;
+        var objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
-        val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
-        val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
-        val objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
+        var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
+        var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
+        var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
-        val propertyLayoutDataById = bsGrid.getAllPropertiesById();
-        val collectionLayoutDataById = bsGrid.getAllCollectionsById();
-        val actionLayoutDataById = bsGrid.getAllActionsById();
+        var propertyLayoutDataById = bsGrid.getAllPropertiesById();
+        var collectionLayoutDataById = bsGrid.getAllCollectionsById();
+        var actionLayoutDataById = bsGrid.getAllActionsById();
 
-        val gridModelIfValid = _GridModel.createFrom(bsGrid);
+        var gridModelIfValid = _GridModel.createFrom(bsGrid);
         if(!gridModelIfValid.isPresent()) { // only present if valid
             return false;
         }
-        val gridModel = gridModelIfValid.get();
+        var gridModel = gridModelIfValid.get();
 
-        val layoutDataFactory = LayoutDataFactory.of(objectSpec);
+        var layoutDataFactory = LayoutDataFactory.of(objectSpec);
 
         // * surplus ... those defined in the grid model but not available with the meta-model
         // * missing ... those available with the meta-model but missing in the grid-model
         // (missing properties will be added to the first field-set of the specified column)
 
-        val surplusAndMissingPropertyIds =
+        var surplusAndMissingPropertyIds =
                 surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
-        val surplusPropertyIds = surplusAndMissingPropertyIds.getSurplus();
-        val missingPropertyIds = surplusAndMissingPropertyIds.getMissing();
+        var surplusPropertyIds = surplusAndMissingPropertyIds.getSurplus();
+        var missingPropertyIds = surplusAndMissingPropertyIds.getMissing();
 
         for (String surplusPropertyId : surplusPropertyIds) {
             propertyLayoutDataById.get(surplusPropertyId).setMetadataError("No such property");
@@ -275,10 +274,10 @@ extends GridSystemServiceAbstract<BSGrid> {
         // catalog which associations are bound to an existing field-set
         // so that (below) we can determine which missing property IDs are not unbound vs
         // which should be included in the field-set that they are bound to.
-        val boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
+        var boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
 
-        for (val fieldSet : gridModel.fieldSets()) {
-            val fieldSetId = GroupIdAndName.forFieldSet(fieldSet)
+        for (var fieldSet : gridModel.fieldSets()) {
+            var fieldSetId = GroupIdAndName.forFieldSet(fieldSet)
                 .orElseThrow(()->_Exceptions.illegalArgument("invalid fieldSet detected, "
                         + "requires at least an id or a name"))
                 .getId();
@@ -293,15 +292,15 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         // 1-to-1-association IDs, that want to contribute to the 'metadata' FieldSet
         // but are unbound, because such a FieldSet is not defined by the given layout.
-        val unboundMetadataContributingIds = _Sets.<String>newHashSet();
+        var unboundMetadataContributingIds = _Sets.<String>newHashSet();
 
         // along with any specified by existing metadata
         for (final OneToOneAssociation oneToOneAssociation : oneToOneAssociationById.values()) {
-            val layoutGroupFacet = oneToOneAssociation.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = oneToOneAssociation.getFacet(LayoutGroupFacet.class);
             if(layoutGroupFacet == null) {
                 continue;
             }
-            val id = layoutGroupFacet.getGroupId();
+            var id = layoutGroupFacet.getGroupId();
             if(gridModel.containsFieldSetId(id)) {
                 Set<String> boundAssociationIds =
                         boundAssociationIdsByFieldSetId.computeIfAbsent(id, k -> _Sets.newLinkedHashSet());
@@ -313,18 +312,18 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         if(!missingPropertyIds.isEmpty()) {
 
-            val unboundPropertyIds = _Sets.newLinkedHashSet(missingPropertyIds);
+            var unboundPropertyIds = _Sets.newLinkedHashSet(missingPropertyIds);
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
-                val boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+                var boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
                 unboundPropertyIds.removeAll(boundPropertyIds);
             }
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
-                val fieldSet = gridModel.getFieldSet(fieldSetId);
-                val associationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+                var fieldSet = gridModel.getFieldSet(fieldSetId);
+                var associationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
 
-                val associations1To1Ids =
+                var associations1To1Ids =
                         associationIds.stream()
                         .map(oneToOneAssociationById::get)
                         .filter(_NullSafe::isPresent)
@@ -340,12 +339,12 @@ extends GridSystemServiceAbstract<BSGrid> {
             }
 
             if(!unboundPropertyIds.isEmpty()) {
-                val fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
+                var fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
                 if(fieldSet != null) {
                     unboundPropertyIds.removeAll(unboundMetadataContributingIds);
 
                     // add unbound properties respecting configured sequence policy
-                    val sortedUnboundPropertyIds = _UnreferencedSequenceUtil
+                    var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
                             .sortProperties(config, unboundPropertyIds.stream()
                                     .map(oneToOneAssociationById::get)
                                     .filter(_NullSafe::isPresent));
@@ -360,10 +359,10 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
 
         // any missing collections will be added as tabs to a new TabGroup in the specified column
-        val surplusAndMissingCollectionIds =
+        var surplusAndMissingCollectionIds =
                 surplusAndMissing(collectionLayoutDataById.keySet(), oneToManyAssociationById.keySet());
-        val surplusCollectionIds = surplusAndMissingCollectionIds.getSurplus();
-        val missingCollectionIds = surplusAndMissingCollectionIds.getMissing();
+        var surplusCollectionIds = surplusAndMissingCollectionIds.getSurplus();
+        var missingCollectionIds = surplusAndMissingCollectionIds.getMissing();
 
         for (String surplusCollectionId : surplusCollectionIds) {
             collectionLayoutDataById.get(surplusCollectionId).setMetadataError("No such collection");
@@ -372,7 +371,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         if(!missingCollectionIds.isEmpty()) {
 
             // add missing collections respecting configured sequence policy
-            val sortedMissingCollectionIds = _UnreferencedSequenceUtil
+            var sortedMissingCollectionIds = _UnreferencedSequenceUtil
                     .sortCollections(config, missingCollectionIds.stream()
                             .map(oneToManyAssociationById::get)
                             .filter(_NullSafe::isPresent));
@@ -397,10 +396,10 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
 
         // any missing actions will be added as actions in the specified column
-        val surplusAndMissingActionIds =
+        var surplusAndMissingActionIds =
                 surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
-        val surplusActionIds = surplusAndMissingActionIds.getSurplus();
-        val possiblyMissingActionIds = surplusAndMissingActionIds.getMissing();
+        var surplusActionIds = surplusAndMissingActionIds.getSurplus();
+        var possiblyMissingActionIds = surplusAndMissingActionIds.getMissing();
 
         final List<String> associatedActionIds = _Lists.newArrayList();
 
@@ -413,9 +412,9 @@ extends GridSystemServiceAbstract<BSGrid> {
                 _Lists.map(sortedPossiblyMissingActions, ObjectMember::getId);
 
         for (final String actionId : sortedPossiblyMissingActionIds) {
-            val objectAction = objectActionById.get(actionId);
+            var objectAction = objectActionById.get(actionId);
 
-            val layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
             if(layoutGroupFacet == null) {
                 continue;
             }
@@ -433,8 +432,8 @@ extends GridSystemServiceAbstract<BSGrid> {
                         log.warn(String.format("Could not find propertyLayoutData for layoutGroupName of '%s'", layoutGroupName));
                         continue;
                     }
-                    val actionLayoutData = new ActionLayoutData(actionId);
-                    val actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                    var actionLayoutData = new ActionLayoutData(actionId);
+                    var actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
                     final ActionLayoutDataOwner owner;
                     final ActionLayout.Position position;
                     if(actionPositionFacet != null) {
@@ -457,11 +456,11 @@ extends GridSystemServiceAbstract<BSGrid> {
                 associatedActionIds.add(actionId);
 
                 if(layoutGroupFacet.isExplicitBinding()) {
-                    val collectionLayoutData = collectionLayoutDataById.get(layoutGroupName);
+                    var collectionLayoutData = collectionLayoutDataById.get(layoutGroupName);
                     if(collectionLayoutData==null) {
                         log.warn("failed to lookup CollectionLayoutData by layoutGroupName '{}'", layoutGroupName);
                     } else {
-                        val actionLayoutData = new ActionLayoutData(actionId);
+                        var actionLayoutData = new ActionLayoutData(actionId);
                         addActionTo(collectionLayoutData, actionLayoutData);
                     }
                 }
@@ -479,7 +478,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
                 // since the action is to be associated with a fieldSet, the only available positions are PANEL and PANEL_DROPDOWN.
                 // if the action already has a preference for PANEL, then preserve it, otherwise default to PANEL_DROPDOWN
-                val actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                var actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
                 if(actionPositionFacet != null && actionPositionFacet.position() == ActionLayout.Position.PANEL) {
                     actionLayoutData.setPosition(ActionLayout.Position.PANEL);
                 } else {
@@ -538,7 +537,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             if(existingIds.contains(propertyId)) {
                 continue;
             }
-            val propertyLayoutData = layoutFactory.apply(propertyId);
+            var propertyLayoutData = layoutFactory.apply(propertyId);
             fieldSet.getProperties().add(propertyLayoutData);
             propertyLayoutData.setOwner(fieldSet);
             onNewLayoutData.accept(propertyId, propertyLayoutData);
@@ -552,7 +551,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final BiConsumer<String, CollectionLayoutData> onNewLayoutData) {
 
         for (final String collectionId : collectionIds) {
-            val collectionLayoutData = layoutFactory.apply(collectionId);
+            var collectionLayoutData = layoutFactory.apply(collectionId);
             tabRowCol.getCollections().add(collectionLayoutData);
             onNewLayoutData.accept(collectionId, collectionLayoutData);
         }
@@ -567,8 +566,8 @@ extends GridSystemServiceAbstract<BSGrid> {
         for (final String collectionId : collectionIds) {
             final BSTab bsTab = new BSTab();
 
-            val feature = objectSpec.getCollectionElseFail(collectionId);
-            val featureCanonicalFriendlyName = feature.getCanonicalFriendlyName();
+            var feature = objectSpec.getCollectionElseFail(collectionId);
+            var featureCanonicalFriendlyName = feature.getCanonicalFriendlyName();
 
             bsTab.setName(featureCanonicalFriendlyName);
             tabGroup.getTabs().add(bsTab);
@@ -584,7 +583,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             tabRowCol.setOwner(tabRow);
             tabRow.getCols().add(tabRowCol);
 
-            val collectionLayoutData = layoutFactory.apply(collectionId);
+            var collectionLayoutData = layoutFactory.apply(collectionId);
             tabRowCol.getCollections().add(collectionLayoutData);
         }
     }
@@ -596,7 +595,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
 
         for (String actionId : actionIds) {
-            val actionLayoutData = layoutFactory.apply(actionId);
+            var actionLayoutData = layoutFactory.apply(actionId);
             addActionTo(bsCol, actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }
@@ -609,7 +608,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final BiConsumer<String, ActionLayoutData> onNewLayoutData) {
 
         for (String actionId : actionIds) {
-            val actionLayoutData = layoutFactory.apply(actionId);
+            var actionLayoutData = layoutFactory.apply(actionId);
             addActionTo(fieldSet, actionLayoutData);
             onNewLayoutData.accept(actionId, actionLayoutData);
         }

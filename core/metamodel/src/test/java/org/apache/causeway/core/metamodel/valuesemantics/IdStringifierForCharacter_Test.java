@@ -27,8 +27,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import lombok.val;
-
 class IdStringifierForCharacter_Test {
 
     public static Stream<Arguments> roundtrip() {
@@ -61,10 +59,10 @@ class IdStringifierForCharacter_Test {
     @MethodSource()
     void roundtrip(final char value) {
 
-        val stringifier = new CharacterValueSemantics();
+        var stringifier = new CharacterValueSemantics();
 
-        val stringified = stringifier.enstring(value);
-        val parse = stringifier.destring(stringified);
+        var stringified = stringifier.enstring(value);
+        var parse = stringifier.destring(stringified);
 
         Assertions.assertThat(parse).isEqualTo(value);
     }

@@ -38,7 +38,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Default implementation of {@link ExceptionRecognizerService}.
@@ -94,7 +93,7 @@ implements ExceptionRecognizerService {
             final ExceptionRecognizer recognizer,
             final Throwable ex) {
 
-        val recognized = recognizer.recognize(ex);
+        var recognized = recognizer.recognize(ex);
         return recognized==null
                 ? Optional.empty()
                 : recognized;

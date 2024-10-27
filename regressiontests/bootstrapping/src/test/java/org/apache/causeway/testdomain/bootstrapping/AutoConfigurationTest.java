@@ -47,7 +47,7 @@ import org.apache.causeway.testdomain.model.stereotypes.MyObject_mixin;
 import org.apache.causeway.testdomain.model.stereotypes.MyService;
 import org.apache.causeway.testdomain.model.stereotypes.MyView;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -99,15 +99,15 @@ class AutoConfigurationTest {
 
     @Test
     void domainObjects_shouldBeDiscovered() {
-        for(val cls : nonManaged()) {
-            val type = causewayBeanTypeRegistry.lookupIntrospectableType(cls);
+        for(var cls : nonManaged()) {
+            var type = causewayBeanTypeRegistry.lookupIntrospectableType(cls);
             assertTrue(type.isPresent());
         }
     }
 
     @Test
     void domainObjects_shouldNotBeManaged() {
-        for(val cls : nonManaged()) {
+        for(var cls : nonManaged()) {
             assertThrows(NoSuchBeanDefinitionException.class, ()->{
                 applicationContext.getBean(cls);
             });
@@ -116,14 +116,14 @@ class AutoConfigurationTest {
 
     @Test
     void domainServices_shouldBeManaged() {
-        val myService = applicationContext.getBean(MyService.class);
+        var myService = applicationContext.getBean(MyService.class);
         assertNotNull(myService);
         assertTrue(serviceRegistry.lookupService(MyService.class).isPresent());
     }
 
     // we don't want those managed by Spring
     private static Class<?>[] nonManaged() {
-        val nonManaged = new Class<?>[] {MyObject.class, MyObject_mixin.class, MyView.class};
+        var nonManaged = new Class<?>[] {MyObject.class, MyObject_mixin.class, MyView.class};
         return nonManaged;
     }
 

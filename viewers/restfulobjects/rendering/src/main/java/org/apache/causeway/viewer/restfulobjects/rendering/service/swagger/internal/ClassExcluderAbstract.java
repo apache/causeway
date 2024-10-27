@@ -24,7 +24,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.val;
+
 
 public abstract class ClassExcluderAbstract implements ClassExcluder {
 
@@ -51,7 +51,7 @@ public abstract class ClassExcluderAbstract implements ClassExcluder {
             return true;
         }
 
-        val parameterTypes = objectAction.getParameterTypes();
+        var parameterTypes = objectAction.getParameterTypes();
         for (ObjectSpecification parameterType : parameterTypes) {
             if(exclude(parameterType)) {
                 return true;

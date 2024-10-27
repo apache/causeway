@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
-
 public class ParameterLayoutFacetFactory
 extends FacetFactoryAbstract {
 
@@ -39,7 +37,7 @@ extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val parameterLayoutIfAny = processParameterContext.synthesizeOnParameter(ParameterLayout.class);
+        var parameterLayoutIfAny = processParameterContext.synthesizeOnParameter(ParameterLayout.class);
         addFacets(processParameterContext, parameterLayoutIfAny);
     }
 
@@ -47,7 +45,7 @@ extends FacetFactoryAbstract {
             final ProcessParameterContext processParameterContext,
             final Optional<ParameterLayout> parameterLayoutIfAny) {
 
-        val facetHolder = processParameterContext.getFacetHolder();
+        var facetHolder = processParameterContext.getFacetHolder();
 
         addFacetIfPresent(
                 CssClassFacetForParameterLayoutAnnotation

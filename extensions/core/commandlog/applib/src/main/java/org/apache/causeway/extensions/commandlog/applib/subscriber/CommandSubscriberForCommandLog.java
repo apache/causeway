@@ -39,7 +39,6 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -75,20 +74,20 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             return;
         }
 
-        val existingCommandLogEntryIfAny =
+        var existingCommandLogEntryIfAny =
                 commandLogEntryRepository.findByInteractionId(command.getInteractionId());
         if(existingCommandLogEntryIfAny.isPresent()) {
 
-            val commandLogEntry = existingCommandLogEntryIfAny.get();
+            var commandLogEntry = existingCommandLogEntryIfAny.get();
             switch (commandLogEntry.getExecuteIn()) {
                 case FOREGROUND:
                     // this isn't really expected to happen ... we just log the fact if it does and the value is different
                     if(log.isWarnEnabled()) {
-                        val existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
+                        var existingCommandDto = existingCommandLogEntryIfAny.get().getCommandDto();
 
-                        val existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
+                        var existingCommandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(existingCommandDto))
                                 .getValue().orElse("Dto to Xml failure");
-                        val commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
+                        var commandDtoXml = Try.call(()->CommandDtoUtils.dtoMapper().toString(command.getCommandDto()))
                                 .getValue().orElse("Dto to Xml failure");
 
                         if(!existingCommandDtoXml.equals(commandDtoXml)) {
@@ -105,7 +104,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
             }
 
         } else {
-            val parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
+            var parentInteractionId = command.getParentInteractionId(); // will be null in most (all?) cases
             commandLogEntryRepository.createEntryAndPersist(command, parentInteractionId, ExecuteIn.FOREGROUND);
         }
 

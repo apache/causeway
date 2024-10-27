@@ -38,7 +38,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import org.apache.causeway.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
 
-import lombok.val;
+
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationConverterOfOAuth2UserPrincipal_Test {
@@ -73,7 +73,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
@@ -99,7 +99,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
@@ -129,7 +129,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
@@ -155,7 +155,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
@@ -180,7 +180,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
@@ -210,7 +210,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
@@ -235,7 +235,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
             Mockito.when(mockAuthentication.getPrincipal()).thenReturn(oAuth2User);
 
             // when
-            val userMemento = converter.convert(mockAuthentication);
+            var userMemento = converter.convert(mockAuthentication);
 
             // then
             Assertions.assertThat(userMemento).isNotNull();

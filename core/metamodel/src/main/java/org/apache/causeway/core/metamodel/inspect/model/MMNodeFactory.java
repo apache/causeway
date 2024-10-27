@@ -28,41 +28,39 @@ import org.apache.causeway.schema.metamodel.v2.FacetHolder.Facets;
 import org.apache.causeway.schema.metamodel.v2.Param;
 import org.apache.causeway.schema.metamodel.v2.Property;
 
-import lombok.val;
-
 public class MMNodeFactory {
 
 
     public static MMNode annotation(final Annotation annotation, final MMNode parentNode) {
-        val node = new AnnotationNode();
+        var node = new AnnotationNode();
         node.setAnnotation(annotation);
         node.setParentNode(parentNode);
         return node;
     }
 
     public static MMNode type(final DomainClassDto domainClassDto, final MMNode parentNode) {
-        val node = new TypeNode();
+        var node = new TypeNode();
         node.setDomainClassDto(domainClassDto);
         node.setParentNode(parentNode);
         return node;
     }
 
     public static MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
-        val node = new FacetNode();
+        var node = new FacetNode();
         node.setFacet(facet);
         node.setParentNode(parentNode);
         return node;
     }
 
     public static MMNode facetAttr(final FacetAttr facetAttr, final FacetNode parentNode) {
-        val node = new FacetAttrNode();
+        var node = new FacetAttrNode();
         node.setFacetAttr(facetAttr);
         node.setParentNode(parentNode);
         return node;
     }
 
     public static MMNode action(final Action action, final TypeNode parentNode) {
-        val node = new ActionNode();
+        var node = new ActionNode();
         node.setAction(action);
         node.setParentNode(parentNode);
         node.setMixedIn(action.isMixedIn());
@@ -70,7 +68,7 @@ public class MMNodeFactory {
     }
 
     public static MMNode property(final Property property, final TypeNode parentNode) {
-        val node = new PropertyNode();
+        var node = new PropertyNode();
         node.setProperty(property);
         node.setParentNode(parentNode);
         node.setMixedIn(property.isMixedIn());
@@ -78,7 +76,7 @@ public class MMNodeFactory {
     }
 
     public static MMNode collection(final Collection collection, final TypeNode parentNode) {
-        val node = new CollectionNode();
+        var node = new CollectionNode();
         node.setCollection(collection);
         node.setParentNode(parentNode);
         node.setMixedIn(collection.isMixedIn());
@@ -86,14 +84,14 @@ public class MMNodeFactory {
     }
 
     public static MMNode param(final Param param, final ActionNode parentNode) {
-        val node = new ParameterNode();
+        var node = new ParameterNode();
         node.setParameter(param);
         node.setParentNode(parentNode);
         return node;
     }
 
     public static MMNode facetGroup(final Facets facets, final MMNode parentNode) {
-        val node = new FacetGroupNode();
+        var node = new FacetGroupNode();
         node.setFacets(facets);
         node.setParentNode(parentNode);
         return node;

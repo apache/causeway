@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class PropertyClearFacetViaClearMethod
 extends PropertyClearFacetAbstract
@@ -55,7 +54,7 @@ implements ImperativeFacet {
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         MmInvokeUtils.invokeNoArg(method.method(), targetAdapter);
         return targetAdapter;
     }

@@ -35,7 +35,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.val;
+
 
 @Component
 @Priority(PriorityPrecedence.LATE)
@@ -69,7 +69,7 @@ extends ValueSemanticsBasedOnIdStringifier<StringId> {
 
     @Override
     public StringId compose(final ValueDecomposition decomposition) {
-        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        var elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
         return destring(_InstanceUtil.loadClass(targetClassName), key);
@@ -86,7 +86,7 @@ extends ValueSemanticsBasedOnIdStringifier<StringId> {
     public StringId destring(
             final @NonNull Class<?> targetEntityClass,
             final @NonNull String stringified) {
-        val idValue = idStringifierForString.destring(targetEntityClass, stringified);
+        var idValue = idStringifierForString.destring(targetEntityClass, stringified);
         return new StringId(targetEntityClass, idValue);
     }
 }

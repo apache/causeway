@@ -57,7 +57,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
+
 
 public class ResourceContext
 implements IResourceContext {
@@ -162,7 +162,7 @@ implements IResourceContext {
                 final String key = paramId.startsWith("x-ro") ? paramId : paramId + ".value";
 
                 // test whether we can parse as an int
-                val parseResult = _Ints.parseInt(paramValue, 10);
+                var parseResult = _Ints.parseInt(paramValue, 10);
                 if(parseResult.isPresent()) {
                     map.mapPutInt(key, parseResult.getAsInt());
                 } else {

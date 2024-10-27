@@ -31,8 +31,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.val;
-
 class InteractionUtils_isA_Test {
 
     class FooSuperFacet extends FacetAbstract {
@@ -73,29 +71,29 @@ class InteractionUtils_isA_Test {
 
     @Test
     void isAWhenIs() {
-        val predicate = _Predicates.instanceOf(FooFacet.class);
-        val fooFacet = new FooFacet(facetHolder);
+        var predicate = _Predicates.instanceOf(FooFacet.class);
+        var fooFacet = new FooFacet(facetHolder);
         assertTrue(predicate.test(fooFacet));
     }
 
     @Test
     void isAWhenIsNot() {
-        val predicate = _Predicates.instanceOf(FooFacet.class);
-        val barFacet = new BarFacet(facetHolder);
+        var predicate = _Predicates.instanceOf(FooFacet.class);
+        var barFacet = new BarFacet(facetHolder);
         assertFalse(predicate.test(barFacet));
     }
 
     @Test
     void isAWhenIsSubclass() {
-        val predicate = _Predicates.instanceOf(FooFacet.class);
-        val fooSubFacet = new FooSubFacet(facetHolder);
+        var predicate = _Predicates.instanceOf(FooFacet.class);
+        var fooSubFacet = new FooSubFacet(facetHolder);
         assertTrue(predicate.test(fooSubFacet));
     }
 
     @Test
     void isAWhenIsNotBecauseASuperclass() {
-        val predicate = _Predicates.instanceOf(FooFacet.class);
-        val fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
+        var predicate = _Predicates.instanceOf(FooFacet.class);
+        var fooSuperFacet = new FooSuperFacet(FooSuperFacet.class, facetHolder);
         assertFalse(predicate.test(fooSuperFacet));
     }
 

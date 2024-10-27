@@ -20,7 +20,6 @@ package org.apache.causeway.testing.unittestsupport.applib.util;
 
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -35,7 +34,7 @@ public class ReflectUtils {
             final Object toInject) {
 
         try {
-            val field = target.getClass().getDeclaredField(fieldName);
+            var field = target.getClass().getDeclaredField(fieldName);
 
             _Reflect.setFieldOn(field, target, toInject);
 

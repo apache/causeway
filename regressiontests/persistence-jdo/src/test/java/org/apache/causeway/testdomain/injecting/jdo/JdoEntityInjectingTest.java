@@ -46,7 +46,7 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
@@ -85,7 +85,7 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 2);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 3);
@@ -100,7 +100,7 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 2);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 3);
@@ -116,7 +116,7 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 3);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 4);
@@ -137,9 +137,9 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
     }
 
     private JdoBook getSampleBook() {
-        val books = repository.allInstances(JdoProduct.class);
+        var books = repository.allInstances(JdoProduct.class);
         assertEquals(3, books.size(), "book count");
-        val book = books.get(0);
+        var book = books.get(0);
         assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JdoBook)book;
     }

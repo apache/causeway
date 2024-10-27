@@ -15,8 +15,6 @@
  */
 package org.apache.causeway.core.transaction.scope;
 
-import lombok.val;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -35,7 +33,7 @@ public class StackedTransactionScope implements Scope {
     @Override
     public Object get(final String name, final ObjectFactory<?> objectFactory) {
 
-        val transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
+        var transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
 
         ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevelForThisThread());
         if (scopedObjects == null) {
@@ -79,7 +77,7 @@ public class StackedTransactionScope implements Scope {
     @Override
     @Nullable
     public Object remove(final String name) {
-        val currentTransactionNestingLevel = currentTransactionNestingLevelForThisThread();
+        var currentTransactionNestingLevel = currentTransactionNestingLevelForThisThread();
         ScopedObjectsHolder scopedObjects = (ScopedObjectsHolder) TransactionSynchronizationManager.getResource(currentTransactionNestingLevel);
         if (scopedObjects != null) {
             scopedObjects.destructionCallbacks.remove(name);
@@ -222,7 +220,7 @@ public class StackedTransactionScope implements Scope {
 
         @Override
         public void suspend() {
-            val transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
+            var transactionNestingLevelForThisThread = currentTransactionNestingLevelForThisThread();
             TransactionSynchronizationManager.unbindResource(transactionNestingLevelForThisThread);
             pushToNewTransactionNestingLevelForThisThread();  // subsequent calls to obtain a @TransactionScope'd bean will be against this key
         }

@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 
 public class HideForContextFacetViaMethod
 extends HideForContextFacetAbstract
@@ -55,7 +54,7 @@ implements ImperativeFacet {
         if (target == null) {
             return null;
         }
-        val method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Boolean isHidden = (Boolean) MmInvokeUtils.invokeAutofit(method.method(), target);
         return isHidden.booleanValue() ? "Hidden" : null;
     }

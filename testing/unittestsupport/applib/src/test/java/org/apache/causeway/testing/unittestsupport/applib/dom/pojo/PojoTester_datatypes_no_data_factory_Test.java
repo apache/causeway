@@ -22,8 +22,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 
-import lombok.val;
-
 public class PojoTester_datatypes_no_data_factory_Test {
 
     public static class Customer {
@@ -41,7 +39,7 @@ public class PojoTester_datatypes_no_data_factory_Test {
     public void exercise_data_not_provided() {
 
         // given
-        val holder = new Customer();
+        var holder = new Customer();
 
         // when
         Assertions.assertThatThrownBy(() -> {

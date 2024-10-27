@@ -25,15 +25,13 @@ import org.opentest4j.AssertionFailedError;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ExampleBean;
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ExampleBeanHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_bean_Test {
 
     @Test
     public void exercise_bean() {
 
         // given
-        val holder = new ExampleBeanHolder();
+        var holder = new ExampleBeanHolder();
         Assertions.assertThat(holder).extracting(ExampleBeanHolder::getExampleBean).isNull();
 
         // when
@@ -50,7 +48,7 @@ public class PojoTester_datatypes_bean_Test {
     public void exercise_bean_broken() {
 
         // given
-        val holder = new ExampleBeanHolder().butBroken();
+        var holder = new ExampleBeanHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {

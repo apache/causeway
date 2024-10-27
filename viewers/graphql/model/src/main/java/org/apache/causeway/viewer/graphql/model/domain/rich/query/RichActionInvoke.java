@@ -30,7 +30,6 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -57,9 +56,9 @@ public class RichActionInvoke
         addChildFieldFor(this.args = new RichActionInvokeArgs(actionInteractor, context));
         addChildFieldFor(this.result = new RichActionInvokeResult(actionInteractor, context));
 
-        val gqlObjectType = buildObjectType();
-        val objectAction = actionInteractor.getObjectMember();
-        val fieldBuilder = newFieldDefinition()
+        var gqlObjectType = buildObjectType();
+        var objectAction = actionInteractor.getObjectMember();
+        var fieldBuilder = newFieldDefinition()
                 .name(fieldNameForSemanticsOf(objectAction))
                 .type(gqlObjectType);
         actionInteractor.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.INVOKE, objectAction.getParameterCount());

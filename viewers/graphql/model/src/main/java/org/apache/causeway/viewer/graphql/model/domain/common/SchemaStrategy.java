@@ -35,8 +35,6 @@ import org.apache.causeway.viewer.graphql.model.domain.simple.SchemaStrategySimp
 
 import static org.apache.causeway.viewer.graphql.model.domain.common.query.CommonTopLevelQueryAbstract.superclassesOf;
 
-import lombok.val;
-
 public interface SchemaStrategy {
 
     SchemaStrategy RICH = new SchemaStrategyRich();
@@ -49,7 +47,7 @@ public interface SchemaStrategy {
             final Context context) {
 
         mapSuperclassesIfNecessary(this, objectSpecification, context);
-        val typeNameFor = CommonDomainObject.typeNameFor(this, objectSpecification);
+        var typeNameFor = CommonDomainObject.typeNameFor(this, objectSpecification);
         return context.domainObjectByTypeName.computeIfAbsent(typeNameFor, typeName -> new CommonDomainObject(this, typeName, objectSpecification, context));
     }
 
@@ -57,7 +55,7 @@ public interface SchemaStrategy {
             final ObjectSpecification objectSpecification,
             final Object servicePojo,
             final Context context) {
-        val typeNameFor = CommonDomainService.typeNameFor(this, objectSpecification);
+        var typeNameFor = CommonDomainService.typeNameFor(this, objectSpecification);
         return context.domainServiceByTypeName.computeIfAbsent(typeNameFor, typeName -> new CommonDomainService(this, typeName, objectSpecification, servicePojo, context));
     }
 
@@ -91,13 +89,13 @@ public interface SchemaStrategy {
             final ObjectSpecification objectSpecification,
             final Context context) {
         // no need to map if the target subclass has already been built
-        val typeName = CommonDomainObject.typeNameFor(schemaStrategy, objectSpecification);
+        var typeName = CommonDomainObject.typeNameFor(schemaStrategy, objectSpecification);
         if (context.domainObjectByTypeName.containsKey(typeName)) {
             return;
         }
-        val superclasses = superclassesOf(objectSpecification);
+        var superclasses = superclassesOf(objectSpecification);
         superclasses.forEach(objectSpec -> {
-            val typeNameForSuperclass = CommonDomainObject.typeNameFor(schemaStrategy, objectSpecification);
+            var typeNameForSuperclass = CommonDomainObject.typeNameFor(schemaStrategy, objectSpecification);
             context.domainObjectByTypeName.computeIfAbsent(typeNameForSuperclass, typeNm -> new CommonDomainObject(schemaStrategy, typeNm, objectSpecification, context));
         });
     }

@@ -57,7 +57,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.Synchronized;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -78,7 +77,7 @@ implements
 
     public static UiObjectWkt ofPageParameters(
             final PageParameters pageParameters) {
-        val bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
+        var bookmark = PageParameterUtils.toBookmark(pageParameters).orElse(null);
         return ofBookmark(bookmark);
     }
 
@@ -218,7 +217,7 @@ implements
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
 
-        val bookmarkedObjectModel = bookmarkedObjectModel();
+        var bookmarkedObjectModel = bookmarkedObjectModel();
 
         //[CAUSEWAY-3532] guard against (owner entity) object deleted/not-found
         //
@@ -226,21 +225,21 @@ implements
         // (that is loading entities only if required),
         // this guard only triggers, once the first property model gets looked up;
         // in other words: this guard only works if every entity has at least a property
-        val ownerPojo = bookmarkedObjectModel.asManagedObject()
+        var ownerPojo = bookmarkedObjectModel.asManagedObject()
                 .getPojo();
         if(ownerPojo==null) {
             throw new ObjectNotFoundException(
                     bookmarkedObjectModel.getBookmark().getIdentifier());
         }
 
-        val pm = property.getMemento();
-        val propertyScalarModels = propertyScalarModels();
+        var pm = property.getMemento();
+        var propertyScalarModels = propertyScalarModels();
         final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
         if (existingScalarModel != null) {
             return existingScalarModel;
         }
 
-        val propertyInteractionModel = new PropertyInteractionWkt(
+        var propertyInteractionModel = new PropertyInteractionWkt(
                 bookmarkedObjectModel,
                 pm.getIdentifier().getMemberLogicalName(),
                 renderingHint.asWhere());
@@ -260,7 +259,7 @@ implements
 
     @Override
     public Stream<Bookmark> streamPropertyBookmarks() {
-        val candidateAdapter = this.getObject();
+        var candidateAdapter = this.getObject();
 
         return candidateAdapter.getSpecification()
         .streamProperties(MixedIn.EXCLUDED)

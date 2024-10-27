@@ -30,8 +30,6 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker.CausewayWicketThemeSupport;
 
-import lombok.val;
-
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -43,7 +41,7 @@ public class BootstrapInitWkt implements WicketApplicationInitializer {
 
     @Override
     public void init(final WebApplication webApplication) {
-        val bsSettings = new BootstrapSettings();
+        var bsSettings = new BootstrapSettings();
         bsSettings.setDeferJavascript(false);
         Bootstrap.install(webApplication, bsSettings);
 

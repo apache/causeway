@@ -82,7 +82,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
@@ -90,49 +89,49 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
     private static void processDomainEvent(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processDomainEvent(processMethodContext, propertyIfAny);
     }
 
     private static void processOptional(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processOptional(processMethodContext, propertyIfAny);
     }
 
     private static void processRegEx(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processRegEx(processMethodContext, propertyIfAny);
     }
 
     private static void processEditing(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processEditing(processMethodContext, propertyIfAny);
     }
 
     private static void processMaxLength(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processMaxLength(processMethodContext, propertyIfAny);
     }
 
     private static void processMustSatisfy(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processMustSatisfy(processMethodContext, propertyIfAny);
     }
 
     private static void processSnapshot(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processSnapshot(processMethodContext, propertyIfAny);
     }
 
     private static void processEntityPropertyChangePublishing(
             final PropertyAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
+        var propertyIfAny = facetFactory.propertyIfAny(processMethodContext);
         facetFactory.processEntityPropertyChangePublishing(processMethodContext, propertyIfAny);
     }
 
@@ -151,7 +150,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
     static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            val mockOnType = Mockito.mock(ObjectSpecification.class);
+            var mockOnType = Mockito.mock(ObjectSpecification.class);
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
@@ -191,7 +190,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 final FacetedMethod facetedMethod,
                 final EventTypeOrigin eventTypeOrigin,
                 final Class<? extends PropertyDomainEvent<?,?>> eventType) {
-            val domainEventFacet = facetedMethod.lookupFacet(PropertyDomainEventFacet.class).orElseThrow();
+            var domainEventFacet = facetedMethod.lookupFacet(PropertyDomainEventFacet.class).orElseThrow();
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
@@ -200,7 +199,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             }
 
             // then
-            val setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
+            var setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(setterFacet);
             assertTrue(setterFacet instanceof PropertyModifyFacetAbstract, "unexpected facet: " + setterFacet);
             final PropertyModifyFacetAbstract setterFacetImpl = (PropertyModifyFacetAbstract) setterFacet;
@@ -208,7 +207,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             assertThat(setterFacetImpl.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
             // then
-            val clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
+            var clearFacet = facetedMethod.getFacet(PropertyClearFacet.class);
             assertNotNull(clearFacet);
             assertTrue(clearFacet instanceof PropertyModifyFacetAbstract);
             final PropertyModifyFacetAbstract clearFacetImpl = (PropertyModifyFacetAbstract) clearFacet;
@@ -315,7 +314,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
         @Test
         void withPropertyDomainEvent_mixedIn_annotatedOnMethod() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             class Customer {
@@ -346,7 +345,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
         @Test
         void withPropertyDomainEvent_mixedIn_annotatedOnMixedInType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             class Customer {
@@ -377,7 +376,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
         @Test
         void withPropertyDomainEvent_mixedIn_annotatedOnMixeeType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent.class)
@@ -409,7 +408,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
         @Test
         void withPropertyDomainEvent_mixedIn_annotatedOnMixeeAndMixedInType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
@@ -442,7 +441,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
 
         @Test
         void withPropertyDomainEvent_mixedIn_annotatedOnMixeeTypeAndMixedInMethod() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             // given
             @DomainObject(propertyDomainEvent = Customer.NamedChangedDomainEvent1.class)
@@ -573,10 +572,10 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processEditing(facetFactory, processMethodContext);
                 // then
-                val disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
+                var disabledFacet = facetedMethod.getFacet(DisabledFacet.class);
                 assertNotNull(disabledFacet);
                 assertTrue(disabledFacet instanceof DisabledFacetForPropertyAnnotation);
-                val disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
+                var disabledFacet2 = (DisabledFacetForPropertyAnnotation) disabledFacet;
                 assertThat(disabledFacet.where(), is(Where.EVERYWHERE));
                 assertThat(disabledFacet2.disabledReason(null).map(VetoReason::string).orElse(null), is(expectedDisabledReason));
             });
@@ -647,7 +646,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 assertNotNull(mustSatisfySpecificationFacet);
                 assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForPropertyAnnotation);
                 final MustSatisfySpecificationFacetForPropertyAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForPropertyAnnotation) mustSatisfySpecificationFacet;
-                val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+                var specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
                 assertThat(specifications.size(), is(2));
 
                 assertTrue(specifications.getElseFail(0) instanceof NotTooHot);
@@ -673,7 +672,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processEntityPropertyChangePublishing(facetFactory, processMethodContext);
                 // then
-                val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+                var changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
                 assertNotNull(changePolicyFacet);
                 assertTrue(changePolicyFacet.isPublishingVetoed());
                 assertFalse(changePolicyFacet.isPublishingAllowed());
@@ -693,7 +692,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processEntityPropertyChangePublishing(facetFactory, processMethodContext);
                 // then
-                val changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+                var changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
                 assertNull(changePolicyFacet);
             });
         }

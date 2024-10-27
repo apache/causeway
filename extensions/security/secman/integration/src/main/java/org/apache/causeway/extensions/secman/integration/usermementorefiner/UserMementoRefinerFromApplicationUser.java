@@ -28,7 +28,7 @@ import org.apache.causeway.core.security.authentication.manager.UserMementoRefin
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @Service
 //@Log4j2
@@ -39,11 +39,11 @@ public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner
 
     @Override
     public UserMemento refine(final UserMemento userMemento) {
-        val applicationUserIfAny = applicationUserRepositoryProvider.get().findByUsername(userMemento.getName());
+        var applicationUserIfAny = applicationUserRepositoryProvider.get().findByUsername(userMemento.getName());
         if (applicationUserIfAny.isEmpty()) {
             return userMemento;
         }
-        val applicationUser = applicationUserIfAny.get();
+        var applicationUser = applicationUserIfAny.get();
 
         UserMemento refinedUserMemento =
                 userMemento.withMultiTenancyToken(applicationUser.getAtPath())
@@ -51,7 +51,7 @@ public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner
                            .withNumberFormatLocale(applicationUser.getNumberFormat())
                            .withTimeFormatLocale(applicationUser.getTimeFormat());
 
-        for (val role : applicationUser.getRoles()) {
+        for (var role : applicationUser.getRoles()) {
             refinedUserMemento = refinedUserMemento.withRoleAdded(role.getName());
         }
 

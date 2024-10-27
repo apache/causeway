@@ -47,8 +47,6 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
-
 import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
 
 @Component
@@ -131,7 +129,7 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        val parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.getValueTypes().getBigDecimal())
+        var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.getValueTypes().getBigDecimal())
                                 ? GroupingSeparatorPolicy.ALLOW
                                 : GroupingSeparatorPolicy.DISALLOW;
         return super.parseDecimal(context, text, parsePolicy)
@@ -151,7 +149,7 @@ implements
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
-        val bigDecimalConfig = causewayConfiguration.getValueTypes().getBigDecimal();
+        var bigDecimalConfig = causewayConfiguration.getValueTypes().getBigDecimal();
         format.setGroupingUsed(
                 usedFor == PARSING
                     ? bigDecimalConfig.getEditing().isUseGroupingSeparator()
@@ -162,7 +160,7 @@ implements
             return;
         }
 
-        val feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
+        var feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
                 .orElse(null);
         if(feature==null) {
             return;

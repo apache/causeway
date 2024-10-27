@@ -52,7 +52,6 @@ import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -129,7 +128,7 @@ public interface CollectionFacet extends Facet {
     }
 
     public static Object[] toArrayOfPojos(@Nullable final ManagedObject container) {
-        val elementAdapters = streamAdapters(container)
+        var elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
         return MmUnwrapUtils.multipleAsArray(elementAdapters);
     }
@@ -147,7 +146,7 @@ public interface CollectionFacet extends Facet {
 
             Stream rawStream = stream;
 
-            val factoryIfAny = factoriesByType.get(requiredType);
+            var factoryIfAny = factoriesByType.get(requiredType);
             if(factoryIfAny!=null) {
                 Supplier rawFactory = factoryIfAny;
                 Collector rawCollector = Collectors.toCollection(rawFactory);

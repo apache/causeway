@@ -50,7 +50,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 class _DomainResourceHelper {
 
@@ -114,7 +114,7 @@ class _DomainResourceHelper {
             final String propertyId,
             final ManagedMember.RepresentationMode representationMode) {
 
-        val property = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+        var property = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getPropertyThatIsVisibleForIntent(propertyId, AccessIntent.ACCESS);
         property.setRepresentationMode(representationMode);
 
@@ -132,7 +132,7 @@ class _DomainResourceHelper {
             final String collectionId,
             final ManagedMember.RepresentationMode representationMode) {
 
-        val collection = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+        var collection = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getCollectionThatIsVisibleForIntent(collectionId, AccessIntent.ACCESS);
         collection.setRepresentationMode(representationMode);
 
@@ -148,7 +148,7 @@ class _DomainResourceHelper {
      */
     public Response actionPrompt(final String actionId) {
 
-        val action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
+        var action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
                         actionId, AccessIntent.ACCESS, SemanticConstraint.NONE);
 
@@ -209,15 +209,15 @@ class _DomainResourceHelper {
             final @NonNull JsonRepresentation arguments,
             final @NonNull ActionResultReprRenderer.SelfLink selfLink) {
 
-        val where = resourceContext.getWhere();
+        var where = resourceContext.getWhere();
 
         // lombok issue, needs explicit cast here
-        val actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
+        var actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
         .checkVisibility()
         .checkUsability(intent)
         .checkSemanticConstraint(semanticConstraint);
 
-        val pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);
+        var pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);
 
         if(pendingArgs==null) {
             // no such action or not visible or not usable
@@ -226,17 +226,17 @@ class _DomainResourceHelper {
                     .orElseGet(()->InteractionVeto.notFound(Identifier.Type.ACTION, actionId))); // unexpected code reach
         }
 
-        val hasParams = pendingArgs.getParamCount()>0;
+        var hasParams = pendingArgs.getParamCount()>0;
 
 
         if(hasParams) {
 
             // parse parameters ...
 
-            val action = pendingArgs.getHead().getMetaModel();
-            val vetoCount = new LongAdder();
+            var action = pendingArgs.getHead().getMetaModel();
+            var vetoCount = new LongAdder();
 
-            val paramsOrVetos = ObjectActionArgHelper
+            var paramsOrVetos = ObjectActionArgHelper
                     .parseArguments(resourceContext, action, arguments);
 
             pendingArgs.getParamModels().zip(paramsOrVetos, (managedParam, paramOrVeto)->{
@@ -254,16 +254,16 @@ class _DomainResourceHelper {
                         InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
             }
 
-            val argAdapters = paramsOrVetos.map(Railway::getSuccessElseFail);
+            var argAdapters = paramsOrVetos.map(Railway::getSuccessElseFail);
             pendingArgs.setParamValues(argAdapters);
 
             // validate parameters ...
 
-            val individualParamConsents = pendingArgs.validateParameterSetForParameters();
+            var individualParamConsents = pendingArgs.validateParameterSetForParameters();
 
             pendingArgs.getParamModels().zip(individualParamConsents, (managedParam, consent)->{
                 if(consent.isVetoed()) {
-                    val veto = InteractionVeto.actionParamInvalid(consent);
+                    var veto = InteractionVeto.actionParamInvalid(consent);
                     InteractionFailureHandler.collectParameterInvalid(managedParam.getMetaModel(), veto, arguments);
                     vetoCount.increment();
                 }
@@ -278,7 +278,7 @@ class _DomainResourceHelper {
 
         }
 
-        val actionConsent = pendingArgs.validateParameterSetForAction();
+        var actionConsent = pendingArgs.validateParameterSetForAction();
         if(actionConsent.isVetoed()) {
             throw InteractionFailureHandler.onParameterListInvalid(
                     InteractionVeto.invalid(actionConsent),
@@ -289,18 +289,18 @@ class _DomainResourceHelper {
             return Response.noContent().build(); // do not progress any further
         }
 
-        val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+        var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
 
         resultOrVeto.ifFailure(veto->{
             throw InteractionFailureHandler.onFailure(veto);
         });
 
-        val actionInteractionResult = Result.of(
+        var actionInteractionResult = Result.of(
                 actionInteraction.getManagedAction().orElse(null),
                 pendingArgs.getParamValues(),
                 resultOrVeto.getSuccessElseFail());
 
-        val objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
+        var objectAndActionInvocation = ObjectAndActionInvocation.of(actionInteractionResult, arguments, selfLink);
 
         // response
         transactionService.flushTransaction();
@@ -317,7 +317,7 @@ class _DomainResourceHelper {
             final IResourceContext resourceContext,
             final @Nullable String serviceIdOrAlias) {
 
-        val mmc = resourceContext.getMetaModelContext();
+        var mmc = resourceContext.getMetaModelContext();
 
         final ManagedObject serviceAdapter = mmc.getSpecificationLoader()
                 .lookupLogicalType(serviceIdOrAlias)

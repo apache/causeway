@@ -50,7 +50,7 @@ import org.apache.causeway.testdomain.jdo.JdoInventoryDao;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -119,10 +119,10 @@ extends RegressionTestAbstract {
 
         interactionService.runAnonymous(()->{
 
-            val inventories = repositoryService.allInstances(JdoInventory.class);
+            var inventories = repositoryService.allInstances(JdoInventory.class);
             assertEquals(1, inventories.size());
 
-            val inventory = inventories.get(0);
+            var inventory = inventories.get(0);
             assertNotNull(inventory);
 
             assertNotNull(inventory);

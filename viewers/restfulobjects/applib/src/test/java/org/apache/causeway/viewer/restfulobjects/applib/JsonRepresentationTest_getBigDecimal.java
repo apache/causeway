@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-import lombok.val;
+
 
 class JsonRepresentationTest_getBigDecimal {
 
@@ -65,7 +65,7 @@ class JsonRepresentationTest_getBigDecimal {
     @Test
     public void invalidFormat() throws IOException {
 
-        val expectMessage = "Value '12345678901234567890.1234' larger than that allowed by format 'big-decimal(22,3)'";
+        var expectMessage = "Value '12345678901234567890.1234' larger than that allowed by format 'big-decimal(22,3)'";
 
         assertThrows(IllegalArgumentException.class, ()->{
             assertThat(jsonRepresentation.getBigDecimal("aBigDecimal", "big-decimal(22,3)"), is(new BigDecimal("12345678901234567890")));
@@ -79,7 +79,7 @@ class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void invalidFormattedFromPath() throws IOException {
-        val expectMessage = "Value '123.45' larger than that allowed by format 'big-decimal(4,2)'";
+        var expectMessage = "Value '123.45' larger than that allowed by format 'big-decimal(4,2)'";
 
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigDecimal("yetAnotherSubMap.anInvalidFormattedBigDecimal.value");
@@ -98,7 +98,7 @@ class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void forNonParseableString() throws IOException {
-        val expectMessage = "'aString' is not a bigdecimal";
+        var expectMessage = "'aString' is not a bigdecimal";
 
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigDecimal("aString");
@@ -107,7 +107,7 @@ class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void forMap() throws IOException {
-        val expectMessage = "'aSubMap' is not a bigdecimal";
+        var expectMessage = "'aSubMap' is not a bigdecimal";
 
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigDecimal("aSubMap");
@@ -116,7 +116,7 @@ class JsonRepresentationTest_getBigDecimal {
 
     @Test
     public void forList() throws IOException {
-        val expectMessage = "'aSubList' is not a bigdecimal";
+        var expectMessage = "'aSubList' is not a bigdecimal";
         assertThrows(IllegalArgumentException.class, ()->{
             jsonRepresentation.getBigDecimal("aSubList");
         }, expectMessage);

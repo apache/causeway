@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Value;
-import lombok.val;
 
 public abstract class ProgrammingModelAbstract
 implements
@@ -65,10 +64,10 @@ implements
         if(isInitialized()) return;
 
         // for all registered facet-factories that also implement MetaModelRefiner
-        for (val facetFactory : snapshotFactories(filter, metaModelContext)) {
+        for (var facetFactory : snapshotFactories(filter, metaModelContext)) {
 
             if(facetFactory instanceof MetaModelRefiner) {
-                val metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
+                var metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
                 metaModelValidatorRefiner.refineProgrammingModel(this);
             }
         }
@@ -92,7 +91,7 @@ implements
 
         assertNotInitialized();
         metaModelContext.getServiceInjector().injectServicesInto(instance);
-        val factoryEntry = ProgrammingModelEntry.of(instance, markers);
+        var factoryEntry = ProgrammingModelEntry.of(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
@@ -104,7 +103,7 @@ implements
 
         assertNotInitialized();
         metaModelContext.getServiceInjector().injectServicesInto(instance);
-        val validatorEntry = ProgrammingModelEntry.of(instance, markers);
+        var validatorEntry = ProgrammingModelEntry.of(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }
 
@@ -116,7 +115,7 @@ implements
 
         assertNotInitialized();
         metaModelContext.getServiceInjector().injectServicesInto(instance);
-        val postProcessorEntry = ProgrammingModelEntry.of(instance, markers);
+        var postProcessorEntry = ProgrammingModelEntry.of(instance, markers);
         postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
     }
 
@@ -157,13 +156,13 @@ implements
             final ProgrammingModelInitFilter filter,
             final MetaModelContext metaModelContext) {
 
-        val factories = _Lists.<FacetFactory>newArrayList();
-        for(val order : FacetProcessingOrder.values()) {
-            val factoryEntrySet = factoryEntriesByOrder.get(order);
+        var factories = _Lists.<FacetFactory>newArrayList();
+        for(var order : FacetProcessingOrder.values()) {
+            var factoryEntrySet = factoryEntriesByOrder.get(order);
             if(factoryEntrySet==null) {
                 continue;
             }
-            for(val factoryEntry : factoryEntrySet) {
+            for(var factoryEntry : factoryEntrySet) {
                 if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
                     factories.add(factoryEntry.getInstance());
                 }
@@ -179,13 +178,13 @@ implements
             final ProgrammingModelInitFilter filter,
             final MetaModelContext metaModelContext) {
 
-        val validators = _Lists.<MetaModelValidator>newArrayList();
-        for(val order : ValidationOrder.values()) {
-            val validatorEntrySet = validatorEntriesByOrder.get(order);
+        var validators = _Lists.<MetaModelValidator>newArrayList();
+        for(var order : ValidationOrder.values()) {
+            var validatorEntrySet = validatorEntriesByOrder.get(order);
             if(validatorEntrySet==null) {
                 continue;
             }
-            for(val validatorEntry : validatorEntrySet) {
+            for(var validatorEntry : validatorEntrySet) {
                 if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
                     validators.add(validatorEntry.getInstance());
                 }
@@ -201,13 +200,13 @@ implements
             final ProgrammingModelInitFilter filter,
             final MetaModelContext metaModelContext) {
 
-        val postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
-        for(val order : PostProcessingOrder.values()) {
-            val postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
+        var postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
+        for(var order : PostProcessingOrder.values()) {
+            var postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
             if(postProcessorEntrySet==null) {
                 continue;
             }
-            for(val postProcessorEntry : postProcessorEntrySet) {
+            for(var postProcessorEntry : postProcessorEntrySet) {
                 if(filter.acceptPostProcessor(
                         postProcessorEntry.getInstance().getClass(),
                         postProcessorEntry.getMarkers())) {

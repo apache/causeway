@@ -24,23 +24,21 @@ import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.Stickiness;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 
-import lombok.val;
-
 final class _Xray {
 
     static void addConfiguration(final ConfigurationViewService configurationService) {
 
         XrayUi.updateModel(model->{
 
-            val root = model.getRootNode();
+            var root = model.getRootNode();
 
-            val env = model.addDataNode(
+            var env = model.addDataNode(
                     root, new XrayDataModel.KeyValue("causeway-env", "Environment", Stickiness.CANNOT_DELETE_NODE));
             configurationService.getConfigurationProperties(Scope.ENV).forEach(item->{
                 env.getData().put(item.getKey(), item.getValue());
             });
 
-            val config = model.addDataNode(
+            var config = model.addDataNode(
                     root, new XrayDataModel.KeyValue("causeway-conf", "Config", Stickiness.CANNOT_DELETE_NODE));
             configurationService.getConfigurationProperties(Scope.PRIMARY).forEach(item->{
                 config.getData().put(item.getKey(), item.getValue());

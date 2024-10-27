@@ -45,7 +45,6 @@ import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -73,8 +72,8 @@ public class PageParameterUtils {
      * @return a new PageParameters instance
      */
     public PageParameters newPageParameters() {
-        val newPageParameters = new PageParameters();
-        val requestCycle = RequestCycle.get();
+        var newPageParameters = new PageParameters();
+        var requestCycle = RequestCycle.get();
 
         if (requestCycle != null) {
             Optional.ofNullable(PageRequestHandlerTracker.getFirstHandler(requestCycle))
@@ -108,7 +107,7 @@ public class PageParameterUtils {
     // -- FACTORY METHODS FOR PAGE PARAMETERS
 
     public PageParameters createPageParametersForBookmark(final Bookmark bookmark) {
-        val pageParameters = PageParameterUtils.newPageParameters();
+        var pageParameters = PageParameterUtils.newPageParameters();
         PageParameterNames.OBJECT_OID.addStringTo(pageParameters, bookmark.stringify());
         return pageParameters;
     }
@@ -119,8 +118,8 @@ public class PageParameterUtils {
      */
     public PageParameters createPageParametersForObject(final ManagedObject adapter) {
 
-        val pageParameters = PageParameterUtils.newPageParameters();
-        val isEntity = ManagedObjects.isIdentifiable(adapter);
+        var pageParameters = PageParameterUtils.newPageParameters();
+        var isEntity = ManagedObjects.isIdentifiable(adapter);
 
         if (isEntity) {
             ManagedObjects.stringify(adapter)
@@ -150,11 +149,11 @@ public class PageParameterUtils {
             final ObjectAction objectAction,
             final Can<ManagedObject> paramValues) {
 
-        val pageParameters = createPageParameters(adapter, objectAction);
+        var pageParameters = createPageParameters(adapter, objectAction);
 
         // capture argument values
-        for(val argumentAdapter: paramValues) {
-            val encodedArg = encodeArg(argumentAdapter);
+        for(var argumentAdapter: paramValues) {
+            var encodedArg = encodeArg(argumentAdapter);
             PageParameterNames.ACTION_ARGS.addStringTo(pageParameters, encodedArg);
         }
 
@@ -162,7 +161,7 @@ public class PageParameterUtils {
     }
 
     public Optional<Bookmark> toBookmark(final PageParameters pageParameters) {
-        val oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        var oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
         return _Strings.isEmpty(oidStr)
                 ? Optional.empty()
                 : Optional.of(Bookmark.parseElseFail(oidStr));
@@ -173,21 +172,21 @@ public class PageParameterUtils {
     private static PageParameters createPageParameters(
             final ManagedObject adapter, final ObjectAction objectAction) {
 
-        val pageParameters = PageParameterUtils.newPageParameters();
+        var pageParameters = PageParameterUtils.newPageParameters();
 
         ManagedObjects.stringify(adapter)
         .ifPresent(oidStr->
             PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
 
-        val actionScope = objectAction.getScope();
+        var actionScope = objectAction.getScope();
         PageParameterNames.ACTION_TYPE.addEnumTo(pageParameters, actionScope);
 
-        val actionOnTypeSpec = objectAction.getDeclaringType();
+        var actionOnTypeSpec = objectAction.getDeclaringType();
         if (actionOnTypeSpec != null) {
             PageParameterNames.ACTION_OWNING_SPEC.addStringTo(pageParameters, actionOnTypeSpec.getFullIdentifier());
         }
 
-        val actionId = determineActionId(objectAction);
+        var actionId = determineActionId(objectAction);
         PageParameterNames.ACTION_ID.addStringTo(pageParameters, actionId);
 
         return pageParameters;

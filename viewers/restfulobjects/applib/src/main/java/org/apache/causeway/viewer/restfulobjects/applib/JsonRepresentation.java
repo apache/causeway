@@ -58,7 +58,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
-import lombok.val;
+
 
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
@@ -115,7 +115,7 @@ public class JsonRepresentation {
     }
 
     public static JsonRepresentation jsonAsMap(final @Nullable String keyValuePairsAsJson) {
-        val repr = JsonRepresentation.newMap();
+        var repr = JsonRepresentation.newMap();
         if(_Strings.isNotEmpty(keyValuePairsAsJson)) {
             final Map<Object, Object> keyValuePairs = _Casts.uncheckedCast(
                     JsonUtils.tryRead(Map.class, keyValuePairsAsJson)

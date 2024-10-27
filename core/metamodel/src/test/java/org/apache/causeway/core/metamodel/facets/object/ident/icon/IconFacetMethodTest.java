@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class IconFacetMethodTest {
 
     private IconFacetViaIconNameMethod facet;
@@ -51,7 +49,7 @@ class IconFacetMethodTest {
     public void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInIconNameMethod();
-        val iconNameMethod = _GenericResolver.testing
+        var iconNameMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "iconName");
 
         facet = (IconFacetViaIconNameMethod) IconFacetViaIconNameMethod

@@ -48,7 +48,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * <p>
@@ -104,8 +104,8 @@ public class AuthorizorSecman implements Authorizor {
             final Identifier identifier,
             final ApplicationPermissionMode permissionMode) {
 
-        val userName = authentication.getUser().getName();
-        val permissionSetIfAny = cache.get()
+        var userName = authentication.getUser().getName();
+        var permissionSetIfAny = cache.get()
                 .computeIfAbsent(userName, ()->
                 applicationUserRepository
                 .findByUsername(userName)

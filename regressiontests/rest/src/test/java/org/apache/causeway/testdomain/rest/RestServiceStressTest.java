@@ -41,7 +41,7 @@ import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIf
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
@@ -64,17 +64,17 @@ class RestServiceStressTest {
 
         assertTrue(restService.getPort()>0);
 
-        val useRequestDebugLogging = false;
+        var useRequestDebugLogging = false;
         final int clients = 16;
         final int iterations = 1000;
-        val label = String.format("Calling REST endpoint %d times", clients * iterations);
+        var label = String.format("Calling REST endpoint %d times", clients * iterations);
 
         _Timing.runVerbose(log, label, ()->{
 
             IntStream.range(0, clients)
             .parallel()
             .mapToObj(i->{
-                val restfulClient = restService.newClient(useRequestDebugLogging);
+                var restfulClient = restService.newClient(useRequestDebugLogging);
                 return restfulClient;
             })
             .forEach(restfulClient->{
@@ -91,10 +91,10 @@ class RestServiceStressTest {
 
     void requestSingleBookOfTheWeek_viaRestEndpoint(final RestfulClient restfulClient) {
 
-        val digest = restService.getRecommendedBookOfTheWeekDto(restfulClient)
+        var digest = restService.getRecommendedBookOfTheWeekDto(restfulClient)
                 .ifFailure(Assertions::fail);
 
-        val bookOfTheWeek = digest.getValue().orElseThrow();
+        var bookOfTheWeek = digest.getValue().orElseThrow();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());

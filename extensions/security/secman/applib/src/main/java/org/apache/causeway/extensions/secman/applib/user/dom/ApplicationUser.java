@@ -64,7 +64,7 @@ import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEv
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.HasAtPath;
 
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 /**
@@ -648,16 +648,16 @@ public abstract class ApplicationUser
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
     @Programmatic public boolean isForSelf() {
-        val currentUser = currentUser();
-        val currentUserName = currentUser.getName();
-        val forSelf = Objects.equals(getUsername(), currentUserName);
+        var currentUser = currentUser();
+        var currentUserName = currentUser.getName();
+        var forSelf = Objects.equals(getUsername(), currentUserName);
         return forSelf;
     }
 
     @Programmatic public boolean isRunAsAdministrator() {
-        val currentUser = currentUser();
-        val adminRoleName = getAdminRoleName(); // is guarded to not be empty
-        val adminRoleSuffix = ":" + adminRoleName;
+        var currentUser = currentUser();
+        var adminRoleName = getAdminRoleName(); // is guarded to not be empty
+        var adminRoleSuffix = ":" + adminRoleName;
         for (final RoleMemento role : currentUser.getRoles()) {
             final String roleName = role.getName();
             if(adminRoleName.equals(roleName)) {
@@ -685,7 +685,7 @@ public abstract class ApplicationUser
     }
 
     @Programmatic private String getAdminRoleName() {
-        val adminRoleName = _Strings.emptyToNull(getSecmanConfig().getSeed().getAdmin().getRoleName());
+        var adminRoleName = _Strings.emptyToNull(getSecmanConfig().getSeed().getAdmin().getRoleName());
         // guard against empty admin role name
         _Assert.assertNotNull(adminRoleName, ()->"secman-config.seed.admin.role-name must not be empty");
         return adminRoleName;

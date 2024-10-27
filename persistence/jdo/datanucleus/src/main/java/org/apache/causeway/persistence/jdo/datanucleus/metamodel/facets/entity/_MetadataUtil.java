@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata.ColumnOrmMetadata;
 
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -46,8 +46,8 @@ class _MetadataUtil {
             final @NonNull PersistenceManager persistenceManager,
             final @NonNull Class<?> entityClass) {
 
-        val pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
-        val typeMetadata = pmf.getMetadata(entityClass.getName());
+        var pmf = (JDOPersistenceManagerFactory) persistenceManager.getPersistenceManagerFactory();
+        var typeMetadata = pmf.getMetadata(entityClass.getName());
 
         return new EntityOrmMetadata(
                 PersistenceStack.JDO,
@@ -85,17 +85,17 @@ class _MetadataUtil {
             final @NonNull TypeMetadata typeMetadata,
             final @NonNull Class<?> entityClass) {
 
-        val identityType = typeMetadata.getIdentityType();
+        var identityType = typeMetadata.getIdentityType();
         switch (identityType) {
             case APPLICATION: {
-                val contextLoader = Thread.currentThread().getContextClassLoader();
-                val nucleusContext = pmf.getNucleusContext();
-                val clr = nucleusContext.getClassLoaderResolver(contextLoader);
+                var contextLoader = Thread.currentThread().getContextClassLoader();
+                var nucleusContext = pmf.getNucleusContext();
+                var clr = nucleusContext.getClassLoaderResolver(contextLoader);
                 final String objectIdClass = typeMetadata.getObjectIdClass();
                 return clr.classForName(objectIdClass);
             }
             case DATASTORE: {
-                val nucleusContext = pmf.getNucleusContext();
+                var nucleusContext = pmf.getNucleusContext();
                 return nucleusContext.getIdentityManager().getDatastoreIdClass();
             }
             case NONDURABLE:

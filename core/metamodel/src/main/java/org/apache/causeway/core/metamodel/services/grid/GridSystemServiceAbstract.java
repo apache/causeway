@@ -86,7 +86,6 @@ import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetI
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject}, access = AccessLevel.PROTECTED)
@@ -144,14 +143,14 @@ implements GridSystemService<G> {
             final G fcGrid,
             final Class<?> domainClass) {
 
-        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+        var objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
-        val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
-        val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
-        val objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
+        var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
+        var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
+        var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
         // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
-        val precedence = fcGrid.isFallback()
+        var precedence = fcGrid.isFallback()
                 ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
@@ -190,8 +189,8 @@ implements GridSystemService<G> {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
 
-                val actionLayoutDataOwner = actionLayoutData.getOwner();
-                val objectAction = objectActionById.get(actionLayoutData.getId());
+                var actionLayoutDataOwner = actionLayoutData.getOwner();
+                var objectAction = objectActionById.get(actionLayoutData.getId());
                 if(objectAction == null) {
                     return;
                 }
@@ -200,8 +199,8 @@ implements GridSystemService<G> {
                     GroupIdAndName groupIdAndName = null;
                     int memberOrderSequence;
                     if(actionLayoutDataOwner instanceof FieldSet) {
-                        val fieldSet = (FieldSet) actionLayoutDataOwner;
-                        for (val propertyLayoutData : fieldSet.getProperties()) {
+                        var fieldSet = (FieldSet) actionLayoutDataOwner;
+                        for (var propertyLayoutData : fieldSet.getProperties()) {
                             // any will do; choose the first one that we know is valid
                             if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
                                 groupIdAndName = GroupIdAndName
@@ -230,7 +229,7 @@ implements GridSystemService<G> {
                             LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
-                    val precedenceHotfix = fcGrid.isFallback()
+                    var precedenceHotfix = fcGrid.isFallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
 
@@ -284,7 +283,7 @@ implements GridSystemService<G> {
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                val oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
+                var oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
                 if(oneToOneAssociation == null) {
                     return;
                 }
@@ -332,7 +331,7 @@ implements GridSystemService<G> {
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                val oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
+                var oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
                 if(oneToManyAssociation == null) {
                     return;
                 }
@@ -382,8 +381,8 @@ implements GridSystemService<G> {
     }
 
     protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
-        val firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
-        val secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
+        var firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
+        var secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
         return SurplusAndMissing.of(firstNotSecond, secondNotFirst);
     }
 
@@ -393,7 +392,7 @@ implements GridSystemService<G> {
     @Override
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+        var objectSpec = specificationLoader.specForTypeElseFail(domainClass);
         grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
     }
 

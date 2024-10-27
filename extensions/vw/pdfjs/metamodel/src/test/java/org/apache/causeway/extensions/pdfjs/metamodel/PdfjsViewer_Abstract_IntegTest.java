@@ -45,7 +45,7 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.integtestsupport.applib.ApprovalsOptions;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegrationTestAbstract {
 
@@ -90,12 +90,12 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
     }
 
     void dump_facets() {
-        val metamodelDto = metaModelService.exportMetaModel(
+        var metamodelDto = metaModelService.exportMetaModel(
                 Config.builder()
                         .namespacePrefixes(Collections.singleton(getDomainModuleClass().getPackageName()))
                         .ignoreMixins(false)
                         .build());
-        val xml = jaxbService.toXml(metamodelDto);
+        var xml = jaxbService.toXml(metamodelDto);
 
         Approvals.verifyXml(xml, ApprovalsOptions.xmlOptions());
     }

@@ -28,7 +28,6 @@ import org.eclipse.persistence.sessions.UnitOfWork;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet.PrimaryKeyType;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -42,7 +41,7 @@ class _JpaEntityStateUtil {
             final Object pojo) {
 
         if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            var primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.ATTACHED_NO_OID;
             }
@@ -64,7 +63,7 @@ class _JpaEntityStateUtil {
             (this was without any weaving) */
             final Throwable cause = ex.getCause();
             if (cause instanceof DescriptorException) {
-                val descriptorException = (DescriptorException) cause;
+                var descriptorException = (DescriptorException) cause;
                 final Throwable internalException = descriptorException.getInternalException();
                 if (internalException instanceof NullPointerException) {
                     return EntityState.TRANSIENT_OR_REMOVED;
@@ -97,7 +96,7 @@ class _JpaEntityStateUtil {
             final PrimaryKeyType<?> primaryKeyType,
             final Object pojo) {
         if (entityManager.contains(pojo)) {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            var primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.ATTACHED_NO_OID;
             }
@@ -105,7 +104,7 @@ class _JpaEntityStateUtil {
         }
 
         try {
-            val primaryKey = persistenceUnitUtil.getIdentifier(pojo);
+            var primaryKey = persistenceUnitUtil.getIdentifier(pojo);
             if (primaryKey == null) {
                 return EntityState.TRANSIENT_OR_REMOVED;
             } else {

@@ -46,7 +46,6 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Default implementation of {@link ObjectIconService}.
@@ -87,19 +86,19 @@ implements ObjectIconService {
             final @NonNull ObjectSpecification spec,
             final @Nullable String iconNameModifier) {
 
-        val domainClass = spec.getCorrespondingClass();
-        val iconResourceKey = _Strings.isNotEmpty(iconNameModifier)
+        var domainClass = spec.getCorrespondingClass();
+        var iconResourceKey = _Strings.isNotEmpty(iconNameModifier)
                 ? domainClass.getName() + "-" + iconNameModifier
                 : domainClass.getName();
 
         // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
 
-        val cachedIcon = iconByKey.get(iconResourceKey);
+        var cachedIcon = iconByKey.get(iconResourceKey);
         if(cachedIcon!=null) {
             return cachedIcon;
         }
 
-        val icon = findIcon(spec, iconNameModifier);
+        var icon = findIcon(spec, iconNameModifier);
 
         iconByKey.put(iconResourceKey, icon);
 
@@ -121,16 +120,16 @@ implements ObjectIconService {
             final @NonNull ObjectSpecification spec,
             final @Nullable String iconNameModifier) {
 
-        val domainClass = spec.getCorrespondingClass();
-        val iconResourceNameNoExt = _Strings.isNotEmpty(iconNameModifier)
+        var domainClass = spec.getCorrespondingClass();
+        var iconResourceNameNoExt = _Strings.isNotEmpty(iconNameModifier)
                 ? domainClass.getSimpleName() + "-" + iconNameModifier
                 : domainClass.getSimpleName();
 
         // search for image in corresponding class'es resource path
 
-        for(val imageType : IMAGE_TYPES) {
+        for(var imageType : IMAGE_TYPES) {
 
-            val objectIcon = imageType
+            var objectIcon = imageType
                 .getProposedFileExtensions()
                 .stream()
                 .map(suffix->iconResourceNameNoExt + "." + suffix)
@@ -152,9 +151,9 @@ implements ObjectIconService {
 
         // also search the default image resource path
 
-        for(val imageType : IMAGE_TYPES) {
+        for(var imageType : IMAGE_TYPES) {
 
-            val objectIcon = imageType
+            var objectIcon = imageType
                     .getProposedFileExtensions()
                     .stream()
                     .map(suffix->DEFAULT_IMAGE_RESOURCE_PATH + "/" + iconResourceNameNoExt + "." + suffix)
@@ -192,7 +191,7 @@ implements ObjectIconService {
             throw _Exceptions
             .illegalArgument("invalid absolute resourceName %s", absoluteResourceName);
         }
-        val resource = resourceLoader.getResource(absoluteResourceName);
+        var resource = resourceLoader.getResource(absoluteResourceName);
         return resource.exists()
                 ? Optional.ofNullable(resource.getURL())
                 : Optional.empty();
@@ -205,7 +204,7 @@ implements ObjectIconService {
             throw _Exceptions
             .illegalArgument("invalid relative resourceName %s", relativeResourceName);
         }
-        val resourceUrl = _Resources.getResourceUrl(contextClass, relativeResourceName);
+        var resourceUrl = _Resources.getResourceUrl(contextClass, relativeResourceName);
         return Optional.ofNullable(resourceUrl);
     }
 

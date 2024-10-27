@@ -51,7 +51,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainS
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -75,7 +75,7 @@ implements DomainServiceResource {
         RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
         final Stream<ManagedObject> serviceAdapters = resourceContext.streamServiceAdapters();
@@ -131,12 +131,12 @@ implements DomainServiceResource {
     public Response service(
             @PathParam("serviceId") final String serviceId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        val serviceAdapter = _DomainResourceHelper.getServiceAdapter(resourceContext, serviceId);
+        var serviceAdapter = _DomainResourceHelper.getServiceAdapter(resourceContext, serviceId);
 
-        val renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+        var renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
         .with(serviceAdapter)
         .includesSelf();
@@ -196,10 +196,10 @@ implements DomainServiceResource {
             @PathParam("serviceId") final String serviceId,
             @PathParam("actionId") final String actionId) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
+        var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "GET /services/{}/actions/{}", serviceId, actionId,
                 domainResourceHelper.actionPrompt(actionId));
@@ -264,13 +264,13 @@ implements DomainServiceResource {
                 xCausewayUrlEncodedQueryString != null
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 RequestParams.ofQueryString(urlUnencodedQueryString));
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
+        var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "GET /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeActionQueryOnly(actionId, arguments));
@@ -290,13 +290,13 @@ implements DomainServiceResource {
             final @PathParam("actionId") String actionId,
             final InputStream body) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
+        var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "PUT /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeActionIdempotent(actionId, arguments));
@@ -315,13 +315,13 @@ implements DomainServiceResource {
             @PathParam("actionId") final String actionId,
             final InputStream body) {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
 
-        val domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
+        var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
         return _EndpointLogging.response(log, "POST /services/{}/actions/{}/invoke", serviceId, actionId,
                 domainResourceHelper.invokeAction(actionId, arguments));

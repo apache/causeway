@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-import lombok.val;
-
 public class JdoPrimaryKeyAnnotationFacetFactory
 extends FacetFactoryAbstract {
 
@@ -45,21 +43,21 @@ extends FacetFactoryAbstract {
     public void process(final ProcessMethodContext processMethodContext) {
 
         // ignore any view models
-        val cls = processMethodContext.getCls();
+        var cls = processMethodContext.getCls();
         if(!jdoFacetContext.isPersistenceEnhanced(cls)) {
             return;
         }
 
-        //      val method = processMethodContext.getMethod();
+        //      var method = processMethodContext.getMethod();
         //       _Assert.assertEquals("expected same on method=" + method , annotation,
         //                Annotations.getAnnotation(method, PrimaryKey.class));
 
-        val primaryKeyIfAny = processMethodContext.synthesizeOnMethod(PrimaryKey.class);
+        var primaryKeyIfAny = processMethodContext.synthesizeOnMethod(PrimaryKey.class);
         if (!primaryKeyIfAny.isPresent()) {
             return;
         }
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         addFacet(new JdoPrimaryKeyFacetAnnotation(facetHolder));
         addFacet(new MandatoryFacetFromJdoPrimaryKeyAnnotation(facetHolder));
         addFacet(new DisabledFacetFromJdoPrimaryKeyAnnotation(facetHolder));

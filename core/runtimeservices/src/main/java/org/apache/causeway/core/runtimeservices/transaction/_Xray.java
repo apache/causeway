@@ -23,8 +23,6 @@ import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 
-import lombok.val;
-
 final class _Xray {
 
     static void txBeforeCompletion(final InteractionLayerTracker iaTracker, final String txInfo) {
@@ -36,20 +34,20 @@ final class _Xray {
 
         _XrayEvent.transaction(txInfo);
 
-        //val threadId = ThreadMemento.fromCurrentThread();
+        //var threadId = ThreadMemento.fromCurrentThread();
 
-        val sequenceId = XrayUtil.currentSequenceId(iaTracker)
+        var sequenceId = XrayUtil.currentSequenceId(iaTracker)
         .orElse(null);
 
         XrayUi.updateModel(model->{
 
-            val seq = model.lookupSequence(sequenceId);
+            var seq = model.lookupSequence(sequenceId);
 
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
             //XXX replaced by log above
 //            if(!seq.isPresent()) {
-//                val uiThreadNode = model.getThreadNode(threadId);
+//                var uiThreadNode = model.getThreadNode(threadId);
 //                model.addContainerNode(
 //                        uiThreadNode,
 //                        txInfo,
@@ -58,7 +56,7 @@ final class _Xray {
 //            }
 
             seq.ifPresent(sequence->{
-                val sequenceData = sequence.getData();
+                var sequenceData = sequence.getData();
                 sequenceData.alias("evb", "EventBus");
                 sequenceData.enter("tx", "evb", txInfo);
             });
@@ -76,20 +74,20 @@ final class _Xray {
 
         _XrayEvent.transaction(txInfo);
 
-        //val threadId = ThreadMemento.fromCurrentThread();
+        //var threadId = ThreadMemento.fromCurrentThread();
 
-        val sequenceId = XrayUtil.currentSequenceId(iaTracker)
+        var sequenceId = XrayUtil.currentSequenceId(iaTracker)
                 .orElse(null);
 
         XrayUi.updateModel(model->{
 
-            val seq = model.lookupSequence(sequenceId);
+            var seq = model.lookupSequence(sequenceId);
 
             // if no sequence diagram available, that we can append to,
             // then at least add a node to the left tree
             //XXX replaced by log above
 //            if(!seq.isPresent()) {
-//                val uiThreadNode = model.getThreadNode(threadId);
+//                var uiThreadNode = model.getThreadNode(threadId);
 //                model.addContainerNode(
 //                        uiThreadNode,
 //                        txInfo,
@@ -98,7 +96,7 @@ final class _Xray {
 //            }
 
             seq.ifPresent(sequence->{
-                val sequenceData = sequence.getData();
+                var sequenceData = sequence.getData();
                 sequenceData.enter("tx", "evb", txInfo);
             });
 

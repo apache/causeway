@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import lombok.val;
+
 
 /**
  * Utility class that encapsulates the logic for updating an
@@ -65,7 +65,7 @@ public class ObjectAdapterUpdateHelper {
             final JsonRepresentation propertiesMap,
             final Intent intent) {
 
-        val allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
+        var allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
 
         objectAdapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only

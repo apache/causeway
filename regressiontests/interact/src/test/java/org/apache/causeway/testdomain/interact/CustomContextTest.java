@@ -40,7 +40,7 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.integtestsupport.applib.annotation.InteractAs;
 
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -61,7 +61,7 @@ class CustomContextTest extends CausewayIntegrationTestAbstract {
     @InteractAs()
     void shouldRunWithDefaultContext() {
 
-        val iaCtx = interactionService.currentInteractionContextElseFail();
+        var iaCtx = interactionService.currentInteractionContextElseFail();
 
         assertThat(iaCtx.getUser().hasSudoAccessAllRole()).isFalse();
         assertEquals(Locale.getDefault(), iaCtx.getLocale().getLanguageLocale());
@@ -80,7 +80,7 @@ class CustomContextTest extends CausewayIntegrationTestAbstract {
             frozenDateTime = "2022-07-13 13:02:04 Z")
     void shouldRunWithCustomContext() {
 
-        val iaCtx = interactionService.currentInteractionContextElseFail();
+        var iaCtx = interactionService.currentInteractionContextElseFail();
 
         assertEquals("sven", iaCtx.getUser().getName());
         assertEquals(Locale.FRANCE.getLanguage(), iaCtx.getLocale().getLanguageLocale().getLanguage());

@@ -34,7 +34,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRule;
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
-import lombok.val;
+
 
 /**
  * Sets up a role for administrators (whose name is {@link Admin#getRoleName() configurable}
@@ -69,7 +69,7 @@ public class CausewayExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPer
     // -- HELPER
 
     private static Stream<String> streamAdminNamespacePermissions(final Secman secman) {
-        val adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
+        var adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
         return Stream.concat(
                 _NullSafe.stream(adminNamespacePermissions.getSticky()),
                 _NullSafe.stream(adminNamespacePermissions.getAdditional()));

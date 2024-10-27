@@ -30,7 +30,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.val;
 
 /**
  * Follows the <em>Railway Pattern</em>, that is, once vetoed, stays vetoed.
@@ -56,7 +55,7 @@ implements
 
     @Override // type-safe override
     public InteractionRailway<T> chain(final @NonNull ThrowingFunction<T, Railway<InteractionVeto, T>> chainingFunction) {
-        val railway = HasRailway.super.chain(chainingFunction);
+        var railway = HasRailway.super.chain(chainingFunction);
         return railway instanceof InteractionRailway
             ? (InteractionRailway<T>) railway
             : new InteractionRailway<>(railway);

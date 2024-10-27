@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator
 extends MetaModelValidatorAbstract {
 
@@ -46,12 +44,12 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        val actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
+        var actions = spec.streamAnyActions(MixedIn.EXCLUDED).collect(Collectors.toList());
 
         final int numActions = actions.size();
         if (numActions > 0) {
 
-            val actionIds = actions.stream()
+            var actionIds = actions.stream()
             .map(ObjectAction::getFeatureIdentifier)
             .map(Identifier::toString)
             .collect(Collectors.joining(", "));

@@ -31,14 +31,12 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodConte
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest_commandPublishing
 extends ActionAnnotationFacetFactoryTest {
 
     private void processCommandPublishing(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processCommandPublishing(processMethodContext, actionIfAny);
     }
 

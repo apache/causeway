@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.val;
+
 
 @org.springframework.stereotype.Component
 public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
@@ -47,7 +47,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        val scalarModel = (ScalarModel) model;
+        var scalarModel = (ScalarModel) model;
         if(!scalarModel.getMetaModel().containsFacet(PdfJsViewerFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }

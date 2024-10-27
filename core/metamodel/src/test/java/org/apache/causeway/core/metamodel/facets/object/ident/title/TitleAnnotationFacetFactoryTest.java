@@ -45,8 +45,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleAn
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class TitleAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
@@ -75,7 +73,7 @@ extends FacetFactoryTestAbstract {
     @Test
     void titleAnnotatedMethodPickedUpOnClassRemoved() throws Exception {
 
-        val someTitleMethod = _GenericResolver.testing
+        var someTitleMethod = _GenericResolver.testing
                 .resolveMethod(Customer1.class, "someTitle");
 
         objectScenario(Customer1.class, (processClassContext, facetHolder)->{
@@ -150,7 +148,7 @@ extends FacetFactoryTestAbstract {
             }
 
             final Customer2 customer = new Customer2();
-            val objectAdapter = ManagedObject.adaptSingular(getSpecificationLoader(), customer);
+            var objectAdapter = ManagedObject.adaptSingular(getSpecificationLoader(), customer);
 
             final String title = titleFacetViaTitleAnnotation.title(objectAdapter);
             assertThat(title, is("titleElement1. titleElement3,titleElement2"));
@@ -224,16 +222,16 @@ extends FacetFactoryTestAbstract {
     void annotatedMethodsSomeOfWhichReturnNulls() throws Exception {
 
         { // check prerequisites
-            val wThree = ManagedObject.adaptSingular(getSpecificationLoader(), Integer.valueOf(3));
+            var wThree = ManagedObject.adaptSingular(getSpecificationLoader(), Integer.valueOf(3));
             assertEquals("3", wThree.getTitle());
-            val pThree = ManagedObject.adaptSingular(getSpecificationLoader(), 3);
+            var pThree = ManagedObject.adaptSingular(getSpecificationLoader(), 3);
             assertEquals("3", pThree.getTitle());
         }
 
         objectScenario(Customer4.class, (processClassContext, facetHolder)->{
             facetFactory.process(processClassContext);
 
-            val objectAdapter = getObjectManager().adapt(new Customer4());
+            var objectAdapter = getObjectManager().adapt(new Customer4());
 
             assertThat(objectAdapter.getTitle(),
                     is("titleElement1 titleElement3 titleElement5 3 this needs to be trimmed"));

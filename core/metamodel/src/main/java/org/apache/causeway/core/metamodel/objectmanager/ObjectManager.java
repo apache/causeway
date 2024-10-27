@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
-import lombok.val;
 
 /**
  * Bundles all domain object state related responsibilities:<br>
@@ -108,7 +107,7 @@ public interface ObjectManager extends HasMetaModelContext {
         if(bookmark==null) {
             return Optional.empty();
         }
-        val specLoader = getMetaModelContext().getSpecificationLoader();
+        var specLoader = getMetaModelContext().getSpecificationLoader();
         return ProtoObject.resolve(specLoader, bookmark)
                 .map(this::loadObject);
     }
@@ -139,7 +138,7 @@ public interface ObjectManager extends HasMetaModelContext {
      * @see #loadObject(Bookmark)
      */
     default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
-        val adapter = loadObject(bookmark)
+        var adapter = loadObject(bookmark)
                 .orElseThrow(() -> new BookmarkNotFoundException(String.format("Bookmark %s was not found.", bookmark)));
         if(adapter.getSpecialization().isEntity()) {
             _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
@@ -208,7 +207,7 @@ public interface ObjectManager extends HasMetaModelContext {
             return (ManagedObject) pojo;
         }
         // could be any pojo, even of a type, that is vetoed for introspection (spec==null)
-        val spec = specForType(pojo.getClass()).orElse(null);
+        var spec = specForType(pojo.getClass()).orElse(null);
         if(spec==null) {
             // best we can do?
             return ManagedObject.unspecified();

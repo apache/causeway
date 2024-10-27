@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  * <blockquote><pre>
-val clientConfig = RestfulClientConfig.builder();
+var clientConfig = RestfulClientConfig.builder();
     .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
         .authenticationMode(AuthenticationMode.BASIC)
         .basicAuthUser("sven")

@@ -22,8 +22,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.val;
-
 /**
  * Indicates that the action should be contributed to objects either
  * as <i>Action</i>, <i>Property</i> or <i>Collection</i>.
@@ -47,7 +45,7 @@ public interface ContributingFacet extends Facet {
     // -- UTILITIES
 
     static boolean isActionContributionVetoed(final ObjectAction action) {
-        val facet = action.getFacet(ContributingFacet.class);
+        var facet = action.getFacet(ContributingFacet.class);
         if(facet != null) {
             return facet.isActionContributionVetoed();
         }
@@ -55,7 +53,7 @@ public interface ContributingFacet extends Facet {
     }
 
     static boolean isAssociationContributionVetoed(final ObjectAction action) {
-        val facet = action.getFacet(ContributingFacet.class);
+        var facet = action.getFacet(ContributingFacet.class);
         if(facet != null) {
             return facet.isAssociationContributionVetoed();
         }

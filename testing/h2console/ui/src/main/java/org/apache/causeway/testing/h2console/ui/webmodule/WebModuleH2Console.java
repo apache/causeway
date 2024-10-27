@@ -45,7 +45,7 @@ import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -127,23 +127,23 @@ public class WebModuleH2Console extends WebModuleAbstract {
                 return;
             }
 
-            val dataSourceProperties = new DataSourceProperties();
+            var dataSourceProperties = new DataSourceProperties();
             dataSourceProperties.setUsername("sa");
             dataSourceProperties.setUrl(jdbcUrl);
 
-            val connectionInfo = new ConnectionInfo(
+            var connectionInfo = new ConnectionInfo(
                     String.format("Generic Spring Datasource|%s|%s|%s",
                             dataSourceProperties.determineDriverClassName(),
                             dataSourceProperties.determineUrl(),
                             dataSourceProperties.determineUsername()));
 
-            val webServlet = this;
+            var webServlet = this;
 
             H2WebServerWrapper.withH2WebServerWrapperDo(webServlet, h2WebServerWrapper->{
                 h2WebServerWrapper.setConnectionInfo(connectionInfo);
                 h2WebServerWrapper.setAllowOthers(isWebAllowRemoteAccess());
                 if(isGenerateRandomWebAdminPassword()) {
-                    val webAdminPass = randomCodeGenerator.generateRandomCode();
+                    var webAdminPass = randomCodeGenerator.generateRandomCode();
                     log.info("webAdminPass: {}", webAdminPass);
                     h2WebServerWrapper.setAdminPassword(webAdminPass);
                 }

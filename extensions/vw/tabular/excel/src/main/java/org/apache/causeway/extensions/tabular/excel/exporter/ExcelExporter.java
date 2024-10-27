@@ -49,7 +49,7 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 @RequiredArgsConstructor
 class ExcelExporter implements BiConsumer<DataTable, File> {
@@ -87,18 +87,18 @@ class ExcelExporter implements BiConsumer<DataTable, File> {
 
             Row row;
 
-            val sheet = wb.createSheet(sheetName);
+            var sheet = wb.createSheet(sheetName);
 
-            val cellStyleProvider = new CellStyleProvider(wb);
+            var cellStyleProvider = new CellStyleProvider(wb);
 
             final ExcelExporter.RowFactory rowFactory = new RowFactory(sheet);
 
-            val dataColumns = table.getDataColumns();
+            var dataColumns = table.getDataColumns();
 
             // primary header row
             row = rowFactory.newRow();
             int i=0;
-            for(val column : dataColumns) {
+            for(var column : dataColumns) {
                 final Cell cell = row.createCell((short) i++);
                 cell.setCellValue(column.getColumnFriendlyName());
                 cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
@@ -108,7 +108,7 @@ class ExcelExporter implements BiConsumer<DataTable, File> {
             row = rowFactory.newRow();
             i=0;
             var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
-            for(val column : dataColumns) {
+            for(var column : dataColumns) {
                 final Cell cell = row.createCell((short) i++);
                 final String columnDescription = column.getColumnDescription().orElse("");
                 cell.setCellValue(columnDescription);
@@ -119,16 +119,16 @@ class ExcelExporter implements BiConsumer<DataTable, File> {
             autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
                     wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
 
-            val dataRows = table.getDataRows();
+            var dataRows = table.getDataRows();
 
             // detail rows
-            for (val dataRow : dataRows) {
+            for (var dataRow : dataRows) {
                 row = rowFactory.newRow();
                 i=0;
                 maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
-                for(val column : dataColumns) {
+                for(var column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
-                    val cellElements = dataRow.getCellElements(column, interactionInitiatedBy)
+                    var cellElements = dataRow.getCellElements(column, interactionInitiatedBy)
                             .filter(managedObject->managedObject.getPojo()!=null);
                     final int linesWritten = setCellValue(cellElements,
                             cell,
@@ -196,8 +196,8 @@ class ExcelExporter implements BiConsumer<DataTable, File> {
                     : cellElements.size();
         }
 
-        val singleton = cellElements.getFirstElseFail();
-        val valueAsObj = singleton.getPojo();
+        var singleton = cellElements.getFirstElseFail();
+        var valueAsObj = singleton.getPojo();
 
         // event though filtered for null by caller, keep this as a guard
         // null

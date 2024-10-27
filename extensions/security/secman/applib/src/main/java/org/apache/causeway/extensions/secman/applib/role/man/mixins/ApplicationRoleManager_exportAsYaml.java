@@ -40,7 +40,7 @@ import org.apache.causeway.extensions.secman.applib.user.man.mixins.ApplicationU
 import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  *
@@ -76,7 +76,7 @@ public class ApplicationRoleManager_exportAsYaml {
             @Parameter
             final String fileName) {
 
-        val yaml = ApplicationSecurityDto.create(
+        var yaml = ApplicationSecurityDto.create(
                 applicationRoleRepository,
                 applicationUserRepository,
                 applicationTenancyRepository,

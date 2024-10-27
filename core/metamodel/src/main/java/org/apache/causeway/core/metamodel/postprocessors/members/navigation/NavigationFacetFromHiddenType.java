@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class NavigationFacetFromHiddenType
 extends FacetAbstract
 implements
@@ -61,13 +59,13 @@ implements
 
     @Override
     public String hides(final VisibilityContext ic) {
-        val facet = navigatedType.getFacet(HiddenTypeFacet.class);
+        var facet = navigatedType.getFacet(HiddenTypeFacet.class);
         if(facet == null) {
             // not expected to happen; this facet should only be installed for object members
             // that navigate to a class that has the HiddenTypeFacet
             return null;
         }
-        val objVisibilityContext = new ObjectVisibilityContext(
+        var objVisibilityContext = new ObjectVisibilityContext(
                 ic.getHead(),
                 Identifier.classIdentifier(navigatedType.getLogicalType()),
                 ic.getInitiatedBy(),

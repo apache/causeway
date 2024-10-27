@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-import lombok.val;
+
 
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
@@ -133,9 +133,9 @@ public class JsonParserHelper {
             throw new IllegalArgumentException(reason);
         }
 
-        val objectAdapter = resourceContext.getObjectAdapterForOidFromHref(oidFromHref)
+        var objectAdapter = resourceContext.getObjectAdapterForOidFromHref(oidFromHref)
                 .orElseThrow(()->{
-                    val reason = "'href' does not reference a known entity";
+                    var reason = "'href' does not reference a known entity";
                     argRepr.mapPutString("invalidReason", reason);
                     return new IllegalArgumentException(reason);
                 });

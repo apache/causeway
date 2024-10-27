@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.DomainTyp
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
 
 import lombok.Getter;
-import lombok.val;
+
 
 public abstract class ReprRendererAbstract<T>
 implements ReprRenderer<T> {
@@ -197,7 +197,7 @@ implements ReprRenderer<T> {
         }
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPutJsonRepresentation(key, adapterList);
-        for (val adapter : adapters) {
+        for (var adapter : adapters) {
             adapterList.arrayAdd(DomainObjectReprRenderer.newLinkToBuilder(getResourceContext(), Rel.VALUE, adapter).build());
         }
     }

@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Synchronized;
-import lombok.val;
+
 
 /**
  * @since 2.0
@@ -124,7 +124,7 @@ extends ModelAbstract<ManagedObject> {
     @Synchronized
     public ObjectSpecification getTypeOfSpecification() {
         if(!isObjectSpecMemoized) {
-            val logicalType = getLogicalElementType().orElse(null);
+            var logicalType = getLogicalElementType().orElse(null);
             elementTypeSpec = super.getSpecificationLoader().specForLogicalType(logicalType).orElse(null);
             isObjectSpecMemoized = true;
         }
@@ -145,7 +145,7 @@ extends ModelAbstract<ManagedObject> {
     @Override
     public final boolean equals(final Object obj) {
         if(obj instanceof ManagedObjectModel) {
-            val other = (ManagedObjectModel) obj;
+            var other = (ManagedObjectModel) obj;
             return Objects.equals(this.memento, other.memento);
         }
         return false;
@@ -158,7 +158,7 @@ extends ModelAbstract<ManagedObject> {
 //    }
 //
 //    private void memento(final ObjectMemento memento) {
-//        val manageObject = super.getMetaModelContext().reconstructObject(memento);
+//        var manageObject = super.getMetaModelContext().reconstructObject(memento);
 //        super.setObject(manageObject);
 //        this.memento = memento;
 //        this.elementTypeSpec = null; // invalidate

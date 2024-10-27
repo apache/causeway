@@ -44,7 +44,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -68,9 +67,9 @@ implements MenuBarsLoaderService {
     public MenuBarsLoaderServiceDefault(final MetaModelContext mmc) {
         this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
-        val menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
+        var menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
                 .getMenubarsLayoutFile();
-        val menubarsLayoutResource = new ClassPathResource(menubarsLayoutFile);
+        var menubarsLayoutResource = new ClassPathResource(menubarsLayoutFile);
         if(!menubarsLayoutResource.exists()) {
             log.warn("menubarsLayoutFile {} (as configured for Apache Causeway) not found",
                     menubarsLayoutFile);
@@ -111,14 +110,14 @@ implements MenuBarsLoaderService {
 
     private String loadMenubarsLayoutResource() {
 
-        val menubarsLayoutResource = menubarsLayoutResourceRef.get();
+        var menubarsLayoutResource = menubarsLayoutResourceRef.get();
         try {
 
             if(!menubarsLayoutResource.exists()) {
                 return null;
             }
 
-            val source = menubarsLayoutResource.getInputStream(); // throws if not found
+            var source = menubarsLayoutResource.getInputStream(); // throws if not found
             final String layoutFileContent =
                     _Strings.read(source, StandardCharsets.UTF_8);
 

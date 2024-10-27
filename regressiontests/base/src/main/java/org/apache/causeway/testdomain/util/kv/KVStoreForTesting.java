@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service @Singleton
@@ -62,10 +62,10 @@ public class KVStoreForTesting {
     }
 
     public void put(final Object caller, final String keyStr, final Object value) {
-        val key = Key.of(caller.getClass(), keyStr);
+        var key = Key.of(caller.getClass(), keyStr);
         log.debug("writing {} -> {}", key, value);
         keyValueMap.put(key, value);
-        val latch = latchMap.remove(caller.getClass());
+        var latch = latchMap.remove(caller.getClass());
         if(latch!=null) {
             latch.countDown();
         }
@@ -82,19 +82,19 @@ public class KVStoreForTesting {
     // -- NON-SCALAR SUPPORT
 
     public void append(final Object caller, final String keyStr, final Object value) {
-        val canRef = get(caller, keyStr);
+        var canRef = get(caller, keyStr);
         if(! canRef.isPresent()) {
             put(caller, keyStr, Can.ofSingleton(value));
         } else {
             @SuppressWarnings("unchecked")
-            val newCan = ((Can<Object>)canRef.get()).add(value);
+            var newCan = ((Can<Object>)canRef.get()).add(value);
             put(caller, keyStr, newCan);
         }
     }
 
     @SuppressWarnings("unchecked")
     public Can<Object> getAll(final Class<?> callerType, final String keyStr) {
-        val canRef = get(callerType, keyStr);
+        var canRef = get(callerType, keyStr);
         return ! canRef.isPresent()
             ? Can.empty()
             : ((Can<Object>)canRef.get());
@@ -108,12 +108,12 @@ public class KVStoreForTesting {
     // -- COUNTING
 
     public long incrementCounter(final Class<?> callerType, final String keyStr) {
-        val key = Key.of(callerType, keyStr);
+        var key = Key.of(callerType, keyStr);
         return (long) keyValueMap.compute(key, (k, v) -> (v == null) ? 1L : 1L + (long)v);
     }
 
     public long getCounter(final Class<?> callerType, final String keyStr) {
-        val key = Key.of(callerType, keyStr);
+        var key = Key.of(callerType, keyStr);
         return (long) keyValueMap.getOrDefault(key, 0L);
     }
 
@@ -147,13 +147,13 @@ public class KVStoreForTesting {
     @SneakyThrows
     public void requestLock(final Class<?> callerType) {
         synchronized(this) {
-            val latch = latchMap.get(callerType);
+            var latch = latchMap.get(callerType);
             if(latch!=null) {
                 log.warn("entering WAIT state until lock becomes available");
                 latch.await();
                 log.info("lock has become available");
             }
-            val newLatch = new CountDownLatch(1);
+            var newLatch = new CountDownLatch(1);
             latchMap.put(callerType, newLatch);
         }
     }
@@ -161,7 +161,7 @@ public class KVStoreForTesting {
     /** unblocks any threads waiting for a new lock */
     public void releaseLock(final Class<?> callerType) {
         synchronized(this) {
-            val latch = latchMap.remove(callerType);
+            var latch = latchMap.remove(callerType);
             if(latch!=null) {
                 latch.countDown();
             }

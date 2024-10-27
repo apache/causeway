@@ -30,7 +30,7 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -93,11 +93,11 @@ public class LifecycleEventSubscriberJpaForTesting {
     // -- HELPER
 
     private void storeJpaEvent(final AbstractLifecycleEvent<JpaBook> ev) {
-        val eventType = ev.getClass().getName();
+        var eventType = ev.getClass().getName();
 
         log.debug("on {}", eventType);
 
-        val bookDto = BookDto.from(ev.getSource());
+        var bookDto = BookDto.from(ev.getSource());
         kvStore.append(this, eventType, bookDto);
     }
 

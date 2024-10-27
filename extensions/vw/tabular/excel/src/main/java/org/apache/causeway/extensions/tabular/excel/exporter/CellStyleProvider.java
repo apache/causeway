@@ -29,7 +29,7 @@ import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
 import lombok.Getter;
-import lombok.val;
+
 import lombok.experimental.Accessors;
 
 //record candidate
@@ -51,9 +51,9 @@ class CellStyleProvider {
     final CellStyle multilineStyle;
 
     protected CellStyle createPrimaryHeaderRowStyle(final Workbook wb) {
-        val font = wb.createFont();
+        var font = wb.createFont();
         font.setBold(true);
-        val cellStyle = wb.createCellStyle();
+        var cellStyle = wb.createCellStyle();
         cellStyle.setFont(font);
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         cellStyle.setFillForegroundColor(createColor(new Color(0xc0c0c0)));
@@ -66,9 +66,9 @@ class CellStyleProvider {
     }
 
     protected CellStyle createSecondaryHeaderRowStyle(final Workbook wb) {
-        val font = wb.createFont();
+        var font = wb.createFont();
         font.setFontHeightInPoints((short) 10);
-        val cellStyle = wb.createCellStyle();
+        var cellStyle = wb.createCellStyle();
         cellStyle.setFont(font);
         cellStyle.setWrapText(true);
         cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
@@ -83,13 +83,13 @@ class CellStyleProvider {
     }
 
     protected CellStyle createDateFormatCellStyle(final Workbook wb, final String dateFormat) {
-        val cellStyle = wb.createCellStyle();
+        var cellStyle = wb.createCellStyle();
         cellStyle.setDataFormat(wb.getCreationHelper().createDataFormat().getFormat(dateFormat));
         return cellStyle;
     }
 
     protected CellStyle createMultilineCellStyle(final Workbook wb) {
-        val cellStyle = wb.createCellStyle();
+        var cellStyle = wb.createCellStyle();
         cellStyle.setVerticalAlignment(VerticalAlignment.TOP);
         cellStyle.setWrapText(true);
         return cellStyle;

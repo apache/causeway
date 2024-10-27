@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.Specification;
 
-import lombok.val;
-
 /**
  * A specification representing a non-{@link FeatureType#OBJECT object}, that
  * therefore has an underlying type (the type of the property, collection)
@@ -57,7 +55,7 @@ public interface ObjectFeature extends Specification {
      *
      * @apiNote argument is a {@link Supplier}, because the {@link ManagedObject}
      * is only required when the name is provided imperatively and domain-object
-     * retrieval might be expensive
+     * retrievar might be expensive
      *
      * @see #getFeatureIdentifier()
      */
@@ -93,7 +91,7 @@ public interface ObjectFeature extends Specification {
      * @since 2.0
      */
     default Either<String, String> getStaticOrCanonicalFriendlyName() {
-        val staticFriendlyName = getStaticFriendlyName();
+        var staticFriendlyName = getStaticFriendlyName();
         return staticFriendlyName.isPresent()
                 ? Either.left(staticFriendlyName.get())
                 : Either.right(getCanonicalFriendlyName());
@@ -105,7 +103,7 @@ public interface ObjectFeature extends Specification {
      *
      * @apiNote argument is a {@link Supplier}, because the {@link ManagedObject}
      * is only required when the description is provided imperatively and domain-object
-     * retrieval might be expensive
+     * retrievar might be expensive
      *
      */
     Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider);
@@ -139,7 +137,7 @@ public interface ObjectFeature extends Specification {
      * @since 2.0
      */
     default Optional<Either<String, String>> getStaticOrCanonicalDescription() {
-        val staticDescription = getStaticDescription();
+        var staticDescription = getStaticDescription();
         return staticDescription.isPresent()
                 ? Optional.of(Either.left(staticDescription.get()))
                 : getCanonicalDescription()

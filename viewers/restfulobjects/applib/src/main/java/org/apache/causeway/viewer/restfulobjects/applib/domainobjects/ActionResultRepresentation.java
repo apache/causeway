@@ -24,7 +24,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 /**
  * @since 1.x {@index}
@@ -50,7 +50,7 @@ public class ActionResultRepresentation extends AbstractObjectMemberRepresentati
         @Getter private final String value;
 
         public static ResultType lookup(final String value) {
-            for (val resultType : values()) {
+            for (var resultType : values()) {
                 if (resultType.value.equals(value)) {
                     return resultType;
                 }

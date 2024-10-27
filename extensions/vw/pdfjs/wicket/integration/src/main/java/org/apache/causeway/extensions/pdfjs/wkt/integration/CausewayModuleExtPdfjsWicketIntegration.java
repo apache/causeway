@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
-import lombok.val;
+
 
 /**
  * @since 2.0 {@index}
@@ -37,7 +37,7 @@ implements WicketApplicationInitializer {
     @Override
     public void init(final WebApplication webApplication) {
         // pdf.js cmap support
-        val resourceGuard =
+        var resourceGuard =
                 (SecurePackageResourceGuard) webApplication.getResourceSettings().getPackageResourceGuard();
         // allows *.bcmap, otherwise Wicket throws 'Access denied to (static) package resource'
         resourceGuard.addPattern("+*.bcmap");

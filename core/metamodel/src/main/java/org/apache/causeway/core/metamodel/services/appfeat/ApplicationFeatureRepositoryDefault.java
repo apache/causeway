@@ -63,7 +63,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -130,11 +129,11 @@ implements ApplicationFeatureRepository, MetamodelListener {
         }
         initializationState = InitializationState.INITIALIZED;
 
-        for (val spec : specificationLoader.snapshotSpecifications()) {
+        for (var spec : specificationLoader.snapshotSpecifications()) {
             createApplicationFeaturesFor(spec);
         }
 
-        val featuresByName = new HashMap<String, ApplicationFeatureId>();
+        var featuresByName = new HashMap<String, ApplicationFeatureId>();
         visitFeatureIdentifierByName(namespaceFeatures, featuresByName::put);
         visitFeatureIdentifierByName(typeFeatures, featuresByName::put);
         visitFeatureIdentifierByName(memberFeatures, featuresByName::put);
@@ -165,9 +164,9 @@ implements ApplicationFeatureRepository, MetamodelListener {
         }
 
 
-        val logicalType = spec.getLogicalType();
-        val logicalTypeName = logicalType.getLogicalTypeName();
-        val typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
+        var logicalType = spec.getLogicalType();
+        var logicalTypeName = logicalType.getLogicalTypeName();
+        var typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
         // add class to our map
         // (later on it may get removed if the class turns out to have no features,
@@ -341,7 +340,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     protected boolean exclude(final ObjectSpecification spec) {
 
-        val excluded = spec.isMixin()
+        var excluded = spec.isMixin()
                 || spec.isAbstract()
                 || spec.getBeanSort().isVetoed()
                 || spec.getBeanSort().isUnknown()

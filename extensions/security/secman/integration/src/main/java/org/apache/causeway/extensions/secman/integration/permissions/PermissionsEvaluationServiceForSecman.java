@@ -46,7 +46,7 @@ import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEv
 
 import lombok.Builder;
 import lombok.NonNull;
-import lombok.val;
+
 
 /**
  * @since 2.0 {@index}
@@ -125,7 +125,7 @@ implements PermissionsEvaluationService {
         case ALLOW_BEATS_VETO:
             return permissionValues;
         case VETO_BEATS_ALLOW:
-            val reversed = _Lists.<ApplicationPermissionValue>newArrayList(permissionValues);
+            var reversed = _Lists.<ApplicationPermissionValue>newArrayList(permissionValues);
             Collections.reverse(reversed);
             return reversed;
         }

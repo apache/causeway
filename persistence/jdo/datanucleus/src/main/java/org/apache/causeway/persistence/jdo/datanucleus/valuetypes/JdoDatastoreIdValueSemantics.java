@@ -38,7 +38,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 @Component
 @Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
@@ -61,7 +61,7 @@ extends ValueSemanticsBasedOnIdStringifier<DatastoreId> {
 
     @Override
     public DatastoreId compose(final ValueDecomposition decomposition) {
-        val elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        var elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
         return destring(_InstanceUtil.loadClass(targetClassName), key);

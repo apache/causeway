@@ -83,14 +83,14 @@ import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelV
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 @Service
 public class DomainObjectTesterFactory implements HasMetaModelContext {
 
     public <T> ObjectTester<T> objectTester(
             final Class<T> domainObjectType) {
-        val tester = getServiceInjector().injectServicesInto(
+        var tester = getServiceInjector().injectServicesInto(
                 new ObjectTester<T>(domainObjectType));
         tester.init();
         return tester;
@@ -100,7 +100,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final Class<T> domainObjectType,
             final String actionName,
             final Where where) {
-        val tester = getServiceInjector().injectServicesInto(
+        var tester = getServiceInjector().injectServicesInto(
                 new ActionTester<T>(domainObjectType, actionName, where));
         tester.init();
         return tester;
@@ -109,10 +109,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
     public <T> ActionTester<T> actionTesterForSpecificInteraction(
             final @NonNull Class<T> domainObjectType,
             final @NonNull ActionInteraction actionInteraction) {
-        val managedAction = actionInteraction.getManagedActionElseFail();
+        var managedAction = actionInteraction.getManagedActionElseFail();
         assertEquals(domainObjectType,
                 managedAction.getOwner().getSpecification().getCorrespondingClass());
-        val actionTester = getServiceInjector().injectServicesInto(
+        var actionTester = getServiceInjector().injectServicesInto(
                 new ActionTester<>(domainObjectType, actionInteraction, managedAction));
         actionTester.init();
         return actionTester;
@@ -122,7 +122,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final Class<T> domainObjectType,
             final String propertyName,
             final Where where) {
-        val tester = getServiceInjector().injectServicesInto(
+        var tester = getServiceInjector().injectServicesInto(
                 new PropertyTester<T>(domainObjectType, propertyName, where));
         tester.init();
         return tester;
@@ -132,7 +132,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final Class<T> domainObjectType,
             final String collectionName,
             final Where where) {
-        val tester = getServiceInjector().injectServicesInto(
+        var tester = getServiceInjector().injectServicesInto(
                 new CollectionTester<T>(domainObjectType, collectionName, where));
         tester.init();
         return tester;
@@ -201,7 +201,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 final ProgrammingModelConstants.MessageTemplate violation,
                 final String memberName) {
 
-            val validateDomainModel =
+            var validateDomainModel =
                     new DomainModelValidator(specificationLoader, configuration, causewaySystemEnvironment);
 
             assertThrows(DomainModelException.class, validateDomainModel::throwIfInvalid);
@@ -308,11 +308,11 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             assertExists(true);
 
-            val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
 
             interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(true);
+                var pendingArgs = startParameterNegotiation(true);
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -323,10 +323,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                 //pendingArgs.validateParameterSetForParameters();
 
-                val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
                 assertTrue(resultOrVeto.isSuccess()); // assert action did not throw
 
-                val actionResultAsPojo = resultOrVeto.getSuccessElseFail().getPojo();
+                var actionResultAsPojo = resultOrVeto.getSuccessElseFail().getPojo();
                 assertEquals(expectedResult, actionResultAsPojo);
 
                 captureCommand();
@@ -340,11 +340,11 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             assertExists(true);
 
-            val pojoVector = Can.ofCollection(pojoArgList);
+            var pojoVector = Can.ofCollection(pojoArgList);
 
             return interactionService.callAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(true);
+                var pendingArgs = startParameterNegotiation(true);
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -355,7 +355,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                 //pendingArgs.validateParameterSetForParameters();
 
-                val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
                 assertTrue(resultOrVeto.isSuccess()); // assert action did not throw
 
                 captureCommand();
@@ -373,12 +373,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             assertExists(true);
 
-            val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
-            val managedAction = this.getManagedActionElseFail();
+            var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            var managedAction = this.getManagedActionElseFail();
 
             interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(false); // no rule checking
+                var pendingArgs = startParameterNegotiation(false); // no rule checking
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -388,11 +388,11 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 });
 
                 // spawns its own transactional boundary, or reuses an existing one if available
-                val either = managedAction.invoke(pendingArgs.getParamValues());
+                var either = managedAction.invoke(pendingArgs.getParamValues());
 
                 assertTrue(either.isSuccess()); // assert action did not throw
 
-                val actionResultAsPojo = either.getSuccessElseFail().getPojo();
+                var actionResultAsPojo = either.getSuccessElseFail().getPojo();
 
                 assertEquals(expectedResult, actionResultAsPojo);
 
@@ -406,11 +406,11 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             assertExists(true);
 
-            val pojoTests = Can.ofArray(pojoDefaultArgTests);
+            var pojoTests = Can.ofArray(pojoDefaultArgTests);
 
             interactionService.runAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(checkRules);
+                var pendingArgs = startParameterNegotiation(checkRules);
 
                 pendingArgs.getParamModels()
                 .forEach(param->{
@@ -436,7 +436,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             assertExists(true);
 
-            val pojoTests = Can.ofArray(pojoArgChoiceTests);
+            var pojoTests = Can.ofArray(pojoArgChoiceTests);
 
             interactionService.runAnonymous(()->{
 
@@ -475,12 +475,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 // then
                 pendingArgs->{
 
-                    val visibilityTests = Can.ofArray(argVisibleChecks);
+                    var visibilityTests = Can.ofArray(argVisibleChecks);
 
                     pendingArgs.getParamModels()
                     .forEach(param->{
 
-                        val consent = pendingArgs.getVisibilityConsent(param.getParamNr());
+                        var consent = pendingArgs.getVisibilityConsent(param.getParamNr());
 
                         visibilityTests
                             .get(param.getParamNr())
@@ -505,12 +505,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 // then
                 pendingArgs->{
 
-                    val usabilityTests = Can.ofArray(argUsableChecks);
+                    var usabilityTests = Can.ofArray(argUsableChecks);
 
                     pendingArgs.getParamModels()
                     .forEach(param->{
 
-                        val consent = pendingArgs.getUsabilityConsent(param.getParamNr());
+                        var consent = pendingArgs.getUsabilityConsent(param.getParamNr());
 
                         usabilityTests
                             .get(param.getParamNr())
@@ -531,12 +531,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 // when
                 pendingArgs->{
 
-                    val pojoArgMappers = Can.ofArray(pojoDefaultArgMapper);
+                    var pojoArgMappers = Can.ofArray(pojoDefaultArgMapper);
 
                     pendingArgs.getParamModels()
                     .forEach(param->{
 
-                        val objManager = param.getMetaModel().getObjectManager();
+                        var objManager = param.getMetaModel().getObjectManager();
 
                         pojoArgMappers
                             .get(param.getParamNr())
@@ -565,7 +565,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             assertExists(true);
 
             interactionService.runAnonymous(()->{
-                val pendingArgs = startParameterNegotiation(checkRules);
+                var pendingArgs = startParameterNegotiation(checkRules);
                 when.accept(pendingArgs);
                 captureCommand();
                 pendingArgs.activateValidationFeedback();
@@ -587,12 +587,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
             assertExists(true);
 
-            val pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
-            val managedAction = this.getManagedActionElseFail();
+            var pojoReplacers = Can.ofArray(pojoDefaultArgReplacers);
+            var managedAction = this.getManagedActionElseFail();
 
             return interactionService.callAnonymous(()->{
 
-                val pendingArgs = startParameterNegotiation(true);
+                var pendingArgs = startParameterNegotiation(true);
 
                 pendingArgs.getParamModels()
                         .forEach(param->{
@@ -603,12 +603,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                 //pendingArgs.validateParameterSetForParameters();
 
-                val resultOrVeto = actionInteraction.invokeWith(pendingArgs);
+                var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
                 assertTrue(resultOrVeto.isSuccess()); // assert action did not throw
 
-                val actionResult = resultOrVeto.getSuccessElseFail();
+                var actionResult = resultOrVeto.getSuccessElseFail();
 
-                val table = DataTableInteractive
+                var table = DataTableInteractive
                         .forAction(managedAction, actionResult);
 
                 return DataTableTester.of(table);
@@ -726,7 +726,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
 
-                    val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+                    var newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
                           .getObjectManager().adapt(proposedNewPropertyValue);
 
                     managedProperty.modifyProperty(newPropertyValue);
@@ -744,12 +744,12 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
 
-                    val propNeg = managedProperty.startNegotiation();
-                    val initialValue = managedProperty.getPropertyValue();
+                    var propNeg = managedProperty.startNegotiation();
+                    var initialValue = managedProperty.getPropertyValue();
 
                     assertEquals(initialValue, propNeg.getValue().getValue());
 
-                    val newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
+                    var newPropertyValue = managedProperty.getMetaModel().getMetaModelContext()
                             .getObjectManager().adapt(proposedNewPropertyValue);
                     propNeg.getValue().setValue(newPropertyValue);
 
@@ -777,7 +777,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             managedPropertyIfAny
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
-                    val propNeg = managedProperty.startNegotiation();
+                    var propNeg = managedProperty.startNegotiation();
                     when.accept(propNeg);
                     propNeg.activateValidationFeedback();
                     propNeg.submit();
@@ -799,8 +799,8 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
 
-                    val propNeg = managedProperty.startNegotiation();
-                    val initialValue = managedProperty.getPropertyValue();
+                    var propNeg = managedProperty.startNegotiation();
+                    var initialValue = managedProperty.getPropertyValue();
 
                     assertEquals(initialValue, propNeg.getValue().getValue());
 
@@ -834,8 +834,8 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             .ifPresent(managedProperty->{
                 interactionService.runAnonymous(()->{
 
-                    val propNeg = managedProperty.startNegotiation();
-                    val initialValue = managedProperty.getPropertyValue();
+                    var propNeg = managedProperty.startNegotiation();
+                    var initialValue = managedProperty.getPropertyValue();
 
                     assertEquals(initialValue, propNeg.getValue().getValue());
 
@@ -855,10 +855,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @SuppressWarnings("unchecked")
         public String asParsebleText() {
             assertExists(true);
-            val valueFacet = getFacetOnElementTypeElseFail(ValueFacet.class);
-            val prop = this.getMetaModel().get();
+            var valueFacet = getFacetOnElementTypeElseFail(ValueFacet.class);
+            var prop = this.getMetaModel().get();
 
-            val context = valueFacet
+            var context = valueFacet
                     .createValueSemanticsContext(prop);
 
             return valueFacet.selectParserForPropertyElseFallback(prop)

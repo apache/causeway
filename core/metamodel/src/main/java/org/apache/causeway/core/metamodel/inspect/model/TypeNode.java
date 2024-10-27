@@ -43,7 +43,6 @@ import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 
 @Named(TypeNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -64,7 +63,7 @@ public class TypeNode extends MMNode {
 
     @Override
     public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
+        var title = lookupTitleAnnotation().map(Annotation::getValue)
                 .orElseGet(()->domainClassDto.getId());
         return title;
     }

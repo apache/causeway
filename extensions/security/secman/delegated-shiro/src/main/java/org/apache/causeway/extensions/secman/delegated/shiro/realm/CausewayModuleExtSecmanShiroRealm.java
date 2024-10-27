@@ -56,7 +56,7 @@ import org.apache.causeway.extensions.secman.delegated.shiro.util.ShiroUtils;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
+
 
 /**
  * @since 2.0 {@index}
@@ -93,18 +93,18 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException();
         }
 
-        val usernamePasswordToken = (UsernamePasswordToken) token;
-        val username = usernamePasswordToken.getUsername();
-        val password = usernamePasswordToken.getPassword();
+        var usernamePasswordToken = (UsernamePasswordToken) token;
+        var username = usernamePasswordToken.getUsername();
+        var password = usernamePasswordToken.getPassword();
 
 
         // this code block is just an optimization, entirely optional
         {
-            val alreadyAuthenticatedPrincipal =
+            var alreadyAuthenticatedPrincipal =
                     getPrincipal_fromAlreadyAuthenticatedSubjectIfApplicable(token);
             if(alreadyAuthenticatedPrincipal!=null) {
-                val credentials = token.getCredentials();
-                val realmName = getName();
+                var credentials = token.getCredentials();
+                var realmName = getName();
                 return AuthInfoForApplicationUser.of(alreadyAuthenticatedPrincipal, realmName, credentials);
             }
         }
@@ -112,17 +112,17 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         // lookup from database, for roles/perms
         PrincipalForApplicationUser principal = lookupPrincipal_inApplicationUserRepository(username);
 
-        val autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && isAutoCreateUser();
+        var autoCreateUserWhenDelegatedAuthentication = hasDelegateAuthenticationRealm() && isAutoCreateUser();
         if (principal == null && autoCreateUserWhenDelegatedAuthentication) {
             // When using delegated authentication, desired behavior is to auto-create user accounts in the
             // DB only if these do successfully authenticate with the delegated authentication mechanism
             // while the newly created user will be disabled by default
             authenticateElseThrow_usingDelegatedMechanism(token);
-            val newPrincipal = createPrincipal_inApplicationUserRepository(username);
+            var newPrincipal = createPrincipal_inApplicationUserRepository(username);
 
             _Assert.assertNotNull(newPrincipal);
 
-            val isAutoUnlockIfDelegatedAndAuthenticated =
+            var isAutoUnlockIfDelegatedAndAuthenticated =
                     config.getExtensions().getSecman().getDelegatedUsers().getAutoCreatePolicy()
                         == AutoCreatePolicy.AUTO_CREATE_AS_UNLOCKED;
 
@@ -146,7 +146,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         if(principal.getAccountType() == AccountType.DELEGATED) {
             authenticateElseThrow_usingDelegatedMechanism(token);
         } else {
-            val checkPasswordResult = checkPassword(password, principal.getEncryptedPassword());
+            var checkPasswordResult = checkPassword(password, principal.getEncryptedPassword());
             switch (checkPasswordResult) {
             case OK:
                 break;
@@ -159,8 +159,8 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
             }
         }
 
-        val credentials = token.getCredentials();
-        val realmName = getName();
+        var credentials = token.getCredentials();
+        var realmName = getName();
         return AuthInfoForApplicationUser.of(principal, realmName, credentials);
     }
 
@@ -189,15 +189,15 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
             return null;
         }
 
-        val currentSubject = SecurityUtils.getSubject();
+        var currentSubject = SecurityUtils.getSubject();
         if(currentSubject!=null && currentSubject.isAuthenticated()) {
-            val authenticatedPrincipalObject = currentSubject.getPrincipal();
+            var authenticatedPrincipalObject = currentSubject.getPrincipal();
             if(authenticatedPrincipalObject instanceof PrincipalForApplicationUser) {
-                val authenticatedPrincipal = (PrincipalForApplicationUser) authenticatedPrincipalObject;
-                val authenticatedUsername = authenticatedPrincipal.getUsername();
-                val usernamePasswordToken = (UsernamePasswordToken) token;
-                val username = usernamePasswordToken.getUsername();
-                val isAuthenticatedWithThisRealm = username.equals(authenticatedUsername);
+                var authenticatedPrincipal = (PrincipalForApplicationUser) authenticatedPrincipalObject;
+                var authenticatedUsername = authenticatedPrincipal.getUsername();
+                var usernamePasswordToken = (UsernamePasswordToken) token;
+                var username = usernamePasswordToken.getUsername();
+                var isAuthenticatedWithThisRealm = username.equals(authenticatedUsername);
                 if(isAuthenticatedWithThisRealm) {
                     return authenticatedPrincipal;
                 }
@@ -215,7 +215,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
             private static final long serialVersionUID = 1L;
             @Override public StackTraceElement[] getStackTrace() {
                 // truncate reported stacktraces down to just 1 line
-                val fullStackTrace = super.getStackTrace();
+                var fullStackTrace = super.getStackTrace();
                 return _NullSafe.size(fullStackTrace)>1
                         ? _Arrays.subArray(super.getStackTrace(), 0, 1)
                         : fullStackTrace;
@@ -240,7 +240,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
-                val applicationUser = applicationUserRepository.findByUsername(username).orElse(null);
+                var applicationUser = applicationUserRepository.findByUsername(username).orElse(null);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
             @Inject private ApplicationUserRepository applicationUserRepository;
@@ -252,7 +252,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         return execute(new Supplier<PrincipalForApplicationUser>() {
             @Override
             public PrincipalForApplicationUser get() {
-                val applicationUser = applicationUserRepository.findOrCreateUserByUsername(username);
+                var applicationUser = applicationUserRepository.findOrCreateUserByUsername(username);
                 return PrincipalForApplicationUser.from(applicationUser);
             }
             @Inject private ApplicationUserRepository applicationUserRepository;
@@ -301,7 +301,7 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
     }
 
     <V> V doExecute(final Supplier<V> closure) {
-        val txTemplate = new TransactionTemplate(txMan);
+        var txTemplate = new TransactionTemplate(txMan);
         return txTemplate.execute(status->closure.get());
     }
 

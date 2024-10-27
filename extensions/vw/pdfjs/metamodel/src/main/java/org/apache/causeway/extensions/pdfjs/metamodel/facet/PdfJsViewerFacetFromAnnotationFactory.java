@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
 
-import lombok.val;
+
 
 
 public class PdfJsViewerFacetFromAnnotationFactory
@@ -57,9 +57,9 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
 
-        val pdfjsViewerIfAny = processMethodContext
+        var pdfjsViewerIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                     PdfJsViewer.class,
                     () -> ValidationFailureUtils

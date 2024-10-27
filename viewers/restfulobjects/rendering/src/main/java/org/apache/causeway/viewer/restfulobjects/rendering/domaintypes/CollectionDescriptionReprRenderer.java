@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-import lombok.val;
+
 
 public class CollectionDescriptionReprRenderer
 extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
@@ -64,7 +64,7 @@ extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
     // -- HELPER
 
     private void addLinkToElementTypeIfAny() {
-        val elementTypeSpec = getObjectFeature().getElementType();
+        var elementTypeSpec = getObjectFeature().getElementType();
         if (elementTypeSpec == null) {
             return;
         }

@@ -38,8 +38,6 @@ import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
-
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
 
@@ -48,7 +46,7 @@ extends TitleFacetAbstract {
             final MetamodelEventService metamodelEventService,
             final FacetHolder facetHolder) {
 
-        val isPostForDefault = facetHolder.getConfiguration()
+        var isPostForDefault = facetHolder.getConfiguration()
                 .getApplib()
                 .getAnnotation()
                 .getDomainObjectLayout()

@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class ConverterBasedOnValueSemantics<T>
 extends ValueSemanticsModelAbstract
@@ -75,10 +74,10 @@ implements IConverter<T> {
                         featureIdentifier);
         }
 
-        val feature = feature();
-        val valueFacet = valueFacet();
+        var feature = feature();
+        var valueFacet = valueFacet();
 
-        val context = valueFacet
+        var context = valueFacet
                 .createValueSemanticsContext(feature);
 
         try {
@@ -100,10 +99,10 @@ implements IConverter<T> {
     @Override
     public final String convertToString(final T value, final Locale locale) {
 
-        val feature = feature();
-        val valueFacet = valueFacet();
+        var feature = feature();
+        var valueFacet = valueFacet();
 
-        val context = valueFacet
+        var context = valueFacet
                 .createValueSemanticsContext(feature);
 
         switch(scalarRepresentation) {
@@ -122,9 +121,9 @@ implements IConverter<T> {
     }
 
     public String getEditingPattern() {
-        val feature = feature();
-        val valueFacet = valueFacet();
-        val context = valueFacet
+        var feature = feature();
+        var valueFacet = valueFacet();
+        var context = valueFacet
                 .createValueSemanticsContext(feature);
         return valueFacet.selectParserForFeatureElseFallback(feature)
                 .getPattern(context);

@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FaFacetViaIconFaLayersMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
-import lombok.val;
-
 class FontAwesomeLayersFacetMethodTest
 extends FacetFactoryTestAbstract {
 
@@ -64,16 +62,16 @@ extends FacetFactoryTestAbstract {
     @Test
     void fontAwesomeLayersFacetViaIconFaLayersMethod() {
 
-        val domainObject = getObjectManager().adapt(new DomainObjectWithFontAwesomeLayersMethod());
+        var domainObject = getObjectManager().adapt(new DomainObjectWithFontAwesomeLayersMethod());
 
         objectScenario(DomainObjectWithFontAwesomeLayersMethod.class, (processClassContext, facetHolder) -> {
             //when
             facetFactory.process(processClassContext);
             //then
-            val fontAwesomeLayersFacet = facetHolder.getFacet(FaFacet.class);
+            var fontAwesomeLayersFacet = facetHolder.getFacet(FaFacet.class);
             assertNotNull(fontAwesomeLayersFacet, ()->"FaFacet required");
             assertTrue(fontAwesomeLayersFacet instanceof FaFacetViaIconFaLayersMethod);
-            val imperativeCssClassFacet = (FaFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
+            var imperativeCssClassFacet = (FaFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
 
             var actual = imperativeCssClassFacet.getFaLayersProvider(domainObject).getLayers();
             assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);

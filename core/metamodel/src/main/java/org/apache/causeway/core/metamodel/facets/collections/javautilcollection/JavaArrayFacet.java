@@ -31,8 +31,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.causeway.commons.internal.collections._Arrays.toArray;
 
-import lombok.val;
-
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
     public JavaArrayFacet(final FacetHolder holder) {
@@ -62,7 +60,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
             return Stream.of();
         }
 
-        val objectManager = super.getObjectManager();
+        var objectManager = super.getObjectManager();
 
         return Stream.of(array)
                 .map(objectManager::adapt);

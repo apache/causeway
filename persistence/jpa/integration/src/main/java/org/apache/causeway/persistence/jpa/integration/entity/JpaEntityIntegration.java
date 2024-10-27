@@ -24,15 +24,13 @@ import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 
-import lombok.val;
-
 @Component
 public class JpaEntityIntegration implements MetaModelRefiner {
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {
 
-        val step1 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        var step1 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
 
         pm.addFactory(step1, new JpaEntityFacetFactory(pm.getMetaModelContext()), Marker.JPA);
     }

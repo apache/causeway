@@ -24,15 +24,13 @@ import org.opentest4j.AssertionFailedError;
 
 import org.apache.causeway.testing.unittestsupport.applib.dom.pojo.holders.ColourEnumHolder;
 
-import lombok.val;
-
 public class PojoTester_datatypes_enum_Test {
 
     @Test
     public void exercise_enum() {
 
         // given
-        val holder = new ColourEnumHolder();
+        var holder = new ColourEnumHolder();
         Assertions.assertThat(holder).extracting(ColourEnumHolder::getColourEnum).isNull();
 
         // when
@@ -48,7 +46,7 @@ public class PojoTester_datatypes_enum_Test {
     public void exercise_enum_broken() {
 
         // given
-        val holder = new ColourEnumHolder().butBroken();
+        var holder = new ColourEnumHolder().butBroken();
 
         // when
         Assertions.assertThatThrownBy(() -> {

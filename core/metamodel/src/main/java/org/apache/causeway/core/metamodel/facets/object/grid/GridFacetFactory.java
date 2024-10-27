@@ -24,8 +24,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
-
 public class GridFacetFactory
 extends FacetFactoryAbstract {
 
@@ -39,7 +37,7 @@ extends FacetFactoryAbstract {
         if(gridService.get()==null) {
             return;
         }
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
         addFacet(
                 GridFacetDefault
                 .create(facetHolder, gridService.get()));

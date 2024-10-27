@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenancyEvaluator;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
-import lombok.val;
+
 
 public class TenantedAuthorizationPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -98,7 +98,7 @@ extends MetaModelPostProcessorAbstract {
             final Class<?> cls,
             final FacetHolder holder) {
 
-        val evaluators = applicationTenancyEvaluators.orderedStream()
+        var evaluators = applicationTenancyEvaluators.orderedStream()
                 .filter(evaluator -> evaluator.handles(cls))
                 .collect(Collectors.<ApplicationTenancyEvaluator>toList());
 

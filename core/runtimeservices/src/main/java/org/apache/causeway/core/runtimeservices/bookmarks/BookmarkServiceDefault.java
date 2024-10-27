@@ -49,8 +49,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.val;
-
 /**
  * Default implementation of {@link BookmarkService}.
  *
@@ -73,7 +71,7 @@ public class BookmarkServiceDefault implements BookmarkService {
         if(bookmarkHolder == null) {
             return Optional.empty();
         }
-        val bookmark = bookmarkHolder.getBookmark();
+        var bookmark = bookmarkHolder.getBookmark();
         return bookmark != null
                 ? lookup(bookmark)
                 : Optional.empty();
@@ -110,7 +108,7 @@ public class BookmarkServiceDefault implements BookmarkService {
         if(domainObject == null) {
             return Optional.empty();
         }
-        val adapter = objectManager.adapt(unwrapped(domainObject));
+        var adapter = objectManager.adapt(unwrapped(domainObject));
         return Optional.ofNullable(adapter)
                 .flatMap(ManagedObject::getBookmark);
     }

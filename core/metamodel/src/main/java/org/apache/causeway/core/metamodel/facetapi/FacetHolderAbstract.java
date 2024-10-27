@@ -33,7 +33,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -65,8 +64,8 @@ implements FacetHolder {
     public final void addFacet(final @NonNull Facet facet) {
         synchronized($lock) {
 
-            val ranking = rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new);
-            val needsInvalidate = ranking.add(facet);
+            var ranking = rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new);
+            var needsInvalidate = ranking.add(facet);
             if(needsInvalidate) {
                 snapshot.clear(); //invalidate
             }
@@ -115,7 +114,7 @@ implements FacetHolder {
 
     // collect all facet information provided with the top-level facets (contributed facets and aliases)
     private Map<Class<? extends Facet>, Facet> snapshot() {
-        val snapshot = _Maps.<Class<? extends Facet>, Facet>newHashMap();
+        var snapshot = _Maps.<Class<? extends Facet>, Facet>newHashMap();
         rankingByType.values()
         .stream()
         .map(facetRanking->facetRanking.getWinner(facetRanking.facetType()))

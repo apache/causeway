@@ -27,8 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.val;
-
 /**
  * Provides a fallback implementation of {@link FixtureScriptsSpecificationProvider} if none has been provided explicitly by the application itself.
  *
@@ -49,8 +47,8 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
     @Qualifier("Default")
     FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final CausewayConfiguration causewayConfiguration) {
 
-        val fixturesConfig = causewayConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
-        val builder = builderFrom(fixturesConfig);
+        var fixturesConfig = causewayConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
+        var builder = builderFrom(fixturesConfig);
 
         builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.getNonPersistedObjectsStrategy().name()));
         builder.with(FixtureScripts.MultipleExecutionStrategy.valueOf(fixturesConfig.getMultipleExecutionStrategy().name()));
@@ -61,11 +59,11 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
     }
 
     private static FixtureScriptsSpecification.Builder builderFrom(CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
-        val contextClass = fixturesConfig.getContextClass();
+        var contextClass = fixturesConfig.getContextClass();
         if(contextClass != null) {
             return FixtureScriptsSpecification.builder(contextClass);
         }
-        val packagePrefix = fixturesConfig.getPackagePrefix(); // could be null; this is legitimate
+        var packagePrefix = fixturesConfig.getPackagePrefix(); // could be null; this is legitimate
         return FixtureScriptsSpecification.builder(packagePrefix);
     }
 

@@ -28,7 +28,6 @@ import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  *
@@ -64,7 +63,7 @@ class _PageFactory implements IPageFactory {
             //TODO whenever this happens we should redirect to home,
             // almost certainly the session has timed out
 
-            val pageTimeoutPageClass = holder.getPageClassRegistry().getPageClass(PageType.HOME_AFTER_PAGETIMEOUT);
+            var pageTimeoutPageClass = holder.getPageClassRegistry().getPageClass(PageType.HOME_AFTER_PAGETIMEOUT);
             return _Casts.uncheckedCast(delegate.newPage(pageTimeoutPageClass));
         }
 

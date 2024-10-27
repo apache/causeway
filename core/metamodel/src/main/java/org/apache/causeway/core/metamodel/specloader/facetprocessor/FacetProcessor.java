@@ -58,7 +58,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public class FacetProcessor
@@ -167,11 +166,11 @@ implements HasMetaModelContext, AutoCloseable{
             final Stream<ResolvedMethod> methodStream,
             final Consumer<ResolvedMethod> onCandidate) {
 
-        val factories = propertyOrCollectionIdentifyingFactories.get();
+        var factories = propertyOrCollectionIdentifyingFactories.get();
 
         methodStream
         .forEach(method->{
-            for (val facetFactory : factories) {
+            for (var facetFactory : factories) {
                 if (facetFactory.isPropertyOrCollectionGetterCandidate(method)) {
                     onCandidate.accept(method);
                 }
@@ -191,7 +190,7 @@ implements HasMetaModelContext, AutoCloseable{
             final MethodRemover methodRemover,
             final List<ResolvedMethod> methodListToAppendTo) {
 
-        for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
+        for (var facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
         }
     }
@@ -208,7 +207,7 @@ implements HasMetaModelContext, AutoCloseable{
             final MethodRemover methodRemover,
             final List<ResolvedMethod> methodListToAppendTo) {
 
-        for (val facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
+        for (var facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
         }
     }
@@ -232,14 +231,14 @@ implements HasMetaModelContext, AutoCloseable{
      * there are multiple facet factories that search for the same prefix.
      */
     public boolean recognizes(final ResolvedMethod method) {
-        val methodName = method.name();
-        for (val prefix : methodPrefixes.get()) {
+        var methodName = method.name();
+        for (var prefix : methodPrefixes.get()) {
             if (methodName.startsWith(prefix)) {
                 return true;
             }
         }
 
-        for (val factory : methodFilteringFactories.get()) {
+        for (var factory : methodFilteringFactories.get()) {
             if (factory.recognizes(method)) {
                 return true;
             }
@@ -249,8 +248,8 @@ implements HasMetaModelContext, AutoCloseable{
     }
 
     public void processObjectType(final Class<?> cls, final FacetHolder facetHolder) {
-        val factoryList = getObjectSpecIfFacetFactoryList();
-        for (val facetFactory : factoryList) {
+        var factoryList = getObjectSpecIfFacetFactoryList();
+        for (var facetFactory : factoryList) {
             facetFactory.process(new ProcessObjectTypeContext(cls, facetHolder));
         }
     }
@@ -260,7 +259,7 @@ implements HasMetaModelContext, AutoCloseable{
 
     private List<ObjectTypeFacetFactory> getObjectSpecIfFacetFactoryList() {
         if(objectSpecIfFacetFactoryList == null) {
-            val facetFactories = _Lists.<ObjectTypeFacetFactory>newArrayList();
+            var facetFactories = _Lists.<ObjectTypeFacetFactory>newArrayList();
 
             factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
             .forEach(facetFactory->{
@@ -295,7 +294,7 @@ implements HasMetaModelContext, AutoCloseable{
             final MethodRemover methodRemover,
             final FacetHolder facetHolder) {
 
-        val ctx = new ProcessClassContext(
+        var ctx = new ProcessClassContext(
                 cls,
                 introspectionPolicy,
                 removerElseNoopRemover(methodRemover),
@@ -338,7 +337,7 @@ implements HasMetaModelContext, AutoCloseable{
             final FeatureType featureType,
             final boolean isMixinMain) {
 
-        val processMethodContext =
+        var processMethodContext =
                 new ProcessMethodContext(
                         cls,
                         introspectionPolicy,
@@ -379,11 +378,11 @@ implements HasMetaModelContext, AutoCloseable{
             final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
 
-        val processParameterContext =
+        var processParameterContext =
                 new ProcessParameterContext(introspectedClass, introspectionPolicy,
                         method, methodRemover, facetedMethodParameter);
 
-        val factoryCache = factoryListByFeatureType.get();
+        var factoryCache = factoryListByFeatureType.get();
 
         FeatureType.PARAMETERS_ONLY.stream()
         .map(factoryCache::getOrElseEmpty)
@@ -402,8 +401,8 @@ implements HasMetaModelContext, AutoCloseable{
     // -- INITIALIZERS
 
     private ListMultimap<FeatureType, FacetFactory> init_factoriesByFeatureType() {
-        val factoryListByFeatureType = _Multimaps.<FeatureType, FacetFactory>newListMultimap();
-        for (val factory : factories) {
+        var factoryListByFeatureType = _Multimaps.<FeatureType, FacetFactory>newListMultimap();
+        for (var factory : factories) {
             factory.getFeatureTypes().forEach(featureType->
                 factoryListByFeatureType.putElement(featureType, factory));
         }
@@ -411,10 +410,10 @@ implements HasMetaModelContext, AutoCloseable{
     }
 
     private Set<String> init_methodPrefixes() {
-        val cachedMethodPrefixes = _Sets.<String>newHashSet();
-        for (val facetFactory : factories) {
+        var cachedMethodPrefixes = _Sets.<String>newHashSet();
+        for (var facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
-                val methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
+                var methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
                 methodPrefixBasedFacetFactory.getPrefixes().forEach(cachedMethodPrefixes::add);
             }
         }
@@ -422,10 +421,10 @@ implements HasMetaModelContext, AutoCloseable{
     }
 
     private List<MethodFilteringFacetFactory> init_methodFilteringFactories() {
-        val methodFilteringFactories = _Lists.<MethodFilteringFacetFactory>newArrayList();
-        for (val factory : factories) {
+        var methodFilteringFactories = _Lists.<MethodFilteringFacetFactory>newArrayList();
+        for (var factory : factories) {
             if (factory instanceof MethodFilteringFacetFactory) {
-                val methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
+                var methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
                 methodFilteringFactories.add(methodFilteringFacetFactory);
             }
         }
@@ -433,10 +432,10 @@ implements HasMetaModelContext, AutoCloseable{
     }
 
     private List<PropertyOrCollectionIdentifyingFacetFactory> init_propertyOrCollectionIdentifyingFactories() {
-        val propertyOrCollectionIdentifyingFactories = _Lists.<PropertyOrCollectionIdentifyingFacetFactory>newArrayList();
-        for (val factory : factories) {
+        var propertyOrCollectionIdentifyingFactories = _Lists.<PropertyOrCollectionIdentifyingFacetFactory>newArrayList();
+        for (var factory : factories) {
             if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
-                val identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
+                var identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
                 propertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
             }
         }

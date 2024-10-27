@@ -45,7 +45,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 
-import lombok.val;
+
 
 
 /**
@@ -150,8 +150,8 @@ public class SwaggerServiceMenu {
                 final Visibility visibility,
                 final Format format) {
 
-            val fileName = buildFileName(fileNamePrefix, visibility, format);
-            val spec = swaggerService.generateSwaggerSpec(visibility, format);
+            var fileName = buildFileName(fileNamePrefix, visibility, format);
+            var spec = swaggerService.generateSwaggerSpec(visibility, format);
             return new Clob(fileName, format.mediaType(), spec);
         }
 

@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -73,7 +72,7 @@ public final class FacetUtil {
      */
     public static boolean addFacets(final @NonNull Iterable<Facet> facetList) {
         boolean addedFacets = false;
-        for (val facet : facetList) {
+        for (var facet : facetList) {
             addedFacets = addFacetIfPresent(Optional.ofNullable(facet)).isPresent()
                     | addedFacets;
         }
@@ -164,8 +163,8 @@ public final class FacetUtil {
     // -- FACET TO STRING
 
     public static String toString(final Facet facet) {
-        val className = ClassUtils.getShortName(facet.getClass());
-        val attributesAsString = attributesAsString(facet);
+        var className = ClassUtils.getShortName(facet.getClass());
+        var attributesAsString = attributesAsString(facet);
         return facet.getClass() == facet.facetType()
                 ? String.format("%s[%s]", className, attributesAsString)
                 : String.format("%s[type=%s; %s]", className, ClassUtils.getShortName(facet.facetType()), attributesAsString);

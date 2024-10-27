@@ -28,8 +28,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import lombok.val;
-
 class IdStringifierForLong_Test {
 
     public static Stream<Arguments> roundtrip() {
@@ -46,7 +44,7 @@ class IdStringifierForLong_Test {
     @MethodSource()
     void roundtrip(final Long value) {
 
-        val stringifier = new LongValueSemantics();
+        var stringifier = new LongValueSemantics();
 
         String stringified = stringifier.enstring(value);
         Long parse = stringifier.destring(stringified);

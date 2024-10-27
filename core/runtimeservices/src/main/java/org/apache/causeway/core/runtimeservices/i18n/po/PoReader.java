@@ -35,7 +35,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -230,7 +229,7 @@ class PoReader extends PoAbstract {
         }
 
         for (final String candidate : candidates) {
-            val lines = readUrl(candidate);
+            var lines = readUrl(candidate);
             if(!lines.isEmpty()) {
                 return lines;
             }

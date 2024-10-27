@@ -45,8 +45,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
 import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
-import lombok.val;
-
 /**
  * Provides reflective access to a field on a domain object.
  */
@@ -152,7 +150,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return assoc -> {
-                val b = assoc.streamFacets()
+                var b = assoc.streamFacets()
                         .filter(facet -> facet instanceof HiddenFacet)
                         .map(facet -> (WhereValueFacet) facet)
                         .anyMatch(wawF -> wawF.where().includes(where));
@@ -178,7 +176,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          */
         public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(
                 final Identifier memberIdentifier) {
-            val whereContext = whereContextFor(memberIdentifier);
+            var whereContext = whereContextFor(memberIdentifier);
             return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)
@@ -250,9 +248,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 final Map<String, List<ObjectAssociation>> associationsByGroup,
                 final ObjectAssociation association) {
 
-            val layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
             if(layoutGroupFacet != null) {
-                val fieldSetId = layoutGroupFacet.getGroupId();
+                var fieldSetId = layoutGroupFacet.getGroupId();
                 if(_Strings.isNotEmpty(fieldSetId)) {
                     getFrom(associationsByGroup, fieldSetId).add(association);
                     return;

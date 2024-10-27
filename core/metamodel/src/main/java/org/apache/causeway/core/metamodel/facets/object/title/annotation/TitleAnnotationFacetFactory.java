@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacet
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class TitleAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -49,8 +47,8 @@ implements MetaModelRefiner {
      */
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
-        val facetHolder = processClassContext.getFacetHolder();
+        var cls = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
 
         addFacetIfPresent(TitleFacetViaTitleAnnotation.create(cls, facetHolder));
     }
@@ -70,7 +68,7 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(objectSpec -> {
 
-            val titleFacetTopRank =
+            var titleFacetTopRank =
                 objectSpec
                 .getFacetRanking(TitleFacet.class)
                 .map(facetRanking->facetRanking.getTopRank(TitleFacet.class))
@@ -80,7 +78,7 @@ implements MetaModelRefiner {
             // top-rank if present must not be ambiguous
             if(titleFacetTopRank.isCardinalityMultiple()) {
 
-                val conflictingFeatures =
+                var conflictingFeatures =
                         titleFacetTopRank
                         .map(TitleFacet::getClass)
                         .map(Class::getSimpleName)
@@ -88,7 +86,7 @@ implements MetaModelRefiner {
 
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "%s: conflict for determining a strategy for retrieval of title for class, "
+                        "%s: conflict for determining a strategy for retrievar of title for class, "
                         + "conflicting title facets %s",
                         objectSpec.getFeatureIdentifier().getClassName(),
                         conflictingFeatures.toString());

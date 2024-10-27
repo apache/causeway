@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -58,7 +58,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final UserReprRenderer renderer = new UserReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -91,7 +91,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response logout() {
 
-        val resourceContext = createResourceContext(
+        var resourceContext = createResourceContext(
                 RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final HomePageReprRenderer renderer = new HomePageReprRenderer(resourceContext, null, JsonRepresentation.newMap());
@@ -110,8 +110,8 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     }
 
     private void logout(final ResourceContext resourceContext) {
-        val interactionService = resourceContext.getInteractionService();
-        val authenticationManager = resourceContext.getAuthenticationManager();
+        var interactionService = resourceContext.getInteractionService();
+        var authenticationManager = resourceContext.getAuthenticationManager();
 
         interactionService
         .currentInteractionContext()

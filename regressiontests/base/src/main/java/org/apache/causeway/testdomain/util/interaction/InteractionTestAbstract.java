@@ -48,7 +48,7 @@ import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
+
 
 public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbstract {
 
@@ -63,27 +63,27 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     }
 
     protected ManagedObject newViewmodel(final Class<?> type) {
-        val viewModel = factoryService.viewModel(type);
+        var viewModel = factoryService.viewModel(type);
         return objectManager.adapt(viewModel);
     }
 
     // -- INTERACTION STARTERS
 
     protected ActionInteraction startActionInteractionOn(final Class<?> type, final String actionId, final Where where) {
-        val viewModel = factoryService.viewModel(type);
-        val managedObject = objectManager.adapt(viewModel);
+        var viewModel = factoryService.viewModel(type);
+        var managedObject = objectManager.adapt(viewModel);
         return ActionInteraction.start(managedObject, actionId, where);
     }
 
     protected PropertyInteraction startPropertyInteractionOn(final Class<?> type, final String propertyId, final Where where) {
-        val viewModel = factoryService.viewModel(type);
-        val managedObject = objectManager.adapt(viewModel);
+        var viewModel = factoryService.viewModel(type);
+        var managedObject = objectManager.adapt(viewModel);
         return PropertyInteraction.start(managedObject, propertyId, where);
     }
 
     protected CollectionInteraction startCollectionInteractionOn(final Class<?> type, final String collectionId, final Where where) {
-        val viewModel = factoryService.viewModel(type);
-        val managedObject = objectManager.adapt(viewModel);
+        var viewModel = factoryService.viewModel(type);
+        var managedObject = objectManager.adapt(viewModel);
         return CollectionInteraction.start(managedObject, collectionId, where);
     }
 
@@ -92,7 +92,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     protected Object invokeAction(
             final Class<?> type, final String actionId, final @Nullable List<Object> pojoArgList) {
 
-        val actTester = testerFactory.actionTester(type, actionId);
+        var actTester = testerFactory.actionTester(type, actionId);
         actTester.assertExists(true);
         actTester.assertVisibilityIsNotVetoed();
         actTester.assertUsabilityIsNotVetoed();
@@ -102,7 +102,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     // -- ASSERTIONS
 
     protected void assertMetamodelValid() {
-        val specLoader = objectManager.getMetaModelContext().getSpecificationLoader();
+        var specLoader = objectManager.getMetaModelContext().getSpecificationLoader();
         assertEquals(Collections.<String>emptyList(), specLoader.getOrAssessValidationResult().getMessages());
     }
 
@@ -159,7 +159,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     // -- ASSERTIONS (AUDITING)
 
     protected void assertNoPropertyChanges() {
-        val changes = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting);
+        var changes = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting);
         assertTrue(changes.isEmpty());
     }
 
@@ -172,7 +172,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
 
     protected void assertJdoBookCreatePropertyChanges() {
 
-        val expectedAudits = _Sets.ofSorted(
+        var expectedAudits = _Sets.ofSorted(
                 "Jdo Book/author: '[NEW]' -> 'Sample Author'",
                 "Jdo Book/price: '[NEW]' -> '99.0'",
                 "Jdo Book/publisher: '[NEW]' -> 'Sample Publisher'",
@@ -181,7 +181,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
                 "Jdo Book/name: '[NEW]' -> 'Sample Book'",
                 "Jdo Inventory/name: '[NEW]' -> 'Sample Inventory'");
 
-        val actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
+        var actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
 
@@ -193,7 +193,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
 
     protected void assertJdoBookDeletePropertyChanges() {
 
-        val expectedAudits = _Sets.ofSorted(
+        var expectedAudits = _Sets.ofSorted(
                 "Jdo Book/author: 'Sample Author' -> '[DELETED]'",
                 "Jdo Book/description: 'A sample book for testing.' -> '[DELETED]'",
                 "Jdo Book/isbn: 'Sample ISBN' -> '[DELETED]'",
@@ -202,7 +202,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
                 "Jdo Book/publisher: 'Sample Publisher' -> '[DELETED]'",
                 "Jdo Inventory/name: 'Sample Inventory' -> '[DELETED]'");
 
-        val actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
+        var actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
 
@@ -214,10 +214,10 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
 
     protected void assertJdoBookPriceChangePropertyChanges() {
 
-        val expectedAudits = _Sets.ofSorted(
+        var expectedAudits = _Sets.ofSorted(
                 "Jdo Book/price: '99.0' -> '12.0'");
 
-        val actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
+        var actualAudits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting)
                 .stream()
                 .collect(Collectors.toCollection(TreeSet::new));
 
@@ -229,7 +229,7 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     // -- UTILTITIES
 
     protected void dumpPropertyChanges() {
-        val audits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting);
+        var audits = EntityPropertyChangeSubscriberForTesting.getPropertyChangeEntries(kvStoreForTesting);
         System.err.println("==PROPERTY CHANGES==");
         audits.forEach(System.err::println);
         System.err.println("==========");

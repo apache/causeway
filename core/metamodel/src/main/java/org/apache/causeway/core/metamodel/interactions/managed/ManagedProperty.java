@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -98,7 +97,7 @@ extends ManagedMember {
     public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
         try {
 
-            val validityConsent =
+            var validityConsent =
                     property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
 
             return validityConsent.isVetoed()
@@ -120,12 +119,12 @@ extends ManagedMember {
      */
     public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject newValue) {
 
-        val interactionVeto = checkValidity(newValue);
+        var interactionVeto = checkValidity(newValue);
         if(interactionVeto.isPresent()) {
             return interactionVeto;
         }
 
-        val updatedOwner = property.set(getOwner(), newValue, InteractionInitiatedBy.USER);
+        var updatedOwner = property.set(getOwner(), newValue, InteractionInitiatedBy.USER);
         setOwner(updatedOwner);
         observablePropValue.invalidate();
         return Optional.empty();
@@ -137,8 +136,8 @@ extends ManagedMember {
      * @return the property value as to be used by the UI for representation
      */
     private ManagedObject reassessPropertyValue() {
-        val property = getProperty();
-        val owner = getOwner();
+        var property = getProperty();
+        var owner = getOwner();
 
         return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
                 && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()

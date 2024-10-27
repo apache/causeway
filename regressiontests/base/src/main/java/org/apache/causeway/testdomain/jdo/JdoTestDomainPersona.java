@@ -30,8 +30,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstrac
 import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptWithoutResult;
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
-import lombok.val;
-
 public enum JdoTestDomainPersona
 implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 
@@ -68,11 +66,11 @@ implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
 //                @Override
 //                protected Object buildResult(final ExecutionContext ec) {
 //
-//                    val products = new HashSet<JdoProduct>();
+//                    var products = new HashSet<JdoProduct>();
 //
 //                    products.add(JdoBook.fromDto(BookDto.sample()));
 //
-//                    val inventory = JdoInventory.of("Sample Inventory", products);
+//                    var inventory = JdoInventory.of("Sample Inventory", products);
 //                    repository.persist(inventory);
 //
 //                    return inventory;
@@ -93,9 +91,9 @@ implements PersonaWithBuilderScript<Object, BuilderScriptAbstract<Object>>  {
                 @Override
                 protected void execute(final ExecutionContext ec) {
 
-                    val regularUserRoleName = causewayConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
-                    val regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
-                    val username = LdapConstants.SVEN_PRINCIPAL;
+                    var regularUserRoleName = causewayConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
+                    var regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
+                    var username = LdapConstants.SVEN_PRINCIPAL;
                     ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);
                     if(svenUser==null) {
                         svenUser = applicationUserRepository

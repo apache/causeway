@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -151,7 +150,7 @@ implements
 
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
-        val authenticationRequest = new AuthenticationRequestPassword(username, password);
+        var authenticationRequest = new AuthenticationRequestPassword(username, password);
         authenticationRequest.addRole(UserMemento.AUTHORIZED_USER_ROLE);
         InteractionContext interactionContext = getAuthenticationManager().authenticate(authenticationRequest);
         setInteractionContext(interactionContext);
@@ -187,14 +186,14 @@ implements
     public synchronized void onInvalidate() {
 
         String userName = null;
-        val authentication = getInteractionContext();
+        var authentication = getInteractionContext();
         if (authentication != null) {
             userName = authentication.getUser().getName();
         }
 
         super.onInvalidate();
 
-        val causedBy = RequestCycle.get() != null
+        var causedBy = RequestCycle.get() != null
                 ? SessionSubscriber.CausedBy.USER
                 : SessionSubscriber.CausedBy.SESSION_EXPIRATION;
 
@@ -261,7 +260,7 @@ implements
             .currentInteractionContext()
             .map(InteractionContext::getUser)
             .map(user->{
-                val roles = new Roles();
+                var roles = new Roles();
                 user.streamRoleNames()
                 .forEach(roles::add);
                 return roles;
@@ -297,13 +296,13 @@ implements
             return;
         }
 
-        val interactionService = getInteractionService();
-        val sessionLoggingServices = getSessionLoggingServices();
+        var interactionService = getInteractionService();
+        var sessionLoggingServices = getSessionLoggingServices();
 
         final Runnable loggingTask = ()->{
 
-            val now = virtualClock().nowAsJavaUtilDate();
-            val httpSessionId = AuthenticatedWebSessionForCauseway.this.getCachedSessionId()
+            var now = virtualClock().nowAsJavaUtilDate();
+            var httpSessionId = AuthenticatedWebSessionForCauseway.this.getCachedSessionId()
                     .orElse("(none)");
 
             sessionLoggingServices

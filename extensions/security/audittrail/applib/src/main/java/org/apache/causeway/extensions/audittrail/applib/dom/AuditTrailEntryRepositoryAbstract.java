@@ -37,8 +37,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.val;
-
 /**
  * Provides supporting functionality for querying {@link AuditTrailEntry audit trail entry} entities.
  *
@@ -120,8 +118,8 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
             final Bookmark target,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -153,8 +151,8 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     public List<AuditTrailEntry> findByFromAndTo(
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -203,8 +201,8 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
             final String username,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {
@@ -237,8 +235,8 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
             final Bookmark target,
             final LocalDate from,
             final LocalDate to) {
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<E> query;
         if(from != null) {

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.commons.model.binding;
 
-import lombok.val;
-
 public interface BindingConverter<L, R> {
 
     L toLeft(R right);
@@ -35,7 +33,7 @@ public interface BindingConverter<L, R> {
     }
 
     public default BindingConverter<R, L> reverse() {
-        val self = this;
+        var self = this;
         return new BindingConverter<R, L>() {
             @Override public R toLeft(final L right) {
                 return self.toRight(right);}

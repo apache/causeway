@@ -40,7 +40,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.val;
 
 @EqualsAndHashCode(of = {"interactionId", "sequence"})
 @NoArgsConstructor
@@ -62,7 +61,7 @@ public class ExecutionLogEntryPK implements Serializable {
     public int sequence;
 
     public ExecutionLogEntryPK(final String value) {
-        val token = new StringTokenizer (value, SEPARATOR);
+        var token = new StringTokenizer (value, SEPARATOR);
         this.interactionId = UUID.fromString(token.nextToken());
         this.sequence = Integer.parseInt(token.nextToken());
         _Assert.assertNotNull(interactionId, ()->"PK required an interactionId");

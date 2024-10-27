@@ -35,14 +35,12 @@ import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanti
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
 
-import lombok.val;
-
 class ActionAnnotationFacetFactoryTest_executionPublishing
 extends ActionAnnotationFacetFactoryTest {
 
     private void processExecutionPublishing(
             final ActionAnnotationFacetFactory facetFactory, final ProcessMethodContext processMethodContext) {
-        val actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
+        var actionIfAny = processMethodContext.synthesizeOnMethod(Action.class);
         facetFactory.processExecutionPublishing(processMethodContext, actionIfAny);
     }
 

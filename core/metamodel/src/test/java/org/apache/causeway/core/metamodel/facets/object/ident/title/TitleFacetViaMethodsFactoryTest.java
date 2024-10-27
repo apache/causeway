@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFac
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 
-import lombok.val;
-
 class TitleFacetViaMethodsFactoryTest
 extends ObjectSupportFacetFactoryTestAbstract {
 
@@ -54,7 +52,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             public String toString() { return "Some title via toString"; }
         }
 
-        val toStringMethod = findMethodExactOrFail(Customer.class, "toString");
+        var toStringMethod = findMethodExactOrFail(Customer.class, "toString");
 
         objectScenario(Customer.class, (processClassContext, facetHolder) -> {
             //when
@@ -63,7 +61,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
             final Facet facet = facetHolder.getFacet(TitleFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof TitleFacetFromToStringMethod);
-            val titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
+            var titleFacetViaTitleMethod = (TitleFacetFromToStringMethod) facet;
             assertMethodEqualsFirstIn(toStringMethod, titleFacetViaTitleMethod);
             assertMethodWasRemoved(toStringMethod);
         });
@@ -71,8 +69,8 @@ extends ObjectSupportFacetFactoryTestAbstract {
 
     @Test
     void titleFacetOnJavaObjectToStringIsIgnored() throws NoSuchMethodException, SecurityException {
-        val sampleMethod = findMethodExactOrFail(Object.class, "toString");
-        val facetedMethod = Mockito.mock(FacetedMethod.class);
+        var sampleMethod = findMethodExactOrFail(Object.class, "toString");
+        var facetedMethod = Mockito.mock(FacetedMethod.class);
 
         assertFalse(TitleFacetFromToStringMethod
                     .create(sampleMethod, facetedMethod)

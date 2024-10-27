@@ -25,8 +25,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
-
 public class MandatoryFacetFromXmlElementAnnotationFactory
 extends FacetFactoryAbstract {
 
@@ -41,8 +39,8 @@ extends FacetFactoryAbstract {
             return; // shortcut just in case
         }
 
-        val xmlElementIfAny = processMethodContext.synthesizeOnMethod(XmlElement.class);
-        val facetHolder = processMethodContext.getFacetHolder();
+        var xmlElementIfAny = processMethodContext.synthesizeOnMethod(XmlElement.class);
+        var facetHolder = processMethodContext.getFacetHolder();
 
         // search for @XmlElement(required=...)
         addFacetIfPresent(

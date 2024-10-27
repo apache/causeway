@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.apache.causeway.viewer.restfulobjects.applib.JsonFixture.readJson;
 
-import lombok.val;
+
 
 class JsonRepresentationTest_streamMapEntries {
 
@@ -47,7 +47,7 @@ class JsonRepresentationTest_streamMapEntries {
         for (int i = 0; i < jsonRepresentation.asJsonNode().size(); i++) {
             assertThat(mapIterator.hasNext(), is(true));
 
-            val next = mapIterator.next();
+            var next = mapIterator.next();
             assertThat(next.getKey(), is(not(nullValue())));
         }
         assertThat(mapIterator.hasNext(), is(false));

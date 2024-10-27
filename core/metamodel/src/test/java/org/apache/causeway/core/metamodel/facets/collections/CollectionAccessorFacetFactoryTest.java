@@ -34,14 +34,12 @@ import org.apache.causeway.core.metamodel.facets.collections.accessor.Collection
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 
-import lombok.val;
-
 class CollectionAccessorFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     @Test
     void accessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
             public Collection getOrders() { return null; }
@@ -56,7 +54,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
             assertMethodWasRemoved(collectionAccessorMethod);
         });
@@ -64,7 +62,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void accessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
             public List getOrders() { return null; }
@@ -79,7 +77,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
             assertMethodWasRemoved(collectionAccessorMethod);
         });
@@ -87,7 +85,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void accessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings({ "rawtypes", "unused" })
         class Customer {
             public Set getOrders() { return null; }
@@ -102,7 +100,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
             assertMethodWasRemoved(collectionAccessorMethod);
         });
@@ -110,7 +108,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void accessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public Object[] getOrders() { return null; }
@@ -125,7 +123,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
             assertMethodWasRemoved(collectionAccessorMethod);
         });
@@ -133,7 +131,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void accessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }
         @SuppressWarnings("unused")
@@ -150,7 +148,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            val propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+            var propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(collectionAccessorMethod, propertyAccessorFacetViaAccessor);
             assertMethodWasRemoved(collectionAccessorMethod);
         });
@@ -158,7 +156,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void accessorFoundInSuperclass() {
-        val facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
+        var facetFactory = new CollectionAccessorFacetViaAccessorFactory(getMetaModelContext());
         class Order {
         }
         @SuppressWarnings("unused")
@@ -175,7 +173,7 @@ extends FacetFactoryTestAbstract {
             final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
-            val collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
+            var collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
             assertMethodEqualsFirstIn(collectionAccessorMethod, collectionAccessorFacetViaMethod);
         });
     }

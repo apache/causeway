@@ -35,7 +35,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
-import lombok.val;
+
 
 /**
  * Sets up a role for regular users of the security module.
@@ -78,7 +78,7 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
-        val allowChanging = Can.of(
+        var allowChanging = Can.of(
                 // everything under "causeway.applib" is granted.
                 // this includes prototype actions for metamodel and translations
                 ApplicationFeatureId.newNamespace(CausewayModuleApplib.NAMESPACE),
@@ -111,7 +111,7 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                     : null
         );
 
-        val allowViewing = Can.of(
+        var allowViewing = Can.of(
                 // we also allow the user to see the roles they are in
                 // (but nothing more than that)
                 ApplicationFeatureId.newType(ApplicationUser.LOGICAL_TYPE_NAME),

@@ -45,7 +45,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.NonNull;
-import lombok.val;
 
 class TemporalValueSemanticsProviderTest {
 
@@ -67,14 +66,14 @@ class TemporalValueSemanticsProviderTest {
         Context context = null;
         LocalTime localTime = LocalTime.of(13, 12, 45);
 
-        val formatter = target.getTemporalEditingFormat(context ,
+        var formatter = target.getTemporalEditingFormat(context ,
                 target.getTemporalCharacteristic(),
                 target.getOffsetCharacteristic(),
                 timePrecision,
                 EditingFormatDirection.OUTPUT,
                 editingPattern);
 
-        val formattedTemporal = formatter.format(localTime);
+        var formattedTemporal = formatter.format(localTime);
         assertNotNull(formattedTemporal);
 
         System.out.println(formattedTemporal);

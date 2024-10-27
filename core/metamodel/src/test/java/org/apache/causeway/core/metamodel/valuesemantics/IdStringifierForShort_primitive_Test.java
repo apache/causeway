@@ -28,8 +28,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import lombok.val;
-
 class IdStringifierForShort_primitive_Test {
 
     public static Stream<Arguments> roundtrip() {
@@ -46,7 +44,7 @@ class IdStringifierForShort_primitive_Test {
     @MethodSource()
     void roundtrip(final short value) {
 
-        val stringifier = new ShortValueSemantics();
+        var stringifier = new ShortValueSemantics();
 
         String stringified = stringifier.enstring(value);
         Short parse = stringifier.destring(stringified);

@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
-import lombok.val;
-
 class CssClassFacetMethodTest
 extends FacetFactoryTestAbstract {
 
@@ -63,16 +61,16 @@ extends FacetFactoryTestAbstract {
     @Test
     void cssClassFacetViaCssClassMethod() {
 
-        val domainObject = getObjectManager().adapt(new DomainObjectInCssClassMethod());
+        var domainObject = getObjectManager().adapt(new DomainObjectInCssClassMethod());
 
         objectScenario(DomainObjectInCssClassMethod.class, (processClassContext, facetHolder) -> {
             //when
             facetFactory.process(processClassContext);
             //then
-            val cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
+            var cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
             assertNotNull(cssClassFacet, ()->"CssClassFacet required");
             assertTrue(cssClassFacet instanceof CssClassFacetViaCssClassMethod);
-            val imperativeCssClassFacet = (CssClassFacetViaCssClassMethod)cssClassFacet;
+            var imperativeCssClassFacet = (CssClassFacetViaCssClassMethod)cssClassFacet;
             assertEquals(SOME_CSS_CLASS,
                     imperativeCssClassFacet.cssClass(domainObject));
         });

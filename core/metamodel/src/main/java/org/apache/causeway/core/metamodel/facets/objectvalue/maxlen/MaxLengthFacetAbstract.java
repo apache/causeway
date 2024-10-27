@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
-import lombok.val;
-
 public abstract class MaxLengthFacetAbstract
 extends SingleIntValueFacetAbstract
 implements MaxLengthFacet {
@@ -68,8 +66,8 @@ implements MaxLengthFacet {
         if (!(context instanceof ProposedHolder)) {
             return null;
         }
-        val proposedHolder = (ProposedHolder) context;
-        val proposedArgument = proposedHolder.getProposed();
+        var proposedHolder = (ProposedHolder) context;
+        var proposedArgument = proposedHolder.getProposed();
         if (!exceeds(proposedArgument)) {
             return null;
         }

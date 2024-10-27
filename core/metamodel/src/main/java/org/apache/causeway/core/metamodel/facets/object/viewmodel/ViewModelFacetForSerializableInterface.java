@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 
 /**
  * Corresponds to {@link Serializable} interface.
@@ -71,10 +70,10 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     @Override
     public String serialize(final ManagedObject viewModel) {
-        val baos = new ByteArrayOutputStream();
-        try(val oos = new ObjectOutputStream(baos)) {
+        var baos = new ByteArrayOutputStream();
+        try(var oos = new ObjectOutputStream(baos)) {
             oos.writeObject(viewModel.getPojo());
-            val mementoStr = _Strings.ofBytes(
+            var mementoStr = _Strings.ofBytes(
                     _Bytes.asUrlBase64.apply(baos.toByteArray()),
                     StandardCharsets.UTF_8);
             return mementoStr;
@@ -87,9 +86,9 @@ extends ViewModelFacetAbstract {
     private Object deserialize(
             @NonNull final ObjectSpecification viewmodelSpec,
             @NonNull final String memento) {
-        val bytes = _Bytes.ofUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8));
-        try(val ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            val viewModelPojo = ois.readObject();
+        var bytes = _Bytes.ofUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8));
+        try(var ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
+            var viewModelPojo = ois.readObject();
             return viewModelPojo;
         }
     }

@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import lombok.val;
+
 
 /**
  *  Corresponds to the documents of the 'spring-jdo' module.
@@ -41,7 +41,7 @@ public class ConfigurationExample2 {
     
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
-        val dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
         dataSourceBuilder.driverClassName("org.h2.Driver");
         dataSourceBuilder.url("jdbc:h2:mem:test");
         dataSourceBuilder.username("sa");
@@ -51,7 +51,7 @@ public class ConfigurationExample2 {
   
     @Bean(destroyMethod = "close")
     public PersistenceManagerFactory myPmf(final DataSource dataSource) {
-        val myPmf = new JDOPersistenceManagerFactory();
+        var myPmf = new JDOPersistenceManagerFactory();
         myPmf.setConnectionFactory(dataSource);
         myPmf.setNontransactionalRead(true);
         return myPmf;

@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
 
-import lombok.val;
+
 
 /**
  * contract test.
@@ -120,8 +120,8 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
     public void entity_forExceptionWithCause() throws Exception {
 
         // given
-        val cause = new Exception("barfoo", new Exception("root-cause-message"));
-        val ex = RestfulObjectsApplicationException
+        var cause = new Exception("barfoo", new Exception("root-cause-message"));
+        var ex = RestfulObjectsApplicationException
                 .createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
 
         // when
@@ -133,10 +133,10 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
         // then
         assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
         assertThat(jsonRepr.getString("message"), is("foobar"));
-        val detailJson = jsonRepr.getRepresentation("detail");
+        var detailJson = jsonRepr.getRepresentation("detail");
         assertThat(detailJson, is(not(nullValue())));
         assertThat(detailJson.getString("message"), is("foobar"));
-        val causedByJson = detailJson.getRepresentation("causedBy");
+        var causedByJson = detailJson.getRepresentation("causedBy");
         assertThat(causedByJson, is(not(nullValue())));
         assertThat(causedByJson.getString("message"), is("root-cause-message"));
     }

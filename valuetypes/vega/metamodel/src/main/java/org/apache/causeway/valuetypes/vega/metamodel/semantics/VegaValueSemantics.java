@@ -36,7 +36,7 @@ import org.apache.causeway.valuetypes.vega.applib.CausewayModuleValVegaApplib;
 import org.apache.causeway.valuetypes.vega.applib.value.Vega;
 
 import lombok.NonNull;
-import lombok.val;
+
 
 @Component
 @Named(CausewayModuleValVegaApplib.NAMESPACE + ".VegaValueSemantics")
@@ -93,11 +93,11 @@ implements
      * and <a href="https://vega.github.io/vega-lite/usage/embed.html">vega-lite</a>
      */
     private String asHtml(final @NonNull Vega vega) {
-        val containerId = "vegaContainer" + UUID.randomUUID().toString();
+        var containerId = "vegaContainer" + UUID.randomUUID().toString();
 
         switch (vega.getSchema()) {
         case VEGA: {
-            val htmlFragment = String.format(""
+            var htmlFragment = String.format(""
                     + "<div id=\"%1$s\"></div>\n"
                     + "<script type=\"text/javascript\">\n"
                     + "document.addEventListener('DOMContentLoaded', (event) => {\n"
@@ -118,7 +118,7 @@ implements
             return htmlFragment;
         }
         case VEGA_LITE: {
-            val htmlFragment = String.format(""
+            var htmlFragment = String.format(""
                     + "<div id=\"%1$s\"></div>\n"
                     + "<script type=\"text/javascript\">\n"
                     + "document.addEventListener('DOMContentLoaded', (event) => {\n"

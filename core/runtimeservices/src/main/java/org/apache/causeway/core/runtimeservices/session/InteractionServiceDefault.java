@@ -69,7 +69,6 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -139,7 +138,7 @@ implements
 
         runtimeEventService.fireBeforeMetamodelLoading();
 
-        val taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
+        var taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
                 .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
                 .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
@@ -151,7 +150,7 @@ implements
         taskList.await();
 
         { // log any validation failures, experimental code however, not sure how to best propagate failures
-            val validationResult = specificationLoader.getOrAssessValidationResult();
+            var validationResult = specificationLoader.getOrAssessValidationResult();
             if(validationResult.getNumberOfFailures()==0) {
                 log.info("Validation PASSED");
             } else {
@@ -183,12 +182,12 @@ implements
     public InteractionLayer openInteraction(
             final @NonNull InteractionContext interactionContextToUse) {
 
-        val causewayInteraction = getOrCreateCausewayInteraction();
+        var causewayInteraction = getOrCreateCausewayInteraction();
 
         // check whether we should reuse any current interactionLayer,
         // that is, if current authentication and authToUse are equal
 
-        val reuseCurrentLayer = currentInteractionContext()
+        var reuseCurrentLayer = currentInteractionContext()
                 .map(currentInteractionContext -> Objects.equals(currentInteractionContext, interactionContextToUse))
                 .orElse(false);
 
@@ -197,7 +196,7 @@ implements
             return interactionLayerStack.get().peek();
         }
 
-        val interactionLayer = new InteractionLayer(causewayInteraction, interactionContextToUse);
+        var interactionLayer = new InteractionLayer(causewayInteraction, interactionContextToUse);
 
         interactionLayerStack.get().push(interactionLayer);
 
@@ -246,7 +245,7 @@ implements
 
 	@Override
     public Optional<InteractionLayer> currentInteractionLayer() {
-    	val stack = interactionLayerStack.get();
+    	var stack = interactionLayerStack.get();
     	return stack.isEmpty()
     	        ? Optional.empty()
                 : Optional.of(stack.lastElement());
@@ -358,7 +357,7 @@ implements
     }
 
     private void requestRollback(final Throwable cause) {
-        val stack = interactionLayerStack.get();
+        var stack = interactionLayerStack.get();
         if(stack.isEmpty()) {
             // seeing this code-path, when the corresponding runnable/callable
             // by itself causes the interaction stack to be closed
@@ -368,7 +367,7 @@ implements
                     cause.getMessage());
             return;
         }
-        val interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).getInteraction());
+        var interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).getInteraction());
         transactionServiceSpring.requestRollback(interaction);
     }
 
@@ -409,7 +408,7 @@ implements
             log.warn("preInteractionClosed: skipping as a precaution because current transaction has been completed already");
 
         } else {
-            val mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
+            var mustAbort = transactionServiceSpring.currentTransactionState().mustAbort();
             if(!mustAbort) {
                 try {
                     transactionServiceSpring.flushTransaction();
@@ -448,7 +447,7 @@ implements
                 interactionLayerStack.get().size(),
                 _Probe.currentThreadId());
 
-        val stack = interactionLayerStack.get();
+        var stack = interactionLayerStack.get();
         try {
             while(stack.size()>downToStackSize) {
                 if(isAtTopLevel()) {
@@ -470,7 +469,7 @@ implements
     }
 
     private CausewayInteraction getInternalInteractionElseFail() {
-        val interaction = currentInteractionElseFail();
+        var interaction = currentInteractionElseFail();
         if(interaction instanceof CausewayInteraction) {
             return (CausewayInteraction) interaction;
         }
@@ -486,14 +485,14 @@ implements
     @Programmatic
     public void completeAndPublishCurrentCommand() {
 
-        val interaction = getInternalInteractionElseFail();
-        val command = interaction.getCommand();
+        var interaction = getInternalInteractionElseFail();
+        var command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
             // the guard is in case we're here as the result of a redirect following a previous exception; patch up as best we can.
 
-            val priorInteractionExecution = interaction.getPriorExecution();
-            val completedAt =
+            var priorInteractionExecution = interaction.getPriorExecution();
+            var completedAt =
                     priorInteractionExecution != null
                     ?
                         // copy over from the most recent (which will be the top-level) interaction

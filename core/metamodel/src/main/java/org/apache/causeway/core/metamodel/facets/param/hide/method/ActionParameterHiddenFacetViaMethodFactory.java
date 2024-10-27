@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportin
 import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
-import lombok.val;
-
 /**
  * Sets up {@link ActionParameterHiddenFacet}.
  */
@@ -44,8 +42,8 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val hideMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
+        var hideMethod = searchResult.getSupportingMethod();
+        var patConstructor = searchResult.getPatConstructor();
         addFacet(
                 new ActionParameterHiddenFacetViaMethod(
                         hideMethod, patConstructor, paramAsHolder));

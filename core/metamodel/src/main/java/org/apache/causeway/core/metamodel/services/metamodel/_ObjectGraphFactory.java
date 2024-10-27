@@ -37,8 +37,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.val;
-
 /**
  * @implNote implemented for one shot use only (stateful), hence not made public
  */
@@ -65,12 +63,12 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
 
     private ObjectGraph.Object registerObject(final ObjectSpecification objSpec) {
 
-        val addFieldsLater = _Refs.booleanRef(false);
+        var addFieldsLater = _Refs.booleanRef(false);
 
-        val obj = objectByLogicalType.computeIfAbsent(objSpec.getLogicalType(), logicalType->{
+        var obj = objectByLogicalType.computeIfAbsent(objSpec.getLogicalType(), logicalType->{
             logicalTypesByNamespace.putElement(logicalType.getNamespace(), logicalType);
-            val newObjId = "o" + objectByLogicalType.size();
-            val newObj = object(newObjId, objSpec);
+            var newObjId = "o" + objectByLogicalType.size();
+            var newObj = object(newObjId, objSpec);
             objectById.put(newObjId, newObj);
             addFieldsLater.setValue(true);
             objectGraph.objects().add(newObj);
@@ -80,22 +78,22 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
         if(addFieldsLater.isTrue()) {
             objSpec.streamAssociations(MixedIn.EXCLUDED)
             .peek(ass->{
-                val elementType = ass.getElementType();
+                var elementType = ass.getElementType();
                 if(elementType.isEntity()
                         || elementType.isAbstract()) {
-                    val referencedObj = registerObject(elementType);
+                    var referencedObj = registerObject(elementType);
 
-                    val thisType = objSpec.getLogicalType();
-                    val refType = elementType.getLogicalType();
+                    var thisType = objSpec.getLogicalType();
+                    var refType = elementType.getLogicalType();
 
-                    val thisNs = thisType.getNamespace();
-                    val refNs = refType.getNamespace();
+                    var thisNs = thisType.getNamespace();
+                    var refNs = refType.getNamespace();
 
                     // only register association relations if they don't cross namespace boundaries
                     // in other words: only include, if they share the same namespace
                     if(thisNs.equals(refNs)) {
-                        val thisCls = thisType.getCorrespondingClass();
-                        val refCls = refType.getCorrespondingClass();
+                        var thisCls = thisType.getCorrespondingClass();
+                        var refCls = refType.getCorrespondingClass();
                         if(thisCls.equals(refCls)
                                 || !refCls.isAssignableFrom(thisCls)) {
                             // we found a 1-x relation
@@ -120,7 +118,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
             final String fromId,
             final String toId,
             final String description) {
-        val relation = new ObjectGraph.Relation(
+        var relation = new ObjectGraph.Relation(
                 relationType,
                 objectById.get(fromId),
                 objectById.get(toId),
@@ -131,7 +129,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
     }
 
     private static ObjectGraph.Object object(final String id, final ObjectSpecification objSpec) {
-        val obj =  new ObjectGraph.Object(id,
+        var obj =  new ObjectGraph.Object(id,
                 objSpec.getLogicalType().getNamespace(),
                 objSpec.getLogicalType().getLogicalTypeSimpleName(),
                 objSpec.isAbstract()
@@ -155,18 +153,18 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
         final Set<ObjectGraph.Relation> inheritanceRelations = new HashSet<>();
         final Set<ObjectGraph.Relation> markedForRemoval = new HashSet<>();
 
-        for(val e1 : objectByLogicalType.entrySet()) {
-            for(val e2 : objectByLogicalType.entrySet()) {
-                val type1 = e1.getKey();
-                val type2 = e2.getKey();
+        for(var e1 : objectByLogicalType.entrySet()) {
+            for(var e2 : objectByLogicalType.entrySet()) {
+                var type1 = e1.getKey();
+                var type2 = e2.getKey();
                 if(type1.equals(type2)) continue;
-                val cls1 = type1.getCorrespondingClass();
-                val cls2 = type2.getCorrespondingClass();
+                var cls1 = type1.getCorrespondingClass();
+                var cls2 = type2.getCorrespondingClass();
                 if(cls2.isAssignableFrom(cls1)) {
-                    val o1 = e1.getValue();
-                    val o2 = e2.getValue();
+                    var o1 = e1.getValue();
+                    var o2 = e2.getValue();
                     // we found an inheritance relation
-                    val relation = new ObjectGraph.Relation(
+                    var relation = new ObjectGraph.Relation(
                             ObjectGraph.RelationType.INHERITANCE,
                             objectById.get(o1.id()), objectById.get(o2.id()), "", "", "");
                     inheritanceRelations.add(relation);
@@ -176,11 +174,11 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
 
         // remove any inheritance relations that shortcut others
         outer:
-        for(val r1 : inheritanceRelations) {
-            for(val r2 : inheritanceRelations) {
+        for(var r1 : inheritanceRelations) {
+            for(var r2 : inheritanceRelations) {
                 if(r1==r2) continue;
                 if(!r1.fromId().equals(r2.fromId())) continue;
-                for(val r3 : inheritanceRelations) {
+                for(var r3 : inheritanceRelations) {
                     if(r1==r3) continue;
                     if(r2==r3) continue;
                     if(!r1.toId().equals(r3.toId())) continue;
@@ -208,7 +206,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
     }
 
     private static String objectShortName(final ObjectSpecification objSpec) {
-        val simpleName = objSpec.getLogicalType().getLogicalTypeSimpleName();
+        var simpleName = objSpec.getLogicalType().getLogicalTypeSimpleName();
         return simpleName;
     }
 

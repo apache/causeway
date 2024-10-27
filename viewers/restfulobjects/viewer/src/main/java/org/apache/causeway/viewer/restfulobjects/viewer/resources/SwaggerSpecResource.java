@@ -39,7 +39,7 @@ import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -99,10 +99,10 @@ public class SwaggerSpecResource {
 
     private String swagger(final Visibility visibility) {
 
-        val format = deriveFrom(httpHeaders);
-        val callable = new MyCallable(swaggerService, visibility, format);
+        var format = deriveFrom(httpHeaders);
+        var callable = new MyCallable(swaggerService, visibility, format);
 
-        val spec = interactionService.callAnonymous(callable);
+        var spec = interactionService.callAnonymous(callable);
         return spec;
     }
 

@@ -38,7 +38,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
-import lombok.val;
+
 
 class UserPermissionViewModelTest {
 
@@ -46,30 +46,30 @@ class UserPermissionViewModelTest {
     @ValueSource(strings = {"sven", "!@$5:", ""}) // username candidates
     void roundtrip(final String username) {
 
-        val featureId = ApplicationFeatureId
+        var featureId = ApplicationFeatureId
                 .fromIdentifier(Identifier.classIdentifier(LogicalType.fqcn(this.getClass())));
 
-        val permissionsEvaluationService = mock(PermissionsEvaluationService.class);
+        var permissionsEvaluationService = mock(PermissionsEvaluationService.class);
 
-        val permissions = List.of(new ApplicationPermissionValue(featureId,
+        var permissions = List.of(new ApplicationPermissionValue(featureId,
                 ApplicationPermissionRule.ALLOW,
                 ApplicationPermissionMode.CHANGING));
 
-        val user = mock(ApplicationUser.class);
+        var user = mock(ApplicationUser.class);
         when(user.getUsername()).thenReturn(username);
         when(user.getPermissionSet()).thenReturn(new ApplicationPermissionValueSet(
                 permissions,
                 permissionsEvaluationService));
 
-        val factoryService = MetaModelContext_forTesting.buildDefault()
+        var factoryService = MetaModelContext_forTesting.buildDefault()
                 .getFactoryService();
 
-        val vm = UserPermissionViewModel.asViewModel(user, factoryService)
+        var vm = UserPermissionViewModel.asViewModel(user, factoryService)
                 .apply(featureId);
 
         // when
-        val memento = vm.viewModelMemento();
-        val vmAfterRoundtrip = new UserPermissionViewModel(memento);
+        var memento = vm.viewModelMemento();
+        var vmAfterRoundtrip = new UserPermissionViewModel(memento);
 
         // then
         assertEquals(username, vmAfterRoundtrip.getUsername());

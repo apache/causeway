@@ -27,22 +27,21 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.DateTimeFormat;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class InteractAsUtils {
 
     public InteractionContext toInteractionContext(final InteractAs testWith) {
-        val user = _Strings.isNotEmpty(testWith.userName())
+        var user = _Strings.isNotEmpty(testWith.userName())
                 ? UserMemento.ofName(testWith.userName())
                 : UserMemento.system();
 
-        val mainLocale = _Strings.isNotEmpty(testWith.localeName())
+        var mainLocale = _Strings.isNotEmpty(testWith.localeName())
                 ? Locale.forLanguageTag(testWith.localeName())
                 : Locale.getDefault();
 
-        val virtualClock = _Strings.isNotEmpty(testWith.frozenDateTime())
+        var virtualClock = _Strings.isNotEmpty(testWith.frozenDateTime())
                 ? VirtualClock.frozenAt(DateTimeFormat.CANONICAL.parseDateTime(testWith.frozenDateTime()))
                 : VirtualClock.system();
 

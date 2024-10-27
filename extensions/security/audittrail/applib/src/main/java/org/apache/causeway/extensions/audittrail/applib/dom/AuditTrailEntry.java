@@ -48,7 +48,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.extensions.audittrail.applib.CausewayModuleExtAuditTrailApplib;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -123,7 +122,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
 
     @ObjectSupport public String title() {
-        val buf = new TitleBuffer();
+        var buf = new TitleBuffer();
         buf.append(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                 .format(getTimestamp().toLocalDateTime()));
         buf.append(" ").append(getLogicalMemberIdentifier());

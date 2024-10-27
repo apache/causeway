@@ -46,7 +46,7 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @SpringBootTest(
         classes = {
@@ -106,7 +106,7 @@ extends InteractionTestAbstract {
 
     @Test
     void mixinMemberNamedFacet_whenSharingSameAbstractMixin() {
-        val objectSpec = specificationLoader.specForType(Customer.class).get();
+        var objectSpec = specificationLoader.specForType(Customer.class).get();
 
         assertEquals(
                 2L,
@@ -114,7 +114,7 @@ extends InteractionTestAbstract {
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
                     //System.out.println("act: " + act);
-                    val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
+                    var memberNamedFacet = act.getFacet(MemberNamedFacet.class);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
                 })

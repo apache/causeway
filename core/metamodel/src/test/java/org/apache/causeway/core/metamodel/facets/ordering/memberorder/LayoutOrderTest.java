@@ -38,14 +38,12 @@ import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrde
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 
-import lombok.val;
-
 class LayoutOrderTest
 extends FacetFactoryTestAbstract {
 
     @Test
     void memberOrderAnnotationPickedUpOnProperty() {
-        val facetFactory = new PropertyLayoutFacetFactory(getMetaModelContext());
+        var facetFactory = new PropertyLayoutFacetFactory(getMetaModelContext());
         class Customer {
             @PropertyLayout(sequence = "1")
             public String getFirstName() { return null; }
@@ -54,7 +52,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
+            var facet = facetedMethod.getFacet(LayoutOrderFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof LayoutOrderFacetFromPropertyLayoutAnnotation);
             assertEquals("1", facet.getSequence());
@@ -65,7 +63,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void memberOrderAnnotationPickedUpOnCollection() {
-        val facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
+        var facetFactory = new CollectionLayoutFacetFactory(getMetaModelContext());
         class Order {
         }
         @SuppressWarnings("unused")
@@ -78,7 +76,7 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
+            var facet = facetedMethod.getFacet(LayoutOrderFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof LayoutOrderFacetFromCollectionLayoutAnnotation);
             assertEquals("2", facet.getSequence());
@@ -89,7 +87,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void memberOrderAnnotationPickedUpOnAction() {
-        val facetFactory = new ActionLayoutFacetFactory(getMetaModelContext());
+        var facetFactory = new ActionLayoutFacetFactory(getMetaModelContext());
         class Customer {
             @ActionLayout(sequence = "3")
             public void someAction() {}
@@ -98,7 +96,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            val facet = facetedMethod.getFacet(LayoutOrderFacet.class);
+            var facet = facetedMethod.getFacet(LayoutOrderFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof LayoutOrderFacetFromActionLayoutAnnotation);
             assertEquals("3", facet.getSequence());

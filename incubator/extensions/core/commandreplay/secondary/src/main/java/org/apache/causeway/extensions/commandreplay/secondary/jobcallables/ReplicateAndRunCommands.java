@@ -37,7 +37,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.spi.ReplayCommandE
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 import org.apache.causeway.extensions.commandreplay.secondary.status.StatusException;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -107,7 +106,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
                 }
 
                 // fetch next command(s) from primary (if any)
-                val commandDtos = commandFetcher.fetchCommand(hwm);
+                var commandDtos = commandFetcher.fetchCommand(hwm);
                 commandsToReplay = commandDtos.stream()
                         .map(dto ->
                                 transactionService.callWithinCurrentTransactionElseCreateNew(
@@ -140,7 +139,7 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             //
             // run command
             //
-            val replayState = executeCommandInTranAndAnalyse(commandLog);
+            var replayState = executeCommandInTranAndAnalyse(commandLog);
             if(replayState.isFailed()) {
                 // will effectively block the running of any further commands
                 // until the issue is fixed.
@@ -150,15 +149,15 @@ public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
             //
             // find child commands, and run them
             //
-            val parent = commandLog;
+            var parent = commandLog;
 
-            val childCommands =
+            var childCommands =
                     transactionService.callWithinCurrentTransactionElseCreateNew(
                             () -> commandLogEntryRepository.findByParent(parent))
                     .ifFailureFail()
                     .getValue().orElse(Collections.emptyList());
-            for (val childCommand : childCommands) {
-                val childReplayState = executeCommandInTranAndAnalyse(childCommand);
+            for (var childCommand : childCommands) {
+                var childReplayState = executeCommandInTranAndAnalyse(childCommand);
                 if(childReplayState.isFailed()) {
                     // give up
                     return;

@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
                 LoggerSetupTestWkt.Config.class,
@@ -48,7 +46,7 @@ public class LoggerSetupTestWkt {
     @Test
     void slf4jLoggers_shouldBeBridgedToWorkWithLog4j2() {
 
-        val logger = LoggerFactory.getLogger(PartialPageUpdate.class);
+        var logger = LoggerFactory.getLogger(PartialPageUpdate.class);
         assertFalse(logger.isWarnEnabled());
 
     }

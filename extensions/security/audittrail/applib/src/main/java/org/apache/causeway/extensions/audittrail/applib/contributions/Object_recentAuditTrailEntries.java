@@ -43,7 +43,6 @@ import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -80,21 +79,21 @@ public class Object_recentAuditTrailEntries {
         return auditTrailEntries;
     }
     @MemberSupport public List<String> choices0Act() {
-        val domainClass = domainObject.getClass();
-        val logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainClass);
+        var domainClass = domainObject.getClass();
+        var logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(domainClass);
         if(logicalTypeIfAny.isEmpty()) {
             // not expected, due to hide guard
             return Collections.emptyList();
         }
-        val propertyFeatureIds = applicationFeatureRepository.propertyIdsFor(logicalTypeIfAny.get());
+        var propertyFeatureIds = applicationFeatureRepository.propertyIdsFor(logicalTypeIfAny.get());
         return propertyFeatureIds.stream().map(ApplicationFeatureId::getLogicalMemberName).collect(Collectors.toList());
     }
     @MemberSupport public String default0Act() {
-        val choices = choices0Act();
+        var choices = choices0Act();
         return choices.size() == 1 ? choices.get(0): null;
     }
     @MemberSupport public boolean hideAct() {
-        val domainClass = domainObject.getClass();
+        var domainClass = domainObject.getClass();
         BeanSort beanSort = metaModelService.sortOf(domainClass, MetaModelService.Mode.RELAXED);
         return !beanSort.isEntity();
     }

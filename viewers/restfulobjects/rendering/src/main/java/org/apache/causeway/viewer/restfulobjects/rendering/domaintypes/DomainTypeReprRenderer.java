@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-import lombok.val;
+
 
 public class DomainTypeReprRenderer
 extends ReprRendererAbstract<ObjectSpecification> {
@@ -138,7 +138,7 @@ extends ReprRendererAbstract<ObjectSpecification> {
     }
 
     private void addTypeActions() {
-        val typeActions = getTypeActions();
+        var typeActions = getTypeActions();
         typeActions.mapPutJsonRepresentation("isSubtypeOf", linkToIsSubtypeOf());
         typeActions.mapPutJsonRepresentation("isSupertypeOf", linkToIsSupertypeOf());
     }

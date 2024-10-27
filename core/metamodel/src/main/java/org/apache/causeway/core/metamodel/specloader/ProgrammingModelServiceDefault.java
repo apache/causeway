@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -63,22 +62,22 @@ implements ProgrammingModelService {
 
         // from all plugins out there, add their contributed FacetFactories, Validators
         // and PostProcessors to the programming model
-        val metaModelRefiners = metaModelContext.getServiceRegistry().select(MetaModelRefiner.class);
+        var metaModelRefiners = metaModelContext.getServiceRegistry().select(MetaModelRefiner.class);
         
         log.info("About to create the ProgrammingModel w/ {} refiners.", metaModelRefiners.size());
         
-        val programmingModel = new ProgrammingModelFacetsJava11(metaModelContext, metaModelRefiners);
+        var programmingModel = new ProgrammingModelFacetsJava11(metaModelContext, metaModelRefiners);
 
         // finalize the programming model (make it immutable)
         programmingModel.init(programmingModelInitFilter);
 
         if(log.isInfoEnabled()) {
 
-            val refinerCount = metaModelRefiners.size();
+            var refinerCount = metaModelRefiners.size();
 
-            val facetFactoryCount = programmingModel.streamFactories().count();
-            val validatorCount = programmingModel.streamValidators().count();
-            val postProcessorCount = programmingModel.streamPostProcessors().count();
+            var facetFactoryCount = programmingModel.streamFactories().count();
+            var validatorCount = programmingModel.streamValidators().count();
+            var postProcessorCount = programmingModel.streamPostProcessors().count();
 
 
             log.info("Collected after asking {} refiners, and passing filter '{}':",

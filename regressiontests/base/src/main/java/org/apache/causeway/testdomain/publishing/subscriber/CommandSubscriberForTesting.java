@@ -35,7 +35,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -74,7 +74,7 @@ implements CommandSubscriber {
 
     private void on(String verb, Command command) {
         @SuppressWarnings("unchecked")
-        val commands = (List<Command>) kvStore.get(this, verb).orElseGet(ArrayList::new);
+        var commands = (List<Command>) kvStore.get(this, verb).orElseGet(ArrayList::new);
 
         commands.add(command);
 

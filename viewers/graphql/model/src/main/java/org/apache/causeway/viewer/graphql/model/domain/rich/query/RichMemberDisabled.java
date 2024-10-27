@@ -32,7 +32,6 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -56,18 +55,18 @@ public class RichMemberDisabled<T extends ObjectMember> extends Element {
     @Override
     protected String fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
         }
 
-        val objectMember = memberInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var objectMember = memberInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        val usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         return usable.getReasonAsString().orElse(null);
     }
 

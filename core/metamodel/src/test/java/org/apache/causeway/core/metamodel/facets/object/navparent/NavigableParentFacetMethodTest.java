@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class NavigableParentFacetMethodTest {
 
     private NavigableParentFacet facet;
@@ -52,13 +50,13 @@ class NavigableParentFacetMethodTest {
     @BeforeEach
     void setUp() throws Exception {
 
-        val mmc = MetaModelContext_forTesting.buildDefault();
+        var mmc = MetaModelContext_forTesting.buildDefault();
         simpleFacetHolder = FacetHolder.forTesting(mmc);
 
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
 
         mockOwningAdapter = Mockito.mock(ManagedObject.class);
-        val navigableParentMethod = _GenericResolver.testing
+        var navigableParentMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInNavigableParentMethod.class, "parent");
         facet = NavigableParentFacetViaMethod.create(pojo.getClass(), navigableParentMethod, simpleFacetHolder)
                 .orElse(null);

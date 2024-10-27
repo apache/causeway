@@ -34,8 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
-import lombok.val;
-
 /**
  * UI mixin for {@link ManagedAction}.
  */
@@ -82,7 +80,7 @@ public interface HasManagedAction {
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     default boolean isBookmarkable() {
-        val action = getAction();
+        var action = getAction();
         return action.getSemantics().isSafeInNature()
                 && Facets.bookmarkPolicyOrElseNotSpecified(action).isRoot();
     }
@@ -99,7 +97,7 @@ public interface HasManagedAction {
      *      where e.g. LinkAndLabel correspond to a UI button.
      */
     default Optional<FontAwesomeLayers> lookupFontAwesomeLayers(final boolean forceAlignmentOnIconAbsence) {
-        val managedAction = getManagedAction();
+        var managedAction = getManagedAction();
         return ObjectAction.Util.cssClassFaFactoryFor(
                     managedAction.getAction(),
                     managedAction.getOwner())

@@ -31,8 +31,6 @@ import javax.xml.bind.Marshaller;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import lombok.val;
-
 /**
  * Hamcrest {@link Matcher} implementations for JAXB XML elements.
  *
@@ -77,7 +75,7 @@ class JaxbUtil2 {
     static <T> void toXml(final T dto, final Writer writer) {
         try {
             final Class<?> aClass = dto.getClass();
-            val m = jaxbContextFor(aClass).createMarshaller();
+            var m = jaxbContextFor(aClass).createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
             m.marshal(dto, writer);
         } catch (JAXBException e) {

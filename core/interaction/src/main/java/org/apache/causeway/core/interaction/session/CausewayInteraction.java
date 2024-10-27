@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -196,7 +195,7 @@ implements InteractionInternal {
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
         // to have been set on the current execution).
-        val startedAt = execution.start(context.getClockService(), context.getMetricsService());
+        var startedAt = execution.start(context.getClockService(), context.getMetricsService());
         if(getCommand().getStartedAt() == null) {
             getCommand().updater().setStartedAt(startedAt);
             getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);

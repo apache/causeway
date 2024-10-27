@@ -55,7 +55,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import lombok.val;
 
 public class OneToOneAssociationDefault
 extends ObjectAssociationAbstract
@@ -110,7 +109,7 @@ implements OneToOneAssociation {
             final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val head = headFor(ownerAdapter);
+        var head = headFor(ownerAdapter);
 
         return new PropertyModifyContext(
                 head,
@@ -152,8 +151,8 @@ implements OneToOneAssociation {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val propertyOrCollectionAccessorFacet = getFacet(PropertyOrCollectionAccessorFacet.class);
-        val referencedPojo =
+        var propertyOrCollectionAccessorFacet = getFacet(PropertyOrCollectionAccessorFacet.class);
+        var referencedPojo =
                 propertyOrCollectionAccessorFacet.getProperty(ownerAdapter, interactionInitiatedBy);
 
         if (referencedPojo == null) {
@@ -184,7 +183,7 @@ implements OneToOneAssociation {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         // null to empty
-        val newValue = _newValue==null
+        var newValue = _newValue==null
                 ? ManagedObject.empty(getElementType())
                 : _newValue;
 
@@ -205,7 +204,7 @@ implements OneToOneAssociation {
             final ManagedObject newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val propertySetterFacet = getFacet(PropertySetterFacet.class);
+        var propertySetterFacet = getFacet(PropertySetterFacet.class);
         if (propertySetterFacet == null) {
             throw _Exceptions.unexpectedCodeReach();
         }
@@ -219,7 +218,7 @@ implements OneToOneAssociation {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val propertyClearFacet = getFacet(PropertyClearFacet.class);
+        var propertyClearFacet = getFacet(PropertyClearFacet.class);
 
         if (propertyClearFacet == null) {
             throw _Exceptions.unexpectedCodeReach();
@@ -271,7 +270,7 @@ implements OneToOneAssociation {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        val propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
+        var propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
         if (propertyChoicesFacet == null) {
             return Can.empty();
         }
@@ -298,7 +297,7 @@ implements OneToOneAssociation {
         final Object[] pojoOptions = propertyAutoCompleteFacet
                 .autoComplete(ownerAdapter, searchArg, interactionInitiatedBy);
 
-        val adapters = _NullSafe.stream(pojoOptions)
+        var adapters = _NullSafe.stream(pojoOptions)
                 .map(getObjectManager()::adapt)
                 .collect(Can.toCan());
         return adapters;
@@ -340,7 +339,7 @@ implements OneToOneAssociation {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().getMethod();
         return methodFacade.synthesize(Property.class).isPresent()
                 || methodFacade.synthesize(PropertyLayout.class).isPresent();
     }

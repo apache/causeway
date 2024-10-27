@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 class DataTableSerializationTest implements HasMetaModelContext {
 
@@ -67,8 +66,8 @@ class DataTableSerializationTest implements HasMetaModelContext {
 
     @Test
     void roundtripOnEmptyTable() {
-        val original = DataTable.forDomainType(Customer.class);
-        val afterRoundtrip = _SerializationTester.roundtrip(original);
+        var original = DataTable.forDomainType(Customer.class);
+        var afterRoundtrip = _SerializationTester.roundtrip(original);
 
         assertNotNull(afterRoundtrip);
         assertEquals(
@@ -81,14 +80,14 @@ class DataTableSerializationTest implements HasMetaModelContext {
 
     @Test
     void roundtripOnPopulatedTable() {
-        val original = DataTable.forDomainType(Customer.class);
+        var original = DataTable.forDomainType(Customer.class);
 
         original.setDataElements(Can.of(
                 getObjectManager().adapt(new Customer("cus-1")),
                 getObjectManager().adapt(new Customer("cus-2"))
                 ));
 
-        val afterRoundtrip = _SerializationTester.roundtrip(original);
+        var afterRoundtrip = _SerializationTester.roundtrip(original);
         assertNotNull(afterRoundtrip);
         assertEquals(2, afterRoundtrip.getDataRows().size());
 

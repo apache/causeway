@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.TypedHolder;
 
-import lombok.val;
-
 /**
  * Central point for providing some kind of default for any {@link Facet}s
  * required by the Apache Causeway framework itself.
@@ -67,7 +65,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
         addFacet(new TitleFacetNone(facetHolder));
         addFacet(new PagedFacetFromConfiguration(

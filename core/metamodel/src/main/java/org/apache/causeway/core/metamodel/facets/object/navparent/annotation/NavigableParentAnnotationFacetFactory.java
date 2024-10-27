@@ -43,8 +43,6 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.method.Navigab
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 /**
  * For detailed behavioral specification see
  * <a href="https://issues.apache.org/jira/browse/CAUSEWAY-1816">CAUSEWAY-1816</a>.
@@ -122,13 +120,13 @@ implements MetaModelRefiner {
 
         programmingModel.addValidatorSkipManagedBeans(spec->{
 
-            val cls = spec.getCorrespondingClass();
+            var cls = spec.getCorrespondingClass();
 
             if(!spec.lookupFacet(NavigableParentFacet.class).isPresent()) {
                 return; // skip check
             }
 
-            val evaluators =
+            var evaluators =
                     Evaluators.streamEvaluators(cls,
                             NavigableParentAnnotationFacetFactory::isNavigableParentFlagSet,
                             TypeHierarchyPolicy.EXCLUDE,
@@ -141,8 +139,8 @@ implements MetaModelRefiner {
                             return false; // different
                         }
                         if(a instanceof MethodEvaluator) {
-                            val ma = (MethodEvaluator) a;
-                            val mb = (MethodEvaluator) b;
+                            var ma = (MethodEvaluator) a;
+                            var mb = (MethodEvaluator) b;
                             return _Reflect.methodsSame(ma.getMethod().method(), mb.getMethod().method());
                         }
                         return true; // equal
@@ -154,11 +152,11 @@ implements MetaModelRefiner {
 
             if (evaluators.isCardinalityMultiple()) {
 
-                val conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toSet();
+                var conflictingEvaluatorNames = evaluators.map(Evaluators.Evaluator::name).toSet();
 
                 ValidationFailure.raiseFormatted(
                         spec,
-                        "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
+                        "%s: conflict for determining a strategy for retrievar of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, "
                                 + "while at most one is allowed.\n\tConflicting members: %s",
                                 spec.getFeatureIdentifier().getClassName(),
@@ -181,7 +179,7 @@ implements MetaModelRefiner {
 
                     ValidationFailure.raiseFormatted(
                             spec,
-                            "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
+                            "%s: unable to determine a strategy for retrievar of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
                                     spec.getFeatureIdentifier().getClassName(),
                                     fieldEvaluator.getField().getName(),

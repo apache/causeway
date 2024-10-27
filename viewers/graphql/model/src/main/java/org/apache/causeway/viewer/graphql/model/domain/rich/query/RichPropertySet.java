@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.val;
+
 
 public class RichPropertySet extends Element {
 
@@ -50,9 +50,9 @@ public class RichPropertySet extends Element {
         this.propertyInteractor = propertyInteractor;
 
         // setters return void, so we return the domain object instead
-        val graphQLOutputType = this.context.typeMapper.outputTypeFor(propertyInteractor.getObjectSpecification(), SchemaType.RICH);
+        var graphQLOutputType = this.context.typeMapper.outputTypeFor(propertyInteractor.getObjectSpecification(), SchemaType.RICH);
 
-        val fieldBuilder = newFieldDefinition()
+        var fieldBuilder = newFieldDefinition()
                 .name("set")
                 .type(graphQLOutputType);
         propertyInteractor.addGqlArgument(propertyInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.INVOKE);
@@ -62,32 +62,32 @@ public class RichPropertySet extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             return null;
         }
 
-        val otoa = propertyInteractor.getObjectMember();
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var otoa = propertyInteractor.getObjectMember();
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(otoa.asciiId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
-        val visibleConsent = otoa.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var visibleConsent = otoa.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (visibleConsent.isVetoed()) {
             throw new HiddenException(otoa.getFeatureIdentifier());
         }
 
-        val usableConsent = otoa.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usableConsent = otoa.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
         if (usableConsent.isVetoed()) {
             throw new DisabledException(otoa.getFeatureIdentifier());
         }
 
-        val validityConsent = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        var validityConsent = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
         if (validityConsent.isVetoed()) {
             throw new InvalidException(validityConsent);
         }

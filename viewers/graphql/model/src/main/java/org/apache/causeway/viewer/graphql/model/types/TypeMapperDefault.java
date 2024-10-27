@@ -44,7 +44,7 @@ import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
@@ -83,7 +83,7 @@ public class TypeMapperDefault implements TypeMapper {
     public Object unmarshal(
             final Object gqlValue,
             final ObjectSpecification targetObjectSpec) {
-        val correspondingClass = targetObjectSpec.getCorrespondingClass();
+        var correspondingClass = targetObjectSpec.getCorrespondingClass();
         if (correspondingClass.isEnum()) {
             return gqlValue;
         }
@@ -155,7 +155,7 @@ public class TypeMapperDefault implements TypeMapper {
     @Nullable public GraphQLList listTypeForElementTypeOf(
             final OneToManyAssociation oneToManyAssociation,
             final SchemaType schemaType) {
-        val elementType = oneToManyAssociation.getElementType();
+        var elementType = oneToManyAssociation.getElementType();
         return listTypeFor(elementType, schemaType);
     }
 
@@ -186,7 +186,7 @@ public class TypeMapperDefault implements TypeMapper {
     private GraphQLInputType inputTypeFor_(
             final OneToOneFeature oneToOneFeature,
             final SchemaType schemaType){
-        val elementObjectSpec = oneToOneFeature.getElementType();
+        var elementObjectSpec = oneToOneFeature.getElementType();
         switch (elementObjectSpec.getBeanSort()) {
             case ABSTRACT:
             case VIEW_MODEL:
@@ -209,7 +209,7 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLList inputTypeFor(
             final OneToManyActionParameter oneToManyActionParameter,
             final SchemaType schemaType){
-        val elementObjectSpec = oneToManyActionParameter.getElementType();
+        var elementObjectSpec = oneToManyActionParameter.getElementType();
         return GraphQLList.list(inputTypeFor(elementObjectSpec, schemaType));
     }
 

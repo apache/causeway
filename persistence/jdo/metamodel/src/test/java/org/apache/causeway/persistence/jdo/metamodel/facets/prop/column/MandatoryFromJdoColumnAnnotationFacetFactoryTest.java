@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodConte
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.persistence.jdo.metamodel.testing.AbstractFacetFactoryTest;
 
-import lombok.val;
-
 class MandatoryFromJdoColumnAnnotationFacetFactoryTest
 extends AbstractFacetFactoryTest {
 
@@ -52,7 +50,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testFeatureTypes() {
-        val featureTypes = facetFactory.getFeatureTypes();
+        var featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
         assertFalse(contains(featureTypes, FeatureType.COLLECTION));
@@ -61,7 +59,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithNoAnnotation_isMandatory() throws Exception {
-        val method = findMethod(cls, "getPrimitiveWithNoAnnotation");
+        var method = findMethod(cls, "getPrimitiveWithNoAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -72,7 +70,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithNoAllowsNull_isMandatory() throws Exception {
-        val method = findMethod(cls, "getPrimitiveWithNoAllowsNull");
+        var method = findMethod(cls, "getPrimitiveWithNoAllowsNull");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -83,7 +81,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithAllowsNullFalse() throws Exception {
-        val method = findMethod(cls, "getPrimitiveWithAllowsNullFalse");
+        var method = findMethod(cls, "getPrimitiveWithAllowsNullFalse");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -94,7 +92,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testPrimitiveWithAllowsNullTrue() throws Exception {
-        val method = findMethod(cls, "getPrimitiveWithAllowsNullTrue");
+        var method = findMethod(cls, "getPrimitiveWithAllowsNullTrue");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -105,7 +103,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithNoAnnotation_isOptional() throws Exception {
-        val method = findMethod(cls, "getReferenceWithNoAnnotation");
+        var method = findMethod(cls, "getReferenceWithNoAnnotation");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -116,7 +114,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithNoAllowsNull_isOptional() throws Exception {
-        val method = findMethod(cls, "getReferenceWithNoAllowsNull");
+        var method = findMethod(cls, "getReferenceWithNoAllowsNull");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -127,7 +125,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithAllowsNullFalse() throws Exception {
-        val method = findMethod(cls, "getReferenceWithAllowsNullFalse");
+        var method = findMethod(cls, "getReferenceWithAllowsNullFalse");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 
@@ -138,7 +136,7 @@ extends AbstractFacetFactoryTest {
     }
 
     public void testReferenceWithAllowsNullTrue() throws Exception {
-        val method = findMethod(cls, "getReferenceWithAllowsNullTrue");
+        var method = findMethod(cls, "getReferenceWithAllowsNullTrue");
         facetFactory.process(ProcessMethodContext
                 .forTesting(cls, null, method, methodRemover, facetedMethod));
 

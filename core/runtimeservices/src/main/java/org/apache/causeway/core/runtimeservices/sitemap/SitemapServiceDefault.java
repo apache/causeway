@@ -48,7 +48,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * Default implementation of {@link SitemapService}.
@@ -70,14 +69,14 @@ public class SitemapServiceDefault implements SitemapService {
     @Override
     public String toSitemapAdoc(final String title) {
 
-        val adoc = new StringBuilder();
+        var adoc = new StringBuilder();
         adoc.append(String.format("= %s\n\n", title));
         adoc.append(":sectnums:\n\n");
 
-        val menuBars = menuBarsService.menuBars(MenuBarsService.Type.DEFAULT);
+        var menuBars = menuBarsService.menuBars(MenuBarsService.Type.DEFAULT);
 
         menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
-            val menuName = _Strings.isNotEmpty(menu.getNamed())
+            var menuName = _Strings.isNotEmpty(menu.getNamed())
                 ? menu.getNamed()
                 : "Unnamed Menu";
 
@@ -85,7 +84,7 @@ public class SitemapServiceDefault implements SitemapService {
 
             _NullSafe.stream(menu.getSections())
             .forEach(menuSection->{
-                val sectionName = _Strings.isNotEmpty(menuSection.getNamed())
+                var sectionName = _Strings.isNotEmpty(menuSection.getNamed())
                         ? menuSection.getNamed()
                         : "Unnamed Section";
                 adoc.append(String.format("=== %s\n\n", sectionName));
@@ -100,8 +99,8 @@ public class SitemapServiceDefault implements SitemapService {
                         adoc.append(String.format("_%s_\n\n", describedAs));
                     });
 
-                    val actionReturnType = menuAction.getReturnType();
-                    val actionElementType = menuAction.getElementType();
+                    var actionReturnType = menuAction.getReturnType();
+                    var actionElementType = menuAction.getElementType();
 
                     if(actionElementType.getCorrespondingClass()==void.class) {
                         adoc.append("WARNING: ");
@@ -112,7 +111,7 @@ public class SitemapServiceDefault implements SitemapService {
                         adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.getLogicalTypeName()));
                     }
 
-                    val groupStack = new Stack<String>();
+                    var groupStack = new Stack<String>();
                     groupStack.push("Top-Bar");
                     final Runnable flushGroupStack = ()->{
                         if(!groupStack.isEmpty()){
@@ -120,7 +119,7 @@ public class SitemapServiceDefault implements SitemapService {
                         }
                     };
 
-                    val grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
+                    var grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
                                 .flatMap(Facets::bootstrapGrid)
                                 .orElse(null);
                     grid.visit(new Grid.VisitorAdapter() {
@@ -128,7 +127,7 @@ public class SitemapServiceDefault implements SitemapService {
                             actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
                             .ifPresent(action->{
                                 flushGroupStack.run();
-                                val describedAs = action.getCanonicalDescription()
+                                var describedAs = action.getCanonicalDescription()
                                     .map(desc->String.format("_%s_", desc))
                                     .orElse("");
                                 adoc.append(String.format("* [ ] Action `%s` %s\n\n",
@@ -140,7 +139,7 @@ public class SitemapServiceDefault implements SitemapService {
                             actionElementType.getProperty(propertyLayoutData.getId())
                             .ifPresent(property->{
                                 flushGroupStack.run();
-                                val describedAs = property.getCanonicalDescription()
+                                var describedAs = property.getCanonicalDescription()
                                         .map(desc->String.format("_%s_", desc))
                                         .orElse("");
                                 adoc.append(String.format("* [ ] Property `%s` %s\n\n",

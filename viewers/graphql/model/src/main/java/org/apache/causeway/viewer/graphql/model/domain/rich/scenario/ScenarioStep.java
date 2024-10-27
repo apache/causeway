@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.graphql.model.domain.common.SchemaStrategy;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainObject;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.CommonDomainService;
 
-import lombok.val;
+
 
 public class ScenarioStep
         extends ElementCustom
@@ -58,7 +58,7 @@ public class ScenarioStep
                 case VIEW_MODEL: // @DomainObject(nature=VIEW_MODEL)
                 case ENTITY:     // @DomainObject(nature=ENTITY)
 
-                    val gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
+                    var gqlvDomainObject = schemaStrategy.domainObjectFor(objectSpec, context);
                     addChildField(gqlvDomainObject.newField());
                     domainObjects.add(gqlvDomainObject);
 

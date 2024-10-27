@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
-import lombok.val;
-
 /**
  * Simply installs a {@link PropertyValidateFacet} onto all properties.
  *
@@ -48,14 +46,14 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        val facetHolder = processMethodContext.getFacetHolder();
+        var facetHolder = processMethodContext.getFacetHolder();
         addFacet(
                 new PropertyValidateFacetDefault(facetHolder));
     }
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        val facetHolder = processParameterContext.getFacetHolder();
+        var facetHolder = processParameterContext.getFacetHolder();
         addFacet(
                 new PropertyValidateFacetDefault(facetHolder));
     }

@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
-import lombok.val;
-
 public class ActionParameterAutoCompleteFacetViaMethodFactory
 extends ActionParameterSupportFacetFactoryAbstract {
 
@@ -43,9 +41,9 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        val autoCompleteMethod = searchResult.getSupportingMethod();
-        val patConstructor = searchResult.getPatConstructor();
-        val paramSupportReturnType = searchResult.getParamSupportReturnType();
+        var autoCompleteMethod = searchResult.getSupportingMethod();
+        var patConstructor = searchResult.getPatConstructor();
+        var paramSupportReturnType = searchResult.getParamSupportReturnType();
         addFacet(
                 new ActionParameterAutoCompleteFacetViaMethod(
                         autoCompleteMethod, paramSupportReturnType, patConstructor, paramAsHolder));

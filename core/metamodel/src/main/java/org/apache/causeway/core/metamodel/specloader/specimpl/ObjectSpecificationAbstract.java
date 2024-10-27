@@ -97,7 +97,6 @@ import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @EqualsAndHashCode(of = "correspondingClass", callSuper = false)
@@ -361,7 +360,7 @@ implements ObjectSpecification {
         }
         // downcast required because addSubclass is (deliberately) not public
         // API
-        val introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
+        var introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
         introspectableSpec.updateSubclasses(this);
     }
 
@@ -376,7 +375,7 @@ implements ObjectSpecification {
     }
 
     protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
-        val orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
+        var orderedAssociations = _MemberSortingUtils.sortAssociationsIntoList(associations);
         synchronized (unmodifiableAssociations) {
             this.associations.clear();
             this.associations.addAll(orderedAssociations);
@@ -385,15 +384,15 @@ implements ObjectSpecification {
     }
 
     protected final void replaceActions(final Stream<ObjectAction> objectActions) {
-        val orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
+        var orderedActions = _MemberSortingUtils.sortActionsIntoList(objectActions);
         synchronized (unmodifiableActions){
             this.objectActions.clear();
             this.objectActions.addAll(orderedActions);
             unmodifiableActions.clear(); // invalidate
 
             // rebuild objectActionsByType multi-map
-            for (val actionType : ActionScope.values()) {
-                val objectActionForType = objectActionsByType.getOrElseNew(actionType);
+            for (var actionType : ActionScope.values()) {
+                var objectActionForType = objectActionsByType.getOrElseNew(actionType);
                 objectActionForType.clear();
                 orderedActions.stream()
                 .filter(ObjectAction.Predicates.ofActionType(actionType))
@@ -451,13 +450,13 @@ implements ObjectSpecification {
     @Override
     public String getTitle(final TitleRenderRequest titleRenderRequest) {
         if (titleFacet != null) {
-            val titleString = titleFacet.title(titleRenderRequest);
+            var titleString = titleFacet.title(titleRenderRequest);
             if (!_Strings.isEmpty(titleString)) {
                 notifySubscribersIfEntity(titleRenderRequest, titleString);
                 return titleString;
             }
         }
-        val prefix = this.isInjectable()
+        var prefix = this.isInjectable()
                 ? ""
                 : "Untitled ";
         return prefix + getSingularName();
@@ -469,7 +468,7 @@ implements ObjectSpecification {
         if (!isEntity()) {
             return;
         }
-        val managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.getObject();
         managedObject.getBookmark().ifPresent(bookmark -> {
             getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
         });
@@ -487,7 +486,7 @@ implements ObjectSpecification {
 
     @Override
     public ObjectIcon getIcon(final ManagedObject domainObject) {
-        val iconNameModifier = getIconName(domainObject);
+        var iconNameModifier = getIconName(domainObject);
         return getObjectIconService().getObjectIcon(this, iconNameModifier);
     }
 
@@ -527,8 +526,8 @@ implements ObjectSpecification {
     @Override
     public boolean isOfType(final ObjectSpecification other) {
 
-        val thisClass = this.getCorrespondingClass();
-        val otherClass = other.getCorrespondingClass();
+        var thisClass = this.getCorrespondingClass();
+        var otherClass = other.getCorrespondingClass();
 
         return thisClass == otherClass
                 || otherClass.isAssignableFrom(thisClass);
@@ -537,8 +536,8 @@ implements ObjectSpecification {
     @Override
     public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
 
-        val thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
-        val otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
+        var thisClass = ClassUtils.resolvePrimitiveIfNecessary(this.getCorrespondingClass());
+        var otherClass = ClassUtils.resolvePrimitiveIfNecessary(other.getCorrespondingClass());
 
         return thisClass == otherClass
                 || otherClass.isAssignableFrom(thisClass);
@@ -574,7 +573,7 @@ implements ObjectSpecification {
      */
     @Override
     public String getHelp() {
-        val helpFacet = getFacet(HelpFacet.class);
+        var helpFacet = getFacet(HelpFacet.class);
         return helpFacet == null ? null : helpFacet.value();
     }
 
@@ -592,20 +591,20 @@ implements ObjectSpecification {
         synchronized(unmodifiableInterfaces) {
 
             // lookup facet holder's facet
-            val facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
+            var facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
 
             // lookup all interfaces
-            val facets2 = _NullSafe.stream(interfaces())
+            var facets2 = _NullSafe.stream(interfaces())
                     .filter(_NullSafe::isPresent) // just in case
                     .map(interfaceSpec->interfaceSpec.getFacet(facetType));
 
             // search up the inheritance hierarchy
-            val facets3 = _NullSafe.streamNullable(superclass())
+            var facets3 = _NullSafe.streamNullable(superclass())
                     .map(superSpec->superSpec.getFacet(facetType));
 
-            val facetsCombined = _Streams.concat(facets1, facets2, facets3);
+            var facetsCombined = _Streams.concat(facets1, facets2, facets3);
 
-            val notANoopFacetFilter = new NotANoopFacetFilter<Q>();
+            var notANoopFacetFilter = new NotANoopFacetFilter<Q>();
 
             return facetsCombined
                     .filter(notANoopFacetFilter)
@@ -681,7 +680,7 @@ implements ObjectSpecification {
             final ObjectSpecification objectSpecification,
             final Subclasses appendTo) {
 
-        val directSubclasses = objectSpecification.subclasses(Depth.DIRECT);
+        var directSubclasses = objectSpecification.subclasses(Depth.DIRECT);
         for (ObjectSpecification subclass : directSubclasses) {
             appendTo.addSubclass(subclass);
             appendSubclasses(subclass, appendTo);
@@ -716,11 +715,11 @@ implements ObjectSpecification {
             return Optional.empty();
         }
 
-        val objectAction = getAction(memberId);
+        var objectAction = getAction(memberId);
         if(objectAction.isPresent()) {
             return objectAction;
         }
-        val association = getAssociation(memberId);
+        var association = getAssociation(memberId);
         if(association.isPresent()) {
             return association;
         }
@@ -742,7 +741,7 @@ implements ObjectSpecification {
 
     @Override
     public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
-        val actionScopes = ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment());
+        var actionScopes = ActionScope.forEnvironment(getMetaModelContext().getSystemEnvironment());
         return streamActions(actionScopes, mixedIn);
     }
 
@@ -773,13 +772,13 @@ implements ObjectSpecification {
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
 
-        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
+        var mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
         }
-        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
+        var mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
@@ -787,7 +786,7 @@ implements ObjectSpecification {
         if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
             return Stream.empty();
         }
-        val mixinMethodName = mixinFacet.getMainMethodName();
+        var mixinMethodName = mixinFacet.getMainMethodName();
 
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
@@ -807,13 +806,13 @@ implements ObjectSpecification {
 
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
-        val mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
+        var mixinSpec = getSpecificationLoader().loadSpecification(mixinType,
                 IntrospectionState.FULLY_INTROSPECTED);
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
         }
-        val mixinFacet = mixinSpec.mixinFacet().orElse(null);
+        var mixinFacet = mixinSpec.mixinFacet().orElse(null);
         if(mixinFacet == null) {
             // this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
@@ -827,7 +826,7 @@ implements ObjectSpecification {
             return Stream.empty();
         }
 
-        val mixinMethodName = mixinFacet.getMainMethodName();
+        var mixinMethodName = mixinFacet.getMainMethodName();
 
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         // value types only support constructor mixins
@@ -864,7 +863,7 @@ implements ObjectSpecification {
     public InteractionResult isValidResult(
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        val validityContext =
+        var validityContext =
                 createValidityInteractionContext(
                         targetAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
@@ -905,20 +904,20 @@ implements ObjectSpecification {
      * one-shot: must be no-op, if already created
      */
     private void createMixedInActionsAndResort() {
-        val include = isEntityOrViewModelOrAbstract()
+        var include = isEntityOrViewModelOrAbstract()
                 || getBeanSort().isManagedBeanContributing()
                 // in support of composite value-type constructor mixins
                 || getBeanSort().isValue();
         if(!include) {
             return;
         }
-        val mixedInActions = createMixedInActions()
+        var mixedInActions = createMixedInActions()
                 .collect(Collectors.toList());
         if(mixedInActions.isEmpty()) {
            return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
         }
 
-        val regularActions = _Lists.newArrayList(objectActions); // defensive copy
+        var regularActions = _Lists.newArrayList(objectActions); // defensive copy
 
         // note: we are doing this before any member sorting
         _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularActions, mixedInActions);
@@ -935,13 +934,13 @@ implements ObjectSpecification {
         if(!isEntityOrViewModelOrAbstract()) {
             return;
         }
-        val mixedInAssociations = createMixedInAssociations()
+        var mixedInAssociations = createMixedInAssociations()
                 .collect(Collectors.toList());
         if(mixedInAssociations.isEmpty()) {
            return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
         }
 
-        val regularAssociations = _Lists.newArrayList(associations); // defensive copy
+        var regularAssociations = _Lists.newArrayList(associations); // defensive copy
 
         // note: we are doing this before any member sorting
         _MemberIdClashReporting.flagAnyMemberIdClashes(this, regularAssociations, mixedInAssociations);

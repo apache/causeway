@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.graphql.model.registry.GraphQLTypeRegistry;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Component
 @RequiredArgsConstructor
@@ -90,7 +89,7 @@ public class Context {
     }
 
     public List<ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
-        val includeEntities = causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
+        var includeEntities = causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
         return specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
                 .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
@@ -115,7 +114,7 @@ public class Context {
     }
 
     private GraphQLEnumType doComputeLogicalTypeNames() {
-        val entitiesOrViewModels = objectSpecifications(ObjectSpecification::isEntityOrViewModel);
+        var entitiesOrViewModels = objectSpecifications(ObjectSpecification::isEntityOrViewModel);
         return newEnum()
                 .name("logicalTypeNames__gqlv_enum")  // TODO: look this up from causeway configuration?
                 .values(entitiesOrViewModels.stream()

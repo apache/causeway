@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 
 import lombok.NonNull;
-import lombok.val;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -56,8 +56,8 @@ final class _Utils {
             final @NonNull MetaModelContext mmc,
             final @NonNull Object entityPojo) {
 
-        val objectManager = mmc.getObjectManager();
-        val entity = objectManager.adapt(entityPojo);
+        var objectManager = mmc.getObjectManager();
+        var entity = objectManager.adapt(entityPojo);
         _Assert.assertTrue(entity.getSpecification().isEntity());
         return entity;
     }

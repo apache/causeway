@@ -48,8 +48,6 @@ import org.apache.causeway.schema.cmd.v2.CommandsDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 import org.apache.causeway.schema.common.v2.InteractionType;
 
-import lombok.val;
-
 /**
  * Provides supporting functionality for querying {@link CommandLogEntry command log entry} entities.
  *
@@ -154,8 +152,8 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
             final @Nullable LocalDate from,
             final @Nullable LocalDate to) {
 
-        val fromTs = toTimestampStartOfDayWithOffset(from, 0);
-        val toTs = toTimestampStartOfDayWithOffset(to, 1);
+        var fromTs = toTimestampStartOfDayWithOffset(from, 0);
+        var toTs = toTimestampStartOfDayWithOffset(to, 1);
 
         final Query<C> query;
         if(from != null) {
@@ -375,7 +373,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
         commandJdo.setReplayState(ReplayState.PENDING);
 
-        val firstTargetOidDto = dto.getTargets().getOid().get(0);
+        var firstTargetOidDto = dto.getTargets().getOid().get(0);
         commandJdo.setTarget(Bookmark.forOidDto(firstTargetOidDto));
         commandJdo.setCommandDto(dto);
         commandJdo.setLogicalMemberIdentifier(dto.getMember().getLogicalMemberIdentifier());
@@ -387,9 +385,9 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
 
     public List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto) {
-        val commandDtos = commandsDto.getCommandDto();
-        val commands = new ArrayList<CommandLogEntry>();
-        for (val dto : commandDtos) {
+        var commandDtos = commandsDto.getCommandDto();
+        var commands = new ArrayList<CommandLogEntry>();
+        for (var dto : commandDtos) {
             commands.add(saveForReplay(dto));
         }
         return commands;
@@ -424,7 +422,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
 
     private C findByInteractionIdElseNull(final UUID interactionId) {
-        val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
+        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BY_INTERACTION_ID)
                 .withParameter("interactionId", interactionId);
         return repositoryService().uniqueMatch(q).orElse(null);
     }
@@ -435,9 +433,9 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
 
         // DN generates incorrect SQL for SQL Server if count set to 1; so we set to 2 and then trim
         // XXX that's a historic workaround, should rather be fixed upstream
-        val needsTrimFix = batchSize != null && batchSize == 1;
+        var needsTrimFix = batchSize != null && batchSize == 1;
 
-        val q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
+        var q = Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_SINCE)
                 .withParameter("timestamp", timestamp)
                 .withRange(QueryRange.limit(
                         needsTrimFix ? 2L : batchSize

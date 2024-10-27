@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
+
 
 public class SimplePropertyLobChars extends SimplePropertyLobAbstract {
 
@@ -42,9 +42,9 @@ public class SimplePropertyLobChars extends SimplePropertyLobAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
+        var bookmarkIfAny = context.bookmarkService.bookmarkFor(sourcePojo);
         return bookmarkIfAny.map(x -> {
             final ObjectFeature objectFeature = memberInteractor.getObjectMember();
             return String.format(

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.action.UiActionForm;
 
-import lombok.val;
+
 
 public interface ActionModel
 extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
@@ -41,7 +41,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
 
     @Override
     default PromptStyle getPromptStyle() {
-        val promptStyle = getAction().getPromptStyle();
+        var promptStyle = getAction().getPromptStyle();
         return promptStyle;
     }
 

@@ -46,7 +46,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 
 import lombok.Getter;
-import lombok.val;
 
 /**
  * Exposes a domain object (view model or entity) via the GQL viewer.
@@ -88,7 +87,7 @@ public class CommonDomainObject
 
         addChildFieldFor(this.meta = schemaStrategy.newMeta(this, context));
 
-        val inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification, getSchemaType()));
+        var inputObjectTypeBuilder = newInputObject().name(TypeNames.inputTypeNameFor(objectSpecification, getSchemaType()));
         inputObjectTypeBuilder
                 .field(newInputObjectField()
                         .name("id")
@@ -116,7 +115,7 @@ public class CommonDomainObject
 
         addMembers();
 
-        val objectType = buildObjectType();
+        var objectType = buildObjectType();
 
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(objectType);
         context.graphQLTypeRegistry.addTypeIfNotAlreadyPresent(gqlInputObjectType);
@@ -133,7 +132,7 @@ public class CommonDomainObject
     public GraphQLFieldDefinition newField() {
 
         // add domain object lookup to top-level query
-        val fieldName = String.format("%s%s%s",
+        var fieldName = String.format("%s%s%s",
                 graphqlConfiguration.getLookup().getFieldNamePrefix(),  // eg "_gqlv_lookup__"
                 TypeNames.objectTypeFieldNameFor(objectSpecification),
                 graphqlConfiguration.getLookup().getFieldNameSuffix());
@@ -145,7 +144,7 @@ public class CommonDomainObject
             final String fieldName,
             final GraphQLInputObjectType gqlInputObjectType
     ) {
-        val objectSpec = getObjectSpecification();
+        var objectSpec = getObjectSpecification();
 
         return newFieldDefinition()
                 .name(fieldName)

@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.util.pchain.ParentChain;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
-import lombok.val;
+
 
 /**
  *
@@ -49,11 +49,11 @@ public class WhereAmIHelper {
         this.startOfChain = startOfChain;
         this.commonContext = startOfChain.getMetaModelContext();
 
-        val settings = commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs();
+        var settings = commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs();
         this.isWhereAmIEnabled = settings.isEnabled();
         int maxChainLength = settings.getMaxParentChainLength();
 
-        val adapter = startOfChain.getObject();
+        var adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
 
         ParentChain.of(commonContext.getSpecificationLoader())
@@ -95,7 +95,7 @@ public class WhereAmIHelper {
     // -- HELPER
 
     private UiObjectWkt toEntityModel(final Object domainObject) {
-        val objectAdapter = commonContext.getObjectManager().adapt(domainObject);
+        var objectAdapter = commonContext.getObjectManager().adapt(domainObject);
         return UiObjectWkt.ofAdapter(objectAdapter);
     }
 

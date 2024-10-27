@@ -33,8 +33,6 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
 
-import lombok.val;
-
 @Service
 @Named(TimestampService.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
@@ -49,7 +47,7 @@ public class TimestampService {
     @EventListener(PreStoreEvent.class)
     public void onPreStore(PreStoreEvent event) {
 
-        val persistableObject = event.getPersistableObject();
+        var persistableObject = event.getPersistableObject();
 
         if(persistableObject instanceof OnUpdatedBy) {
             ((OnUpdatedBy)persistableObject).setUpdatedBy(userService.currentUserNameElseNobody());

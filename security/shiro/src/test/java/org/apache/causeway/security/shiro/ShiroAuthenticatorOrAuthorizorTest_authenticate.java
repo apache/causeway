@@ -40,8 +40,6 @@ import org.apache.causeway.core.security.authentication.AuthenticationRequestPas
 import org.apache.causeway.security.shiro.authentication.AuthenticatorShiro;
 import org.apache.causeway.security.shiro.authorization.AuthorizorShiro;
 
-import lombok.val;
-
 class ShiroAuthenticatorOrAuthorizorTest_authenticate {
 
     private AuthenticatorShiro authenticator;
@@ -50,7 +48,7 @@ class ShiroAuthenticatorOrAuthorizorTest_authenticate {
     @BeforeEach
     public void setUp() throws Exception {
 
-         val configuration = CausewayConfiguration.builder().build();
+         var configuration = CausewayConfiguration.builder().build();
         configuration.getSecurity().getShiro().setAutoLogoutIfAlreadyAuthenticated(false);
 
         authenticator = new AuthenticatorShiro(configuration);
@@ -84,7 +82,7 @@ class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        val authentication = authenticator.authenticate(ar, "test code");
+        var authentication = authenticator.authenticate(ar, "test code");
 
         assertThat(authentication, is(not(nullValue())));
         assertThat(authentication.getUser().getName(), is("lonestarr"));

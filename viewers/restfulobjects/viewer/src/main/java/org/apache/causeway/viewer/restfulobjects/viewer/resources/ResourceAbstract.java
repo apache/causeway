@@ -55,7 +55,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
+
 
 public abstract class ResourceAbstract
 implements HasMetaModelContext {
@@ -94,7 +94,7 @@ implements HasMetaModelContext {
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
 
-        val urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
+        var urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
         return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
 
@@ -111,10 +111,10 @@ implements HasMetaModelContext {
                                     .orElseGet(()->uriInfo.getBaseUri().toString());
 
         // eg. /ctx/restful/
-        val restfulRelativeBase = uriInfo.getBaseUri().getRawPath();
+        var restfulRelativeBase = uriInfo.getBaseUri().getRawPath();
 
         // eg. http://localhost:8080/
-        val serverAbsoluteBase =
+        var serverAbsoluteBase =
                 _Strings
                 .suffix(TextUtils.cutter(restfulAbsoluteBase)
                         .keepAfterLast(restfulRelativeBase)
@@ -122,7 +122,7 @@ implements HasMetaModelContext {
                 "/");
 
         // eg. http://localhost:8080/ctx/
-        val applicationAbsoluteBase = _Strings
+        var applicationAbsoluteBase = _Strings
                 .suffix(webAppContextPath.appendContextPath(serverAbsoluteBase), "/");
 
         return resourceContext(
@@ -149,7 +149,7 @@ implements HasMetaModelContext {
             final @NonNull UnaryOperator<RestfulObjectsApplicationException> onRoException) {
         final String instanceIdDecoded = UrlDecoderUtils.urlDecode(instanceIdEncoded);
 
-        val bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
+        var bookmark = Bookmark.forLogicalTypeNameAndIdentifier(domainType, instanceIdDecoded);
         return metaModelContext.getObjectManager().loadObject(bookmark) // might return ManagedObject.EMPTY
                 .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                 .orElseThrow(()->onRoException.apply(

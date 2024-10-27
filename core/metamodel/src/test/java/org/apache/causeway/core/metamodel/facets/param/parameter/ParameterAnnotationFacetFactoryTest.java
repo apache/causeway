@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.maxlen.MaxLengt
 import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 
-import lombok.val;
+
 
 @SuppressWarnings("unused")
 class ParameterAnnotationFacetFactoryTest
@@ -217,7 +217,7 @@ extends FacetFactoryTestAbstract {
                 assertNotNull(mustSatisfySpecificationFacet);
                 assertTrue(mustSatisfySpecificationFacet instanceof MustSatisfySpecificationFacetForParameterAnnotation);
                 MustSatisfySpecificationFacetForParameterAnnotation mustSatisfySpecificationFacetImpl = (MustSatisfySpecificationFacetForParameterAnnotation) mustSatisfySpecificationFacet;
-                val specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
+                var specifications = mustSatisfySpecificationFacetImpl.getSpecifications();
                 assertThat(specifications.size(), is(2));
 
                 assertTrue(specifications.getElseFail(0) instanceof NotTooHot);

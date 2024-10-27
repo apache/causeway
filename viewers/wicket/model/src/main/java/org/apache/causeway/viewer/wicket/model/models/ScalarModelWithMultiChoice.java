@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -68,12 +67,12 @@ implements
     @Override
     public ArrayList<ObjectMemento> getObject() {
 
-        val packedValue = pendingValue().getValue().getValue();
-        val unpackedValues = ManagedObjects.unpack(packedValue);
+        var packedValue = pendingValue().getValue().getValue();
+        var unpackedValues = ManagedObjects.unpack(packedValue);
 
         log.debug("getObject() as unpackedValue {}", unpackedValues);
 
-        val mementos = unpackedValues.stream()
+        var mementos = unpackedValues.stream()
         .map(ManagedObject::getMementoElseFail)
         .collect(Collectors.toCollection(()->new ArrayList<ObjectMemento>()));
 
@@ -84,8 +83,8 @@ implements
     @Override
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
-        val logicalType = scalarModel().getElementType().getLogicalType();
-        val packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
+        var logicalType = scalarModel().getElementType().getLogicalType();
+        var packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }
 

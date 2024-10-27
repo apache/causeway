@@ -60,7 +60,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.val;
+
 
 @Component
 @Import({
@@ -218,11 +218,11 @@ extends PublishingTestFactoryAbstract {
                 // when
                 context.changeProperty(()->{
 
-                    val bookAdapter = objectManager.adapt(book);
-                    val propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
-                    val managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-                    val propertyModel = managedProperty.startNegotiation();
-                    val propertySpec = managedProperty.getElementType();
+                    var bookAdapter = objectManager.adapt(book);
+                    var propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
+                    var managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+                    var propertyModel = managedProperty.startNegotiation();
+                    var propertySpec = managedProperty.getElementType();
                     propertyModel.getValue().setValue(ManagedObject.value(propertySpec, "Book #2"));
                     propertyModel.submit();
 
@@ -240,10 +240,10 @@ extends PublishingTestFactoryAbstract {
                 // when
                 context.executeAction(()->{
 
-                    val bookAdapter = objectManager.adapt(book);
+                    var bookAdapter = objectManager.adapt(book);
 
-                    val actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
-                    val managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
+                    var actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
+                    var managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
                     // this test action is always disabled, so don't enforce rules here, just invoke
                     managedAction.invoke(Can.empty()); // no-arg action
                 });
@@ -274,7 +274,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                var syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
                 context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
 
             });
@@ -287,7 +287,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                var syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
                 context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
 
             });
@@ -314,7 +314,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                var syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
                 //assertThrows(DisabledException.class, ()->{
                     wrapper.wrap(book, syncControl).setName("Book #2"); // should throw DisabledException
@@ -330,7 +330,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                val syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                var syncControl = SyncControl.control().withCheckRules(); // enforce rules
 
                 //assertThrows(DisabledException.class, ()->{
                     wrapper.wrap(book, syncControl).doubleThePrice(); // should throw DisabledException
@@ -354,7 +354,7 @@ extends PublishingTestFactoryAbstract {
         context.bind(commitListener);
 
         // given
-        val asyncControl = returningVoid().withSkipRules(); // don't enforce rules
+        var asyncControl = returningVoid().withSkipRules(); // don't enforce rules
 
         // when
 
@@ -382,7 +382,7 @@ extends PublishingTestFactoryAbstract {
         withBookDo(book->{
 
             // when - running synchronous
-            val asyncControl = returningVoid().withCheckRules(); // enforce rules
+            var asyncControl = returningVoid().withCheckRules(); // enforce rules
 
             //assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
@@ -398,20 +398,20 @@ extends PublishingTestFactoryAbstract {
 
     private void setupBookForJpa() {
 
-        val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+        var em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
         // cleanup
         fixtureScripts.runPersona(JpaTestDomainPersona.InventoryPurgeAll);
 
         // given Inventory with 1 Book
 
-        val products = new HashSet<JpaProduct>();
+        var products = new HashSet<JpaProduct>();
 
-        val detachedNewBook = JpaBook.fromDto(BookDto.sample());
+        var detachedNewBook = JpaBook.fromDto(BookDto.sample());
 
         products.add(detachedNewBook);
 
-        val inventory = JpaInventory.of("Sample Inventory", products);
+        var inventory = JpaInventory.of("Sample Inventory", products);
         em.persist(inventory);
 
         inventory.getProducts().forEach(product->{
@@ -429,9 +429,9 @@ extends PublishingTestFactoryAbstract {
     @SneakyThrows
     private void withBookDo(final CheckedConsumer<JpaBook> bookConsumer) {
 
-        //val em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
+        //var em = jpaSupport.getEntityManagerElseFail(JpaBook.class);
 
-        val book = repository.allInstances(JpaBook.class).listIterator().next();
+        var book = repository.allInstances(JpaBook.class).listIterator().next();
         bookConsumer.accept(book);
 
         //em.flush(); // in effect makes changes visible during PRE_COMMIT

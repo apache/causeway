@@ -39,7 +39,6 @@ import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.d3js.ObjectGraph
 import org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml.ObjectGraphRendererPlantuml;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @Component
 @Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".EntityDiagramPageAbstract")
@@ -52,7 +51,7 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
     public AsciiDoc getContent() {
         return new AsciiDocBuilder()
                 .append(doc->{
-                    val mainBlock = AsciiDocFactory.block(doc);
+                    var mainBlock = AsciiDocFactory.block(doc);
                     _Strings.nonEmpty(diagramTitle())
                         .ifPresent(mainBlock::setTitle);
                     mainBlock.setSource(renderObjectGraph(createObjectGraph()));
@@ -77,7 +76,7 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
      * Creates the diagram model. Can be overwritten to customize.
      */
     protected ObjectGraph createObjectGraph() {
-        val objectGraph = metaModelService.exportObjectGraph(this::accept)
+        var objectGraph = metaModelService.exportObjectGraph(this::accept)
                 .transform(ObjectGraph.Transformers.relationMerger());
         return objectGraph;
     }
@@ -86,7 +85,7 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
      * Can be used by sub class when implementing {@link #renderObjectGraph(ObjectGraph)}.
      */
     protected String renderObjectGraphUsingD3js(final ObjectGraph objectGraph) {
-        val d3jsSourceAsHtml = objectGraph.render(
+        var d3jsSourceAsHtml = objectGraph.render(
                 new ObjectGraphRendererD3js(GraphRenderOptions.builder().build()));
         return new AsciiDocBuilder()
                 .append(doc->AsciiDocFactory.htmlPassthroughBlock(doc, d3jsSourceAsHtml))
@@ -102,7 +101,7 @@ public abstract class EntityDiagramPageAbstract implements HelpPage {
      * Can be used by sub class when implementing {@link #renderObjectGraph(ObjectGraph)}.
      */
     protected String renderObjectGraphUsingPlantuml(final ObjectGraph objectGraph) {
-        val plantumlSource = objectGraph.render(new ObjectGraphRendererPlantuml());
+        var plantumlSource = objectGraph.render(new ObjectGraphRendererPlantuml());
         return _DiagramUtils.plantumlBlock(plantumlSource)
             + "\n"
             + _DiagramUtils.plantumlSourceBlock(plantumlSource);

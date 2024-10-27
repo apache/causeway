@@ -40,7 +40,6 @@ import org.apache.causeway.schema.metamodel.v2.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.val;
 
 @Named(ActionNode.LOGICAL_TYPE_NAME)
 @DomainObject(
@@ -60,7 +59,7 @@ public class ActionNode extends MemberNode {
 
     @Override
     public String createTitle() {
-        val title = lookupTitleAnnotation().map(Annotation::getValue)
+        var title = lookupTitleAnnotation().map(Annotation::getValue)
                 .orElseGet(()->
                     String.format("%s(...): %s%s",
                             action.getId(),

@@ -26,7 +26,6 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.val;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,16 +40,16 @@ final class _LogUtil {
             return;
         }
 
-        val cached = cache.snapshotSpecs();
+        var cached = cache.snapshotSpecs();
 
         log.debug(String.format(
                 "scanned.size = %d ; cached.size = %d",
                 scanned.size(), cached.size()));
 
-        val registryNotCached = scanned.stream()
+        var registryNotCached = scanned.stream()
                 .filter(spec -> !cached.contains(spec))
                 .collect(Collectors.toList());
-        val cachedNotRegistry = cached.stream()
+        var cachedNotRegistry = cached.stream()
                 .filter(spec -> !scanned.contains(spec))
                 .collect(Collectors.toList());
 
@@ -68,8 +67,8 @@ final class _LogUtil {
             return;
         }
 
-        val cached = cache.snapshotSpecs();
-        val cachedAfterNotBefore = cached.stream()
+        var cached = cache.snapshotSpecs();
+        var cachedAfterNotBefore = cached.stream()
                 .filter(spec -> !scanned.contains(spec))
                 .collect(Collectors.toList());
 

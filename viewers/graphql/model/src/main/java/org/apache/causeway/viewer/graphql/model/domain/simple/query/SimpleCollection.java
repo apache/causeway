@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ObjectInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.val;
+
 
 public class SimpleCollection
         extends Element {
@@ -46,7 +46,7 @@ public class SimpleCollection
         this.objectInteractor = objectInteractor;
         this.objectMember = otma;
 
-        val objectType = this.context.typeMapper.listTypeForElementTypeOf(otma, objectInteractor.getSchemaType());
+        var objectType = this.context.typeMapper.listTypeForElementTypeOf(otma, objectInteractor.getSchemaType());
         if(objectType != null) {
             setField(newFieldDefinition()
                         .name(getId())
@@ -66,18 +66,18 @@ public class SimpleCollection
     @Override
     protected Object fetchData(final DataFetchingEnvironment environment) {
 
-        val sourcePojo = BookmarkedPojo.sourceFrom(environment);
+        var sourcePojo = BookmarkedPojo.sourceFrom(environment);
 
-        val sourcePojoClass = sourcePojo.getClass();
-        val objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
+        var sourcePojoClass = sourcePojo.getClass();
+        var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
         if (objectSpecification == null) {
             // not expected
             return null;
         }
 
-        val otma = objectMember;
-        val managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-        val resultManagedObject = otma.get(managedObject);
+        var otma = objectMember;
+        var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var resultManagedObject = otma.get(managedObject);
 
         return resultManagedObject != null
                 ? resultManagedObject.getPojo()

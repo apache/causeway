@@ -38,8 +38,6 @@ import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.val;
-
 abstract class SpecificationLoaderTestAbstract {
 
     protected MetaModelContext metaModelContext;
@@ -79,7 +77,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     @Test
     public void testNamedFaced() throws Exception {
-        val facet =
+        var facet =
 
                 specification.lookupFacet(ObjectNamedFacet.class)
                 .map(Facet.class::cast)
@@ -91,7 +89,7 @@ abstract class SpecificationLoaderTestAbstract {
 
     @Test @Disabled("we allow descriptions to be absent - no need to install empty fallbacks")
     public void testDescriptionFacet() throws Exception {
-        val facet =
+        var facet =
 
                 specification.lookupFacet(ObjectDescribedFacet.class)
                 .map(Facet.class::cast)

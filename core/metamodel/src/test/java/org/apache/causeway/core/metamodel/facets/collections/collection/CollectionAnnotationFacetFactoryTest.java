@@ -59,7 +59,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 class CollectionAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
@@ -68,13 +67,13 @@ extends FacetFactoryTestAbstract {
 
     private static void processDomainEvent(
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = facetFactory.collectionIfAny(processMethodContext);
+        var collectionIfAny = facetFactory.collectionIfAny(processMethodContext);
         facetFactory.processDomainEvent(processMethodContext, collectionIfAny);
     }
 
     private static void processTypeOf(
             final CollectionAnnotationFacetFactory facetFactory, final FacetFactory.ProcessMethodContext processMethodContext) {
-        val collectionIfAny = facetFactory.collectionIfAny(processMethodContext);
+        var collectionIfAny = facetFactory.collectionIfAny(processMethodContext);
         facetFactory.processTypeOf(processMethodContext, collectionIfAny);
     }
 
@@ -92,7 +91,7 @@ extends FacetFactoryTestAbstract {
     static class DomainEventTests extends CollectionAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            val mockOnType = Mockito.mock(ObjectSpecification.class);
+            var mockOnType = Mockito.mock(ObjectSpecification.class);
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
                 public Object getProperty(
@@ -107,7 +106,7 @@ extends FacetFactoryTestAbstract {
                 final FacetedMethod facetedMethod,
                 final EventTypeOrigin eventTypeOrigin,
                 final Class<? extends CollectionDomainEvent<?,?>> eventType) {
-            val domainEventFacet = facetedMethod.lookupFacet(CollectionDomainEventFacet.class).orElseThrow();
+            var domainEventFacet = facetedMethod.lookupFacet(CollectionDomainEventFacet.class).orElseThrow();
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
         }
@@ -215,7 +214,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         void withCollectionDomainEvent_mixedIn_annotatedOnMethod() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             class Order {
             }
@@ -248,7 +247,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         void withCollectionDomainEvent_mixedIn_annotatedOnMixedInType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             class Order {
             }
@@ -281,7 +280,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         void withCollectionDomainEvent_mixedIn_annotatedOnMixeeType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             class Order {
             }
@@ -315,7 +314,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         void withCollectionDomainEvent_mixedIn_annotatedOnMixeeAndMixedInType() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             class Order {
             }
@@ -350,7 +349,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         void withCollectionDomainEvent_mixedIn_annotatedOnMixeeTypeAndMixedInMethod() {
-            val postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
+            var postProcessor = new SynthesizeDomainEventsForMixinPostProcessor(getMetaModelContext());
 
             class Order {
             }

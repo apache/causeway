@@ -35,8 +35,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.val;
-
 @Component
 @Named("causeway.metamodel.value.LocalResourcePathValueSemantics")
 @Priority(PriorityPrecedence.LATE)
@@ -81,7 +79,7 @@ implements
     }
 
     private String toHtmlLink(final LocalResourcePath path) {
-        val href = path.getValue();
+        var href = path.getValue();
         return String.format("<a "
                 + "target=\"_blank\" "
                 + "class=\"no-click-bubbling\" "
@@ -98,7 +96,7 @@ implements
 
     @Override
     public LocalResourcePath parseTextRepresentation(final Context context, final String text) {
-        val input = _Strings.blankToNullOrTrim(text);
+        var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
             return null;
         }

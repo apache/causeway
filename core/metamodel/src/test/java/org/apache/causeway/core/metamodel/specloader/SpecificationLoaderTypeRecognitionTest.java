@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 
 import lombok.Getter;
-import lombok.val;
 
 class SpecificationLoaderTypeRecognitionTest
 implements HasMetaModelContext {
@@ -70,7 +69,7 @@ implements HasMetaModelContext {
     })
     void singularType(final Class<?> typeUnderTest) {
         // given
-        val specification = getSpecificationLoader().loadSpecification(typeUnderTest);
+        var specification = getSpecificationLoader().loadSpecification(typeUnderTest);
         // then
         assertTrue(specification.isSingular());
         assertEquals(typeUnderTest.getName(), specification.getFullIdentifier());
@@ -81,7 +80,7 @@ implements HasMetaModelContext {
         final TypeOfFacet typeOfFacet = specification.getFacet(TypeOfFacet.class);
         assertNull(typeOfFacet);
 
-        val namedFacet = specification.lookupFacet(ObjectNamedFacet.class)
+        var namedFacet = specification.lookupFacet(ObjectNamedFacet.class)
                 .map(Facet.class::cast)
                 .or(()->specification.lookupFacet(MemberNamedFacet.class))
                 .orElse(null);
@@ -99,26 +98,26 @@ implements HasMetaModelContext {
     })
     void pluralType(final Class<?> typeUnderTest) {
         // given
-        val specification = getSpecificationLoader().loadSpecification(typeUnderTest);
+        var specification = getSpecificationLoader().loadSpecification(typeUnderTest);
 
         // then
         assertTrue(specification.isPlural());
 
-        val containerType = typeUnderTest.isArray()
+        var containerType = typeUnderTest.isArray()
                 ? java.lang.reflect.Array.class
                 : typeUnderTest;
 
         assertEquals(containerType.getName(), specification.getFullIdentifier());
 
-        val collectionFacet = specification.getFacet(CollectionFacet.class);
+        var collectionFacet = specification.getFacet(CollectionFacet.class);
         assertNotNull(collectionFacet);
 
-        val typeOfFacet = specification.getFacet(TypeOfFacet.class);
+        var typeOfFacet = specification.getFacet(TypeOfFacet.class);
         assertNotNull(typeOfFacet);
         assertEquals(Optional.of(containerType), typeOfFacet.value().containerType());
         assertEquals(Object.class, typeOfFacet.value().elementType());
 
-        val namedFacet = specification.lookupFacet(ObjectNamedFacet.class)
+        var namedFacet = specification.lookupFacet(ObjectNamedFacet.class)
                 .map(Facet.class::cast)
                 .or(()->specification.lookupFacet(MemberNamedFacet.class))
                 .orElse(null);

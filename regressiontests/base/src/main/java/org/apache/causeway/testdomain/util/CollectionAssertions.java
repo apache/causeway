@@ -32,14 +32,14 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
+
 
 public final class CollectionAssertions {
 
     public static void assertComponentWiseEquals(final Object a, final Object b) {
-        val array1 = _NullSafe.streamAutodetect(a)
+        var array1 = _NullSafe.streamAutodetect(a)
             .collect(_Arrays.toArray(Object.class));
-        val array2 = _NullSafe.streamAutodetect(b)
+        var array2 = _NullSafe.streamAutodetect(b)
             .collect(_Arrays.toArray(Object.class));
 
         assertArrayEquals(array1, array2);
@@ -59,10 +59,10 @@ public final class CollectionAssertions {
 
         for(int i=0; i<list1.size(); ++i) {
             final int index = i;
-            val u = list1.get(i);
-            val v = list2.get(i);
+            var u = list1.get(i);
+            var v = list2.get(i);
 
-            val delta = difference.apply(u, v);
+            var delta = difference.apply(u, v);
 
             if(delta!=null) {
                 Assertions.fail(String.format("elements at index %d differ: %s", index, delta));
@@ -71,10 +71,10 @@ public final class CollectionAssertions {
     }
 
     public static void assertComponentWiseNumberEquals(final Object a, final Object b) {
-        val array1 = _NullSafe.streamAutodetect(a)
+        var array1 = _NullSafe.streamAutodetect(a)
             .map(Number.class::cast)
             .collect(_Arrays.toArray(Number.class));
-        val array2 = _NullSafe.streamAutodetect(b)
+        var array2 = _NullSafe.streamAutodetect(b)
             .map(Number.class::cast)
             .collect(_Arrays.toArray(Number.class));
 
@@ -86,13 +86,13 @@ public final class CollectionAssertions {
     }
 
     public static void assertComponentWiseUnwrappedEquals(final Object a, final Object b) {
-        val array1 = _NullSafe.streamAutodetect(a)
+        var array1 = _NullSafe.streamAutodetect(a)
             .map(element->(element instanceof ManagedObject)
                     ? ((ManagedObject)element).getPojo()
                     : element)
             .collect(_Arrays.toArray(Object.class));
 
-        val array2 = _NullSafe.streamAutodetect(b)
+        var array2 = _NullSafe.streamAutodetect(b)
                 .map(element->(element instanceof ManagedObject)
                         ? ((ManagedObject)element).getPojo()
                         : element)

@@ -50,8 +50,6 @@ import org.apache.causeway.schema.metamodel.v2.Property;
 import org.apache.causeway.schema.metamodel.v2.ScalarParam;
 import org.apache.causeway.schema.metamodel.v2.VectorParam;
 
-import lombok.val;
-
 class MetaModelExporter {
 
     private final SpecificationLoader specificationLookup;
@@ -76,8 +74,8 @@ class MetaModelExporter {
     MetamodelDto exportMetaModel(final Config config) {
 
         // single type(s) MM export support
-        val tinyDomain = _Lists.<ObjectSpecification>newArrayList();
-        val useTinyDomain = _NullSafe.stream(config.getNamespacePrefixes())
+        var tinyDomain = _Lists.<ObjectSpecification>newArrayList();
+        var useTinyDomain = _NullSafe.stream(config.getNamespacePrefixes())
         .map(namespace->specificationLookup.specForLogicalTypeName(namespace))
         .peek(specIfAny->specIfAny.ifPresent(tinyDomain::add))
         .allMatch(Optional::isPresent);
@@ -195,13 +193,13 @@ class MetaModelExporter {
             final ObjectSpecification specification,
             final Config config) {
 
-        val namespacePrefixes = config.getNamespacePrefixes();
+        var namespacePrefixes = config.getNamespacePrefixes();
         if(config.isNamespacePrefixAny()) {
             return true; // export all
         }
 
-        val logicalTypeName = specification.getLogicalTypeName();
-        for (val prefix : namespacePrefixes) {
+        var logicalTypeName = specification.getLogicalTypeName();
+        for (var prefix : namespacePrefixes) {
             if(logicalTypeName.startsWith(prefix)) {
                 return true;
             }
@@ -355,7 +353,7 @@ class MetaModelExporter {
 
         addFacets(oa, actionType.getFacets(), config);
 
-        val parameters = oa.getParameters();
+        var parameters = oa.getParameters();
         final List<Param> params = actionType.getParams().getParam();
         for (final ObjectActionParameter parameter : parameters) {
             params.add(asXsdType(parameter, domainClassByObjectSpec, config));

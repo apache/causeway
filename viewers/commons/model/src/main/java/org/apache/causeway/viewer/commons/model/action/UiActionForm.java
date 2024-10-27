@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.commons.model.UiModel;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 
-import lombok.val;
-
 public interface UiActionForm
 extends
     UiModel,
@@ -56,7 +54,7 @@ extends
     default Consent getVisibilityConsent() {
 
         // guard against missing action owner
-        val actionOwner = getActionOwner();
+        var actionOwner = getActionOwner();
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionOwner)) {
             return Veto.DEFAULT; // veto, so we don't render the action
         }
@@ -76,13 +74,13 @@ extends
 
     default Consent getValidityConsent() {
 
-        val proposedArguments = streamPendingParamUiModels()
+        var proposedArguments = streamPendingParamUiModels()
                 .map(UiParameter::getValue)
                 .collect(Can.toCan());
 
         _Assert.assertEquals(getAction().getParameterCount(), proposedArguments.size());
 
-        val head = getAction().interactionHead(getActionOwner());
+        var head = getAction().interactionHead(getActionOwner());
 
         return getAction().isArgumentSetValid(
                 head,
@@ -95,9 +93,9 @@ extends
 
     @Override
     default String getTitle() {
-        val owner = getActionOwner();
+        var owner = getActionOwner();
 
-        val buf = new StringBuilder();
+        var buf = new StringBuilder();
 
         streamPendingParamUiModels()
         .filter(paramModel->paramModel.getParameterNegotiationModel()

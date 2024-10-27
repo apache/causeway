@@ -28,8 +28,6 @@ import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.do
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.list;
 import static org.apache.causeway.valuetypes.asciidoc.builder.AsciiDocFactory.listItem;
 
-import lombok.val;
-
 class NestedListTest extends AbstractAsciiDocWriterTest {
 
     private Document doc;
@@ -45,20 +43,20 @@ class NestedListTest extends AbstractAsciiDocWriterTest {
     @Test
     void testList() throws IOException {
         
-        val list = list(doc);
+        var list = list(doc);
         list.setTitle("NestedList");
         
-        val item1 = listItem(list, "Item-1");
-        val item2 = listItem(list, "Item-2");
+        var item1 = listItem(list, "Item-1");
+        var item2 = listItem(list, "Item-2");
         
-        val list1 = list(item1);
+        var list1 = list(item1);
         
-        val item11 = listItem(list1, "Item-1-1");
-        val item12 = listItem(list1, "Item-1-2");
+        var item11 = listItem(list1, "Item-1-1");
+        var item12 = listItem(list1, "Item-1-2");
         
-        val list12 = list(item12);
+        var list12 = list(item12);
         
-        val item121 = listItem(list12, "Item-1-2-1");
+        var item121 = listItem(list12, "Item-1-2-1");
         
         assertDocumentIsCorrectlyWritten(doc);
     }

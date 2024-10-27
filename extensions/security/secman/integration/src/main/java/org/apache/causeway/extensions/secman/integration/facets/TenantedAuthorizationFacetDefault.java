@@ -36,7 +36,7 @@ import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
-import lombok.val;
+
 
 public class TenantedAuthorizationFacetDefault
 extends FacetAbstract
@@ -83,16 +83,16 @@ implements TenantedAuthorizationFacet {
             return Optional.empty();
         }
 
-        val domainObject = head.getOwner().getPojo();
-        val userName = userService.currentUserNameElseNobody();
+        var domainObject = head.getOwner().getPojo();
+        var userName = userService.currentUserNameElseNobody();
 
-        val applicationUser = findApplicationUser(userName);
+        var applicationUser = findApplicationUser(userName);
         if (applicationUser == null) {
             // not expected, but best to be safe...
             return Optional.of("Could not locate application user for " + userName);
         }
 
-        for (val evaluator : evaluators) {
+        for (var evaluator : evaluators) {
             final String reasonString = evaluationDispatcher.dispatch(evaluator, domainObject, applicationUser);
             if(reasonString != null) {
                 return Optional.of(reasonString);

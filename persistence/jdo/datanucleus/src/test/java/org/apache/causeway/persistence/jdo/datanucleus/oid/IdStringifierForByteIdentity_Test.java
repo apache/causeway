@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics;
 
-import lombok.val;
+
 
 class IdStringifierForByteIdentity_Test {
 
@@ -51,18 +51,18 @@ class IdStringifierForByteIdentity_Test {
     @MethodSource()
     void roundtrip(final Byte value) {
 
-        val entityType = Customer.class;
+        var entityType = Customer.class;
 
-        val stringifier = new JdoByteIdentityValueSemantics();
+        var stringifier = new JdoByteIdentityValueSemantics();
 
-        val stringified = stringifier.enstring(new ByteIdentity(entityType, value));
-        val parse = stringifier.destring(entityType, stringified);
+        var stringified = stringifier.enstring(new ByteIdentity(entityType, value));
+        var parse = stringifier.destring(entityType, stringified);
 
         Assertions.assertThat(parse.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(parse.getTargetClass()).isEqualTo(entityType);
 
-        val decomposed = stringifier.decompose(new ByteIdentity(entityType, value));
-        val composed = stringifier.compose(decomposed);
+        var decomposed = stringifier.decompose(new ByteIdentity(entityType, value));
+        var composed = stringifier.compose(decomposed);
 
         Assertions.assertThat(composed.getKeyAsObject()).isEqualTo(value);
         Assertions.assertThat(composed.getTargetClass()).isEqualTo(entityType);

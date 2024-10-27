@@ -43,7 +43,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -113,11 +112,11 @@ implements MixedInMember {
 
         // adjust name if necessary
 
-        val isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
+        var isExplicitlyNamed = lookupNonFallbackFacet(MemberNamedFacet.class)
                 .isPresent();
 
         if(!isExplicitlyNamed) {
-            val memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
+            var memberName = _MixedInMemberNamingStrategy.mixinFriendlyName(mixinAction);
             this.addFacet(
                     new MemberNamedFacetForStaticMemberName(memberName, facetHolder));
         }
@@ -210,7 +209,7 @@ implements MixedInMember {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        val methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().getMethod();
         return super.isExplicitlyAnnotated() // legacy programming style
                 || methodFacade.synthesize(Domain.Include.class).isPresent();
     }

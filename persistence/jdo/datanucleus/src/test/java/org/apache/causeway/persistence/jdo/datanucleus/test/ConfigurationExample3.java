@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.Getter;
-import lombok.val;
+
 
 /**
  *  Corresponds to the documents of the 'spring-jdo' module.
@@ -54,7 +54,7 @@ public class ConfigurationExample3 {
 
     @Bean(destroyMethod = "close")
     public DataSource getDataSource() {
-        val dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
+        var dataSourceBuilder = DataSourceBuilder.create().type(BasicDataSource.class);
         dataSourceBuilder.driverClassName("org.h2.Driver");
         dataSourceBuilder.url("jdbc:h2:mem:test");
         dataSourceBuilder.username("sa");
@@ -64,7 +64,7 @@ public class ConfigurationExample3 {
 
     @Bean(destroyMethod = "close") @Named("myPmf")
     public PersistenceManagerFactory myPmf(final DataSource dataSource) {
-        val myPmf = new JDOPersistenceManagerFactory();
+        var myPmf = new JDOPersistenceManagerFactory();
         myPmf.setConnectionFactory(dataSource);
         myPmf.setNontransactionalRead(true);
         return myPmf;
@@ -74,7 +74,7 @@ public class ConfigurationExample3 {
     public TransactionAwarePersistenceManagerFactoryProxy myPmfProxy(
             final MetaModelContext metaModelContext, // no longer used, but perhaps keep to enforce a dependency relation
             final PersistenceManagerFactory myPmf) {
-        val myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
+        var myPmfProxy = new TransactionAwarePersistenceManagerFactoryProxy();
         myPmfProxy.setTargetPersistenceManagerFactory(myPmf);
         myPmfProxy.setAllowCreate(false); // enforce active transactions
         return myPmfProxy;

@@ -29,8 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
-import lombok.val;
-
 /**
  * Implementation of a <i>Wicket</i> {@link IConverter} for {@link ManagedObject}s,
  * converting to-and-from their {@link Bookmark}'s string representation.
@@ -48,7 +46,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
     @Override
     public ManagedObject convertToObject(final String value, final Locale locale) {
 
-        val obj = Bookmark.parse(value)
+        var obj = Bookmark.parse(value)
             .flatMap(objectManager.getMetaModelContext().getObjectManager()::loadObject)
             .orElse(null);
 
@@ -63,7 +61,7 @@ public class ConverterForObjectAdapter implements IConverter<ManagedObject> {
      */
     @Override
     public String convertToString(final ManagedObject adapter, final Locale locale) {
-        val string =  ManagedObjects.stringify(adapter)
+        var string =  ManagedObjects.stringify(adapter)
                 .orElse(null);
 
         //XXX ever used ?

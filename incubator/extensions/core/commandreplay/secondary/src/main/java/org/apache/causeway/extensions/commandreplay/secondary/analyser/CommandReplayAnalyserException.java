@@ -35,7 +35,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtC
 import org.apache.causeway.schema.common.v2.InteractionType;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 /**
  * @since 2.0 {@index}
@@ -60,20 +59,20 @@ public class CommandReplayAnalyserException implements CommandReplayAnalyser {
             return null;
         }
 
-        val dto = commandLogEntry.getCommandDto();
+        var dto = commandLogEntry.getCommandDto();
         if(dto.getMember().getInteractionType() == InteractionType.PROPERTY_EDIT) {
             return null;
         }
 
-        val primaryException = CommandDtoUtils.getUserData(dto, UserDataKeys.EXCEPTION);
+        var primaryException = CommandDtoUtils.getUserData(dto, UserDataKeys.EXCEPTION);
         if (_Strings.isNullOrEmpty(primaryException)) {
             return null;
         }
 
-        val replayedException = commandLogEntry.getException();
+        var replayedException = commandLogEntry.getException();
 
-        val primaryExceptionTrimmed = trimmed(primaryException);
-        val replayedExceptionTrimmed = trimmed(replayedException);
+        var primaryExceptionTrimmed = trimmed(primaryException);
+        var replayedExceptionTrimmed = trimmed(replayedException);
         return Objects.equals(primaryExceptionTrimmed, replayedExceptionTrimmed)
                 ? null
                 : String.format("Exceptions differ.  On primary system was '%s'", primaryException);

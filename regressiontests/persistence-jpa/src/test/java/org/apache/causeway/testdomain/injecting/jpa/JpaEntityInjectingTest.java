@@ -47,7 +47,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-import lombok.val;
+
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
@@ -87,7 +87,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 2);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 3);
@@ -102,7 +102,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 2);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 3);
@@ -118,7 +118,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
         //assertInjectCountRange(1, 3);
 
-        val book = getSampleBook();
+        var book = getSampleBook();
         assertTrue(book.hasInjectionPointsResolved());
 
         //assertInjectCountRange(1, 4);
@@ -139,9 +139,9 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
     }
 
     private JpaBook getSampleBook() {
-        val books = repository.allInstances(JpaProduct.class);
+        var books = repository.allInstances(JpaProduct.class);
         assertEquals(3, books.size(), "book count");
-        val book = books.get(0);
+        var book = books.get(0);
         assertEquals(BookDto.sample().getName(), book.getName(), "book name");
         return (JpaBook)book;
     }

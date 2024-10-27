@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.ElementCustom;
 import org.apache.causeway.viewer.graphql.model.domain.Parent;
 
-import lombok.val;
+
 
 public class SimpleTopLevelMutation
                 extends ElementCustom
@@ -49,7 +49,7 @@ public class SimpleTopLevelMutation
             // type already exists, nothing else to do.
             return;
         }
-        val objectSpecifications = context.objectSpecifications();
+        var objectSpecifications = context.objectSpecifications();
 
         objectSpecifications
                 .forEach(objectSpec -> {
@@ -79,13 +79,13 @@ public class SimpleTopLevelMutation
     }
 
     public void addAction(ObjectSpecification objectSpec, final ObjectAction objectAction) {
-        val gqlvMutationForAction = new SimpleMutationForAction(objectSpec, objectAction, context);
+        var gqlvMutationForAction = new SimpleMutationForAction(objectSpec, objectAction, context);
         addChildFieldFor(gqlvMutationForAction);
         actions.add(gqlvMutationForAction);
     }
 
     public void addProperty(ObjectSpecification objectSpec, final OneToOneAssociation property) {
-        val gqlvMutationForProperty = new SimpleMutationForProperty(objectSpec, property, context);
+        var gqlvMutationForProperty = new SimpleMutationForProperty(objectSpec, property, context);
         addChildFieldFor(gqlvMutationForProperty);
         properties.add(gqlvMutationForProperty);
     }

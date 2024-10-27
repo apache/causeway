@@ -24,8 +24,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.BooleanReference;
 
-import lombok.val;
-
 /**
  * Depth-first node traversing. Use to iterate through all nodes under and including the specified root node.
  */
@@ -52,15 +50,15 @@ final class StructuralNodeTraversor {
             return;
         }
 
-        val continueVisit = visitor.head(node, depth);
+        var continueVisit = visitor.head(node, depth);
         if(!continueVisit) {
             continueTraverse.update(__->false);
         }
 
-        val blocks = node.getBlocks();
+        var blocks = node.getBlocks();
 
         if(!_NullSafe.isEmpty(blocks)) {
-            for(val subNode : blocks) {
+            for(var subNode : blocks) {
                 traverse(visitor, subNode, depth+1, continueTraverse);
                 if(continueTraverse.isFalse()) {
                     break;

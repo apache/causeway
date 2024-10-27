@@ -31,7 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
-import lombok.val;
+
 
 @SuppressWarnings("unused")
 public class Annotations_synthesize_on_Parameter_Test {
@@ -80,8 +80,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -98,8 +98,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -115,8 +115,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -133,8 +133,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));
@@ -151,8 +151,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
@@ -170,8 +170,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
@@ -190,8 +190,8 @@ public class Annotations_synthesize_on_Parameter_Test {
                     ) {}
         }
 
-        val method = SomeDomainObject.class.getMethod("updateName", String.class);
-        val nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
+        var method = SomeDomainObject.class.getMethod("updateName", String.class);
+        var nearest = _Annotations.synthesize(method.getParameters()[0], DomainObj.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.YES));

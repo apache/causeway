@@ -46,7 +46,6 @@ import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 class _AssociationsAsColumns implements HasMetaModelContext {
@@ -60,11 +59,11 @@ class _AssociationsAsColumns implements HasMetaModelContext {
             final ManagedObject parentObject) {
 
         // the type that has the properties and collections that make up this table's columns
-        val elementClass = elementType.getCorrespondingClass();
+        var elementClass = elementType.getCorrespondingClass();
 
-        val parentSpecIfAny = parentObject.getSpecification();
+        var parentSpecIfAny = parentObject.getSpecification();
 
-        val assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
+        var assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
         .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(memberIdentifier))
@@ -72,7 +71,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
         .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
-        val assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
+        var assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
@@ -105,7 +104,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         // same code also appears in EntityPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
         // one object of that type has been rendered via EntityPage.
-        val elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
+        var elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
 
         if(elementTypeGridFacet == null) {
             return Optional.empty();
@@ -115,7 +114,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         // just enough to ask for the metadata.
 
         // don't pass in any object, just need the meta-data
-        val elementTypeGrid = elementTypeGridFacet.getGrid(null);
+        var elementTypeGrid = elementTypeGridFacet.getGrid(null);
 
         final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
         elementTypeGrid.getAllPropertiesById().forEach((propertyId, __)->{
@@ -138,12 +137,12 @@ class _AssociationsAsColumns implements HasMetaModelContext {
             final List<String> propertyIdsInOrder,
             final Class<?> elementType) {
 
-        val tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
+        var tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
         if(tableColumnOrderServices.isEmpty()) {
             return;
         }
 
-        val whereContext = whereContextFor(memberIdentifier);
+        var whereContext = whereContextFor(memberIdentifier);
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->

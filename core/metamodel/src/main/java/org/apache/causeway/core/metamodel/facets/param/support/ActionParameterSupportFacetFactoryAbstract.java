@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.facets.ParameterSupport.SearchAlgorith
 import org.apache.causeway.core.metamodel.facets.members.support.MemberAndPropertySupportFacetFactoryAbstract;
 
 import lombok.NonNull;
-import lombok.val;
 
 public abstract class ActionParameterSupportFacetFactoryAbstract
 extends MemberAndPropertySupportFacetFactoryAbstract {
@@ -58,17 +57,17 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
     @Override
     public final void process(final ProcessMethodContext processMethodContext) {
 
-        val facetedMethod = processMethodContext.getFacetHolder();
-        val parameters = facetedMethod.getParameters();
+        var facetedMethod = processMethodContext.getFacetHolder();
+        var parameters = facetedMethod.getParameters();
 
         if (parameters.isEmpty()) {
             return;
         }
 
-        val methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
+        var methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::parameterSupportCandidates);
 
-        val searchRequest = searchRefiner
+        var searchRequest = searchRefiner
                 .apply(
                         ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                         .processMethodContext(processMethodContext)
@@ -80,9 +79,9 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
             processMethodContext.removeMethod(searchResult.getSupportingMethod());
-            val paramIndex = searchResult.getParamIndex();
+            var paramIndex = searchResult.getParamIndex();
             // add facets directly to parameters, not to actions
-            val paramAsHolder = parameters.getElseFail(paramIndex);
+            var paramAsHolder = parameters.getElseFail(paramIndex);
             onSearchResult(paramAsHolder, searchResult);
         });
 

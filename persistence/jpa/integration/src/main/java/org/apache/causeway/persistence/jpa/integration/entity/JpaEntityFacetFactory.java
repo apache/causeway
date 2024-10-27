@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-import lombok.val;
-
 //@Log4j2
 public class JpaEntityFacetFactory
 extends FacetFactoryAbstract {
@@ -39,11 +37,11 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        val cls = processClassContext.getCls();
+        var cls = processClassContext.getCls();
 
-        val facetHolder = processClassContext.getFacetHolder();
+        var facetHolder = processClassContext.getFacetHolder();
 
-        val entityAnnotation = processClassContext.synthesizeOnType(Entity.class);
+        var entityAnnotation = processClassContext.synthesizeOnType(Entity.class);
         if(!entityAnnotation.isPresent()) {
             return;
         }

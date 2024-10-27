@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
-import lombok.val;
 
 public final class CollectionInteraction
 extends MemberInteraction<ManagedCollection, CollectionInteraction> {
@@ -36,7 +35,7 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        val managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
+        var managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
 
         final InteractionRailway<ManagedCollection> railway = managedCollection.isPresent()
                 ? InteractionRailway.success(managedCollection.get())

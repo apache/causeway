@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 public abstract class RegExFacetAbstract
@@ -100,7 +99,7 @@ implements RegExFacet {
         if(!(otherFacet instanceof RegExFacetAbstract)) {
             return false;
         }
-        val other = (RegExFacetAbstract)otherFacet;
+        var other = (RegExFacetAbstract)otherFacet;
         return Objects.equals(this.regexp(), other.regexp())
                 && this.patternFlags() == other.patternFlags()
                 && Objects.equals(this.message(), other.message());
@@ -111,7 +110,7 @@ implements RegExFacet {
 
     protected static int asMask(final javax.validation.constraints.Pattern.Flag[] flags) {
         int mask = 0;
-        for (val flag : flags) {
+        for (var flag : flags) {
             mask |= flag.getValue();
         }
         return mask;

@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFac
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.NonNull;
-import lombok.val;
 
 public class IconFacetFromProjectionFacet
 extends IconFacetAbstract {
@@ -43,7 +42,7 @@ extends IconFacetAbstract {
 
     @Override
     public String iconName(final ManagedObject targetAdapter) {
-        val projectedAdapter = projectionFacet.projected(targetAdapter);
+        var projectedAdapter = projectionFacet.projected(targetAdapter);
         return projectedAdapter.getSpecification().getIconName(projectedAdapter);
     }
 

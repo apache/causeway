@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.NonNull;
 import lombok.Value;
-import lombok.val;
 
 @Value(staticConstructor = "of")
 public class GroupIdAndName
@@ -74,7 +73,7 @@ implements
     public static Optional<GroupIdAndName> forActionLayout(
             final @NonNull ActionLayout actionLayout) {
 
-        val explicit =  GroupIdAndName.inferIfOneMissing(
+        var explicit =  GroupIdAndName.inferIfOneMissing(
                 actionLayout.fieldSetId(),
                 actionLayout.fieldSetName());
 
@@ -128,23 +127,23 @@ implements
             final @Nullable String _id,
             final @Nullable String _name) {
 
-        val id = nullToUnspecified(_id);
-        val name = nullToUnspecified(_name);
+        var id = nullToUnspecified(_id);
+        var name = nullToUnspecified(_name);
 
-        val isIdUnspecified = isUnspecified(id) || id.isEmpty();
-        val isNameUnspecified = isUnspecified(name);
+        var isIdUnspecified = isUnspecified(id) || id.isEmpty();
+        var isNameUnspecified = isUnspecified(name);
         if(isIdUnspecified
                 && isNameUnspecified) {
             return Optional.empty(); // fully unspecified, don't create a LayoutGroupFacet down the line
         }
         if(isIdUnspecified) {
-            val inferredId = inferIdFromName(name);
+            var inferredId = inferIdFromName(name);
             if(inferredId.isEmpty()) {
                 return Optional.empty(); // cannot infer a usable id, so don't create a LayoutGroupFacet down the line
             }
             return Optional.of(GroupIdAndName.of(inferredId, name));
         } else if(isNameUnspecified) {
-            val inferredName = inferNameFromId(id);
+            var inferredName = inferNameFromId(id);
             return Optional.of(GroupIdAndName.of(id, inferredName));
         }
         return Optional.of(GroupIdAndName.of(id, name));

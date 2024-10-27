@@ -50,7 +50,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
+
 
 @RequiredArgsConstructor
 public class KeycloakOauth2UserService extends OidcUserService {
@@ -96,7 +96,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         if(causewayConfiguration.getSecurity().getKeycloak().isExtractClientRoles()) {
             // attempt to parse out 'resource_access.${client_id}.roles'
-            val rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
             asNonEmptyMap(token.getClaims().get("resource_access"))
             .ifPresent(resourceMap->{
                 final String clientId = userRequest.getClientRegistration().getClientId();
@@ -110,7 +110,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         if (causewayConfiguration.getSecurity().getKeycloak().isExtractRealmRoles()) {
             // attempt to parse out 'realm_access.roles'
-            val rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
             asNonEmptyMap(token.getClaims().get("realm_access"))
             .ifPresent(realmAccessMap->{
                 asNonEmptyCollection(realmAccessMap.get("roles"))
@@ -122,7 +122,7 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         if (causewayConfiguration.getSecurity().getKeycloak().isExtractRoles()) {
             // attempt to parse out 'roles'
-            val rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
             asNonEmptyCollection(token.getClaims().get("roles"))
             .ifPresent(roles->{
                 forEachNonNullIn(roles, role -> combinedRoles.add(rolePrefix + role));

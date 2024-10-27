@@ -32,8 +32,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.val;
-
 class TitleFacetViaTitleAnnotationTest {
 
     MetaModelContext metaModelContext;
@@ -75,7 +73,7 @@ class TitleFacetViaTitleAnnotationTest {
 
         Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
 
-        val managedObject =
+        var managedObject =
                 metaModelContext.getObjectManager().adapt(normalPojo);
 
         final String title = facet.title(managedObject);

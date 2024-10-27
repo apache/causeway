@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 
-import lombok.val;
+
 
 /**
  * Implements the HTTP Basic Auth protocol; does not bind the
@@ -59,23 +59,23 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
                 Boolean.FALSE);
 
 
-        val digest = getBasicAuthDigest(httpServletRequest);
+        var digest = getBasicAuthDigest(httpServletRequest);
         if (digest == null) {
             return null;
         }
 
-        val userAndPassword = unencoded(digest);
-        val matcher = USER_AND_PASSWORD_REGEX.matcher(userAndPassword);
+        var userAndPassword = unencoded(digest);
+        var matcher = USER_AND_PASSWORD_REGEX.matcher(userAndPassword);
         if (!matcher.matches()) {
             return null;
         }
 
-        val user = matcher.group(1);
-        val password = matcher.group(2);
+        var user = matcher.group(1);
+        var password = matcher.group(2);
 
-        val authenticationRequestPwd = new AuthenticationRequestPassword(user, password);
-        val authenticationManager = super.getAuthenticationManager(httpServletRequest);
-        val authentication = authenticationManager.authenticate(authenticationRequestPwd);
+        var authenticationRequestPwd = new AuthenticationRequestPassword(user, password);
+        var authenticationManager = super.getAuthenticationManager(httpServletRequest);
+        var authentication = authenticationManager.authenticate(authenticationRequestPwd);
         return authentication;
     }
 
@@ -96,7 +96,7 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
     // value should be in the form:
     // Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
     private String getBasicAuthDigest(final HttpServletRequest httpServletRequest) {
-        val authStr = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
+        var authStr = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
         return authStr != null &&
                 authStr.startsWith(BASIC_AUTH_PREFIX)
                 ? authStr.substring(BASIC_AUTH_PREFIX.length())

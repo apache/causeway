@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.val;
-
 public class ViewModelFacetFactory
 extends FacetFactoryAbstract
 implements
@@ -52,11 +50,11 @@ implements
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        val facetHolder = processClassContext.getFacetHolder();
-        val type = processClassContext.getCls();
+        var facetHolder = processClassContext.getFacetHolder();
+        var type = processClassContext.getCls();
 
         // XmlRootElement annotation (with default precedence)
-        val hasXmlRootElementAnnotation = _ClassCache.getInstance().hasJaxbRootElementSemantics(type);
+        var hasXmlRootElementAnnotation = _ClassCache.getInstance().hasJaxbRootElementSemantics(type);
         FacetUtil
         .addFacetIfPresent(
                 ViewModelFacetForXmlRootElementAnnotation
