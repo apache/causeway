@@ -27,7 +27,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -53,7 +52,7 @@ implements CausewayComponentScanInterceptor {
             throw _Exceptions.illegalState("introspectable types had already been drained (one shot)");
         }
 
-        val defensiveCopy = Can.ofCollection(introspectableTypes.values());
+        var defensiveCopy = Can.ofCollection(introspectableTypes.values());
 
         if(log.isDebugEnabled()) {
             defensiveCopy.forEach(type->{
@@ -71,21 +70,21 @@ implements CausewayComponentScanInterceptor {
     @Override
     public void intercept(final ScannedTypeMetaData scanMeta) {
 
-        val classOrFailure = scanMeta.getUnderlyingClass();
+        var classOrFailure = scanMeta.getUnderlyingClass();
         if(classOrFailure.isFailure()) {
             log.warn(classOrFailure.getFailure());
             return;
         }
 
-        val correspondingClass = classOrFailure.getValue().get();
-        val typeMeta = causewayBeanTypeClassifier.classify(correspondingClass);
+        var correspondingClass = classOrFailure.getValue().get();
+        var typeMeta = causewayBeanTypeClassifier.classify(correspondingClass);
 
         scanMeta.setVetoedForInjection(typeMeta.getManagedBy().isVetoedForInjection());
         if(typeMeta.getManagedBy().isBeanNameOverride()) {
             scanMeta.setBeanNameOverride(typeMeta.getLogicalType().getLogicalTypeName());
         }
 
-        val beanSort = typeMeta.getBeanSort();
+        var beanSort = typeMeta.getBeanSort();
         if(beanSort.isToBeIntrospected()) {
             introspectableTypes.put(correspondingClass, typeMeta);
             if(log.isDebugEnabled()) {

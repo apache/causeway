@@ -25,7 +25,6 @@ import org.apache.causeway.commons.internal.context._Context;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 @RequiredArgsConstructor(staticName = "of")
 final class ScannedTypeMetaData {
@@ -70,7 +69,7 @@ final class ScannedTypeMetaData {
     private Try<Class<?>> resolveClass() {
         return Try.<Class<?>>call(()->_Context.loadClass(className))
         .mapFailure(ex->{
-            val msg = String.format("Failed to load class for name '%s'", className);
+            var msg = String.format("Failed to load class for name '%s'", className);
             return new RuntimeException(msg, ex);
         });
     }

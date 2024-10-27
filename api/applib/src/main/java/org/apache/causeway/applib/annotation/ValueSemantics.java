@@ -168,7 +168,7 @@ public @interface ValueSemantics {
      * </pre>
      *
      * <p>
-     * Here, the intervar of the [1-may-2013,1-jun-2013) would be rendered as the dates
+     * Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
      * 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.  What is stored
      * In the domain object, itself, however, the value stored is 1-jun-2013.
      * </p>

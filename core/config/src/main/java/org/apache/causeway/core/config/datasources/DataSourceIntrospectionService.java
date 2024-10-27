@@ -40,7 +40,6 @@ import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -82,7 +81,7 @@ public class DataSourceIntrospectionService {
 
     private Stream<DataSourceInfo> streamDataSourceInfos() {
 
-        val registeredDataSources = Can.ofCollection(dataSources);
+        var registeredDataSources = Can.ofCollection(dataSources);
 
         log.debug("about to introspect data-sources: {}",
                 ()->registeredDataSources.map(ds->ds.getClass().getName()));
@@ -98,7 +97,7 @@ public class DataSourceIntrospectionService {
             final @NonNull DataSource dataSource) {
 
         // make sure we close any connection after having consumed the meta-data
-        try(val connection = dataSource.getConnection()){
+        try(var connection = dataSource.getConnection()){
             return Optional.ofNullable(connection.getMetaData())
                     .map(DataSourceInfo::fromMetaData);
         } catch (SQLException e) {

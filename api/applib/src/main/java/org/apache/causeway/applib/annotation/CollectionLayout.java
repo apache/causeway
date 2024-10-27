@@ -157,12 +157,12 @@ public @interface CollectionLayout {
      *
      * <p>
      * Whenever there is a collection of type {@link java.util.SortedSet}, the domain entity referenced
-     * is expected to implement {@link Comparable}, ie to have a natural ordering.  In effect tis
+     * is expected to implement {@link Comparable}, ie to have a natural ordering. In effect this
      * means that all domain entities should provide a natural ordering.
      *
      * <p>
      * However, in some circumstances the ordering of collection may be different to the entity's
-     * natural ordering.  For example, the entity may represent an intervar of time sorted by its
+     * natural ordering.  For example, the entity may represent an interval of time sorted by its
      * <i>startDate</i> ascending, but the collection may wish to sort by <i>startDate</i>.
      *
      * <p>

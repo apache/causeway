@@ -35,7 +35,6 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -61,18 +60,18 @@ public class AopPatch implements ApplicationContextAware {
             return;
         }
 
-        val advisor = (BeanFactoryTransactionAttributeSourceAdvisor)
+        var advisor = (BeanFactoryTransactionAttributeSourceAdvisor)
                 applicationContext.getBean(TransactionManagementConfigUtils.TRANSACTION_ADVISOR_BEAN_NAME);
 
-        val attrSource = applicationContext
+        var attrSource = applicationContext
                 .getBeanProvider(TransactionAttributeSource.class, false)
                 .getIfAvailable();
 
-        val transactionInterceptorFactory = applicationContext
+        var transactionInterceptorFactory = applicationContext
                 .getBeanProvider(TransactionInterceptorFactory.class, false)
                 .getIfAvailable();
 
-        val transactionManager = applicationContext
+        var transactionManager = applicationContext
                 .getBeanProvider(TransactionManager.class, false)
                 .getIfAvailable();
 

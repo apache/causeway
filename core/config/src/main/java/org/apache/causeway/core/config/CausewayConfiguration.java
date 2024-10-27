@@ -108,8 +108,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Value;
-import lombok.val;
-
 
 /**
  * Configuration 'beans' with meta-data (IDE-support).
@@ -4639,7 +4637,7 @@ public class CausewayConfiguration {
 
         @Override
         public void initialize(final AssignableFrom assignableFrom) {
-            val className = assignableFrom.value();
+            var className = assignableFrom.value();
             try {
                 superType = _Context.loadClass(className);
             } catch (ClassNotFoundException e) {
@@ -4681,7 +4679,7 @@ public class CausewayConfiguration {
 
         @Override
         public void initialize(final OneOf assignableFrom) {
-            val value = assignableFrom.value();
+            var value = assignableFrom.value();
             allowed = value != null? Collections.unmodifiableList(Arrays.asList(value)): Collections.emptyList();
         }
 
