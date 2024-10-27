@@ -50,5 +50,4 @@ public interface HasTarget {
     @Target
     Bookmark getTarget();
 
-
 }

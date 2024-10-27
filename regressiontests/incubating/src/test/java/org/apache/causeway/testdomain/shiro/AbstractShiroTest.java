@@ -85,7 +85,6 @@ class AbstractShiroTest {
             ThreadContext.unbindSubject();
         }
 
-
         if (subjectThreadState != null) {
             subjectThreadState.clear();
             subjectThreadState = null;

@@ -323,7 +323,6 @@ extends MetaModelContext {
         return factoryService;
     }
 
-
     @Override
     public TranslationService getTranslationService() {
         if(translationService==null) {

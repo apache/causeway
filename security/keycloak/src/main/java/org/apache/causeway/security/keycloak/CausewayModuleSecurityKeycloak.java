@@ -76,7 +76,6 @@ import lombok.val;
 @EnableWebSecurity
 public class CausewayModuleSecurityKeycloak {
 
-
     @Bean
     public SecurityFilterChain filterChain(
             final HttpSecurity http,
@@ -84,7 +83,6 @@ public class CausewayModuleSecurityKeycloak {
             final KeycloakOauth2UserService keycloakOidcUserService,
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers) throws Exception {
-
 
         val successUrl = causewayConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
         val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
@@ -127,7 +125,6 @@ public class CausewayModuleSecurityKeycloak {
         return http.build();
     }
 
-
     @Bean
     KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration causewayConfiguration) {
 
@@ -160,6 +157,4 @@ public class CausewayModuleSecurityKeycloak {
         return decoder;
     }
 
-
 }
-

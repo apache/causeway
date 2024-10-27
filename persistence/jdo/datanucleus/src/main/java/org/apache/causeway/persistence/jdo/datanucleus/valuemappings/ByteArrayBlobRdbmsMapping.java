@@ -48,5 +48,4 @@ public class ByteArrayBlobRdbmsMapping extends BlobColumnMapping {
         }
     }
 
-
 }

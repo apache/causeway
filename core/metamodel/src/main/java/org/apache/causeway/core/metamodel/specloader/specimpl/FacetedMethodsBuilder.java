@@ -154,7 +154,6 @@ implements HasMetaModelContext {
     // introspect class
     // ////////////////////////////////////////////////////////////////////////////
 
-
     public void introspectClass() {
         if (log.isDebugEnabled()) {
             log.debug("introspecting {}: class-level details", getClassName());
@@ -194,7 +193,6 @@ implements HasMetaModelContext {
         .findAssociationCandidateGetters(
                     methodRemover.streamRemaining(),
                     associationCandidateMethods::add);
-
 
         // Ensure all return types are known
 

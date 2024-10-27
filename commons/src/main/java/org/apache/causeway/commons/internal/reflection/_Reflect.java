@@ -71,7 +71,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class _Reflect {
 
-
     // -- PREDICATES
 
     /**
@@ -487,7 +486,6 @@ public final class _Reflect {
                 .collect(Collectors.toMap(PropertyDescriptor::getName, PropertyDescriptor::getReadMethod));
     }
 
-
     public Method getGetter(final Class<?> cls, final String propertyName) throws IntrospectionException {
         final BeanInfo beanInfo = Introspector.getBeanInfo(cls);
         for(PropertyDescriptor pd:beanInfo.getPropertyDescriptors()){
@@ -524,7 +522,6 @@ public final class _Reflect {
             final @NonNull Object value) {
         setter.invoke(target, value);
     }
-
 
     // -- MODIFIERS
 
@@ -564,7 +561,6 @@ public final class _Reflect {
         /*sonar-ignore-off*/
     }
 
-
     public Try<Object> invokeMethodOn(
             final @NonNull Method method,
             final @NonNull Object target,
@@ -603,7 +599,6 @@ public final class _Reflect {
         });
         /*sonar-ignore-off*/
     }
-
 
     // -- COMMON CONSTRUCTOR IDIOMS
 

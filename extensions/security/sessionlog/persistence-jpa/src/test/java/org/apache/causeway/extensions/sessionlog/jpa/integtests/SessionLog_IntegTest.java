@@ -38,7 +38,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
@@ -51,6 +50,5 @@ public class SessionLog_IntegTest extends SessionLogIntegTestAbstract {
     })
     public static class AppManifest {
     }
-
 
 }

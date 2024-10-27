@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services.deadlock;
 
 import lombok.SneakyThrows;
 
-
 /**
  * Provides a pluggable mechanism
  *
@@ -38,5 +37,3 @@ public interface DeadlockRecognizer {
     }
 
 }
-
-

@@ -73,7 +73,6 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     private static final String ID_SECTION_SEPARATOR = "sectionSeparator";
     private static final String ID_SECTION_LABEL = "sectionLabel";
 
-
     private final CollectionPresentationSelectorHelper selectorHelper;
     private final ComponentHintKey componentHintKey;
 
@@ -317,6 +316,3 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     }
 
 }
-
-
-

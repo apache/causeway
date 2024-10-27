@@ -92,6 +92,4 @@ class JodaTimeConvertersTest {
                         zoneId.getId(), zoneId));
     }
 
-
-
 }

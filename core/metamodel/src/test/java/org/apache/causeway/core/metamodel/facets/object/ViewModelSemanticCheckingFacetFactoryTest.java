@@ -78,5 +78,4 @@ class ViewModelSemanticCheckingFacetFactoryTest {
         return metaModelContext.getSpecificationLoader().getOrAssessValidationResult();
     }
 
-
 }

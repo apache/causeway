@@ -164,7 +164,6 @@ public class ScalarFragmentFactory {
         public abstract RepeatingView createButtonContainer(final MarkupContainer container);
     }
 
-
     // -- OUTPUT/COMPACT FRAGMENTS
 
     /** Can be used for both CompactFrame and RegularFrame. */

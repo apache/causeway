@@ -72,7 +72,6 @@ implements ManagedFeature {
         this.owner = managedObject;
     }
 
-
     @Override
     public abstract ObjectMember getMetaModel();
 
@@ -104,7 +103,6 @@ implements ManagedFeature {
 
     @Getter @Setter @NonNull
     private RepresentationMode representationMode = RepresentationMode.AUTO;
-
 
     /**
      * @return non-empty if hidden

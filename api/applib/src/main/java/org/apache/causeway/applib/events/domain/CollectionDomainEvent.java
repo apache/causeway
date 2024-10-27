@@ -65,7 +65,6 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
      */
     public static class Doop extends CollectionDomainEvent<Object, Object> {}
 
-
     /**
      * Subtypes can define a no-arg constructor; the framework sets state
      * via (non-API) setters.
@@ -86,8 +85,6 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
         super(source);
     }
 
-
-
     private static final ToString<CollectionDomainEvent<?,?>> toString =
             ObjectContracts.<CollectionDomainEvent<?,?>>
     toString("source", CollectionDomainEvent::getSource)
@@ -99,6 +96,5 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

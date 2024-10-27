@@ -57,7 +57,6 @@ class ObjectAssociationAbstractTest {
     private ObjectAssociationAbstract objectAssociation;
     private FacetedMethod facetedMethod;
 
-
     public static class Customer {
         private String firstName;
 

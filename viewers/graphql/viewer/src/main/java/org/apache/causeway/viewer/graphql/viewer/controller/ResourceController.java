@@ -49,7 +49,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Value;
 
-
 @RestController()
 @RequestMapping("/graphql/object")
 public class ResourceController {

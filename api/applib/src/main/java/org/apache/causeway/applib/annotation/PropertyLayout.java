@@ -65,7 +65,6 @@ public @interface PropertyLayout {
     String describedAs()
             default "";
 
-
     /**
      * Specifies the <b>id</b> of associated <i>FieldSet</i>.
      *
@@ -228,7 +227,6 @@ public @interface PropertyLayout {
     Repainting repainting()
             default Repainting.NOT_SPECIFIED;
 
-
     /**
      * The order of this member relative to other members in the same (layout) group,
      * given in <i>Dewey-decimal</i> notation.
@@ -260,4 +258,3 @@ public @interface PropertyLayout {
             default -1;
 
 }
-

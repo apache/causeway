@@ -178,7 +178,6 @@ public interface Consent {
         }
     }
 
-
     /**
      * Returns true if this object is giving permission.
      */
@@ -204,7 +203,6 @@ public interface Consent {
     default Optional<String> getReasonAsString() {
         return getReason().map(VetoReason::string);
     }
-
 
     /**
      * Description of the interaction that this consent represents.

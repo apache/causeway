@@ -35,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 @TransactionScope
 public class CommitListener implements TransactionSynchronization {
 
-
     @Value
     @RequiredArgsConstructor
     public static class TransactionCompletionStatusHolder {

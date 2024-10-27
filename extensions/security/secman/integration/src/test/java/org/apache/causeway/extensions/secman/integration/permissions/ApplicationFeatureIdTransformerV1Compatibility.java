@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ApplicationFeatureIdTransformerV1Compatibility implements ApplicationFeatureIdTransformer {
 

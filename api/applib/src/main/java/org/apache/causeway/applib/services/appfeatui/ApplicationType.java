@@ -52,8 +52,6 @@ public class ApplicationType extends ApplicationFeatureViewModel {
     public static abstract class CollectionDomainEvent<T>
             extends ApplicationFeatureViewModel.CollectionDomainEvent<ApplicationType, T> {}
 
-
-
     // -- constructors
 
     public ApplicationType() { }
@@ -64,8 +62,6 @@ public class ApplicationType extends ApplicationFeatureViewModel {
     public ApplicationType(final String memento) {
         super(memento);
     }
-
-
 
     // -- actions (collection)
 
@@ -88,7 +84,6 @@ public class ApplicationType extends ApplicationFeatureViewModel {
         return asViewModels(members, ApplicationTypeAction.class);
     }
 
-
     // -- properties (collection)
 
     @Collection(
@@ -110,8 +105,6 @@ public class ApplicationType extends ApplicationFeatureViewModel {
         return asViewModels(members, ApplicationTypeProperty.class);
     }
 
-
-
     // -- collections (collection)
 
     @Collection(
@@ -132,6 +125,5 @@ public class ApplicationType extends ApplicationFeatureViewModel {
         final SortedSet<ApplicationFeatureId> members = getFeature().getCollections();
         return asViewModels(members, ApplicationTypeCollection.class);
     }
-
 
 }

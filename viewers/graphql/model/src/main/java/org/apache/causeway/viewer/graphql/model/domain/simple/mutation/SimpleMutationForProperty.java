@@ -46,8 +46,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-
-
 //@Log4j2
 public class SimpleMutationForProperty extends Element {
 
@@ -87,7 +85,6 @@ public class SimpleMutationForProperty extends Element {
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
-
 
         Object target = dataFetchingEnvironment.getArgument(argumentName);
         Optional<Object> result;
@@ -145,7 +142,6 @@ public class SimpleMutationForProperty extends Element {
 
         return managedObject; // return the original object because setters return void
     }
-
 
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 

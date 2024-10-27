@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.DeptHeadReposi
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.StaffMemberRepository;
 import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlIntegTestAbstract;
 
-
 @Import({
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,

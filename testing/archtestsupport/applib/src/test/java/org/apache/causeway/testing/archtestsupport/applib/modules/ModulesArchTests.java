@@ -60,7 +60,6 @@ public class ModulesArchTests {
               analyzeClasses_packagesOf(ModulesArchTests.class),
               Arrays.asList(SimplifiedSubpackageEnum.values()));
 
-
     @RequiredArgsConstructor
     public enum SimplifiedSubpackageEnum implements Subpackage {
 

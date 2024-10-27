@@ -74,7 +74,6 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
         return allThemes;
     }
 
-
     // -- HELPER
 
     private ThemeProviderComposite createThemeProvider() {

@@ -34,7 +34,6 @@ import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryCo
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * @since 2.0 {@index}
  */

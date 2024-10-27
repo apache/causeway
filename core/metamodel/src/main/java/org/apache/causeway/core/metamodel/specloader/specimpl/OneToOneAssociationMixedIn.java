@@ -77,7 +77,6 @@ implements MixedInMember {
      */
     private final ObjectSpecification mixeeSpec;
 
-
     /**
      * Hold facets rather than delegate to the contributed action.
      */

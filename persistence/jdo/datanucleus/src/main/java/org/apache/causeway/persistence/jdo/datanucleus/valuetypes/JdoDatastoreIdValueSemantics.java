@@ -39,7 +39,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE + 100) // after the implementations of DatastoreId; for a custom impl.
 public class JdoDatastoreIdValueSemantics

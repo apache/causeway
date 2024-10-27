@@ -65,7 +65,6 @@ public final class _Oneshot implements Serializable {
         }
     }
 
-
     /**
      * resets to initial condition, that is it allows one more trigger
      */

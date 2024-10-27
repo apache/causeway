@@ -145,7 +145,6 @@ implements
             return;
         }
 
-
         // participate if an InteractionContext was already provided through some other mechanism,
         // but fail early if the current user is impersonating
         // (seeing this if going back the browser history into a page, that was previously impersonated)
@@ -255,7 +254,6 @@ implements
         }
     }
 
-
     /**
      * Is called prior to {@link #onEndRequest(RequestCycle)}, and offers the opportunity to
      * throw an exception.
@@ -301,14 +299,12 @@ implements
         IRequestCycleListener.super.onDetach(requestCycle);
     }
 
-
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
 
         if(log.isDebugEnabled()) {
             log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().took());
         }
-
 
         // using side-effect free access to MM validation result
         var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()

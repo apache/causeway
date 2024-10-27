@@ -111,7 +111,6 @@ public class MetaModelServiceDefaultTest {
         jaxbMarshaller.marshal(domainMembers, noopOutput());
     }
 
-
     @Test @DisplayName("example to XML marshalling should not throw")
     void example_marshalling() throws JAXBException {
 
@@ -206,7 +205,5 @@ public class MetaModelServiceDefaultTest {
 
         return employees;
     }
-
-
 
 }

@@ -101,7 +101,6 @@ implements CollectionCountProvider {
             ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
             : componentFactories.getFirstElseFail().id();
 
-
         // create all, hide the one not selected
         int i = 0;
         int selectedIdx = 0;
@@ -192,6 +191,5 @@ implements CollectionCountProvider {
             return null;
         }
     }
-
 
 }

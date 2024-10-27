@@ -144,5 +144,4 @@ public class MmAssertionUtils {
                 ()->String.format("object %s does not provide a bookmark", adapter));
     }
 
-
 }

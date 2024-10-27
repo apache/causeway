@@ -66,5 +66,4 @@ extends ScalarPanelAbstract2 {
         return tree;
     }
 
-
 }

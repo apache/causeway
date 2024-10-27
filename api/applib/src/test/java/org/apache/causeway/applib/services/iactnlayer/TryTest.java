@@ -63,7 +63,6 @@ class TryTest {
         throw new Exception("void failed");
     }
 
-
     // -- TESTS
 
     @Test
@@ -177,6 +176,5 @@ class TryTest {
         var mandatory = result.mapEmptyToFailure();
         assertTrue(mandatory.isFailure());
     }
-
 
 }

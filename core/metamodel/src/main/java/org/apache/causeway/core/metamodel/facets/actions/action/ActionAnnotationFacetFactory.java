@@ -90,7 +90,6 @@ extends FacetFactoryAbstract {
                 .create(actionIfAny, holder));
     }
 
-
     void processDomainEvent(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
 
         var actionMethod = processMethodContext.getMethod();
@@ -202,7 +201,6 @@ extends FacetFactoryAbstract {
                 ExecutionPublishingFacetForActionAnnotation
                 .create(actionIfAny, getConfiguration(), facetedMethod));
 
-
     }
 
     void processTypeOf(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {
@@ -248,6 +246,5 @@ extends FacetFactoryAbstract {
                 FileAcceptFacetForActionAnnotation
                 .create(actionIfAny, holder));
     }
-
 
 }

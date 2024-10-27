@@ -117,7 +117,6 @@ implements HasDynamicallyVisibleContent {
             actionIdToHide = null;
         }
 
-
         // actions
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDataList = bsCol.getActions();
@@ -142,7 +141,6 @@ implements HasDynamicallyVisibleContent {
             WktComponents.permanentlyHide(div, actionIdToHide);
         }
 
-
         // rows
         final List<BSRow> rows = _Lists.newArrayList(this.bsCol.getRows());
         if(!rows.isEmpty()) {
@@ -152,7 +150,6 @@ implements HasDynamicallyVisibleContent {
         } else {
             WktComponents.permanentlyHide(div, ID_ROWS);
         }
-
 
         // tab groups
         final List<BSTabGroup> tabGroupsWithNonEmptyTabs =
@@ -202,8 +199,6 @@ implements HasDynamicallyVisibleContent {
         } else {
             WktComponents.permanentlyHide(div, ID_TAB_GROUPS);
         }
-
-
 
         // fieldsets
         final List<FieldSet> fieldSetsWithProperties =
@@ -263,7 +258,6 @@ implements HasDynamicallyVisibleContent {
             WktComponents.permanentlyHide(div, ID_COLLECTIONS);
         }
 
-
         final WebMarkupContainer panel = this;
         if(visible) {
             panel.add(div);
@@ -285,12 +279,10 @@ implements HasDynamicallyVisibleContent {
         return rowRv;
     }
 
-
     private boolean visible = false;
     @Override
     public boolean isVisible() {
         return visible;
     }
-
 
 }

@@ -73,7 +73,6 @@ public class CommandReplayOnPrimaryService {
     public static abstract class ActionDomainEvent<T>
     extends CausewayModuleExtCommandLogApplib.ActionDomainEvent<T> { }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = findCommands.ActionDomainEvent.class,
@@ -156,8 +155,6 @@ public class CommandReplayOnPrimaryService {
         }
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = downloadCommandById.ActionDomainEvent.class,
@@ -206,6 +203,4 @@ public class CommandReplayOnPrimaryService {
         return uuid != null ? uuid.toString() : "00000000-0000-0000-0000-000000000000";
     }
 
-
 }
-

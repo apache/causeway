@@ -133,5 +133,4 @@ interface StructuralNodeVisitor {
 
     default void tableTail(final Table table, final int depth) {}
 
-
 }

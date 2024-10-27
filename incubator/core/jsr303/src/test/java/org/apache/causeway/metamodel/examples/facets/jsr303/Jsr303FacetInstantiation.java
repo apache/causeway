@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.apache.causeway.core.metamodel.examples.facets.jsr303.Jsr303PropertyValidationFacet;
 import org.apache.causeway.core.metamodel.facets.FacetHolderImpl;
 
-
 public class Jsr303FacetInstantiation {
 
     private FacetHolderImpl holder;

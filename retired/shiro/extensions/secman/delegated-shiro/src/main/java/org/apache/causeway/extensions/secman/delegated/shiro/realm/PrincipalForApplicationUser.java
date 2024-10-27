@@ -40,7 +40,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Acts as the Principal for the {@link CausewayModuleExtSecmanShiroRealm}, meaning that it is returned from
  * {@link CausewayModuleExtSecmanShiroRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken) authentication}, and passed into

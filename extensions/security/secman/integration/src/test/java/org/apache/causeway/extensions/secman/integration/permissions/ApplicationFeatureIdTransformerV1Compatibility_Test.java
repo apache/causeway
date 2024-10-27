@@ -81,7 +81,6 @@ class ApplicationFeatureIdTransformerV1Compatibility_Test {
         assertThat(transformed.getLogicalMemberName()).isNull();
     }
 
-
     @Test
     void type_when_does_not_exist() {
         ApplicationFeatureId input = ApplicationFeatureId.newType("order.Order");

@@ -51,7 +51,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 import lombok.NonNull;
 
-
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -213,7 +212,6 @@ implements IRequestListener {
                 new NotificationPanel(ID_FEEDBACK,
                         pdfJsPanel,
                         new ComponentFeedbackMessageFilter(pdfJsPanel)));
-
 
         return regularFrame;
     }

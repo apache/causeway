@@ -144,7 +144,6 @@ class ObjectAssociationAbstractTest_alwaysHidden {
         };
     }
 
-
     @Test
     public void whenNone() throws Exception {
 

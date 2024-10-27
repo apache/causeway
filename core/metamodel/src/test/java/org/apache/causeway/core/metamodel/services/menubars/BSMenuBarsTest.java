@@ -56,7 +56,6 @@ class BSMenuBarsTest {
             System.err.printf("%s%n", data);
         });
 
-
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             println(entry.getKey() + ":");
             println(entry.getValue());

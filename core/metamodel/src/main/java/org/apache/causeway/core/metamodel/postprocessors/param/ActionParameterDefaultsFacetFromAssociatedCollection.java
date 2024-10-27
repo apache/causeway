@@ -43,5 +43,4 @@ extends ActionParameterDefaultsFacetAbstract {
         return pendingArgs.getMultiselectChoices().getSelected();
     }
 
-
 }

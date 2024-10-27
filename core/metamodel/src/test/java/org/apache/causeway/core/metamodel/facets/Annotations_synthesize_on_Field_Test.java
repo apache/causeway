@@ -33,11 +33,8 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 
-
-
 @SuppressWarnings("unused")
 public class Annotations_synthesize_on_Field_Test {
-
 
     @Property(executionPublishing = Publishing.ENABLED)
     @Inherited
@@ -178,7 +175,6 @@ public class Annotations_synthesize_on_Field_Test {
         assertThat(nearestM.isPresent(), is(true));
         assertThat(nearestM.get().executionPublishing(), is(Publishing.DISABLED));
     }
-
 
     @Test
     public void direct_overrides_metaMeta_2() throws Exception {

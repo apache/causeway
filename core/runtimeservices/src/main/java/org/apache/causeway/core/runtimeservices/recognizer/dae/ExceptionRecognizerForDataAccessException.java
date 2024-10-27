@@ -120,5 +120,4 @@ implements ExceptionRecognizer {
         return Recognition.of(category, friendlyMessage);
     }
 
-
 }

@@ -75,7 +75,6 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
         raise(facetHolder, String.format(messageFormat, args));
     }
 
-
     private static final Comparator<ValidationFailure> comparator = Comparator
             .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
             .<String>thenComparing(failure->failure.getOrigin().getMemberLogicalName(), nullsFirst(naturalOrder()))

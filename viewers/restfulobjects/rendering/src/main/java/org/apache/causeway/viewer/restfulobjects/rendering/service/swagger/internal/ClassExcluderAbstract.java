@@ -24,8 +24,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-
-
 public abstract class ClassExcluderAbstract implements ClassExcluder {
 
     private final Set<String> packageNamesToIgnore = _Sets.newHashSet();

@@ -73,5 +73,4 @@ public class JdoEntityArchTests {
   public static ArchRule every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent =
       every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent();
 
-
 }

@@ -146,7 +146,6 @@ class CorsFilterTest {
         return digest;
     }
 
-
     private String validOrigin() {
         return "http://www.google.com";
     }

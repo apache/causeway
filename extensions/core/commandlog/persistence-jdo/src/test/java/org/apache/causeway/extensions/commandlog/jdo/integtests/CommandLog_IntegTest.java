@@ -30,7 +30,6 @@ import org.apache.causeway.extensions.commandlog.jdo.integtests.model.Counter;
 @ActiveProfiles("test")
 public class CommandLog_IntegTest extends CommandLog_IntegTestAbstract {
 
-
     protected org.apache.causeway.extensions.commandlog.applib.integtest.model.Counter newCounter(String name) {
         return Counter.builder().name(name).build();
     }

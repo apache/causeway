@@ -64,7 +64,6 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 //        return Optional.empty();
     }
 
-
     public BSGridPanel(final String id, final UiObjectWkt entityModel, final BSGrid bsGrid) {
         super(id, entityModel);
         this.bsPage = bsGrid;

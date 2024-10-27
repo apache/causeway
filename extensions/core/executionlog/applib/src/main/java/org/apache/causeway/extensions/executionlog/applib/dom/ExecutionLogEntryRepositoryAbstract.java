@@ -47,7 +47,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
  */
 public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLogEntry> implements ExecutionLogEntryRepository {
 
-
     private final Class<E> executionLogEntryClass;
 
     @Inject Provider<RepositoryService> repositoryServiceProvider;
@@ -61,7 +60,6 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
     public Class<E> getEntityClass() {
         return executionLogEntryClass;
     }
-
 
     /**
      * for testing only.
@@ -239,7 +237,6 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         return repositoryServiceProvider.get();
     }
 
-
     /**
      * intended for testing purposes only
      */
@@ -250,7 +247,6 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         }
         return _Casts.uncheckedCast(repositoryService().allInstances(executionLogEntryClass));
     }
-
 
     /**
      * intended for testing purposes only
@@ -263,7 +259,6 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         repositoryService().removeAll(executionLogEntryClass);
     }
 
-
     private static Timestamp toTimestampStartOfDayWithOffset(
             final @Nullable LocalDate dt,
             final int daysOffset) {
@@ -274,6 +269,5 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
                         .toEpochMilli())
                 : null;
     }
-
 
 }

@@ -73,5 +73,4 @@ extends ModelAbstract<ManagedObject> {
         return adapter;
     }
 
-
 }

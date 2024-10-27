@@ -20,8 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.pages;
 
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 
-
-
 public interface BookmarkedPagesModelProvider  {
 
     BookmarkedPagesModel getBookmarkedPagesModel();

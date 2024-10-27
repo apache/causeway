@@ -83,6 +83,4 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
         return filterOnMarker.test(markersIfAny);
     }
 
-
-
 }

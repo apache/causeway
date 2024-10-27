@@ -265,7 +265,6 @@ extends FacetFactoryTestAbstract {
 
         }
 
-
         actionScenario(Order.class, "maxTotalA", (processMethodContext, facetHolder, facetedMethod) -> {
             // when
             newFacetFactory().process(processMethodContext);

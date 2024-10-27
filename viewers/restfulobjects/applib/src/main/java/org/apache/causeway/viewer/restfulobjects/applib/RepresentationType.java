@@ -322,6 +322,4 @@ public enum RepresentationType {
         return PARSER;
     }
 
-
-
 }

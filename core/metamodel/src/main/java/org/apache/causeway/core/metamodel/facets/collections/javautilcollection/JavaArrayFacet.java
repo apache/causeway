@@ -83,5 +83,4 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
                 : (Object[]) arrayAdapter.getPojo();
     }
 
-
 }

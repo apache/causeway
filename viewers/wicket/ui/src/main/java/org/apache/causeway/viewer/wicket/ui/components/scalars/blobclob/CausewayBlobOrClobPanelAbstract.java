@@ -56,7 +56,6 @@ extends ScalarPanelFormFieldAbstract<T> {
     protected abstract IModel<List<FileUpload>> fileUploadModel();
     protected abstract IResource newResource(final T namedWithMimeType);
 
-
     // -- INPUT FORMAT
 
     @Override
@@ -239,8 +238,6 @@ extends ScalarPanelFormFieldAbstract<T> {
 //                    return null;
 //                });
 //    }
-
-
 
 //    private Image asWicketImage(final String id) {
 //        var blob = scalarModel().unwrapped(Blob.class).getObject();

@@ -121,7 +121,6 @@ public interface ObjectAction extends ObjectMember {
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy);
 
-
     // -- isArgumentSetValid, isArgumentSetValidForParameters, isArgumentSetValidForAction
 
     /**
@@ -176,7 +175,6 @@ public interface ObjectAction extends ObjectMember {
             InteractionHead head,
             Can<ManagedObject> proposedArguments,
             InteractionInitiatedBy interactionInitiatedBy);
-
 
     // -- INTERACTION HEAD
 
@@ -239,7 +237,6 @@ public interface ObjectAction extends ObjectMember {
      * @see ObjectActionParameter#get(ManagedObject, InteractionInitiatedBy)
      */
     ObjectActionParameter getParameterByName(String paramName);
-
 
     /**
      * The actual target to invoke actions upon.
@@ -430,7 +427,6 @@ public interface ObjectAction extends ObjectMember {
             return action.getFriendlyName(head::getOwner);
         }
     }
-
 
     // -- Predicates
 

@@ -237,7 +237,6 @@ implements Serializable {
     @NonNull
     AuthenticationSource authenticationSource = AuthenticationSource.DEFAULT;
 
-
     public enum AuthenticationSource {
         DEFAULT,
         /**
@@ -252,12 +251,10 @@ implements Serializable {
         }
     }
 
-
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "security", sequence = "3")
     @Getter @Builder.Default @With(onMethod_ = {@Programmatic})
     boolean impersonating = false;
-
 
     /**
      * Indicates which tenancy (or tenancies) this user has access to.
@@ -271,7 +268,6 @@ implements Serializable {
     @Getter @With(onMethod_ = {@Programmatic})
     @Nullable
     String multiTenancyToken;
-
 
     private static final String DEFAULT_AUTH_VALID_CODE = "";
 
@@ -384,6 +380,5 @@ implements Serializable {
         return UserMemento.builder()
                 .name(name);
     }
-
 
 }

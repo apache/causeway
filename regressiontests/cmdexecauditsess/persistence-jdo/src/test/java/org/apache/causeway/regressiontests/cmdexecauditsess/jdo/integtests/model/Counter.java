@@ -62,5 +62,4 @@ public class Counter extends org.apache.causeway.regressiontests.cmdexecauditses
     @Getter @Setter
     private Long num2;
 
-
 }

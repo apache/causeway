@@ -34,9 +34,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.graphql.viewer.test.domain.dept.Department;
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-
-
-
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(900)
 @DirtiesContext // yucky workaround

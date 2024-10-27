@@ -44,7 +44,6 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLTypeReference;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class TypeMapperDefault implements TypeMapper {
 
@@ -60,7 +59,6 @@ public class TypeMapperDefault implements TypeMapper {
 
     private final ScalarMapper scalarMapper;
     private final Provider<Context> contextProvider;
-
 
     @Override
     public GraphQLOutputType outputTypeFor(final Class<?> clazz){
@@ -122,7 +120,6 @@ public class TypeMapperDefault implements TypeMapper {
                 ? scalarType
                 : nonNull(scalarType);
     }
-
 
     @Override
     @Nullable

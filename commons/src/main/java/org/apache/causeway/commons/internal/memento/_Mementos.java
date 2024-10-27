@@ -113,8 +113,6 @@ public final class _Mementos {
         public <T> T read(@NonNull Class<T> cls, @NonNull Serializable value);
     }
 
-
-
     // -- MEMENTO CONSTRUCTION
 
     /**

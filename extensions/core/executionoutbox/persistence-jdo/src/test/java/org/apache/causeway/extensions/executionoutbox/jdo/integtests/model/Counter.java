@@ -61,5 +61,4 @@ public class Counter extends org.apache.causeway.extensions.executionoutbox.appl
     @Getter @Setter
     private Long num2;
 
-
 }

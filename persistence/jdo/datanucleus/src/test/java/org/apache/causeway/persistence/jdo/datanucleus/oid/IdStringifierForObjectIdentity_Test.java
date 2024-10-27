@@ -31,8 +31,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoObjectIdentityValueSemantics;
 
-
-
 class IdStringifierForObjectIdentity_Test {
 
     public static Stream<Arguments> roundtrip() {

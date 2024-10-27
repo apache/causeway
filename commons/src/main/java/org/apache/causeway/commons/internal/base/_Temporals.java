@@ -163,7 +163,6 @@ public final class _Temporals {
     private static final DateTimeFormatter ZONEDDATETIME_DATASTORE_PARSER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss" + FRACTIONAL_SECONDS_READ_PATTERN + "[ VV]");
 
-
     /**
      * Returns a {@link String} representing given temporal suitable for the data-store.
      */

@@ -60,7 +60,6 @@ HasDescribedAs, HasHidden, HasNamed {
         setId(id);
     }
 
-
     private String id;
     /**
      * Method name.
@@ -91,7 +90,6 @@ HasDescribedAs, HasHidden, HasNamed {
         this.cssClass = cssClass;
     }
 
-
     private String cssClassFa;
 
     @Override
@@ -104,7 +102,6 @@ HasDescribedAs, HasHidden, HasNamed {
     public void setCssClassFa(final String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
-
 
     private CssClassFaPosition cssClassFaPosition;
 
@@ -119,7 +116,6 @@ HasDescribedAs, HasHidden, HasNamed {
         this.cssClassFaPosition = cssClassFaPosition;
     }
 
-
     private String describedAs;
 
     @Override
@@ -133,8 +129,6 @@ HasDescribedAs, HasHidden, HasNamed {
         this.describedAs = describedAs;
     }
 
-
-
     private Where hidden;
 
     @Override
@@ -147,8 +141,6 @@ HasDescribedAs, HasHidden, HasNamed {
     public void setHidden(final Where hidden) {
         this.hidden = hidden;
     }
-
-
 
     private String named;
 
@@ -174,7 +166,6 @@ HasDescribedAs, HasHidden, HasNamed {
         this.position = position;
     }
 
-
     private PromptStyle promptStyle;
 
     @XmlAttribute(required = false)
@@ -186,8 +177,6 @@ HasDescribedAs, HasHidden, HasNamed {
         this.promptStyle = promptStyle;
     }
 
-
-
     private Redirect redirect;
 
     @XmlAttribute(required = false)
@@ -198,8 +187,6 @@ HasDescribedAs, HasHidden, HasNamed {
     public void setRedirect(final Redirect redirect) {
         this.redirect = redirect;
     }
-
-
 
     private ActionLayoutDataOwner owner;
     /**
@@ -219,7 +206,6 @@ HasDescribedAs, HasHidden, HasNamed {
         this.owner = owner;
     }
 
-
     private String metadataError;
 
     /**
@@ -233,7 +219,6 @@ HasDescribedAs, HasHidden, HasNamed {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
-
 
     private Link link;
 
@@ -253,13 +238,10 @@ HasDescribedAs, HasHidden, HasNamed {
         this.link = link;
     }
 
-
-
     @Override public String toString() {
         return "ActionLayoutData{" +
                 "id='" + id + '\'' +
                 '}';
     }
-
 
 }

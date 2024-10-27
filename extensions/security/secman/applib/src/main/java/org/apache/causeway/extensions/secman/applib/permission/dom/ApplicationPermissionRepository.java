@@ -50,7 +50,6 @@ public interface ApplicationPermissionRepository {
             ApplicationPermissionRule rule,
             ApplicationFeatureSort type);
 
-
     /**
      * @return detached entity
      */

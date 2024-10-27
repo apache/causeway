@@ -38,7 +38,6 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.NonNull;
 
-
 /**
  * Provides supporting functionality for querying {@link SessionLogEntry session log entry} entities.
  *
@@ -82,7 +81,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         return repositoryService.persistAndFlush(entry);
     }
 
-
     public Optional<SessionLogEntry> findBySessionGuid(final UUID sessionGuid) {
         return _Casts.uncheckedCast(
                 repositoryService.firstMatch(
@@ -90,7 +88,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
                          .withParameter("sessionGuid", sessionGuid))
         );
     }
-
 
     public Optional<SessionLogEntry> findByHttpSessionId(final String httpSessionId) {
         return _Casts.uncheckedCast(
@@ -100,7 +97,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
     public List<SessionLogEntry> findByUsername(final String username) {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
@@ -108,7 +104,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
                          .withParameter("username", username))
         );
     }
-
 
     public List<SessionLogEntry> findByUsernameAndFromAndTo(
             final String username,
@@ -142,7 +137,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
-
     public List<SessionLogEntry> findByFromAndTo(
             final LocalDate from,
             final LocalDate to) {
@@ -170,7 +164,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         return _Casts.uncheckedCast(repositoryService.allMatches(query));
     }
 
-
     public List<SessionLogEntry> findByUsernameAndStrictlyBefore(
             final String username,
             final Timestamp from) {
@@ -183,7 +176,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
     public List<SessionLogEntry> findByUsernameAndStrictlyAfter(
             final String username,
             final Timestamp from) {
@@ -195,16 +187,12 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
         );
     }
 
-
-
     public List<SessionLogEntry> findActiveSessions() {
         return _Casts.uncheckedCast(
                 repositoryService.allMatches(
                     Query.named(sessionLogEntryClass, SessionLogEntry.Nq.FIND_ACTIVE_SESSIONS))
         );
     }
-
-
 
     public List<SessionLogEntry> findRecentByUsername(final String username) {
         return _Casts.uncheckedCast(
@@ -221,7 +209,6 @@ public abstract class SessionLogEntryRepositoryAbstract<E extends SessionLogEntr
                 ? Timestamp.valueOf(dt.atStartOfDay().plusDays(daysOffset))
                 : null;
     }
-
 
     /**
      * for testing purposes only

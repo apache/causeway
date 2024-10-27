@@ -46,7 +46,6 @@ class _ExcelServiceHelper {
 
     private final ExcelFileBlobConverter excelFileBlobConverter = new ExcelFileBlobConverter();
 
-
     /**
      * Creates a Blob holding a single-sheet spreadsheet of the domain objects.
      *
@@ -172,8 +171,6 @@ class _ExcelServiceHelper {
             throw new ExcelServiceDefault.Exception(ex);
         }
     }
-
-
 
     /**
      * Returns a list of objects for each line in the spreadsheet, of the specified type.  The objects are read

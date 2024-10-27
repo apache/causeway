@@ -52,5 +52,4 @@ extends MustSatisfySpecificationFacetAbstract {
         super(specifications, holder);
     }
 
-
 }

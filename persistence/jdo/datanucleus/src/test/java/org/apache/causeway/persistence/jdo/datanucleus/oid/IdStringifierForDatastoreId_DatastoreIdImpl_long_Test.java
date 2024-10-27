@@ -30,8 +30,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.DnDatastoreIdImplValueSemantics;
 
-
-
 class IdStringifierForDatastoreId_DatastoreIdImpl_long_Test {
 
     public static Stream<Arguments> roundtrip() {

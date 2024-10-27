@@ -52,7 +52,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
         TaggerDefault.class,
         ValueSchemaFactoryDefault.class,
 
-
         // @Service's
         AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,

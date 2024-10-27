@@ -92,5 +92,4 @@ extends CausewayIntegrationTestAbstract
         assertEquals(0, repository.allInstances(JpaBook.class).size());
     }
 
-
 }

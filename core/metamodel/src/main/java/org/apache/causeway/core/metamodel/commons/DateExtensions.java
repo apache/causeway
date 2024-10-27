@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.commons;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public final class DateExtensions {
 
     private DateExtensions(){}

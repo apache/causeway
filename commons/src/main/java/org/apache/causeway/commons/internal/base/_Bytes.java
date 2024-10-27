@@ -309,7 +309,6 @@ public final class _Bytes {
         }
     }
 
-
     /**
      * Compresses the given byte array, using {@link Deflater} algorithm.<br/>
      * Symmetry holds: <br/>
@@ -423,6 +422,5 @@ public final class _Bytes {
             .andThen(_Bytes::decompress);
 
     // --
-
 
 }

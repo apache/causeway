@@ -42,7 +42,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfu
 
 import lombok.Getter;
 
-
 /**
  * WebModule that provides the RestfulObjects Viewer.
  *
@@ -134,6 +133,5 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
 
         return Can.empty(); // registers no listeners
     }
-
 
 }

@@ -182,7 +182,6 @@ public final class _Exceptions {
         return new UnsupportedOperationException(safelyFormat(format, args));
     }
 
-
     private static String safelyFormat(final String format, final Object... args) {
         try {
             return String.format(format, args);

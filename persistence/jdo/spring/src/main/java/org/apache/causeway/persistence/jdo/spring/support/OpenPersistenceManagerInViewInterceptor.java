@@ -64,11 +64,9 @@ public class OpenPersistenceManagerInViewInterceptor implements WebRequestInterc
 	 */
 	public static final String PARTICIPATE_SUFFIX = ".PARTICIPATE";
 
-
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	private PersistenceManagerFactory persistenceManagerFactory;
-
 
 	/**
 	 * Set the JDO PersistenceManagerFactory that should be used to create
@@ -85,7 +83,6 @@ public class OpenPersistenceManagerInViewInterceptor implements WebRequestInterc
 	public PersistenceManagerFactory getPersistenceManagerFactory() {
 		return persistenceManagerFactory;
 	}
-
 
 	@Override
 	public void preHandle(WebRequest request) throws DataAccessException {

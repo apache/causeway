@@ -48,7 +48,6 @@ import lombok.RequiredArgsConstructor;
 
 import junit.framework.AssertionFailedError;
 
-
 /**
  * Use as a <tt>@Rule</tt>, meaning that the <tt>@RunWith(JMock.class)</tt> can
  * be ignored.
@@ -83,7 +82,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         jUnitRuleMockery2.setThreadingPolicy(new Synchroniser());
         return jUnitRuleMockery2;
     }
-
 
     /**
      * Annotate the field that references the class under test;
@@ -125,7 +123,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
     @Retention(RUNTIME)
     @Target(FIELD)
     public static @interface One {}
-
 
     /**
      * Annotate fields annotated with {@link Mock}, to indicate that they should be set up
@@ -174,7 +171,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                     final Object cut = container.getComponent(cutType);
                     _Reflect.setFieldOn(cutField, target, cut);
 
-
                 } else {
                     cutType = null;
                 }
@@ -192,7 +188,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
                     }
                 }
             }
-
 
             protected Field locateClassUnderTestFieldIfAny(final List<Field> allFields) {
                 Field cutField = null;
@@ -213,14 +208,12 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         };
     }
 
-
     public <T> T getClassUnderTest() {
         if(cutType == null) {
             throw new IllegalStateException("No field annotated @ClassUnderTest was found");
         }
         return _Casts.uncheckedCast( container.getComponent(cutType) );
     }
-
 
     /**
      * Ignoring any interaction with the mock; an allowing/ignoring mock will be
@@ -257,7 +250,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         }
     }
 
-
     /**
      * Require one interaction
      */
@@ -285,7 +277,6 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
         }
     }
 
-
     private static class ExpectationsWithInitializer extends Expectations {
         private ExpectationsWithInitializer(Consumer<Expectations> initializer) {
             super();
@@ -296,7 +287,5 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
     public static Expectations expectationsWith(Consumer<Expectations> initializer) {
         return new ExpectationsWithInitializer(initializer);
     }
-
-
 
 }

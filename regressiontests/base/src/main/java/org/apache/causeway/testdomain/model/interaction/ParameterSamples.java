@@ -81,5 +81,4 @@ final class ParameterSamples {
         Collection<DemoEnum> b;
     }
 
-
 }

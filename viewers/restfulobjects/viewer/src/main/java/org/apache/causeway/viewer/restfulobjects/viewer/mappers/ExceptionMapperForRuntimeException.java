@@ -37,5 +37,4 @@ public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<
         return buildResponse(ex);
     }
 
-
 }

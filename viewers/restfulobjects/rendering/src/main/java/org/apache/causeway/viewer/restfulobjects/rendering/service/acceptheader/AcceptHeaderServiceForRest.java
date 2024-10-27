@@ -70,12 +70,10 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
         mediaTypesByThread.remove();
     }
 
-
     @Override
     public List<MediaType> getAcceptableMediaTypes() {
         return mediaTypesByThread.get();
     }
-
 
     @Component
     @Provider

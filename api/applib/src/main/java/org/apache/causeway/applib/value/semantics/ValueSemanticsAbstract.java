@@ -129,7 +129,6 @@ ValueSemanticsProvider<T> {
                 .orElseGet(()->getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
     }
 
-
     // -- COMPOSITION UTILS
 
     protected ValueDecomposition decomposeAsString(
@@ -154,7 +153,6 @@ ValueSemanticsProvider<T> {
                 ? fromString.apply(string)
                 : onNullOrEmpty.get();
     }
-
 
     /**
      * @param <F> - the underlying fundamental value-type
@@ -256,7 +254,6 @@ ValueSemanticsProvider<T> {
 
         var format = getNumberFormat(context, FormatUsageFor.PARSING);
         format.setParseBigDecimal(true);
-
 
         var position = new ParsePosition(0);
         try {

@@ -52,7 +52,6 @@ import static org.apache.causeway.testing.archtestsupport.applib.classrules.Comm
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.CommonPredicates.haveNoArgProtectedConstructor;
 import static org.apache.causeway.testing.archtestsupport.applib.classrules.CommonPredicates.ofAnEnum;
 
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -309,7 +308,6 @@ public class ArchitectureJpaRules {
                 .and().doNotHaveModifier(JavaModifier.ABSTRACT)
                 .should(haveNoArgProtectedConstructor());
     }
-
 
     static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
         return new DescribedPredicate<JavaClass>("are subtype entities ") {

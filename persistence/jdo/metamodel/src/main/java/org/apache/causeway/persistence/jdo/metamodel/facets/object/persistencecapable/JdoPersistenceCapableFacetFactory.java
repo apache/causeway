@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable;
 
-
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.PersistenceCapable;
 
@@ -33,8 +32,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
-
-
 
 /**
  * Implements {@link ObjectTypeFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.

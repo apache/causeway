@@ -42,5 +42,4 @@ implements JdoVersionFacet {
         super(JdoVersionFacet.class, holder);
     }
 
-
 }

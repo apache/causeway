@@ -82,7 +82,6 @@ implements MixedInMember {
      */
     private final ObjectSpecification mixeeSpec;
 
-
     /**
      * Hold facets rather than delegate to the mixin action (different types might use layout metadata to position
      * the mixin in different ways)

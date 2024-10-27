@@ -326,7 +326,6 @@ implements TemporalValueSemantics<T> {
         return t; // otherwise acts as identity operator
     }
 
-
     /**
      * Format used for rendering editable text representation.
      */

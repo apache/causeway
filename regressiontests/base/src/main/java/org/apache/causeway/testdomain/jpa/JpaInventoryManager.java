@@ -59,6 +59,4 @@ public class JpaInventoryManager {
         return repository.allInstances(JpaProduct.class);
     }
 
-
-
 }

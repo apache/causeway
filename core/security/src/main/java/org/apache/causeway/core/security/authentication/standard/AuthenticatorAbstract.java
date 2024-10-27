@@ -43,7 +43,6 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         return InteractionContext.ofUserWithSystemDefaults(user);
     }
 
-
     /**
      * Whether this {@link Authenticator} is valid/applicable in the running context (and
      * optionally with respect to the provided {@link AuthenticationRequest}).

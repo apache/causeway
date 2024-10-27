@@ -113,5 +113,4 @@ class CollectionFacetUtilsTest {
             CollectionFacet.AutofitUtils.collect(null, List.class));
     }
 
-
 }

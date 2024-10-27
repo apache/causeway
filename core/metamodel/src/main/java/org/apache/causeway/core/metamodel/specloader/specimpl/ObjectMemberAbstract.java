@@ -125,7 +125,6 @@ implements
                         textFacet->Optional.empty()));
     }
 
-
     @Override
     public final Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider) {
         return lookupFacet(MemberDescribedFacet.class)
@@ -144,7 +143,6 @@ implements
                                 textFacet->Optional.of(textFacet.translated()),
                                 textFacet->Optional.empty()));
     }
-
 
     @Override
     public final String getHelp() {
@@ -177,7 +175,6 @@ implements
         .map(HasStaticText::translated);
     }
 
-
     // -- Hidden (or visible)
     /**
      * Create an {@link InteractionContext} to represent an attempt to view this
@@ -193,8 +190,6 @@ implements
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
-
-
 
     @Override
     public boolean isAlwaysHidden() {

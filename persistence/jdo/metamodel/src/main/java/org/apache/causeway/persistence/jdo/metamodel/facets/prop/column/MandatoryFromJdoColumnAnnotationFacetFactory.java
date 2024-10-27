@@ -43,7 +43,6 @@ import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
-
 public class MandatoryFromJdoColumnAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {
@@ -122,7 +121,6 @@ implements MetaModelRefiner {
                 : MandatoryFacet.Semantics.OPTIONAL;
 
     }
-
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {

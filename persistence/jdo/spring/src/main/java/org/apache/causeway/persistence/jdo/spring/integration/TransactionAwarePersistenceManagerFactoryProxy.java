@@ -122,7 +122,6 @@ implements
 		return this.allowCreate;
 	}
 
-
 	@Override
 	public PersistenceManagerFactory getObject() {
 		return this.proxy;
@@ -137,7 +136,6 @@ implements
 	public boolean isSingleton() {
 		return true;
 	}
-
 
 	/**
 	 * Invocation handler that delegates getPersistenceManager calls on the

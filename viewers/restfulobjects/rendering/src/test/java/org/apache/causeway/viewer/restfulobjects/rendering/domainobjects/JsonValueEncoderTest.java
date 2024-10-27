@@ -43,8 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
-
-
 class JsonValueEncoderTest
 extends JsonValueEncoderTestAbstract {
 
@@ -214,7 +212,6 @@ extends JsonValueEncoderTestAbstract {
         // then
         assertSame(spec, adapter.getSpecification());
     }
-
 
     @Test
     void whenReprIsString() throws Exception {

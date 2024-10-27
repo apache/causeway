@@ -79,5 +79,4 @@ class _ImagesTest {
         return _Images.fromPixels(getPixels());
     }
     
-    
 }

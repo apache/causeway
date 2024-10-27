@@ -22,7 +22,6 @@ import javax.jdo.annotations.Column;
 
 abstract class SimpleObjectWithColumnAllowsNullAnnotations {
 
-
     private int primitiveWithNoAnnotation;
     public int getPrimitiveWithNoAnnotation() {
         return primitiveWithNoAnnotation;
@@ -49,7 +48,6 @@ abstract class SimpleObjectWithColumnAllowsNullAnnotations {
         this.primitiveWithAllowsNullFalse = primitive;
     }
 
-
     private int primitiveWithAllowsNullTrue;
     @Column(allowsNull="true")
     public int getPrimitiveWithAllowsNullTrue() {
@@ -58,7 +56,6 @@ abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public void setPrimitiveWithAllowsNullTrue(final int primitive) {
         this.primitiveWithAllowsNullTrue = primitive;
     }
-
 
     private String referenceWithNoAnnotation;
     public String getReferenceWithNoAnnotation() {
@@ -86,7 +83,6 @@ abstract class SimpleObjectWithColumnAllowsNullAnnotations {
         this.referenceWithAllowsNullFalse = referenceWithAllowsNullFalse;
     }
 
-
     private String referenceWithAllowsNullTrue;
     @Column(allowsNull="true")
     public String getReferenceWithAllowsNullTrue() {
@@ -95,6 +91,5 @@ abstract class SimpleObjectWithColumnAllowsNullAnnotations {
     public void setReferenceWithAllowsNullTrue(final String referenceWithAllowsNullTrue) {
         this.referenceWithAllowsNullTrue = referenceWithAllowsNullTrue;
     }
-
 
 }

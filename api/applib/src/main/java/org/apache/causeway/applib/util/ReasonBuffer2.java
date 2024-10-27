@@ -104,7 +104,6 @@ public class ReasonBuffer2 {
 
     private final List<LazyReason> lazyReasons = _Lists.newArrayList();
 
-
     private ReasonBuffer2(final Mode mode, final String prefix) {
         this.prefix = prefix;
         this.mode = mode != null ? mode : Mode.ALL;

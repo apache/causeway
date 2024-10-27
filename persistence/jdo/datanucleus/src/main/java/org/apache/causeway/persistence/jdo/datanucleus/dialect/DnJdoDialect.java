@@ -29,8 +29,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.persistence.jdo.spring.integration.DefaultJdoDialect;
 import org.apache.causeway.persistence.jdo.spring.integration.JdoDialect;
 
-
-
 /**
  * Vendor (<i>Datanucleus</i>) specific implementation of <i>Spring's</i> {@link JdoDialect}
  * interface.

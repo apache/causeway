@@ -55,7 +55,6 @@ public class PdfJsDemoObjectWithBlobMenu {
         return repositoryService.allInstances(PdfJsDemoObjectWithBlob.class);
     }
 
-
     @MemberOrder(sequence = "2")
     public PdfJsDemoObjectWithBlob createDemoObjectWithBlob(
             @ParameterLayout(named = "Name")
@@ -65,7 +64,5 @@ public class PdfJsDemoObjectWithBlobMenu {
         repositoryService.persist(obj);
         return obj;
     }
-
-
 
 }

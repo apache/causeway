@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
 
-
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
 
 public abstract class DomainServiceLayoutFacetAbstract
 extends FacetAbstract

@@ -42,7 +42,6 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import lombok.Getter;
 
-
 public class SimpleProperty
         extends Element
         implements MemberInteractor<OneToOneAssociation>, Parent {
@@ -149,7 +148,6 @@ public class SimpleProperty
             lobChars.addDataFetcher(this);
         }
     }
-
 
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {

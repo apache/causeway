@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -95,8 +94,5 @@ public class ClientConversationLogger implements ClientConversationFilter {
         }
         return keyValueLiteral;
     }
-
-
-
 
 }

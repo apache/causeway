@@ -101,6 +101,4 @@ public class JaxbServiceDefault extends Simple {
                 serviceInjector.injectServicesInto(new PersistentEntitiesAdapter()));
     }
 
-
 }
-

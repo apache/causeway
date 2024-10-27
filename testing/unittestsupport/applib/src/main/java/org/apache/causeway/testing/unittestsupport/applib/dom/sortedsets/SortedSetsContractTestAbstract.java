@@ -70,5 +70,4 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
         return entityType.getSimpleName() + "#" + collectionField.getName();
     }
 
-
 }

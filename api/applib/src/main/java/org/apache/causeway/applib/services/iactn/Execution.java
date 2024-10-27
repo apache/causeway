@@ -55,7 +55,6 @@ import lombok.Getter;
  */
 public abstract class Execution<T extends MemberExecutionDto, E extends AbstractDomainEvent<?>> {
 
-
     /**
      * The owning {@link Interaction}.
      */
@@ -108,7 +107,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
         this.target = target;
     }
 
-
     // -- parent, children
 
     private final List<Execution<?, ?>> children = _Lists.newArrayList();
@@ -128,7 +126,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
             parent.children.add(this);
         }
     }
-
 
     /**
      * The actions/property edits made in turn via the {@link WrapperFactory}.
@@ -237,7 +234,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
         this.threw = threw;
     }
 
-
     // -- dto (property)
 
     /**
@@ -259,7 +255,6 @@ public abstract class Execution<T extends MemberExecutionDto, E extends Abstract
     public void setDto(final T executionDto) {
         this.dto = executionDto;
     }
-
 
     // -- helpers (syncMetrics)
 

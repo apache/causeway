@@ -29,5 +29,4 @@ module org.apache.causeway.persistence.querydsl.metamodel {
     requires spring.context;
     requires spring.core;
 
-
 }

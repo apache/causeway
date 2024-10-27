@@ -223,5 +223,4 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         return Optional.empty();
     }
 
-
 }

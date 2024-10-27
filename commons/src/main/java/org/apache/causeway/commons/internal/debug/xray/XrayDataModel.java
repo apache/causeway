@@ -155,7 +155,6 @@ public abstract class XrayDataModel extends HasIdAndLabel {
 
     }
 
-
     @Getter
     @EqualsAndHashCode(callSuper = false)
     @RequiredArgsConstructor

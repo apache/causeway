@@ -44,42 +44,32 @@ public interface SessionLogEntryRepository {
             final SessionSubscriber.CausedBy causedBy,
             final Timestamp timestamp);
 
-
     Optional<SessionLogEntry> findBySessionGuid(final UUID sessionGuid);
-
 
     Optional<SessionLogEntry> findByHttpSessionId(final String httpSessionId);
 
-
     List<SessionLogEntry> findByUsername(final String username);
-
 
     List<SessionLogEntry> findByUsernameAndFromAndTo(
             final String username,
             final LocalDate from,
             final LocalDate to);
 
-
     List<SessionLogEntry> findByFromAndTo(
             final LocalDate from,
             final LocalDate to);
-
 
     List<SessionLogEntry> findByUsernameAndStrictlyBefore(
             final String username,
             final Timestamp from);
 
-
     List<SessionLogEntry> findByUsernameAndStrictlyAfter(
             final String username,
             final Timestamp from);
 
-
     List<SessionLogEntry> findActiveSessions();
 
-
     List<SessionLogEntry> findRecentByUsername(final String username);
-
 
     /**
      * for testing purposes only

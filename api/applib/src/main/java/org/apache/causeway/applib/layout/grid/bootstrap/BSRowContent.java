@@ -51,7 +51,6 @@ public abstract class BSRowContent extends BSElementAbstract {
         this.size = size;
     }
 
-
     private BSRowContentOwner owner;
 
     /**
@@ -76,6 +75,5 @@ public abstract class BSRowContent extends BSElementAbstract {
     public BSGrid getGrid() {
         return getOwner().getGrid();
     }
-
 
 }

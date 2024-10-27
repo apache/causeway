@@ -56,7 +56,6 @@ class OneToOneAssociationAbstractTest {
     private OneToOneAssociation objectAssociation;
     private FacetedMethod facetedMethod;
 
-
     public static class Customer {
         private String firstName;
 
@@ -137,7 +136,6 @@ class OneToOneAssociationAbstractTest {
             public int getAutoCompleteMinLength() {
                 return 0;
             }
-
 
         };
     }

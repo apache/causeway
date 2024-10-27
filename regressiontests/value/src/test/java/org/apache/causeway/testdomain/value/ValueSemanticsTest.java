@@ -54,8 +54,6 @@ import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExampleService.S
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -153,7 +151,6 @@ class ValueSemanticsTest {
 
        // env.cleanup();
     }
-
 
     @ParameterizedTest(name = "{index} {0}")
     @MethodSource("provideValueTypeExamples")

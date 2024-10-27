@@ -135,7 +135,6 @@ public interface CommandExecutorService {
      */
     Try<Bookmark> executeCommand(Command command);
 
-
     /**
      * As per {@link #executeCommand(InteractionContextPolicy, CommandDto)}, with a policy of {@link InteractionContextPolicy#NO_SWITCH no switch}.
      *

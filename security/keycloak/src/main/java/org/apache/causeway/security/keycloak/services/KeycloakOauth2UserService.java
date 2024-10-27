@@ -51,7 +51,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 public class KeycloakOauth2UserService extends OidcUserService {
 
@@ -156,7 +155,6 @@ public class KeycloakOauth2UserService extends OidcUserService {
         return _Casts.castTo(Collection.class, x)
                 .filter(Predicate.not(_NullSafe::isEmpty));
     }
-
 
     private Jwt parseJwt(final String accessTokenValue) {
         try {

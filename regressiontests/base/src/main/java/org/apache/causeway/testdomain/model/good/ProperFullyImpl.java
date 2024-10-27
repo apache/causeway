@@ -70,5 +70,4 @@ extends ProperFullyAbstract {
     public void setSampleCollection(final List<String> sampleCollection) {
     }
 
-
 }

@@ -29,8 +29,6 @@ import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.PersistenceStack;
 
-
-
 /**
  * ServiceLoader plugin, classifies PersistenceCapable types into BeanSort.ENTITY.
  * @since 2.0
@@ -78,6 +76,5 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
 
         return null; // we don't see fit to classify given type
     }
-
 
 }

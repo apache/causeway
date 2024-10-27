@@ -324,5 +324,4 @@ implements
         return logicalName;
     }
 
-
 }

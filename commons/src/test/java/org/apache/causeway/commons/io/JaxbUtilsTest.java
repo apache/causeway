@@ -44,7 +44,6 @@ import lombok.Setter;
 
 class JaxbUtilsTest {
 
-
     @XmlRootElement(name = "type-a")
     @XmlType
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -64,7 +63,6 @@ class JaxbUtilsTest {
         @XmlElement(required = false)
         @Getter @Setter private String string;
     }
-
 
     private A a;
     private B b;

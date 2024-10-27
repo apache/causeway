@@ -32,7 +32,6 @@ public class ObjectRetrievalFailureException extends DataRetrievalFailureExcepti
 
 	private Object identifier;
 
-
 	/**
 	 * Create a general ObjectRetrievalFailureException with the given message,
 	 * without any information on the affected object.
@@ -98,7 +97,6 @@ public class ObjectRetrievalFailureException extends DataRetrievalFailureExcepti
 		this.persistentClass = persistentClassName;
 		this.identifier = identifier;
 	}
-
 
 	/**
 	 * Return the persistent class of the object that was not found.

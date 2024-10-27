@@ -69,7 +69,6 @@ extends ViewModelFacetAbstract {
             var explicitInjectConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_WITH_INJECT_SEMANTICS.getAll(cls);
             var publicConstructors = ProgrammingModelConstants.ViewmodelConstructor.PUBLIC_ANY.getAll(cls);
 
-
             var violation = explicitInjectConstructors.getCardinality().isMultiple()
                     ? ProgrammingModelConstants.MessageTemplate.VIEWMODEL_MULTIPLE_CONSTRUCTORS_WITH_INJECT_SEMANTICS
                     : explicitInjectConstructors.getCardinality().isZero()

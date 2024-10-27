@@ -224,30 +224,25 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
 
     static final String FQCN = "org.apache.causeway.extensions.audittrail.jdo.dom.AuditTrailEntry";
 
-
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
-
 
     @Column(allowsNull = Timestamp.ALLOWS_NULL)
     @Timestamp
     @Getter @Setter
     private java.sql.Timestamp timestamp;
 
-
     @Column(allowsNull = InteractionId.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
     @InteractionId
     @Getter @Setter
     private UUID interactionId;
 
-
     @Column(allowsNull = Sequence.ALLOWS_NULL)
     @Sequence
     @Getter @Setter
     private int sequence;
-
 
     @Persistent
     @Column(allowsNull = Target.ALLOWS_NULL, length = Target.MAX_LENGTH)
@@ -255,24 +250,20 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
     @Getter @Setter
     private Bookmark target;
 
-
     @Column(allowsNull = LogicalMemberIdentifier.ALLOWS_NULL, length = LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
     @Getter @Setter
     private String logicalMemberIdentifier;
-
 
     @Column(allowsNull = PropertyId.ALLOWS_NULL, length = PropertyId.MAX_LENGTH)
     @PropertyId
     @Getter @Setter
     private String propertyId;
 
-
     @Column(allowsNull = PreValue.ALLOWS_NULL, length = PreValue.MAX_LENGTH)
     @PreValue
     @Getter @Setter
     private String preValue;
-
 
     @Column(allowsNull = PostValue.ALLOWS_NULL, length = PostValue.MAX_LENGTH)
     @PostValue

@@ -87,5 +87,4 @@ class ServiceInjectorLegacyTest {
         private Service2 d;
     }
 
-
 }

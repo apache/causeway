@@ -32,5 +32,4 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  */
 public interface PropertyClearFacet extends PropertyClearingAccessor, Facet {
 
-
 }

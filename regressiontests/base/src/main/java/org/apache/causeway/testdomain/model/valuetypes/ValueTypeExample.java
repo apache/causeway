@@ -85,7 +85,6 @@ import lombok.Setter;
 import lombok.Singular;
 import lombok.SneakyThrows;
 
-
 public abstract class ValueTypeExample<T> {
 
     @Property(editing = Editing.ENABLED)
@@ -768,7 +767,6 @@ public abstract class ValueTypeExample<T> {
         public TreePath sampleAction(@Parameter @Nullable final TreePath value) { return value; }
     }
     
-
     //TODO    TreeNode
 //    @DomainObject(
 //            @Named("causeway.testdomain.valuetypes.ValueTypeExampleTreeNode",

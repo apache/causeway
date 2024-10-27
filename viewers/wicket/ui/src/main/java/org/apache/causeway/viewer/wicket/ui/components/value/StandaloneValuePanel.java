@@ -69,5 +69,4 @@ extends PanelAbstract<ManagedObject, ValueModel> {
                 || LocalResourcePath.class.equals(cls);
     }
 
-
 }

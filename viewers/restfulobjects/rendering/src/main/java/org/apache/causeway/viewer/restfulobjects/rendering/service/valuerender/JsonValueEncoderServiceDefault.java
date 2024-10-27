@@ -161,7 +161,6 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                 + " (using 'String' as a fallback attempt)", valueRepr);
     }
 
-
     @Override
     public void appendValueAndFormat(
             final ManagedObject valueAdapter,

@@ -18,11 +18,9 @@
  */
 package org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable;
 
-
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-
 
 /**
  * Corresponds to annotating the class with the {@link javax.jdo.annotations.PersistenceCapable} annotation.

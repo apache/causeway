@@ -37,7 +37,6 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.causeway.extensions.excel.applib.AggregationType;
 import org.apache.causeway.extensions.excel.applib.service.ExcelServiceDefault;
 
-
 /**
  * @since 2.0 {@index}
  */
@@ -93,7 +92,6 @@ public class SheetPivoter {
         static CellStyle totalSumStyle;
         static Font boldFont;
     }
-
 
     /**
      * Takes the values of the source sheet and creates a pivot in the target sheet based on the information of

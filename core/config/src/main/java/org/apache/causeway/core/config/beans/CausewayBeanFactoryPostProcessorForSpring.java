@@ -128,5 +128,4 @@ implements
         return causewayComponentScanInterceptor.getAndDrainIntrospectableTypes();
     }
 
-
 }

@@ -27,7 +27,6 @@ import org.junit.jupiter.api.TestFactory;
 
 import org.apache.causeway.viewer.graphql.viewer.test.e2e.Abstract_IntegTest;
 
-
 //NOT USING @Transactional since we are running server within same transaction otherwise
 @Order(30)
 public class I18nCalculator_IntegTest extends Abstract_IntegTest {

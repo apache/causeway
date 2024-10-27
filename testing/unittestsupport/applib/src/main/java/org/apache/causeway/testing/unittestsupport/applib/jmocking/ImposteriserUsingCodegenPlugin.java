@@ -38,7 +38,6 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
     private ImposteriserUsingCodegenPlugin() {
     }
 
-
     @Override
     public boolean canImposterise(Class<?> mockedType) {
 
@@ -60,7 +59,6 @@ class ImposteriserUsingCodegenPlugin implements Imposteriser {
         if(mockedType.isInterface()) {
             return reflectionImposteriser.imposterise(mockObject, mockedType, ancilliaryTypes);
         }
-
 
         final _ProxyFactory<T> factory = _ProxyFactory.builder(mockedType)
                 .interfaces(ancilliaryTypes)

@@ -83,7 +83,6 @@ extends NavigableParentFacetAbstract {
         }
     }
 
-
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);

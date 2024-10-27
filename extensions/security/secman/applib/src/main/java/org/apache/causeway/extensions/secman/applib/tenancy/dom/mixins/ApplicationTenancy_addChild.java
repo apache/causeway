@@ -36,7 +36,6 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.mixins.Applicati
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  *
  * @since 2.0 {@index}
@@ -74,7 +73,6 @@ public class ApplicationTenancy_addChild {
 
     @MemberSupport public String disableAct() {
         return choicesChild().isEmpty()? "No root (non-paranted) tenancies available": null; }
-
 
     // -- HELPER
 

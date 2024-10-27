@@ -182,7 +182,6 @@ public class ExecutionParametersDefault_Test {
         assertThat(roundTrippedAsT, is(value));
     }
 
-
     @Test
     public void roundTripBigDecimal() throws Exception {
 
@@ -267,6 +266,5 @@ public class ExecutionParametersDefault_Test {
         assertThat(roundTripped, is(value));
         assertThat(roundTrippedAsT, is(value));
     }
-
 
 }

@@ -92,8 +92,6 @@ public class FixtureResult {
         return getObjectBookmark() != null? getObject().getClass().getName(): null;
     }
 
-
     @XmlTransient @Inject BookmarkService bookmarkService;
-
 
 }

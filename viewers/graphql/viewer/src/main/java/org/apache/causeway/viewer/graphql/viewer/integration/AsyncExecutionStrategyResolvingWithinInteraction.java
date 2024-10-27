@@ -31,8 +31,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.viewer.graphql.applib.auth.UserMementoProvider;
 
-
-
 @Service
 public class AsyncExecutionStrategyResolvingWithinInteraction extends AsyncExecutionStrategy {
 

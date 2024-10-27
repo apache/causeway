@@ -46,7 +46,6 @@ public class InvalidMemberOverloadingWhenInherited {
 
     }
 
-
     @DomainObject(
             nature = Nature.VIEW_MODEL,
             introspection = Introspection.ANNOTATION_OPTIONAL)
@@ -104,4 +103,3 @@ public class InvalidMemberOverloadingWhenInherited {
     }
 
 }
-

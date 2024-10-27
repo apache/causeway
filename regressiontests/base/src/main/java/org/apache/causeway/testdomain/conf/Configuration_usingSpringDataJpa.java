@@ -52,5 +52,4 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 })
 public class Configuration_usingSpringDataJpa {
 
-
 }

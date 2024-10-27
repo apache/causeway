@@ -95,8 +95,6 @@ class ApplicationFeatureRepositoryDefaultTest {
 
             final ApplicationFeatureId classFeatureId = ApplicationFeatureId.newType("com.mycompany.Bar");
 
-
-
             // when
             final ApplicationFeatureId applicationFeatureId =
                     applicationFeatureRepository.addClassParent(classFeatureId);

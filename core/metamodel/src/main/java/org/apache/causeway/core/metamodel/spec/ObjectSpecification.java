@@ -178,7 +178,6 @@ extends
                 .findAny();
     }
 
-
     /**
      * @return Java class this specification is associated with
      */
@@ -294,7 +293,6 @@ extends
      */
     Optional<Contributing> contributing();
 
-
     // //////////////////////////////////////////////////////////////
     // TitleContext
     // //////////////////////////////////////////////////////////////
@@ -335,7 +333,6 @@ extends
     // //////////////////////////////////////////////////////////////
     // Facets
     // //////////////////////////////////////////////////////////////
-
 
     /**
      * Determines if the object represents an value or object.

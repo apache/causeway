@@ -46,7 +46,6 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
         this.user = ownedBy;
     }
 
-
     @Getter
     private List<ExcelDemoToDoItem> todoItems = _Lists.newArrayList();
 
@@ -82,9 +81,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
         return (List<ExcelDemoToDoItem>) excelFixture.getObjects();
     }
 
-
     @Inject UserService userService;
     @Inject TransactionService transactionService;
-
 
 }

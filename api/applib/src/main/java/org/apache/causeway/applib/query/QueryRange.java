@@ -132,5 +132,4 @@ public interface QueryRange extends Serializable {
         return of(getStart(), limit);
     }
 
-
 }

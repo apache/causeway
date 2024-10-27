@@ -102,7 +102,6 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     private final Set<String> packageNamesToIgnore = _Sets.newHashSet();
     private final Set<String> proxyPackageNamesToSkip = _Sets.newHashSet();
 
-
     /**
      * For any classes registered as ignored, {@link #getReplacement(Class)} will
      * return <tt>null</tt>.

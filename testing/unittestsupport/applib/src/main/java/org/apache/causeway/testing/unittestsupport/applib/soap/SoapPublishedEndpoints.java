@@ -93,7 +93,6 @@ public class SoapPublishedEndpoints {
     private int port;
     private final Map<Class<?>, SoapEndpoint> soapEndpointByType = _Maps.newLinkedHashMap();
 
-
     public SoapPublishedEndpoints publishIfRequired(final Class<?> endpointClass, final String endpointAddress) {
         return publishIfRequired(new SoapEndpointSpec(endpointClass, endpointAddress));
     }

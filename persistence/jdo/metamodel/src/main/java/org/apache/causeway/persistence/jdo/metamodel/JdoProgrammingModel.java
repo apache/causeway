@@ -44,8 +44,6 @@ import org.apache.causeway.persistence.jdo.metamodel.facets.prop.primarykey.JdoP
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-
-
 @Component
 public class JdoProgrammingModel implements MetaModelRefiner {
 
@@ -64,7 +62,6 @@ public class JdoProgrammingModel implements MetaModelRefiner {
         // Datanucleus
         pm.addFactory(step1, new RemoveDatanucleusPersistableTypesFacetFactory(mmc), Marker.JDO);
         pm.addFactory(step1, new RemoveDnPrefixedMethodsFacetFactory(mmc), Marker.JDO);
-
 
         var step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
         var jdoFacetContext = mmc.getServiceRegistry().lookupServiceElseFail(JdoFacetContext.class);
@@ -88,7 +85,6 @@ public class JdoProgrammingModel implements MetaModelRefiner {
         // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
         // and also PropertyAnnotationFactory
         pm.addFactory(step2, new MandatoryFromJdoColumnAnnotationFacetFactory(mmc, jdoFacetContext), Marker.JDO);
-
 
         // -- validators
 

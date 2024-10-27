@@ -176,7 +176,6 @@ public class FakeScheduler {
         });
     }
 
-
     @Inject List<RunBackgroundCommandsJobListener> listeners;
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject CommandExecutorService commandExecutorService;

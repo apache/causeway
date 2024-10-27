@@ -38,8 +38,6 @@ import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJdoForT
 import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-
-
 public abstract class LifecycleEventPublishingTestAbstract
 extends PublishingTestAbstract {
 
@@ -168,7 +166,6 @@ extends PublishingTestAbstract {
                 assertHasRemovingLifecycleEvents(Can.empty());
                 return;
 
-
             case PROPERTY_UPDATE: // update the book's name -> "Book #2"
 
                 assertHasCreatedLifecycleEvents(Can.empty());
@@ -205,7 +202,6 @@ extends PublishingTestAbstract {
             default:
                 throw _Exceptions.unmatchedCase(changeScenario);
             }
-
 
         default:
             // if hitting this, the caller is requesting a verification stage, we are providing no case for
@@ -292,6 +288,5 @@ extends PublishingTestAbstract {
         }
         return null; // no difference
     }
-
 
 }

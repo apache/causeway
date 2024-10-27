@@ -290,7 +290,6 @@ class _DiffExport {
                 .map(rightAttrByName::get)
                 .collect(Can.toCan());
         
-     
         leftAttrIntersection.zip(rightAttrIntersection, (leftAttr, rightAttr)->{
             _Assert.assertEquals(leftAttr.getName(), rightAttr.getName());
             if(Objects.equals(leftAttr.getValue(), rightAttr.getValue())) {
@@ -304,7 +303,6 @@ class _DiffExport {
             
             diffModel.diffCout++;
         });
-        
         
     }
 

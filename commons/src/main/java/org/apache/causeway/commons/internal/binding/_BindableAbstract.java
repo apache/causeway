@@ -32,7 +32,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.NonNull;
 import lombok.Setter;
 
-
 /**
  * <h1>- internal use only -</h1>
  *
@@ -239,6 +238,5 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
             return wref.get() == null;
         }
     }
-
 
 }

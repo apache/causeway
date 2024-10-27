@@ -77,7 +77,6 @@ implements HasMetaModelContext {
                             jaxbService);
                 }));
 
-
         mmcBuilder.singletonProvider(
                 _SingletonBeanProvider
                 .forTestingLazy(MenuBarsLoaderService.class, ()->{
@@ -101,7 +100,6 @@ implements HasMetaModelContext {
                             jaxbService,
                             metaModelContext);
                     }));
-
 
         metaModelContext = mmcBuilder.build();
 

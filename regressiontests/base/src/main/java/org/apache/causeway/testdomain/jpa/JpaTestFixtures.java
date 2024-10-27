@@ -85,5 +85,4 @@ public class JpaTestFixtures extends EntityTestFixtures {
         repository.persistAndFlush(inventory);
     }
 
-
 }

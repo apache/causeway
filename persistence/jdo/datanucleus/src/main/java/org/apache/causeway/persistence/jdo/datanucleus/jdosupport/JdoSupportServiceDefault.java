@@ -97,7 +97,6 @@ public class JdoSupportServiceDefault implements JdoSupportService {
         }
     }
 
-
     @Override
     public Integer executeUpdate(final String sql) {
         final JDOConnection dataStoreConnection = getPersistenceManager().getDataStoreConnection();
@@ -150,7 +149,6 @@ public class JdoSupportServiceDefault implements JdoSupportService {
 
     // //////////////////////////////////////
 
-
     @Override
     public void deleteAll(final Class<?>... pcClasses) {
         for (final Class<?> pcClass : pcClasses) {
@@ -167,7 +165,6 @@ public class JdoSupportServiceDefault implements JdoSupportService {
 
     // //////////////////////////////////////
 
-
     @Override
     public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression filter) {
         JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
@@ -177,7 +174,6 @@ public class JdoSupportServiceDefault implements JdoSupportService {
         return executeListAndClose(query);
     }
 
-
     @Override
     public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression filter) {
         JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
@@ -186,7 +182,6 @@ public class JdoSupportServiceDefault implements JdoSupportService {
         }
         return executeUniqueAndClose(query);
     }
-
 
     @Override
     public <T> JDOQLTypedQuery<T> newTypesafeQuery(final Class<T> cls) {
@@ -221,6 +216,5 @@ public class JdoSupportServiceDefault implements JdoSupportService {
     public void disableMultivaluedFetch(final Query<?> query) {
         query.addExtension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
-
 
 }

@@ -198,7 +198,6 @@ implements ActionPromptProvider {
         return debugBar;
     }
 
-
     /**
      * Creates the component that should be used as a page header/navigation bar
      *
@@ -220,7 +219,6 @@ implements ActionPromptProvider {
         Component footer = getComponentFactoryRegistry().createComponent(id, UiComponentType.FOOTER, null);
         return (MarkupContainer) footer;
     }
-
 
     protected void setTitle(final String title) {
         Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
@@ -338,7 +336,6 @@ implements ActionPromptProvider {
         getComponentFactoryRegistry().addOrReplaceComponent(container, uiComponentType, model);
     }
 
-
     ////////////////////////////////////////////////////////////////
     // bookmarked pages
     ////////////////////////////////////////////////////////////////
@@ -400,8 +397,6 @@ implements ActionPromptProvider {
                 : Optional.empty();
     }
 
-
-
     // ///////////////////////////////////////////////////////////////////
     // ActionPromptModalWindowProvider
     // ///////////////////////////////////////////////////////////////////
@@ -452,7 +447,6 @@ implements ActionPromptProvider {
         parent.addOrReplace(actionPromptSidebar);
     }
 
-
     // ///////////////////////////////////////////////////////////////////
     // UI Hint
     // ///////////////////////////////////////////////////////////////////
@@ -487,7 +481,6 @@ implements ActionPromptProvider {
 
         enabledPageRenderSubscribers
                 .forEach(subscriber -> subscriber.onRendering(pageType));
-
 
         if(XrayUi.isXrayEnabled()){
             _Debug.log("about to render %s ..", this.getClass().getSimpleName());

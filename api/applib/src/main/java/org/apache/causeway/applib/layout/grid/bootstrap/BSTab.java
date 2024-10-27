@@ -64,7 +64,6 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
         this.name = name;
     }
 
-
     private List<BSRow> rows = new ArrayList<>();
 
     // no wrapper
@@ -77,8 +76,6 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
     public void setRows(final List<BSRow> rows) {
         this.rows = rows;
     }
-
-
 
     private BSTabOwner owner;
 
@@ -97,7 +94,6 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
     public void setOwner(final BSTabOwner owner) {
         this.owner = owner;
     }
-
 
     public static class Predicates {
         public static Predicate<BSTab> notEmpty() {

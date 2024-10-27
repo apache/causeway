@@ -113,6 +113,4 @@ implements ValueSemanticsResolver {
                 .create(specificationLoaderProvider, translationService, enumType));
     }
 
-
-
 }

@@ -32,5 +32,4 @@ public abstract class FileAcceptFacetAbstract extends SingleStringValueFacetAbst
         super(type(), holder, value);
     }
 
-
 }

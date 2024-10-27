@@ -147,7 +147,5 @@ public enum BeanSort {
         return isMixin() || isViewModel() || isEntity() || isManagedBeanAny();
     }
 
-
-
     // ...
 }

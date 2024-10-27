@@ -37,8 +37,6 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-
-
 public class RichPropertySet extends Element {
 
     final PropertyInteractor propertyInteractor;

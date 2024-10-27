@@ -279,6 +279,4 @@ public class WelcomeHelpPage implements HelpPage {
                 .orElse(null);
     }
 
-
 }
-

@@ -58,7 +58,6 @@ extends MetaModelTestAbstract {
         action = ObjectActionDefault.forTesting.forMethod(mockFacetedMethod);
     }
 
-
     @Test
     void nameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";

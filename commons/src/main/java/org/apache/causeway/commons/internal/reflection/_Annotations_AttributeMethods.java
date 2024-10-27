@@ -40,7 +40,6 @@ final class _Annotations_AttributeMethods {
 
     static final _Annotations_AttributeMethods NONE = new _Annotations_AttributeMethods(null, new Method[0]);
 
-
     private static final Map<Class<? extends Annotation>, _Annotations_AttributeMethods> cache =
             new ConcurrentReferenceHashMap<>();
 
@@ -50,7 +49,6 @@ final class _Annotations_AttributeMethods {
         }
         return m1 != null ? -1 : 1;
     };
-
 
     @Nullable
     private final Class<? extends Annotation> annotationType;
@@ -62,7 +60,6 @@ final class _Annotations_AttributeMethods {
     private final boolean hasDefaultValueMethod;
 
     private final boolean hasNestedAnnotation;
-
 
     private _Annotations_AttributeMethods(
             final @Nullable Class<? extends Annotation> annotationType,
@@ -93,7 +90,6 @@ final class _Annotations_AttributeMethods {
         this.hasNestedAnnotation = foundNestedAnnotation;
     }
 
-
     /**
      * Determine if this instance only contains a single attribute named
      * {@code value}.
@@ -103,7 +99,6 @@ final class _Annotations_AttributeMethods {
         return (this.attributeMethods.length == 1 &&
                 MergedAnnotation.VALUE.equals(this.attributeMethods[0].getName()));
     }
-
 
     /**
      * Determine if values from the given annotation can be safely accessed without
@@ -248,7 +243,6 @@ final class _Annotations_AttributeMethods {
         return this.hasNestedAnnotation;
     }
 
-
     /**
      * Get the attribute methods for the given annotation type.
      * @param annotationType the annotation type
@@ -311,4 +305,3 @@ final class _Annotations_AttributeMethods {
     }
 
 }
-

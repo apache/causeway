@@ -51,8 +51,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
@@ -144,6 +142,5 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
     void aSecondRunShouldWorkAsWell() {
         sampleInventoryShouldBeSetUp();
     }
-
 
 }

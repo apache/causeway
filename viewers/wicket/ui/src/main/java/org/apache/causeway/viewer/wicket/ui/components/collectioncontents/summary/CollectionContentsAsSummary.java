@@ -186,7 +186,6 @@ implements CollectionCountProvider {
             return _Lists.map(values, Number.class::cast);
         }
 
-
     }
 
     private void addItem(final AbstractItem item, final String id, final BigDecimal amt) {

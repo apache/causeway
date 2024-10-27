@@ -23,7 +23,6 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 
-
 /**
  * Derived by the presence of the primary key.
  */

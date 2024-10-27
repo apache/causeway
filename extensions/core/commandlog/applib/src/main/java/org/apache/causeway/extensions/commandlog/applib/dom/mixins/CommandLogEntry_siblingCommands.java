@@ -62,7 +62,6 @@ public class CommandLogEntry_siblingCommands {
         return siblingCommands;
     }
 
-
     @jakarta.inject.Inject
     private CommandLogEntryRepositoryAbstract<? extends CommandLogEntry> commandLogEntryRepository;
 

@@ -62,7 +62,6 @@ public enum Rel {
     VALUE(RelDefinition.RO_SPEC, "value"),
     VERSION(RelDefinition.RO_SPEC, "version"),
 
-
     // implementation specific
     CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by"),
     OBJECT_LAYOUT(RelDefinition.IMPL, "object-layout"),

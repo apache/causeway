@@ -385,7 +385,6 @@ public class _Ints {
         return sb.toString();
     }
 
-
     public static String tableForm(
             final @NonNull int[][] nested) {
         return tableForm(nested, 8, Integer::toString);

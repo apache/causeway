@@ -64,5 +64,4 @@ public final class InputStreamExtensions {
         return count;
     }
 
-
 }

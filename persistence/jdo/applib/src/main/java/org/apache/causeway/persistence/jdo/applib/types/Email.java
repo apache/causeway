@@ -92,5 +92,4 @@ public @interface Email {
     @AliasFor( annotation = javax.jdo.annotations.Column.class, attribute = "length")
     int columnLength() default MAX_LENGTH;
 
-
 }

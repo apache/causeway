@@ -34,8 +34,6 @@ import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistence
 import org.apache.causeway.viewer.graphql.viewer.test2.domain.UniversityModule;
 import org.apache.causeway.viewer.graphql.viewer.test2.e2e.Abstract_IntegTest;
 
-
-
 @Import({
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,

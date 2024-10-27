@@ -84,7 +84,6 @@ extends Interaction {
             final PropertyEdit propertyEdit,
             final Context context);
 
-
     /**
      * Numbers the executions (an action invocation or property edit) within
      * a given {@link Interaction}.
@@ -155,6 +154,5 @@ extends Interaction {
         }
         return priorExecution;
     }
-
 
 }

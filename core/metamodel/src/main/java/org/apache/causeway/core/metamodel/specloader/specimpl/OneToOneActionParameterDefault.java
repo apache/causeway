@@ -33,5 +33,4 @@ implements OneToOneActionParameter {
         super(FeatureType.ACTION_PARAMETER_SINGULAR, index, paramElementType, actionImpl);
     }
 
-
 }

@@ -187,7 +187,6 @@ public class CausewayModulePersistenceJdoDatanucleus {
         return tapmfProxy;
     }
 
-
     @Qualifier("jdo-platform-transaction-manager")
     @Bean @Primary
     public JdoTransactionManager getTransactionManager(

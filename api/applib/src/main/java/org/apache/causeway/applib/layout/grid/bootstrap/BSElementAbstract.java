@@ -47,6 +47,4 @@ public abstract class BSElementAbstract implements BSElement {
         this.cssClass = cssClass;
     }
 
-
-
 }

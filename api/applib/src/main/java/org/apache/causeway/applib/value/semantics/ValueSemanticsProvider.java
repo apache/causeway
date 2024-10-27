@@ -85,7 +85,6 @@ public interface ValueSemanticsProvider<T> {
 
     // --
 
-
     /**
      * The {@link OrderRelation}, if any.
      */

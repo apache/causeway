@@ -89,5 +89,4 @@ class ObjectContract_Empty<T> implements ObjectContract<T> {
         return new IllegalArgumentException(UNDEFINED_CONTRACT);
     }
 
-
 }

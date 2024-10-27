@@ -50,5 +50,4 @@ extends ChangesDtoValueSemantics {
         return SyntaxHighlighter.PRISM_DEFAULT;
     }
 
-
 }

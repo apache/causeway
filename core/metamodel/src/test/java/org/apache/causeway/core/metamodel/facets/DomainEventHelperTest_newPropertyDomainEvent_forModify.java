@@ -54,7 +54,6 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
         assertThat(ev.getNewValue(), is((Object)newValue));
     }
 
-
     @Test
     public void customEventType() throws Exception {
 

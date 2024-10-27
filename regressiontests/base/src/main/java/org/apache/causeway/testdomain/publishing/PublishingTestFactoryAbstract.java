@@ -55,7 +55,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-
 public abstract class PublishingTestFactoryAbstract {
 
     public static enum VerificationStage {
@@ -316,7 +315,6 @@ public abstract class PublishingTestFactoryAbstract {
     /** a test - method is embedded in its own interaction and transaction */
     protected abstract void wrapperAsyncExecutionWithRules(PublishingTestContext context);
 
-
     // -- HELPER
 
     private final DynamicTest publishingTest(
@@ -389,7 +387,6 @@ public abstract class PublishingTestFactoryAbstract {
                 testContext.runVerify(onSuccess);
                 failWhenContextHasErrors(testContext);
 
-
             } finally {
 
                 releaseContext(testContext);
@@ -410,7 +407,6 @@ public abstract class PublishingTestFactoryAbstract {
             fail(testContext.getVerificationErrors().get(0));
         }
     }
-
 
     // -- XRAY
 

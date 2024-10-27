@@ -107,7 +107,6 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
         return interactionId;
     }
 
-
     /**
      * The user that created the command.
      *
@@ -251,7 +250,6 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
      */
     @Getter
     private Throwable exception;
-
 
     public static enum CommandPublishingPhase {
         /** initial state: do not publish (yet) */

@@ -29,7 +29,6 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 import graphql.Scalars;
 
-
 /**
  * Acts as a fallback.  We put it last in the list
  */

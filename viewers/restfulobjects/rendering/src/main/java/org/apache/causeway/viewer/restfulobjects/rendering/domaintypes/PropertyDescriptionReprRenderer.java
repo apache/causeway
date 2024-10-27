@@ -28,8 +28,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 
-
-
 public class PropertyDescriptionReprRenderer
 extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
 
@@ -63,7 +61,6 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
             .ifPresent(maxLength->representation.mapPutInt("maxLength", maxLength));
     }
 
-
     @Override
     protected void putExtensionsSpecificToFeature() {
         putExtensionsName();
@@ -82,6 +79,5 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
                 .newLinkToBuilder(getResourceContext(), Rel.RETURN_TYPE, returnTypeSpec)
                 .build());
     }
-
 
 }

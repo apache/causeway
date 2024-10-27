@@ -38,8 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainS
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ListReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 
-
-
 public class HomePageReprRenderer
 extends ReprRendererAbstract<Void> {
 

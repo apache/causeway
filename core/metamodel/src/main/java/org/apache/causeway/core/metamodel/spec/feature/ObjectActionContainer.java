@@ -67,7 +67,6 @@ public interface ObjectActionContainer {
     default ObjectAction getActionElseFail(final String id) {
         return getActionElseFail(id, ActionScope.ANY, MixedIn.INCLUDED); }
 
-
     // -- ACTION LOOKUP, DECLARED ACTIONS (NO INHERITANCE CONSIDERED)
 
     /**

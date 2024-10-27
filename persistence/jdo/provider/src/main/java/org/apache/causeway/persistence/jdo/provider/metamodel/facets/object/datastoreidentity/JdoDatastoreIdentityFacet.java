@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.datastoreidentity;
 
-
 import javax.jdo.annotations.DatastoreIdentity;
 import javax.jdo.annotations.IdGeneratorStrategy;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-
 
 /**
  * Corresponds to annotating the class with the {@link DatastoreIdentity} annotation.

@@ -27,7 +27,6 @@ import org.apache.causeway.extensions.sessionlog.applib.app.SessionLogMenu;
 import org.apache.causeway.extensions.sessionlog.applib.spiimpl.SessionLogServiceInitializer;
 import org.apache.causeway.extensions.sessionlog.applib.spiimpl.SessionSubscriberForSessionLog;
 
-
 @Configuration
 @Import({
         SessionLogMenu.class,
@@ -50,7 +49,6 @@ public class CausewayModuleExtSessionLogApplib {
 
     public abstract static class LayoutUiEvent<S>
             extends org.apache.causeway.applib.events.ui.LayoutUiEvent<S> { }
-
 
     public abstract static class ActionDomainEvent<S>
     extends org.apache.causeway.applib.events.domain.ActionDomainEvent<S> {}

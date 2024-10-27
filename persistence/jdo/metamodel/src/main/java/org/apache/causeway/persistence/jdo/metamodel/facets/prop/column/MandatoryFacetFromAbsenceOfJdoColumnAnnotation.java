@@ -32,5 +32,4 @@ extends MandatoryFacetAbstract {
         super(semantics, holder, precedence);
     }
 
-
 }

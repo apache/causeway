@@ -44,8 +44,6 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
 
     private static final long serialVersionUID = 1L;
 
-
-
     private Boolean unreferencedCollections;
     /**
      * Whether this tab group should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
@@ -63,9 +61,6 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
         this.unreferencedCollections = unreferencedCollections;
     }
 
-
-
-
     private Boolean collapseIfOne;
     /**
      * If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
@@ -79,8 +74,6 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
         this.collapseIfOne = collapseIfOne;
     }
 
-
-
     private List<BSTab> tabs = new ArrayList<>();
 
     // no wrapper; required=false because may be auto-generated
@@ -93,7 +86,6 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     public void setTabs(final List<BSTab> tabs) {
         this.tabs = tabs;
     }
-
 
     private BSTabGroupOwner owner;
 
@@ -112,8 +104,6 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     public void setOwner(final BSTabGroupOwner owner) {
         this.owner = owner;
     }
-
-
 
     private String metadataError;
 
@@ -137,4 +127,3 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     }
 
 }
-

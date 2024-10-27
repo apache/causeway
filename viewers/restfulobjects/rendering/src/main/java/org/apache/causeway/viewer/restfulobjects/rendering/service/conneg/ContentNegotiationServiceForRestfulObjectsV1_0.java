@@ -61,7 +61,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 
 import lombok.NonNull;
 
-
 /**
  * Returns representations according to the
  * <a href="https://restfulobjects.org">Restful Objects</a> spec.
@@ -74,7 +73,6 @@ import lombok.NonNull;
 @Qualifier("RestfulObjectsV1_0")
 public class ContentNegotiationServiceForRestfulObjectsV1_0
 implements ContentNegotiationService {
-
 
     protected final CausewayConfiguration configuration;
     protected final SpecificationLoader specificationLoader;
@@ -407,6 +405,5 @@ implements ContentNegotiationService {
         }
         return true;
     }
-
 
 }

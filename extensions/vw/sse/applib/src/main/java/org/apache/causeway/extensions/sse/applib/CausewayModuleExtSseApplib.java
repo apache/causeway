@@ -20,7 +20,6 @@ package org.apache.causeway.extensions.sse.applib;
 
 import org.springframework.context.annotation.Configuration;
 
-
 /**
  * @since 2.0 {@index}
  */

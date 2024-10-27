@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
  */
 public interface RedirectFacet extends Facet {
 
-
     Redirect policy();
 
 }

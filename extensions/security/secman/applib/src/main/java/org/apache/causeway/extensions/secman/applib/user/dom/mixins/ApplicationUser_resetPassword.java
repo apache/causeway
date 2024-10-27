@@ -86,5 +86,4 @@ public class ApplicationUser_resetPassword {
         return null;
     }
 
-
 }

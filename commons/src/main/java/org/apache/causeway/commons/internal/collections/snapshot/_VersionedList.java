@@ -83,7 +83,6 @@ public final class _VersionedList<T> {
             }
         }
 
-
     }
 
     public Snapshot<T> snapshot() {
@@ -177,9 +176,7 @@ public final class _VersionedList<T> {
         }
     }
 
-
     // -- HELPER
-
 
     /**
      * @implNote only call within synchronized block!
@@ -208,6 +205,5 @@ public final class _VersionedList<T> {
             currentVersion = new ArrayList<>(); // create a new array for others to write to next
         }
     }
-
 
 }

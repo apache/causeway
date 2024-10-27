@@ -40,5 +40,4 @@ extends ValueTypeContractTestAbstract<LogicalType> {
                 LogicalType.lazy(List.class, List.class::getName));
     }
 
-
 }

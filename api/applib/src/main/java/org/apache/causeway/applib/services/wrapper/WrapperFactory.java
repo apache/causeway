@@ -172,12 +172,9 @@ public interface WrapperFactory {
      */
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
-
-
     //
     // -- ASYNC WRAPPING
     //
-
 
     /**
      * Returns a proxy object for the provided {@code domainObject},
@@ -208,7 +205,6 @@ public interface WrapperFactory {
                    Class<T> mixinClass, Object mixee,
                    AsyncControl<R> asyncControl);
 
-
     /**
      * Returns a proxy object for the provided {@code mixinClass},
      * through which can execute the action asynchronously (in another thread).
@@ -225,8 +221,6 @@ public interface WrapperFactory {
                    AsyncControl<R> asyncControl) {
         return asyncWrapMixin(mixinClass, mixee, asyncControl);
     }
-
-
 
     //
     // -- INTERACTION EVENT HANDLING
@@ -270,11 +264,9 @@ public interface WrapperFactory {
 
     void notifyListeners(InteractionEvent ev);
 
-
     //
     // -- SPI for ExecutorServices
     //
-
 
     /**
      * Provides a mechanism for custom implementations of {@link java.util.concurrent.ExecutorService}, as installed

@@ -339,7 +339,6 @@ implements DomainTypeResource {
                 Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
-
     @Override
     @GET
     @Path("/{domainType}/type-actions/isSupertypeOf/invoke")

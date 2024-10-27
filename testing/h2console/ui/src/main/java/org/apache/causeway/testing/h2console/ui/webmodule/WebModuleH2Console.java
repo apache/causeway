@@ -87,8 +87,6 @@ public class WebModuleH2Console extends WebModuleAbstract {
     @Getter
     private final String name = "H2Console";
 
-
-
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 

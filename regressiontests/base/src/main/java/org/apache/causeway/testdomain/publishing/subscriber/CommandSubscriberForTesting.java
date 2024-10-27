@@ -71,7 +71,6 @@ implements CommandSubscriber {
         log.debug("publish completed command {}", ()->command.getCommandDto());
     }
 
-
     private void on(final String verb, final Command command) {
         @SuppressWarnings("unchecked")
         var commands = (List<Command>) kvStore.get(this, verb).orElseGet(ArrayList::new);
@@ -93,6 +92,5 @@ implements CommandSubscriber {
     public static void clearPublishedCommands(final KVStoreForTesting kvStore) {
         kvStore.clear(CommandSubscriberForTesting.class);
     }
-
 
 }

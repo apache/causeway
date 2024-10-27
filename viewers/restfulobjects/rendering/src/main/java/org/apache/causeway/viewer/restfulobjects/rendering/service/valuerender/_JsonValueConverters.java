@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Has support for JSON primitives.
  */

@@ -33,7 +33,6 @@ import org.apache.causeway.viewer.graphql.viewer.test2.domain.dept.DeptHeadRepos
 import org.apache.causeway.viewer.graphql.viewer.test2.domain.dept.StaffMemberRepository;
 import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraphqlIntegTestAbstract;
 
-
 @Import({
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,
@@ -56,6 +55,5 @@ public abstract class Abstract_IntegTest extends CausewayViewerGraphqlIntegTestA
     @Inject protected DeptHeadRepository deptHeadRepository;
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
-
 
 }

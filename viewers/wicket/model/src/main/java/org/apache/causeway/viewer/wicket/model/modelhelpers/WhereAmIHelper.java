@@ -25,8 +25,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.util.pchain.ParentChain;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
-
-
 /**
  *
  * @implNote - previously this was called WhereAmIModel,

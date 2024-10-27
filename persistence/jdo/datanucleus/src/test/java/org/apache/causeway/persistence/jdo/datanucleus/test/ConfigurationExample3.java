@@ -39,7 +39,6 @@ import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePe
 
 import lombok.Getter;
 
-
 /**
  *  Corresponds to the documents of the 'spring-jdo' module.
  */

@@ -151,7 +151,6 @@ public class EmailServiceDefault implements EmailService {
         return !_Strings.isNullOrEmpty(senderEmailAddress) && !_Strings.isNullOrEmpty(senderEmailPassword);
     }
 
-
     @Override
     public boolean send(
             final List<String> toList,

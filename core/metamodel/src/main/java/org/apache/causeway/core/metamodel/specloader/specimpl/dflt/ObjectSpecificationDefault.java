@@ -193,7 +193,6 @@ implements FacetHolder {
         }
     }
 
-
     // -- create associations and actions
     private Stream<ObjectAssociation> createAssociations() {
         return facetedMethodsBuilder.getAssociationFacetedMethods()
@@ -352,7 +351,6 @@ implements FacetHolder {
     public boolean isDomainService() {
         return isDomainServiceLazy.get();
     }
-
 
     // -- TO STRING
 

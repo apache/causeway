@@ -83,8 +83,6 @@ extends FacetFactoryAbstract {
                 SortedByFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
-
-
     }
 
 }

@@ -39,8 +39,6 @@ import org.apache.causeway.viewer.graphql.viewer.testsupport.CausewayViewerGraph
 
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
-
-
 /**
  * Utility to print out the schema, to <code>src/test/resources</code> of the implementing subclass.
  *

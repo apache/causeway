@@ -88,7 +88,6 @@ public class Object_downloadColumnOrderTxtFilesAsZip {
         return String.format("%s.columnOrder.zip", domainObject.getClass().getSimpleName());
     }
 
-
     @Inject ColumnOrderTxtFileService columnOrderTxtFileService;
 
 }

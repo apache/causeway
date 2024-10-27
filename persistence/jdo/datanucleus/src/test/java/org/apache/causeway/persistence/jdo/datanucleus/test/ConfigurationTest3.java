@@ -28,8 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
-
-
 @SpringBootTest(
         classes = {
                 ConfigurationExample3.class

@@ -141,7 +141,6 @@ public abstract class _ConcurrentTask<T> implements Runnable {
 
     }
 
-
     // -- FACTORIES
 
     public static _ConcurrentTask<Void> of(final @NonNull Runnable runnable) {
@@ -194,6 +193,5 @@ public abstract class _ConcurrentTask<T> implements Runnable {
             Thread.currentThread().setContextClassLoader(originalContextClassLoader);
         }
     }
-
 
 }

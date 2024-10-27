@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing;
 
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Publishing;
@@ -68,4 +67,3 @@ extends EntityChangePublishingFacetAbstract {
         super(holder, enabled);
     }
 }
-

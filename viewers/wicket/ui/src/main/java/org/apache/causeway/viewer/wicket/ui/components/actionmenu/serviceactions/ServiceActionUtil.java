@@ -87,7 +87,6 @@ class ServiceActionUtil {
 
     }
 
-
     @RequiredArgsConstructor(staticName = "of")
     private static class MenuBuilderWkt implements MenuVisitor {
 

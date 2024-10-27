@@ -135,5 +135,4 @@ public final class LayoutConstants {
         public static final String LOGICAL_TYPE_NAME = "logicalTypeName";
     }
 
-
 }

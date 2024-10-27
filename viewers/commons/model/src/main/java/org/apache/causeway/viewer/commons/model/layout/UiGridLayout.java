@@ -105,7 +105,6 @@ public class UiGridLayout implements UiModel {
 
             });
 
-
         });
         return bSGrid;
     }
@@ -186,6 +185,5 @@ public class UiGridLayout implements UiModel {
             visitor.onProperty(uiFieldSet, propertyData);
         }
     }
-
 
 }

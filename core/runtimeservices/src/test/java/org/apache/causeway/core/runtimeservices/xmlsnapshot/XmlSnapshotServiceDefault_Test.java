@@ -102,5 +102,4 @@ class XmlSnapshotServiceDefault_Test {
         throw new IllegalArgumentException("no such locale:" + language + "_" + country);
     }
 
-
 }

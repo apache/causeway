@@ -182,11 +182,9 @@ public final class PredicatePrettifier implements Visitor<String, Templates> {
         return str;
     }
 
-
     public String prettied() {
         return visits.get(0);
     }
-
 
     private void appendStr(StringBuilder builder, String str) {
         builder.append(spaces());
@@ -198,7 +196,6 @@ public final class PredicatePrettifier implements Visitor<String, Templates> {
         appendStr(builder, str);
     }
 
-
     static String spaces() {
         return spaces(num.get().get());
     }
@@ -206,7 +203,6 @@ public final class PredicatePrettifier implements Visitor<String, Templates> {
     private static String spaces(int num) {
         return Stream.generate(() -> " ").limit(num).collect(Collectors.joining());
     }
-
 
     public static class IndentableTemplates extends Templates {
 

@@ -66,5 +66,4 @@ public class ProperMemberSupport_property2 {
         return false;
     }
 
-
 }

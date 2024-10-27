@@ -48,7 +48,6 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -144,6 +143,5 @@ extends InteractionTestAbstract {
     void mixinActionAccess() {
         assertEquals(3, wrapper.wrapMixin(InteractionDemo_biArgEnabled.class, new InteractionDemo()).act(1, 2));
     }
-
 
 }

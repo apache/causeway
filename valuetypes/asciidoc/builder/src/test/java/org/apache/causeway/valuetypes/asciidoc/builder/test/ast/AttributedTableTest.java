@@ -59,5 +59,4 @@ class AttributedTableTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
 
-
 }

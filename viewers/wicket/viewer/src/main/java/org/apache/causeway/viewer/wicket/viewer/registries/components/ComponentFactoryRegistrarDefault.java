@@ -215,7 +215,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new CollectionContentsAsSummaryFactory());
     }
 
-
     protected void addComponentFactoriesForEmptyCollection(final ComponentFactoryList componentFactories) {
         componentFactories.add(new EmptyCollectionPanelFactory());
     }
@@ -327,7 +326,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
             return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
         }
     }
-
 
     public static class ScalarPanelFactoryForNumberField<T extends Serializable>
     extends ComponentFactoryScalarTypeConstrainedAbstract {

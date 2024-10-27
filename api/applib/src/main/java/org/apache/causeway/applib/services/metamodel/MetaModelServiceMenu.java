@@ -182,7 +182,6 @@ public class MetaModelServiceMenu {
 
     }
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetaModelDiff.ActionDomainEvent.class,
@@ -255,7 +254,6 @@ public class MetaModelServiceMenu {
         @MemberSupport public boolean default2Act() { return false; }
 
     }
-
 
     // -- HELPER
 

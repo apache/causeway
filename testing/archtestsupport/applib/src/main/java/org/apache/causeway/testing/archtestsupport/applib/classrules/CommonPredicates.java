@@ -36,7 +36,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

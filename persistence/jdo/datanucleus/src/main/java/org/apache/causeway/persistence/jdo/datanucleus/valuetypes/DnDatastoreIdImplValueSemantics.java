@@ -34,7 +34,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class DnDatastoreIdImplValueSemantics

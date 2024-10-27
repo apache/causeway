@@ -50,7 +50,6 @@ import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenan
 import lombok.Getter;
 import lombok.Setter;
 
-
 @PersistenceCapable(
         identityType = IdentityType.APPLICATION,
         schema = ApplicationTenancy.SCHEMA,
@@ -93,19 +92,16 @@ public class ApplicationTenancy
 
     protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.tenancy.dom.ApplicationTenancy";
 
-
     @Column(allowsNull = Name.ALLOWS_NULL, length = Name.MAX_LENGTH)
     @Name
     @Getter @Setter
     private String name;
-
 
     @PrimaryKey
     @Column(allowsNull = Path.ALLOWS_NULL, length = Path.MAX_LENGTH)
     @Path
     @Getter @Setter
     private String path;
-
 
     @Column(name = Parent.NAME, allowsNull = Parent.ALLOWS_NULL)
     @Parent
@@ -115,7 +111,6 @@ public class ApplicationTenancy
     public void setParent(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
-
 
     @Persistent(mappedBy = Children.MAPPED_BY)
     @Children
@@ -131,6 +126,5 @@ public class ApplicationTenancy
     public void removeFromChildren(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
     }
-
 
 }

@@ -171,7 +171,6 @@ public interface JdoSupportService {
         query.addExtension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
 
-
     // -- SHORTCUTS
 
     default PersistenceManager getPersistenceManager() {

@@ -77,5 +77,4 @@ public abstract class AuthenticatedWebSessionForCauseway_TestAbstract {
         };
     }
 
-
 }

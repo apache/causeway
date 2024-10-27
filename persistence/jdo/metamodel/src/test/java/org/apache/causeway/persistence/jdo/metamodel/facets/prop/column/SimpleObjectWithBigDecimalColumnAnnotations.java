@@ -86,5 +86,4 @@ class SimpleObjectWithBigDecimalColumnAnnotations {
         this.bigDecimalPropertyWithoutColumnAnnotation = bigDecimalPropertyWithoutColumnAnnotation;
     }
 
-
 }

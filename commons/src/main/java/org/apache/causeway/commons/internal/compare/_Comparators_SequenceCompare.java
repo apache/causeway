@@ -108,5 +108,4 @@ final class _Comparators_SequenceCompare {
         return new StringTokenizer(sequence, separator, false);
     }
 
-
 }

@@ -62,7 +62,6 @@ public abstract class GridAbstract implements Grid {
         this.domainClass = domainClass;
     }
 
-
     private String tnsAndSchemaLocation;
     @Override
     @Programmatic
@@ -119,7 +118,6 @@ public abstract class GridAbstract implements Grid {
         }
     }
 
-
     /**
      * Convenience for subclasses.
      */
@@ -138,7 +136,6 @@ public abstract class GridAbstract implements Grid {
         }
     }
 
-
     /**
      * Convenience for subclasses.
      */
@@ -151,7 +148,6 @@ public abstract class GridAbstract implements Grid {
             traverseActions(collection, visitor);
         }
     }
-
 
     @Override
     @Programmatic
@@ -166,7 +162,6 @@ public abstract class GridAbstract implements Grid {
         });
         return propertiesById;
     }
-
 
     @Override
     @Programmatic
@@ -183,7 +178,6 @@ public abstract class GridAbstract implements Grid {
         return collectionsById;
     }
 
-
     @Override
     @Programmatic
     @XmlTransient
@@ -199,7 +193,6 @@ public abstract class GridAbstract implements Grid {
         return actionsById;
     }
 
-
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
@@ -213,6 +206,5 @@ public abstract class GridAbstract implements Grid {
         });
         return fieldSetsByName;
     }
-
 
 }

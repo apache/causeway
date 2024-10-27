@@ -325,5 +325,4 @@ public final class _Collections {
         return toStringJoining(collection, "\n");
     }
 
-
 }

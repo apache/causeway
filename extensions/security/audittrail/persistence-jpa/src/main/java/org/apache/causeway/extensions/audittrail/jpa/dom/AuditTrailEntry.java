@@ -229,8 +229,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         this.id = id;
     }
 
-
-
     private Long version;
 
     @Version
@@ -241,8 +239,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
     public void setVersion(Long version) {
         this.version = version;
     }
-
-
 
     private String username;
 
@@ -256,8 +252,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         this.username = username;
     }
 
-
-
     private java.sql.Timestamp timestamp;
 
     @Column(nullable = Timestamp.NULLABLE)
@@ -269,7 +263,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
     public void setTimestamp(java.sql.Timestamp timestamp) {
         this.timestamp = timestamp;
     }
-
 
     private UUID interactionId;
 
@@ -284,7 +277,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         this.interactionId = interactionId;
     }
 
-
     private int sequence;
 
     @Column(nullable = Sequence.NULLABLE)
@@ -296,8 +288,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
     public void setSequence(int sequence) {
         this.sequence = sequence;
     }
-
-
 
     private Bookmark target;
 
@@ -312,7 +302,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         this.target = target;
     }
 
-
     private String logicalMemberIdentifier;
 
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
@@ -324,7 +313,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
     public void setLogicalMemberIdentifier(String logicalMemberIdentifier) {
         this.logicalMemberIdentifier = logicalMemberIdentifier;
     }
-
 
     private String propertyId;
 
@@ -338,7 +326,6 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         this.propertyId = propertyId;
     }
 
-
     private String preValue;
 
     @Column(nullable = PreValue.NULLABLE, length = PreValue.MAX_LENGTH)
@@ -351,9 +338,7 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         this.preValue = preValue;
     }
 
-
     private String postValue;
-
 
     @Column(nullable = PostValue.NULLABLE, length = PostValue.MAX_LENGTH)
     @PostValue

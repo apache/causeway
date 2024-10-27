@@ -64,7 +64,6 @@ public class Scenario
         );
     }
 
-
     @Override
     protected void addDataFetchersForChildren() {
         scenarioName.addDataFetcher(this);

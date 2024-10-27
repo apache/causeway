@@ -63,7 +63,6 @@ public class PageClassListDefault implements PageClassList {
         }
     }
 
-
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -80,7 +79,6 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.VALUE, getValuePageClass());
         pageRegistry.registerPage(PageType.VOID_RETURN, getVoidReturnPageClass());
     }
-
 
     /**
      * For subclassing if required.

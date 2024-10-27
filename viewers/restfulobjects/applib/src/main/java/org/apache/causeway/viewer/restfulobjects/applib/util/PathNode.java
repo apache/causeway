@@ -157,7 +157,6 @@ public class PathNode {
         return true;
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -182,7 +181,6 @@ public class PathNode {
             return false;
         return true;
     }
-
 
     @Override
     public String toString() {

@@ -59,7 +59,6 @@ class _ValidateUtil{
         log.debug("Done running MetaModelValidators.");
     }
 
-
     // -- HELPER
 
     private void runValidator(final MetaModelValidator validator, final Can<ObjectSpecification> snapshot) {

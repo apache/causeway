@@ -146,7 +146,6 @@ implements RepositoryService, HasMetaModelContext {
         return domainObject;
     }
 
-
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
@@ -175,7 +174,6 @@ implements RepositoryService, HasMetaModelContext {
         }
     }
 
-
     // -- allInstances, allMatches, uniqueMatch, firstMatch
 
     @Override
@@ -194,14 +192,12 @@ implements RepositoryService, HasMetaModelContext {
         return allMatches(ofType, predicate, 0L, Long.MAX_VALUE);
     }
 
-
     @Override
     public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, final long start, final long count) {
         return _NullSafe.stream(allInstances(ofType, start, count))
                 .filter(predicate)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
-
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
@@ -235,7 +231,6 @@ implements RepositoryService, HasMetaModelContext {
         return firstInstanceElseEmpty(instances);
     }
 
-
     @Override
     public <T> Optional<T> uniqueMatch(final Query<T> query) {
         final List<T> instances = allMatches(query); // No need to fetch more than 2.
@@ -250,7 +245,6 @@ implements RepositoryService, HasMetaModelContext {
         final List<T> instances = allMatches(type, predicate);
         return firstInstanceElseEmpty(instances);
     }
-
 
     @Override
     public <T> Optional<T> firstMatch(final Query<T> query) {
@@ -302,6 +296,5 @@ implements RepositoryService, HasMetaModelContext {
     private Object unwrapped(final Object domainObject) {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
-
 
 }

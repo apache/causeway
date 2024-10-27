@@ -47,7 +47,6 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest(
@@ -78,7 +77,6 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
         jdoTestFixtures.resetTo3Books(()->kvStore.clear(JdoBook.class));
         assertInjectCountRange(3, 12); //TODO there is some injection redundancy
     }
-
 
     @Test @Order(1)
     void sampleBook_shouldHave_injectionPointsResolved() {
@@ -129,7 +127,6 @@ class JdoEntityInjectingTest extends CausewayIntegrationTestAbstract {
     void releaseLock() {
         lock.release();
     }
-
 
     // -- HELPER
 

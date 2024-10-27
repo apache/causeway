@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.test.domain.dom.DepartmentRepos
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.DeptHeadRepository;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.StaffMemberRepository;
 
-
 @Import({
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,

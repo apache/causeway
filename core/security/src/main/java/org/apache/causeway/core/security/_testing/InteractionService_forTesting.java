@@ -105,7 +105,6 @@ implements InteractionService {
         }
     }
 
-
     @Override @SneakyThrows
     public void runAnonymous(@NonNull final ThrowingRunnable runnable) {
         try {

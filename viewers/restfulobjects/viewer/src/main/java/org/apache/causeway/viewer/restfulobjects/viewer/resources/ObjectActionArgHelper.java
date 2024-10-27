@@ -37,7 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Utility class that encapsulates the logic for parsing arguments to be invoked by an
  * {@link ObjectAction}.
@@ -116,7 +115,5 @@ public class ObjectActionArgHelper {
         }
         return argList;
     }
-
-
 
 }

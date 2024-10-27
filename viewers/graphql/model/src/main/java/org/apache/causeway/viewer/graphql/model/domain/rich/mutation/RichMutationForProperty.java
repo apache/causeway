@@ -86,7 +86,6 @@ public class RichMutationForProperty extends Element {
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 
-
         Object target = dataFetchingEnvironment.getArgument(argumentName);
         Optional<Object> result;
         final Environment environment = new Environment.For(dataFetchingEnvironment);
@@ -143,7 +142,6 @@ public class RichMutationForProperty extends Element {
 
         return managedObject; // return the original object because setters return void
     }
-
 
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 

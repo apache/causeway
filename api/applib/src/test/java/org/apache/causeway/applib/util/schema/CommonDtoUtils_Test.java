@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.applib.util.schema;
 
-
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;

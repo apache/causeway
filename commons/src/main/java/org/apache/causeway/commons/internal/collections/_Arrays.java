@@ -84,7 +84,6 @@ public final class _Arrays {
         return false;
     }
 
-
     /**
      * Whether given {@code test} predicate evaluates 'true' for all given pairs of elements
      * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n}
@@ -102,7 +101,6 @@ public final class _Arrays {
             final @NonNull BiPredicate<T, T> test) {
         return !testAnyMatch(array1, array2, test.negate());
     }
-
 
     /**
      * @param cls
@@ -308,8 +306,6 @@ public final class _Arrays {
         return Arrays.copyOfRange(array, beginIndex, endIndex);
     }
 
-
-
     // -- COMPONENT TYPE INFERENCE
 
     /**
@@ -459,7 +455,6 @@ public final class _Arrays {
         }
         return mappedArray;
     }
-
 
     // --
 

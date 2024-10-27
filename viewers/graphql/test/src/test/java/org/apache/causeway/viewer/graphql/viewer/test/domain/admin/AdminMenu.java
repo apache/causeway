@@ -38,12 +38,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class AdminMenu {
 
-
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     @ActionLayout(hidden = Where.EVERYWHERE)
     public void adminAction() {
     }
-
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public void otherAdminAction() {
@@ -51,7 +49,6 @@ public class AdminMenu {
     public String disableOtherAdminAction() {
         return "yup, disabled!";
     }
-
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public void actionWithDisabledParam(final String firstParam, final String secondParam, final String thirdParameter) {
@@ -62,8 +59,6 @@ public class AdminMenu {
     public String disable2ActionWithDisabledParam(final String firstParam, final String secondParam) {
         return _Strings.isNullOrEmpty(secondParam) ? null : "Disabled because secondParam is not empty";
     }
-
-
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
     public void actionWithHiddenParam(final String firstParam, final String secondParam) {

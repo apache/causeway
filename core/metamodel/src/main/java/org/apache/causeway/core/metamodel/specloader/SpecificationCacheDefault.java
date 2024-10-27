@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
 
-
 class SpecificationCacheDefault<T extends ObjectSpecification> implements SpecificationCache<T> {
 
     private final Map<Class<?>, T> specByClass = _Maps.newHashMap();
@@ -116,6 +115,5 @@ class SpecificationCacheDefault<T extends ObjectSpecification> implements Specif
             vList.add(spec); // add to vList only if we don't have it already
         }
     }
-
 
 }

@@ -529,7 +529,6 @@ implements ScalarModelChangeListener {
         }
     }
 
-
     @Override
     public void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
     }
@@ -593,7 +592,6 @@ implements ScalarModelChangeListener {
      */
     @Nullable
     protected abstract Component getValidationFeedbackReceiver();
-
 
     private void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
         if(component==null) {

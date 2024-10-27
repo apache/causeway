@@ -48,8 +48,6 @@ import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbstract {
 
     @Inject protected ObjectManager objectManager;
@@ -234,6 +232,5 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
         audits.forEach(System.err::println);
         System.err.println("==========");
     }
-
 
 }

@@ -35,8 +35,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-
-
 public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelRefiner {
 
@@ -105,7 +103,5 @@ implements MetaModelRefiner {
         final Matcher matcher = variablesPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;
     }
-
-
 
 }

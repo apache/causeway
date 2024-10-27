@@ -33,7 +33,6 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.quer
 import lombok.Getter;
 import lombok.NonNull;
 
-
 public class JdoQueryFacetAbstract
 extends FacetAbstract
 implements JdoQueryFacet {

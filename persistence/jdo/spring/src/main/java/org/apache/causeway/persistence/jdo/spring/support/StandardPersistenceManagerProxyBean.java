@@ -42,7 +42,6 @@ public class StandardPersistenceManagerProxyBean implements FactoryBean<Persiste
 
 	private PersistenceManager proxy;
 
-
 	/**
 	 * Set the target JDO PersistenceManagerFactory that this proxy should
 	 * delegate to. This should be the raw PersistenceManagerFactory, as
@@ -53,7 +52,6 @@ public class StandardPersistenceManagerProxyBean implements FactoryBean<Persiste
 		Assert.notNull(pmf, "PersistenceManagerFactory must not be null");
 		this.proxy = pmf.getPersistenceManagerProxy();
 	}
-
 
 	@Override
 	public PersistenceManager getObject() {

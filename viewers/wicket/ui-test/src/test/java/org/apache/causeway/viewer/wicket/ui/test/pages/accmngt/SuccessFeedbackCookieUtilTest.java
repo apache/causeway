@@ -76,7 +76,6 @@ class SuccessFeedbackCookieUtilTest {
         when(mockHttpServletRequest.getCookies())
         .thenReturn(mockWebResponse.getCookies().toArray(new Cookie[] {}));
 
-
         // verify that we can read the message from the cookie
         var resultRef = new AtomicReference<String>();
 

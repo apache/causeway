@@ -44,7 +44,6 @@ import org.apache.causeway.extensions.excel.applib.Mode;
 import org.apache.causeway.extensions.excel.applib.WorksheetContent;
 import org.apache.causeway.extensions.excel.applib.WorksheetSpec;
 
-
 /**
  * Implementation of {@link ExcelService}.
  *
@@ -216,6 +215,5 @@ public class ExcelServiceDefault implements ExcelService {
 
         return fromExcel(excelBlob, worksheetSpecs);
     }
-
 
 }

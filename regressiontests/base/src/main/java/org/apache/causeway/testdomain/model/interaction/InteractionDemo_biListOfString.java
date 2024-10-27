@@ -49,7 +49,6 @@ public class InteractionDemo_biListOfString {
         return List.of("a1", "a2", "a3", "a4");
     }
 
-
     // -- PARAM B
 
     @MemberSupport public List<String> defaultB(final ParameterSamples.BiListOfString p) {

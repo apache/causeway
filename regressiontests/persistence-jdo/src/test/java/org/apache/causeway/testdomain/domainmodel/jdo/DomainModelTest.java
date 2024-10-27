@@ -45,8 +45,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,
@@ -116,6 +114,5 @@ class DomainModelTest {
         var versionFacet = entitySpec.getFacet(JdoVersionFacet.class);
         assertNotNull(versionFacet);
     }
-
 
 }

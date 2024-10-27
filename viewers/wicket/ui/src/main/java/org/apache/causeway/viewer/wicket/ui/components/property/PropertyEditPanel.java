@@ -103,5 +103,4 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         return header;
     }
 
-
 }

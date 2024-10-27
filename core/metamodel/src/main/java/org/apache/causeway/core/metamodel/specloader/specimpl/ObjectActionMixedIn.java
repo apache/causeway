@@ -197,7 +197,6 @@ implements MixedInMember {
                 interactionInitiatedBy);
     }
 
-
     @Override
     public ObjectSpecification getMixinType() {
         return getSpecificationLoader().loadSpecification(mixinType);

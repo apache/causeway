@@ -33,8 +33,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.causeway.core.metamodel.valuesemantics.CharacterValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics;
 
-
-
 class IdStringifierForCharIdentity_Test {
 
     public static Stream<Arguments> roundtrip() {

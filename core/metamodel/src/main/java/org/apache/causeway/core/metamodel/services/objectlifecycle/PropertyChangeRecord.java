@@ -47,7 +47,6 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     public Bookmark getBookmark() {return id.getBookmark();}
     public String getPropertyId() {return id.getPropertyId();}
 
-
     public static PropertyChangeRecord ofNew(
             final @NonNull PropertyChangeRecordId pcrId) {
         return new PropertyChangeRecord(pcrId)
@@ -138,7 +137,6 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
         return this;
     }
 
-
     // -- UTILITY
 
     public EntityPropertyChange toEntityPropertyChange(
@@ -168,7 +166,6 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
         return MmUnwrapUtils.single(referencedAdapter);
     }
 
-
     @Override
     public int compareTo(PropertyChangeRecord o) {
         return Comparator
@@ -176,4 +173,3 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
                 .compare(this, o);
     }
 }
-

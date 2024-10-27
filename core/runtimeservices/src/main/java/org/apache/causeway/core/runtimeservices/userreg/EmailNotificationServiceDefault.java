@@ -67,7 +67,6 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     private String passwordResetTemplate;
     private String emailVerificationTemplate;
 
-
     // -- INIT
 
     private boolean initialized;
@@ -162,6 +161,5 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
         return message;
     }
-
 
 }

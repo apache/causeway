@@ -47,8 +47,6 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo_multiEnu
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_multiInt;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -88,8 +86,6 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertUsabilityIsVetoedWith("Disabled for demonstration.");
     }
 
-
-
     @Test
     void whenEnabled_shouldProvideActionMetadata() {
 
@@ -126,7 +122,6 @@ class ActionInteractionTest extends InteractionTestAbstract {
         tester.assertVisibilityIsNotVetoed();
         tester.assertUsabilityIsNotVetoed();
         tester.assertInvocationResult(99, UnaryOperator.identity());
-
 
         var capturedCommands = tester.getCapturedCommands();
         assertEquals(1, capturedCommands.size());
@@ -351,7 +346,6 @@ class ActionInteractionTest extends InteractionTestAbstract {
 
         assertComponentWiseUnwrappedEquals(expectedParamsAfter, pendingArgs.getParamValues());
     }
-
 
     @Test
     void shouldProvideChoices() {

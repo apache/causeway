@@ -130,5 +130,4 @@ public abstract class MMNode {
         return nameOf(annotationName).negate();
     }
 
-
 }

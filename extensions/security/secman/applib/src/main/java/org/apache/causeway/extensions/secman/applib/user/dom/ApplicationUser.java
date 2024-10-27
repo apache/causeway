@@ -64,7 +64,6 @@ import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEv
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.HasAtPath;
 
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -137,17 +136,12 @@ public abstract class ApplicationUser
         return config.getExtensions().getSecman();
     }
 
-
-
-
-
     @ObjectSupport public String title() {
         return getName();
     }
     @ObjectSupport public String iconName() {
         return ApplicationUserStatus.isUnlocked(getStatus()) ? "unlocked" : "locked";
     }
-
 
     // -- NAME
 
@@ -184,7 +178,6 @@ public abstract class ApplicationUser
         return buf.toString();
     }
 
-
     // -- USERNAME
 
     @Property(
@@ -208,7 +201,6 @@ public abstract class ApplicationUser
     @Username
     public abstract String getUsername();
     public abstract void setUsername(String username);
-
 
     // -- FAMILY NAME
 
@@ -242,7 +234,6 @@ public abstract class ApplicationUser
     public abstract String getFamilyName();
     public abstract void setFamilyName(String familyName);
 
-
     // -- GIVEN NAME
 
     @Property(
@@ -274,7 +265,6 @@ public abstract class ApplicationUser
     @GivenName
     public abstract String getGivenName();
     public abstract void setGivenName(String givenName);
-
 
     // -- KNOWN AS
 
@@ -308,7 +298,6 @@ public abstract class ApplicationUser
     public abstract String getKnownAs();
     public abstract void setKnownAs(String knownAs);
 
-
     // -- EMAIL ADDRESS
 
     @Property(
@@ -340,7 +329,6 @@ public abstract class ApplicationUser
     public abstract String getEmailAddress();
     public abstract void setEmailAddress(String emailAddress);
 
-
     // -- PHONE NUMBER
 
     @Property(
@@ -370,7 +358,6 @@ public abstract class ApplicationUser
     @PhoneNumber
     public abstract String getPhoneNumber();
     public abstract void setPhoneNumber(String phoneNumber);
-
 
     // -- FAX NUMBER
 
@@ -404,7 +391,6 @@ public abstract class ApplicationUser
     public abstract String getFaxNumber();
     public abstract void setFaxNumber(String faxNumber);
 
-
     // -- LOCALEs
 
     @Property(
@@ -426,7 +412,6 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
 
-
     @Property(
             domainEvent = Locale.DomainEvent.class
     )
@@ -441,7 +426,6 @@ public abstract class ApplicationUser
     @Language
     public abstract java.util.Locale getLanguage();
     public abstract void setLanguage(java.util.Locale locale);
-
 
     @Property(
             domainEvent = NumberFormat.DomainEvent.class
@@ -458,7 +442,6 @@ public abstract class ApplicationUser
     public abstract java.util.Locale getNumberFormat();
     public abstract void setNumberFormat(java.util.Locale locale);
 
-
     @Property(
             domainEvent = TimeFormat.DomainEvent.class
     )
@@ -473,8 +456,6 @@ public abstract class ApplicationUser
     @TimeFormat
     public abstract java.util.Locale getTimeFormat();
     public abstract void setTimeFormat(java.util.Locale locale);
-
-
 
     @Property(
             domainEvent = AtPath.DomainEvent.class
@@ -496,8 +477,6 @@ public abstract class ApplicationUser
     @AtPath
     public abstract String getAtPath();
     public abstract void setAtPath(String atPath);
-
-
 
     // -- ACCOUNT TYPE
 
@@ -524,7 +503,6 @@ public abstract class ApplicationUser
     public abstract org.apache.causeway.extensions.secman.applib.user.dom.AccountType getAccountType();
     public abstract void setAccountType(org.apache.causeway.extensions.secman.applib.user.dom.AccountType accountType);
 
-
     // -- STATUS
 
     @Property(
@@ -550,7 +528,6 @@ public abstract class ApplicationUser
     public abstract ApplicationUserStatus getStatus();
     public abstract void setStatus(ApplicationUserStatus disabled);
 
-
     // -- ENCRYPTED PASSWORD
 
     @Property
@@ -568,7 +545,6 @@ public abstract class ApplicationUser
     @MemberSupport public boolean hideEncryptedPassword() {
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
-
 
     // -- HAS PASSWORD
 
@@ -595,7 +571,6 @@ public abstract class ApplicationUser
         return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
     }
 
-
     // ROLES
 
     @Collection(
@@ -621,7 +596,6 @@ public abstract class ApplicationUser
     @Roles
     public abstract Set<ApplicationRole> getRoles();
 
-
     // -- PERMISSION SET
 
     // short-term caching
@@ -642,8 +616,6 @@ public abstract class ApplicationUser
                         _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
                         getPermissionsEvaluationService());
     }
-
-
 
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
@@ -695,13 +667,11 @@ public abstract class ApplicationUser
         return getUserService().currentUserElseFail();
     }
 
-
     // -- equals, hashCode, compareTo, toString
     private static final String propertyNames = "username";
 
     private static final ObjectContracts.ObjectContract<ApplicationUser> contract =
             ObjectContracts.parse(ApplicationUser.class, propertyNames);
-
 
     @Override
     public int compareTo(final org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser other) {

@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
-
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -94,7 +93,6 @@ public class RepresentationService {
          */
         NOT_APPLICABLE
     }
-
 
     /**
      * Returns a representation of a single object.

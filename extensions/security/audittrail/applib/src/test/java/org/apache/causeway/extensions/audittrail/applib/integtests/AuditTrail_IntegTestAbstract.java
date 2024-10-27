@@ -203,5 +203,4 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
     @Inject BookmarkService bookmarkService;
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
 
-
 }

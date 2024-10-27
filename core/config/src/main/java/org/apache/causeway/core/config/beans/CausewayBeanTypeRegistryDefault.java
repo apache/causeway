@@ -125,6 +125,4 @@ implements CausewayBeanTypeRegistry {
 
     }
 
-
-
 }

@@ -99,7 +99,6 @@ public class IdentifierUtil {
                     .equals(command.getLogicalMemberIdentifier());
     }
 
-
     public String logicalMemberIdentifierFor(
             final @NonNull InteractionHead interactionHead,
             final ObjectMember objectMember) {
@@ -155,6 +154,5 @@ public class IdentifierUtil {
     private String logicalMemberIdentifierForDeclaredMember(final OneToOneAssociation otoa) {
         return logicalMemberIdentifierFor(otoa.getDeclaringType(), otoa);
     }
-
 
 }

@@ -54,7 +54,6 @@ import org.apache.causeway.core.security.authorization.manager.AuthorizationMana
 
 import lombok.Getter;
 
-
 class MetaModelContext_usingSpring extends MetaModelContext {
 
     private final _IocContainer iocContainer;

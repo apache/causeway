@@ -37,6 +37,4 @@ public abstract class RepresentationTypeTest_getName_ContractTest {
         assertThat(RepresentationType.ACTION_PARAMETER_DESCRIPTION.getName(), is("actionParameterDescription"));
     }
 
-
-
 }

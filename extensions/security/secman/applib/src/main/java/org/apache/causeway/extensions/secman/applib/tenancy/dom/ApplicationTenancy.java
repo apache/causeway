@@ -74,7 +74,6 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
         public static final String FIND_BY_NAME_OR_PATH_MATCHING = LOGICAL_TYPE_NAME + ".findByNameOrPathMatching";
     }
 
-
     // -- UI & DOMAIN EVENTS
 
     public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationTenancy> { }
@@ -86,13 +85,11 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationTenancy, T> {}
     public static abstract class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationTenancy> {}
 
-
     // -- MODEL
 
     @ObjectSupport public String title() {
         return getName();
     }
-
 
     // -- NAME
 
@@ -126,7 +123,6 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     public abstract String getName();
     public abstract void setName(String name);
 
-
     // -- PATH
 
     @Property(
@@ -148,7 +144,6 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     @Path
     public abstract String getPath();
     public abstract void setPath(String path);
-
 
     // -- PARENT
 
@@ -173,12 +168,10 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     public abstract ApplicationTenancy getParent();
     public abstract void setParent(ApplicationTenancy parent);
 
-
     @Programmatic
     public boolean isRoot() {
         return getParent()==null;
     }
-
 
     // -- CHILDREN
 
@@ -196,8 +189,6 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
     }
     @Children
     public abstract Collection<ApplicationTenancy> getChildren();
-
-
 
     // -- CONTRACT
 

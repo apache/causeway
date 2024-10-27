@@ -451,7 +451,6 @@ final class NodeWriter implements StructuralNodeVisitor {
     private boolean isContinuation = false;
     private final Stack<Integer> bulletCountStack = new Stack<>();
 
-
     // -- EMPTY CONTINUATION BLOCK HANDLING
 
     private final static int EMPTY_CONTINUATION_BLOCK_SIZE = 8;
@@ -543,6 +542,5 @@ final class NodeWriter implements StructuralNodeVisitor {
         }
         return x;
     }
-
 
 }

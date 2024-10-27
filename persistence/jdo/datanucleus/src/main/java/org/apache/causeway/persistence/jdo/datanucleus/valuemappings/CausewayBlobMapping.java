@@ -68,7 +68,6 @@ public class CausewayBlobMapping extends SingleFieldMultiMapping {
         addColumns(ClassNameConstants.BYTE_ARRAY); // bytes
     }
 
-
     @Override
     public Object getValueForColumnMapping(NucleusContext nucleusCtx, int index, Object value)
     {
@@ -129,6 +128,5 @@ public class CausewayBlobMapping extends SingleFieldMultiMapping {
         }
         return new Blob(name, mimeTypeBase, bytes);
     }
-
 
 }

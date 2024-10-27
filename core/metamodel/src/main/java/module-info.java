@@ -128,7 +128,6 @@ open module org.apache.causeway.core.metamodel {
             org.apache.causeway.viewer.wicket.ui,
             org.apache.causeway.incubator.viewer.graphql.viewer, org.apache.causeway.incubator.viewer.graphql.model, org.apache.causeway.extensions.titlecache.jcache, org.apache.causeway.extensions.titlecache.caffeine, org.apache.causeway.persistence.querydsl.integration;
 
-
     exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
     exports org.apache.causeway.core.metamodel.facets.object.layout;
     exports org.apache.causeway.core.metamodel.facets.all.hide;
@@ -144,7 +143,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.spi;
     exports org.apache.causeway.core.metamodel.services.deadlock;
     exports org.apache.causeway.core.metamodel.facets.object.autocomplete;
-
 
     requires jakarta.activation;
     requires jakarta.annotation;

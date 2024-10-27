@@ -66,7 +66,6 @@ class ServiceInjectorDefaultTest_usingFields {
 
         @Inject AutowireCapableBeanFactory beanFactory;
 
-
         @Bean @Singleton
         A mockA() {
             return (A) beanFactory.autowire(A.class, autowireMode, true);
@@ -131,7 +130,6 @@ class ServiceInjectorDefaultTest_usingFields {
         // managed
         assertThat(serviceA.getSomeB(), any(B_Abstract.class));
         assertThat(serviceB.getSomeC(), any(C.class));
-
 
         // not-managed
         injector.injectServicesInto(serviceD);

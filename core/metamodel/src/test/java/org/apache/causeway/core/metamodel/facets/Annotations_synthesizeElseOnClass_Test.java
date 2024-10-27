@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 
 public class Annotations_synthesizeElseOnClass_Test {
 
-
     @Inherited
     @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE, ElementType.TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -61,7 +60,6 @@ public class Annotations_synthesizeElseOnClass_Test {
     @Retention(RetentionPolicy.RUNTIME)
     @interface MetaInteractAsJoe {
     }
-
 
     @Test
     void on_method() throws Exception {
@@ -156,7 +154,6 @@ public class Annotations_synthesizeElseOnClass_Test {
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("bill"));
     }
-
 
     @Test
     void from_class() throws Exception {

@@ -195,5 +195,4 @@ public interface CollectionFacet extends Facet {
 
     }
 
-
 }

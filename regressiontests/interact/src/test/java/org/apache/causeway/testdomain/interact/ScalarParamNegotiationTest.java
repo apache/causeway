@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo_negotiate.Params.NumberRange;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -153,7 +151,6 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
                 uiParamC::getChoiceBoxUpdateEventCount,
                 ()->uiParamC.setSimulatedSearchArgument("-")); // select for all negative and odd numbers
 
-
         // verify that no additional changes are triggered
         assertDoesNotIncrement(
                 uiParamC::getChoiceBoxUpdateEventCount,
@@ -232,8 +229,5 @@ class ScalarParamNegotiationTest extends InteractionTestAbstract {
                 uiParamA.getValidationMessage());
 
     }
-
-
-
 
 }

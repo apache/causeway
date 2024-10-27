@@ -49,5 +49,4 @@ extends InteractionDtoValueSemantics {
         return SyntaxHighlighter.PRISM_DEFAULT;
     }
 
-
 }

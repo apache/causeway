@@ -29,5 +29,4 @@ abstract class _QueryAbstract<T> implements Query<T> {
     @Getter(onMethod_ = {@Override}) private final Class<T> resultType;
     @Getter(onMethod_ = {@Override}) private final QueryRange range;
     
-    
 }

@@ -57,12 +57,9 @@ public class ExecutionOutbox_IntegTest extends ExecutionOutbox_IntegTestAbstract
     public static class AppManifest {
     }
 
-
     @Override
     protected org.apache.causeway.extensions.executionoutbox.applib.integtest.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
-
-
 
 }

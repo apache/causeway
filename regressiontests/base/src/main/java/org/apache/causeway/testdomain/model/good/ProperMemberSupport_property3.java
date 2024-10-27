@@ -48,5 +48,4 @@ public class ProperMemberSupport_property3 {
         return "described-imperative[property3]";
     }
 
-
 }

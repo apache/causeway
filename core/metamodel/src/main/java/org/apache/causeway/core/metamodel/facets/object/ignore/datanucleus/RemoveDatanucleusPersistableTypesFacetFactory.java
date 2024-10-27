@@ -63,7 +63,4 @@ extends FacetFactoryAbstract {
         }
     }
 
-
-
-
 }

@@ -221,5 +221,4 @@ public interface ObjectManager extends HasMetaModelContext {
                         .collect(Can.toCan()));
     }
 
-
 }

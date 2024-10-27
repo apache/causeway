@@ -109,7 +109,6 @@ public class ApplicationPermission
 
     protected final static String FQCN = "org.apache.causeway.extensions.secman.jdo.permission.dom.ApplicationPermission";
 
-
     @Column(name = Role.NAME, allowsNull = Role.ALLOWS_NULL)
     @Role
     @Getter
@@ -119,29 +118,24 @@ public class ApplicationPermission
         this.role = _Casts.uncheckedCast(role);
     }
 
-
     @Column(allowsNull = Rule.ALLOWS_NULL)
     @Rule
     @Getter @Setter
     private ApplicationPermissionRule rule;
-
 
     @Column(allowsNull = Mode.ALLOWS_NULL)
     @Mode
     @Getter @Setter
     private ApplicationPermissionMode mode;
 
-
     @Column(allowsNull = FeatureSort.ALLOWS_NULL)
     @FeatureSort
     @Getter @Setter
     private ApplicationFeatureSort featureSort;
 
-
     @Column(allowsNull = FeatureFqn.ALLOWS_NULL)
     @FeatureFqn
     @Getter @Setter
     private String featureFqn;
-
 
 }

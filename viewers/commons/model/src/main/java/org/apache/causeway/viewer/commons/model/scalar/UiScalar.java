@@ -70,7 +70,6 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         return getMetaModel().getFeatureType().isActionParameter();
     }
 
-
     default Optional<String> getDescribedAs() {
         return getMetaModel().getDescription(this::getOwner);
     }

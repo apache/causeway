@@ -108,18 +108,12 @@ public abstract class FixtureScript {
         return str != null ? str : _Strings.asNaturalName.apply(getClass().getSimpleName());
     }
 
-
-
     public String getQualifiedName() {
         return getParentPath() + getLocalName();
     }
 
-
-
     @Getter @Setter
     private String friendlyName;
-
-
 
     /**
      * Will always be populated, initially by the default name, but can be
@@ -128,16 +122,11 @@ public abstract class FixtureScript {
     @Getter( onMethod = @__(@Programmatic)) @Setter
     private String localName;
 
-
-
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
     @Getter( onMethod = @__(@Programmatic)) @Setter( onMethod = @__(@Programmatic))
     private String parentPath;
-
-
-
 
     // -- ExecutionContext
 
@@ -588,9 +577,7 @@ public abstract class FixtureScript {
 
         }
 
-
         static enum As { EXEC, SKIP }
-
 
         private <T extends FixtureScript> T executeChildIfNotAlready(final T childFixtureScript) {
 
@@ -674,8 +661,6 @@ public abstract class FixtureScript {
             return Collections.unmodifiableList(previouslyExecuted);
         }
 
-
-
         /**
          * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
          * strategy is in use.
@@ -688,12 +673,9 @@ public abstract class FixtureScript {
          */
         private final Map<FixtureScript, FixtureScript> fixtureScriptByValue = _Maps.newLinkedHashMap();
 
-
-
         static int roundup(final int n, final int roundTo) {
             return ((n / roundTo) + 1) * roundTo;
         }
-
 
         @Getter @Setter
         private Map<Class<?>, Object> userData = _Maps.newHashMap();
@@ -703,8 +685,6 @@ public abstract class FixtureScript {
         }
 
     }
-
-
 
     // -- defaultParam, checkParam
     protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
@@ -780,7 +760,6 @@ public abstract class FixtureScript {
         return parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1);
     }
 
-
     // -- run (entry point for FixtureScripts service to call)
 
     /**
@@ -809,8 +788,6 @@ public abstract class FixtureScript {
         }
     }
 
-
-
     /**
      * Optional hook to validate parameters.
      */
@@ -818,9 +795,6 @@ public abstract class FixtureScript {
     public String validateRun(final String parameters) {
         return null;
     }
-
-
-
 
     // -- execute (API for subclasses to implement)
 
@@ -835,7 +809,6 @@ public abstract class FixtureScript {
      */
     @Programmatic
     protected abstract void execute(final ExecutionContext executionContext);
-
 
     // -- helpers (for subclasses)
 
@@ -910,7 +883,6 @@ public abstract class FixtureScript {
         return new TransactionTemplate(txMan);
     }
 
-
     // -- helpers (local)
 
     @Programmatic
@@ -928,6 +900,5 @@ public abstract class FixtureScript {
     @Inject protected WrapperFactory wrapperFactory;
     @Inject protected TransactionService transactionService;
     @Inject protected PlatformTransactionManager txMan;
-
 
 }

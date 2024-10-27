@@ -63,6 +63,4 @@ public class CausewayModuleViewerGraphqlViewer {
         return new DefaultBatchLoaderRegistry();
     }
 
-
 }
-

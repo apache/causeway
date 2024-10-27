@@ -41,7 +41,6 @@ public class BSMenuBars_roundtrip_Test {
     public void tearDown() throws Exception {
     }
 
-
     @Test
     public void happyCase() throws Exception {
 

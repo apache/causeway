@@ -31,9 +31,6 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 import org.apache.causeway.extensions.pdfjs.applib.annotations.PdfJsViewer;
 
-
-
-
 public class PdfJsViewerFacetFromAnnotationFactory
 extends FacetFactoryAbstract {
 
@@ -52,7 +49,6 @@ extends FacetFactoryAbstract {
     public PdfJsViewerFacetFromAnnotationFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.PROPERTIES_AND_ACTIONS);
     }
-
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {

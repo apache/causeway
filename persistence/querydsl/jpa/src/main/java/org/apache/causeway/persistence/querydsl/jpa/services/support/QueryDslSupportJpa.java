@@ -34,7 +34,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.persistence.querydsl.applib.query.DslQuery;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
-
 @Component
 @ConditionalOnMissingBean(QueryDslSupport.class)
 public class QueryDslSupportJpa implements QueryDslSupport {

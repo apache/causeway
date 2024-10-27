@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-
-
 public class DomainTypeReprRenderer
 extends ReprRendererAbstract<ObjectSpecification> {
 

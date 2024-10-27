@@ -59,7 +59,6 @@ public @interface CollectionLayout {
     String cssClass()
             default "";
 
-
     /**
      * Indicates which view is used by default to render the collection.
      *

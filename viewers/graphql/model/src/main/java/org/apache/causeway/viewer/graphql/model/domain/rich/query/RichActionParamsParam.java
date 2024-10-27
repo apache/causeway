@@ -91,7 +91,6 @@ public class RichActionParamsParam
             return;
         }
 
-
         addChildFieldFor(this.hidden = new RichActionParamsParamHidden(this, context));
         addChildFieldFor(this.disabled = new RichActionParamsParamDisabled(this, context));
         addChildFieldFor(this.choices = new RichActionParamsParamChoices(this, context));

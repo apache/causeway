@@ -57,5 +57,4 @@ implements JpaTableFacetAnnotation {
         visitor.accept("table", tableOrTypeName);
     }
 
-
 }

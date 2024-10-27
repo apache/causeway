@@ -83,7 +83,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
 
     protected abstract Counter newCounter(String name);
 
-
     @Test
     void invoke_mixin() {
         counter1 = counterRepository.findByName("counter-1");
@@ -201,7 +200,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         assertThat(all).isEmpty();
     }
 
-
     @Test
     void roundtrip_ELE_bookmarks() {
 
@@ -270,7 +268,6 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         var executionTarget1User2 = executionsForTarget1User2.get(0);
         var executionTarget1User2Id = executionTarget1User2.getInteractionId();
 
-
         // given (same user, same target, yesterday)
         counter1 = counterRepository.findByName("counter-1");
         final UUID[] executionTarget1User1YesterdayIdHolder = new UUID[1];
@@ -334,13 +331,11 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));
         var bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
 
-
         // when
         List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findRecentByTarget(bookmark1);
 
         // then
         assertThat(recentByTarget).hasSize(3);
-
 
         // when
         List<? extends ExecutionLogEntry> byTargetAndTimestampBefore = executionLogEntryRepository.findByTargetAndTimestampBefore(bookmark1, from1);

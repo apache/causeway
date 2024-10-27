@@ -83,7 +83,6 @@ public final class Clob implements NamedWithMimeType {
     private final MimeType mimeType;
     private final CharSequence chars;
 
-
     // -- FACTORIES
 
     /**

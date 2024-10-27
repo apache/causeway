@@ -35,7 +35,6 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 
 public class Annotations_synthesize_on_Class_Test {
 
-
     @Inherited
     @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -53,7 +52,6 @@ public class Annotations_synthesize_on_Class_Test {
 
         Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
     }
-
 
     //@Meta
     @DomainObj(publishng = DomainObj.Publishng.YES)
@@ -175,7 +173,6 @@ public class Annotations_synthesize_on_Class_Test {
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
 
-
     @Test
     public void direct_overrides_metaMeta_2() throws Exception {
 
@@ -239,8 +236,5 @@ public class Annotations_synthesize_on_Class_Test {
         assertEquals(TitleUiEvent.Noop.class, synthesized.get().titleUiEvent());
 
     }
-
-
-
 
 }

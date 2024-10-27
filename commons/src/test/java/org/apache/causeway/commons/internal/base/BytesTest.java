@@ -124,7 +124,6 @@ class BytesTest {
         assertThat(compressionRatio, lessThan(0.7));
     }
 
-
     // -- COMPRESSION
 
     private static byte[] data(final int index) {

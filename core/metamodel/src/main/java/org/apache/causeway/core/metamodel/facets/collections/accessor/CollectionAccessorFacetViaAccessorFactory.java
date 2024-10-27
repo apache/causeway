@@ -59,7 +59,6 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
                         typeSpec, accessorMethod, facetHolder));
     }
 
-
     // ///////////////////////////////////////////////////////////////
     // PropertyOrCollectionIdentifyingFacetFactory impl.
     // ///////////////////////////////////////////////////////////////

@@ -34,7 +34,6 @@ import graphql.execution.ExecutionContext;
 import graphql.execution.ExecutionStrategyParameters;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoProviderDefault implements UserMementoProvider {
 
@@ -49,7 +48,6 @@ public class UserMementoProviderDefault implements UserMementoProvider {
     }
 
     @Inject private final CausewayConfiguration causewayConfiguration;
-
 
     @Override
     public UserMemento userMemento(

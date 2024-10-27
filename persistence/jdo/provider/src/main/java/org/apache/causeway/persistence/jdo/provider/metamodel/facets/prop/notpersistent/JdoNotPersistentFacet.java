@@ -23,7 +23,6 @@ import javax.jdo.annotations.NotPersistent;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
-
 /**
  * Corresponds to the property with the {@link NotPersistent} annotation.
  * <p>

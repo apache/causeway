@@ -42,7 +42,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
@@ -61,6 +60,5 @@ public class AuditTrail_IntegTest extends AuditTrail_IntegTestAbstract {
     protected org.apache.causeway.extensions.audittrail.applib.integtests.model.Counter newCounter(final String name) {
         return Counter.builder().name(name).build();
     }
-
 
 }

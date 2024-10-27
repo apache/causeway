@@ -251,7 +251,6 @@ implements
         return changes.get();
     }
 
-
     /**
      * @implNote access to this {@link Map} must be thread-safe (insertion order preservation is not required)
      */
@@ -260,7 +259,6 @@ implements
     private final LongAdder numberEntitiesLoaded = new LongAdder();
     private final LongAdder entityChangeEventCount = new LongAdder();
     private final AtomicBoolean persistentChangesEncountered = new AtomicBoolean();
-
 
     @Override
     public void destroy() {
@@ -283,7 +281,6 @@ implements
 
         persistentChangesEncountered.set(false);
     }
-
 
     /**
      * @implNote sets a lock on the {@code enlistedPropertyChangeRecordsById} {@link Map}
@@ -407,7 +404,6 @@ implements
         return Optional.of(changingEntities);
     }
 
-
     private static ChangesDto newDto(
             final UUID interactionId, final int transactionSequenceNum,
             final String userName, final java.sql.Timestamp completedAt,
@@ -455,7 +451,6 @@ implements
         changesDto.setObjects(objectsDto);
         return changesDto;
     }
-
 
     @Override
     public Can<EntityPropertyChange> getPropertyChanges(
@@ -549,7 +544,6 @@ implements
         });
     }
 
-
     @Override
     public void enlistUpdating(
             final ManagedObject entity,
@@ -588,7 +582,6 @@ implements
             }
         });
     }
-
 
     @Override
     public void enlistDeleting(final ManagedObject entity) {
@@ -655,7 +648,6 @@ implements
 
         boolean isEnabled();
     }
-
 
     @Component
     @Priority(PriorityPrecedence.LATE)

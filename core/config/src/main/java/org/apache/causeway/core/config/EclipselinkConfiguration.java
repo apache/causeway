@@ -121,7 +121,6 @@ public class EclipselinkConfiguration {
     @CausewayConfiguration.AssignableFrom("org.eclipse.persistence.sessions.SessionEventListener")
     Class<?> sessionEventListener = null;
 
-
     private final Logging logging = new Logging();
     @Data
     public static class Logging {
@@ -193,7 +192,6 @@ public class EclipselinkConfiguration {
          */
         int size = 100; // bytes
 
-
         /**
          * The CacheType enum is used with the Cache annotation for a persistent class.
          * It defines the type of cache (IdentityMap) used for the class. By default the
@@ -263,7 +261,6 @@ public class EclipselinkConfiguration {
     @Data
     public static class FlushClear {
 
-
         /**
          * FlushClearCache persistence property
          * defines modes of cache handling after em.flush call followed by em.clear call.
@@ -311,7 +308,6 @@ public class EclipselinkConfiguration {
         FlushClearCache cache = FlushClearCache.DropInvalidate;
     }
 
-
     /**
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#createddljdbcfilename">eclipselink.create-ddl-jdbc-file-name</a>
      */
@@ -350,7 +346,6 @@ public class EclipselinkConfiguration {
         String outputMode = "database";
 
     }
-
 
     /**
      * @see <a href="https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CCHCJCDJ">eclipselink.exception-handler</a>

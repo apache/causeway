@@ -105,7 +105,6 @@ public class DomainMemberDefault implements DomainMember {
                                     : "1 Object";
     }
 
-
     @XmlElement @Override
     public String getLogicalTypeName() {
         return spec.getLogicalTypeName();

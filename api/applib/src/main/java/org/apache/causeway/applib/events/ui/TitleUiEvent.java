@@ -76,7 +76,6 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      */
     public static class Doop extends TitleUiEvent<Object> {}
 
-
     /**
      * If used then the framework will set state via (non-API) setters.
      *
@@ -91,7 +90,6 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public TitleUiEvent(final S source) {
         super(source);
     }
-
 
     /**
      * The title as provided by a subscriber using {@link #setTitle(String)}.
@@ -110,7 +108,6 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
         this.title = title;
     }
 
-
     /**
      * The translatable (i18n) title as provided by a subscriber using {@link #setTranslatableTitle(TranslatableString)}.
      *
@@ -128,6 +125,5 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     public void setTranslatableTitle(final TranslatableString translatableTitle) {
         this.translatableTitle = translatableTitle;
     }
-
 
 }

@@ -226,7 +226,6 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
 
     protected final static String FQCN = "org.apache.causeway.extensions.commandlog.jdo.dom.CommandLogEntry";
 
-
     /**
      * Intended for use on secondary (replay) system.
      *
@@ -247,18 +246,15 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Getter @Setter
     private UUID interactionId;
 
-
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
 
-
     @Column(allowsNull = Timestamp.ALLOWS_NULL)
     @Timestamp
     @Getter @Setter
     private java.sql.Timestamp timestamp;
-
 
     @Persistent
     @Column(allowsNull = Target.ALLOWS_NULL, length = Target.MAX_LENGTH)
@@ -266,24 +262,20 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Getter @Setter
     private Bookmark target;
 
-
     @Column(allowsNull = ExecuteIn.ALLOWS_NULL, length = ExecuteIn.MAX_LENGTH)
     @ExecuteIn
     @Getter @Setter
     private org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn executeIn;
-
 
     @Column(allowsNull = Parent.ALLOWS_NULL, length = InteractionId.MAX_LENGTH)
     @Domain.Exclude
     @Getter @Setter
     private UUID parentInteractionId;
 
-
     @Column(allowsNull = LogicalMemberIdentifier.ALLOWS_NULL, length = LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
     @Getter @Setter
     private String logicalMemberIdentifier;
-
 
     @Persistent
     @Column(allowsNull = CommandDtoAnnot.ALLOWS_NULL, jdbcType = "CLOB")
@@ -291,18 +283,15 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Getter @Setter
     private CommandDto commandDto;
 
-
     @Column(allowsNull = StartedAt.ALLOWS_NULL)
     @StartedAt
     @Getter @Setter
     private java.sql.Timestamp startedAt;
 
-
     @Column(allowsNull = CompletedAt.ALLOWS_NULL)
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
-
 
     @Persistent
     @Column(allowsNull = Result.ALLOWS_NULL, length = Result.MAX_LENGTH)
@@ -310,19 +299,16 @@ extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
     @Getter @Setter
     private Bookmark result;
 
-
     @Persistent
     @Column(allowsNull = Exception.ALLOWS_NULL, jdbcType = "CLOB")
     @Exception
     @Getter @Setter
     private String exception;
 
-
     @Column(allowsNull = ReplayState.ALLOWS_NULL, length = ReplayState.MAX_LENGTH)
     @ReplayState
     @Getter @Setter
     private org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState;
-
 
     @Column(allowsNull = ReplayStateFailureReason.ALLOWS_NULL, length = ReplayStateFailureReason.MAX_LENGTH)
     @ReplayStateFailureReason

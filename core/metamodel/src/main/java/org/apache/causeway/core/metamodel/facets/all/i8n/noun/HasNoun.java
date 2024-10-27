@@ -64,5 +64,4 @@ extends HasMemoizableTranslation {
         return translated().orElse(null);
     }
 
-
 }

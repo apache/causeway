@@ -36,8 +36,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInte
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-
-
 /**
  * Represents an action (a member) of an entity.
  *

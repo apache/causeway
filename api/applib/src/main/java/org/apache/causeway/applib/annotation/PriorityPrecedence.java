@@ -77,6 +77,4 @@ public class PriorityPrecedence {
      */
     public static final int LATE = MIDPOINT + (LAST - MIDPOINT) / 2;
 
-
 }
-

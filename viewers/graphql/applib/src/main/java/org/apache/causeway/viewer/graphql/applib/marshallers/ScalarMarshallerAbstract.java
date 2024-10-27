@@ -25,7 +25,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Convenience adapter for {@link ScalarMarshaller} SPI.
  *
@@ -44,6 +43,5 @@ public abstract class ScalarMarshallerAbstract<K> implements ScalarMarshaller<K>
     public boolean handles(Class<?> javaClass) {
         return this.javaClass.isAssignableFrom(javaClass);
     }
-
 
 }

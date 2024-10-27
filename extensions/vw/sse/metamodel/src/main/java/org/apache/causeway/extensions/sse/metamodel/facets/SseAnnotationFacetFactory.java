@@ -30,8 +30,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.extensions.sse.applib.annotations.ServerSentEvents;
 
-
-
 public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
 
     @Component
@@ -55,7 +53,6 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
         processObserve(processMethodContext);
     }
 
-
     void processObserve(final ProcessMethodContext processMethodContext) {
         var facetHolder = processMethodContext.getFacetHolder();
 
@@ -65,6 +62,5 @@ public class SseAnnotationFacetFactory extends FacetFactoryAbstract {
                 SseObserveFacetForServerSentEventsAnnotation
                 .create(serverSentEventsIfAny, facetHolder));
     }
-
 
 }

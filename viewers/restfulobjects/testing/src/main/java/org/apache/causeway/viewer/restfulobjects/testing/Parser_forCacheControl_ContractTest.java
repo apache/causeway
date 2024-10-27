@@ -30,7 +30,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
 public abstract class Parser_forCacheControl_ContractTest {
 
-
     @Test
     public void forCacheControl() {
         final Parser<CacheControl> parser = Parser.forCacheControl();
@@ -55,6 +54,5 @@ public abstract class Parser_forCacheControl_ContractTest {
         // equals() method
         return cacheControl;
     }
-
 
 }

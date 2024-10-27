@@ -29,7 +29,6 @@ import org.w3c.dom.Element;
  */
 public interface XmlService {
 
-
     /**
      * Converts xml string into an {@link Document W3C Document}.
      *

@@ -118,7 +118,6 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
                 .build();
     }
 
-
     private ElementCustom determineTopLevelQueryFrom(
             final CausewayConfiguration.Viewer.Graphql.SchemaStyle schemaStyle) {
         switch (schemaStyle) {

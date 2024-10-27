@@ -99,7 +99,6 @@ public interface JaxbService {
             Object domainObject,
             CausewaySchemas causewaySchemas);
 
-
     /** 'Simple' because no injection point resolving or advanced {@link DomainObjectList} handling. */
     class Simple implements JaxbService {
 
@@ -145,7 +144,6 @@ public interface JaxbService {
             .getValue().orElse(null);
         }
 
-
         /**
          * Optional hook
          */
@@ -164,7 +162,6 @@ public interface JaxbService {
          */
         protected void configure(final Marshaller marshaller) {
         }
-
 
         @Override
         @SneakyThrows

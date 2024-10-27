@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.jdo;
 
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

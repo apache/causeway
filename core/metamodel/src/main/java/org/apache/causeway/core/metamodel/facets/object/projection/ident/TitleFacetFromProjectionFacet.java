@@ -51,5 +51,4 @@ extends TitleFacetAbstract {
         visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
 
-
 }

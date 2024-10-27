@@ -22,7 +22,6 @@ package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 import jakarta.validation.Pattern;
 import jakarta.validation.Patterns;
 
-
 public class DomainObjectWithBuiltInValidation {
 
     private String serialNumber;

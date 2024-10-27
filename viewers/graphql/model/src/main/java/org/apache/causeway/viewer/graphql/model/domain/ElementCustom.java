@@ -172,5 +172,4 @@ public abstract class ElementCustom
         return objAssoc.getElementType().isViewModelOrValue();
     }
 
-
 }

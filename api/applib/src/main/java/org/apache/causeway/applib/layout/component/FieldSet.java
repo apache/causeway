@@ -64,8 +64,6 @@ Serializable {
         setName(name);
     }
 
-    
-    
     private String id;
 
     /**
@@ -79,8 +77,6 @@ Serializable {
     public void setId(final String id) {
         this.id = id;
     }
-
-
 
     private Boolean unreferencedActions;
 
@@ -100,7 +96,6 @@ Serializable {
         this.unreferencedActions = unreferencedActions;
     }
 
-
     private Boolean unreferencedProperties;
     /**
      * Whether this fieldset should be used to hold any unreferenced properties (contributed or &quot;native&quot;).
@@ -118,9 +113,6 @@ Serializable {
         this.unreferencedProperties = unreferencedProperties;
     }
 
-
-
-
     private String name;
 
     /**
@@ -134,8 +126,6 @@ Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-
 
     private List<ActionLayoutData> actions = new ArrayList<>();
 
@@ -151,8 +141,6 @@ Serializable {
         this.actions = actionLayoutDatas;
     }
 
-
-
     private List<PropertyLayoutData> properties = new ArrayList<>();
 
     // no wrapper; required=false because may be auto-generated
@@ -164,7 +152,6 @@ Serializable {
     public void setProperties(List<PropertyLayoutData> properties) {
         this.properties = properties;
     }
-
 
     private FieldSetOwner owner;
     /**
@@ -183,7 +170,6 @@ Serializable {
     public void setOwner(final FieldSetOwner owner) {
         this.owner = owner;
     }
-
 
     private String metadataError;
 

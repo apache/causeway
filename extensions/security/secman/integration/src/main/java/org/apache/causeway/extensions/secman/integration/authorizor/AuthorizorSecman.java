@@ -49,7 +49,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 
 import lombok.NonNull;
 
-
 /**
  * <p>
  * Note that this service has an earlier precedence than <code>AuthorizorShiro</code>.
@@ -87,7 +86,6 @@ public class AuthorizorSecman implements Authorizor {
         }
         return grants(authentication, identifier, ApplicationPermissionMode.VIEWING);
     }
-
 
     @Override
     public boolean isUsable(final InteractionContext authentication, final Identifier identifier) {

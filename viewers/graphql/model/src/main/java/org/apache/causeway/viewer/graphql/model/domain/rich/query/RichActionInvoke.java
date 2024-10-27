@@ -81,7 +81,6 @@ public class RichActionInvoke
         }
     }
 
-
     @Override
     protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
 

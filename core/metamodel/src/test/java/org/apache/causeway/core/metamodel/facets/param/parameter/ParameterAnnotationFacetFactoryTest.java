@@ -46,8 +46,6 @@ import org.apache.causeway.core.metamodel.facets.param.parameter.maxlen.MaxLengt
 import org.apache.causeway.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.causeway.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 
-
-
 @SuppressWarnings("unused")
 class ParameterAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {

@@ -223,8 +223,6 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
         return _CanFactory.ofNonNullElements(nonNullElements);
     }
 
-
-
     /**
      * Returns either a {@code Can} with all the elements from given {@code collection}
      * or an empty {@code Can} if the {@code collection} is {@code null}.
@@ -941,6 +939,5 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
 //
 //    <O extends Comparable<O>> Can<T> min(@NonNull Function<? super T, O> toOrdinalFunction);
 //    <O> Can<T> min(@NonNull Function<? super T, O> toOrdinalFunction, @NonNull Comparator<O> ordinalComparator);
-
 
 }

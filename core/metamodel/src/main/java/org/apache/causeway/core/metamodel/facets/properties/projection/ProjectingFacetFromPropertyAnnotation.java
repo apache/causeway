@@ -47,7 +47,6 @@ extends ProjectingFacetAbstract {
 
     }
 
-
     private final Projecting projecting;
 
     private ProjectingFacetFromPropertyAnnotation(

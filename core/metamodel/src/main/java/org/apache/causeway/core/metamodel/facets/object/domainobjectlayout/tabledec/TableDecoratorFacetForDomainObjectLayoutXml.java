@@ -48,5 +48,4 @@ extends TableDecoratorFacetAbstract {
         super(value, holder, precedence);
     }
 
-
 }

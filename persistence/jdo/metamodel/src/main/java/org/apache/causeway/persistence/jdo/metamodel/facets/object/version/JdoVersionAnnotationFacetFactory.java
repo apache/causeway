@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.persistence.jdo.provider.entities.JdoFacetContext;
 
-
-
 public class JdoVersionAnnotationFacetFactory
 extends FacetFactoryAbstract {
 

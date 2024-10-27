@@ -214,5 +214,4 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
         return toString.toString(this);
     }
 
-
 }

@@ -29,7 +29,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 
 public class ComparableContractTester<T extends Comparable<T>> {
 
-
     private final List<List<T>> orderedTuples;
 
     /**
@@ -77,6 +76,5 @@ public class ComparableContractTester<T extends Comparable<T>> {
     public static <E> List<E> listOf(final E... elements) {
         return _Lists.ofArray(elements);
     }
-
 
 }

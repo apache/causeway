@@ -52,7 +52,6 @@ import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-
 class ValueSemanticsTester<T> {
 
     @Inject InteractionService interactionService;
@@ -185,7 +184,6 @@ class ValueSemanticsTester<T> {
 
         probe.testComposer(context, semanticsIfAny.get());
 
-
         var parserIfAny = parser(prop);
         if(parserIfAny.isPresent()) {
             probe.testParser(context, parserIfAny.get());
@@ -269,7 +267,5 @@ class ValueSemanticsTester<T> {
         var valueFacet = valueFacet(feature);
         return valueFacet.selectDefaultRenderer();
     }
-
-
 
 }

@@ -43,7 +43,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
-
 /**
  * This service (API and implementation) provides a mechanism by which
  * idempotent query results can be cached for the duration of an {@link org.apache.causeway.applib.services.iactn.Interaction}.
@@ -108,7 +107,6 @@ public class QueryResultsCache implements DisposableBean {
         final Key cacheKey = new Key(callingClass, methodName);
         return executeWithCaching(action::call, cacheKey);
     }
-
 
     public <R, A0> R execute(final MethodReferences.Call1<? extends R, A0> action, final Class<?> callingClass, final String methodName, final A0 arg0) {
         if(isIgnoreCache()) {
@@ -216,7 +214,6 @@ public class QueryResultsCache implements DisposableBean {
         log.debug("{}: {}", (cacheValue != null ? "HIT" : "MISS"), cacheKey.toString());
     }
 
-
     /**
      * Not API: for framework to call at end of transaction, to clear out the cache.
      *
@@ -228,7 +225,6 @@ public class QueryResultsCache implements DisposableBean {
     public void onTransactionEnded() {
         cache.clear();
     }
-
 
     @Override
     public void destroy() throws Exception {

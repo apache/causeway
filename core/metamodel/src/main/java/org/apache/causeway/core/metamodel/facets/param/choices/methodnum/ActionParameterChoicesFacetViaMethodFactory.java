@@ -46,5 +46,4 @@ extends ActionParameterSupportFacetFactoryAbstract {
                         choicesMethod, paramSupportReturnType, patConstructor, paramAsHolder));
     }
 
-
 }

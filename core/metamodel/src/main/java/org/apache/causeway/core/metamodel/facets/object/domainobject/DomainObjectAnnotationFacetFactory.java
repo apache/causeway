@@ -180,7 +180,6 @@ implements
         processDomainEvents(domainObjectIfAny, processClassContext);
     }
 
-
     void processEntityChangePublishing(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
@@ -318,8 +317,6 @@ implements
                 .create(domainObjectIfAny, cls, facetHolder));
     }
 
-
-
     void processNature(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
@@ -360,7 +357,6 @@ implements
 
     }
 
-
     private void processLifecycleEvents(
             final Optional<DomainObject> domainObjectIfAny,
             final ProcessClassContext processClassContext) {
@@ -378,7 +374,6 @@ implements
         processLifecycleEventUpdated(domainObjectIfAny, facetHolder);
         processLifecycleEventUpdating(domainObjectIfAny, facetHolder);
     }
-
 
     private void processDomainEvents(
             final Optional<DomainObject> domainObjectIfAny,

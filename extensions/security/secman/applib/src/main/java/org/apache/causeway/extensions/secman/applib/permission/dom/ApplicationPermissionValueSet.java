@@ -43,14 +43,11 @@ public class ApplicationPermissionValueSet implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermissionValueSet, T> {}
 
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermissionValueSet, T> {}
 
     public static abstract class ActionDomainEvent extends CausewayModuleExtSecmanApplib.ActionDomainEvent<ApplicationPermissionValueSet> {}
-
-
 
     // -- values
     private final List<ApplicationPermissionValue> values;
@@ -97,7 +94,6 @@ public class ApplicationPermissionValueSet implements Serializable {
      */
     private PermissionsEvaluationService permissionsEvaluationService;
 
-
     // -- constructor
 
     public ApplicationPermissionValueSet(
@@ -111,7 +107,6 @@ public class ApplicationPermissionValueSet implements Serializable {
         }
         this.permissionsEvaluationService = permissionsEvaluationService;
     }
-
 
     // -- grants, evaluate
 
@@ -153,7 +148,6 @@ public class ApplicationPermissionValueSet implements Serializable {
         return new Evaluation(null, false);
     }
 
-
     // -- equals, hashCode, toString
     @Override
     public boolean equals(final Object o) {
@@ -170,7 +164,6 @@ public class ApplicationPermissionValueSet implements Serializable {
     public int hashCode() {
         return values != null ? values.hashCode() : 0;
     }
-
 
     @Override
     public String toString() {

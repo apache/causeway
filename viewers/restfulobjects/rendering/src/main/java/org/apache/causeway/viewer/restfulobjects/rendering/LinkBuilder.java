@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
-
 import jakarta.ws.rs.core.MediaType;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulHttpMethod;
-
 
 public final class LinkBuilder {
 

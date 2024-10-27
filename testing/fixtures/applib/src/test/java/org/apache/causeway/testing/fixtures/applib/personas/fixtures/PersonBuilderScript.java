@@ -28,7 +28,6 @@ import org.apache.causeway.testing.fixtures.applib.personas.dom.PersonRepository
 
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 public class PersonBuilderScript extends BuilderScriptWithResult<Person> {
 

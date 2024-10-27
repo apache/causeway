@@ -69,13 +69,11 @@ public class RichActionInvokeArgsArg
         }
     }
 
-
     @Override
     protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
         var environment = new Environment.ForTunnelled(dataFetchingEnvironment);
         var managedObjects = actionInteractor.argumentManagedObjectsFor(environment, actionInteractor.getObjectMember(), context.bookmarkService);
         return managedObjects.get(paramNum).map(ManagedObject::getPojo).orElse(null);
     }
-
 
 }

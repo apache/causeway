@@ -57,5 +57,4 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
         this.addOrReplace(div);
     }
 
-
 }

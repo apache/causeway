@@ -54,7 +54,6 @@ public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTe
         fixtureScripts.runFixtureScript(script, "");
     }
 
-
     @Test @Disabled("TODO[2033] removal of PlatformTransactionManager")
     public void testResults() throws Exception{
 

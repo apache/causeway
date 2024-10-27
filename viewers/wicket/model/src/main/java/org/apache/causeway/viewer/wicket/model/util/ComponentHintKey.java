@@ -108,7 +108,6 @@ public class ComponentHintKey implements Serializable {
         return getHintStore().get(bookmark, getKey());
     }
 
-
     public void remove(final Bookmark bookmark) {
         if(bookmark == null) {
             return;
@@ -128,7 +127,6 @@ public class ComponentHintKey implements Serializable {
         final String prefixedKey = prefix + getKey();
         pageParameters.add(prefixedKey, value);
     }
-
 
     public static ComponentHintKey noop() {
         return new ComponentHintKey(null, null, null, null, null) {

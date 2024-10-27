@@ -48,5 +48,4 @@ implements OneToManyActionParameter {
                         "framework bug: non-scalar feature must have a TypeOfFacet"));
     }
 
-
 }

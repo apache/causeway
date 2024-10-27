@@ -39,7 +39,6 @@ public class PropertyAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
 implements ImperativeFacet {
 
-
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
     public PropertyAccessorFacetViaAccessor(
@@ -84,6 +83,5 @@ implements ImperativeFacet {
         super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
     }
-
 
 }

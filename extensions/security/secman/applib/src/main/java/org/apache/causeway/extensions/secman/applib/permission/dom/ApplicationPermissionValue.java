@@ -58,7 +58,6 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
         return featureId;
     }
 
-
     // -- rule
     private final ApplicationPermissionRule rule;
     @Programmatic
@@ -66,14 +65,12 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
         return rule;
     }
 
-
     // -- mode
     private final ApplicationPermissionMode mode;
     @Programmatic
     public ApplicationPermissionMode getMode() {
         return mode;
     }
-
 
     // -- implies, refutes
     @Programmatic
@@ -121,7 +118,6 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
         return new ApplicationPermissionValue(applicationFeatureId, this.rule, this.mode);
     }
 
-
     // -- Comparators
     public static final class Comparators {
         private Comparators(){}
@@ -139,7 +135,6 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
         }
     }
 
-
     // -- CONTRACT
 
     private static final Comparator<ApplicationPermissionValue> comparator =
@@ -151,7 +146,6 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
             ObjectContracts.toString("name", ApplicationPermissionValue::getRule)
             .thenToString("mode", ApplicationPermissionValue::getMode)
             .thenToString("featureId", ApplicationPermissionValue::getFeatureId);
-
 
     @Override
     public int compareTo(final ApplicationPermissionValue o) {
@@ -188,6 +182,5 @@ public class ApplicationPermissionValue implements Comparable<ApplicationPermiss
     public String toString() {
         return toString.toString(this);
     }
-
 
 }

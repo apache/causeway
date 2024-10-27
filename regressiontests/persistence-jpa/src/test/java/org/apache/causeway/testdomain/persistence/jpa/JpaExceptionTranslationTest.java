@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
@@ -75,7 +73,6 @@ class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
                 var inventory = inventories.get(0);
                 assertNotNull(inventory);
-
 
                 // add a conflicting book (unique ISBN violation)
                 testFixtures.addABookTo(inventory);

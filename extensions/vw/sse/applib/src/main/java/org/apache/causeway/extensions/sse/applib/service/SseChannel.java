@@ -43,5 +43,4 @@ public interface SseChannel {
 
     void awaitClose() throws InterruptedException;
 
-
 }

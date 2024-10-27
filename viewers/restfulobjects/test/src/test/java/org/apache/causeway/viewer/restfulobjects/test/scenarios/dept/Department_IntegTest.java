@@ -34,8 +34,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
-
-
 public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
@@ -127,7 +125,6 @@ public class Department_IntegTest extends Abstract_IntegTest {
                 .extracting(Response::getStatus)
                 .isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
         Approvals.verify(entity, jsonOptions());
-
 
     }
 

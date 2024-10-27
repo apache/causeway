@@ -45,7 +45,6 @@ class _MetadataUtil {
                 .orElseThrow(()->
                     _Exceptions.noSuchElement("cannot find JPA metadata for entity %s", entityClass));
 
-
         return new EntityOrmMetadata(
                 PersistenceStack.JPA,
                 Optional.empty(), // if somebody knows how to implement this, feel free to inform us

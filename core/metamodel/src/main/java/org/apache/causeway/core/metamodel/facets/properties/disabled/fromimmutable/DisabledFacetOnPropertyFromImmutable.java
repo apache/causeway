@@ -66,6 +66,4 @@ extends DisabledFacetAbstract {
                 .or(()->VetoReason.immutableIfNoReasonGivenByImmutableFacet().toOptional());
     }
 
-
-
 }

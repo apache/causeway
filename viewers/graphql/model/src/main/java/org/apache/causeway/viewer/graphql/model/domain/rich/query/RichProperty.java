@@ -37,8 +37,6 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectSpecificationP
 import org.apache.causeway.viewer.graphql.model.mmproviders.SchemaTypeProvider;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-
-
 public class RichProperty
         extends RichAssociation<OneToOneAssociation, ObjectInteractor>
         implements
@@ -116,8 +114,6 @@ public class RichProperty
         }
     }
 
-
-
     private boolean isBlob() {
         return getOneToOneAssociation().getElementType().getCorrespondingClass() == Blob.class;
     }
@@ -141,7 +137,6 @@ public class RichProperty
                 .type(context.typeMapper.inputTypeFor(otoa, inputContext, SchemaType.RICH))
                 .build();
     }
-
 
     @Override
     public ObjectSpecification getObjectSpecification() {

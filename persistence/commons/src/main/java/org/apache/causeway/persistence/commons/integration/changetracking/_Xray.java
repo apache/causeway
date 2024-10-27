@@ -89,7 +89,6 @@ final class _Xray {
         addSequence("recognizeLoaded", entity, interactionProviderProvider);
     }
 
-
     // -- HELPER
 
     private static void addSequence(
@@ -126,8 +125,5 @@ final class _Xray {
         });
 
     }
-
-
-
 
 }

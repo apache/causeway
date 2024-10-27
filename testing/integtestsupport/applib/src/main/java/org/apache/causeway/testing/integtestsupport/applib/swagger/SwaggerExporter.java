@@ -63,7 +63,6 @@ public class SwaggerExporter {
         swaggerService.generateSwaggerSpec(visibility, format);
     }
 
-
     private File buildSwaggerSpecFile(
             final File outputDir, final String fileNamePrefix,
             final Visibility visibility,
@@ -91,7 +90,6 @@ public class SwaggerExporter {
             }
         }
     }
-
 
     private File defaultOutputDir() {
         return new File("target/generated-resources/swagger-export");

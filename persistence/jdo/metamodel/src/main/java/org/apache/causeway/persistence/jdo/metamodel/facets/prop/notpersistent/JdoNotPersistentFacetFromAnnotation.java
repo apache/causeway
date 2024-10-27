@@ -20,7 +20,6 @@ package org.apache.causeway.persistence.jdo.metamodel.facets.prop.notpersistent;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-
 public class JdoNotPersistentFacetFromAnnotation extends JdoNotPersistentFacetAbstract {
 
     public JdoNotPersistentFacetFromAnnotation(final FacetHolder holder) {

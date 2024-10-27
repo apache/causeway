@@ -68,7 +68,6 @@ implements TitleFacet {
             return Enums.getFriendlyNameOf((Enum<?>)pojo);
         }
 
-
         // support for qualified value semantics, requires a 'where' context, that is,
         // what property, collection, action return or action param this is to be rendered for ...
         if(renderRequest.getFeature()!=null) {
@@ -125,6 +124,5 @@ implements TitleFacet {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         valueFacet.visitAttributes(visitor);
     }
-
 
 }

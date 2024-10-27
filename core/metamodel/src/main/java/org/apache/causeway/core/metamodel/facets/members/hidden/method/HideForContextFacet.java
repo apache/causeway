@@ -32,5 +32,4 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  */
 public interface HideForContextFacet extends Facet, HidingInteractionAdvisor {
 
-
 }

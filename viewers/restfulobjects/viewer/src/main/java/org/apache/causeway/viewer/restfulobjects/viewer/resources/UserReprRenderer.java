@@ -87,5 +87,4 @@ extends ReprRendererAbstract<InteractionContext> {
         getLinks().arrayAdd(link);
     }
 
-
 }

@@ -54,7 +54,6 @@ class InteractionEventTest {
     public void getIdentifier() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-
         };
         assertThat(interactionEvent.getIdentifier(), is(identifier));
     }
@@ -62,7 +61,6 @@ class InteractionEventTest {
     @Test
     public void getSource() {
         interactionEvent = new InteractionEvent(source, identifier) {
-
 
         };
         assertThat(interactionEvent.getSource(), is(source));
@@ -72,7 +70,6 @@ class InteractionEventTest {
     public void getClassName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-
         };
         assertThat(interactionEvent.getClassName(), equalTo(CustomerOrder.class.getCanonicalName()));
     }
@@ -80,7 +77,6 @@ class InteractionEventTest {
     @Test
     public void getClassNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
-
 
         };
         assertThat(interactionEvent.getClassNaturalName(), equalTo("Customer Order"));
@@ -90,7 +86,6 @@ class InteractionEventTest {
     public void getMember() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-
         };
         assertThat(interactionEvent.getMemberName(), equalTo("cancelOrder"));
     }
@@ -98,7 +93,6 @@ class InteractionEventTest {
     @Test
     public void getMemberNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
-
 
         };
         assertThat(interactionEvent.getMemberNaturalName(), equalTo("Cancel Order"));
@@ -108,7 +102,6 @@ class InteractionEventTest {
     public void shouldInitiallyNotVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-
         };
         assertThat(interactionEvent.isVeto(), is(false));
     }
@@ -116,7 +109,6 @@ class InteractionEventTest {
     @Test
     public void afterAdvisedShouldVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
-
 
         };
         interactionEvent.advised("some reason", this.getClass());
@@ -127,7 +119,6 @@ class InteractionEventTest {
     public void afterAdvisedShouldReturnReason() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
-
         };
         interactionEvent.advised("some reason", this.getClass());
         assertThat(interactionEvent.isVeto(), is(true));
@@ -136,7 +127,6 @@ class InteractionEventTest {
     @Test
     public void afterAdvisedShouldReturnAdvisorClass() {
         interactionEvent = new InteractionEvent(source, identifier) {
-
 
         };
         interactionEvent.advised("some reason", advisorClass);

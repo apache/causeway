@@ -34,7 +34,6 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import lombok.Getter;
 import lombok.Setter;
 
-
 /**
  *
  * <h1>Support Matrix</h1>

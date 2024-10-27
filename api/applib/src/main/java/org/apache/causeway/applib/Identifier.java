@@ -107,7 +107,6 @@ implements
                 Type.COLLECTION);
     }
 
-
     /** for reporting orphaned methods */
     public static Identifier methodIdentifier(
             final LogicalType typeIdentifier,
@@ -328,4 +327,3 @@ implements
     }
 
 }
-

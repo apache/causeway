@@ -61,5 +61,4 @@ class NestedListTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
     
-
 }

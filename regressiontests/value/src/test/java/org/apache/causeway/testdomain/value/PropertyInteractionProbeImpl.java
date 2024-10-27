@@ -55,7 +55,6 @@ import org.apache.causeway.testdomain.value.ValueSemanticsTester.PropertyInterac
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 

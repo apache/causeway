@@ -103,8 +103,6 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         this(Category.OTHER, predicate);
     }
 
-
-
     private Optional<String> recognizeRootCause(final Throwable ex) {
 
         return _Exceptions.streamCausalChain(ex)

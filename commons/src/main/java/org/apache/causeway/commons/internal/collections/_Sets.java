@@ -109,7 +109,6 @@ public final class _Sets {
                 .collect(Collectors.toCollection(TreeSet::new))); // natural order
     }
 
-
     /**
      * Copies all elements from iterable into a new unmodifiable Set preserving iteration order.
      * @param iterable
@@ -142,7 +141,6 @@ public final class _Sets {
         return _NullSafe.stream(iterable)
                 .collect(Collectors.<T, TreeSet<T>>toCollection(()->new TreeSet<T>(comparator)));
     }
-
 
     // -- HASH SET
 
@@ -216,7 +214,6 @@ public final class _Sets {
         return _Collections.collectFromIterable(iterable, _Sets::newCopyOnWriteArraySet,
                 ()->Collectors.<T, CopyOnWriteArraySet<T>>toCollection(CopyOnWriteArraySet::new) );
     }
-
 
     // -- SET OPERATIONS
 

@@ -156,7 +156,6 @@ public class CommonDomainObject
                 .build();
     }
 
-
     private void addMembers() {
         objectSpecification.streamProperties(MixedIn.INCLUDED)
                 .filter(this::inApiScope)
@@ -177,7 +176,6 @@ public class CommonDomainObject
                 : ActionScope.PROTOTYPE;
     }
 
-
     @Override
     protected void addDataFetchersForChildren() {
         if(meta == null) {
@@ -195,7 +193,6 @@ public class CommonDomainObject
         return ObjectFeatureUtils.asPojo(getObjectSpecification(), target, new Environment.For(dataFetchingEnvironment), context)
                 .orElse(null);
     }
-
 
     @Override
     public String toString() {

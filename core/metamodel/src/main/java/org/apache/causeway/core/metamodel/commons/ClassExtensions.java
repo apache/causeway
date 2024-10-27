@@ -35,7 +35,6 @@ import org.apache.causeway.commons.internal.resources._Resources;
 
 public final class ClassExtensions {
 
-
     private ClassExtensions() {
     }
 

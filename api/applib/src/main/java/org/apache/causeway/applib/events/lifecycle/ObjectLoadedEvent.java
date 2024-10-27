@@ -59,5 +59,4 @@ public abstract class ObjectLoadedEvent<S> extends AbstractLifecycleEvent<S> {
         super(source);
     }
 
-
 }

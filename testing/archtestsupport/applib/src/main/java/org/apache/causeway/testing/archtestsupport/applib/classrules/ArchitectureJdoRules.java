@@ -41,7 +41,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 
-
 import lombok.experimental.UtilityClass;
 
 /**
@@ -197,7 +196,6 @@ public class ArchitectureJdoRules {
                 .should().beAnnotatedWith(PersistenceCapable_schema());
     }
 
-
     static DescribedPredicate<JavaAnnotation<?>> PersistenceCapable_schema() {
         return new DescribedPredicate<>("@PersistenceCapable(schema=...)") {
             @Override
@@ -274,6 +272,5 @@ public class ArchitectureJdoRules {
             }
         };
     }
-
 
 }

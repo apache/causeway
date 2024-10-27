@@ -174,7 +174,6 @@ class GraphUtilsTest {
                 TextUtils.readLines(textForm).filter(StringUtils::hasLength));
     }
 
-
     @Test
     void kernelSubgraph() {
         var kernel = new GraphKernel(4, ImmutableEnumSet.noneOf(GraphCharacteristic.class));

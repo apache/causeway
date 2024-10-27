@@ -55,5 +55,4 @@ extends FacetFactoryAbstract {
                 .required(processMethodContext.getFacetHolder()));
     }
 
-
 }

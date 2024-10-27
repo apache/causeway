@@ -70,5 +70,4 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         skipProxyPackage("org.datanucleus.");
     }
 
-
 }

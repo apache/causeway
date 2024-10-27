@@ -236,8 +236,6 @@ extends FacetFactoryAbstract {
                 .create(propertyIfAny, getConfiguration(), holder));
     }
 
-
-
     void processMaxLength(final ProcessMethodContext processMethodContext, final Optional<Property> propertyIfAny) {
 
         var holder = processMethodContext.getFacetHolder();
@@ -320,6 +318,5 @@ extends FacetFactoryAbstract {
                 FileAcceptFacetForPropertyAnnotation
                 .create(propertyIfAny, holder));
     }
-
 
 }

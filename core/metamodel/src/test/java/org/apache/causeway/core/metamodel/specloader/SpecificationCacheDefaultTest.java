@@ -82,7 +82,6 @@ class SpecificationCacheDefaultTest {
         assertSame(objectSpecification, customerSpec);
     }
 
-
     @Test
     public void allSpecs_whenCached() {
         specificationCache.computeIfAbsent(Customer.class, __->customerSpec);

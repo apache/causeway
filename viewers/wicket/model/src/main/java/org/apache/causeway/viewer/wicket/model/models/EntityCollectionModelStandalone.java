@@ -24,7 +24,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTable
 
 import lombok.NonNull;
 
-
 public class EntityCollectionModelStandalone
 extends EntityCollectionModelAbstract {
 

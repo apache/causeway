@@ -55,7 +55,6 @@ public class CausewayModuleExtAuditTrailApplib {
     public abstract static class LayoutUiEvent<S>
             extends org.apache.causeway.applib.events.ui.LayoutUiEvent<S> { }
 
-
     public abstract static class ActionDomainEvent<S>
     extends org.apache.causeway.applib.events.domain.ActionDomainEvent<S> {}
 

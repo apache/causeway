@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.introspection;
 
-
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;

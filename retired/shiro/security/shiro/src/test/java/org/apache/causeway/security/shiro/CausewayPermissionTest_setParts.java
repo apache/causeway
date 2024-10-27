@@ -45,7 +45,6 @@ class CausewayPermissionTest_setParts {
         assertThat(ip.toString(), is("!foo/com.mycompany.myapp:customer:changeaddress:r"));
     }
 
-
     @Test
     void xxx() throws Exception {
         CausewayPermission ip = new CausewayPermission("schwartz/com.mycompany.myapp:Order:submit:*");

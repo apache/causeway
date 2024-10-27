@@ -127,5 +127,4 @@ public class AutoCompleteGeneratedQueryServiceImpl implements AutoCompleteGenera
         return result;
     }
 
-
 }

@@ -58,7 +58,6 @@ public class LayoutLoadersGitHubMenu {
     @Getter
     private boolean enabled;
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = enableDynamicLayoutLoading.ActionDomainEvent.class,
@@ -84,7 +83,6 @@ public class LayoutLoadersGitHubMenu {
         }
 
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,

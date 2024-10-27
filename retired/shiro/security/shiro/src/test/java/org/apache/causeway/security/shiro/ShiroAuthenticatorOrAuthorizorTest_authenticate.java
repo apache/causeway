@@ -78,7 +78,6 @@ class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         SecurityManager securityManager = factory.getInstance();
         SecurityUtils.setSecurityManager(securityManager);
 
-
         assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
@@ -104,7 +103,5 @@ class ShiroAuthenticatorOrAuthorizorTest_authenticate {
                 TypeIdentifierTestFactory.order(), "cancel");
         assertThat(authorizor.isVisible(authentication, cancelOrderIdentifier), is(false));
     }
-
-
 
 }

@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class IdStringifierForByte_primitive_Test {
 
-
     public static Stream<Arguments> roundtrip() {
         return Stream.of(
                 Arguments.of(Byte.MAX_VALUE),

@@ -99,5 +99,4 @@ implements ExceptionRecognizerService {
                 : recognized;
     }
 
-
 }

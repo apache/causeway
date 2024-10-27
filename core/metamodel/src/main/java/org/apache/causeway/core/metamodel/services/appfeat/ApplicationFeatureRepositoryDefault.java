@@ -80,7 +80,6 @@ implements ApplicationFeatureRepository, MetamodelListener {
     private final CausewayConfiguration configuration;
     private final SpecificationLoader specificationLoader;
 
-
     // -- caches
     private Map<String, ApplicationFeatureId> featureIdentifiersByName;
 
@@ -163,7 +162,6 @@ implements ApplicationFeatureRepository, MetamodelListener {
             return;
         }
 
-
         var logicalType = spec.getLogicalType();
         var logicalTypeName = logicalType.getLogicalTypeName();
         var typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
@@ -217,7 +215,6 @@ implements ApplicationFeatureRepository, MetamodelListener {
         final SingleIntValueFacet facet = facetHolder.getFacet(cls);
         return facet != null ? facet.value() : null;
     }
-
 
     ApplicationFeatureId addClassParent(final ApplicationFeatureId classFeatureId) {
         final ApplicationFeatureId parentPackageId = classFeatureId.getParentNamespaceFeatureId();
@@ -393,25 +390,20 @@ implements ApplicationFeatureRepository, MetamodelListener {
         throw _Exceptions.illegalArgument("Feature of unknown sort '%s'", featureId.getSort());
     }
 
-
     public ApplicationFeature findNamespace(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return namespaceFeatures.get(featureId);
     }
-
 
     public ApplicationFeature findLogicalType(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return typeFeatures.get(featureId);
     }
 
-
     public ApplicationFeature findMember(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return memberFeatures.get(featureId);
     }
-
-
 
     // -- allFeatures, allPackages, allClasses, allMembers
 
@@ -483,6 +475,5 @@ implements ApplicationFeatureRepository, MetamodelListener {
         initializeIfRequired();
         return featureIdentifiersByName;
     }
-
 
 }

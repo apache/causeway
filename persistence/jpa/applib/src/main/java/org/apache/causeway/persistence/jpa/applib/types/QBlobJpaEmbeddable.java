@@ -28,7 +28,6 @@ import com.querydsl.core.types.dsl.StringPath;
 
 import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
-
 /**
  * QBlobJpaEmbeddable is a Querydsl query type for BlobJpaEmbeddable
  *
@@ -70,4 +69,3 @@ public class QBlobJpaEmbeddable extends BeanPath<BlobJpaEmbeddable> {
     }
 
 }
-

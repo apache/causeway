@@ -150,7 +150,6 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
     protected abstract T getSample();
     protected abstract void assertValueEncodesToJsonAs(T a, String json);
 
-
     @ParameterizedTest
     @EnumSource(Format.class)
     final void decodeNULL(final Format format) throws Exception {

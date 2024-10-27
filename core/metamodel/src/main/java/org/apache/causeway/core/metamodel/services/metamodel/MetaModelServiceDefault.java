@@ -116,7 +116,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         specificationLoader.reloadSpecification(domainType);
     }
 
-
     @Override
     public DomainModel getDomainModel() {
 
@@ -146,8 +145,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         return new DomainModelDefault(rows);
     }
 
-
-
     protected boolean exclude(final OneToOneAssociation property) {
         return false;
     }
@@ -168,8 +165,6 @@ public class MetaModelServiceDefault implements MetaModelService {
         final String className = spec.getFullIdentifier();
         return className.startsWith("java") || className.startsWith("org.joda");
     }
-
-
 
     @Override
     public BeanSort sortOf(

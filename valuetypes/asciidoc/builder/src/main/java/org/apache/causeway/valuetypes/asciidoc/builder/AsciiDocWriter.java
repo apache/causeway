@@ -125,5 +125,4 @@ public class AsciiDocWriter {
         writer.flush();
     }
 
-
 }

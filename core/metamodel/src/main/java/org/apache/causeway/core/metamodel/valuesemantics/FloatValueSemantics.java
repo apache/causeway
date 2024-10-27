@@ -122,5 +122,4 @@ implements
         return Can.of(Float.MIN_VALUE, Float.MAX_VALUE);
     }
 
-
 }

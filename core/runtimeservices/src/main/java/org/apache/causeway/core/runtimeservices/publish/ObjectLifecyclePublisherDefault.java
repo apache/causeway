@@ -101,7 +101,6 @@ public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher
         lifecycleCallbackNotifier().postUpdate(entity);
     }
 
-
     @Override
     public void onPreRemove(final ManagedObject entity) {
         entityChangeTracker()

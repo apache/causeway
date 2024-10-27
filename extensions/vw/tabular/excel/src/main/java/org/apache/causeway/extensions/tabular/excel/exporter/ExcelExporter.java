@@ -50,7 +50,6 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-
 @RequiredArgsConstructor
 class ExcelExporter implements BiConsumer<DataTable, File> {
 

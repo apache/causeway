@@ -37,7 +37,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
 
 import lombok.Getter;
 
-
 /**
  * Convenience fixture script intended to be easily subclassed in order to set up an
  * {@link org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser} with associated roles.
@@ -135,7 +134,6 @@ implements FixtureScriptWithExecutionStrategy {
     protected final Can<String> getRoleNames() {
         return roleNamesSupplier.get();
     }
-
 
     @Override
     protected void execute(final ExecutionContext executionContext) {

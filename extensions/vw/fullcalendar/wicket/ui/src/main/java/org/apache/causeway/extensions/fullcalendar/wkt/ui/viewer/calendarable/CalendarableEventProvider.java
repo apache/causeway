@@ -54,5 +54,4 @@ public class CalendarableEventProvider extends EventProviderAbstract {
         .orElse(null);
     }
 
-
 }

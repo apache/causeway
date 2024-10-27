@@ -56,5 +56,4 @@ public abstract class SseObserveFacetAbstract extends SingleClassValueFacetAbstr
         throw _Exceptions.notImplemented();
     }
 
-
 }

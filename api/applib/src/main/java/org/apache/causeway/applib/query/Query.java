@@ -25,7 +25,6 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 
 import lombok.NonNull;
 
-
 /**
  * For use by repository implementations, representing the values of a query.
  *

@@ -38,8 +38,6 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
-
-
 class UserPermissionViewModelTest {
 
     @ParameterizedTest

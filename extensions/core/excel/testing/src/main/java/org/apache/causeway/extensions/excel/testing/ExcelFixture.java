@@ -63,11 +63,9 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
 
     private final List<Class<?>> classes;
 
-
     @Inject SpecificationLoader specLoader;
     @Inject ExcelService excelService;
     @Inject RepositoryService repositoryService;
-
 
     public ExcelFixture(final URL excelResource, final Class<?>... classes) {
         this(excelResource, Arrays.asList(classes));
@@ -105,7 +103,6 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
         this.classes = classes;
     }
 
-
     /**
      * Input, optional: defines the name of the resource, used as a suffix to override {@link #getQualifiedName()}
      * (disambiguate items when added to {@link FixtureResultList} if multiple instances of {@link ExcelFixture} are
@@ -121,7 +118,6 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
         return super.getQualifiedName() + (getExcelResourceName() != null ? "-" + getExcelResourceName() : "");
     }
 
-
     /**
      * Input, mandatory ... the Excel spreadsheet to read.
      */
@@ -129,13 +125,11 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     @PropertyLayout(sequence = "1.2")
     private URL excelResource;
 
-
     /**
      * Input, mandatory ... the Excel spreadsheet to read.
      */
     @Getter @Setter
     private Blob blob;
-
 
     /**
      * Output: all the objects created by this fixture.
@@ -148,9 +142,6 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
      */
     @Getter
     private final Map<Class<?>, List<Object>> objectsByClass = _Maps.newHashMap();
-
-
-
 
     @Override
     protected void execute(final ExecutionContext ec) {
@@ -201,8 +192,6 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
         this.objects.addAll(createdObjects);
     }
 
-
-
     private byte[] bytes;
     private byte[] getBytes() {
         if (bytes == null) {
@@ -245,7 +234,5 @@ public class ExcelFixture extends FixtureScript implements FixtureScriptWithExec
     public int hashCode() {
         return Arrays.hashCode(getBytes());
     }
-
-
 
 }

@@ -173,5 +173,4 @@ class ObjectContract_Parser<T> {
 
     }
 
-
 }

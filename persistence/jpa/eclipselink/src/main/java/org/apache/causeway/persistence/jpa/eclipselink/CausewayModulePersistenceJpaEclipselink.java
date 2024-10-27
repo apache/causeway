@@ -236,7 +236,6 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                 return jdbcExceptionTranslator;
             }
 
-
         };
     }
 

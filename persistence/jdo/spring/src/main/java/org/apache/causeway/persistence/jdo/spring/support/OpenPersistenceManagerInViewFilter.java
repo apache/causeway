@@ -63,7 +63,6 @@ public class OpenPersistenceManagerInViewFilter extends OncePerRequestFilter {
 
 	private String persistenceManagerFactoryBeanName = DEFAULT_PERSISTENCE_MANAGER_FACTORY_BEAN_NAME;
 
-
 	/**
 	 * Set the bean name of the PersistenceManagerFactory to fetch from Spring's
 	 * root application context. Default is "persistenceManagerFactory".
@@ -80,7 +79,6 @@ public class OpenPersistenceManagerInViewFilter extends OncePerRequestFilter {
 	protected String getPersistenceManagerFactoryBeanName() {
 		return this.persistenceManagerFactoryBeanName;
 	}
-
 
 	/**
 	 * Returns "false" so that the filter may re-bind the opened {@code PersistenceManager}

@@ -52,7 +52,6 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
                         + "where \"ownedBy\" = '%s'", ownedBy));
     }
 
-
     @Inject JdoSupportService jdoSupport;
 
 }

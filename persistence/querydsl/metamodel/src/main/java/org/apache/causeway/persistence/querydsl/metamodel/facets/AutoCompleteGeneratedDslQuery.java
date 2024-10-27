@@ -46,7 +46,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
-
 /**
  * Dynamically generate an auto complete query on runtime using Query DSL.
  * Auto complete operates on fields of String type ONLY.
@@ -134,7 +133,6 @@ public class AutoCompleteGeneratedDslQuery {
         return dslQueryIfAny.map(query -> query.fetch()).orElse(newList());
     }
 
-
     public <T> Optional<DslQuery> generateQuery(
             final String searchPhrase,
             final Function<PathBuilder<T>, Predicate> additionalPredicate) {
@@ -199,6 +197,5 @@ public class AutoCompleteGeneratedDslQuery {
     static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
-
 
 }

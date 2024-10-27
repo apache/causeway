@@ -159,7 +159,6 @@ implements IBook {
     private static final LongAdder idGen = new LongAdder();
     private int oid=-1;
 
-
     @Override
     public int hashCode() {
         synchronized(idGen) {
@@ -170,7 +169,6 @@ implements IBook {
         }
         return oid;
     }
-
 
     @Property
     @Getter @Setter @Column(nullable = true)
@@ -192,6 +190,5 @@ implements IBook {
         this.isbn = isbn;
         this.publisher = publisher;
     }
-
 
 }

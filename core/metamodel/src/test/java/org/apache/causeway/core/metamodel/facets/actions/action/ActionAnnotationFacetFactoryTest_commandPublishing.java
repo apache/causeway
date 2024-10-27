@@ -87,7 +87,6 @@ extends ActionAnnotationFacetFactoryTest {
         });
     }
 
-
     @Test
     void given_annotation_with_command_disabled_then_facet_not_added() {
 

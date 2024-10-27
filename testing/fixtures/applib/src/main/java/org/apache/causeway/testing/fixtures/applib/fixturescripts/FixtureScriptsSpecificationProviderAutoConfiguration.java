@@ -67,5 +67,4 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
         return FixtureScriptsSpecification.builder(packagePrefix);
     }
 
-
 }

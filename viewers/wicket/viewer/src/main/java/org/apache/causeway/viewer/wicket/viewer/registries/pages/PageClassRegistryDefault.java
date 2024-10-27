@@ -85,7 +85,6 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
         }
     }
 
-
     @Override
     public final Class<? extends Page> getPageClass(final PageType pageType) {
         return pageClassByType.get(pageType);
@@ -100,7 +99,6 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
     public PageType getPageType(PageAbstract page) {
         return getPageType(page.getClass());
     }
-
 
     @Override
     public final void registerPage(final PageType pageType, final Class<? extends Page> pageClass) {

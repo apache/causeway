@@ -64,7 +64,6 @@ public class RichActionInvokeArgs
         buildObjectTypeAndField("args", "Arguments used to invoke this action");
     }
 
-
     @Override
     protected void addDataFetchersForChildren() {
         args.forEach(param -> param.addDataFetcher(this));

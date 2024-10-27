@@ -79,8 +79,6 @@ public abstract class CausewayIntegrationGwtAbstract extends CausewayIntegration
         return interactionService.callAndCatch(interactionContext, callable);
     }
 
-
-
     protected void when(final ThrowingRunnable runnable) {
         interactionService.runAnonymous(runnable);
     }
@@ -113,8 +111,6 @@ public abstract class CausewayIntegrationGwtAbstract extends CausewayIntegration
         return interactionService.callAndCatch(interactionContext, callable);
     }
 
-
-
     protected void then(final ThrowingRunnable runnable) {
         interactionService.runAnonymous(runnable);
     }
@@ -146,7 +142,5 @@ public abstract class CausewayIntegrationGwtAbstract extends CausewayIntegration
     protected <T> Try<T> thenAndCatch(final InteractionContext interactionContext, final Callable<T> callable) {
         return interactionService.callAndCatch(interactionContext, callable);
     }
-
-
 
 }

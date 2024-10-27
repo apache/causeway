@@ -63,5 +63,4 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         return new ServiceActionsPanel(id, menuItems);
     }
 
-
 }

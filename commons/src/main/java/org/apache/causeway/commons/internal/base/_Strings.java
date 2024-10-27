@@ -87,7 +87,6 @@ public final class _Strings {
      */
     public static final String[] emptyArray = new String[0];
 
-
     // -- PAIR OF STRINGS
 
     public static interface KeyValuePair extends Map.Entry<String, String> {
@@ -190,7 +189,6 @@ public final class _Strings {
         return x==null || x.length()==0;
     }
 
-
     /**
      *
      * @param x
@@ -246,7 +244,6 @@ public final class _Strings {
         }
         return input;
     }
-
 
     /**
      * Trims the input.
@@ -464,7 +461,6 @@ public final class _Strings {
         return left + delimiter + right;
     }
 
-
     // -- PADDING
 
     /**
@@ -635,7 +631,6 @@ public final class _Strings {
                 rhs->onSplit.accept(null, rhs));
     }
 
-
     public static Stream<String> grep(final @Nullable String input, @Nullable Predicate<String> matcher){
         matcher = matcher!=null ? matcher : _Predicates.alwaysTrue();
         return splitThenStream(input, "\n")
@@ -758,7 +753,6 @@ public final class _Strings {
             final @NonNull Consumer<PrintStream> printer) {
         return print(printer, StandardCharsets.UTF_8);
     }
-
 
     // -- BYTE ARRAY CONVERSION
 
@@ -951,7 +945,6 @@ public final class _Strings {
                 ()->String.format("framework bug: could not create a base name from '%s'", methodName));
         return javaBaseName;
     }
-
 
     /**
      * Within given string, converts any special UTF-8 variants of the space ' ' character to the regular one.

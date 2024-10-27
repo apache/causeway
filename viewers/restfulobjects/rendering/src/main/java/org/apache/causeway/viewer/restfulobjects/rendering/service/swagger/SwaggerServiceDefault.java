@@ -35,8 +35,6 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator;
 
-
-
 /**
  * Default implementation of {@link SwaggerService}.
  *

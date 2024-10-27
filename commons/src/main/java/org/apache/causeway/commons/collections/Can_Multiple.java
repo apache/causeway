@@ -210,7 +210,6 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
         return Can.ofCollection(filteredElements);
     }
 
-
     @Override
     public <R> void zip(@NonNull final Iterable<R> zippedIn, @NonNull final BiConsumer<? super T, ? super R> action) {
         var zippedInIterator = zippedIn.iterator();

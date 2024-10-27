@@ -149,7 +149,6 @@ implements DomainObjectResource {
                 domainResourceHelper.objectRepresentation());
     }
 
-
     // //////////////////////////////////////////////////////////
     // domain object
     // //////////////////////////////////////////////////////////
@@ -176,7 +175,6 @@ implements DomainObjectResource {
         return _EndpointLogging.response(log, "GET /objects/{}/{}", domainType, instanceId,
                 domainResourceHelper.objectRepresentation());
     }
-
 
     @Override
     @PUT
@@ -250,7 +248,6 @@ implements DomainObjectResource {
                 .createWithMessage(
                         HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed."));
     }
-
 
     // //////////////////////////////////////////////////////////
     // domain object layout

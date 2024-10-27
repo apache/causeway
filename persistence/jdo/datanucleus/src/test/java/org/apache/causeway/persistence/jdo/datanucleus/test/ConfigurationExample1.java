@@ -27,8 +27,6 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceManagerFactoryBean;
 
-
-
 /**
  *  Corresponds to the documents of the 'spring-jdo' module.
  */

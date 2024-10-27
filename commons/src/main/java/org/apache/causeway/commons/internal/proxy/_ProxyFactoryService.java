@@ -31,7 +31,6 @@ public interface _ProxyFactoryService {
             @Nullable Class<?>[] interfaces,
             @Nullable Class<?>[] constructorArgTypes);
 
-
     <T> _ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass);
 
     /**

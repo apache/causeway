@@ -81,7 +81,6 @@ public final class MmVisibilityUtils {
         return autofittedObjectContainer;
     }
 
-
     /**
      * @param adapter - wrapper of domain object whose visibility is being checked,
      *      must not be a mixin

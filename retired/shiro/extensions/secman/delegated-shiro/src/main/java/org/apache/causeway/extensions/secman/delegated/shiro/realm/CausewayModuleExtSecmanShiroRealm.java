@@ -95,7 +95,6 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         var username = usernamePasswordToken.getUsername();
         var password = usernamePasswordToken.getPassword();
 
-
         // this code block is just an optimization, entirely optional
         {
             var alreadyAuthenticatedPrincipal =
@@ -166,7 +165,6 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(final PrincipalCollection principals) {
         return principals.oneByType(PrincipalForApplicationUser.class);
     }
-
 
     // -- HELPER
 
@@ -257,7 +255,6 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         });
     }
 
-
     private static enum CheckPasswordResult {
         OK,
         BAD_PASSWORD,
@@ -302,6 +299,5 @@ public class CausewayModuleExtSecmanShiroRealm extends AuthorizingRealm {
         var txTemplate = new TransactionTemplate(txMan);
         return txTemplate.execute(status->closure.get());
     }
-
 
 }

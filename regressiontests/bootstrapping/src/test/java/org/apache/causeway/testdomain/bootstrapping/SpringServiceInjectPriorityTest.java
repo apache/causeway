@@ -51,7 +51,6 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 import lombok.Getter;
 
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -149,7 +148,6 @@ class SpringServiceInjectPriorityTest {
         // uses the @Priority (we exclude the "Good" that doesn't implement PriorityRating)
         assertThat(serviceRegistry.lookupServiceElseFail(PriorityRating.class).getRating(), is(equalTo(1)));
     }
-
 
     interface Rating {
         int getRating();

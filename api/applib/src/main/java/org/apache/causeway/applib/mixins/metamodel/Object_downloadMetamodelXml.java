@@ -77,7 +77,6 @@ public class Object_downloadMetamodelXml {
                     describedAs = DtoMixinConstants.FILENAME_PROPERTY_DESCRIPTION)
             final String fileName) {
 
-
         final Optional<LogicalType> logicalTypeIfAny = metaModelService.lookupLogicalTypeByClass(holder.getClass());
         if(!logicalTypeIfAny.isPresent()) {
             messageService.warnUser("Unknown class, unable to export");
@@ -104,7 +103,6 @@ public class Object_downloadMetamodelXml {
 
         return Clob.of(fileName, CommonMimeType.XML, xmlString);
     }
-
 
     /**
      * Defaults to the simple name of the domain object's class.

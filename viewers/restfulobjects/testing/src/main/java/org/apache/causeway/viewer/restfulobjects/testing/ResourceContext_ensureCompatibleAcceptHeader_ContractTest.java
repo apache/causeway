@@ -50,8 +50,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
-
-
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
     /*sonar-ignore-on*/

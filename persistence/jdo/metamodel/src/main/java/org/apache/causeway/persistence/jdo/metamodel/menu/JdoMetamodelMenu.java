@@ -61,7 +61,6 @@ public class JdoMetamodelMenu {
     public static abstract class ActionDomainEvent<T>
     extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = downloadMetamodels.ActionDomainEvent.class,
@@ -82,7 +81,6 @@ public class JdoMetamodelMenu {
             return Blob.of("jdo-metamodels", CommonMimeType.ZIP, zipBytes);
         }
     }
-
 
     // -- HELPER
 

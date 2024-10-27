@@ -247,6 +247,4 @@ implements ComponentFactoryRegistry {
         return factory;
     }
 
-
-
 }

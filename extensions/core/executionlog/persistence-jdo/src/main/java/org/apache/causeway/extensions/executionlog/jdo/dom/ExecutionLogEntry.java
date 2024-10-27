@@ -149,7 +149,6 @@ import lombok.Setter;
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class ExecutionLogEntry extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry {
 
-
     public static final String FQCN = "org.apache.causeway.extensions.executionlog.jdo.dom.ExecutionLogEntry";
     @PrimaryKey
     @InteractionId
@@ -157,25 +156,21 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     @Getter @Setter
     private UUID interactionId;
 
-
     @PrimaryKey
     @Sequence
     @Column(allowsNull = Sequence.ALLOWS_NULL)
     @Getter @Setter
     private int sequence;
 
-
     @Column(allowsNull = ExecutionType.ALLOWS_NULL, length = ExecutionType.MAX_LENGTH)
     @ExecutionType
     @Getter @Setter
     private ExecutionLogEntryType executionType;
 
-
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
-
 
     @Persistent
     @Column(allowsNull = Timestamp.ALLOWS_NULL)
@@ -183,13 +178,11 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     @Getter @Setter
     private java.sql.Timestamp timestamp;
 
-
     @Persistent
     @Column(allowsNull = Target.ALLOWS_NULL, length = Target.MAX_LENGTH)
     @Target
     @Getter @Setter
     private Bookmark target;
-
 
     @Column(allowsNull = LogicalMemberIdentifier.ALLOWS_NULL, length= LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
@@ -199,13 +192,11 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
         this.logicalMemberIdentifier = Util.abbreviated(logicalMemberIdentifier, LogicalMemberIdentifier.MAX_LENGTH);
     }
 
-
     @Persistent
     @Column(allowsNull = InteractionDtoAnnot.ALLOWS_NULL, jdbcType = "CLOB", sqlType = "LONGVARCHAR")
     @InteractionDtoAnnot
     @Getter @Setter
     private InteractionDto interactionDto;
-
 
     @Persistent
     @Column(allowsNull = StartedAt.ALLOWS_NULL)
@@ -213,13 +204,10 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     @Getter @Setter
     private java.sql.Timestamp startedAt;
 
-
     @Persistent
     @Column(allowsNull = CompletedAt.ALLOWS_NULL)
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
-
-
 
 }

@@ -113,7 +113,6 @@ public class BookmarkServiceDefault implements BookmarkService {
                 .flatMap(ManagedObject::getBookmark);
     }
 
-
     @Override
     public Optional<Bookmark> bookmarkFor(
             final @Nullable Class<?> cls,

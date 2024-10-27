@@ -77,8 +77,6 @@ import org.apache.causeway.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -111,7 +109,6 @@ class DomainModelTest_usingBadDomain {
         });
     }
 
-
     @Test
     void fullIntrospection_shouldBeEnabledByThisTestClass() {
         assertTrue(IntrospectionMode.isFullIntrospect(configuration, causewaySystemEnvironment));
@@ -137,7 +134,6 @@ class DomainModelTest_usingBadDomain {
         tester.assertValidationFailureOnMember(
                 ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD, "hideMe()");
     }
-
 
     @Test
     void orphanedPropertySupport_shouldFail() {

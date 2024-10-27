@@ -69,5 +69,4 @@ implements
                 getObjectManager().demementify(memento));
     }
 
-
 }

@@ -212,8 +212,6 @@ class PoReaderTest {
         assertThat(translated2, is(equalTo(msgstr$1)));
     }
 
-
-
     @Test
     public void noTranslation() throws Exception {
 

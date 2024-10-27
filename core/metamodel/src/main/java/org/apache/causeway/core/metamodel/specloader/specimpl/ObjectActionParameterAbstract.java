@@ -211,7 +211,6 @@ implements
         return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
-
     // -- Choices
 
     @Override
@@ -305,7 +304,6 @@ implements
         }
     }
 
-
     // > Visibility
 
     private ActionArgVisibilityContext createArgumentVisibilityContext(
@@ -362,7 +360,6 @@ implements
         return usableResult.createConsent();
     }
 
-
     // -- Validation
 
     @Override
@@ -389,13 +386,11 @@ implements
         return validResult.createConsent();
     }
 
-
     // -- CONTRACT
 
     @Override
     public String toString() {
         return String.format("ObjectActionParameter[id=%s]", getFeatureIdentifier());
     }
-
 
 }

@@ -32,7 +32,6 @@ import org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntryRepos
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * Initializes the <i>Session Log</i> extension when the application is first bootstrapped.
  *

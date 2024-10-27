@@ -120,5 +120,4 @@ public abstract class InteractionContext {
         return head.getTarget();
     }
 
-
 }

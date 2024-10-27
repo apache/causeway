@@ -169,12 +169,10 @@ public class FakeDataService {
     private CausewayBlobs causewayBlobs;
     private CausewayClobs causewayClobs;
 
-
     /**
      * Access to the full API of the underlying javafaker library.
      */
     public Faker javaFaker() { return javaFaker; }
-
 
     public Names name() {
         return names;
@@ -307,6 +305,5 @@ public class FakeDataService {
     public CausewayClobs causewayClobs() {
         return causewayClobs;
     }
-
 
 }

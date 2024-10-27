@@ -54,6 +54,4 @@ public interface ApplicationTenancyRepository {
     void setParentOnTenancy(ApplicationTenancy tenancy, ApplicationTenancy parent);
     void clearParentOnTenancy(ApplicationTenancy tenancy);
 
-
-
 }

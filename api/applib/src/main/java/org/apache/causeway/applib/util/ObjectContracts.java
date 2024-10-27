@@ -185,6 +185,4 @@ public final class ObjectContracts {
                 .compare(obj, other);
     }
 
-
-
 }

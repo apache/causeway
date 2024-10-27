@@ -110,7 +110,6 @@ extends HasMetaModelContext {
 
     }
 
-
     // -- INTERFACE
 
     <T extends FacetFactory> void addFactory(
@@ -127,7 +126,6 @@ extends HasMetaModelContext {
             PostProcessingOrder order,
             T instance,
             Marker ... markers);
-
 
     Stream<FacetFactory> streamFactories();
     Stream<MetaModelValidator> streamValidators();
@@ -166,6 +164,5 @@ extends HasMetaModelContext {
             }
         });
     }
-
 
 }

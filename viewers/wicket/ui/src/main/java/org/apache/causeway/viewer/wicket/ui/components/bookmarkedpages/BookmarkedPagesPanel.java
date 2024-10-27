@@ -62,7 +62,6 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final String CLEAR_BOOKMARKS = "clearBookmarks";
 
-
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
     @Inject
@@ -185,6 +184,5 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         helpText.setOutputMarkupPlaceholderTag(true);
         return helpText;
     }
-
 
 }

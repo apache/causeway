@@ -59,7 +59,6 @@ public final class _Context {
 
     private static final Object $LOCK = new Object[0];
 
-
     /**
      * Puts a singleton instance onto the current context.
      * @param type non-null
@@ -167,8 +166,6 @@ public final class _Context {
         return computeIfAbsent(type, __->factory.get());
     }
 
-
-
     /**
      * Gets a singleton instance of {@code type} if there is any,
      * otherwise returns the {@code fallback}'s result,
@@ -208,7 +205,6 @@ public final class _Context {
                 .orElseThrow(()->new NoSuchElementException(
                         String.format("Could not resolve an instance of type '%s'", type.getName())));
     }
-
 
     // -- REMOVAL
 
@@ -290,7 +286,6 @@ public final class _Context {
 //        _Context_ThreadLocal.cleanupThread();
 //    }
 
-
     // -- DEFAULT CLASSLOADER
 
     private static final Supplier<ClassLoader> FALLBACK_CLASSLOADER =
@@ -365,6 +360,5 @@ public final class _Context {
             }
         }
     }
-
 
 }

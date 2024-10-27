@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.spi;
 
-
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Programmatic;

@@ -39,8 +39,6 @@ import org.apache.causeway.testdomain.model.badnoactenforce.InvalidOrphanedActio
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,

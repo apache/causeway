@@ -91,7 +91,6 @@ public class RequestParams {
             return JsonRepresentation.newMap();
         }
 
-
         try {
             final JsonRepresentation jsonRepr = JsonMapper.instance().read(rawArgs);
             if (!jsonRepr.isMap()) {

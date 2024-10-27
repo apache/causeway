@@ -134,5 +134,4 @@ public interface ClassSubstitutor {
      */
     Substitution getSubstitution(@NonNull Class<?> cls);
 
-
 }

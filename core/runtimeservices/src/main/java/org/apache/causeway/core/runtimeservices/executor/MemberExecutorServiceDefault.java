@@ -147,7 +147,6 @@ implements MemberExecutorService {
         //            final ActionExecutorFactory actionExecutorFactory,
         final FacetHolder facetHolder = actionExecutor.getFacetHolder();
 
-
         if(interactionInitiatedBy.isPassThrough()) {
             var resultPojo = invokeMethodPassThrough(actionExecutor.getMethod(), head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
@@ -355,7 +354,6 @@ implements MemberExecutorService {
                 ? resultAdapter
                 : null;
     }
-
 
     /**
      * Will set the command's CommandPublishingPhase to READY,

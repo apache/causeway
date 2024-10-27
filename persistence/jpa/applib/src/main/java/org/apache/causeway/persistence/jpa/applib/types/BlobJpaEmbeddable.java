@@ -120,7 +120,6 @@ public final class BlobJpaEmbeddable {
         return new Blob(name, mimeType, bytes);
     }
 
-
     @Override
     public String toString() {
         return asBlob().toString();

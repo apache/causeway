@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.examples.facets.jsr303;
 
 import jakarta.validation.Constraint;
 
-
 public class CustomPatternValidator implements Constraint<CustomPattern> {
     private java.util.regex.Pattern pattern;
 

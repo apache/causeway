@@ -296,7 +296,6 @@ implements MenuBarsService {
         return true;
     }
 
-
     private void appendFromAnnotationsOnly(
             final Can<ManagedObject> serviceAdapters,
             final BSMenuBar menuBar,
@@ -369,7 +368,6 @@ implements MenuBarsService {
         return menus;
     }
 
-
     /**
      * The unique service names, as they appear in order of the provided List of {@link ServiceAndAction}s.
      *
@@ -428,7 +426,6 @@ implements MenuBarsService {
         return serviceActionsByName;
     }
 
-
     private Stream<ServiceAndAction> streamServiceActions(
             final ManagedObject serviceAdapter,
             final ActionScope actionType) {
@@ -458,7 +455,6 @@ implements MenuBarsService {
         };
     }
 
-
     private String tnsAndSchemaLocation() {
 
         return Stream.of(
@@ -474,4 +470,3 @@ implements MenuBarsService {
     }
 
 }
-

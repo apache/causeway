@@ -162,7 +162,6 @@ implements InteractionInternal {
         }
     }
 
-
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      *
@@ -181,7 +180,6 @@ implements InteractionInternal {
             // adds to graph of parent
             execution.setParent(currentExecution);
         }
-
 
         // update this.currentExecution and this.previousExecution
         moveCurrentTo(execution);
@@ -262,6 +260,5 @@ implements InteractionInternal {
     public void removeAttribute(final Class<?> type) {
         attributes.remove(type);
     }
-
 
 }

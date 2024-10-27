@@ -38,8 +38,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import org.apache.causeway.extensions.spring.security.oauth2.authconverters.AuthenticationConverterOfOAuth2UserPrincipal;
 
-
-
 @ExtendWith(MockitoExtension.class)
 class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 

@@ -162,35 +162,29 @@ public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.a
     @Getter @Setter
     private UUID sessionGuid;
 
-
     @Column(allowsNull = HttpSessionId.ALLOWS_NULL, length = HttpSessionId.MAX_LENGTH)
     @HttpSessionId
     @Getter @Setter
     private String httpSessionId;
-
 
     @Column(allowsNull = Username.ALLOWS_NULL, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
 
-
     @Column(allowsNull = LoginTimestamp.ALLOWS_NULL)
     @LoginTimestamp
     @Getter @Setter
     private Timestamp loginTimestamp;
-
 
     @Column(allowsNull = LogoutTimestamp.ALLOWS_NULL)
     @LogoutTimestamp
     @Getter @Setter
     private Timestamp logoutTimestamp;
 
-
     @Column(allowsNull = CausedBy.ALLOWS_NULL)
     @CausedBy
     @Getter @Setter
     private SessionSubscriber.CausedBy causedBy;
-
 
 }

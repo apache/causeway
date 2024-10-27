@@ -55,5 +55,4 @@ class DocumentHeaderTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
     
-
 }

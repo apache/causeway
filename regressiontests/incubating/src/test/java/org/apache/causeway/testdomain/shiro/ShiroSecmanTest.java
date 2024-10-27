@@ -137,8 +137,6 @@ class ShiroSecmanTest extends AbstractShiroTest {
 
         assertFalse(subject.isAuthenticated());
 
-
     }
-
 
 }

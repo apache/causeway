@@ -32,8 +32,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
-
-
 public final class Responses {
 
     private Responses(){}

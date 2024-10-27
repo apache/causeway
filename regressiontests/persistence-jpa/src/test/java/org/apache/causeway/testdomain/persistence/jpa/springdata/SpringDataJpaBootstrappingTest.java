@@ -50,8 +50,6 @@ import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 @DataJpaTest(
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:SpringDataJpaBootstrappingTest",
@@ -140,6 +138,5 @@ class SpringDataJpaBootstrappingTest extends CausewayIntegrationTestAbstract {
     void aSecondRunShouldWorkAsWell() {
         sampleEmployeesShouldBeSetUp();
     }
-
 
 }

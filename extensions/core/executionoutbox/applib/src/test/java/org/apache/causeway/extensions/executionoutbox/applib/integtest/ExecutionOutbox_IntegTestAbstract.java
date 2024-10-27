@@ -53,7 +53,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-
     @BeforeAll
     static void beforeAll() {
         CausewayPresets.forcePrototyping();
@@ -79,7 +78,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     }
 
     protected abstract Counter newCounter(String name);
-
 
     @Test
     void invoke_mixin() {
@@ -171,8 +169,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         assertThat(all).isEmpty();
     }
 
-
-
     @Test
     void edit() {
 
@@ -216,7 +212,6 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
         assertThat(all).isEmpty();
     }
-
 
     @Test
     void roundtrip_EOE_bookmarks() {

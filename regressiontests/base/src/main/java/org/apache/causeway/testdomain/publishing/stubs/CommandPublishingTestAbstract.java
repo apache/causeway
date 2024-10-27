@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.publishing.subscriber.CommandSubscriberFor
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-
-
 public abstract class CommandPublishingTestAbstract
 extends PublishingTestAbstract {
 
@@ -125,7 +123,5 @@ extends PublishingTestAbstract {
         }
         return null; // no difference
     }
-
-
 
 }

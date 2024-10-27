@@ -60,8 +60,6 @@ import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.Enti
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
 import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
@@ -85,7 +83,6 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
     // optimization: reuse Wicket application across tests
     private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
             _Refs.objectRef(null);
-
 
     @BeforeEach
     void setUp() throws InterruptedException {

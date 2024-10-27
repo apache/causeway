@@ -64,7 +64,6 @@ public class PageRenderCollectionLogger implements PageRenderSubscriber {
         return log.isDebugEnabled();
     }
 
-
     private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
 
     @Override
@@ -76,7 +75,6 @@ public class PageRenderCollectionLogger implements PageRenderSubscriber {
         timings.set(new Timing());
     }
 
-
     @Override
     public void onRenderedCollection(final Supplier<List<Bookmark>> bookmarkSupplier) {
         final var bookmarksStringified = bookmarksStringified(bookmarkSupplier);
@@ -86,7 +84,6 @@ public class PageRenderCollectionLogger implements PageRenderSubscriber {
             log.debug("rendered collection: [ {} ]  user: {}  took: {}ms", bookmarksStringified, userService.currentUserNameElseNobody(), timing.took());
         }
     }
-
 
     // -- HELPER
 

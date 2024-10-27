@@ -35,8 +35,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.menu.MeService;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
-
-
 /**
  * Sets up a role for regular users of the security module.
  *

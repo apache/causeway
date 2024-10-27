@@ -90,8 +90,6 @@ extends FacetFactoryTestAbstract {
             processEditing(facetFactory, processMethodContext);
             // then
 
-
-
             final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
             assertNotNull(facet);
             assertTrue(facet instanceof DisabledFacetAbstract);

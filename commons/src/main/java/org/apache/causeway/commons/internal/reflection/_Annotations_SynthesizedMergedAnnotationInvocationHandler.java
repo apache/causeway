@@ -67,7 +67,6 @@ implements InvocationHandler {
     @Nullable
     private volatile Integer hashCode;
 
-
     private _Annotations_SynthesizedMergedAnnotationInvocationHandler(
             final MergedAnnotations mergedAnnotations,
             final MergedAnnotations additionalAnnotations,
@@ -85,7 +84,6 @@ implements InvocationHandler {
         }
 
     }
-
 
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) {
@@ -266,4 +264,3 @@ implements InvocationHandler {
     }
 
 }
-

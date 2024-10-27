@@ -32,5 +32,4 @@ class CausewayPermissionTest_equals {
         assertFalse(perm1.equals(perm2));
     }
 
-
 }

@@ -63,11 +63,9 @@ public class ApplicationRoleMenu {
     private final ApplicationRoleRepository applicationRoleRepository;
     private final FactoryService factory;
 
-
     @ObjectSupport public String iconName() {
         return "applicationRole";
     }
-
 
     // -- ROLE MANAGER
 

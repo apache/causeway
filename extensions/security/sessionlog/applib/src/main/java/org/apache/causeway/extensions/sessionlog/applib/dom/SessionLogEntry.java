@@ -109,7 +109,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     public static abstract class ActionDomainEvent extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<SessionLogEntry> { }
 
-
     protected SessionLogEntry(
             final UUID sessionGuid,
             final String httpSessionId,
@@ -144,8 +143,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
                     : "expired";
     }
 
-
-
     @Property(
             domainEvent = SessionGuid.DomainEvent.class
     )
@@ -167,10 +164,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public abstract UUID getSessionGuid();
     public abstract void setSessionGuid(UUID sessionGuid);
 
-
-
-
-
     @Property(
             domainEvent = HttpSessionId.DomainEvent.class
     )
@@ -190,9 +183,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @HttpSessionId
     public abstract String getHttpSessionId();
     public abstract void setHttpSessionId(String httpSessionId);
-
-
-
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -215,8 +205,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @Username
     public abstract String getUsername();
     public abstract void setUsername(String username);
-
-
 
     @Property(
             domainEvent = LoginTimestamp.DomainEvent.class,
@@ -245,9 +233,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public abstract Timestamp getLoginTimestamp();
     public abstract void setLoginTimestamp(Timestamp loginTimestamp);
 
-
-
-
     @Property(
             domainEvent = LogoutTimestamp.DomainEvent.class,
             editing = Editing.DISABLED,
@@ -275,8 +260,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public abstract Timestamp getLogoutTimestamp();
     public abstract void setLogoutTimestamp(Timestamp logoutTimestamp);
 
-
-
     @Property(
             domainEvent = CausedBy.DomainEvent.class,
             editing = Editing.DISABLED,
@@ -302,8 +285,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     @CausedBy
     public abstract SessionSubscriber.CausedBy getCausedBy();
     public abstract void setCausedBy(SessionSubscriber.CausedBy causedBy);
-
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -333,8 +314,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         SessionLogEntryRepositoryAbstract sessionLogEntryRepository;
     }
 
-
-
     @Action(
             commandPublishing = Publishing.DISABLED,
             domainEvent = previous.DomainEvent.class,
@@ -363,8 +342,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         SessionLogEntryRepositoryAbstract sessionLogEntryRepository;
     }
 
-
-
     private static final ObjectContracts.ObjectContract<SessionLogEntry> contract	=
             ObjectContracts.contract(SessionLogEntry.class)
                     .thenUse("loginTimestamp", SessionLogEntry::getLoginTimestamp)
@@ -375,7 +352,6 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
                     .thenUse("causedBy", SessionLogEntry::getCausedBy)
             ;
 
-
     @Override
     public String toString() {
         return contract.toString(SessionLogEntry.this);
@@ -385,7 +361,5 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     public int compareTo(final SessionLogEntry other) {
         return contract.compare(this,other);
     }
-
-
 
 }

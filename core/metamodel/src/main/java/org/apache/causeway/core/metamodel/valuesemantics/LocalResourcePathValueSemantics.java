@@ -86,7 +86,6 @@ implements
                 + "href=\"%s\">%s</a>", href, href);
     }
 
-
     // -- PARSER
 
     @Override
@@ -123,6 +122,5 @@ implements
                 new LocalResourcePath("img/a"),
                 new LocalResourcePath("img/b"));
     }
-
 
 }

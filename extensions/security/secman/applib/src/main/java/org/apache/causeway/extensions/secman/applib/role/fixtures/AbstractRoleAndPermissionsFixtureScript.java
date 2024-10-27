@@ -117,7 +117,6 @@ implements FixtureScriptWithExecutionStrategy {
             throw new IllegalArgumentException(String.format("No such feature(s):\n%s", buf));
         }
 
-
         var roleName = getRoleName();
         var securityRole = applicationRoleRepository.findByName(roleName)
                 .orElseGet(() -> applicationRoleRepository.newRole(roleName, getRoleDescription()));

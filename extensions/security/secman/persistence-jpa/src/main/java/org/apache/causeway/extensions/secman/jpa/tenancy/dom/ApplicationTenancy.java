@@ -47,7 +47,6 @@ import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityList
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Table(
         schema = ApplicationTenancy.SCHEMA,
@@ -89,19 +88,16 @@ public class ApplicationTenancy
     @Version
     private Long version;
 
-
     @Column(nullable = Name.NULLABLE, length = Name.MAX_LENGTH)
     @Name
     @Getter @Setter
     private String name;
-
 
     @Id
     @Column(nullable = Path.NULLABLE, length = Path.MAX_LENGTH)
     @Path
     @Getter @Setter
     private String path;
-
 
     @ManyToOne
     @JoinColumn(name=Parent.NAME, nullable = Parent.NULLABLE)
@@ -112,7 +108,6 @@ public class ApplicationTenancy
     public void setParent(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
-
 
     @OneToMany(mappedBy = Children.MAPPED_BY)
     @Children
@@ -129,6 +124,5 @@ public class ApplicationTenancy
     public void removeFromChildren(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
     }
-
 
 }

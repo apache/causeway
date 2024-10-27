@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 /**
  * Contract test for value types ({@link #equals(Object) equals} and
  * {@link #hashCode() hashCode}), and also {@link Comparable#compareTo(Object) compareTo} for

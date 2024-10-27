@@ -99,7 +99,6 @@ class RestServiceSimpifiedRepresentationTest {
             filter4ReprType,
             filter4Reporting);
 
-
     @AfterAll
     static void tearDown() throws IOException {
     	if(UtilSurefire.isRunningWithSurefire()) {
@@ -534,6 +533,5 @@ class RestServiceSimpifiedRepresentationTest {
         }
 
     }
-
 
 }

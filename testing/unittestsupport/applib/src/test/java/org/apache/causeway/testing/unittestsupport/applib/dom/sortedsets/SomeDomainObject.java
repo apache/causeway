@@ -26,13 +26,11 @@ import javax.jdo.annotations.PersistenceCapable;
 @PersistenceCapable
 public class SomeDomainObject {
 
-
     @SuppressWarnings("unused")
     private SortedSet<SomeDomainObject> someSortedSet = new TreeSet<SomeDomainObject>();
 
     //private Set<SomeDomainObject> someSet = new HashSet<SomeDomainObject>();
 
     //private List<SomeDomainObject> someList = new ArrayList<SomeDomainObject>();
-
 
 }

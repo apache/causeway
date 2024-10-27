@@ -136,7 +136,6 @@ class ApplicationFeatureTest {
         }
     }
 
-
     public static class MethodsTest extends ApplicationFeatureTest {
 
         private static ApplicationFeatureDefault newApplicationFeature(final ApplicationFeatureId featId) {
@@ -149,7 +148,5 @@ class ApplicationFeatureTest {
             assertThat(input.getFullyQualifiedName(), is("com.mycompany.Foo#bar"));
         }
     }
-
-
 
 }

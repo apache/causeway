@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 
-
 public class Files_deleteFileUtils_Test {
 
     @Rule
@@ -60,7 +59,6 @@ public class Files_deleteFileUtils_Test {
                 deleter);
     }
 
-
     private static Matcher<File> equalsFile(final File file) throws IOException {
         final String canonicalPath = file.getCanonicalPath();
         return new TypeSafeMatcher<File>() {
@@ -80,6 +78,5 @@ public class Files_deleteFileUtils_Test {
             }
         };
     }
-
 
 }

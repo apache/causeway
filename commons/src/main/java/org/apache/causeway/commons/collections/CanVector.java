@@ -100,5 +100,4 @@ public final class CanVector<T> implements Iterable<Can<T>>, Serializable {
         return cans.hashCode();
     }
 
-
 }

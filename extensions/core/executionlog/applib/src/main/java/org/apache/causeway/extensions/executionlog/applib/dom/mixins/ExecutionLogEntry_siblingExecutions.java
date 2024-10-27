@@ -47,7 +47,6 @@ public class ExecutionLogEntry_siblingExecutions {
     public static class CollectionDomainEvent
             extends CausewayModuleExtExecutionLogApplib.CollectionDomainEvent<ExecutionLogEntry_siblingExecutions, ExecutionLogEntry> { }
 
-
     @MemberSupport public List<? extends ExecutionLogEntry> coll() {
         var entries = new ArrayList<>(executionLogEntryRepository.findByInteractionId(executionLogEntry.getInteractionId()));
         entries.remove(executionLogEntry);

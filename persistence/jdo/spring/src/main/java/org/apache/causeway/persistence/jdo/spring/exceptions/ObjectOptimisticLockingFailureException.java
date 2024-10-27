@@ -31,7 +31,6 @@ public class ObjectOptimisticLockingFailureException extends OptimisticLockingFa
 
 	private Object identifier;
 
-
 	/**
 	 * Create a general ObjectOptimisticLockingFailureException with the given message,
 	 * without any information on the affected object.
@@ -123,7 +122,6 @@ public class ObjectOptimisticLockingFailureException extends OptimisticLockingFa
 		this.persistentClass = persistentClassName;
 		this.identifier = identifier;
 	}
-
 
 	/**
 	 * Return the persistent class of the object for which the locking failed.

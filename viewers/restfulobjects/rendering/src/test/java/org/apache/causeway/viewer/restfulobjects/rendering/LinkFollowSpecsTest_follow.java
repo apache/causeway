@@ -122,7 +122,6 @@ class LinkFollowSpecsTest_follow {
         assertThat(followA.matches(JsonRepresentation.newMap("x", "y", "z", "bad")), is(false));
     }
 
-
     @Test
     public void simple_multiplePaths() throws Exception {
         final List<List<String>> links = asListOfLists("a.b.c,x.y.z");
@@ -212,7 +211,6 @@ class LinkFollowSpecsTest_follow {
         assertThat(followMembers.follow("value").isFollowing(), is(true));
         assertThat(followMembers.follow("value").isTerminated(), is(false));
     }
-
 
     private List<List<String>> asListOfLists(final String string) {
         return Parser.forListOfListOfStrings().valueOf(string);

@@ -109,5 +109,4 @@ public class ThemeProviderComposite implements ThemeProvider {
         availableNames = Collections.unmodifiableList(_Lists.map(availableThemes, ITheme::name));
     }
 
-
 }

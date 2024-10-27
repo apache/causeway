@@ -59,11 +59,9 @@ public class ApplicationPermissionMenu {
     @Inject private ApplicationPermissionRepository applicationPermissionRepository;
     @Inject private FactoryService factoryService;
 
-
     @ObjectSupport public String iconName() {
         return "applicationPermission";
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -80,8 +78,6 @@ public class ApplicationPermissionMenu {
             return factoryService.viewModel(new ApplicationOrphanedPermissionManager());
         }
     }
-
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -100,6 +96,5 @@ public class ApplicationPermissionMenu {
         }
 
     }
-
 
 }

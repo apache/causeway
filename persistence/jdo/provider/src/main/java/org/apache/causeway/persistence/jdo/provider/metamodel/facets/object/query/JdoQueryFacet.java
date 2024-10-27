@@ -23,7 +23,6 @@ import javax.jdo.annotations.Query;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
-
 /**
  * In the standard JDO Model, corresponds to annotating the class with either
  * {@link javax.jdo.annotations.Query} or

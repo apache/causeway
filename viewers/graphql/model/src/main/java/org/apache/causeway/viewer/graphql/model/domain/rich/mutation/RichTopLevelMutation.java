@@ -87,7 +87,6 @@ public class RichTopLevelMutation
         properties.add(gqlvMutationForProperty);
     }
 
-
     @Override
     public GraphQLObjectType getGqlObjectType() {
         return super.getGqlObjectType();
@@ -102,6 +101,5 @@ public class RichTopLevelMutation
         actions.forEach(richMutationForAction -> richMutationForAction.addDataFetcher(this));
         properties.forEach(richMutationForProperty -> richMutationForProperty.addDataFetcher(this));
     }
-
 
 }

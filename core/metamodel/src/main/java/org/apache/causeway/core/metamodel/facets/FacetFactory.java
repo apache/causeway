@@ -159,7 +159,6 @@ public interface FacetFactory {
      */
     ImmutableEnumSet<FeatureType> getFeatureTypes();
 
-
     // //////////////////////////////////////
     // process class
     // //////////////////////////////////////
@@ -217,7 +216,6 @@ public interface FacetFactory {
     // //////////////////////////////////////
     // process method
     // //////////////////////////////////////
-
 
     public static class ProcessMethodContext
     extends AbstractProcessWithMethodContext<FacetedMethod>
@@ -317,7 +315,6 @@ public interface FacetFactory {
             }
         }
 
-
         // -- SUPPORTING METHOD NAMING CONVENTIONS
 
         private Can<String> namingConventionForActionSupport(
@@ -359,7 +356,6 @@ public interface FacetFactory {
         }
 
     }
-
 
     /**
      * Process the method, and return the correctly setup annotation if present.
@@ -421,6 +417,5 @@ public interface FacetFactory {
      * annotation if present.
      */
     void processParams(ProcessParameterContext processParameterContext);
-
 
 }

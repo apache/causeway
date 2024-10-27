@@ -56,7 +56,6 @@ public class DemoReplayController implements ReplayCommandExecutionController {
     }
     public boolean hideResumeReplay() { return state == State.RUNNING; }
 
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     @ActionLayout(cssClassFa = "fa-pause")
     public void pauseReplay() {

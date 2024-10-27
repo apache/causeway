@@ -150,5 +150,4 @@ public abstract class ContentNodeAbstract implements ContentNode {
         return String.format("[normalize_web_path %s %s %b]", path, start, preserveUriTarget);
     }
 
-
 }

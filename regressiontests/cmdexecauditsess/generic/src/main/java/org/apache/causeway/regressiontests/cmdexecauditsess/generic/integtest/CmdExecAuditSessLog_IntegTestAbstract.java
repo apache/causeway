@@ -51,8 +51,6 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
     @BeforeAll
@@ -92,8 +90,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     protected abstract Counter newCounter(String name);
 
     @Inject SpecificationLoader specificationLoader;
-
-
 
     protected void assertEntityPublishingDisabledFor(final Class<?> entityClass) {
         var objectSpecification = specificationLoader.loadSpecification(entityClass);
@@ -189,7 +185,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
                 .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo(""))
         ;
 
-
         assertThat(commandLogEntry.getCompletedAt()).isNull();
 
         // ... and audit entries not yet generated
@@ -279,7 +274,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
                 .satisfies(e -> assertThat(e.getResult()).isNotNull())
                 .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
 
-
         if(!isJpa()) {
             // and then
             // ... audit trail entry created
@@ -288,7 +282,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         }
 
     }
-
 
     @Test
     void edit() {
@@ -345,7 +338,6 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     boolean isJpa() {
         return causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJpa();
     }
-
 
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;
     @Inject ExecutionOutboxEntryRepository executionOutboxEntryRepository;

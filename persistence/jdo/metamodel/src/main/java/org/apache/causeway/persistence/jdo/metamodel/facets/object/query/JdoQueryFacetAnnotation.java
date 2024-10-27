@@ -24,7 +24,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
-
 public class JdoQueryFacetAnnotation extends JdoQueryFacetAbstract
 implements JdoQueryFacet {
 
@@ -34,6 +33,5 @@ implements JdoQueryFacet {
 
         super(holder, Can.ofSingleton(jdoNamedQuery));
     }
-
 
 }

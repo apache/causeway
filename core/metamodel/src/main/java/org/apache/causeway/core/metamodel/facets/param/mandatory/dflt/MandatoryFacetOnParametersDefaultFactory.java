@@ -54,5 +54,4 @@ public class MandatoryFacetOnParametersDefaultFactory extends FacetFactoryAbstra
                 .required(processParameterContext.getFacetHolder()));
     }
 
-
 }

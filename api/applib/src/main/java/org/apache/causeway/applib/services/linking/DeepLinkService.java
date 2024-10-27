@@ -20,7 +20,6 @@ package org.apache.causeway.applib.services.linking;
 
 import java.net.URI;
 
-
 /**
  * A service that returns a web link (`java.net.URI`) to any domain object in
  * one of the framework's viewers.

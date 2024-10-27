@@ -143,7 +143,6 @@ public interface JdoDialect {
 	void releaseJdbcConnection(ConnectionHandle conHandle, PersistenceManager pm)
 			throws JDOException, SQLException;
 
-
 	//-----------------------------------------------------------------------------------
 	// Hook for exception translation (used by JdoTransactionManager)
 	//-----------------------------------------------------------------------------------

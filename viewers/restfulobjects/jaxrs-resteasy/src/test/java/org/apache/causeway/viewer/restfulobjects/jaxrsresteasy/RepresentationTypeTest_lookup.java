@@ -22,6 +22,4 @@ import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_
 
 public class RepresentationTypeTest_lookup extends RepresentationTypeTest_lookup_ContractTest {
 
-
-
 }

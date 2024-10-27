@@ -84,6 +84,4 @@ public class ExceptionDetail {
         return stackTraceElement.toString();
     }
 
-
-
 }

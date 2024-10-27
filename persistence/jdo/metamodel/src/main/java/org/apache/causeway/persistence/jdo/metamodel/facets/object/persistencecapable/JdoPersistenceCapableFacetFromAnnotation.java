@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-
-
 public class JdoPersistenceCapableFacetFromAnnotation
 extends FacetAbstract
 implements JdoPersistenceCapableFacet {
@@ -102,7 +100,6 @@ implements JdoPersistenceCapableFacet {
                 .map(_Strings::emptyToNull)
                 .orElseGet(cls::getSimpleName);
 
-
         var identityType = IdentityType.UNSPECIFIED;
 
         return Optional.of(new JdoPersistenceCapableFacetFromAnnotation(
@@ -146,6 +143,5 @@ implements JdoPersistenceCapableFacet {
         visitor.accept("table", table);
         visitor.accept("identityType", identityType);
     }
-
 
 }

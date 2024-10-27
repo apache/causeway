@@ -70,7 +70,6 @@ class _ArraysTest {
     void tearDown() throws Exception {
     }
 
-
     /**
      * Test method for {@link org.apache.causeway.commons.internal.collections._Arrays#testAnyMatch(T[], T[], java.util.function.BiPredicate)}.
      */
@@ -102,7 +101,6 @@ class _ArraysTest {
                 new Integer[] {0, 1, 2, 3},
                 new Integer[] {1, 2, 3, 4},
                 Objects::equals));
-
 
     }
 

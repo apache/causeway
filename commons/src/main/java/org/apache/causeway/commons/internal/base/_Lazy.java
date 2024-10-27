@@ -73,7 +73,6 @@ public interface _Lazy<T> extends Supplier<T> {
      */
     public void set(T value);
 
-
     // -- FACTORIES
 
     /**
@@ -97,6 +96,5 @@ public interface _Lazy<T> extends Supplier<T> {
     public static <T> _Lazy<T> threadSafe(final ThrowingSupplier<? extends T> supplier) {
         return new _Lazy_ThreadSafe<T>(supplier);
     }
-
 
 }

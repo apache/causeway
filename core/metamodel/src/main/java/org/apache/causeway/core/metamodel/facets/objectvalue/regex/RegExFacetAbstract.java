@@ -105,7 +105,6 @@ implements RegExFacet {
                 && Objects.equals(this.message(), other.message());
     }
 
-
     // -- UTILITY
 
     protected static int asMask(final jakarta.validation.constraints.Pattern.Flag[] flags) {

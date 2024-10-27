@@ -67,7 +67,6 @@ implements ObjectIconService {
                 CommonMimeType.JPEG,
                 CommonMimeType.SVG);
 
-
     private final ResourceLoader resourceLoader;
 
     private final Map<String, ObjectIcon> iconByKey = _Maps.newConcurrentHashMap();
@@ -79,7 +78,6 @@ implements ObjectIconService {
                             ObjectIconServiceDefault.class,
                             "ObjectIconFallback.png"),
                     CommonMimeType.PNG);
-
 
     @Override
     public ObjectIcon getObjectIcon(

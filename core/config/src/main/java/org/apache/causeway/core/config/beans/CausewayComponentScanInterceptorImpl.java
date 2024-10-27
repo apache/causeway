@@ -96,5 +96,4 @@ implements CausewayComponentScanInterceptor {
 
     }
 
-
 }

@@ -38,8 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter;
 
-
-
 public class ObjectPropertyReprRenderer
 extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
@@ -208,6 +206,5 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     protected void putExtensionsCausewayProprietary() {
         // none
     }
-
 
 }

@@ -37,7 +37,6 @@ public record MenuAction (
         @Nullable String cssClassFa
         ) implements MenuEntry {
 
-
     public static MenuAction of(final @NonNull ManagedAction managedAction) {
         // TODO missing cssClass
         return new MenuAction(

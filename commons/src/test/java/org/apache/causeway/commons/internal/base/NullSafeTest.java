@@ -100,7 +100,6 @@ class NullSafeTest {
         assertThat(_NullSafe.isPresent(""), is(true));
     }
 
-
     @Test
     void emptyStreamWithArray() throws Exception {
 
@@ -151,7 +150,5 @@ class NullSafeTest {
                 .collect(Collectors.joining("|")),
                 is("foo|bar"));
     }
-
-
 
 }

@@ -98,5 +98,4 @@ implements CommandPublishingFacet {
         visitor.accept("dtoProcessor", processor);
     }
 
-
 }

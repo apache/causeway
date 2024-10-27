@@ -59,7 +59,6 @@ public class ExecutionOutboxMenu {
     public static abstract class ActionDomainEvent
         extends CausewayModuleExtExecutionOutboxApplib.ActionDomainEvent<ExecutionOutboxMenu> { }
 
-
     final ExecutionOutboxEntryRepository executionOutboxEntryRepository;
     final ClockService clockService;
 
@@ -76,4 +75,3 @@ public class ExecutionOutboxMenu {
     }
 
 }
-

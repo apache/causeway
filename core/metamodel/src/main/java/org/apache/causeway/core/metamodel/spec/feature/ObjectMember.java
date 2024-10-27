@@ -90,7 +90,6 @@ public interface ObjectMember extends ObjectFeature {
      */
     boolean isAlwaysHidden();
 
-
     /**
      * Determines if this member is visible (not hidden), represented as a {@link Consent}.
      * @param target
@@ -172,11 +171,9 @@ public interface ObjectMember extends ObjectFeature {
      */
     boolean isExplicitlyAnnotated();
 
-
     // /////////////////////////////////////////////////////////////
     // Debugging
     // /////////////////////////////////////////////////////////////
-
 
     /**
      * Thrown if the user is not authorized to access an action or any property/collection of an entity.
@@ -242,7 +239,6 @@ public interface ObjectMember extends ObjectFeature {
         });
         return memberById;
     }
-
 
     // -- COLLECTION PAGE SIZE (COLL + NON-SCALAR ACTION RESULT)
 

@@ -42,7 +42,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationR
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  *
  * @since 2.0 {@index}

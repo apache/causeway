@@ -105,8 +105,6 @@ public class WebModuleShiro extends WebModuleAbstract {
         */
     }
 
-
-
     /* TODO[ISIS-3275] shiro-web no jakarta API support
      * Adds support for dependency injection into security realms
      * @since 2.0
@@ -201,7 +199,5 @@ public class WebModuleShiro extends WebModuleAbstract {
 */
         return Can.empty();
     }
-
-
 
 }

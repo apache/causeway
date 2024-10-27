@@ -112,7 +112,6 @@ extends ManagedMember {
         }
     }
 
-
     /**
      * @param newValue
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
@@ -130,7 +129,6 @@ extends ManagedMember {
         return Optional.empty();
     }
 
-
     /**
      * If visibility is vetoed, returns an empty but specified ManagedObject.
      * @return the property value as to be used by the UI for representation
@@ -144,7 +142,6 @@ extends ManagedMember {
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getElementType());
     }
-
 
     // -- NEGOTIATION
 
@@ -165,4 +162,3 @@ extends ManagedMember {
     }
 
 }
-

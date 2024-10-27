@@ -35,10 +35,7 @@ import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGit
 
 import lombok.SneakyThrows;
 
-
-
 class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
-
 
     LayoutResourceLoaderFromGithub loader;
 
@@ -82,7 +79,6 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
         assertThat(layoutResourceIfAny).isEmpty();
 
     }
-
 
     @SneakyThrows
     private String getApiKey() {

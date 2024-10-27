@@ -164,5 +164,4 @@ class SpringBeanProcessorRegressionWorkaround {
         return new ResteasyEmbeddedServletInitializer();
     }
 
-
 }

@@ -124,7 +124,6 @@ public class RoSpecSampler {
         return List.of(BigInteger.ZERO, bigInteger());
     }
 
-
     // -- CUSTOMER
 
     @Action
@@ -167,6 +166,5 @@ public class RoSpecSampler {
     public BigComplex complexAdd(final String are, final String aim, final String bre, final String bim) {
         return BigComplex.of(are, aim).add(BigComplex.of(bre, bim));
     }
-
 
 }

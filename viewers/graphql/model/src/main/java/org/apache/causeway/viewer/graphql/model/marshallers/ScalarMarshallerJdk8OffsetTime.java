@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.graphql.applib.marshallers.ScalarMarshallerAbs
 
 import graphql.scalars.ExtendedScalars;
 
-
 @Component
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8OffsetTime extends ScalarMarshallerAbstract<OffsetTime> {

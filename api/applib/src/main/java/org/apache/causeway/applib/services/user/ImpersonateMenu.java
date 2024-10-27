@@ -68,12 +68,10 @@ public class ImpersonateMenu {
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> {}
 
-
     final UserService userService;
     final MessageService messageService;
     final FactoryService factoryService;
     final List<ImpersonateMenuAdvisor> impersonateMenuAdvisors;
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -109,7 +107,6 @@ public class ImpersonateMenu {
         }
 
     }
-
 
     @Action(
             commandPublishing = Publishing.DISABLED,

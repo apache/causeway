@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.action.UiActionForm;
 
-
-
 public interface ActionModel
 extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
 

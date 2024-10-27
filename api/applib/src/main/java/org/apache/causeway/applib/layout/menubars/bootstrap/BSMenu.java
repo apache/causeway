@@ -56,7 +56,6 @@ public class BSMenu implements Menu, Serializable {
         this.named = named;
     }
 
-
     private String named;
 
     @Override
@@ -69,8 +68,6 @@ public class BSMenu implements Menu, Serializable {
         this.named = named;
     }
 
-
-
     private String cssClassFa;
 
     @XmlAttribute(required = false)
@@ -81,8 +78,6 @@ public class BSMenu implements Menu, Serializable {
     public void setCssClassFa(final String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
-
-
 
     private List<BSMenuSection> sections = new ArrayList<>();
 

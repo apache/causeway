@@ -223,5 +223,4 @@ public class PropertyNegotiationModel implements ManagedValue {
         isCurrentValueAbsent.invalidate();
     }
 
-
 }

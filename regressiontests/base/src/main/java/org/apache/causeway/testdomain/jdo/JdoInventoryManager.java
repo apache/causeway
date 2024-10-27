@@ -61,6 +61,4 @@ public class JdoInventoryManager {
         return repository.allInstances(JdoProduct.class);
     }
 
-
-
 }

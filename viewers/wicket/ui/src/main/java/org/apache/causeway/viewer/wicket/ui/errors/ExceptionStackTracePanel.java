@@ -59,7 +59,6 @@ extends PanelBase<List<StackTraceDetail>> {
     private static final JavaScriptResourceReference DIV_TOGGLE_JS =
             new JavaScriptResourceReference(ExceptionStackTracePanel.class, "div-toggle.js");
 
-
     public class ExternalImageUrl extends WebComponent {
 
         private static final long serialVersionUID = -3556235292216447710L;

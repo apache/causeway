@@ -27,7 +27,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-
 /**
  * JDO distinguishes between DETACHED and HOLLOW, where we are (historically) using HOLLOW,
  * by virtue of {@code datanucleus.detachAllOnCommit=false}.

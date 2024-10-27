@@ -61,7 +61,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-
 @Component
 @Import({
     CommitListener.class
@@ -152,7 +151,6 @@ extends PublishingTestFactoryAbstract {
                 assertNotNull(book);
             });
             break;
-
 
         case PROPERTY_UPDATE:
 
@@ -437,6 +435,5 @@ extends PublishingTestFactoryAbstract {
         //em.flush(); // in effect makes changes visible during PRE_COMMIT
 
     }
-
 
 }

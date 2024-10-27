@@ -94,7 +94,6 @@ public class JGrowlUtil {
         buf.append(");\n");
     }
 
-
     //JUnit support (public)
     public String escape(final String origMsg) {
 

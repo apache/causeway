@@ -157,7 +157,6 @@ public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.a
         this(null, null, null, null, null);
     }
 
-
     @EmbeddedId
     private SessionLogEntryPK pk;
 
@@ -178,29 +177,24 @@ public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.a
     @Getter @Setter
     private String httpSessionId;
 
-
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
-
 
     @Column(nullable = LoginTimestamp.NULLABLE)
     @LoginTimestamp
     @Getter @Setter
     private Timestamp loginTimestamp;
 
-
     @Column(nullable = LogoutTimestamp.NULLABLE)
     @LogoutTimestamp
     @Getter @Setter
     private Timestamp logoutTimestamp;
 
-
     @Column(nullable = CausedBy.NULLABLE)
     @CausedBy
     @Getter @Setter
     private SessionSubscriber.CausedBy causedBy;
-
 
 }

@@ -32,5 +32,4 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 @EntityScan(basePackageClasses = JpaBook.class)
 public class JpaTestDomainModule {
 
-
 }

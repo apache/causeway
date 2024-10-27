@@ -260,7 +260,6 @@ public final class _NullSafe {
 
     // -- ABSENCE/PRESENCE PREDICATES
 
-
     /**
      * Equivalent to {@link java.util.Objects#nonNull(Object)}.
      * @param x
@@ -389,7 +388,5 @@ public final class _NullSafe {
                 ? Collections.emptySet()
                 : map.entrySet();
     }
-
-
 
 }

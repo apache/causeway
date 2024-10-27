@@ -136,7 +136,6 @@ public class PojoTester {
 
 	private final Map<Class<?>, DatumFactory<?>> dataByType = new HashMap<>();
 
-
 	protected PojoTester() {
 
 		final var booleanDatumFactory = new DatumFactoryImpl<>(Boolean.class) {
@@ -149,7 +148,6 @@ public class PojoTester {
 		usingData(boolean.class, booleanDatumFactory);
 		usingData(Boolean.class, booleanDatumFactory);
 
-
 		final var byteDatumFactory = new DatumFactoryImpl<>(Byte.class) {
 			@Override
 			public Byte getNext() {
@@ -159,7 +157,6 @@ public class PojoTester {
 		};
 		usingData(byte.class, byteDatumFactory);
 		usingData(Byte.class, byteDatumFactory);
-
 
 		final var shortDatumFactory = new DatumFactoryImpl<>(Short.class) {
 			@Override
@@ -171,7 +168,6 @@ public class PojoTester {
 		usingData(short.class, shortDatumFactory);
 		usingData(Short.class, shortDatumFactory);
 
-
 		final var charDatumFactory = new DatumFactoryImpl<>(Character.class) {
 			@Override
 			public Character getNext() {
@@ -181,7 +177,6 @@ public class PojoTester {
 		};
 		usingData(char.class, charDatumFactory);
 		usingData(Character.class, charDatumFactory);
-
 
 		final var intDatumFactory = new DatumFactoryImpl<>(Integer.class) {
 			@Override
@@ -193,7 +188,6 @@ public class PojoTester {
 		usingData(int.class, intDatumFactory);
 		usingData(Integer.class, intDatumFactory);
 
-
 		final var longDatumFactory = new DatumFactoryImpl<>(Long.class) {
 			@Override
 			public Long getNext() {
@@ -204,7 +198,6 @@ public class PojoTester {
 		usingData(long.class, longDatumFactory);
 		usingData(Long.class, longDatumFactory);
 
-
 		final var floatDatumFactory = new DatumFactoryImpl<>(Float.class) {
 			@Override
 			public Float getNext() {
@@ -214,7 +207,6 @@ public class PojoTester {
 		};
 		usingData(float.class, floatDatumFactory);
 		usingData(Float.class, floatDatumFactory);
-
 
 		final var doubleDatumFactory = new DatumFactoryImpl<>(Double.class) {
 			@Override
@@ -677,8 +669,6 @@ public class PojoTester {
 		return prefix + Character.toUpperCase(property.charAt(0))
 				+ property.substring(1);
 	}
-
-
 
 	public static final class TestException extends Exception {
 

@@ -39,7 +39,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectAndActionInvocation {
 
@@ -62,7 +61,6 @@ public class ObjectAndActionInvocation {
     @Getter private final Can<ManagedObject> argAdapters;
     @Getter private final ManagedObject returnedAdapter;
     @Getter private final ActionResultReprRenderer.SelfLink selfLink;
-
 
     /**
      * not API
@@ -154,6 +152,5 @@ public class ObjectAndActionInvocation {
     private static boolean isVector(final @NonNull ObjectSpecification spec) {
         return Facets.collectionIsPresent(spec);
     }
-
 
 }

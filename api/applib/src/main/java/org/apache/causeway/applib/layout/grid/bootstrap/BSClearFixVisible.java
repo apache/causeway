@@ -44,7 +44,6 @@ public class BSClearFixVisible extends BSClearFix {
 
     private CssDisplay cssDisplay;
 
-
     @XmlAttribute(required = true)
     public CssDisplay getCssDisplay() {
         return cssDisplay;
@@ -53,7 +52,6 @@ public class BSClearFixVisible extends BSClearFix {
     public void setCssDisplay(final CssDisplay cssDisplay) {
         this.cssDisplay = cssDisplay;
     }
-
 
     @Override
     public String toCssClass() {

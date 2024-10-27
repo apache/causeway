@@ -78,5 +78,4 @@ class FactoryService_forTesting implements FactoryService {
         return domainClass.getDeclaredConstructor().newInstance();
     }
 
-
 }

@@ -41,8 +41,6 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.mixins.Applic
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
-
-
 /**
  *
  * @since 2.0 {@index}
@@ -105,7 +103,6 @@ implements ApplicationRoleRepository {
         }
         return Collections.emptySortedSet();
     }
-
 
     @Override
     public ApplicationRole newRole(
@@ -182,6 +179,5 @@ implements ApplicationRoleRepository {
             final ApplicationUser user) {
         return user.getRoles();
     }
-
 
 }

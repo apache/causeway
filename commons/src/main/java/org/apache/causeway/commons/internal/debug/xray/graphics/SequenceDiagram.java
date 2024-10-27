@@ -140,7 +140,6 @@ public class SequenceDiagram {
                 : CONNECTION_LABEL_COLOR;
     }
 
-
     // -- RENDERING
 
     private final static Color PARTICIPANT_BACKGROUND_COLOR = _Graphics.COLOR_LIGHTER_GREEN;
@@ -308,7 +307,6 @@ public class SequenceDiagram {
         }
     }
 
-
     public Dimension layout(final Graphics2D g) {
 
         PARTICIPANT_FONT.ifPresent(g::setFont);
@@ -372,7 +370,6 @@ public class SequenceDiagram {
             g.setStroke(_Graphics.STROKE_DASHED);
             g.drawLine(p.getX_middle(), p.getY_bottom(), p.getX_middle(), size.height - PARTICIPANT_MARGIN_V);
         });
-
 
         g.setStroke(_Graphics.STROKE_DEFAULT);
 

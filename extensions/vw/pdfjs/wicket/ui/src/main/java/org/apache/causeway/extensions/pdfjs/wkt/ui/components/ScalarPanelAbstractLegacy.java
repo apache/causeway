@@ -27,8 +27,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-
-
 abstract class ScalarPanelAbstractLegacy
 extends PanelAbstract<ManagedObject, ScalarModel> {
 

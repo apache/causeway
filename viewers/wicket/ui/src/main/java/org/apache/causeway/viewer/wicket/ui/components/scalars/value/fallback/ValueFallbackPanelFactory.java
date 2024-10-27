@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback;
 
-
 import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;

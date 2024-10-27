@@ -91,7 +91,6 @@ implements OneToOneAssociation {
                 InteractionUtils.renderPolicy(ownerAdapter));
     }
 
-
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject ownerAdapter,
@@ -279,7 +278,6 @@ implements OneToOneAssociation {
                 ownerAdapter,
                 interactionInitiatedBy);
     }
-
 
     @Override
     public boolean hasAutoComplete() {

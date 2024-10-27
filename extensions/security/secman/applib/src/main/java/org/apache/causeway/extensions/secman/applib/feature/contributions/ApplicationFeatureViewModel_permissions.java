@@ -56,5 +56,4 @@ public class ApplicationFeatureViewModel_permissions {
         return applicationPermissionRepository.findByFeatureCached(viewModel.getFeatureId());
     }
 
-
 }

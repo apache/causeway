@@ -33,7 +33,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class FileUtils {
 
-
     public enum Recursion {
         DO_RECURSE, DONT_RECURSE
     }
@@ -95,7 +94,6 @@ public final class FileUtils {
             }
         }
     }
-
 
     public static FilenameFilter and(final FilenameFilter... filters) {
         return new FilenameFilter() {

@@ -383,7 +383,6 @@ public class _Multimaps {
         return newSetMultimap(ConcurrentHashMap<K, Set<V>>::new, _Sets::newConcurrentHashSet);
     }
 
-
     /**
      * @param keyComparator - if {@code null} uses natural ordering
      * @param elementComparator - if {@code null} uses natural ordering
@@ -411,7 +410,5 @@ public class _Multimaps {
     public static <K1, K2, V> MapMultimap<K1, K2, V> newConcurrentMapMultimap(){
         return newMapMultimap(ConcurrentHashMap<K1, Map<K2, V>>::new, HashMap::new);
     }
-
-
 
 }

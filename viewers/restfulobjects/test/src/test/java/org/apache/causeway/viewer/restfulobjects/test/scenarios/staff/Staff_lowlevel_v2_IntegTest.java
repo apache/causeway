@@ -45,7 +45,6 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-
 public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
 
     private GsonBuilder gsonBuilder;
@@ -126,7 +125,6 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
         return new Blob(fileName, "application/pdf", bytes);
     }
 
-
     @Getter
     static class Body {
 
@@ -161,7 +159,6 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
 
         }
 
-
         @lombok.Value
         static class Blob {
             private Value value;
@@ -177,5 +174,3 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
     }
 
 }
-
-

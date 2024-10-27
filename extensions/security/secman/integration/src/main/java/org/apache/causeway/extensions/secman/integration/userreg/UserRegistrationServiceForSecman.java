@@ -40,7 +40,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStat
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * An implementation of {@link org.apache.causeway.applib.services.userreg.UserRegistrationService}
  * to allow users to be automatically created with the configured initial

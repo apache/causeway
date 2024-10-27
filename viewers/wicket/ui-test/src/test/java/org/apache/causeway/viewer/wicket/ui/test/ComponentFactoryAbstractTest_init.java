@@ -93,7 +93,6 @@ class ComponentFactoryAbstractTest_init {
     @Test
     public void cannotInstantiateComponentFactoryWithIncorrectComponentClass() {
 
-
         class ComponentFactoryWithIncorrectComponentClass extends ComponentFactoryAbstract {
 
             public ComponentFactoryWithIncorrectComponentClass() {
@@ -118,6 +117,5 @@ class ComponentFactoryAbstractTest_init {
         });
 
     }
-
 
 }

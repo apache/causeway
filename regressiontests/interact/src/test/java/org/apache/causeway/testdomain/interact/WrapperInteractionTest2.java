@@ -45,7 +45,6 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
 import lombok.Data;
 
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,

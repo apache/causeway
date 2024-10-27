@@ -48,13 +48,11 @@ public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
      */
     public static class Doop extends ObjectUpdatedEvent<Object> {}
 
-
     public ObjectUpdatedEvent() {
     }
 
     public ObjectUpdatedEvent(final S source) {
         super(source);
     }
-
 
 }

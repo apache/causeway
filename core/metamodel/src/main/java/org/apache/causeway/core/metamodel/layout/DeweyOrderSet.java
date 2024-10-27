@@ -344,7 +344,6 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         }
     }
 
-
     // //////////////////////////////////////
     // compareTo, equals, hashCode, toString
     // //////////////////////////////////////
@@ -401,6 +400,5 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     public String toString() {
         return getGroupFullName() + ":" + size() + "el/" + (size() - childOrderSets.size()) + "m/" + childOrderSets.size() + "ch";
     }
-
 
 }

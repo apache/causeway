@@ -164,11 +164,8 @@ public final class JodaTimeJaxbAdapters {
         }
     }
 
-
     private static boolean isNullOrEmpty(final String x) {
         return x == null || x.isEmpty();
     }
 
-
 }
-

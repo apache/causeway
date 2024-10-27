@@ -82,5 +82,4 @@ public class CausewayModuleExtCors {
         return new CorsFilter(source);
     }
 
-
 }

@@ -129,7 +129,6 @@ public @interface ValueSemantics {
     TimePrecision timePrecision()
         default TimePrecision.SECOND;
 
-
     /**
      * If associated with a temporal value,
      * that has time-zone or time-offset information,

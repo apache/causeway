@@ -44,8 +44,6 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
 import org.apache.causeway.testing.integtestsupport.applib.CausewayInteractionHandler;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
@@ -195,6 +193,5 @@ class JpaTransactionRollbackTest_usingTransactionService
     }
 
     // -- HELPER
-
 
 }

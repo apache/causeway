@@ -57,5 +57,4 @@ extends MandatoryFacetAbstract {
         super(Semantics.OPTIONAL, holder);
     }
 
-
 }

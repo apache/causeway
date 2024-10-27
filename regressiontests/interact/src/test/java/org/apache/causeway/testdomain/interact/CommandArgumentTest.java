@@ -53,7 +53,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -80,7 +79,6 @@ class CommandArgumentTest extends InteractionTestAbstract {
         private String resultAsString;
 
     }
-
 
     @XmlRootElement(name = "root")
     @XmlType
@@ -134,6 +132,5 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         assertEquals("[1, 2, 3]", stringified);
     }
-
 
 }

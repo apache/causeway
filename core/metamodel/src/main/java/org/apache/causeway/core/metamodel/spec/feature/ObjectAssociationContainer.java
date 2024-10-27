@@ -110,7 +110,6 @@ public interface ObjectAssociationContainer {
      */
     Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn);
 
-
     /**
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
@@ -149,6 +148,5 @@ public interface ObjectAssociationContainer {
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      */
     Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn);
-
 
 }

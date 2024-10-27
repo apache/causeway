@@ -45,7 +45,6 @@ import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
  */
 public interface InteractionDtoFactory {
 
-
     /**
      * Called by the framework when invoking an action, to create an
      * {@link ActionInvocationDto} capturing the details of the action
@@ -95,6 +94,5 @@ public interface InteractionDtoFactory {
             ActionInvocationDto actionInvocationDto,
             ObjectAction objectAction,
             ManagedObject resultObject);
-
 
 }

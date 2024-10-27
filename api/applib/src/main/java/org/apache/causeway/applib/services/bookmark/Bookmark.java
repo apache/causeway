@@ -146,7 +146,6 @@ public final class Bookmark implements Oid {
         return Optional.empty();
     }
 
-
     public static Bookmark parseElseFail(final @Nullable String input) {
         return parse(input)
                 .orElseThrow(()->_Exceptions.illegalArgument("cannot parse Bookmark '%s'", input));

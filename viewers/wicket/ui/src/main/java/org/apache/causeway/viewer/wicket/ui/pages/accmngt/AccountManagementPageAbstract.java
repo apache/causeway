@@ -107,7 +107,6 @@ public class AccountManagementPageAbstract extends WebPageBase {
 
     private final static List<String> suppressedExceptionMessages = Arrays.asList("Requested page is no longer available.");
 
-
     private void addPageTitle() {
         var applicationName = getApplicationSettings().getName();
         Wkt.labelAdd(this, ID_PAGE_TITLE, applicationName);
@@ -135,7 +134,5 @@ public class AccountManagementPageAbstract extends WebPageBase {
         getWicketViewerSettings().getJs()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
-
-
 
 }

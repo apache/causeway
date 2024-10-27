@@ -44,7 +44,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CausewayLogOnExceptionFilter implements Filter {
 
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }

@@ -53,8 +53,6 @@ import org.apache.causeway.core.webapp.modules.templresources.TemplateResourceCa
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategy;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth.AuthenticationStrategyUsingSession;
 
-
-
 /**
  * Filter for RestfulObjects.
  *
@@ -92,7 +90,6 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
      * assume 'restricted' handling.
      */
     public static final String LOGON_PAGE_KEY = "logonPage";
-
 
     /**
      * Init parameter key for what should be done if no session was found.
@@ -234,15 +231,11 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
         public abstract void handle(CausewayRestfulObjectsInteractionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException;
     }
 
-
     private AuthenticationStrategy authStrategy;
     private List<String> restrictedPaths;
     private WhenNoSession whenNotAuthenticated;
     private String redirectToOnException;
     private Collection<Pattern> ignoreExtensions;
-
-
-
 
     // /////////////////////////////////////////////////////////////////
     // init, destroy
@@ -329,7 +322,6 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
         return Stream.empty();
     }
 
-
     @Override
     public void destroy() {
     }
@@ -415,7 +407,6 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
 
     }
 
-
     private static void ensureMetamodelIsValid(final SpecificationLoader specificationLoader) {
         // using side-effect free access to MM validation result
         var validationResult = specificationLoader.getValidationResult()
@@ -424,7 +415,6 @@ public class CausewayRestfulObjectsInteractionFilter implements Filter {
             throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
         }
     }
-
 
     protected boolean requestIsPassThru(final HttpServletRequest httpServletRequest) {
         final String requestURI = httpServletRequest.getRequestURI();

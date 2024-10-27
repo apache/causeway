@@ -122,7 +122,6 @@ implements GridSystemService<G> {
         }
     }
 
-
     /**
      * Mandatory hook method for subclasses, where they must ensure that all object members (properties, collections
      * and actions) are in the grid metadata, typically by deriving this information from other existing metadata
@@ -131,7 +130,6 @@ implements GridSystemService<G> {
     protected abstract boolean validateAndNormalize(
             final Grid grid,
             final Class<?> domainClass);
-
 
     /**
      * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
@@ -396,7 +394,6 @@ implements GridSystemService<G> {
         grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
     }
 
-
     @Programmatic
     @Override
     public void minimal(final G grid, final Class<?> domainClass) {
@@ -424,7 +421,5 @@ implements GridSystemService<G> {
             }
         });
     }
-
-
 
 }

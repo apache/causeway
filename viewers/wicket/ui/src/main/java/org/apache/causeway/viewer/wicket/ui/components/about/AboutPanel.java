@@ -85,5 +85,4 @@ extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutMode
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
     }
 
-
 }

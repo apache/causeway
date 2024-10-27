@@ -51,8 +51,6 @@ import org.apache.causeway.testdomain.jdo.JdoInventoryDao;
 import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,

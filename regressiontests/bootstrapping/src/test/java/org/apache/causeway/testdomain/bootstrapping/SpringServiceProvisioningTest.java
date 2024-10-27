@@ -46,8 +46,6 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
 import static org.apache.causeway.commons.internal.collections._Collections.toStringJoiningNewLine;
 import static org.apache.causeway.commons.internal.collections._Sets.intersectSorted;
 
-
-
 //import org.apache.causeway.testdomain.Incubating;
 
 @SpringBootTest(
@@ -110,7 +108,6 @@ class SpringServiceProvisioningTest {
         System.out.println(servicesFound);
         System.out.println("--------------------------------");
         
-
         // same as managedServices.containsAll(singletonSet) but more verbose in case of
         // failure
         assertEquals(toStringJoiningNewLine(expectedSingletons),

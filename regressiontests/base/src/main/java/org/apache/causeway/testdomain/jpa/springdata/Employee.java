@@ -52,5 +52,4 @@ public class Employee {
         this.lastName = lastName;
     }
 
-
 }

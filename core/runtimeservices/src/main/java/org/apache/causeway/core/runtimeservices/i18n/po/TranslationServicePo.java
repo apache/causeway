@@ -98,7 +98,6 @@ public class TranslationServicePo implements TranslationService {
         }
     }
 
-
     @PreDestroy
     public void shutdown() {
         if(onShutdown!=null) {
@@ -133,7 +132,6 @@ public class TranslationServicePo implements TranslationService {
         ((PoWriter)po).toPot(buf);
         return Optional.of(buf.toString());
     }
-
 
     /**
      * Not API

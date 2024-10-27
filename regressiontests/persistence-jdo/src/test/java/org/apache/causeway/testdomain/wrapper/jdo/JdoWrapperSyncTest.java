@@ -43,8 +43,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJdo.class,

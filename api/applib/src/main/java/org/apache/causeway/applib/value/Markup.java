@@ -105,6 +105,4 @@ public final class Markup implements Serializable {
         }
     }
 
-
-
 }

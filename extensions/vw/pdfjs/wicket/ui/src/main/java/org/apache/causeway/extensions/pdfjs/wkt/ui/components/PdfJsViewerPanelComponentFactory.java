@@ -31,8 +31,6 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-
-
 @org.springframework.stereotype.Component
 public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
@@ -72,4 +70,3 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
         return new PdfJsViewerPanel(id, (ScalarModel) model);
     }
 }
-

@@ -40,7 +40,6 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
         super(metaModelContext, FeatureType.OBJECTS_AND_PROPERTIES);
     }
 
-
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
@@ -139,6 +138,5 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
     private QueryDslSupport queryDslSupport() {
         return getMetaModelContext().lookupServiceElseFail(QueryDslSupport.class);
     }
-
 
 }

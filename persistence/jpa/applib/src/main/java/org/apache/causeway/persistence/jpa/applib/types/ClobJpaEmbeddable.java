@@ -120,7 +120,6 @@ public final class ClobJpaEmbeddable {
         return new Clob(name, mimeType, chars);
     }
 
-
     @Override
     public String toString() {
         return asClob().toString();

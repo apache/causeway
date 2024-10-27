@@ -283,5 +283,4 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 feature.getFeatureIdentifier());
     }
 
-
 }

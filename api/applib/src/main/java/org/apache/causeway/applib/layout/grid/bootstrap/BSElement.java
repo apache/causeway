@@ -34,5 +34,4 @@ public interface BSElement extends WithinGrid, Serializable {
 
     void setCssClass(final String cssClass);
 
-
 }

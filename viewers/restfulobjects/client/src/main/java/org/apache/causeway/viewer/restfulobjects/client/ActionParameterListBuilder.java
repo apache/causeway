@@ -174,7 +174,6 @@ public class ActionParameterListBuilder {
         return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
     }
 
-
     public <T> ActionParameterListBuilder addActionParameter(
             final String parameterName,
             final @NonNull Class<T> type,

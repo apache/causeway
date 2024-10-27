@@ -94,7 +94,6 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
 
     protected abstract MarkupContainer newExtraFieldsContainer(String id);
 
-
     private IFormValidator newEqualPasswordInputValidator(
             final MarkupContainer password,
             final MarkupContainer confirmPassword) {
@@ -201,6 +200,5 @@ public abstract class RegisterPanel extends PanelBase<UserDetails> {
         usernameFormGroup.add(username);
         return usernameFormGroup;
     }
-
 
 }

@@ -78,7 +78,6 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
         return executionOutboxEntryClass;
     }
 
-
     /**
      * for testing only.
      */
@@ -179,8 +178,6 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
     private RepositoryService repositoryService() {
         return repositoryServiceProvider.get();
     }
-
-
 
     /**
      * for testing purposes only

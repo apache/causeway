@@ -46,7 +46,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationU
 
 import lombok.RequiredArgsConstructor;
 
-
 /**
  * This service automatically creates an {@link ApplicationUser} if an end-user successfully logged in via Oauth.
  *

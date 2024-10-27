@@ -173,5 +173,4 @@ class DeweyOrderComparatorTest  {
         facetedMethod.addFacet(new LayoutOrderFacetAbstract(sequence, facetedMethod) {});
     }
 
-
 }

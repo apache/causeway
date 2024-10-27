@@ -99,6 +99,4 @@ implements EntityPropertyChangeSubscriber {
         kvStore.clear(EntityPropertyChangeSubscriberForTesting.class);
     }
 
-
-
 }

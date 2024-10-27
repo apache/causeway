@@ -103,52 +103,43 @@ public class ApplicationUser
     @GeneratedValue
     private Long id;
 
-
     @Version
     private Long version;
-
 
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
     @Getter @Setter
     private String username;
 
-
     @Column(nullable = FamilyName.NULLABLE, length = FamilyName.MAX_LENGTH)
     @FamilyName
     @Getter @Setter
     private String familyName;
-
 
     @Column(nullable = GivenName.NULLABLE, length = GivenName.MAX_LENGTH)
     @GivenName
     @Getter @Setter
     private String givenName;
 
-
     @Column(nullable = KnownAs.NULLABLE, length = KnownAs.MAX_LENGTH)
     @KnownAs
     @Getter @Setter
     private String knownAs;
-
 
     @Column(nullable = EmailAddress.NULLABLE, length = EmailAddress.MAX_LENGTH)
     @EmailAddress
     @Getter @Setter
     private String emailAddress;
 
-
     @Column(nullable = PhoneNumber.NULLABLE, length = PhoneNumber.MAX_LENGTH)
     @PhoneNumber
     @Getter @Setter
     private String phoneNumber;
 
-
     @Column(nullable = FaxNumber.NULLABLE, length= FaxNumber.MAX_LENGTH)
     @FaxNumber
     @Getter @Setter
     private String faxNumber;
-
 
     @Column(nullable = Language.NULLABLE)
     @Language
@@ -160,18 +151,15 @@ public class ApplicationUser
     @Getter @Setter
     private java.util.Locale numberFormat;
 
-
     @Column(nullable = TimeFormat.NULLABLE)
     @TimeFormat
     @Getter @Setter
     private java.util.Locale timeFormat;
 
-
     @Column(nullable = AtPath.NULLABLE, length = AtPath.MAX_LENGTH)
     @AtPath
     @Getter @Setter
     private String atPath;
-
 
     @Column(nullable = AccountType.NULLABLE) @Enumerated(EnumType.STRING)
     @AccountType
@@ -182,19 +170,15 @@ public class ApplicationUser
         this.accountType = accountType;
     }
 
-
     @Column(nullable = Status.NULLABLE) @Enumerated(EnumType.STRING)
     @Status
     @Getter @Setter
     private ApplicationUserStatus status;
 
-
     @Column(nullable = EncryptedPassword.NULLABLE, length = EncryptedPassword.MAX_LENGTH)
     @EncryptedPassword
     @Getter @Setter
     private String encryptedPassword;
-
-
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(

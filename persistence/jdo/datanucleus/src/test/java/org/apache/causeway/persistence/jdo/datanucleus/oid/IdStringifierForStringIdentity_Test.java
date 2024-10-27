@@ -32,8 +32,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
 import org.apache.causeway.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics;
 
-
-
 class IdStringifierForStringIdentity_Test {
 
     public static Stream<Arguments> roundtrip() {

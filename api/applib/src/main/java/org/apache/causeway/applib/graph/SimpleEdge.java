@@ -23,7 +23,6 @@ import jakarta.inject.Named;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 
-
 /**
  * Fundamental building block for graph structures.
  *

@@ -49,5 +49,4 @@ public class JUnitRuleMockery2Test_mockAnnotatedWithOne_happyCase {
         collaborating.collaborateWithCollaborator();
     }
 
-
 }

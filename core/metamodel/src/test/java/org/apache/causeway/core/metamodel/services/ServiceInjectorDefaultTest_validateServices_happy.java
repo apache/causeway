@@ -81,5 +81,4 @@ class ServiceInjectorDefaultTest_validateServices_happy {
         // nothing else to check
     }
 
-
 }

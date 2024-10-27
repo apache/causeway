@@ -49,7 +49,6 @@ public class MediaTypes {
 
         } catch (IllegalArgumentException e) {
 
-
             List<String> chunks = _Strings.splitThenStream(type, ";")
                     .collect(Collectors.toList());
 
@@ -66,7 +65,6 @@ public class MediaTypes {
             return MediaType.valueOf(sb.toString());
 
         }
-
 
     }
 

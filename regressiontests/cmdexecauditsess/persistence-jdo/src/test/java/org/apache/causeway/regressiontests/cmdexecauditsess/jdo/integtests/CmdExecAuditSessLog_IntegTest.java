@@ -52,7 +52,6 @@ import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 @ActiveProfiles("test")
 public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTestAbstract {
 
-
     @SpringBootConfiguration
     @EnableAutoConfiguration
     @Import({
@@ -70,7 +69,6 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
     @ComponentScan(basePackageClasses = {AppManifest.class, CmdExecAuditSessTestDomainModel.class, CounterRepository.class})
     public static class AppManifest {
     }
-
 
     @Override
     protected org.apache.causeway.regressiontests.cmdexecauditsess.generic.integtest.model.Counter newCounter(final String name) {

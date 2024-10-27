@@ -91,5 +91,4 @@ extends FacetFactoryAbstract {
     private final _Lazy<MetamodelEventService> metamodelEventService = _Lazy.threadSafe(()->
         getServiceRegistry().lookupServiceElseFail(MetamodelEventService.class));
 
-
 }

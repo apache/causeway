@@ -33,7 +33,6 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 
 public class Annotations_synthesize_on_Method_Test {
 
-
     @Inherited
     @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
     @Retention(RetentionPolicy.RUNTIME)
@@ -160,7 +159,6 @@ public class Annotations_synthesize_on_Method_Test {
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().publishng(), is(DomainObj.Publishng.NO));
     }
-
 
     @Test
     public void direct_overrides_metaMeta_2() throws Exception {

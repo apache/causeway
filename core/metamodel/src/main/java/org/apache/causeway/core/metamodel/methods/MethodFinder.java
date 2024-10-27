@@ -200,7 +200,6 @@ public class MethodFinder {
                 methodNameCandidates);
     }
 
-
     // -- HELPER
 
     private static MethodFinder havingAnyOrNoAnnotation(
@@ -274,6 +273,5 @@ public class MethodFinder {
         }
         return isMarkerAnnotationPresent;
     }
-
 
 }

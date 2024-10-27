@@ -74,7 +74,6 @@ implements
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }
 
-
     // //////////////////////////////////////
 
     @Override

@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -94,7 +93,6 @@ implements HomePageResource {
                         RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
                         "Posting to the home page resource is not allowed."));
     }
-
 
     @Override
     @GET

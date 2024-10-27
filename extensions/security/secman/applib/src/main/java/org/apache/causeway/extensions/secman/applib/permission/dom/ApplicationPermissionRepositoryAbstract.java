@@ -87,7 +87,6 @@ implements ApplicationPermissionRepository {
         );
     }
 
-
     // -- findByUser (programmatic)
     public List<ApplicationPermission> findByUserCached(final @NonNull ApplicationUser user) {
         return queryResultsCacheProvider.get().execute(this::findByUser,
@@ -120,7 +119,6 @@ implements ApplicationPermissionRepository {
                     .withParameter("username", username))
         );
     }
-
 
     // -- findByUserAndPermissionValue (programmatic)
     /**
@@ -189,7 +187,6 @@ implements ApplicationPermissionRepository {
                 .collect(_Sets.toUnmodifiableSorted());
     }
 
-
     // -- findByRoleAndRuleAndFeature (programmatic)
     public Optional<ApplicationPermission> findByRoleAndRuleAndFeatureCached(
             final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole role,
@@ -219,7 +216,6 @@ implements ApplicationPermissionRepository {
                         .withParameter("featureFqn", featureFqn ))
         );
     }
-
 
     // -- findByFeature (programmatic)
 
@@ -325,7 +321,6 @@ implements ApplicationPermissionRepository {
         return permission;
     }
 
-
     // -- allPermission (programmatic)
     @Override
     public Collection<ApplicationPermission> allPermissions() {
@@ -359,6 +354,5 @@ implements ApplicationPermissionRepository {
 
         return orphaned;
     }
-
 
 }

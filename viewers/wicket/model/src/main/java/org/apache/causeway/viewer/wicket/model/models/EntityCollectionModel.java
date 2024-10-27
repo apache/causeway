@@ -141,5 +141,4 @@ extends
                 .map(EntityCollectionModelParented::asHintingBookmark);
     }
 
-
 }

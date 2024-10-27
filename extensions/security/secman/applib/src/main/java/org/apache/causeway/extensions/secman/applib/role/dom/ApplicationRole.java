@@ -79,7 +79,6 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     @Inject transient private ApplicationPermissionRepository applicationPermissionRepository;
 
-
     // -- UI & DOMAIN EVENTS
 
     public static class TitleUiEvent extends CausewayModuleExtSecmanApplib.TitleUiEvent<ApplicationRole> { }
@@ -90,13 +89,11 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationRole, T> {}
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationRole, T> {}
 
-
     // -- MODEL
 
     @ObjectSupport public String title() {
         return getName();
     }
-
 
     // -- NAME
 
@@ -129,7 +126,6 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     @Name
     public abstract String getName();
     public abstract void setName(String name);
-
 
     // -- DESCRIPTION
 
@@ -166,7 +162,6 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     public abstract String getDescription();
     public abstract void setDescription(String description);
 
-
     // -- USERS
 
     @Collection(
@@ -185,7 +180,6 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     @Users
     public abstract Set<ApplicationUser> getUsers();
 
-
     // -- PERMISSIONS
 
     @Collection(
@@ -202,14 +196,12 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
         class DomainEvent extends CollectionDomainEvent<ApplicationPermission> {}
     }
 
-
     // -- PERMISSIONS
 
     @Permissions
     public List<org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions() {
         return applicationPermissionRepository.findByRole(this);
     }
-
 
     // -- equals, hashCode, compareTo, toString
 
@@ -224,7 +216,6 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     private static final ToString<ApplicationRole> toString =
             ObjectContracts.toString("name", ApplicationRole::getName);
-
 
     @Override
     public int compareTo(final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole other) {

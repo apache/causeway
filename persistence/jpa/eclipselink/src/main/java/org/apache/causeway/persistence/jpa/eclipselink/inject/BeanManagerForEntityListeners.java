@@ -311,5 +311,4 @@ public class BeanManagerForEntityListeners implements BeanManager {
         return null;
     }
 
-
 }

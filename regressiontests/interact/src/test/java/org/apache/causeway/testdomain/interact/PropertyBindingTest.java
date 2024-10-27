@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.model.interaction.Configuration_usingInter
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
-
-
 @SpringBootTest(
         classes = {
                 Configuration_headless.class,
@@ -137,7 +135,6 @@ class PropertyBindingTest extends InteractionTestAbstract {
                 uiPropBAutoComplete::getChoiceBoxUpdateEventCount,
                 ()->uiPropBAutoComplete.setSimulatedSearchArgument("H")); // select "Hello"
 
-
         // verify that no additional changes are triggered
         assertDoesNotIncrement(
                 uiPropBAutoComplete::getChoiceBoxUpdateEventCount,
@@ -145,6 +142,5 @@ class PropertyBindingTest extends InteractionTestAbstract {
 
         // TODO such a change might set or clear propA validation message once validation feedback is active
     }
-
 
 }

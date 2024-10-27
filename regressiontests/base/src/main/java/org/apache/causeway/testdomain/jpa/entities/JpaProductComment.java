@@ -62,5 +62,4 @@ public class JpaProductComment implements OnUpdatedByAndAt {
     @Property
     private @Getter @Setter Timestamp updatedAt;
 
-
 }

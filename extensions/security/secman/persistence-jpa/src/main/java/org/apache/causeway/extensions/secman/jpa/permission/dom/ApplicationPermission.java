@@ -108,14 +108,12 @@ import lombok.Setter;
 public class ApplicationPermission
     extends org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
 
-
     @Id
     @GeneratedValue
     private Long id;
 
     @Version
     private Long version;
-
 
     @ManyToOne
     @JoinColumn(name=Role.NAME, nullable=Role.NULLABLE)
@@ -127,30 +125,25 @@ public class ApplicationPermission
         role = _Casts.uncheckedCast(applicationRole);
     }
 
-
     @Column(nullable = Rule.NULLABLE)
     @Enumerated(EnumType.STRING)
     @Rule
     @Getter @Setter
     private ApplicationPermissionRule rule;
 
-
     @Column(nullable = Mode.NULLABLE) @Enumerated(EnumType.STRING)
     @Mode
     @Getter @Setter
     private ApplicationPermissionMode mode;
-
 
     @Column(nullable = FeatureSort.NULLABLE) @Enumerated(EnumType.STRING)
     @FeatureSort
     @Getter @Setter
     private ApplicationFeatureSort featureSort;
 
-
     @Column(nullable = FeatureFqn.NULLABLE)
     @FeatureFqn
     @Getter @Setter
     private String featureFqn;
-
 
 }

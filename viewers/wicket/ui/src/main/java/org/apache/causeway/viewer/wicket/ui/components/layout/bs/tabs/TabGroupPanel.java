@@ -123,5 +123,4 @@ implements HasDynamicallyVisibleContent {
                 .anyMatch(ITab::isVisible);
     }
 
-
 }

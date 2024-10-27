@@ -184,5 +184,4 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         return causewayConfiguration.getSchema().getCommand().getParamIdentifierStrategy() == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
     }
 
-
 }

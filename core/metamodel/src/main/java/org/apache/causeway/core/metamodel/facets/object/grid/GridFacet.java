@@ -39,5 +39,4 @@ public interface GridFacet extends Facet {
 
     Grid getGrid(@Nullable ManagedObject objectAdapter);
 
-
 }

@@ -106,7 +106,6 @@ public class ObjectManagerDefault implements ObjectManager {
         throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
     }
 
-
     // JUnit support
     public static ObjectManager forTesting(final MetaModelContext metaModelContext) {
         var objectManager = new ObjectManagerDefault(metaModelContext);

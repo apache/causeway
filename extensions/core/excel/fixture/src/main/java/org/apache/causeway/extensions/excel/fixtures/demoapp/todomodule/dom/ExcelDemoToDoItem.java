@@ -181,7 +181,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Getter @Setter
     private boolean complete;
 
-
     @javax.jdo.annotations.Column(allowsNull="true", scale=2)
     //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
     //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
@@ -198,7 +197,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     )
     @Getter @Setter
     private BigDecimal previousCost;
-
 
     @Getter @Setter
     @javax.jdo.annotations.Column(allowsNull="true", length=400)
@@ -218,12 +216,9 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @CollectionLayout(sortedBy = DependenciesComparator.class)
     private SortedSet<ExcelDemoToDoItem> dependencies = new TreeSet<>();
 
-
-
     // no getter/setter (therefore persisted but not part of Causeway' metamodel)
     private Double locationLatitude;
     private Double locationLongitude;
-
 
     public String validateDueBy(final LocalDate dueBy) {
         if (dueBy == null) {
@@ -231,9 +226,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         }
         return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
     }
-
-
-
 
     //region > completed (action)
 
@@ -292,9 +284,7 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     }
     //endregion
 
-
     //region > add (action)
-
 
     public ExcelDemoToDoItem add(
             final ExcelDemoToDoItem toDoItem) {
@@ -414,7 +404,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
                 .thenComparing(ExcelDemoToDoItem::getDueBy)
                 .thenComparing(ExcelDemoToDoItem::getDescription);
 
-
     @Override
     public int compareTo(final ExcelDemoToDoItem other) {
         return comparator.compare(this, other);
@@ -437,7 +426,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //        return new CalendarEvent(getDueBy().toDateTimeAtStartOfDay(), getCalendarName(), container.titleOf(this));
 //    }
 
-
 //    @Property(
 //            optionality = Optionality.OPTIONAL,
 //            editing = Editing.DISABLED
@@ -457,6 +445,5 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 //        locationLongitude = longitude;
 //        return this;
 //    }
-
 
 }

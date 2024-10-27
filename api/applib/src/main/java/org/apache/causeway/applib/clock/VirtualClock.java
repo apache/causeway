@@ -62,7 +62,6 @@ public interface VirtualClock extends Serializable {
      */
     Instant nowAsInstant();
 
-
     // -- FACTORIES
 
     /**
@@ -128,7 +127,6 @@ public interface VirtualClock extends Serializable {
         return nowAt(virtualNow.toDate());
     }
 
-
     /**
      * Always returns the time {@link Instant} as given by {@code frozenAt}
      */
@@ -179,7 +177,6 @@ public interface VirtualClock extends Serializable {
     static VirtualClock frozenAt(@NonNull final org.joda.time.DateTime frozenAt) {
         return frozenAt(frozenAt.toDate());
     }
-
 
     /**
      * Always returns the time {@link Instant} 2003/8/17 21:30:25 (UTC)
@@ -295,7 +292,6 @@ public interface VirtualClock extends Serializable {
     default XMLGregorianCalendar nowAsXmlGregorianCalendar() {
         return JavaSqlXMLGregorianCalendarMarshalling.toXMLGregorianCalendar(nowAsJavaSqlTimestamp());
     }
-
 
     /**
      * Returns the time as a Joda {@link org.joda.time.DateTime}, using the specified {@link ZoneId} timezone.

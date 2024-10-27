@@ -82,8 +82,6 @@ public class DeptHead extends Person implements Comparable<DeptHead>  {
         return departmentRepository.findAll();
     }
 
-
-
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public class changeName {
 
@@ -103,8 +101,6 @@ public class DeptHead extends Person implements Comparable<DeptHead>  {
             return null;
         }
     }
-
-
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
     public class changeDepartment {
@@ -133,6 +129,5 @@ public class DeptHead extends Person implements Comparable<DeptHead>  {
 
     @Inject @Transient
     DepartmentRepository departmentRepository;
-
 
 }

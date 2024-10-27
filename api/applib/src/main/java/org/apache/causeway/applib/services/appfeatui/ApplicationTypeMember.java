@@ -82,7 +82,4 @@ public abstract class ApplicationTypeMember extends ApplicationFeatureViewModel 
         return super.getMemberName();
     }
 
-
 }
-
-

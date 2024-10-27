@@ -29,8 +29,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 
-
-
 public class ListeningMarkupComponent extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;
@@ -53,7 +51,6 @@ public class ListeningMarkupComponent extends MarkupComponent {
         super(id, model, Options.defaults());
         this.observing = null;
     }
-
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){

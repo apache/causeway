@@ -63,13 +63,11 @@ public class ApplicationFeatureMenu {
     public static abstract class ActionDomainEvent
     extends CausewayModuleApplib.ActionDomainEvent<ApplicationFeatureMenu> {}
 
-
     // -- ICON NAME
 
     @ObjectSupport public String iconName() {
         return "applicationFeature";
     }
-
 
     // -- ALL PACKAGES
 
@@ -86,7 +84,6 @@ public class ApplicationFeatureMenu {
         return asViewModels(featureRepository.allNamespaces(), ApplicationNamespace.class);
     }
 
-
     // -- ALL TYPES
 
     public static class AllTypesDomainEvent extends ActionDomainEvent {}
@@ -101,7 +98,6 @@ public class ApplicationFeatureMenu {
     public List<ApplicationType> allTypes() {
         return asViewModels(featureRepository.allTypes(), ApplicationType.class);
     }
-
 
     // -- ALL ACTIONS
 
@@ -118,7 +114,6 @@ public class ApplicationFeatureMenu {
         return asViewModels(featureRepository.allActions(), ApplicationTypeAction.class);
     }
 
-
     // -- ALL PROPERTIES
 
     public static class AllPropertiesDomainEvent extends ActionDomainEvent {}
@@ -133,7 +128,6 @@ public class ApplicationFeatureMenu {
     public List<ApplicationTypeProperty> allProperties() {
         return asViewModels(featureRepository.allProperties(), ApplicationTypeProperty.class);
     }
-
 
     // -- ALL COLLECTIONS
 
@@ -167,6 +161,5 @@ public class ApplicationFeatureMenu {
     @Inject ApplicationFeatureRepository featureRepository;
     @Inject RepositoryService repository;
     @Inject FactoryService factory;
-
 
 }

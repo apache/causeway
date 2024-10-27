@@ -157,5 +157,4 @@ Comparable<ApplicationFeature> {
         return toString.toString(this);
     }
 
-
 }

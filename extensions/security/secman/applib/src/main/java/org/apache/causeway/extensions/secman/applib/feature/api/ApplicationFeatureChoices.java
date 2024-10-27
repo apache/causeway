@@ -107,7 +107,6 @@ public class ApplicationFeatureChoices {
         return featureId.getSort().isMember();
     }
 
-
     // -- FEATURE VIEW MODEL WRAPPING A VALUE TYPE
 
     /**

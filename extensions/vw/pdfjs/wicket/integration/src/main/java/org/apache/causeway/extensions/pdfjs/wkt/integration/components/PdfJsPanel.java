@@ -31,7 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 
-
 /**
  * A panel for rendering PDF documents inline in the page
  */

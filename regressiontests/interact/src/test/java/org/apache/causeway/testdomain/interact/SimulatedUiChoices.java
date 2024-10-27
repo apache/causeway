@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
 
-
 public class SimulatedUiChoices extends HasValueValidation {
 
     private final Bindable<Can<ManagedObject>> choiceBox = _Bindables.empty();

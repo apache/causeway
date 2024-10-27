@@ -59,5 +59,4 @@ public class ProperMemberSupport_collection2 {
         return null;
     }
 
-
 }

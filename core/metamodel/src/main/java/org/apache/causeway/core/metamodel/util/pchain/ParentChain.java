@@ -75,5 +75,4 @@ public interface ParentChain {
         return chain.stream().skip(1);
     }
 
-
 }

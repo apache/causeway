@@ -79,5 +79,4 @@ public class Jsr303FacetFactoryProcessProperty {
         facetFactory.process(firstNameMethod, mockMethodRemover, mockFacetHolder);
     }
 
-
 }

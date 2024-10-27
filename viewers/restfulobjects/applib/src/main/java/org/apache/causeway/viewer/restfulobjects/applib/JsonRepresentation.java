@@ -58,8 +58,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.util.JsonNodeUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 
-
-
 /**
  * A wrapper around {@link JsonNode} that provides some additional helper
  * methods.
@@ -309,7 +307,6 @@ public class JsonRepresentation {
         return node.numberValue();
     }
 
-
     // ///////////////////////////////////////////////////////////////////////
     // isIntegralNumber, getIntegralNumber, asIntegralNumber
     // ///////////////////////////////////////////////////////////////////////
@@ -331,7 +328,6 @@ public class JsonRepresentation {
     private boolean isIntegralNumber(final JsonNode node) {
         return !representsNull(node) && node.isValueNode() && node.isIntegralNumber();
     }
-
 
     // ///////////////////////////////////////////////////////////////////////
     // getDate, asDate
@@ -515,7 +511,6 @@ public class JsonRepresentation {
         return node.shortValue();
     }
 
-
     // ///////////////////////////////////////////////////////////////////////
     // getChar, asChar
     // ///////////////////////////////////////////////////////////////////////
@@ -549,7 +544,6 @@ public class JsonRepresentation {
         }
         return textValue.charAt(0);
     }
-
 
     // ///////////////////////////////////////////////////////////////////////
     // isInt, getInt, asInt
@@ -592,7 +586,6 @@ public class JsonRepresentation {
         }
         return node.intValue();
     }
-
 
     // ///////////////////////////////////////////////////////////////////////
     // isLong, getLong, asLong
@@ -668,7 +661,6 @@ public class JsonRepresentation {
         }
         return node.floatValue();
     }
-
 
     // ///////////////////////////////////////////////////////////////////////
     // isDecimal, isDouble, getDouble, asDouble
@@ -921,7 +913,6 @@ public class JsonRepresentation {
         }
         throw new IllegalArgumentException(formatExMsg(path, "is not a bigdecimal, is not any other numeric, is not text parseable as a bigdecimal"));
     }
-
 
     // ///////////////////////////////////////////////////////////////////////
     // getString, isString, asString
@@ -1260,7 +1251,6 @@ public class JsonRepresentation {
                 .map(typedTransformer);
     }
 
-
     //[ahuber] replaced by streamArrayElements
     //    public Iterable<JsonRepresentation> arrayIterable() {
     //        return arrayIterable(JsonRepresentation.class);
@@ -1594,13 +1584,11 @@ public class JsonRepresentation {
         }
     }
 
-
     public Stream<Map.Entry<String, JsonRepresentation>> streamMapEntries() {
         ensureIsAMap();
         return _NullSafe.stream(jsonNode.fields())
                 .map(MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
     }
-
 
     // [ahuber] replaced by streamMapEntries
     //	public Iterable<Map.Entry<String, JsonRepresentation>> mapIterable() {
@@ -1761,7 +1749,6 @@ public class JsonRepresentation {
         return buf.toString();
     }
 
-
     // -- OBJECT CONTRACT (NO SEMANTIC EQUALITY) ... use toString() to check for semantic equality
 
     @Override
@@ -1789,13 +1776,9 @@ public class JsonRepresentation {
         return true;
     }
 
-
     @Override
     public String toString() {
         return jsonNode.toString();
     }
 
-
-
 }
-

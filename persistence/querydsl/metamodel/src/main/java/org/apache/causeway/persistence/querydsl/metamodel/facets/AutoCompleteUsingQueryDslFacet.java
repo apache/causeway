@@ -47,7 +47,6 @@ import com.querydsl.core.types.dsl.PathBuilder;
 
 public class AutoCompleteUsingQueryDslFacet extends FacetAbstract implements AutoCompleteFacet {
 
-
     private final Class<?> entity;
 
     private final Optional<Object> additionalPredicateRepositoryIfAny;

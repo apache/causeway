@@ -45,7 +45,6 @@ import org.apache.causeway.applib.mixins.updates.OnUpdatedBy;
  */
 public interface HasUsername {
 
-
     @Property(
             editing = Editing.DISABLED,
             maxLength = Username.MAX_LENGTH
@@ -67,6 +66,5 @@ public interface HasUsername {
      */
     @Username
     String getUsername();
-
 
 }

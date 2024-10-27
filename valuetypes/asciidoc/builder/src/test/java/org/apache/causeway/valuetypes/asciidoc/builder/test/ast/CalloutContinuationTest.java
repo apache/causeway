@@ -39,7 +39,6 @@ class CalloutContinuationTest extends AbstractAsciiDocWriterTest {
         super.debugEnabled = false;
     }
 
-
     //<.> fn-1
     //+
     //--
@@ -66,7 +65,6 @@ class CalloutContinuationTest extends AbstractAsciiDocWriterTest {
         var calloutLI = AsciiDocFactory.callout(callouts, "fn-1");
         var callout = AsciiDocFactory.openBlock(calloutLI);
 
-
         var note = AsciiDocFactory.warning(callout);
         AsciiDocFactory.block(note, "warn-1");
         AsciiDocFactory.block(note, "warn-2");
@@ -85,7 +83,4 @@ class CalloutContinuationTest extends AbstractAsciiDocWriterTest {
         assertDocumentIsCorrectlyWritten(doc);
     }
 
-
-
 }
-
