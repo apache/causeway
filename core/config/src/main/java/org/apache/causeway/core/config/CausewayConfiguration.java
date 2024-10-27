@@ -2930,7 +2930,7 @@ public class CausewayConfiguration {
 
             /**
              * Whether actions, that on click will show a dialog, 
-             * should be indicated by a trailing ellipsis on the actions's label.
+             * should be indicated by a trailing ellipsis on the action's label.
              * <p> 
              * Applies to both, action buttons and action menu items. 
              */
