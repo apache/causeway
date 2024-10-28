@@ -2460,7 +2460,7 @@ identified
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.20.0</version>    <!--bumped-->
+                    <version>3.21.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <!-- Packaging: source jars of main and test code -->
