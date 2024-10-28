@@ -108,7 +108,7 @@ identified
 
         <cucumber.version>7.20.1</cucumber.version>
 
-        <datanucleus-api-jdo.version>6.0.3</datanucleus-api-jdo.version>
+        <datanucleus-api-jdo.version>6.0.4</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
         <datanucleus-core.version>6.0.8</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
