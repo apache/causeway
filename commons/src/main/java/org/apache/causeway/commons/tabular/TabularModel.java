@@ -18,10 +18,17 @@
  */
 package org.apache.causeway.commons.tabular;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * General purpose tabular data structure,
@@ -49,13 +56,60 @@ public record TabularModel(
             String columnDescription) {
     }
 
-    //TODO[CAUSEWAY-3825] this is nothing more than a stub yet
+    /**
+     * A cell can have no value {@code cardinality=0},
+     * one value {@code cardinality=1},
+     * or multiple values {@code cardinality>1}.
+     * <p>
+     * For the plural case, no pojo is provided.
+     * Instead a {@link Stream} of literals (labels) is provided.
+     */
     public record TabularCell(
-            Can<Object> pojos,
-            Supplier<Stream<String>> labelSupplier) {
+            int cardinality,
+            /**
+             * When cardinality is 0 then must be Either.right,
+             * otherwise no strict policy is enforced.<br>
+             * E.g. a TabularCell can decide to provide a label instead of a pojo,
+             * even though cardinality is 1.
+             */
+            @NonNull Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
+
+        // -- FACTORIES
+
+        private static TabularCell EMPTY = new TabularCell(0, Either.right(null));
+        public static TabularCell empty() { return EMPTY; }
+
+        public static TabularCell single(@Nullable final Object value) {
+            return value==null
+                    ? EMPTY
+                    : new TabularCell(1, Either.left(value));
+        }
+        public static TabularCell labeled(final int cardinality, @NonNull final Supplier<Stream<String>> labelSupplier) {
+            Objects.requireNonNull(labelSupplier);
+            return new TabularCell(cardinality, Either.right(labelSupplier));
+        }
+
+        // -- CANONICAL CONSTRUCTOR
+
+        public TabularCell(
+                final int cardinality,
+                @NonNull final Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
+            Objects.requireNonNull(eitherValueOrLabelSupplier);
+            if(cardinality<0) throw _Exceptions.illegalArgument("cardinality cannot be negative: %d", cardinality);
+            if(cardinality==0) {
+                _Assert.assertTrue(eitherValueOrLabelSupplier.isRight(), ()->
+                        "cannot provide a value when cardinality is zero");
+            }
+            this.cardinality = cardinality;
+            this.eitherValueOrLabelSupplier = eitherValueOrLabelSupplier;
+        }
+
+        // -- LABELS
 
         public Stream<String> labels() {
-            return labelSupplier.get();
+            return eitherValueOrLabelSupplier.fold(
+                    left->Stream.<String>empty(),
+                    right->right.get());
         }
     }
 

@@ -44,24 +44,22 @@ record ExcelCellWriter(
      */
     int setCellValue(
             final TabularColumn column,
-            final TabularCell cellValue,
+            final TabularCell tabularCell,
             final Cell cell,
             final CellStyleProvider cellStyleProvider) {
 
-        final var cellElements = cellValue.pojos();
-
-        if(cellElements.isEmpty()) {
+        if(tabularCell.cardinality() == 0) {
             cell.setBlank();
             return 1;
         }
 
-        if(cellElements.isCardinalityMultiple()) {
-            String joinedElementsLiteral = cellValue.labels()
+        if(tabularCell.eitherValueOrLabelSupplier().isRight()) {
+            String joinedElementsLiteral = tabularCell.labels()
                 .limit(maxCellElements)
                 .collect(Collectors.joining(POI_LINE_DELIMITER));
 
             // if cardinality exceeds threshold, truncate with 'has more' label at the end
-            final int overflow = cellElements.size() - maxCellElements;
+            final int overflow = tabularCell.cardinality() - maxCellElements;
             if(overflow>0) {
                 joinedElementsLiteral += POI_LINE_DELIMITER + String.format("(has %d more)", overflow);
             }
@@ -69,15 +67,21 @@ record ExcelCellWriter(
             cell.setCellStyle(cellStyleProvider.multilineStyle());
             return overflow>0
                     ? maxCellElements + 1
-                    : cellElements.size();
+                    : tabularCell.cardinality();
         }
 
-        var valueAsObj = cellElements.getFirstElseFail();
+        final var valueAsObj = tabularCell.eitherValueOrLabelSupplier().leftIfAny();
 
-        // event though filtered for null by caller, keep this as a guard
-        // null
+        // null guard
         if(valueAsObj == null) {
             cell.setBlank();
+            return 1;
+        }
+
+        // String
+        if(valueAsObj instanceof CharSequence) {
+            CharSequence value = (CharSequence) valueAsObj;
+            cell.setCellValue(value.toString());
             return 1;
         }
 
@@ -155,7 +159,8 @@ record ExcelCellWriter(
             return 1;
         }
 
-        final String objectAsStr = cellValue.labels().findFirst().orElseGet(valueAsObj::toString);
+        // if all else fails fallback to value's toString method
+        final String objectAsStr = tabularCell.labels().findFirst().orElseGet(valueAsObj::toString);
         cell.setCellValue(objectAsStr);
         return 1;
     }

@@ -63,14 +63,16 @@ class TabularUtil {
             final DataRow dataRow,
             final InteractionInitiatedBy interactionInitiatedBy) {
         var cells = new ArrayList<TabularModel.TabularCell>(dataColumns.size());
-        dataColumns.forEach(dc->{
-            var cellElements = dataRow.getCellElements(dc, interactionInitiatedBy);
-            var cellPojos = cellElements
-                    .map(ManagedObject::getPojo);
-            cells.add(new TabularModel.TabularCell(
-                    cellPojos,
-                    ()->cellElements
-                        .map(ManagedObject::getTitle).stream()));
+        dataColumns.forEach(dataColumn->{
+            var cellElements = dataRow.getCellElements(dataColumn, interactionInitiatedBy);
+            final int cardinality = cellElements.size();
+            final boolean forceUseTitle = !dataColumn.getMetamodel().getElementType().isValue();
+
+            var tabularCell = cardinality==1
+                    && !forceUseTitle
+                ? TabularModel.TabularCell.single(cellElements.getFirstElseFail().getPojo())
+                : TabularModel.TabularCell.labeled(cardinality, ()->cellElements.map(ManagedObject::getTitle).stream());
+            cells.add(tabularCell);
         });
 
         return new TabularModel.TabularRow(Can.ofCollection(cells));
