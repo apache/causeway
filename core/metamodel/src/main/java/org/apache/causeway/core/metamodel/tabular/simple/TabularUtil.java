@@ -16,59 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.excel.exporter;
+package org.apache.causeway.core.metamodel.tabular.simple;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
-
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.tabular.TabularModel;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
-import org.apache.causeway.core.metamodel.tabular.simple.DataColumn;
-import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
-@Component
-public class CollectionContentsAsExcelExporter
-implements CollectionContentsExporter {
+import lombok.experimental.UtilityClass;
 
-    @Override
-    public void createExport(final DataTable dataTable, final File tempFile,
-            final @Nullable CollectionContentsExporter.AccessMode accessMode) {
-        new ExcelFileWriter()
-            .export(tabularModel(dataTable, accessMode), tempFile);
-    }
+/**
+ * Converts a {@link DataTable} to a {@link TabularModel}.
+ */
+@UtilityClass
+class TabularUtil {
 
-    @Override
-    public CommonMimeType getMimeType() {
-        return CommonMimeType.XLSX;
-    }
-
-    @Override
-    public String getTitleLabel() {
-        return "Excel Download";
-    }
-
-    @Override
-    public String getCssClass() {
-        return "fa-solid fa-file-excel";
-    }
-
-    @Override
-    public int orderOfAppearanceInUiDropdown() {
-        return 2500;
-    }
-
-    // -- HELPER
-
-    private TabularModel tabularModel(
+    TabularModel toTabularModel(
             final DataTable dataTable,
             final CollectionContentsExporter.AccessMode accessMode) {
         var interactionInitiatedBy = switch(accessMode) {
@@ -77,12 +44,14 @@ implements CollectionContentsExporter {
         };
 
         var columns = dataTable.getDataColumns()
-                .map(IndexedFunction.zeroBased(this::tabularColumn));
+                .map(IndexedFunction.zeroBased(TabularUtil::tabularColumn));
         var rows = dataTable.getDataRows()
                 .map(dr->tabularRow(dataTable.getDataColumns(), col->dr.getCellElements(col, interactionInitiatedBy)));
         var sheet = new TabularModel.TabularSheet(dataTable.getTableFriendlyName(), columns, rows);
         return new TabularModel(Can.of(sheet));
     }
+
+    // -- HELPER
 
     private TabularModel.TabularColumn tabularColumn(final int index, final DataColumn dc) {
         return new TabularModel.TabularColumn(
@@ -95,7 +64,7 @@ implements CollectionContentsExporter {
             final Can<DataColumn> dataColumns,
             final Function<DataColumn, Can<ManagedObject>> cellElementProvider) {
         var cells = new ArrayList<TabularModel.TabularCell>(dataColumns.size());
-        dataColumns.forEach(null);
+        //dataColumns.forEach(null); //TODO[CAUSEWAY-3825] implement!
         return new TabularModel.TabularRow(Can.ofCollection(cells));
     }
 

@@ -37,6 +37,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.tabular.TabularModel;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -279,8 +280,11 @@ public class DataTable implements Serializable {
 
     // -- EXPORT
 
+    public TabularModel toTabularModel(final CollectionContentsExporter.AccessMode accessMode) {
+        return TabularUtil.toTabularModel(this, accessMode);
+    }
+
     /**
-     *
      * Typical use-case:<br>
      * <pre>{@code
      * @Inject CollectionContentsAsExcelExporter excelExporter;
