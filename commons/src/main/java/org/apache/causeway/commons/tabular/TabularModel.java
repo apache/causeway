@@ -76,7 +76,7 @@ public record TabularModel(
 
         // -- FACTORIES
 
-        private static TabularCell EMPTY = new TabularCell(0, Either.right(null));
+        private static TabularCell EMPTY = new TabularCell(0, Either.right(Stream::empty));
         public static TabularCell empty() { return EMPTY; }
 
         public static TabularCell single(@Nullable final Object value) {
