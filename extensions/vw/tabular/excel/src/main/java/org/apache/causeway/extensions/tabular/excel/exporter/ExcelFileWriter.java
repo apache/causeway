@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.tabular.excel.exporter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -31,22 +32,42 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.tabular.TabularModel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
+/**
+ * Utility to write a {@link TabularModel} to file.
+ */
 public record ExcelFileWriter() {
 
     @SneakyThrows
-    void write(final TabularModel tabular, final File tempFile) {
+    public void write(final TabularModel tabular, final File tempFile) {
         try(final Workbook wb = new XSSFWorkbook()) {
             tabular.sheets().forEach(sheet->writeSheet(wb, sheet));
             try(var fos = new FileOutputStream(tempFile)) {
                 wb.write(fos);
             }
+        }
+    }
+
+    /**
+     * Writes given tabular data to a {@link Blob}, using given name as blob name.
+     */
+    @SneakyThrows
+    public Blob writeToBlob(final String name, final TabularModel tabular) {
+        var tempFile = File.createTempFile(this.getClass().getCanonicalName(), name);
+        try {
+            write(tabular, tempFile);
+            return Blob.of(name, CommonMimeType.XLSX, DataSource.ofFile(tempFile).bytes());
+        } finally {
+            Files.deleteIfExists(tempFile.toPath()); // cleanup
         }
     }
 

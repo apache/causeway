@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.tabular.simple;
 
-import java.util.ArrayList;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.tabular.TabularModel;
@@ -62,8 +60,7 @@ class TabularUtil {
             final Can<DataColumn> dataColumns,
             final DataRow dataRow,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        var cells = new ArrayList<TabularModel.TabularCell>(dataColumns.size());
-        dataColumns.forEach(dataColumn->{
+        var cells = dataColumns.map(dataColumn->{
             var cellElements = dataRow.getCellElements(dataColumn, interactionInitiatedBy);
             final int cardinality = cellElements.size();
             final boolean forceUseTitle = !dataColumn.getMetamodel().getElementType().isValue();
@@ -72,8 +69,9 @@ class TabularUtil {
                     && !forceUseTitle
                 ? TabularModel.TabularCell.single(cellElements.getFirstElseFail().getPojo())
                 : TabularModel.TabularCell.labeled(cardinality, ()->cellElements.map(ManagedObject::getTitle).stream());
-            cells.add(tabularCell);
-        });
+            return tabularCell;
+        })
+        .toList();
 
         return new TabularModel.TabularRow(Can.ofCollection(cells));
     }
