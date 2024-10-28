@@ -110,7 +110,7 @@ identified
 
         <datanucleus-api-jdo.version>6.0.4</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.1</datanucleus-api-jpa.version>
-        <datanucleus-core.version>6.0.8</datanucleus-core.version>
+        <datanucleus-core.version>6.0.9</datanucleus-core.version>
         <datanucleus-jdo-api.version>3.2.1</datanucleus-jdo-api.version>
         <datanucleus-jdo-query.version>6.0.1</datanucleus-jdo-query.version>
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
