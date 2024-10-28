@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.tabular.simple;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
@@ -29,12 +28,12 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.experimental.UtilityClass;
 
-/**
- * Converts a {@link DataTable} to a {@link TabularModel}.
- */
 @UtilityClass
 class TabularUtil {
 
+    /**
+     * Converts a {@link DataTable} to a {@link TabularModel.TabularSheet}.
+     */
     TabularModel.TabularSheet toTabularSheet(
             final DataTable dataTable,
             final DataTable.AccessMode accessMode) {
@@ -46,7 +45,7 @@ class TabularUtil {
         var columns = dataTable.getDataColumns()
                 .map(IndexedFunction.zeroBased(TabularUtil::tabularColumn));
         var rows = dataTable.getDataRows()
-                .map(dr->tabularRow(dataTable.getDataColumns(), col->dr.getCellElements(col, interactionInitiatedBy)));
+                .map(dr->tabularRow(dataTable.getDataColumns(), dr, interactionInitiatedBy));
         return new TabularModel.TabularSheet(dataTable.getTableFriendlyName(), columns, rows);
     }
 
@@ -61,9 +60,19 @@ class TabularUtil {
 
     private TabularModel.TabularRow tabularRow(
             final Can<DataColumn> dataColumns,
-            final Function<DataColumn, Can<ManagedObject>> cellElementProvider) {
+            final DataRow dataRow,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         var cells = new ArrayList<TabularModel.TabularCell>(dataColumns.size());
-        //dataColumns.forEach(null); //TODO[CAUSEWAY-3825] implement!
+        dataColumns.forEach(dc->{
+            var cellElements = dataRow.getCellElements(dc, interactionInitiatedBy);
+            var cellPojos = cellElements
+                    .map(ManagedObject::getPojo);
+            cells.add(new TabularModel.TabularCell(
+                    cellPojos,
+                    ()->cellElements
+                        .map(ManagedObject::getTitle).stream()));
+        });
+
         return new TabularModel.TabularRow(Can.ofCollection(cells));
     }
 
