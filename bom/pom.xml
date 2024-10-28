@@ -1624,7 +1624,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			<dependency>
 				<groupId>com.fasterxml.woodstox</groupId>
 				<artifactId>woodstox-core</artifactId>
-				<version>7.0.0</version>
+				<version>7.1.0</version>
 			</dependency>
 			<dependency>
 	            <groupId>com.sun.xml.bind</groupId>
