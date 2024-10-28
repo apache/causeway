@@ -35,9 +35,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class TabularUtil {
 
-    TabularModel toTabularModel(
+    TabularModel.TabularSheet toTabularSheet(
             final DataTable dataTable,
-            final CollectionContentsExporter.AccessMode accessMode) {
+            final DataTable.AccessMode accessMode) {
         var interactionInitiatedBy = switch(accessMode) {
             case PASS_THROUGH -> InteractionInitiatedBy.PASS_THROUGH;
             default -> InteractionInitiatedBy.USER;
@@ -47,8 +47,7 @@ class TabularUtil {
                 .map(IndexedFunction.zeroBased(TabularUtil::tabularColumn));
         var rows = dataTable.getDataRows()
                 .map(dr->tabularRow(dataTable.getDataColumns(), col->dr.getCellElements(col, interactionInitiatedBy)));
-        var sheet = new TabularModel.TabularSheet(dataTable.getTableFriendlyName(), columns, rows);
-        return new TabularModel(Can.of(sheet));
+        return new TabularModel.TabularSheet(dataTable.getTableFriendlyName(), columns, rows);
     }
 
     // -- HELPER

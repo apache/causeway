@@ -41,7 +41,7 @@ import lombok.SneakyThrows;
 public record ExcelFileWriter() {
 
     @SneakyThrows
-    void export(final TabularModel tabular, final File tempFile) {
+    void write(final TabularModel tabular, final File tempFile) {
         try(final Workbook wb = new XSSFWorkbook()) {
             tabular.sheets().forEach(sheet->writeSheet(wb, sheet));
             try(var fos = new FileOutputStream(tempFile)) {

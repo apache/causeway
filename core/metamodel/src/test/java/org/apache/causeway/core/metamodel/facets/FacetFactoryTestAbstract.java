@@ -56,66 +56,61 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 public abstract class FacetFactoryTestAbstract
 implements HasMetaModelContext {
 
     // -- SCENARIO BUILDER
 
-    @lombok.Value @Builder
-    @Getter @Accessors(fluent=true)
-    public static class ActionScenario {
-        final Class<?> declaringClass;
-        final String actionName;
-        @Builder.Default
-        final Optional<Class<?>> mixinClass = Optional.empty();
+    @Builder
+    public record ActionScenario(
+            Class<?> declaringClass,
+            String actionName,
+            Optional<Class<?>> mixinClass) {
         public static ActionScenarioBuilder builder(final Class<?> declaringClass, final String actionName) {
             return new ActionScenario.ActionScenarioBuilder()
+                    .mixinClass(Optional.empty())
                     .declaringClass(declaringClass)
                     .actionName(actionName);
         }
     }
 
-    @lombok.Value @Builder
-    @Getter @Accessors(fluent=true)
-    public static class ParameterScenario {
-        final Class<?> declaringClass;
-        final String actionName;
-        final int paramIndex;
-        @Builder.Default
-        final Optional<Class<?>> mixinClass = Optional.empty();
+    @Builder
+    public record ParameterScenario(
+            Class<?> declaringClass,
+            String actionName,
+            int paramIndex,
+            Optional<Class<?>> mixinClass) {
         public static ParameterScenarioBuilder builder(final Class<?> declaringClass, final String actionName, final int paramIndex) {
             return new ParameterScenario.ParameterScenarioBuilder()
+                    .mixinClass(Optional.empty())
                     .declaringClass(declaringClass)
                     .actionName(actionName)
                     .paramIndex(paramIndex);
         }
     }
 
-    @lombok.Value @Builder
-    @Getter @Accessors(fluent=true)
-    public static class PropertyScenario {
-        final Class<?> declaringClass;
-        final String propertyName;
-        @Builder.Default
-        final Optional<Class<?>> mixinClass = Optional.empty();
+    @Builder
+    public record PropertyScenario(
+            Class<?> declaringClass,
+            String propertyName,
+            Optional<Class<?>> mixinClass) {
         public static PropertyScenarioBuilder builder(final Class<?> declaringClass, final String propertyName) {
             return new PropertyScenario.PropertyScenarioBuilder()
+                    .mixinClass(Optional.empty())
                     .declaringClass(declaringClass)
                     .propertyName(propertyName);
         }
     }
 
-    @lombok.Value @Builder
-    @Getter @Accessors(fluent=true)
-    public static class CollectionScenario {
-        final Class<?> declaringClass;
-        final String collectionName;
-        @Builder.Default
-        final Optional<Class<?>> mixinClass = Optional.empty();
+    @Builder
+    public record CollectionScenario(
+            Class<?> declaringClass,
+            String collectionName,
+            Optional<Class<?>> mixinClass) {
         public static CollectionScenarioBuilder builder(final Class<?> declaringClass, final String collectionName) {
             return new CollectionScenario.CollectionScenarioBuilder()
+                    .mixinClass(Optional.empty())
                     .declaringClass(declaringClass)
                     .collectionName(collectionName);
         }

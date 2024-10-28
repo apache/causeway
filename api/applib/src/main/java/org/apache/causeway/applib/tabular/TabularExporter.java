@@ -16,78 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.tabular.simple;
+package org.apache.causeway.applib.tabular;
 
 import java.io.File;
 import java.nio.file.Files;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.DataSource;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.commons.tabular.TabularModel;
 
 import lombok.SneakyThrows;
 
 /**
  * SPI to provide file export to table views.
  *
- * @since 2.0 {@index}
+ * @since 3.2 {@index}
  */
-public interface CollectionContentsExporter {
-
-    public enum AccessMode {
-        /**
-         * must be authorized, with transactions, with publishing, with domain events
-         */
-        USER,
-        /**
-         * always authorized, no transactions, no publishing, no domain events;
-         */
-        PASS_THROUGH;
-        /**
-         * @see #USER
-         */
-        public boolean isUser() { return this==USER; }
-        /**
-         * @see #PASS_THROUGH
-         */
-        public boolean isPassThrough() { return this==PASS_THROUGH; }
-    }
+public interface TabularExporter {
 
     /**
      * Implementing exporters need to write given tabular data from
-     * {@link DataTable} into the {@link File tempFile},
+     * {@link org.apache.causeway.commons.tabular.TabularModel.TabularSheet} into the {@link File exportFile},
      * which is provided by the framework for the duration of a single request cycle.
      *
      * @param dataTable data model for the table
-     * @param tempFile destination, this exporter writes its data to
+     * @param exportFile destination, this exporter writes its data to
      */
-    default void createExport(final DataTable dataTable, final File tempFile) {
-        createExport(dataTable, tempFile, AccessMode.USER);
-    }
-
-    void createExport(DataTable dataTable, File tempFile, @Nullable AccessMode accessMode);
-
-    /**
-     * Writes given tabular data into a {@link Blob} of given name.
-     *
-     */
-    default Blob exportToBlob(final DataTable dataTable, final String name) {
-        return exportToBlob(dataTable, name, AccessMode.USER);
-    }
-
-    @SneakyThrows
-    default Blob exportToBlob(final DataTable dataTable, final String name, final @Nullable AccessMode accessMode) {
-        var tempFile = File.createTempFile(this.getClass().getCanonicalName(), name);
-        try {
-            createExport(dataTable, tempFile, accessMode);
-            return Blob.of(name, getMimeType(), DataSource.ofFile(tempFile).bytes());
-        } finally {
-            Files.deleteIfExists(tempFile.toPath()); // cleanup
-        }
-    }
+    void export(TabularModel.TabularSheet tabularSheet, File exportFile);
 
     CommonMimeType getMimeType();
 
@@ -115,9 +71,24 @@ public interface CollectionContentsExporter {
     int orderOfAppearanceInUiDropdown();
 
     /**
-     * Whether this exporter applies to given {@code objectType}.
-     * If <code>false</code>, this exporter is not provided to the end user.
+     * Whether this exporter applies to given {@code elementType}.
+     * If <code>false</code>, this exporter is not provided to end users.
      */
-    default boolean appliesTo(final ObjectSpecification objectType) { return true; }
+    default boolean appliesTo(final Class<?> elementType) { return true; }
+
+    /**
+     * Writes given tabular data to a {@link Blob}, using given sheet's name as blob name.
+     */
+    @SneakyThrows
+    default Blob exportToBlob(final TabularModel.TabularSheet tabularSheet) {
+        var tempFile = File.createTempFile(this.getClass().getCanonicalName(), tabularSheet.sheetName());
+        try {
+            export(tabularSheet, tempFile);
+            return Blob.of(tabularSheet.sheetName(), getMimeType(), DataSource.ofFile(tempFile).bytes());
+        } finally {
+            Files.deleteIfExists(tempFile.toPath()); // cleanup
+        }
+    }
+
 
 }

@@ -36,13 +36,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.tabular.TabularExporter;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
-import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -118,7 +118,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     private @Inject ValueSemanticsResolver valueSemanticsResolver;
-    private @Autowired(required = false) List<CollectionContentsExporter> collectionContentsExporters;
+    private @Autowired(required = false) List<TabularExporter> tabularExporters;
 
     private final List<ComponentFactory> componentFactoriesPluggedIn;
     public ComponentFactoryRegistrarDefault(final List<ComponentFactory> componentFactoriesPluggedIn) {
@@ -205,7 +205,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
         componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
 
-        _NullSafe.stream(collectionContentsExporters)
+        _NullSafe.stream(tabularExporters)
             .map(CollectionContentsAsExportFactory::new)
             .forEach(componentFactories::add);
 

@@ -33,6 +33,10 @@ import org.apache.causeway.commons.collections.Can;
 public record TabularModel(
         Can<TabularSheet> sheets) {
 
+    public TabularModel(final TabularSheet sheet) {
+        this(Can.of(sheet));
+    }
+
     public record TabularSheet(
             String sheetName,
             Can<TabularColumn> columns,
