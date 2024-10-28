@@ -26,8 +26,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.file.Files;
 
+import org.apache.causeway.applib.tabular.TabularExporter;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
@@ -48,11 +49,11 @@ public class CollectionContentsAsExportFactory
 extends ComponentFactoryAbstract
 implements CollectionContentsAsFactory {
 
-    private final CollectionContentsExporter collectionContentsExporter;
+    private final TabularExporter tabularExporter;
 
-    public CollectionContentsAsExportFactory(final CollectionContentsExporter collectionContentsExporter) {
+    public CollectionContentsAsExportFactory(final TabularExporter collectionContentsExporter) {
         super(UiComponentType.COLLECTION_CONTENTS_EXPORT, collectionContentsExporter.getClass().getName(), DownloadLink.class);
-        this.collectionContentsExporter = collectionContentsExporter;
+        this.tabularExporter = collectionContentsExporter;
     }
 
     @Override
@@ -61,7 +62,7 @@ implements CollectionContentsAsFactory {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         var collectionModel = (EntityCollectionModel) model;
-        return collectionContentsExporter.appliesTo(collectionModel.getElementType())
+        return tabularExporter.appliesTo(collectionModel.getElementType().getCorrespondingClass())
                 ? ApplicationAdvice.APPLIES
                 : ApplicationAdvice.DOES_NOT_APPLY;
     }
@@ -69,7 +70,7 @@ implements CollectionContentsAsFactory {
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         var collectionModel = (EntityCollectionModel) model;
-        var mimeType = collectionContentsExporter.getMimeType();
+        var mimeType = tabularExporter.getMimeType();
         var ext = mimeType.getProposedFileExtensions().getFirstElseFail();
         var fileName = collectionModel.getName().replaceAll(" ", "") + "." + ext;
 
@@ -81,17 +82,17 @@ implements CollectionContentsAsFactory {
 
     @Override
     public IModel<String> getTitleLabel() {
-        return Model.of(collectionContentsExporter.getTitleLabel());
+        return Model.of(tabularExporter.getTitleLabel());
     }
 
     @Override
     public IModel<String> getCssClass() {
-        return Model.of(collectionContentsExporter.getCssClass());
+        return Model.of(tabularExporter.getCssClass());
     }
 
     @Override
     public int orderOfAppearanceInUiDropdown() {
-        return collectionContentsExporter.orderOfAppearanceInUiDropdown();
+        return tabularExporter.orderOfAppearanceInUiDropdown();
     }
 
     // --
@@ -112,7 +113,7 @@ implements CollectionContentsAsFactory {
         public File getObject() {
             var tempFile = File.createTempFile(CollectionContentsAsExportFactory.class.getCanonicalName(), fileName);
             Try.run(()->
-                exporter().createExport(model.getDataTableModel().export(), tempFile))
+                exporter().export(model.getDataTableModel().export().toTabularSheet(DataTable.AccessMode.USER), tempFile))
             .ifFailure(__->{
                 Files.remove(tempFile); // cleanup after sad case
             })
@@ -120,9 +121,9 @@ implements CollectionContentsAsFactory {
             return tempFile;
         }
 
-        private CollectionContentsExporter exporter() {
+        private TabularExporter exporter() {
             return ((CollectionContentsAsExportFactory) key.resolve(model::getServiceRegistry))
-                    .collectionContentsExporter;
+                    .tabularExporter;
         }
 
     }

@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.tabular.TabularExporter;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -37,6 +38,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.tabular.TabularModel.TabularSheet;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -279,8 +281,30 @@ public class DataTable implements Serializable {
 
     // -- EXPORT
 
+    public enum AccessMode {
+        /**
+         * must be authorized, with transactions, with publishing, with domain events
+         */
+        USER,
+        /**
+         * always authorized, no transactions, no publishing, no domain events;
+         */
+        PASS_THROUGH;
+        /**
+         * @see #USER
+         */
+        public boolean isUser() { return this==USER; }
+        /**
+         * @see #PASS_THROUGH
+         */
+        public boolean isPassThrough() { return this==PASS_THROUGH; }
+    }
+
+    public TabularSheet toTabularSheet(final AccessMode accessMode) {
+        return TabularUtil.toTabularSheet(this, accessMode);
+    }
+
     /**
-     *
      * Typical use-case:<br>
      * <pre>{@code
      * @Inject CollectionContentsAsExcelExporter excelExporter;
@@ -292,8 +316,8 @@ public class DataTable implements Serializable {
      * }
      * }</pre>
      */
-    public Blob exportToBlob(final CollectionContentsExporter exporter) {
-        return exporter.exportToBlob(this, tableFriendlyName);
+    public Blob exportToBlob(final TabularExporter exporter, final AccessMode accessMode) {
+        return exporter.exportToBlob(toTabularSheet(accessMode));
     }
 
     // -- COLUMN FILTER FACTORIES

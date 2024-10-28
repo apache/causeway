@@ -119,6 +119,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.xmlsnapshot;
     exports org.apache.causeway.applib.snapshot;
     exports org.apache.causeway.applib.spec;
+    exports org.apache.causeway.applib.tabular;
     exports org.apache.causeway.applib.types;
     exports org.apache.causeway.applib.util.schema;
     exports org.apache.causeway.applib.util;
@@ -145,7 +146,7 @@ module org.apache.causeway.applib {
     requires transitive spring.core;
     requires spring.tx;
     requires org.apache.logging.log4j.core;
-    
+
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;
     opens org.apache.causeway.applib.layout.component;
