@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -41,9 +40,6 @@ import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderCom
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
-
-import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
-import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -157,25 +153,18 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             };
         }
 
-        static Where whereContextFor(final Identifier memberIdentifier) {
-            return memberIdentifier.getType().isAction()
-                    ? STANDALONE_TABLES
-                    : PARENTED_TABLES;
-        }
-
         /**
          * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
-         *
          * <p>
          * However, if it's a 1-to-Many, whereHidden={@link Where#ALL_TABLES} is used as default
          * when no {@link HiddenFacet} is found.
          *
+         * @see ObjectAction.Predicates#visibleAccordingToHiddenFacet(Where)
+         *
          * @apiNote an alternative would be to prime the meta-model with fallback facets,
          *      however the current approach is more heap friendly
          */
-        public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(
-                final Identifier memberIdentifier) {
-            var whereContext = whereContextFor(memberIdentifier);
+        public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(final Where whereContext) {
             return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)

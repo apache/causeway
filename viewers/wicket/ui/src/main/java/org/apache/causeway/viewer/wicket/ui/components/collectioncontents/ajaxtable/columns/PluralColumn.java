@@ -31,6 +31,7 @@ import org.apache.causeway.applib.services.linking.DeepLinkService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
@@ -61,13 +62,14 @@ extends AssociationColumnAbstract {
     private final RenderOptions opts;
 
     public PluralColumn(
+            final ObjectSpecification elementType,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             final String propertyId,
             final String parentTypeName,
             final Optional<String> describedAs,
             final RenderOptions opts) {
-        super(collectionVariant, columnNameModel,
+        super(elementType, collectionVariant, columnNameModel,
                 Optional.empty(), // empty sortProperty (hence never sortable)
                 propertyId, parentTypeName, describedAs);
         this.opts = opts;

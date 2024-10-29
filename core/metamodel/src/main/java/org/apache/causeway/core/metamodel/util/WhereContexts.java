@@ -16,15 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
+package org.apache.causeway.core.metamodel.util;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.tabular.DataRow;
+import lombok.experimental.UtilityClass;
 
-public interface GenericColumn
-extends IColumn<DataRow, String> {
+@UtilityClass
+public class WhereContexts {
 
-    ObjectSpecification elementType();
+    /**
+     * Utility, that detects the collection variant (standalone or parented),
+     * based on the feature {@link Identifier} of the originating feature,
+     * that is, the feature is either a plural member or a plural action result.
+     */
+    public Where collectionVariant(final Identifier featureId) {
+        var whereContext = featureId.getType().isAction()
+                    ? Where.STANDALONE_TABLES
+                    : Where.PARENTED_TABLES;
+        return whereContext;
+    }
+
 }

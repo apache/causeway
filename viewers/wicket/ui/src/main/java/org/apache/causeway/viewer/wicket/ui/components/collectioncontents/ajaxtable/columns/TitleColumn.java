@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -39,12 +40,13 @@ extends GenericColumnAbstract {
     private final Bookmark contextBookmark;
 
     public TitleColumn(
+            final ObjectSpecification elementType,
             final Variant variant,
             final Bookmark contextBookmark,
             final int maxColumnTitleLength,
             final ColumnAbbreviationOptions opts) {
 
-        super(columnName(variant, maxColumnTitleLength)); // i18n
+        super(elementType, columnName(variant, maxColumnTitleLength)); // i18n
         this.variant = variant;
         this.contextBookmark = contextBookmark;
         this.opts = opts;

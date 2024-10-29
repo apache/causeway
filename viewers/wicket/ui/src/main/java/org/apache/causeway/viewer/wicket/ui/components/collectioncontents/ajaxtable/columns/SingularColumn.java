@@ -24,6 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -35,13 +36,14 @@ extends AssociationColumnAbstract {
     private static final long serialVersionUID = 1L;
 
     public SingularColumn(
+            final ObjectSpecification elementType,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             final Optional<String> sortProperty,
             final String propertyId,
             final String parentTypeName,
             final Optional<String> describedAs) {
-        super(collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
+        super(elementType, collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
     }
 
     @Override

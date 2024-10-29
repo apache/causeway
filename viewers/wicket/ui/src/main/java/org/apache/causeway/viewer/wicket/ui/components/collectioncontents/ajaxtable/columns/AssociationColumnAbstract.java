@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -53,6 +54,7 @@ extends GenericColumnAbstract {
     protected final String describedAs;
 
     public AssociationColumnAbstract(
+            final ObjectSpecification elementType,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             /**
@@ -66,7 +68,7 @@ extends GenericColumnAbstract {
             final String parentTypeName,
             final Optional<String> describedAs) {
 
-        super(columnNameModel, sortProperty.orElse(null));
+        super(elementType, columnNameModel, sortProperty.orElse(null));
         this.collectionVariant = collectionVariant;
         this.memberId = memberId;
         this.parentTypeName = parentTypeName;

@@ -30,6 +30,8 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
@@ -52,16 +54,22 @@ implements GenericColumn, HasMetaModelContext {
     private static final long serialVersionUID = 1L;
 
     private transient ComponentFactoryRegistry componentRegistry;
+    private final Class<?> elementClass;
+    private transient ObjectSpecification elementType;
 
     protected GenericColumnAbstract(
+            final ObjectSpecification elementType,
             final String columnName) {
-        this(Model.of(columnName), null);
+        this(elementType, Model.of(columnName), null);
     }
 
     protected GenericColumnAbstract(
+            final ObjectSpecification elementType,
             final IModel<String> columnNameModel,
             final String sortColumn) {
         super(columnNameModel, sortColumn);
+        this.elementType = elementType;
+        this.elementClass = elementType.getCorrespondingClass();
     }
 
     @Override
@@ -70,6 +78,9 @@ implements GenericColumn, HasMetaModelContext {
             final String componentId,
             final IModel<DataRow> rowModel) {
         cellItem.add(createCellComponent(componentId, (DataRowWkt)rowModel));
+        if(this instanceof ActionColumn) {
+            Wkt.cssAppend(cellItem, "action-column");
+        }
         if(this instanceof TitleColumn) {
             Wkt.cssAppend(cellItem, "title-column");
             if(((TitleColumn)this).isTitleSuppressed()) {
@@ -84,6 +95,16 @@ implements GenericColumn, HasMetaModelContext {
     }
 
     protected abstract Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt);
+
+    @Override
+    public final ObjectSpecification elementType() {
+        synchronized(this) {
+            if(elementType==null) {
+                this.elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(elementClass);
+            }
+        }
+        return elementType;
+    }
 
     protected ComponentFactory findComponentFactory(final UiComponentType uiComponentType, final IModel<?> model) {
         return getComponentRegistry().findComponentFactory(uiComponentType, model);

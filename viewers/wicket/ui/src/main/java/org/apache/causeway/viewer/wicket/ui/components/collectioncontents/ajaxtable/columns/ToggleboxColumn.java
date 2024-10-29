@@ -25,6 +25,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
@@ -48,8 +49,9 @@ extends GenericColumnAbstract {
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
 
     public ToggleboxColumn(
+            final ObjectSpecification elementType,
             final IModel<DataTableInteractive> dataTableModelHolder) {
-        super("");
+        super(elementType, "");
         this.dataTableModelHolder = dataTableModelHolder;
     }
 
