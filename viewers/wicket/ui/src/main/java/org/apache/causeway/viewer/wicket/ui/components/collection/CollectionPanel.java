@@ -36,6 +36,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
@@ -94,7 +95,7 @@ implements
             var collModel = getModel();
             var collMetaModel = collModel.getMetaModel();
             toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new ToggleboxColumn(collModel.delegate()))
+                    ? Optional.of(new ToggleboxColumn(collModel.getElementType(), collModel.delegate()))
                     : Optional.empty();
         }
         return toggleboxColumn.orElse(null);

@@ -31,6 +31,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -39,6 +40,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ActionColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn;
@@ -107,19 +109,25 @@ implements CollectionCountProvider {
         final List<GenericColumn> columns = _Lists.newArrayList();
 
         var collectionModel = entityCollectionModel();
+        var elementType = collectionModel.getElementType();
 
         // first create property columns, so we know how many columns there are
         addPropertyColumnsIfRequired(columns);
         // prepend title column, which may have distinct rendering hints,
         // based on whether there are any property columns or not
         prependTitleColumn(
-                columns,
+                elementType,
                 collectionModel.getVariant(),
-                getWicketViewerSettings());
+                getWicketViewerSettings(),
+                columns);
 
-        // prepend togglebox column (left most), if enabled
+        // prepend toggle-box column (left most), if enabled
         getToggleboxColumn()
             .ifPresent(toggleboxColumn->columns.add(0, toggleboxColumn));
+
+        // last append action column
+        //TODO[CAUSEWAY-3815] disabled until action column rendering is fleshed out
+        //addActionsColumnIfRequired(elementType, columns);
 
         var dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         var dataTable = new CausewayAjaxDataTable(
@@ -157,9 +165,10 @@ implements CollectionCountProvider {
     }
 
     private void prependTitleColumn(
-            final List<GenericColumn> columns,
+            final ObjectSpecification elementType,
             final Variant variant,
-            final Wicket wktConfig) {
+            final Wicket wktConfig,
+            final List<GenericColumn> columns) {
 
         var contextBookmark = entityCollectionModel().getParentObject().getBookmark()
                 .orElse(null);
@@ -174,14 +183,15 @@ implements CollectionCountProvider {
                             : -1 /* don't override */)
             .build();
 
-        columns.add(0, new TitleColumn(variant, contextBookmark, maxColumnTitleLength, opts));
+        columns.add(0, new TitleColumn(elementType, variant, contextBookmark, maxColumnTitleLength, opts));
     }
 
-    private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
+    private void addPropertyColumnsIfRequired(
+            final List<GenericColumn> columns) {
 
         var collectionModel = getModel();
-        var elementTypeSpec = collectionModel.getElementType();
-        if(elementTypeSpec == null) {
+        var elementType = collectionModel.getElementType();
+        if(elementType == null) {
             return;
         }
 
@@ -189,7 +199,7 @@ implements CollectionCountProvider {
         var memberIdentifier = collectionModel.getIdentifier();
 
         // add all ordered columns to the table
-        elementTypeSpec.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
+        elementType.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
         .map(ObjectAssociation::getSpecialization)
         .map(spez->spez.fold(
                 this::createSingularColumn,
@@ -197,7 +207,8 @@ implements CollectionCountProvider {
         .forEach(columns::add);
     }
 
-    private SingularColumn createSingularColumn(final OneToOneAssociation property) {
+    private SingularColumn createSingularColumn(
+            final OneToOneAssociation property) {
         var collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
         final Optional<String> sortability = property.getElementType().isComparableOrOrdered()
@@ -205,6 +216,7 @@ implements CollectionCountProvider {
                 : Optional.empty();
 
         return new SingularColumn(
+                collectionModel.getElementType(),
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
                 sortability,
@@ -213,11 +225,13 @@ implements CollectionCountProvider {
                 property.getCanonicalDescription());
     }
 
-    private PluralColumn createPluralColumn(final OneToManyAssociation collection) {
+    private PluralColumn createPluralColumn(
+            final OneToManyAssociation collection) {
         var collectionModel = getModel();
         final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
 
         return new PluralColumn(
+                collectionModel.getElementType(),
                 collectionModel.getVariant(),
                 Model.of(collection.getCanonicalFriendlyName()),
                 collection.getId(),
@@ -225,6 +239,14 @@ implements CollectionCountProvider {
                 collection.getCanonicalDescription(),
                 // future work: can hook up with global config
                 RenderOptions.builder().build());
+    }
+
+    private void addActionsColumnIfRequired(
+            final ObjectSpecification elementType,
+            final List<GenericColumn> columns) {
+        var collectionModel = getModel();
+        var memberIdentifier = collectionModel.getIdentifier();
+        ActionColumn.create(memberIdentifier, elementType).ifPresent(columns::add);
     }
 
 }

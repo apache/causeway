@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.columnorder.ColumnOrderTxtFileService;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -53,6 +54,7 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
 
     final SpecificationLoader specificationLoader;
 
+    @Override
     @Programmatic
     public byte[] toZip(final Object domainObject) {
         var zipBuilder = ZipUtils.zipEntryBuilder();
@@ -65,7 +67,7 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
 
     // HELPERS
 
-    private void addStandaloneEntry(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
+    private void addStandaloneEntry(final Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
         var parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         var buf = new StringBuilder();
 
@@ -79,23 +81,25 @@ public class ColumnOrderTxtFileServiceDefault implements ColumnOrderTxtFileServi
         zipBuilder.addAsUtf8(fileName, fileContents);
     }
 
-    private void addCollectionEntries(Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
+    private void addCollectionEntries(final Object domainObject, final ZipUtils.EntryBuilder zipBuilder) {
         var parentSpec = specificationLoader.loadSpecification(domainObject.getClass());
         parentSpec.streamCollections(MixedIn.INCLUDED)
                 .forEach(collection -> addCollection(collection, parentSpec, zipBuilder));
     }
 
-    private void addCollection(final OneToManyAssociation collection, final ObjectSpecification parentSpec, final ZipUtils.EntryBuilder zipBuilder) {
+    private void addCollection(
+            final OneToManyAssociation collection,
+            final ObjectSpecification parentSpec,
+            final ZipUtils.EntryBuilder zipBuilder) {
+
         var buf = new StringBuilder();
 
-        var collectionIdentifier = collection.getFeatureIdentifier();
-        var elementType = collection.getElementType();
-
-        elementType.streamAssociations(MixedIn.INCLUDED)
-                .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(collectionIdentifier))
-                .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
-                .map(ObjectFeature::getId)
-                .forEach(assocId -> buf.append(assocId).append("\n"));
+        collection.getElementType()
+            .streamAssociations(MixedIn.INCLUDED)
+            .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(Where.PARENTED_TABLES))
+            .filter(ObjectAssociation.Predicates.referencesParent(parentSpec).negate())
+            .map(ObjectFeature::getId)
+            .forEach(assocId -> buf.append(assocId).append("\n"));
 
         var fileName = String.format("%s#%s.columnOrder.txt", parentSpec.getShortIdentifier(), collection.getId());
         var fileContents = buf.toString();

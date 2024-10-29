@@ -140,6 +140,11 @@ public interface ObjectActionContainer {
      */
     Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn);
 
+    /**
+     * Actions visible in dedicated actions-column, honoring order and visibility.
+     */
+    Stream<ObjectAction> streamActionsForColumnRendering(Identifier memberIdentifier);
+
     // -- ACTION STREAM (NO INHERITANCE)
 
     /**

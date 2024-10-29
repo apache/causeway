@@ -38,7 +38,9 @@ import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.util.WhereContexts;
 
 import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
 import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
@@ -48,10 +50,20 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-class _AssociationsAsColumns implements HasMetaModelContext {
+class _MembersAsColumns implements HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
+
+    public final Stream<ObjectAction> streamActionsForColumnRendering(
+            final ObjectSpecification elementType,
+            final Identifier memberIdentifier) {
+        if(elementType.isValue()) return Stream.empty();
+
+        return elementType.streamRuntimeActions(MixedIn.INCLUDED)
+                .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
+                .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
+    }
 
     public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final ObjectSpecification elementType,
@@ -66,7 +78,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         var assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
-        .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(memberIdentifier))
+        .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
         .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
         .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
         .forEach(assoc->assocById.put(assoc.getId(), assoc));
