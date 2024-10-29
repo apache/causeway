@@ -306,15 +306,15 @@ public class DataTable implements Serializable {
 
     /**
      * Typical use-case:<br>
-     * <pre>{@code
-     * @Inject CollectionContentsAsExcelExporter excelExporter;
+     * <pre>
+     * &#64;Inject TabularExcelExporter excelExporter;
      *
-     * Blob exportToExcel(List&lt;MyDomainObject&gt; myDomainObjects) {
+     * Blob exportToBlob(List&lt;MyDomainObject&gt; myDomainObjects) {
      *     var dataTable = DataTable.forDomainType(MyDomainObject.class);
      *     dataTable.setDataElementPojos(myDomainObjects);
-     *     return dataTable.exportToBlob(excelExporter);
+     *     return dataTable.exportToBlob(excelExporter, AccessMode.USER);
      * }
-     * }</pre>
+     * </pre>
      */
     public Blob exportToBlob(final TabularExporter exporter, final AccessMode accessMode) {
         return exporter.exportToBlob(toTabularSheet(accessMode));
