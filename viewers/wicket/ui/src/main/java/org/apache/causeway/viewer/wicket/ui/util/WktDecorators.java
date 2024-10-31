@@ -224,25 +224,6 @@ public class WktDecorators {
         decorateActionCommon(actionLink, actionLabel, decorationModel);
     }
 
-    public void decorateCssMenuItem(
-            AjaxLink<ManagedObject> actionLink,
-            Label actionLabel, 
-            ActionDecorationModel decorationModel) {
-
-        decorationModel.disabling()
-            .ifPresentOrElse(disableUiModel->{
-                //DISABLE
-                disable().decorate(actionLink, disableUiModel);
-            }, ()->{
-                //DESCRIBE
-                decorationModel
-                    .describedAs()
-                    .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
-            });
-    
-        decorateActionCommon(actionLink, actionLabel, decorationModel);
-    }
-
     // -- ACTION DECORATION HELPER
     
     private void decorateActionCommon(

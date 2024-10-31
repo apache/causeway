@@ -75,18 +75,11 @@ implements Menuable {
     }
 
     private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
-    protected void addSubMenuItem(final CssMenuItem cssMenuItem) {
+    protected final void addSubMenuItem(final CssMenuItem cssMenuItem) {
         subMenuItems.add(cssMenuItem);
     }
     public Can<CssMenuItem> getSubMenuItems() {
         return Can.ofCollection(subMenuItems);
-    }
-    /**
-     * @param menuItems we assume these have the correct parent already set
-     */
-    public void replaceSubMenuItems(final List<CssMenuItem> menuItems) {
-        subMenuItems.clear();
-        subMenuItems.addAll(menuItems);
     }
     public boolean hasSubMenuItems() {
         return subMenuItems.size() > 0;
@@ -107,7 +100,7 @@ implements Menuable {
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
 
         var linkAndLabel = getLinkAndLabel();
-        var actionLink = getLinkAndLabel().getUiComponent();
+        var actionLink = linkAndLabel.getUiComponent();
 
         var label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
 
@@ -115,11 +108,9 @@ implements Menuable {
 
             // show link...
             markupContainer.add(actionLink);
-            actionLink.add(label);
 
-            WktDecorators.decorateCssMenuItem(
-                    linkAndLabel.getUiComponent(), 
-                    label, 
+            WktDecorators.decorateMenuAction(
+                    actionLink, actionLink, label, 
                     ActionDecorationModel.builder(linkAndLabel)
                         .actionStyle(ActionStyle.MENU_ITEM)
                         .build());
@@ -137,8 +128,6 @@ implements Menuable {
             });
 
             label.add(new AttributeModifier("class", Model.of("disabled")));
-
-            markupContainer.add(label);
 
             return label;
         }
