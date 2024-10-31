@@ -127,7 +127,7 @@ implements CollectionCountProvider {
 
         // last append action column
         //TODO[CAUSEWAY-3815] disabled until action column rendering is fleshed out
-        //addActionsColumnIfRequired(elementType, columns);
+        addActionsColumnIfRequired(elementType, columns);
 
         var dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         var dataTable = new CausewayAjaxDataTable(

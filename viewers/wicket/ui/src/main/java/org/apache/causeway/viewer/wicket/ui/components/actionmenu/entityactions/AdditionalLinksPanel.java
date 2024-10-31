@@ -48,17 +48,17 @@ extends MenuablePanelAbstract {
     public enum Style {
         INLINE_LIST(ActionStyle.BUTTON) {
             @Override
-            AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
+            public AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
                 return new AdditionalLinksAsListInlinePanel(id, links);
             }
         },
         DROPDOWN(ActionStyle.MENU_ITEM) {
             @Override
-            AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
+            public AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
                 return new AdditionalLinksAsDropDownPanel(id, links);
             }
         };
-        abstract AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links);
+        public abstract AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links);
         final ActionStyle actionStyle;                
 
     }

@@ -60,11 +60,11 @@ public final class WktLinks {
             final ActionStyle actionStyle) {
 
         var link = linkAndLabel.getUiComponent();
-        var viewTitleLabel = Wkt.labelAdd(link, titleId,
+        var actionLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
         
         WktDecorators.decorateAdditionalLink(
-                link, tooltipReceiver, viewTitleLabel,
+                link, tooltipReceiver, actionLabel,
                 ActionDecorationModel.builder(linkAndLabel)
                     .actionStyle(actionStyle)
                     .build());
