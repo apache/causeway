@@ -54,7 +54,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -75,6 +75,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
@@ -301,7 +302,7 @@ implements ScalarModelChangeListener {
             scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
                     formFrame = createFormFrame());
 
-            var associatedLinksAndLabels = _Util.associatedLinksAndLabels(scalarModel);
+            var associatedLinksAndLabels = _Util.associatedActionModels(scalarModel);
             addPositioningCssTo(regularFrame, associatedLinksAndLabels);
             addActionLinksBelowAndRight(regularFrame, associatedLinksAndLabels);
 
@@ -604,16 +605,16 @@ implements ScalarModelChangeListener {
 
     private void addActionLinksBelowAndRight(
             final MarkupContainer labelIfRegular,
-            final Can<LinkAndLabel> linkAndLabels) {
+            final Can<ActionModel> actionModels) {
 
-        var linksBelow = linkAndLabels
-                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
+        var linksBelow = actionModels
+                .filter(ActionModel.isPositionedAt(ActionLayout.Position.BELOW));
         ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
                 linksBelow, ActionLinksPanel.Style.INLINE_LIST);
 
-        var linksRight = linkAndLabels
-                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
+        var linksRight = actionModels
+                .filter(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT));
         ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId(),
                 linksRight, ActionLinksPanel.Style.DROPDOWN);
@@ -629,7 +630,7 @@ implements ScalarModelChangeListener {
      */
     private void addPositioningCssTo(
             final MarkupContainer markupContainer,
-            final Can<LinkAndLabel> actionLinks) {
+            final Can<ActionModel> actionLinks) {
         Wkt.cssAppend(markupContainer, determinePropParamLayoutCss(getModel()));
         Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
@@ -638,9 +639,9 @@ implements ScalarModelChangeListener {
         return Facets.labelAtCss(scalarModel.getMetaModel());
     }
 
-    private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {
+    private static String determineActionLayoutPositioningCss(final Can<ActionModel> entityActionLinks) {
         return entityActionLinks.stream()
-                .anyMatch(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT))
+                .anyMatch(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT))
                     ? "actions-right"
                     : null;
     }

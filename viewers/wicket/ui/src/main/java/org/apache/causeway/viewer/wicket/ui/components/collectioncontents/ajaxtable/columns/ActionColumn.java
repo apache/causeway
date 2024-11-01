@@ -26,10 +26,11 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
 
@@ -65,11 +66,13 @@ extends GenericColumnAbstract {
         var rowElement = dataRow.getRowElement();
 
         var entityModel = UiObjectWkt.ofAdapter(rowElement);
-        var linksAndLables = actions().stream()
-            .map(LinkAndLabelFactory.forEntity(entityModel))
+        var actionModels = actions().stream()
+            .map(act->ActionModel.forEntity(act, entityModel))
             .collect(Can.toCan());
         
-        return ActionLinksPanel.Style.DROPDOWN.newPanel(componentId, linksAndLables);
+        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.Style.DROPDOWN)
+                .map(Component.class::cast)
+                .orElseGet(()->Wkt.label(componentId, ""));        
     }
 
     // -- HELPER

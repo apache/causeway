@@ -25,8 +25,8 @@ import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
@@ -63,7 +63,7 @@ implements
         var collMetaModel = getModel().getMetaModel();
 
         var associatedActions = collMetaModel.streamAssociatedActions()
-        .map(LinkAndLabelFactory.forCollection(collectionModel))
+        .map(act->ActionModel.forCollection(act, collectionModel))
         .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(associatedActions);

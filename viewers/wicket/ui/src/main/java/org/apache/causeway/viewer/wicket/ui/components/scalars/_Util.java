@@ -35,10 +35,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 
 import lombok.experimental.UtilityClass;
 
@@ -72,27 +70,27 @@ class _Util {
                 && lookupCompositeValueMixinForFeature(scalarModel).isPresent();
     }
 
-    Optional<LinkAndLabel> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
+    Optional<ActionModel> lookupMixinForCompositeValueUpdate(final ScalarModel scalarModel) {
         return lookupCompositeValueMixinForFeature(scalarModel)
             .flatMap(compositeValueMixinForFeature->
-                toLinkAndLabelWithRuleChecking(compositeValueMixinForFeature, scalarModel))
+                toActionModelWithRuleChecking(compositeValueMixinForFeature, scalarModel))
             .filter(_Util::guardAgainstInvalidCompositeMixinScenarios);
     }
 
-    Optional<LinkAndLabel> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
+    Optional<ActionModel> lookupPropertyActionForInlineEdit(final ScalarModel scalarModel) {
         // not editable property, but maybe one of the actions is.
         return scalarModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()
-                .flatMap(action->toLinkAndLabelWithRuleChecking(action, scalarModel));
+                .flatMap(action->toActionModelWithRuleChecking(action, scalarModel));
     }
 
-    Can<LinkAndLabel> associatedLinksAndLabels(final ScalarModel scalarModel) {
+    Can<ActionModel> associatedActionModels(final ScalarModel scalarModel) {
         // find associated actions for this scalar property (only properties will have any.)
         // convert those actions into UI layer widgets
         return scalarModel.getAssociatedActions()
                 .getRemainingAssociated()
                 .stream()
-                .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel))
+                .map(act->ActionModel.forPropertyOrParameter(act, scalarModel))
                 .collect(Can.toCan());
     }
 
@@ -118,23 +116,19 @@ class _Util {
                 && !scalarModel.disabledReason().isPresent();
     }
 
-    private Optional<LinkAndLabel> toLinkAndLabelNoRuleChecking(
+    private Optional<ActionModel> toActionModelNoRuleChecking(
             final @Nullable ObjectAction action,
             final ScalarModel scalarModel) {
         return Optional.ofNullable(action)
-        .map(LinkAndLabelFactory.forPropertyOrParameter(scalarModel));
+        .map(act->ActionModel.forPropertyOrParameter(act, scalarModel));
     }
 
-    private Optional<LinkAndLabel> toLinkAndLabelWithRuleChecking(
+    private Optional<ActionModel> toActionModelWithRuleChecking(
             final @Nullable ObjectAction action,
             final ScalarModel scalarModel) {
-        return toLinkAndLabelNoRuleChecking(action, scalarModel)
-        .filter(LinkAndLabel::isVisible)
-        .filter(LinkAndLabel::isEnabled);
-    }
-
-    private boolean guardAgainstInvalidCompositeMixinScenarios(final LinkAndLabel linkAndLabel) {
-        return guardAgainstInvalidCompositeMixinScenarios(linkAndLabel.getActionModel());
+        return toActionModelNoRuleChecking(action, scalarModel)
+        .filter(ActionModel::isVisible)
+        .filter(ActionModel::isEnabled);
     }
 
     private boolean guardAgainstInvalidCompositeMixinScenarios(final ActionModel actionModel) {

@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -150,7 +150,7 @@ implements HasDynamicallyVisibleContent {
             collectionMetaModel.getDescription(collectionModel::getParentObject)
                 .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
-            final Can<LinkAndLabel> links = collectionModel.getLinks();
+            final Can<ActionModel> links = collectionModel.getLinks();
             ActionLinksPanel.addActionLinks(
                     div, ID_ADDITIONAL_LINKS, links, ActionLinksPanel.Style.INLINE_LIST);
 

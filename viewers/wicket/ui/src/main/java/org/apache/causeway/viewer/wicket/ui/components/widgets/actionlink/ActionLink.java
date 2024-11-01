@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
+package org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,14 +26,17 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
@@ -75,7 +78,7 @@ import lombok.NonNull;
  */
 public final class ActionLink
 extends IndicatingAjaxLink<ManagedObject>
-implements HasMetaModelContext {
+implements HasMetaModelContext, Menuable, HasManagedAction {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_ACTION_LINK = "actionLink";
@@ -88,13 +91,13 @@ implements HasMetaModelContext {
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
-    protected transient MetaModelContext commonContext;
 
     private ActionLink(
             final String id,
             final ActionModel model) {
         super(id, model);
-        this.commonContext = model.getMetaModelContext();
+        
+        _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
@@ -106,13 +109,18 @@ implements HasMetaModelContext {
             this.add(this.indicatorAppenderIfAny);
         }
     }
-
-    //XXX temporary public
+    
     public ActionModel getActionModel() {
         return (ActionModel) getModel();
     }
+    
+    @Override
+    public ManagedAction getManagedAction() {
+        return getActionModel().getManagedAction();
+    }
 
-    public ObjectAction getObjectAction() {
+    @Override
+    public ObjectAction getAction() {
         return getActionModel().getAction();
     }
 
@@ -261,6 +269,11 @@ implements HasMetaModelContext {
 
     public Wicket getSettings() {
         return getMetaModelContext().getConfiguration().getViewer().getWicket();
+    }
+
+    @Override
+    public Kind menuableKind() {
+        return Kind.LINK;
     }
 
 }

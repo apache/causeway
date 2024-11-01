@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.model.links;
 import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 
 /**
@@ -28,5 +29,5 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
  * additional list of {@link Link}s to be rendered.
  */
 public interface LinksProvider {
-    Can<LinkAndLabel> getLinks();
+    Can<ActionModel> getLinks();
 }

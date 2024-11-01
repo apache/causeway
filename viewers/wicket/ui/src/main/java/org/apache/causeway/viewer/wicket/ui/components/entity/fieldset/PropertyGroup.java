@@ -39,11 +39,10 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -112,13 +111,13 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
             ActionLinksPanel.addActionLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
                     memberGroupActions
-                        .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.PANEL)),
+                        .filter(ActionModel.isPositionedAt(ActionLayout.Position.PANEL)),
                     ActionLinksPanel.Style.INLINE_LIST);
 
             ActionLinksPanel.addActionLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
                     memberGroupActions
-                        .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.PANEL_DROPDOWN)),
+                        .filter(ActionModel.isPositionedAt(ActionLayout.Position.PANEL_DROPDOWN)),
                     ActionLinksPanel.Style.DROPDOWN);
         }
 
@@ -132,11 +131,11 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         return childComponents;
     }
 
-    private Can<LinkAndLabel> collectMemberGroupActions(
+    private Can<ActionModel> collectMemberGroupActions(
             final RepeatingView container,
             final Consumer<Component> onNewChildComponent) {
 
-        var memberGroupActionList = _Lists.<LinkAndLabel>newArrayList();
+        var memberGroupActionList = _Lists.<ActionModel>newArrayList();
 
         for (var property : getPropertiesNotStaticallyHidden()) {
             var propertyRvContainer = new WebMarkupContainer(container.newChildId());
@@ -182,7 +181,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
             final UiObjectWkt entityModel,
             final OneToOneAssociation property,
             final WebMarkupContainer container,
-            final Consumer<LinkAndLabel> onAssociatedAction) {
+            final Consumer<ActionModel> onAssociatedAction) {
 
         final ScalarModel scalarModel =
                 entityModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
@@ -197,7 +196,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         var entity = entityModel.getManagedObject();
 
         ObjectAction.Util.findForAssociation(entity, property)
-        .map(LinkAndLabelFactory.forEntity(entityModel))
+        .map(act->ActionModel.forEntity(act, entityModel))
         .forEach(onAssociatedAction);
 
         return scalarNameAndValueComponent;

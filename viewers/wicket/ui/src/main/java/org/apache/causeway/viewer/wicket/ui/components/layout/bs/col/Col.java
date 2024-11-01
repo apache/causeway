@@ -39,10 +39,10 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory.CollectionOwnerAndLayout;
 import org.apache.causeway.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.row.Row;
@@ -128,7 +128,7 @@ implements HasDynamicallyVisibleContent {
             getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
         )
         .filter(_NullSafe::isPresent)
-        .map(LinkAndLabelFactory.forEntity(getModel()))
+        .map(act->ActionModel.forEntity(act, getModel()))
         .collect(Can.toCan());
 
         if (!visibleActions.isEmpty()) {

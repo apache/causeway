@@ -32,9 +32,9 @@ import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 
@@ -49,18 +49,17 @@ class ServiceActionUtil {
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
 
-        var linkAndLabel = menuItem.getLinkAndLabel();
-        var menuItemActionLink = linkAndLabel.getUiComponent();
-        var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
+        var actionLink = menuItem.actionLinkElseFail();
+        var menuItemLabel = Wkt.labelAdd(actionLink, "menuLinkLabel", menuItem.getName());
 
         WktDecorators
-            .decorateMenuAction(menuItemActionLink, listItem, menuItemLabel, 
-                    ActionDecorationModel.builder(linkAndLabel)
+            .decorateMenuAction(actionLink, listItem, menuItemLabel, 
+                    ActionDecorationModel.builder(actionLink)
                         .actionStyle(ActionStyle.MENU_ITEM)
                         .build());
 
         var leafItem = new Fragment("content", "leafItem", parent);
-        leafItem.add(menuItemActionLink);
+        leafItem.add(actionLink);
 
         listItem.add(leafItem);
     }
@@ -75,7 +74,7 @@ class ServiceActionUtil {
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);
 
-        Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
+        Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.actionLinkElseFail().getFriendlyName());
         final Can<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
 
         Wkt.listViewAdd(folderItem, "subMenuItems", menuItems.toList(), item->{
@@ -113,10 +112,8 @@ class ServiceActionUtil {
         public void addSubMenu(final MenuItemDto menuDto) {
             var managedAction = menuDto.getManagedAction();
 
-            var menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName());
+            var menuItem = CssMenuItem.newMenuItemWithLink(menuDto.getName(), newActionLink(managedAction));
             currentTopLevelMenu.addSubMenuItem(menuItem);
-
-            menuItem.setLinkAndLabel(newActionLink(managedAction));
         }
 
         @Override
@@ -125,10 +122,10 @@ class ServiceActionUtil {
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
 
-        private LinkAndLabel newActionLink(final ManagedAction managedAction) {
+        private ActionLink newActionLink(final ManagedAction managedAction) {
             var serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
-            return LinkAndLabelFactory.forMenu(serviceModel)
-                    .apply(managedAction.getAction());
+            return ActionLink.create(
+                    ActionModel.forServiceAction(managedAction.getAction(), serviceModel));
         }
     }
 

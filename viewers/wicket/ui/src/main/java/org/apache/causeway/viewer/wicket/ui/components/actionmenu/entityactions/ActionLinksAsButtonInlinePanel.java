@@ -19,13 +19,13 @@
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
 class ActionLinksAsButtonInlinePanel extends ActionLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionLinksAsButtonInlinePanel(final String id, final Can<LinkAndLabel> links) {
+    public ActionLinksAsButtonInlinePanel(final String id, final Can<ActionLink> links) {
         super(id, links, Style.INLINE_LIST);
     }
 }

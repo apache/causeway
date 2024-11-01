@@ -19,13 +19,13 @@
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
 class ActionLinksAsDropDownPanel extends ActionLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionLinksAsDropDownPanel(final String id, final Can<LinkAndLabel> links) {
+    public ActionLinksAsDropDownPanel(final String id, final Can<ActionLink> links) {
         super(id, links, Style.DROPDOWN);
     }
 }
