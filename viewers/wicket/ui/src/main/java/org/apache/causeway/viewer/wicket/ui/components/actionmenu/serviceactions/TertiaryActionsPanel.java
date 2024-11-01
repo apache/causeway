@@ -32,7 +32,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs">Bootsnip</a>
  * </p>
  */
-public class TertiaryActionsPanel extends MenuActionPanel {
+class TertiaryActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
 

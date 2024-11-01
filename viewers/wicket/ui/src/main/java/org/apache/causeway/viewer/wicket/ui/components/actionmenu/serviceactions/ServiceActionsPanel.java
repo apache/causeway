@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs">Bootsnip</a>
  * </p>
  */
-public class ServiceActionsPanel extends MenuActionPanel {
+class ServiceActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
 

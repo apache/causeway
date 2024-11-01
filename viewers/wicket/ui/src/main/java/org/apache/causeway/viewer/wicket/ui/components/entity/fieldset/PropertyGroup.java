@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
@@ -109,17 +109,17 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         } else {
             Wkt.labelAdd(panelHeading, ID_MEMBER_GROUP_NAME, fieldSet.getName());
 
-            AdditionalLinksPanel.addAdditionalLinks(
+            ActionLinksPanel.addActionLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
                     memberGroupActions
                         .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.PANEL)),
-                    AdditionalLinksPanel.Style.INLINE_LIST);
+                    ActionLinksPanel.Style.INLINE_LIST);
 
-            AdditionalLinksPanel.addAdditionalLinks(
+            ActionLinksPanel.addActionLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
                     memberGroupActions
                         .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.PANEL_DROPDOWN)),
-                    AdditionalLinksPanel.Style.DROPDOWN);
+                    ActionLinksPanel.Style.DROPDOWN);
         }
 
         // either add the built content, or hide entire

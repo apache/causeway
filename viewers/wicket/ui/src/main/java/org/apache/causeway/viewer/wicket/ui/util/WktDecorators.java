@@ -190,9 +190,9 @@ public class WktDecorators {
     }
     
     /**
-     * For rendering actions within additional-link panels or drop-downs.
+     * For rendering actions within action-link panels or drop-downs.
      */
-    public void decorateAdditionalLink(
+    public void decorateActionLink(
             final AjaxLink<ManagedObject> actionLink,
             final Component tooltipReceiver, 
             final Label actionLabel,

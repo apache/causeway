@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.RequiredArgsConstructor;
 
-public class AdditionalLinksPanel
+public class ActionLinksPanel
 extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -48,22 +48,22 @@ extends MenuablePanelAbstract {
     public enum Style {
         INLINE_LIST(ActionStyle.BUTTON) {
             @Override
-            public AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
-                return new AdditionalLinksAsListInlinePanel(id, links);
+            public ActionLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
+                return new ActionLinksAsButtonInlinePanel(id, links);
             }
         },
         DROPDOWN(ActionStyle.MENU_ITEM) {
             @Override
-            public AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
-                return new AdditionalLinksAsDropDownPanel(id, links);
+            public ActionLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
+                return new ActionLinksAsDropDownPanel(id, links);
             }
         };
-        public abstract AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links);
+        public abstract ActionLinksPanel newPanel(String id, Can<LinkAndLabel> links);
         final ActionStyle actionStyle;                
 
     }
 
-    public static AdditionalLinksPanel addAdditionalLinks(
+    public static ActionLinksPanel addActionLinks(
             final MarkupContainer markupContainer,
             final String id,
             final Can<LinkAndLabel> links,
@@ -75,7 +75,7 @@ extends MenuablePanelAbstract {
         return Wkt.add(markupContainer, style.newPanel(id, links));
     }
 
-    protected AdditionalLinksPanel(
+    protected ActionLinksPanel(
             final String id,
             final Can<LinkAndLabel> menuables,
             final Style style) {
@@ -88,7 +88,7 @@ extends MenuablePanelAbstract {
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
             var linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks
-                    .asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style.actionStyle));
+                    .asActionLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style.actionStyle));
             if (!linkAndLabel.isVisible()) {
                 Wkt.cssAppend(item, "hidden");
             }

@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory.CollectionOwnerAndLayout;
 import org.apache.causeway.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
@@ -132,7 +132,7 @@ implements HasDynamicallyVisibleContent {
         .collect(Can.toCan());
 
         if (!visibleActions.isEmpty()) {
-            AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, visibleActions, AdditionalLinksPanel.Style.INLINE_LIST);
+            ActionLinksPanel.addActionLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.Style.INLINE_LIST);
             visible = true;
         } else {
             WktComponents.permanentlyHide(actionOwner, actionIdToUse);

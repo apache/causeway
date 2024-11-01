@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 
 import lombok.NonNull;
@@ -69,7 +69,7 @@ extends GenericColumnAbstract {
             .map(LinkAndLabelFactory.forEntity(entityModel))
             .collect(Can.toCan());
         
-        return AdditionalLinksPanel.Style.DROPDOWN.newPanel(componentId, linksAndLables);
+        return ActionLinksPanel.Style.DROPDOWN.newPanel(componentId, linksAndLables);
     }
 
     // -- HELPER

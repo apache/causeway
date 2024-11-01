@@ -62,7 +62,7 @@ extends Function<ObjectAction, LinkAndLabel> {
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         null, null, null),
-                new AdditionalLinkFactory());
+                new ActionLinkFactory());
     }
 
     public static LinkAndLabelFactory forCollection(
@@ -74,7 +74,7 @@ extends Function<ObjectAction, LinkAndLabel> {
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         null, null, collectionModel),
-                new AdditionalLinkFactory());
+                new ActionLinkFactory());
     }
 
     public static LinkAndLabelFactory forPropertyOrParameter(
@@ -92,7 +92,7 @@ extends Function<ObjectAction, LinkAndLabel> {
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         propertyModel, null, null),
-                new AdditionalLinkFactory());
+                new ActionLinkFactory());
     }
 
     public static LinkAndLabelFactory forParameter(
@@ -107,7 +107,7 @@ extends Function<ObjectAction, LinkAndLabel> {
                             action.getFeatureIdentifier(),
                             Where.OBJECT_FORMS,
                             null, parameterModel, null),
-                    new AdditionalLinkFactory());
+                    new ActionLinkFactory());
         }
         return action -> null;
     }
@@ -131,11 +131,11 @@ extends Function<ObjectAction, LinkAndLabel> {
         }
     }
 
-    static class AdditionalLinkFactory implements ActionLinkUiComponentFactoryWkt {
+    static class ActionLinkFactory implements ActionLinkUiComponentFactoryWkt {
         private static final long serialVersionUID = 1L;
         @Override
         public ActionLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
-            return ActionLink.create(AdditionalLinksPanel.ID_ADDITIONAL_LINK, actionModel);
+            return ActionLink.create(ActionLinksPanel.ID_ADDITIONAL_LINK, actionModel);
         }
     }
 

@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
@@ -151,8 +151,8 @@ implements HasDynamicallyVisibleContent {
                 .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
             final Can<LinkAndLabel> links = collectionModel.getLinks();
-            AdditionalLinksPanel.addAdditionalLinks(
-                    div, ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
+            ActionLinksPanel.addActionLinks(
+                    div, ID_ADDITIONAL_LINKS, links, ActionLinksPanel.Style.INLINE_LIST);
 
             createSelectorDropdownPanel(collectionModel);
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);

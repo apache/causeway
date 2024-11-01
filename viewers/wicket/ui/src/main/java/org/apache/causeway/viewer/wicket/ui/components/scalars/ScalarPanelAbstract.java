@@ -56,7 +56,7 @@ import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.Fo
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobOrClobPanelAbstract;
@@ -608,15 +608,15 @@ implements ScalarModelChangeListener {
 
         var linksBelow = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
-        AdditionalLinksPanel.addAdditionalLinks(
+        ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
-                linksBelow, AdditionalLinksPanel.Style.INLINE_LIST);
+                linksBelow, ActionLinksPanel.Style.INLINE_LIST);
 
         var linksRight = linkAndLabels
                 .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
-        AdditionalLinksPanel.addAdditionalLinks(
+        ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId(),
-                linksRight, AdditionalLinksPanel.Style.DROPDOWN);
+                linksRight, ActionLinksPanel.Style.DROPDOWN);
     }
 
     /**

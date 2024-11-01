@@ -51,9 +51,9 @@ public final class WktLinks {
     }
 
     /**
-     * For rendering {@link LinkAndLabel} within additional-link panels or drop-downs.
+     * For rendering {@link LinkAndLabel} within action-link panels or drop-downs.
      */
-    public AbstractLink asAdditionalLink(
+    public AbstractLink asActionLink(
             final Component tooltipReceiver,
             final String titleId,
             final LinkAndLabel linkAndLabel,
@@ -63,7 +63,7 @@ public final class WktLinks {
         var actionLabel = Wkt.labelAdd(link, titleId,
                 linkAndLabel::getFriendlyName);
         
-        WktDecorators.decorateAdditionalLink(
+        WktDecorators.decorateActionLink(
                 link, tooltipReceiver, actionLabel,
                 ActionDecorationModel.builder(linkAndLabel)
                     .actionStyle(actionStyle)
