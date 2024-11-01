@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.NonNull;
 
@@ -42,6 +41,18 @@ import lombok.NonNull;
 public interface LinkAndLabelFactory
 extends Function<ObjectAction, LinkAndLabel> {
 
+    public static LinkAndLabel forMenu(
+            final ObjectAction action,
+            final UiObjectWkt serviceModel) {
+        return LinkAndLabel.of(
+                ActionModelImpl.forEntity(
+                        serviceModel,
+                        action.getFeatureIdentifier(),
+                        Where.ANYWHERE,
+                        null, null, null),
+                new ActionLinkFactory());
+    }
+    
     public static LinkAndLabelFactory forMenu(
             final UiObjectWkt serviceModel) {
         return action -> LinkAndLabel.of(
@@ -50,7 +61,7 @@ extends Function<ObjectAction, LinkAndLabel> {
                         action.getFeatureIdentifier(),
                         Where.ANYWHERE,
                         null, null, null),
-                new MenuLinkFactory());
+                new ActionLinkFactory());
     }
 
     public static LinkAndLabelFactory forEntity(
@@ -123,19 +134,11 @@ extends Function<ObjectAction, LinkAndLabel> {
         }
     }
 
-    static class MenuLinkFactory implements ActionLinkUiComponentFactoryWkt {
-        private static final long serialVersionUID = 1L;
-        @Override
-        public ActionLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
-            return ActionLink.create(PageAbstract.ID_MENU_LINK, actionModel);
-        }
-    }
-
     static class ActionLinkFactory implements ActionLinkUiComponentFactoryWkt {
         private static final long serialVersionUID = 1L;
         @Override
         public ActionLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
-            return ActionLink.create(ActionLinksPanel.ID_ADDITIONAL_LINK, actionModel);
+            return ActionLink.create(actionModel);
         }
     }
 

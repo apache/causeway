@@ -78,12 +78,12 @@ extends IndicatingAjaxLink<ManagedObject>
 implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_ACTION_LINK = "actionLink";
 
     public static ActionLink create(
-            final @NonNull String linkId,
             final @NonNull ActionModel actionModel) {
 
-        var actionLink = new ActionLink(linkId, actionModel);
+        var actionLink = new ActionLink(ID_ACTION_LINK, actionModel);
         return Wkt.cssAppend(actionLink, "noVeil");
     }
 

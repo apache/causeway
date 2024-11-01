@@ -42,7 +42,7 @@ extends MenuablePanelAbstract {
     private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
-    public  static final String ID_ADDITIONAL_LINK = "additionalLink";
+    
 
     @RequiredArgsConstructor
     public enum Style {
