@@ -44,10 +44,10 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
             final UiObjectWkt parentEntityModel,
             final Identifier actionIdentifier,
             final Where where,
+            final ColumnActionModifier columnActionModifier,
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny,
-            final boolean originatesFromActionColumn) {
+            final EntityCollectionModel associatedWithCollectionIfAny) {
         var delegate = ActionInteractionWkt.forEntity(
                 parentEntityModel,
                 actionIdentifier,
@@ -55,7 +55,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                 associatedWithPropertyIfAny,
                 associatedWithParameterIfAny,
                 associatedWithCollectionIfAny);
-        return new ActionModelImpl(parentEntityModel, delegate, originatesFromActionColumn);
+        return new ActionModelImpl(parentEntityModel, delegate, columnActionModifier);
     }
 
     public static ActionModel forServiceAction(
@@ -65,7 +65,8 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         serviceModel,
                         action.getFeatureIdentifier(),
                         Where.ANYWHERE,
-                        null, null, null, false);
+                        ColumnActionModifier.NONE,
+                        null, null, null);
     }
 
     public static ActionModel forEntity(
@@ -76,17 +77,20 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         parentEntityModel,
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        null, null, null, false);
+                        ColumnActionModifier.NONE,
+                        null, null, null);
     }
 
     public static ActionModel forEntityFromActionColumn(
             final ObjectAction action,
-            final UiObjectWkt parentEntityModel) {
+            final UiObjectWkt parentEntityModel,
+            final ColumnActionModifier columnActionModifier) {
         return ActionModel.forEntity(
                         parentEntityModel,
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        null, null, null, true);
+                        columnActionModifier,
+                        null, null, null);
     }
 
     public static ActionModel forCollection(
@@ -96,7 +100,8 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         collectionModel.getEntityModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        null, null, collectionModel, false);
+                        ColumnActionModifier.NONE,
+                        null, null, collectionModel);
     }
 
     public static ActionModel forPropertyOrParameter(
@@ -114,7 +119,8 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         propertyModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        propertyModel, null, null, false);
+                        ColumnActionModifier.NONE,
+                        propertyModel, null, null);
     }
 
     public static ActionModel forParameter(
@@ -128,7 +134,8 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                             parameterModel.getParentUiModel(),
                             action.getFeatureIdentifier(),
                             Where.OBJECT_FORMS,
-                            null, parameterModel, null, false);
+                            ColumnActionModifier.NONE,
+                            null, parameterModel, null);
         }
         return null;
     }
@@ -150,14 +157,31 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
     }
 
     /**
-     * If true, has special page redirect semantics:
+     * If underlying action, originates from an action-column, it has special page redirect semantics:
      * <ul>
      * <li>if action return is void or matches the originating table/collection's element-type, then just RELOAD page</li>
      * <li>otherwise open action result page in NEW browser tab</li>
      * </ul>
      * @since CAUSEWAY-3815
      */
-    boolean originatesFromActionColumn();
+    enum ColumnActionModifier {
+        NONE,
+        FORCE_STAY_ON_PAGE,
+        FORCE_NEW_BROWSER_WINDOW;
+        public boolean isNone() { return this == NONE; }
+        public boolean isForceStayOnPage() { return this == FORCE_STAY_ON_PAGE; }
+        public boolean isForceNewBrowserWindow() { return this == FORCE_NEW_BROWSER_WINDOW; }
+    }
+
+    /**
+     * If underlying action, originates from an action-column, it has special page redirect semantics:
+     * <ul>
+     * <li>if action return is void or matches the originating table/collection's element-type, then just RELOAD page</li>
+     * <li>otherwise open action result page in NEW browser tab</li>
+     * </ul>
+     * @since CAUSEWAY-3815
+     */
+    ColumnActionModifier getColumnActionModifier();
 
     @Override
     default PromptStyle getPromptStyle() {

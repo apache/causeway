@@ -20,15 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.actionresponse;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.Getter;
@@ -50,46 +48,29 @@ public class ActionResultResponse {
     private final String url;
 
     public static ActionResultResponse toEntityPage(final @NonNull ManagedObject entityOrViewmodel) {
-        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
+        var pageRedirectRequest = PageRedirectRequest.forPageClassAndBookmark(
+                EntityPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
+        return ActionResultResponse.toPage(pageRedirectRequest);
     }
 
     public static ActionResultResponse determineAndInterpretResult(
-            final ActionModel model,
+            final ActionModel actionModel,
             final @Nullable AjaxRequestTarget targetIfAny,
             final @Nullable ManagedObject resultAdapter) {
-        return _ResponseUtil.determineAndInterpretResult(model, targetIfAny, resultAdapter);
+        return _ResponseUtil.determineAndInterpretResult(actionModel, targetIfAny, resultAdapter);
     }
 
-    public static ActionResultResponse withHandler(final IRequestHandler handler) {
+    static ActionResultResponse withHandler(final IRequestHandler handler) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.SCHEDULE_HANDLER, handler, null, null, null);
     }
 
-    public static ActionResultResponse toPage(final PageRedirectRequest<?> page) {
+    static ActionResultResponse toPage(final PageRedirectRequest<?> page) {
         return new ActionResultResponse(
                 ActionResultResponseHandlingStrategy.REDIRECT_TO_PAGE, null, page, null, null);
     }
 
-    public static <T extends IRequestablePage> ActionResultResponse toPage(
-            final @NonNull Class<T> pageClass,
-            final @NonNull Bookmark bookmark) {
-        return toPage(PageRedirectRequest.forPageClass(
-                        pageClass,
-                        PageParameterUtils.createPageParametersForBookmark(bookmark)));
-    }
-
-    public static <T extends IRequestablePage> ActionResultResponse toPage(
-            final @NonNull Class<T> pageClass,
-            final @NonNull T pageInstance) {
-        return toPage(PageRedirectRequest.forPage(pageClass, pageInstance));
-    }
-
-    public static <T extends IRequestablePage> ActionResultResponse toPage(
-            final @NonNull Class<T> pageClass) {
-        return toPage(PageRedirectRequest.forPageClass(pageClass));
-    }
-
-    public static ActionResultResponse openUrlInBrowser(
+    static ActionResultResponse openUrlInBrowser(
             final AjaxRequestTarget target,
             final String url,
             final @NonNull OpenUrlStrategy openUrlStrategy) {
@@ -100,7 +81,7 @@ public class ActionResultResponse {
                 null, null, target, url);
     }
 
-    private ActionResultResponse(
+    ActionResultResponse(
             final ActionResultResponseHandlingStrategy strategy,
             final IRequestHandler handler,
             final PageRedirectRequest<?> pageRedirect,
@@ -111,6 +92,22 @@ public class ActionResultResponse {
         this.pageRedirect = pageRedirect;
         this.target = target;
         this.url = url;
+    }
+
+    //TODO[CAUSEWAY-3815] WIP should create URL from current page then open in new browser
+    ActionResultResponse withForceNewBrowserWindow() {
+        var url = this.url!=null
+                ? this.url
+                : RequestCycle.get().getRequest().getOriginalUrl().toString();
+
+        return new ActionResultResponse(
+                ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW,
+                handler, pageRedirect, target, url);
+    }
+
+    //TODO[CAUSEWAY-3815] WIP should force reload the entire page (or do a proper partial page update (AJAX) of the originating table)
+    ActionResultResponse withForceReload() {
+        return this;
     }
 
     /**

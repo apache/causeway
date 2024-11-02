@@ -59,18 +59,37 @@ class _ResponseUtil {
             @Nullable final AjaxRequestTarget ajaxTarget,
             @Nullable final ManagedObject resultAdapterIfAny) {
 
-        var typeAndAdapter = ActionResultModel.determineFor(resultAdapterIfAny, ajaxTarget);
-        final ActionResultResponseType responseType = typeAndAdapter.responseType();
-        final ManagedObject resultAdapter = typeAndAdapter.resultAdapter();
+        var actionResultModel = ActionResultModel.determineFor(actionModel, resultAdapterIfAny, ajaxTarget);
+        var response = determineAndInterpretResult(actionModel, ajaxTarget, actionResultModel);
+
+        switch(actionModel.getColumnActionModifier()) {
+        case NONE:
+            return response;
+        case FORCE_STAY_ON_PAGE:
+            return response.withForceReload();
+        case FORCE_NEW_BROWSER_WINDOW:
+            return response.withForceNewBrowserWindow();
+        default:
+            throw _Exceptions.unmatchedCase(actionModel.getColumnActionModifier());
+        }
+    }
+
+    private ActionResultResponse determineAndInterpretResult(
+            @NonNull final ActionModel actionModel,
+            @Nullable final AjaxRequestTarget ajaxTarget,
+            @NonNull final ActionResultModel actionResultModel) {
+
+        final ActionResultResponseType responseType = actionResultModel.responseType();
+        final ManagedObject resultAdapter = actionResultModel.resultAdapter();
 
         switch(responseType) {
         case COLLECTION: {
             _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
-
-            final var collectionModel = EntityCollectionModelStandalone
+            var collectionModel = EntityCollectionModelStandalone
                     .forActionModel((PackedManagedObject)resultAdapter, actionModel);
-            return ActionResultResponse.toPage(
+            var pageRedirectRequest = PageRedirectRequest.forPage(
                     StandaloneCollectionPage.class, new StandaloneCollectionPage(collectionModel));
+            return ActionResultResponse.toPage(pageRedirectRequest);
         }
         case OBJECT: {
             determineScalarAdapter(actionModel.getMetaModelContext(), resultAdapter); // intercepts collections
@@ -80,13 +99,15 @@ class _ResponseUtil {
             var signInPage = actionModel.getMetaModelContext()
                     .lookupServiceElseFail(PageClassRegistry.class)
                     .getPageClass(PageType.SIGN_IN);
-            return ActionResultResponse.toPage(PageRedirectRequest.forPageClass(signInPage));
+            var pageRedirectRequest = PageRedirectRequest.forPageClass(signInPage);
+            return ActionResultResponse.toPage(pageRedirectRequest);
         }
         case VALUE: {
-            final var valueModel = ValueModel.of(actionModel.getAction(), resultAdapter);
+            var valueModel = ValueModel.of(actionModel.getAction(), resultAdapter);
             valueModel.setActionHint(actionModel);
-            final var valuePage = new ValuePage(valueModel);
-            return ActionResultResponse.toPage(ValuePage.class, valuePage);
+            var valuePage = new ValuePage(valueModel);
+            var pageRedirectRequest = PageRedirectRequest.forPage(ValuePage.class, valuePage);
+            return ActionResultResponse.toPage(pageRedirectRequest);
         }
         case VALUE_BLOB: {
             final Object value = resultAdapter.getPojo();
@@ -102,14 +123,14 @@ class _ResponseUtil {
         }
         case VALUE_LOCALRESPATH_AJAX: {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
+            var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             return ActionResultResponse
                     .openUrlInBrowser(ajaxTarget, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.getOpenUrlStrategy());
         }
         case VALUE_LOCALRESPATH_NOAJAX: {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
-            final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
+            var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             IRequestHandler handler = _RedirectHandler.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
@@ -121,19 +142,21 @@ class _ResponseUtil {
         case VALUE_URL_NOAJAX: {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
-            final var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
+            var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             IRequestHandler handler = _RedirectHandler.redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
             return ActionResultResponse.withHandler(handler);
         }
         case VOID_AS_EMPTY: {
-            final VoidModel voidModel = new VoidModel();
+            VoidModel voidModel = new VoidModel();
             voidModel.setActionHint(actionModel);
-            return ActionResultResponse.toPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
+            var pageRedirectRequest = PageRedirectRequest.forPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
+            return ActionResultResponse.toPage(pageRedirectRequest);
         }
-        case VOID_AS_RELOAD: {
+        case RELOAD: {
             var currentPage = PageRequestHandlerTracker.getLastHandler(RequestCycle.get()).getPage();
             var pageClass = currentPage.getClass();
-            return ActionResultResponse.toPage(PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage)));
+            var pageRedirectRequest = PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage));
+            return ActionResultResponse.toPage(pageRedirectRequest);
         }
         default:
             throw _Exceptions.unmatchedCase(responseType);

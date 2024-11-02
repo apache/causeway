@@ -24,6 +24,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -39,6 +42,14 @@ public class PageRedirectRequest<T extends IRequestablePage> {
             final @NonNull Class<T> pageClass,
             final @NonNull PageParameters pageParameters) {
         return new PageRedirectRequest<>(pageClass, pageParameters, null);
+    }
+
+    public static <T extends IRequestablePage> PageRedirectRequest forPageClassAndBookmark(
+            final @NonNull Class<T> pageClass,
+            final @NonNull Bookmark bookmark) {
+        return forPageClass(
+                        pageClass,
+                        PageParameterUtils.createPageParametersForBookmark(bookmark));
     }
 
     public static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(

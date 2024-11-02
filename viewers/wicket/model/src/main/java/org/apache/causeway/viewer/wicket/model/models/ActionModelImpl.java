@@ -35,7 +35,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParamete
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * Represents an action (a member) of an entity.
@@ -55,18 +54,18 @@ implements ActionModel {
     // -- CONSTRUCTION
 
     private final ActionInteractionWkt delegate;
-    @Getter @Accessors(fluent=true)
-    private final boolean originatesFromActionColumn;
+    @Getter
+    private final ColumnActionModifier columnActionModifier;
 
     ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
-        this(parentEntityModel, delegate, false);
+        this(parentEntityModel, delegate, ColumnActionModifier.NONE);
     }
 
     ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate,
-            final boolean originatesFromActionColumn) {
+            final ColumnActionModifier columnActionModifier) {
         super(parentEntityModel);
         this.delegate = delegate;
-        this.originatesFromActionColumn = originatesFromActionColumn;
+        this.columnActionModifier = columnActionModifier;
     }
 
     // --
@@ -131,7 +130,7 @@ implements ActionModel {
         delegate.resetParametersToDefault();
     }
 
-    //////////////////////////////////////////////////
+    // --
 
     @Override
     public InlinePromptContext getInlinePromptContext() {

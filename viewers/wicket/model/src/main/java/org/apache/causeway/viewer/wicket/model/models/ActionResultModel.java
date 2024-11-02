@@ -32,23 +32,22 @@ import org.apache.causeway.viewer.wicket.model.models.FormExecutor.ActionResultR
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 @AllArgsConstructor @Getter @Accessors(fluent=true) //java record candidate
 public class ActionResultModel {
     private final ActionResultResponseType responseType;
     private final ManagedObject resultAdapter;
-    private final boolean originatesFromActionsColumn;
-
-    private ActionResultModel(
-        final ActionResultResponseType responseType,
-        final ManagedObject resultAdapter) {
-        this(responseType, resultAdapter, false);
-    }
 
     public static ActionResultModel determineFor(
+            @NonNull final ActionModel actionModel,
             final ManagedObject resultAdapter,
             final AjaxRequestTarget targetIfAny) {
+
+        if(actionModel.getColumnActionModifier().isForceStayOnPage()) {
+            return new ActionResultModel(ActionResultResponseType.RELOAD, resultAdapter);
+        }
 
         /*
          * won't implement CAUSEWAY-3372 (reload on void action result)
@@ -109,7 +108,7 @@ public class ActionResultModel {
             case 1:
                 var firstElement = unpacked.getFirstElseFail();
                 // recursively unwrap
-                return determineFor(firstElement, targetIfAny);
+                return determineFor(actionModel, firstElement, targetIfAny);
             default:
                 return new ActionResultModel(ActionResultResponseType.COLLECTION, resultAdapter);
             }

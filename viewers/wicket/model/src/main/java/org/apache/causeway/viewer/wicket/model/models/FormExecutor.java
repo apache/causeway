@@ -48,7 +48,7 @@ public interface FormExecutor extends Serializable {
         /**
          * Issues a (current) page reload.
          */
-        VOID_AS_RELOAD,
+        RELOAD,
         SIGN_IN;
     }
 

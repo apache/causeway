@@ -110,12 +110,11 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 final ActionResultResponse resultResponse) {
 
-            final AjaxRequestTarget target = resultResponse.getAjaxTarget();
             final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
 
-            scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);
+            scheduleJs(resultResponse.getAjaxTarget(), javascriptFor_newWindow(fullUrl), 100);
         }
     },
     OPEN_URL_IN_SAME_BROWSER_WINDOW {
@@ -123,12 +122,11 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 final ActionResultResponse resultResponse) {
 
-            final AjaxRequestTarget target = resultResponse.getAjaxTarget();
             final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
 
-            scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
+            scheduleJs(resultResponse.getAjaxTarget(), javascriptFor_sameWindow(fullUrl), 100);
         }
     };
 
@@ -144,7 +142,7 @@ public enum ActionResultResponseHandlingStrategy {
     }
 
     /**
-     * very simple templating support, the idea being that "antiCache=${currentTimeMillis}"
+     * very simple template support, the idea being that "antiCache=${currentTimeMillis}"
      * will be replaced automatically.
      */
     public static String expanded(String urlStr) {
