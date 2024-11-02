@@ -138,7 +138,7 @@ public class ComponentFactoryConfigWkt {
     public ComponentFactoryRegistry componentFactoryRegistry(
             @Autowired(required = true) final ComponentFactoryList factoryList,
             @Autowired(required = true) final MetaModelContext metaModelContext) {
-        return new ComponentFactoryRegistryDefault(factoryList, metaModelContext);
+        return new ComponentFactoryRegistry(factoryList, metaModelContext);
     }
 
     /**
