@@ -67,12 +67,12 @@ extends GenericColumnAbstract {
 
         var entityModel = UiObjectWkt.ofAdapter(rowElement);
         var actionModels = actions().stream()
-            .map(act->ActionModel.forEntity(act, entityModel))
+            .map(act->ActionModel.forEntityFromActionColumn(act, entityModel))
             .collect(Can.toCan());
-        
+
         return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.Style.DROPDOWN)
                 .map(Component.class::cast)
-                .orElseGet(()->Wkt.label(componentId, ""));        
+                .orElseGet(()->Wkt.label(componentId, ""));
     }
 
     // -- HELPER

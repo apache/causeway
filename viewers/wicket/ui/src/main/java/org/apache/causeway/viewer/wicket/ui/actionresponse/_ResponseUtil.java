@@ -27,8 +27,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -37,10 +35,9 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
-import org.apache.causeway.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
+import org.apache.causeway.viewer.wicket.model.models.ActionResultModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor.ActionResultResponseType;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -52,7 +49,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 import lombok.NonNull;
-import lombok.Value;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -63,11 +59,11 @@ class _ResponseUtil {
             @Nullable final AjaxRequestTarget ajaxTarget,
             @Nullable final ManagedObject resultAdapterIfAny) {
 
-        var typeAndAdapter = TypeAndAdapter.determineFor(resultAdapterIfAny, ajaxTarget);
-        final ActionResultResponseType type = typeAndAdapter.type;
-        final ManagedObject resultAdapter = typeAndAdapter.resultAdapter;
+        var typeAndAdapter = ActionResultModel.determineFor(resultAdapterIfAny, ajaxTarget);
+        final ActionResultResponseType responseType = typeAndAdapter.responseType();
+        final ManagedObject resultAdapter = typeAndAdapter.resultAdapter();
 
-        switch(type) {
+        switch(responseType) {
         case COLLECTION: {
             _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
 
@@ -140,14 +136,14 @@ class _ResponseUtil {
             return ActionResultResponse.toPage(PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage)));
         }
         default:
-            throw _Exceptions.unmatchedCase(type);
+            throw _Exceptions.unmatchedCase(responseType);
         }
     }
 
     // -- HELPER
 
     private ManagedObject determineScalarAdapter(
-            final @NonNull MetaModelContext commonContext,
+            final @NonNull MetaModelContext mmc,
             final @NonNull ManagedObject resultAdapter) {
 
         if (resultAdapter.getSpecification().isSingular()) {
@@ -159,87 +155,9 @@ class _ResponseUtil {
                     .findFirst()
                     .orElseThrow(_Exceptions::noSuchElement);
 
-            final var scalarAdapter = commonContext.getObjectManager().adapt(pojo);
+            final var scalarAdapter = mmc.getObjectManager().adapt(pojo);
             return scalarAdapter;
         }
     }
-
-    @Value(staticConstructor = "of")
-    private static class TypeAndAdapter {
-        final ActionResultResponseType type;
-        final ManagedObject resultAdapter;
-
-        static TypeAndAdapter determineFor(
-                final ManagedObject resultAdapter,
-                final AjaxRequestTarget targetIfAny) {
-
-            /*
-             * won't implement CAUSEWAY-3372 (reload on void action result)
-             * because we found a counter example, where we don't want this behavior, that is:
-             * @Action
-             * public void delete() {
-             *     repositoryService.removeAndFlush(this);
-             * }
-             */
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-                // triage based on whether action return type is 'void'
-                return TypeAndAdapter.of(ActionResultResponseType.VOID_AS_EMPTY, resultAdapter);
-            }
-
-            var resultSpec = resultAdapter.getSpecification();
-            if (!(resultAdapter instanceof PackedManagedObject)) {
-
-                // scalar ...
-
-                _Assert.assertTrue(resultSpec.isSingular());
-
-                if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
-                    return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);
-                }
-
-                if (resultSpec.isValue()) {
-
-                    final Object value = resultAdapter.getPojo();
-                    if(value instanceof Clob) {
-                        return TypeAndAdapter.of(ActionResultResponseType.VALUE_CLOB, resultAdapter);
-                    }
-                    if(value instanceof Blob) {
-                        return TypeAndAdapter.of(ActionResultResponseType.VALUE_BLOB, resultAdapter);
-                    }
-                    if(value instanceof LocalResourcePath) {
-                        return targetIfAny != null
-                                ? TypeAndAdapter.of(ActionResultResponseType.VALUE_LOCALRESPATH_AJAX, resultAdapter)
-                                : TypeAndAdapter.of(ActionResultResponseType.VALUE_LOCALRESPATH_NOAJAX, resultAdapter);
-                    }
-                    if(value instanceof java.net.URL) {
-                        return targetIfAny != null
-                                ? TypeAndAdapter.of(ActionResultResponseType.VALUE_URL_AJAX, resultAdapter)
-                                : TypeAndAdapter.of(ActionResultResponseType.VALUE_URL_NOAJAX, resultAdapter);
-                    }
-                    // else
-                    return TypeAndAdapter.of(ActionResultResponseType.VALUE, resultAdapter);
-                } else {
-                    return TypeAndAdapter.of(ActionResultResponseType.OBJECT, resultAdapter);
-                }
-            } else {
-                // non-scalar ...
-
-                var packedAdapter = (PackedManagedObject) resultAdapter;
-                var unpacked = packedAdapter.unpack();
-
-                final int cardinality = unpacked.size();
-                switch (cardinality) {
-                case 1:
-                    var firstElement = unpacked.getFirstElseFail();
-                    // recursively unwrap
-                    return determineFor(firstElement, targetIfAny);
-                default:
-                    return TypeAndAdapter.of(ActionResultResponseType.COLLECTION, resultAdapter);
-                }
-            }
-        }
-
-    }
-
 
 }

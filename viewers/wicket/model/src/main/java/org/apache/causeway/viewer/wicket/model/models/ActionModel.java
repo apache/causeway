@@ -46,7 +46,8 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
             final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
             final ScalarParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
+            final EntityCollectionModel associatedWithCollectionIfAny,
+            final boolean originatesFromActionColumn) {
         var delegate = ActionInteractionWkt.forEntity(
                 parentEntityModel,
                 actionIdentifier,
@@ -54,7 +55,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                 associatedWithPropertyIfAny,
                 associatedWithParameterIfAny,
                 associatedWithCollectionIfAny);
-        return new ActionModelImpl(parentEntityModel, delegate);
+        return new ActionModelImpl(parentEntityModel, delegate, originatesFromActionColumn);
     }
 
     public static ActionModel forServiceAction(
@@ -64,7 +65,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         serviceModel,
                         action.getFeatureIdentifier(),
                         Where.ANYWHERE,
-                        null, null, null);
+                        null, null, null, false);
     }
 
     public static ActionModel forEntity(
@@ -75,7 +76,17 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         parentEntityModel,
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        null, null, null);
+                        null, null, null, false);
+    }
+
+    public static ActionModel forEntityFromActionColumn(
+            final ObjectAction action,
+            final UiObjectWkt parentEntityModel) {
+        return ActionModel.forEntity(
+                        parentEntityModel,
+                        action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
+                        null, null, null, true);
     }
 
     public static ActionModel forCollection(
@@ -85,7 +96,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         collectionModel.getEntityModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        null, null, collectionModel);
+                        null, null, collectionModel, false);
     }
 
     public static ActionModel forPropertyOrParameter(
@@ -103,7 +114,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                         propertyModel.getParentUiModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
-                        propertyModel, null, null);
+                        propertyModel, null, null, false);
     }
 
     public static ActionModel forParameter(
@@ -117,7 +128,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
                             parameterModel.getParentUiModel(),
                             action.getFeatureIdentifier(),
                             Where.OBJECT_FORMS,
-                            null, parameterModel, null);
+                            null, parameterModel, null, false);
         }
         return null;
     }
@@ -137,6 +148,16 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
     default boolean isEnabled() {
         return getUsabilityConsent().isAllowed();
     }
+
+    /**
+     * If true, has special page redirect semantics:
+     * <ul>
+     * <li>if action return is void or matches the originating table/collection's element-type, then just RELOAD page</li>
+     * <li>otherwise open action result page in NEW browser tab</li>
+     * </ul>
+     * @since CAUSEWAY-3815
+     */
+    boolean originatesFromActionColumn();
 
     @Override
     default PromptStyle getPromptStyle() {

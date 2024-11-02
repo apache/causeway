@@ -31,6 +31,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -41,6 +42,7 @@ import lombok.NonNull;
  */
 public class ActionResultResponse {
 
+    @Getter
     private final ActionResultResponseHandlingStrategy handlingStrategy;
     private final IRequestHandler handler;
     private final PageRedirectRequest<?> pageRedirect;
@@ -111,10 +113,6 @@ public class ActionResultResponse {
         this.url = url;
     }
 
-    public ActionResultResponseHandlingStrategy getHandlingStrategy() {
-        return handlingStrategy;
-    }
-
     /**
      * Populated only if {@link #getHandlingStrategy() handling strategy}
      * is {@link ActionResultResponseHandlingStrategy#SCHEDULE_HANDLER}
@@ -136,7 +134,7 @@ public class ActionResultResponse {
      * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
      * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
      */
-    public AjaxRequestTarget getTarget() {
+    public AjaxRequestTarget getAjaxTarget() {
         return target;
     }
 

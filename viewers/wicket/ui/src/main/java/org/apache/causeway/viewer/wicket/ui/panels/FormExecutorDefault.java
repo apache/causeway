@@ -29,9 +29,6 @@ import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
@@ -83,11 +80,6 @@ implements FormExecutor, HasCommonContext {
 
         try {
 
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] start ...");
-                //formExecutorContext.getParentObject().reloadViewmodelFromMemoizedBookmark();
-            });
-
             final Optional<Recognition> invalidReasonIfAny = Recognition.of(
                     Category.CONSTRAINT_VIOLATION,
                     actionOrPropertyModel
@@ -99,15 +91,6 @@ implements FormExecutor, HasCommonContext {
                 raiseErrorMessage(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
                 return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                final String whatIsExecuted = actionOrPropertyModel
-                .fold(
-                        act->act.getFriendlyName(),
-                        prop->prop.getFriendlyName());
-
-                _Debug.log("[EXECUTOR] execute %s ...", whatIsExecuted);
-            });
 
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
@@ -128,16 +111,6 @@ implements FormExecutor, HasCommonContext {
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
 
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-
-                final String whatIsExecuted = actionOrPropertyModel
-                .fold(
-                        act->act.getFriendlyName(),
-                        prop->prop.getFriendlyName());
-
-                _Debug.log("[EXECUTOR] resultAdapter created for %s", whatIsExecuted);
-            });
-
             // if we are in a nested dialog/form, that supports an action parameter,
             // the result must be fed back into the calling dialog's/form's parameter
             // negotiation model (instead of redirecting to a new page)
@@ -147,16 +120,6 @@ implements FormExecutor, HasCommonContext {
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 
-            if(log.isDebugEnabled()) {
-                log.debug("about to redirect with {} after execution result {}",
-                        MmEntityUtils.getEntityState(resultAdapter),
-                        resultAdapter);
-            }
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] interpret result ...");
-            });
-
             //XXX triggers ManagedObject.getBookmarkRefreshed()
             var resultResponse = actionOrPropertyModel.fold(
                     act->ActionResultResponse
@@ -164,21 +127,11 @@ implements FormExecutor, HasCommonContext {
                     prop->ActionResultResponse
                             .toEntityPage(resultAdapter));
 
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] handle result ...");
-            });
-
             // redirect using associated strategy
             // XXX note: on property edit, triggers SQL update (on JPA)
             resultResponse
                 .getHandlingStrategy()
-                .handleResults(getMetaModelContext(), resultResponse);
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] ... return\n"
-                        + " - %s\n",
-                        resultResponse.toStringMultiline());
-            });
+                .handleResults(resultResponse);
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 

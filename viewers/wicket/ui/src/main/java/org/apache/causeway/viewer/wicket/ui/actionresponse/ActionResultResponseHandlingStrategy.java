@@ -42,7 +42,6 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
         @Override
         public void handleResults(
-                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             PageUtils.pageRedirect(new VoidReturnPage(new VoidModel()));
@@ -51,14 +50,12 @@ public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(
-                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             // force any changes in state etc to happen now prior to the redirect;
             // in the case of an object being returned, this should cause our page mementos
             // (eg EntityModel) to hold the correct state.  I hope.
-
-            commonContext.getTransactionService().flushTransaction();
+            MetaModelContext.instance().ifPresent(mmc->mmc.getTransactionService().flushTransaction());
 
             // "redirect-after-post"
             resultResponse.getPageRedirect().applyTo(RequestCycle.get());
@@ -67,7 +64,6 @@ public enum ActionResultResponseHandlingStrategy {
     SCHEDULE_HANDLER {
         @Override
         public void handleResults(
-                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
             final RequestCycle requestCycle = RequestCycle.get();
@@ -112,10 +108,9 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_NEW_BROWSER_WINDOW {
         @Override
         public void handleResults(
-                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
-            final AjaxRequestTarget target = resultResponse.getTarget();
+            final AjaxRequestTarget target = resultResponse.getAjaxTarget();
             final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
@@ -126,10 +121,9 @@ public enum ActionResultResponseHandlingStrategy {
     OPEN_URL_IN_SAME_BROWSER_WINDOW {
         @Override
         public void handleResults(
-                final MetaModelContext commonContext,
                 final ActionResultResponse resultResponse) {
 
-            final AjaxRequestTarget target = resultResponse.getTarget();
+            final AjaxRequestTarget target = resultResponse.getAjaxTarget();
             final String url = resultResponse.getUrl();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
@@ -139,7 +133,6 @@ public enum ActionResultResponseHandlingStrategy {
     };
 
     public abstract void handleResults(
-            MetaModelContext commonContext,
             ActionResultResponse resultResponse);
 
     /**
