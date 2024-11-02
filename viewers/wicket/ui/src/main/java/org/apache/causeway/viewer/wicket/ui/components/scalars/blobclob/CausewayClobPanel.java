@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
  *    One option might be to 'guess' the character encoding, eg akin to cpdetector?
  * </p>
  */
-public class CausewayClobPanel extends CausewayBlobOrClobPanelAbstract<Clob> {
+class CausewayClobPanel extends CausewayBlobOrClobPanelAbstract<Clob> {
 
     private static final long serialVersionUID = 1L;
 

@@ -59,10 +59,6 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobOrClobPanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ObjectChoicesSelect2Panel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ValueChoicesSelect2Panel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
@@ -133,7 +129,7 @@ implements ScalarModelChangeListener {
             return this==CAN_EDIT
                 || this==CAN_EDIT_INLINE
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }
-        
+
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
             var scalarModel = scalarPanel.scalarModel();
             if(scalarModel.getRenderingHint().isInTable()) {
@@ -225,8 +221,12 @@ implements ScalarModelChangeListener {
 
     /**
      * Used by most subclasses
-     * ({@link ScalarPanelAbstract}, {@link ObjectChoicesSelect2Panel}, {@link ValueChoicesSelect2Panel})
-     * but not all ({@link CausewayBlobOrClobPanelAbstract}, {@link BooleanPanel})
+     * ({@link ScalarPanelAbstract},
+     * {@link org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ObjectChoicesSelect2Panel},
+     * {@link org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ValueChoicesSelect2Panel})
+     * but not all
+     * ({@link org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobOrClobPanelAbstract},
+     * {@link org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanel})
      */
     @Getter(AccessLevel.PROTECTED)
     private WebMarkupContainer formFrame;
@@ -661,11 +661,11 @@ implements ScalarModelChangeListener {
 
        var visibilityBefore = isVisibilityAllowed();
        var usabilityBefore = isCurrentlyRenderedAsUsable();
-       
+
        var paramNegotiationModel = paramModel.getParameterNegotiationModel();
        final int paramIndex = paramModel.getParameterIndex();
        paramNegotiationModel.invalidateVisibilityAndUsability(paramIndex);
-        
+
        /*
         * VISIBILITY, cases to consider:
         * (1) start showing     -> Repaint.REQUIRED_ON_PARENT
@@ -707,11 +707,11 @@ implements ScalarModelChangeListener {
 
        return Repaint.OPTIONAL;
    }
-   
+
    // -- HELPER
-   
+
    /**
-    * Whether the underlying UI component is currently rendered as usable. 
+    * Whether the underlying UI component is currently rendered as usable.
     */
    private boolean isCurrentlyRenderedAsUsable() {
        if(!isEnabled()) return false;

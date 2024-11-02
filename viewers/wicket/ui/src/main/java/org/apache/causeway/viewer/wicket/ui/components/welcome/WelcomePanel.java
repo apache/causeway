@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
-public class WelcomePanel
+class WelcomePanel
 extends PanelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome, WelcomeModel> {
 
     private static final long serialVersionUID = 1L;

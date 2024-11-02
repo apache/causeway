@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 /**
  * Panel for rendering scalars of type {@link org.apache.causeway.applib.value.Blob Causeway' applib.Blob}.
  */
-public class CausewayBlobPanel extends CausewayBlobOrClobPanelAbstract<Blob> {
+class CausewayBlobPanel extends CausewayBlobOrClobPanelAbstract<Blob> {
 
     private static final long serialVersionUID = 1L;
 

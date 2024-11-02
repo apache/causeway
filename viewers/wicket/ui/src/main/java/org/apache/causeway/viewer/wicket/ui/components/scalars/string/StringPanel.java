@@ -24,7 +24,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFi
 /**
  * Panel for rendering scalars of type {@link String}.
  */
-public class StringPanel extends ScalarPanelTextFieldTextualAbstract {
+class StringPanel extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 

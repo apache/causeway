@@ -43,7 +43,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraConte
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanel;
+import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
@@ -235,7 +235,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
         castTo(ActionPromptWithExtraContent.class, actionPrompt)
         .ifPresent(promptWithExtraContent->{
-            BSGridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
+            BSGridPanelFactory.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
             .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
         });
     }

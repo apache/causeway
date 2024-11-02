@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-public class ValueChoicesSelect2Panel
+class ValueChoicesSelect2Panel
 extends ScalarPanelSelectAbstract
 implements ChoiceTitleHandler {
 

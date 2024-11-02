@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFi
  * This is a fallback panel; values are expected to be {@link Parser parseable}
  * (typically through the Causeway' {@link Value} annotation.
  */
-public class ValueFallbackPanel
+class ValueFallbackPanel
 extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;

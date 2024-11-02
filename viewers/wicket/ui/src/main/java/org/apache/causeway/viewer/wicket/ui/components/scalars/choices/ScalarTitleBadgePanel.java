@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.scalars.string;
+package org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
 
 import java.util.EnumSet;
 
@@ -32,7 +32,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * <p>
  * Most prominently this is used for {@link Enum} values.
  */
-public class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
+class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     private static final long serialVersionUID = 1L;
 

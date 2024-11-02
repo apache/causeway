@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-public class StandaloneCollectionPanel
+class StandaloneCollectionPanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 

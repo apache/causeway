@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-public class StandaloneMarkupPanel
+class StandaloneMarkupPanel
 extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;

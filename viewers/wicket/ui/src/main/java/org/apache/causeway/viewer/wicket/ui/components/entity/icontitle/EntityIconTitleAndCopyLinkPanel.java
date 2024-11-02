@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.zclip.ZeroClipboa
  * An extension of {@link org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel}
  * that additionally has a link allowing to copy the url to the shown entity
  */
-public class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
+class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
 
     private static final long serialVersionUID = 1L;
 

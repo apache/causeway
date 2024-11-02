@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-public class UnknownModelPanel
+class UnknownModelPanel
 extends PanelAbstract<Object, IModel<Object>> {
 
     private static final long serialVersionUID = 1L;

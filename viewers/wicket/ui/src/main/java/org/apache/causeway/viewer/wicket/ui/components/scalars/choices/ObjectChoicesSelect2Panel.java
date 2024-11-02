@@ -47,7 +47,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ObjectChoicesSelect2Panel
+class ObjectChoicesSelect2Panel
 extends ScalarPanelSelectAbstract
 implements ChoiceTitleHandler {
 

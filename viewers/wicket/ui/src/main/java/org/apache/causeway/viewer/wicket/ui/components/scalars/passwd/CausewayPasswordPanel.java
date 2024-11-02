@@ -28,7 +28,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 /**
  * Panel for rendering scalars of type {@link Password Causeway' applib.Password}.
  */
-public class CausewayPasswordPanel
+class CausewayPasswordPanel
 extends ScalarPanelTextFieldWithValueSemantics<Password> {
 
     private static final long serialVersionUID = 1L;
