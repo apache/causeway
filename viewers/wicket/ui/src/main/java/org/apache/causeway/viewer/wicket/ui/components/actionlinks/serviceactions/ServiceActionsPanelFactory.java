@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -25,20 +25,21 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 /**
- * {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} for a {@link org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanel} to represent the
+ * {@link ComponentFactory} for a {@link ServiceActionsPanel} to represent the
  * {@link org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel application action}s.
  */
-public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
+public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
 
-    public TertiaryMenuPanelFactory() {
+    public ServiceActionsPanelFactory() {
         super(UiComponentType.SERVICE_ACTIONS, ServiceActionsPanel.class);
     }
 
     /**
-     * Applies only to tertiary service action models.
+     * Applies to primary and secondary service action models.
      */
     @Override
     protected ApplicationAdvice appliesTo(final IModel<?> model) {
@@ -48,8 +49,8 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         var menuUiModel = ((ServiceActionsModel) model).getObject();
         var menuBarSelect = menuUiModel.getMenuBarSelect();
         return appliesIf(
-                menuBarSelect == DomainServiceLayout.MenuBar.TERTIARY
-                || menuBarSelect == null);
+                menuBarSelect != DomainServiceLayout.MenuBar.TERTIARY
+                && menuBarSelect != null);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         ServiceActionUtil.buildMenu(
                 super.getMetaModelContext(), menuUiModel, menuItems::add);
 
-        return new TertiaryActionsPanel(id, menuItems);
+        return new ServiceActionsPanel(id, menuItems);
     }
 
 }

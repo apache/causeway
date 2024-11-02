@@ -56,7 +56,7 @@ import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.Fo
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;

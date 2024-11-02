@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
 import java.util.function.Consumer;
 

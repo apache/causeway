@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;

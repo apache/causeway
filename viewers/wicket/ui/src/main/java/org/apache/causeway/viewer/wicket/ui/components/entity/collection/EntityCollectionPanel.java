@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions;
 
 import java.util.List;
 import java.util.Optional;

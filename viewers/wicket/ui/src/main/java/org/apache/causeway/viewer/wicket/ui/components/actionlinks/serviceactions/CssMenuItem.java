@@ -14,7 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
 import java.util.List;
 

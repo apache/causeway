@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
