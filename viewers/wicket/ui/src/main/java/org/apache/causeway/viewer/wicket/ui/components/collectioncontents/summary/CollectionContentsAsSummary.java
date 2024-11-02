@@ -51,7 +51,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * collection of entity}s rendered using as a table of summary values with a
  * chart alongside.
  */
-public class CollectionContentsAsSummary
+class CollectionContentsAsSummary
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider {
 

@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-public class BookmarkedPagesPanel
+class BookmarkedPagesPanel
 extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final long serialVersionUID = 1L;

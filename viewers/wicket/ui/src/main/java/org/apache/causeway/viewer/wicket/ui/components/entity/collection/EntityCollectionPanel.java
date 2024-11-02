@@ -53,7 +53,7 @@ import lombok.Getter;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link UiObjectWkt}.
  */
-public class EntityCollectionPanel
+class EntityCollectionPanel
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 

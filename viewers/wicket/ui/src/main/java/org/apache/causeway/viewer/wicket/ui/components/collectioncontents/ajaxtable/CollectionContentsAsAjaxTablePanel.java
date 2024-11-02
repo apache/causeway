@@ -57,7 +57,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
-public class CollectionContentsAsAjaxTablePanel
+class CollectionContentsAsAjaxTablePanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider {
 

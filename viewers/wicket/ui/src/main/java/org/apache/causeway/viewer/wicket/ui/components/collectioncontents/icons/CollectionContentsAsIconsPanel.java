@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using a simple list of icons.
  */
-public class CollectionContentsAsIconsPanel
+class CollectionContentsAsIconsPanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;

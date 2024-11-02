@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
-public class EmptyCollectionPanel
+class EmptyCollectionPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

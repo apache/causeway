@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
@@ -47,7 +48,7 @@ import lombok.experimental.Accessors;
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link UiObjectWkt}.
  */
-public class EntityIconAndTitlePanel
+class EntityIconAndTitlePanel
 extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private static final long serialVersionUID = 1L;
@@ -171,7 +172,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private String titleAbbreviated(final String titleString) {
         final int maxTitleLength = abbreviateTo(getModel(), titleString);
-        return abbreviated(titleString, maxTitleLength);
+        return _Text.abbreviated(titleString, maxTitleLength);
     }
 
     /**
@@ -262,17 +263,6 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
 
     private boolean isContextAdapter(final ManagedObject other) {
         return getModel().isContextAdapter(other);
-    }
-
-    //JUnit support (public)
-    public static String abbreviated(final String str, final int maxLength) {
-        int length = str.length();
-        if (length <= maxLength) {
-            return str;
-        }
-        return maxLength <= 3
-                ? ""
-                : str.substring(0, maxLength - 3) + "...";
     }
 
     private static void guardAgainstNonEmptyAbstractSingular(final ObjectAdapterModel objectAdapterModel) {

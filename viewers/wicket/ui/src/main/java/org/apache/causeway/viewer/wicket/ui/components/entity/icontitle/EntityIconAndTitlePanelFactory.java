@@ -44,7 +44,6 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
     public EntityIconAndTitlePanelFactory(
             final UiComponentType uiComponentType,
             final Class<?> componentClass) {
-
         super(uiComponentType, componentClass);
     }
 
@@ -52,7 +51,6 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             final UiComponentType uiComponentType,
             final String name,
             final Class<?> componentClass) {
-
         super(uiComponentType, name, componentClass);
     }
 
@@ -95,6 +93,15 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         }
 
         return new EntityIconAndTitlePanel(id, objectAdapterModel);
+    }
+
+    /**
+     * refactoring hint: go through proper ComponentFactory channels instead
+     */
+    public static Component entityIconAndTitlePanel(
+            final String componentId,
+            final ObjectAdapterModel objectAdapterModel) {
+        return new EntityIconAndTitlePanel(componentId, objectAdapterModel);
     }
 
 }

@@ -46,7 +46,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
  * rendering the appropriate {@link UiComponentType#COLLECTION_CONTENTS}
  * view for a backing {@link EntityCollectionModel}.
  */
-public class CollectionContentsMultipleViewsPanel
+class CollectionContentsMultipleViewsPanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
 implements CollectionCountProvider {
 
