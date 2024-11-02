@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.actionresponse.ActionResultResponseType;
+import org.apache.causeway.viewer.wicket.ui.actionresponse.ActionResultResponse;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -159,9 +159,9 @@ implements FormExecutor, HasCommonContext {
 
             //XXX triggers ManagedObject.getBookmarkRefreshed()
             var resultResponse = actionOrPropertyModel.fold(
-                    act->ActionResultResponseType
+                    act->ActionResultResponse
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
-                    prop->ActionResultResponseType
+                    prop->ActionResultResponse
                             .toEntityPage(resultAdapter));
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{

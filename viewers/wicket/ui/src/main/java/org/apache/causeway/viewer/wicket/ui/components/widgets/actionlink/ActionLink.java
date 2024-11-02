@@ -208,7 +208,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
             var targetAdapter = actionModel.getParentObject();
 
             var bookmark = targetAdapter.refreshBookmark().orElseThrow();
-            getMetaModelContext().getTransactionService().flushTransaction();
+            getTransactionService().flushTransaction();
 
             // "redirect-after-post"
             RequestCycle.get().setResponsePage(EntityPage.class,

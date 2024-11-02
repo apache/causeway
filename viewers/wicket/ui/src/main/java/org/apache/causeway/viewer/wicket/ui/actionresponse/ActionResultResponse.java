@@ -22,9 +22,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 
 import lombok.NonNull;
 
@@ -41,6 +46,17 @@ public class ActionResultResponse {
     private final PageRedirectRequest<?> pageRedirect;
     private final AjaxRequestTarget target;
     private final String url;
+
+    public static ActionResultResponse toEntityPage(final @NonNull ManagedObject entityOrViewmodel) {
+        return ActionResultResponse.toPage(EntityPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
+    }
+
+    public static ActionResultResponse determineAndInterpretResult(
+            final ActionModel model,
+            final @Nullable AjaxRequestTarget targetIfAny,
+            final @Nullable ManagedObject resultAdapter) {
+        return _ResponseUtil.determineAndInterpretResult(model, targetIfAny, resultAdapter);
+    }
 
     public static ActionResultResponse withHandler(final IRequestHandler handler) {
         return new ActionResultResponse(
