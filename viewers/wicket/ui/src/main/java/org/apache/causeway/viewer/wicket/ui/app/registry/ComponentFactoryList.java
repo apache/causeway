@@ -20,11 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.app.registry;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 public final class ComponentFactoryList implements Iterable<ComponentFactory> {
@@ -36,48 +34,6 @@ public final class ComponentFactoryList implements Iterable<ComponentFactory> {
             return;
         }
         componentFactories.add(componentFactory);
-    }
-
-    public void replace(final ComponentFactory replacementComponentFactory) {
-        removeExisting(matching(replacementComponentFactory.getComponentType()));
-        add(replacementComponentFactory);
-    }
-
-    public void replace(final Class<? extends ComponentFactory> toReplace, final ComponentFactory replacementComponentFactory) {
-        int indexOfOldFactory = removeExisting(matching(toReplace));
-        insert(indexOfOldFactory, replacementComponentFactory);
-    }
-
-    private void insert(final int indexToInsertInto, final ComponentFactory replacementComponentFactory) {
-        if (indexToInsertInto > -1 && indexToInsertInto < componentFactories.size()) {
-            componentFactories.add(indexToInsertInto, replacementComponentFactory);
-        } else {
-            componentFactories.add(replacementComponentFactory);
-        }
-    }
-
-    private int removeExisting(final Predicate<ComponentFactory> predicate) {
-        int indexOfFirst = -1;
-        for (int i = 0; i < componentFactories.size(); i++) {
-            ComponentFactory factory = componentFactories.get(i);
-            if (predicate.test(factory)) {
-                componentFactories.remove(i);
-                if (indexOfFirst == -1) {
-                    indexOfFirst = i;
-                }
-                i--;
-            }
-        }
-
-        return indexOfFirst;
-    }
-
-    private static Predicate<ComponentFactory> matching(final UiComponentType uiComponentType) {
-        return input -> input.getComponentType() == uiComponentType;
-    }
-
-    private static Predicate<ComponentFactory> matching(final Class<? extends ComponentFactory> toReplace) {
-        return input -> toReplace.isAssignableFrom(input.getClass());
     }
 
     @Override

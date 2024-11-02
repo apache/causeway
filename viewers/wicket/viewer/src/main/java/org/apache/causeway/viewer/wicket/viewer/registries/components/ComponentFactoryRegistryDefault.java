@@ -25,21 +25,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -51,97 +42,28 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryList;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * Implementation of {@link ComponentFactoryRegistry} that delegates to a
- * provided {@link ComponentFactoryRegistrar}.
- */
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Log4j2
-public class ComponentFactoryRegistryDefault
+class ComponentFactoryRegistryDefault
 implements ComponentFactoryRegistry {
-
-    public static final String LOGICAL_TYPE_NAME =
-            CausewayModuleViewerWicketViewer.NAMESPACE + ".ComponentFactoryRegistryDefault";
-
-    @Configuration
-    public static class AutoConfiguration {
-        @Bean
-        @Named(LOGICAL_TYPE_NAME)
-        @Order(PriorityPrecedence.MIDPOINT)
-        @Qualifier("Default")
-        public ComponentFactoryRegistryDefault componentFactoryRegistryDefault(
-                final ComponentFactoryRegistrar componentFactoryRegistrar,
-                final MetaModelContext metaModelContext
-        ) {
-            return new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
-        }
-    }
-
-    private final ComponentFactoryRegistrar componentFactoryRegistrar;
-    private final MetaModelContext metaModelContext;
 
     private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByComponentType =
             _Multimaps.newListMultimap();
     private final Map<Class<? extends ComponentFactory>, ComponentFactory> componentFactoriesByType =
             new HashMap<>();
 
-    @PostConstruct
-    public void init() {
-        registerComponentFactories(componentFactoryRegistrar);
-    }
-
-    // -- REGISTRATION
-
-    /**
-     * Registers the provided set of component factories.
-     */
-    protected void registerComponentFactories(final ComponentFactoryRegistrar componentFactoryRegistrar) {
-
-        var componentFactories = new ComponentFactoryList();
-
-        componentFactoryRegistrar.addComponentFactories(componentFactories);
-
-        var commonContext = metaModelContext;
-
-        for (var componentFactory : componentFactories) {
-            registerComponentFactory(commonContext, componentFactory);
+    public ComponentFactoryRegistryDefault(
+            final ComponentFactoryList factoryList,
+            final MetaModelContext metaModelContext) {
+        super();
+        for (var componentFactory : factoryList) {
+            registerComponentFactory(metaModelContext, componentFactory);
             componentFactoriesByType.put(componentFactory.getClass(), componentFactory);
         }
-
         ensureAllComponentTypesRegistered();
-    }
-
-    private void registerComponentFactory(
-            final MetaModelContext commonContext,
-            final ComponentFactory componentFactory) {
-
-        // handle dependency injection for factories
-        commonContext.getServiceInjector().injectServicesInto(componentFactory);
-        if(componentFactory instanceof ComponentFactoryAbstract) {
-            ((ComponentFactoryAbstract)componentFactory).setMetaModelContext(commonContext);
-        }
-
-        componentFactoriesByComponentType.putElement(componentFactory.getComponentType(), componentFactory);
-    }
-
-    private void ensureAllComponentTypesRegistered() {
-        for (var componentType : UiComponentType.values()) {
-
-            if(componentType.getOptionality().isOptional()) {
-                continue;
-            }
-
-            if (componentFactoriesByComponentType.getOrElseEmpty(componentType).isEmpty()) {
-                throw new IllegalStateException("No component factories registered for " + componentType);
-            }
-        }
     }
 
     // -- PUBLIC API
@@ -215,6 +137,34 @@ implements ComponentFactoryRegistry {
         return Optional.ofNullable((T)componentFactoriesByType.get(factoryClass));
     }
 
+    // -- REGISTRATION
+
+    private void registerComponentFactory(
+            final MetaModelContext commonContext,
+            final ComponentFactory componentFactory) {
+
+        // handle dependency injection for factories
+        commonContext.getServiceInjector().injectServicesInto(componentFactory);
+        if(componentFactory instanceof ComponentFactoryAbstract) {
+            ((ComponentFactoryAbstract)componentFactory).setMetaModelContext(commonContext);
+        }
+
+        componentFactoriesByComponentType.putElement(componentFactory.getComponentType(), componentFactory);
+    }
+
+    private void ensureAllComponentTypesRegistered() {
+        for (var componentType : UiComponentType.values()) {
+
+            if(componentType.getOptionality().isOptional()) {
+                continue;
+            }
+
+            if (componentFactoriesByComponentType.getOrElseEmpty(componentType).isEmpty()) {
+                throw new IllegalStateException("No component factories registered for " + componentType);
+            }
+        }
+    }
+
     // -- DEBUG LOGGING
 
     private static void logComponentResolving(
@@ -235,10 +185,10 @@ implements ComponentFactoryRegistry {
     }
 
     static ComponentFactoryRegistryDefault forTesting(
-            final ComponentFactoryRegistrar componentFactoryRegistrar,
+            final ComponentFactoryList factoryList,
             final MetaModelContext metaModelContext,
             final List<ComponentFactory> componentFactories) {
-        var factory = new ComponentFactoryRegistryDefault(componentFactoryRegistrar, metaModelContext);
+        var factory = new ComponentFactoryRegistryDefault(factoryList, metaModelContext);
         _NullSafe.stream(componentFactories)
         .forEach(componentFactory->
             factory.componentFactoriesByComponentType.putElement(

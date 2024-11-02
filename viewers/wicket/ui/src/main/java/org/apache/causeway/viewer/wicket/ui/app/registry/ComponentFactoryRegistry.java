@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 /**
  * API for finding registered {@link ComponentFactory}s.
- *
  * <p>
  * Ultimately all requests to locate {@link ComponentFactory}s are routed
  * through to an object implementing this interface.
