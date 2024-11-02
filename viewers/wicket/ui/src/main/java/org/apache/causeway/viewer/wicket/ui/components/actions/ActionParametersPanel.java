@@ -23,12 +23,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * {@link PanelAbstract Panel} representing an action invocation, backed by an
@@ -36,9 +34,10 @@ import lombok.Setter;
  * <p>
  * Will render either parameter dialog or the results.
  * <p>
- * Corresponding component to edit properties is {@link PropertyEditPanel}.
+ * Corresponding component to edit properties is
+ * {@link org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanel}.
  */
-public class ActionParametersPanel
+class ActionParametersPanel
 extends PanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;
@@ -46,8 +45,9 @@ extends PanelAbstract<ManagedObject, ActionModel> {
     private static final String ID_HEADER = "header";
     private static final String ID_ACTION_NAME = "actionName";
 
-    public ActionParametersPanel(final String id, final ActionModel actionModel) {
+    public ActionParametersPanel(final String id, final ActionModel actionModel, final boolean showHeader) {
         super(id, actionModel);
+        this.showHeader = showHeader;
     }
 
     ActionModel getActionModel() {
@@ -78,10 +78,10 @@ extends PanelAbstract<ManagedObject, ActionModel> {
     }
 
     /**
-     * Gives a chance to hide the header part of this action panel,
+     * Whether to hide the header part of this action panel,
      * e.g. when shown in an action prompt
      */
-    @Setter @Getter
-    private boolean showHeader = true;
+    @Getter
+    private final boolean showHeader;
 
 }

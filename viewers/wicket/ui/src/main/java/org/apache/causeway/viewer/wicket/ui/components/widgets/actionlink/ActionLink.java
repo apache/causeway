@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraConte
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
@@ -96,7 +95,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
             final String id,
             final ActionModel model) {
         super(id, model);
-        
+
         _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
@@ -109,11 +108,11 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
             this.add(this.indicatorAppenderIfAny);
         }
     }
-    
+
     public ActionModel getActionModel() {
         return (ActionModel) getModel();
     }
-    
+
     @Override
     public ManagedAction getManagedAction() {
         return getActionModel().getManagedAction();
@@ -189,7 +188,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     }
 
     // -- HELPER
-    
+
     private void executeWithoutParams() {
         var actionModel = this.getActionModel();
 
@@ -224,13 +223,10 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
                 .getFrom(this.getPage())
                 .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
 
-        var actionParametersPanel = (ActionParametersPanel)
-                getComponentFactoryRegistry()
+        var actionParametersPanel = getComponentFactoryRegistry()
                 .createComponent(actionPrompt.getContentId(),
                         UiComponentType.ACTION_PROMPT,
                         actionModel);
-
-        actionParametersPanel.setShowHeader(false);
 
         var label = Wkt.label(actionPrompt.getTitleId(), actionModel::getFriendlyName);
         actionPrompt.setTitle(label, target);

@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.property;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersFormPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 
@@ -28,9 +27,10 @@ import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  * <p>
- * Corresponding panel for property edits is {@link ActionParametersFormPanel}.
+ * Corresponding panel for property edits is
+ * {@link org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersFormPanel}.
  */
-public class PropertyEditFormPanel
+class PropertyEditFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;

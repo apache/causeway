@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.components.actions;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -29,9 +28,10 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * {@link PanelAbstract Panel} to capture the arguments for an action
  * invocation.
  * <p>
- * Corresponding panel for property edits is {@link PropertyEditFormPanel}.
+ * Corresponding panel for property edits is
+ * {@link org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanel}.
  */
-public class ActionParametersFormPanel
+class ActionParametersFormPanel
 extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
 
     private static final long serialVersionUID = 1L;

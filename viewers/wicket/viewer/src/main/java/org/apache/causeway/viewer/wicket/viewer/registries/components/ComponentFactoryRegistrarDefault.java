@@ -45,6 +45,7 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.tabular.simple.CollectionContentsExporter;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.causeway.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
