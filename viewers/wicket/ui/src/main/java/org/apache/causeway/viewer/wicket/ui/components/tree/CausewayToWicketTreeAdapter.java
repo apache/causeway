@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 class CausewayToWicketTreeAdapter {
@@ -110,7 +110,7 @@ class CausewayToWicketTreeAdapter {
         @Override
         protected Component newContentComponent(final String id, final IModel<_TreeNodeMemento> node) {
             final _TreeNodeMemento treeModel = node.getObject();
-            final Component entityIconAndTitle = new EntityIconAndTitlePanel(
+            final Component entityIconAndTitle = EntityIconAndTitlePanelFactory.entityIconAndTitlePanel(
                     id, treeModel.asObjectAdapterModel());
             if(treeExpansionModel().isSelected(treeModel.getTreePath())) {
                 Wkt.cssAppend(entityIconAndTitle, "tree-node-selected");

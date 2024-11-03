@@ -16,13 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
 import java.util.List;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js.ServerSentEventsJsReference;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+
+// import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -32,19 +38,31 @@ import org.apache.wicket.request.resource.CssResourceReference;
  *     <a href="http://bootsnipp.com/snippets/featured/multi-level-dropdown-menu-bs">Bootsnip</a>
  * </p>
  */
-public class TertiaryActionsPanel extends MenuActionPanel {
+class ServiceActionsPanel extends MenuActionPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public TertiaryActionsPanel(final String id, final List<CssMenuItem> menuItems) {
+    public ServiceActionsPanel(final String id, final List<CssMenuItem> menuItems) {
         super(id);
-        add(super.subMenuItemsView(flatten(menuItems)));
+
+        Wkt.listViewAdd(this, "menuItems", menuItems, listItem->{
+            var menuItem = listItem.getModelObject();
+
+            var topMenu = new WebMarkupContainer("topMenu");
+            topMenu.add(subMenuItemsView(menuItem.getSubMenuItems()));
+            var css = Wkt.cssNormalize(menuItem.getName());
+            Wkt.cssAppend(topMenu, "top-menu-" + css);
+            Wkt.labelAdd(listItem, "name", menuItem.getName());
+            listItem.add(topMenu);
+        });
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(new CssResourceReference(TertiaryActionsPanel.class, "TertiaryActionsPanel.css")));
+        response.render(CssHeaderItem.forReference(
+                new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
+        response.render(ServerSentEventsJsReference.asHeaderItem());
     }
 
 }

@@ -23,19 +23,13 @@ import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import org.apache.wicket.Component;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.util.ClassUtils;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.tabular.TabularExporter;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
@@ -43,13 +37,15 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryList;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.about.AboutPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actioninfo.ActionInfoPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions.ServiceActionsPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions.TertiaryMenuPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions.ServiceActionsPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions.TertiaryMenuPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
@@ -89,47 +85,60 @@ import org.apache.causeway.viewer.wicket.ui.components.value.StandaloneValuePane
 import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
-import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Default implementation of {@link ComponentFactoryRegistrar} that registers a
- * hardcoded set of built-in {@link ComponentFactory}s, along with any
- * implementations discovered by the IoC container.
+ * Registers a hardcoded set of built-in {@link ComponentFactory}s,
+ * along with any implementations discovered by Spring.
  */
+@Configuration
 @Log4j2
-public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistrar {
+public class ComponentFactoryConfigWkt {
 
-    public static final String LOGICAL_TYPE_NAME =
-            CausewayModuleViewerWicketViewer.NAMESPACE + ".ComponentFactoryRegistrarDefault";
+    @Bean
+    public ComponentFactoryList componentFactoryList(
+            @Autowired(required = true) final ValueSemanticsResolver valueSemanticsResolver,
+            @Autowired(required = false) List<TabularExporter> tabularExporters,
+            final List<ComponentFactory> componentFactoriesPluggedIn) {
+        var factoryList = new ComponentFactoryList();
 
-    @Configuration
-    public static class AutoConfiguration {
-        @Bean
-        @Named(LOGICAL_TYPE_NAME)
-        @Order(PriorityPrecedence.MIDPOINT)
-        @Qualifier("Default")
-        public ComponentFactoryRegistrarDefault componentFactoryRegistrarDefault(
-                final List<ComponentFactory> componentFactoriesPluggedIn) {
-            return new ComponentFactoryRegistrarDefault(componentFactoriesPluggedIn);
-        }
+        addComponentFactoriesActingAsSelectors(factoryList);
+
+        log.info("adding {} ComponentFactories from plugins: {}",
+                _NullSafe.size(componentFactoriesPluggedIn), componentFactoriesPluggedIn);
+        _NullSafe.stream(componentFactoriesPluggedIn)
+            .forEach(factoryList::add);
+
+        //built-in
+        addComponentFactoriesForWelcomeAndAbout(factoryList);
+        addComponentFactoriesForApplicationActions(factoryList);
+        addComponentFactoriesForEntity(factoryList);
+        addComponentFactoriesForActionInfo(factoryList);
+        addComponentFactoriesForAction(factoryList);
+        addComponentFactoriesForPropertyEdit(factoryList);
+        addComponentFactoriesForEntityCollectionContents(factoryList, tabularExporters);
+        addComponentFactoriesForEmptyCollection(factoryList);
+        addComponentFactoriesForScalar(factoryList, valueSemanticsResolver);
+        addComponentFactoriesForEntityLink(factoryList);
+        addComponentFactoriesForVoidReturn(factoryList);
+        addComponentFactoriesForValue(factoryList);
+        addComponentFactoriesForParameters(factoryList);
+        addComponentFactoriesForBreadcrumbs(factoryList);
+        addComponentFactoriesForPageHeader(factoryList);
+        addComponentFactoriesForPageFooter(factoryList);
+
+        addComponentFactoriesForUnknown(factoryList);
+
+        return factoryList;
     }
 
-    private @Inject ValueSemanticsResolver valueSemanticsResolver;
-    private @Autowired(required = false) List<TabularExporter> tabularExporters;
-
-    private final List<ComponentFactory> componentFactoriesPluggedIn;
-    public ComponentFactoryRegistrarDefault(final List<ComponentFactory> componentFactoriesPluggedIn) {
-        this.componentFactoriesPluggedIn = componentFactoriesPluggedIn;
-    }
-
-    @Override
-    public void addComponentFactories(final ComponentFactoryList componentFactories) {
-        addComponentFactoriesActingAsSelectors(componentFactories);
-        addComponentFactoriesFromPlugins(componentFactories);
-        addBuiltInComponentFactories(componentFactories);
+    @Bean
+    public ComponentFactoryRegistry componentFactoryRegistry(
+            @Autowired(required = true) final ComponentFactoryList factoryList,
+            @Autowired(required = true) final MetaModelContext metaModelContext) {
+        return new ComponentFactoryRegistry(factoryList, metaModelContext);
     }
 
     /**
@@ -146,37 +155,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new CollectionContentsMultipleViewsPanelFactory());
     }
 
-    protected void addComponentFactoriesFromPlugins(final ComponentFactoryList componentFactories) {
-
-        log.info("adding {} ComponentFactories from plugins: {}",
-                _NullSafe.size(componentFactoriesPluggedIn),
-                componentFactoriesPluggedIn);
-
-        _NullSafe.stream(componentFactoriesPluggedIn)
-            .forEach(componentFactories::add);
-    }
-
-    private void addBuiltInComponentFactories(final ComponentFactoryList componentFactories) {
-        addComponentFactoriesForWelcomeAndAbout(componentFactories);
-        addComponentFactoriesForApplicationActions(componentFactories);
-        addComponentFactoriesForEntity(componentFactories);
-        addComponentFactoriesForActionInfo(componentFactories);
-        addComponentFactoriesForAction(componentFactories);
-        addComponentFactoriesForPropertyEdit(componentFactories);
-        addComponentFactoriesForEntityCollectionContents(componentFactories);
-        addComponentFactoriesForEmptyCollection(componentFactories);
-        addComponentFactoriesForScalar(componentFactories);
-        addComponentFactoriesForEntityLink(componentFactories);
-        addComponentFactoriesForVoidReturn(componentFactories);
-        addComponentFactoriesForValue(componentFactories);
-        addComponentFactoriesForParameters(componentFactories);
-        addComponentFactoriesForBreadcrumbs(componentFactories);
-        addComponentFactoriesForPageHeader(componentFactories);
-        addComponentFactoriesForPageFooter(componentFactories);
-
-        addComponentFactoriesForUnknown(componentFactories);
-    }
-
     protected void addComponentFactoriesForPageHeader(final ComponentFactoryList componentFactories) {
         componentFactories.add(new HeaderPanelFactory());
     }
@@ -191,7 +169,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForEntity(final ComponentFactoryList componentFactories) {
-
         // top level
         componentFactories.add(new BSGridPanelFactory());
 
@@ -202,16 +179,12 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new EntityCollectionPanelFactory());
     }
 
-    protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {
+    protected void addComponentFactoriesForEntityCollectionContents(
+            final ComponentFactoryList componentFactories, List<TabularExporter> tabularExporters) {
         componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
-
         _NullSafe.stream(tabularExporters)
             .map(CollectionContentsAsExportFactory::new)
             .forEach(componentFactories::add);
-
-        // // work-in-progress
-        // componentFactories.add(new CollectionContentsAsIconsPanelFactory());
-
         componentFactories.add(new CollectionContentsAsSummaryFactory());
     }
 
@@ -225,7 +198,9 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new StandaloneValuePanelFactory());
     }
 
-    protected void addComponentFactoriesForScalar(final ComponentFactoryList componentFactories) {
+    protected void addComponentFactoriesForScalar(
+            final ComponentFactoryList componentFactories,
+            final ValueSemanticsResolver valueSemanticsResolver) {
 
         componentFactories.add(TreePanelFactories.parented());
         componentFactories.add(MarkupPanelFactories.parented());
@@ -242,7 +217,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new CausewayClobPanelFactory());
 
         // install after explicit values, but before fallbacks
-        addGenericComponentFactoriesForScalar(componentFactories);
+        addGenericComponentFactoriesForScalar(componentFactories, valueSemanticsResolver);
 
         componentFactories.add(new ValueFallbackPanelFactory());
 
@@ -383,7 +358,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addGenericComponentFactoriesForScalar(
-            final ComponentFactoryList componentFactories) {
+            final ComponentFactoryList componentFactories,
+            final ValueSemanticsResolver valueSemanticsResolver) {
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
         var registeredScalarTypes =

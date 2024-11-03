@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-public class JavaAwtImagePanel
+class JavaAwtImagePanel
 extends PanelAbstract<ManagedObject, ScalarModel> {
 
     private static final long serialVersionUID = 1L;

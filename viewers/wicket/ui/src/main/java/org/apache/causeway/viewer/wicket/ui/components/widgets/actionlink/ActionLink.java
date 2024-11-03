@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
+package org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,22 +26,24 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
-import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanel;
+import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
@@ -75,26 +77,26 @@ import lombok.NonNull;
  */
 public final class ActionLink
 extends IndicatingAjaxLink<ManagedObject>
-implements HasMetaModelContext {
+implements HasMetaModelContext, Menuable, HasManagedAction {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_ACTION_LINK = "actionLink";
 
     public static ActionLink create(
-            final @NonNull String linkId,
             final @NonNull ActionModel actionModel) {
 
-        var actionLink = new ActionLink(linkId, actionModel);
+        var actionLink = new ActionLink(ID_ACTION_LINK, actionModel);
         return Wkt.cssAppend(actionLink, "noVeil");
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
-    protected transient MetaModelContext commonContext;
 
     private ActionLink(
             final String id,
             final ActionModel model) {
         super(id, model);
-        this.commonContext = model.getMetaModelContext();
+
+        _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
@@ -107,12 +109,17 @@ implements HasMetaModelContext {
         }
     }
 
-    //XXX temporary public
     public ActionModel getActionModel() {
         return (ActionModel) getModel();
     }
 
-    public ObjectAction getObjectAction() {
+    @Override
+    public ManagedAction getManagedAction() {
+        return getActionModel().getManagedAction();
+    }
+
+    @Override
+    public ObjectAction getAction() {
         return getActionModel().getAction();
     }
 
@@ -180,6 +187,8 @@ implements HasMetaModelContext {
         }
     }
 
+    // -- HELPER
+
     private void executeWithoutParams() {
         var actionModel = this.getActionModel();
 
@@ -199,7 +208,7 @@ implements HasMetaModelContext {
             var targetAdapter = actionModel.getParentObject();
 
             var bookmark = targetAdapter.refreshBookmark().orElseThrow();
-            getMetaModelContext().getTransactionService().flushTransaction();
+            getTransactionService().flushTransaction();
 
             // "redirect-after-post"
             RequestCycle.get().setResponsePage(EntityPage.class,
@@ -214,13 +223,10 @@ implements HasMetaModelContext {
                 .getFrom(this.getPage())
                 .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());
 
-        var actionParametersPanel = (ActionParametersPanel)
-                getComponentFactoryRegistry()
+        var actionParametersPanel = getComponentFactoryRegistry()
                 .createComponent(actionPrompt.getContentId(),
                         UiComponentType.ACTION_PROMPT,
                         actionModel);
-
-        actionParametersPanel.setShowHeader(false);
 
         var label = Wkt.label(actionPrompt.getTitleId(), actionModel::getFriendlyName);
         actionPrompt.setTitle(label, target);
@@ -229,7 +235,7 @@ implements HasMetaModelContext {
 
         castTo(ActionPromptWithExtraContent.class, actionPrompt)
         .ifPresent(promptWithExtraContent->{
-            BSGridPanel.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
+            BSGridPanelFactory.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
             .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
         });
     }
@@ -259,6 +265,11 @@ implements HasMetaModelContext {
 
     public Wicket getSettings() {
         return getMetaModelContext().getConfiguration().getViewer().getWicket();
+    }
+
+    @Override
+    public Kind menuableKind() {
+        return Kind.LINK;
     }
 
 }

@@ -27,6 +27,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 
 import lombok.NonNull;
 
+@Deprecated
 public interface ActionLinkUiComponentFactoryWkt
 extends Serializable {
     AjaxLink<ManagedObject> newActionLinkUiComponent(@NonNull ActionModel actionModel);

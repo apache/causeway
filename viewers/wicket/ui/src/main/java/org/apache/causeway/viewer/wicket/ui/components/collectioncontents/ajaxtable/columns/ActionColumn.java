@@ -26,7 +26,11 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel.ColumnActionModifier;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.NonNull;
@@ -42,7 +46,11 @@ extends GenericColumnAbstract {
         var actions = elementType.streamActionsForColumnRendering(featureId)
                 .collect(Can.toCan());
         if(actions.isEmpty()) return Optional.empty();
-        return Optional.of(new ActionColumn(elementType, actions));
+
+        var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
+        return wktConfig.isActionColumnEnabled()
+                ? Optional.of(new ActionColumn(elementType, actions))
+                : Optional.empty();
     }
 
     private final Can<String> actionIds;
@@ -62,18 +70,35 @@ extends GenericColumnAbstract {
         var dataRow = dataRowWkt.getObject();
         var rowElement = dataRow.getRowElement();
 
-        return Wkt.label(componentId, actions()
-                .map(action->action.getFriendlyName(()->rowElement))
-                .join("|"));
+        var entityModel = UiObjectWkt.ofAdapter(rowElement);
+        var elementType = elementType();
+
+        var actionModels = actions().stream()
+            .map(act->ActionModel.forEntityFromActionColumn(act, entityModel,
+                    determineColumnActionModifier(act, elementType)))
+            .collect(Can.toCan());
+
+        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.Style.DROPDOWN)
+                .map(Component.class::cast)
+                .orElseGet(()->Wkt.label(componentId, ""));
     }
 
     // -- HELPER
 
+    private ColumnActionModifier determineColumnActionModifier(
+            final ObjectAction action,
+            final ObjectSpecification collectionElementType) {
+        return action.getElementType().isVoid()
+                || action.getElementType().isOfType(collectionElementType)
+                ? ColumnActionModifier.FORCE_STAY_ON_PAGE
+                : ColumnActionModifier.FORCE_NEW_BROWSER_WINDOW;
+    }
+
     private Can<ObjectAction> actions() {
         synchronized(this) {
             if(actions==null) {
-                var elementTypeSpec = elementType();
-                this.actions = actionIds.map(elementTypeSpec::getActionElseFail);
+                var elementType = elementType();
+                this.actions = actionIds.map(elementType::getActionElseFail);
             }
         }
         return actions;

@@ -31,12 +31,12 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
@@ -53,7 +53,7 @@ import lombok.Getter;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link UiObjectWkt}.
  */
-public class EntityCollectionPanel
+class EntityCollectionPanel
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 
@@ -150,9 +150,9 @@ implements HasDynamicallyVisibleContent {
             collectionMetaModel.getDescription(collectionModel::getParentObject)
                 .ifPresent(description->WktTooltips.addTooltip(labelComponent, description));
 
-            final Can<LinkAndLabel> links = collectionModel.getLinks();
-            AdditionalLinksPanel.addAdditionalLinks(
-                    div, ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
+            final Can<ActionModel> links = collectionModel.getLinks();
+            ActionLinksPanel.addActionLinks(
+                    div, ID_ADDITIONAL_LINKS, links, ActionLinksPanel.Style.INLINE_LIST);
 
             createSelectorDropdownPanel(collectionModel);
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);

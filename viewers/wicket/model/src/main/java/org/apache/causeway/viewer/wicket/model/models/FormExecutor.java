@@ -30,6 +30,28 @@ import org.apache.wicket.markup.html.form.Form;
  */
 public interface FormExecutor extends Serializable {
 
+    enum ActionResultResponseType {
+        OBJECT,
+        COLLECTION,
+        /**
+         * Renders the value-type in its own <i>Standalone Value Page</i>.
+         */
+        VALUE,
+        VALUE_CLOB,
+        VALUE_BLOB,
+        VALUE_LOCALRESPATH_AJAX,
+        VALUE_LOCALRESPATH_NOAJAX,
+        VALUE_URL_AJAX,
+        VALUE_URL_NOAJAX,
+        /** render the 'empty page' */
+        VOID_AS_EMPTY,
+        /**
+         * Issues a (current) page reload.
+         */
+        RELOAD,
+        SIGN_IN;
+    }
+
     enum FormExecutionOutcome {
 
         /**

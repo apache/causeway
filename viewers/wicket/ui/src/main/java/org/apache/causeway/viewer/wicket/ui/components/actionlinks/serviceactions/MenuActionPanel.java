@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 @SuppressWarnings("rawtypes")
-public abstract class MenuActionPanel extends PanelBase {
+abstract class MenuActionPanel extends PanelBase {
 
     private static final long serialVersionUID = 1L;
 

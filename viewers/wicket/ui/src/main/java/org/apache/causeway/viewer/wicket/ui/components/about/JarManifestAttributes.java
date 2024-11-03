@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Map.Entry;
 
-public class JarManifestAttributes implements Serializable {
+class JarManifestAttributes implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -16,9 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,15 +27,16 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.RequiredArgsConstructor;
 
-public class AdditionalLinksPanel
+public class ActionLinksPanel
 extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -42,42 +44,55 @@ extends MenuablePanelAbstract {
     private static final String ID_ADDITIONAL_LINK_LIST = "additionalLinkList";
     private static final String ID_ADDITIONAL_LINK_ITEM = "additionalLinkItem";
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
-    public  static final String ID_ADDITIONAL_LINK = "additionalLink";
 
     @RequiredArgsConstructor
     public enum Style {
         INLINE_LIST(ActionStyle.BUTTON) {
             @Override
-            AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
-                return new AdditionalLinksAsListInlinePanel(id, links);
+            public ActionLinksPanel newPanel(final String id, final Can<ActionLink> links) {
+                return new ActionLinksAsButtonInlinePanel(id, links);
             }
         },
         DROPDOWN(ActionStyle.MENU_ITEM) {
             @Override
-            AdditionalLinksPanel newPanel(final String id, final Can<LinkAndLabel> links) {
-                return new AdditionalLinksAsDropDownPanel(id, links);
+            public ActionLinksPanel newPanel(final String id, final Can<ActionLink> links) {
+                return new ActionLinksAsDropDownPanel(id, links);
             }
         };
-        abstract AdditionalLinksPanel newPanel(String id, Can<LinkAndLabel> links);
+        abstract ActionLinksPanel newPanel(String id, Can<ActionLink> links);
         final ActionStyle actionStyle;                
 
     }
 
-    public static AdditionalLinksPanel addAdditionalLinks(
+    /**
+     * Permanently hides given markupContainer, if no links are given.
+     */
+    public static ActionLinksPanel addActionLinks(
             final MarkupContainer markupContainer,
             final String id,
-            final Can<LinkAndLabel> links,
+            final Can<ActionModel> links,
             final Style style) {
-        if(links.isEmpty()) {
+        var panel = actionLinks(id, links, style);
+        if(panel.isEmpty()) {
             WktComponents.permanentlyHide(markupContainer, id);
             return null;
         }
-        return Wkt.add(markupContainer, style.newPanel(id, links));
+        return Wkt.add(markupContainer, panel.get());
+    }
+    
+    public static Optional<ActionLinksPanel> actionLinks(
+            final String id,
+            final Can<ActionModel> links,
+            final Style style) {
+        if(links.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(style.newPanel(id, links.map(ActionLink::create)));
     }
 
-    protected AdditionalLinksPanel(
+    protected ActionLinksPanel(
             final String id,
-            final Can<LinkAndLabel> menuables,
+            final Can<ActionLink> menuables,
             final Style style) {
         super(id, menuables);
         setOutputMarkupId(true);
@@ -88,7 +103,7 @@ extends MenuablePanelAbstract {
         Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
             var linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks
-                    .asAdditionalLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style.actionStyle));
+                    .asActionLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style.actionStyle));
             if (!linkAndLabel.isVisible()) {
                 Wkt.cssAppend(item, "hidden");
             }
@@ -102,16 +117,16 @@ extends MenuablePanelAbstract {
 
     }
 
-    protected final Stream<LinkAndLabel> streamLinkAndLabels() {
-        return menuablesModel().streamMenuables(LinkAndLabel.class);
+    protected final Stream<ActionLink> streamLinkAndLabels() {
+        return menuablesModel().streamMenuables(ActionLink.class);
     }
 
-    protected final List<LinkAndLabel> listOfLinkAndLabels() {
+    protected final List<ActionLink> listOfLinkAndLabels() {
         return streamLinkAndLabels().collect(Collectors.toList());
     }
 
     public final boolean hasAnyVisibleLink() {
-        return streamLinkAndLabels().anyMatch(linkAndLabel->linkAndLabel.getUiComponent().isVisible());
+        return streamLinkAndLabels().anyMatch(actionLink->actionLink.isVisible());
     }
 
 }

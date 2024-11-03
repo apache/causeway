@@ -19,10 +19,12 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 public class StringPanelFactory extends ComponentFactoryScalarTypeConstrainedAbstract {
 
@@ -35,5 +37,9 @@ public class StringPanelFactory extends ComponentFactoryScalarTypeConstrainedAbs
         return Facets.multilineIsPresent(scalarModel.getMetaModel())
             ? new MultiLineStringPanel(id, scalarModel)
             : new StringPanel(id, scalarModel);
+    }
+
+    public static CssResourceReference cssResourceReferenceForMultiLineString() {
+        return PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class);
     }
 }

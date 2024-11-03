@@ -37,7 +37,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -51,21 +51,20 @@ public final class WktLinks {
     }
 
     /**
-     * For rendering {@link LinkAndLabel} within additional-link panels or drop-downs.
+     * For rendering action links within a button panel or drop-down panel.
      */
-    public AbstractLink asAdditionalLink(
+    public AbstractLink asActionLink(
             final Component tooltipReceiver,
             final String titleId,
-            final LinkAndLabel linkAndLabel,
+            final ActionLink link,
             final ActionStyle actionStyle) {
-
-        var link = linkAndLabel.getUiComponent();
-        var viewTitleLabel = Wkt.labelAdd(link, titleId,
-                linkAndLabel::getFriendlyName);
         
-        WktDecorators.decorateAdditionalLink(
-                link, tooltipReceiver, viewTitleLabel,
-                ActionDecorationModel.builder(linkAndLabel)
+        var actionLabel = Wkt.labelAdd(link, titleId,
+                link::getFriendlyName);
+        
+        WktDecorators.decorateActionLink(
+                link, tooltipReceiver, actionLabel,
+                ActionDecorationModel.builder(link)
                     .actionStyle(actionStyle)
                     .build());
 

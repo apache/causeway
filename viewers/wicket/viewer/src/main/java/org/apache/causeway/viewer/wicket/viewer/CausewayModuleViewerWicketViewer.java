@@ -22,8 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.viewer.wicket.ui.CausewayModuleViewerWicketUi;
-import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistrarDefault;
-import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
+import org.apache.causeway.viewer.wicket.viewer.registries.components.ComponentFactoryConfigWkt;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
@@ -56,15 +55,12 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         WicketViewerCssBundleInit.class,
         DatatablesNetInitWkt.class,
         DebugInitWkt.class,
+        ComponentFactoryConfigWkt.class,
 
         // @Service's
         BookmarkUiServiceWicket.class,
         DeepLinkServiceWicket.class,
         WebModuleWicket.class,
-
-        // autoconfigurations
-        ComponentFactoryRegistrarDefault.AutoConfiguration.class,
-        ComponentFactoryRegistryDefault.AutoConfiguration.class,
 
         PageClassListDefault.AutoConfiguration.class,
         PageClassRegistryDefault.AutoConfiguration.class,

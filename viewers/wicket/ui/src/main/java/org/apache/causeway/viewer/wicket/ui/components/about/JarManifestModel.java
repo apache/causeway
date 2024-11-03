@@ -38,7 +38,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
-public class JarManifestModel extends ModelAbstract<JarManifestModel> {
+class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
     private static final long serialVersionUID = 1L;
 

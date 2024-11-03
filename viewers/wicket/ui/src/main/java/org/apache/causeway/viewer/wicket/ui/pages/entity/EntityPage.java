@@ -50,7 +50,7 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -204,7 +204,7 @@ public class EntityPage extends PageAbstract {
         final RepeatingView listItems = new RepeatingView("whereAmI-items");
 
         whereAmIModel.streamParentChainReversed().forEach(entityModel->
-            listItems.add(new EntityIconAndTitlePanel(listItems.newChildId(), entityModel)));
+            listItems.add(EntityIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), entityModel)));
 
         Wkt.labelAdd(listItems, listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle());
 

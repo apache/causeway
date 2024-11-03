@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
  * {@link EntityCollectionModel collection of entity}s so that they can be only
  * lazily resolved.
  */
-public class CollectionContentsHiddenPanel
+class CollectionContentsHiddenPanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private static final long serialVersionUID = 1L;

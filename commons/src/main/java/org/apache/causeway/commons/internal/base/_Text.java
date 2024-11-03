@@ -176,6 +176,18 @@ public final class _Text {
 
     }
 
+    // -- LABEL ABBREVIATION
+
+    public static String abbreviated(final String str, final int maxLength) {
+        int length = str.length();
+        if (length <= maxLength) {
+            return str;
+        }
+        return maxLength <= 3
+                ? ""
+                : str.substring(0, maxLength - 3) + "...";
+    }
+
     // -- LOGGING SUPPORT
 
     public static String abbreviate(final @Nullable String input) {

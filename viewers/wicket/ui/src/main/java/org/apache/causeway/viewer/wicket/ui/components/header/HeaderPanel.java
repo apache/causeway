@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 /**
  * A panel for the default page header
  */
-public class HeaderPanel
+class HeaderPanel
 extends PanelAbstract<String, Model<String>> {
 
     private static final long serialVersionUID = 1L;

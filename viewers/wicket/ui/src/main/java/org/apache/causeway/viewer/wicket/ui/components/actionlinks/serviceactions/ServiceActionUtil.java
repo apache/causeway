@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
 
 import java.util.function.Consumer;
 
@@ -25,13 +25,16 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdown;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 
@@ -46,18 +49,17 @@ class ServiceActionUtil {
             final ListItem<CssMenuItem> listItem,
             final MarkupContainer parent) {
 
-        var linkAndLabel = menuItem.getLinkAndLabel();
-        var menuItemActionLink = linkAndLabel.getUiComponent();
-        var menuItemLabel = Wkt.labelAdd(menuItemActionLink, "menuLinkLabel", menuItem.getName());
+        var actionLink = menuItem.actionLinkElseFail();
+        var menuItemLabel = Wkt.labelAdd(actionLink, "menuLinkLabel", menuItem.getName());
 
         WktDecorators
-            .decorateMenuAction(menuItemActionLink, listItem, menuItemLabel,
-                    ActionDecorationModel.builder(linkAndLabel)
+            .decorateMenuAction(actionLink, listItem, menuItemLabel, 
+                    ActionDecorationModel.builder(actionLink)
                         .actionStyle(ActionStyle.MENU_ITEM)
                         .build());
 
         var leafItem = new Fragment("content", "leafItem", parent);
-        leafItem.add(menuItemActionLink);
+        leafItem.add(actionLink);
 
         listItem.add(leafItem);
     }
@@ -72,7 +74,7 @@ class ServiceActionUtil {
         Fragment folderItem = new Fragment("content", "folderItem", parent);
         listItem.add(folderItem);
 
-        Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.getLinkAndLabel().getFriendlyName());
+        Wkt.labelAdd(folderItem, "folderName", ()->subMenuItem.actionLinkElseFail().getFriendlyName());
         final Can<CssMenuItem> menuItems = subMenuItem.getSubMenuItems();
 
         Wkt.listViewAdd(folderItem, "subMenuItems", menuItems.toList(), item->{
@@ -105,19 +107,25 @@ class ServiceActionUtil {
             var menuSection = CssMenuItem.newSpacer();
             currentTopLevelMenu.addSubMenuItem(menuSection);
         }
-
+        
         @Override
-        public void onMenuAction(final MenuAction menuAction) {
-            var menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name());
+        public void onMenuAction(MenuAction menuAction) {
+            var menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name(), newActionLink(menuAction.managedAction().orElseThrow()));
             currentTopLevelMenu.addSubMenuItem(menuItem);
-            menuItem.setLinkAndLabel(LinkAndLabelFactory.linkAndLabelForMenu(menuAction));
         }
-
+        
         @Override
         public void onSectionLabel(final String named) {
             var menuSectionLabel = CssMenuItem.newSectionLabel(named);
             currentTopLevelMenu.addSubMenuItem(menuSectionLabel);
         }
+
+        private ActionLink newActionLink(final ManagedAction managedAction) {
+            var serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
+            return ActionLink.create(
+                    ActionModel.forServiceAction(managedAction.getAction(), serviceModel));
+        }
+
     }
 
     public static void buildMenu(

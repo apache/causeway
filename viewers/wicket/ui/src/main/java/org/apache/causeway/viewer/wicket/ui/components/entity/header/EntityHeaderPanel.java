@@ -24,10 +24,10 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -73,12 +73,12 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
         var adapter = model.getObject();
         if (adapter != null) {
             var topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
-            .map(LinkAndLabelFactory.forEntity(model))
+            .map(act->ActionModel.forEntity(act, model))
             .collect(Can.toCan());
 
-            AdditionalLinksPanel
-                    .addAdditionalLinks(this, ID_ENTITY_ACTIONS, topLevelActions,
-                            AdditionalLinksPanel.Style.INLINE_LIST);
+            ActionLinksPanel
+                    .addActionLinks(this, ID_ENTITY_ACTIONS, topLevelActions,
+                            ActionLinksPanel.Style.INLINE_LIST);
         } else {
             WktComponents.permanentlyHide(this, ID_ENTITY_ACTIONS);
         }

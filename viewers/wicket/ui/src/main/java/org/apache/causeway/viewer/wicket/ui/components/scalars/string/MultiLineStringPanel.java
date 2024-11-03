@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFi
 /**
  * Panel for rendering MultiLine scalars of type String
  */
-public class MultiLineStringPanel
+class MultiLineStringPanel
 extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;

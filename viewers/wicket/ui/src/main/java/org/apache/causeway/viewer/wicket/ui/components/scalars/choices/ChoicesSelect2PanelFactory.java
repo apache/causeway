@@ -22,7 +22,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.string.ScalarTitleBadgePanel;
 
 public class ChoicesSelect2PanelFactory
 extends ComponentFactoryScalarAbstract {

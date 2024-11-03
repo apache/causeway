@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * Panel for rendering any value types that do not have their own custom
  * {@link ScalarPanelAbstract panel} to render them.
  */
-public class StandaloneValuePanel
+class StandaloneValuePanel
 extends PanelAbstract<ManagedObject, ValueModel> {
 
     private static final long serialVersionUID = 1L;

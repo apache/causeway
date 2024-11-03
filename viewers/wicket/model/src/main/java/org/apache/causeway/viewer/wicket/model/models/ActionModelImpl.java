@@ -24,9 +24,7 @@ import java.util.stream.Stream;
 import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
@@ -35,6 +33,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+
+import lombok.Getter;
 
 /**
  * Represents an action (a member) of an entity.
@@ -45,38 +45,27 @@ import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
  * ActionModel --bound-to--> ActionInteractionWkt (delegate)
  * </pre>
  */
-public final class ActionModelImpl
+final class ActionModelImpl
 extends ChainingModel<ManagedObject>
 implements ActionModel {
 
     private static final long serialVersionUID = 1L;
 
-    // -- FACTORY METHODS
-
-    public static ActionModelImpl forEntity(
-            final UiObjectWkt parentEntityModel,
-            final Identifier actionIdentifier,
-            final Where where,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
-        var delegate = ActionInteractionWkt.forEntity(
-                parentEntityModel,
-                actionIdentifier,
-                where,
-                associatedWithPropertyIfAny,
-                associatedWithParameterIfAny,
-                associatedWithCollectionIfAny);
-        return new ActionModelImpl(parentEntityModel, delegate);
-    }
-
     // -- CONSTRUCTION
 
     private final ActionInteractionWkt delegate;
+    @Getter
+    private final ColumnActionModifier columnActionModifier;
 
-    private ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
+    ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
+        this(parentEntityModel, delegate, ColumnActionModifier.NONE);
+    }
+
+    ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate,
+            final ColumnActionModifier columnActionModifier) {
         super(parentEntityModel);
         this.delegate = delegate;
+        this.columnActionModifier = columnActionModifier;
     }
 
     // --
@@ -141,7 +130,7 @@ implements ActionModel {
         delegate.resetParametersToDefault();
     }
 
-    //////////////////////////////////////////////////
+    // --
 
     @Override
     public InlinePromptContext getInlinePromptContext() {

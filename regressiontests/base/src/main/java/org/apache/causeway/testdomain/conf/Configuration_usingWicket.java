@@ -103,7 +103,7 @@ public class Configuration_usingWicket {
         public static final String OPEN_SAMPLE_ACTION = "theme:entityPageContainer:entity:rows:1"
                 + ":rowContents:1"
                 + ":col:entityHeaderPanel:entityActions:additionalLinkList:additionalLinkItem:1"
-                + ":additionalLink";
+                + ":actionLink";
 
         public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
                 + ":additionalLinkTitle";
@@ -118,15 +118,16 @@ public class Configuration_usingWicket {
                 + ":rows:1:rowContents:1"
                 + ":col:fieldSets:1:memberGroup"
                 + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+                + ":additionalLinkList:additionalLinkItem:0:actionLink";
 
         /** strange asymmetry with JDO, to investigate another day */
         public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
                 + ":rowContents:1"
-                + ":col:rows:1:rowContents:1:col:tabGroups:1:1:rowContents:1"
+                + ":col:rows:1:rowContents:1:col:tabGroups:1"
+                + ":1:rowContents:1"
                 + ":col:fieldSets:1:memberGroup"
                 + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+                + ":additionalLinkList:additionalLinkItem:0:actionLink";
 
         // -- GENERIC STANDALONE COLLECTION
 
@@ -316,7 +317,6 @@ public class Configuration_usingWicket {
     @RequiredArgsConstructor
     private static class PageFactory_forTesting implements IPageFactory {
 
-        private final WicketApplication_forTesting holder;
         private final IPageFactory delegate;
 
         @Override
@@ -383,7 +383,7 @@ public class Configuration_usingWicket {
 
         @Override
         protected IPageFactory newPageFactory() {
-            return new PageFactory_forTesting(this, super.newPageFactory());
+            return new PageFactory_forTesting(super.newPageFactory());
         }
 
         @Override
@@ -394,64 +394,5 @@ public class Configuration_usingWicket {
         }
 
     }
-
-    // --
-
-//  @Bean
-//  public RequestCycleFactory requestCycleFactory() {
-//      return new RequestCycleFactory();
-//  }
-//
-//    private static class WicketApplication_forTesting
-//    extends MockApplication
-//    implements HasCommonContext {
-//
-//        @Inject MetaModelContext mmc;
-//
-//        private MetaModelContext commonContext;
-//
-//        public WicketApplication_forTesting() {
-//            setRootRequestMapper(new SystemMapper(this));
-//        }
-//
-//        @Override
-//        public MetaModelContext getCommonContext() {
-//            if(commonContext==null) {
-//                commonContext = MetaModelContext.of(mmc);
-//            }
-//            return commonContext;
-//        }
-//
-//    }
-
-    // -- HELPER -- REQUEST CYCLE (WICKET)
-
-//    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-//    public static class RequestCycleFactory {
-//
-//        public void newRequestCycle(
-//                final Class<? extends IRequestablePage> pageClass,
-//                final PageParameters pageParameters) {
-//
-//            var url = Application.get().getRootRequestMapper().mapHandler(
-//                    new BookmarkablePageRequestHandler(new PageProvider(pageClass, pageParameters)));
-//
-//            final HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
-//            final ServletWebRequest servletWebRequest =
-//                    new ServletWebRequest(mockHttpServletRequest, "", url);//Url.parse("/wicket"));
-//            final MockWebResponse mockWebResponse = new MockWebResponse();
-//
-//            ThreadContext.setRequestCycle(new RequestCycle(new RequestCycleContext(
-//                    servletWebRequest,
-//                    mockWebResponse,
-//                    Mockito.mock(IRequestMapper.class),
-//                    Mockito.mock(IExceptionMapper.class))));
-//        }
-//
-//        public void clearRequestCycle() {
-//            ThreadContext.setRequestCycle(null);
-//        }
-//
-//    }
 
 }

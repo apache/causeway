@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
-public class AdditionalLinksAsListInlinePanel extends AdditionalLinksPanel {
+class ActionLinksAsButtonInlinePanel extends ActionLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public AdditionalLinksAsListInlinePanel(final String id, final Can<LinkAndLabel> links) {
+    public ActionLinksAsButtonInlinePanel(final String id, final Can<ActionLink> links) {
         super(id, links, Style.INLINE_LIST);
     }
 }

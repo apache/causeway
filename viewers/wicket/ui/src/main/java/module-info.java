@@ -22,7 +22,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
-    exports org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
+    exports org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink;
     exports org.apache.causeway.viewer.wicket.ui.util;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.mmverror;
@@ -31,7 +31,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.summary;
     exports org.apache.causeway.viewer.wicket.ui.pages.error;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.composite;
-    exports org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
+    exports org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome;
     exports org.apache.causeway.viewer.wicket.ui.components.propertyheader;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.links;
@@ -69,7 +69,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.scalars;
     exports org.apache.causeway.viewer.wicket.ui.pages;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.navbar;
-    exports org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+    exports org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions;
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox;
     exports org.apache.causeway.viewer.wicket.ui.pages.home;
@@ -100,7 +100,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.actionprompt;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.markup;
     exports org.apache.causeway.viewer.wicket.ui.pages.about;
-    exports org.apache.causeway.viewer.wicket.ui.components.actionmenu;
+    exports org.apache.causeway.viewer.wicket.ui.components.actionlinks;
     exports org.apache.causeway.viewer.wicket.ui.pages.value;
     exports org.apache.causeway.viewer.wicket.ui;
     exports org.apache.causeway.viewer.wicket.ui.errors;

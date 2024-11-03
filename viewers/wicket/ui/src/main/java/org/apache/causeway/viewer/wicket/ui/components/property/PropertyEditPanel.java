@@ -26,14 +26,14 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
- * Corresponding component to prompt for action (parameters) is {@link ActionParametersPanel}.
+ * Corresponding component to prompt for action (parameters) is
+ * {@link org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel}.
  */
-public class PropertyEditPanel
+class PropertyEditPanel
 extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     private static final long serialVersionUID = 1L;

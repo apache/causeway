@@ -41,8 +41,8 @@ import org.apache.causeway.viewer.commons.model.decorators.PrototypingDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator;
 import org.apache.causeway.viewer.commons.model.decorators.TooltipDecorator.TooltipDecorationModel;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.FontAwesomeBehavior;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel.ActionLink;
+import org.apache.causeway.viewer.wicket.ui.components.actionlinks.FontAwesomeBehavior;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
 import lombok.Getter;
@@ -190,9 +190,9 @@ public class WktDecorators {
     }
 
     /**
-     * For rendering actions within additional-link panels or drop-downs.
+     * For rendering actions within action-link panels or drop-downs.
      */
-    public void decorateAdditionalLink(
+    public void decorateActionLink(
             final AjaxLink<ManagedObject> actionLink,
             final Component tooltipReceiver,
             final Label actionLabel,

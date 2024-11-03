@@ -20,15 +20,11 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <body>
         <wicket:panel>
-            <li class="nav-item dropdown" wicket:id="menuItems">
-                <a href="javascript:;" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><span wicket:id="name"></span> <span class="caret"></span></a>
-                <ul wicket:id="topMenu" class="dropdown-menu multi-level" role="menu">
-                    <li wicket:id="subMenuItems">
-                        <wicket:container wicket:id="content"></wicket:container>
-                    </li>
-                </ul>
-            </li>
 
+            <li wicket:id="subMenuItems">
+                <wicket:container wicket:id="content"></wicket:container>
+            </li>
+            
             <wicket:fragment wicket:id="separatorItem">
                 <div class="list-separator"/>
             </wicket:fragment>
@@ -38,7 +34,7 @@
             </wicket:fragment>
 
             <wicket:fragment wicket:id="leafItem">
-                <a class="menuLink dropdown-item" wicket:id="menuLink">
+                <a class="menuLink dropdown-item" wicket:id="actionLink">
                     <span class="menuLinkLabel" wicket:id="menuLinkLabel"></span>
                 </a>
             </wicket:fragment>

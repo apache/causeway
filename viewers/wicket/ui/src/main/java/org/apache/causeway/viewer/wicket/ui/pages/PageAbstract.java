@@ -102,7 +102,6 @@ implements ActionPromptProvider {
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
     private static final String ID_PAGE_TITLE = "pageTitle";
-    public static final String ID_MENU_LINK = "menuLink";
     public static final String UIHINT_FOCUS = "focus";
 
     /**

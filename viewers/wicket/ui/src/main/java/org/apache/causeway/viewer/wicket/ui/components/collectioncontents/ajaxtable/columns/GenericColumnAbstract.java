@@ -38,15 +38,14 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWk
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
  * Represents a {@link AbstractColumn} within a
  * {@link AjaxFallbackDefaultDataTable}.
- *
  * <p>
- * Part of the implementation of {@link CollectionContentsAsAjaxTablePanel}.
+ * Part of the implementation of
+ * {@link org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel}.
  */
 public abstract class GenericColumnAbstract
 extends AbstractColumn<DataRow, String>

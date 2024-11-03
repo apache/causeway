@@ -28,7 +28,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
 import lombok.NonNull;
@@ -107,15 +106,15 @@ implements EntityCollectionModel {
     /**
      * Additional links to render (if any)
      */
-    private List<LinkAndLabel> linkAndLabels = _Lists.newArrayList();
+    private List<ActionModel> linkAndLabels = _Lists.newArrayList();
 
-    public final void setLinkAndLabels(final @NonNull Iterable<LinkAndLabel> linkAndLabels) {
+    public final void setLinkAndLabels(final @NonNull Iterable<ActionModel> linkAndLabels) {
         this.linkAndLabels.clear();
         linkAndLabels.forEach(this.linkAndLabels::add);
     }
 
     @Override
-    public final Can<LinkAndLabel> getLinks() {
+    public final Can<ActionModel> getLinks() {
         return Can.ofCollection(linkAndLabels);
     }
 

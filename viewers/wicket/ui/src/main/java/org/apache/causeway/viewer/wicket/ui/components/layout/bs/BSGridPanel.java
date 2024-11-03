@@ -18,21 +18,18 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.layout.bs;
 
-import java.util.Optional;
-
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-public class BSGridPanel
+class BSGridPanel
 extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
@@ -40,29 +37,6 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
     private static final String ID_ROWS = "rows";
 
     private final BSGrid bsPage;
-
-    public static Optional<BSGridPanel> extraContentForMixin(final String id, final ActionModel actionModel) {
-
-        //[CAUSEWAY-3210] EntityModel.ofAdapter(commonContext, targetAdapterForMixin); not supported for mixins
-        return Optional.empty();
-
-//        var action = actionModel.getAction();
-//        if(action.isMixedIn()) {
-//
-//            var mixinSpec = ((MixedInMember)action).getMixinType();
-//            var targetAdapterForMixin = action.realTargetAdapter(actionModel.getActionOwner());
-//
-//            // if we can bootstrap a grid, use it
-//            return Facets.bootstrapGrid(mixinSpec, targetAdapterForMixin)
-//            .map(bsGrid->{
-//                var commonContext = actionModel.getMetaModelContext();
-//                var entityModelForMixin =
-//                        EntityModel.ofAdapter(commonContext, targetAdapterForMixin);
-//                return new BSGridPanel(id, entityModelForMixin, bsGrid);
-//            });
-//        }
-//        return Optional.empty();
-    }
 
     public BSGridPanel(final String id, final UiObjectWkt entityModel, final BSGrid bsGrid) {
         super(id, entityModel);

@@ -16,14 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.model.action;
+package org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions;
 
-import org.apache.causeway.viewer.commons.model.UiModel;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
-public interface UiAction<M, R>
-extends HasManagedAction, UiModel {
+class ActionLinksAsDropDownPanel extends ActionLinksPanel {
 
-    M createMenuUiComponent();
-    R createRegularUiComponent();
+    private static final long serialVersionUID = 1L;
 
+    public ActionLinksAsDropDownPanel(final String id, final Can<ActionLink> links) {
+        super(id, links, Style.DROPDOWN);
+    }
 }

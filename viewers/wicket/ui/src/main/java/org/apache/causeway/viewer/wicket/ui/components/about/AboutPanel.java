@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
  * {@link PanelAbstract Panel} displaying welcome message (as used on
  * {@link HomePage}).
  */
-public class AboutPanel
+class AboutPanel
 extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutModel> {
 
     private static final long serialVersionUID = 1L;

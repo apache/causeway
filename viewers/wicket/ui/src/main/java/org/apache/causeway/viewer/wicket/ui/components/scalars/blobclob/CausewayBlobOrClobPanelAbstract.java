@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelFormFi
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-public abstract class CausewayBlobOrClobPanelAbstract<T extends NamedWithMimeType>
+abstract class CausewayBlobOrClobPanelAbstract<T extends NamedWithMimeType>
 extends ScalarPanelFormFieldAbstract<T> {
 
     private static final long serialVersionUID = 1L;
