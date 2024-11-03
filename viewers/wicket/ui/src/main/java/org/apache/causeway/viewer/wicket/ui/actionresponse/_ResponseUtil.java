@@ -60,8 +60,9 @@ class _ResponseUtil {
             @Nullable final ManagedObject resultAdapterIfAny) {
 
         var actionResultModel = ActionResultModel.determineFor(actionModel, resultAdapterIfAny, ajaxTarget);
-        var response = determineAndInterpretResult(actionModel, ajaxTarget, actionResultModel);
+        var response = actionResultResponse(actionModel, ajaxTarget, actionResultModel);
 
+        // honor any modifiers
         switch(actionModel.getColumnActionModifier()) {
         case NONE:
             return response;
@@ -74,7 +75,9 @@ class _ResponseUtil {
         }
     }
 
-    private ActionResultResponse determineAndInterpretResult(
+    // -- HELPER
+
+    private ActionResultResponse actionResultResponse(
             @NonNull final ActionModel actionModel,
             @Nullable final AjaxRequestTarget ajaxTarget,
             @NonNull final ActionResultModel actionResultModel) {
@@ -162,8 +165,6 @@ class _ResponseUtil {
             throw _Exceptions.unmatchedCase(responseType);
         }
     }
-
-    // -- HELPER
 
     private ManagedObject determineScalarAdapter(
             final @NonNull MetaModelContext mmc,

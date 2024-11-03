@@ -2917,13 +2917,25 @@ public class CausewayConfiguration {
         public static class Wicket {
 
             /**
-             * Whether actions, that on click will show a dialog, 
+             * Whether actions, that have explicit <code>hidden = Where</code> semantics
+             * to enable them in tables,
+             * should be gathered into an action column.
+             * That is, collections of domain objects are presented in the UI as tables,
+             * where corresponding domain object actions are gathered into an additional
+             * (typically trailing) column (labeled 'action-column').
+             * <p>
+             * Defaults to disabled, while we are still working on this feature [CAUSEWAY-3815].
+             */
+            private boolean actionColumnEnabled = false;
+
+            /**
+             * Whether actions, that on click will show a dialog,
              * should be indicated by a trailing ellipsis on the action's label.
-             * <p> 
-             * Applies to both, action buttons and action menu items. 
+             * <p>
+             * Applies to both, action buttons and action menu items.
              */
             private boolean actionIndicationWhenBoundToDialog = true;
-            
+
             /**
              * Specifies the subclass of
              * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication</code> that is used to

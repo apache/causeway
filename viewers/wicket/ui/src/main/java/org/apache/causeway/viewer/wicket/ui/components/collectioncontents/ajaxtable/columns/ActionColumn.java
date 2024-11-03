@@ -46,7 +46,11 @@ extends GenericColumnAbstract {
         var actions = elementType.streamActionsForColumnRendering(featureId)
                 .collect(Can.toCan());
         if(actions.isEmpty()) return Optional.empty();
-        return Optional.of(new ActionColumn(elementType, actions));
+
+        var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
+        return wktConfig.isActionColumnEnabled()
+                ? Optional.of(new ActionColumn(elementType, actions))
+                : Optional.empty();
     }
 
     private final Can<String> actionIds;
