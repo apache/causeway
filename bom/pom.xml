@@ -1641,7 +1641,7 @@ identified
             <dependency>
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>org.eclipse.persistence.asm</artifactId>
-                <version>9.7.0</version>
+                <version>9.7.1</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
