@@ -135,7 +135,7 @@ extends
         XUL("application/vnd.mozilla.xul+xml"),
         YAML("text/vnd.yaml", "yaml", "yml"),
         ZIP("application/zip"),
-        _7Z("application/x-7z-compressed"),
+        _7Z("application/x-7z-compressed", "7z"),
 
         // see
         // https://stackoverflow.com/questions/4212861/what-is-a-correct-mime-type-for-docx-pptx-etc
