@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.tabular.excel.exporter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,14 +39,48 @@ import org.apache.causeway.commons.internal.base._Reduction;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.tabular.TabularModel;
+import org.apache.causeway.commons.tabular.TabularModel.TabularCell;
+import org.apache.causeway.commons.tabular.TabularModel.TabularRow;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
  * Utility to write a {@link TabularModel} to file.
  */
-public record ExcelFileWriter() {
+public record ExcelFileWriter(@Nullable Options options) {
+
+    @Builder
+    public record Options(
+            /**
+             * Custom style for individual cell based on cell value. Overrules rowStyleFunction if provided.
+             * <p>
+             * {@link Function} may return {@code null}.
+             */
+            @Nullable Function<TabularCell, CustomCellStyle> cellStyleFunction,
+            /**
+             * Custom style for entire row based on row data. Overruled by cellStyleFunction if provided.
+             * {@link Function} may return {@code null}.<br>
+             */
+            @Nullable Function<TabularRow, CustomCellStyle> rowStyleFunction) {
+
+        public enum CustomCellStyle {
+            DEFAULT,
+            BLUE,
+            GREEN,
+            INDIGO,
+            WARNING,
+            DANGER;
+            public boolean isDefault() { return this == CustomCellStyle.DEFAULT; }
+            static CustomCellStyle nullToDefault(@Nullable final CustomCellStyle customCellStyle) {
+                return customCellStyle!=null
+                        ? customCellStyle
+                        : DEFAULT;
+            }
+        }
+
+    }
 
     @SneakyThrows
     public void write(final TabularModel tabular, final File tempFile) {
@@ -90,7 +125,7 @@ public record ExcelFileWriter() {
 
             var cellWriter = new ExcelCellWriter(5);
             var sheet = wb.createSheet(sheetName);
-            var cellStyleProvider = new CellStyleProvider(wb);
+            var cellStyleProvider = CellStyleProvider.create(wb, options);
             var rowFactory = new RowFactory(sheet);
 
             var dataColumns = tabularSheet.columns();
@@ -128,13 +163,15 @@ public record ExcelFileWriter() {
                 maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
                 for(var column : dataColumns) {
                     final Cell cell = row.createCell((short) i++);
+                    final TabularCell tabularCell = dataRow.getCell(column);
                     final int linesWritten = cellWriter.setCellValue(
                             column,
-                            dataRow.getCell(column),
+                            tabularCell,
                             cell,
                             cellStyleProvider);
                     maxLinesInRow.accept(linesWritten);
                 }
+                cellStyleProvider.applyCustomStyle(dataRow, row);
                 autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
             }
 

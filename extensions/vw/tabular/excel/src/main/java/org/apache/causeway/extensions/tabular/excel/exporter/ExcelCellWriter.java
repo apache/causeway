@@ -64,7 +64,7 @@ record ExcelCellWriter(
                 joinedElementsLiteral += POI_LINE_DELIMITER + String.format("(has %d more)", overflow);
             }
             cell.setCellValue(joinedElementsLiteral);
-            cell.setCellStyle(cellStyleProvider.multilineStyle());
+            cellStyleProvider.applyMultilineStyle(cell);
             return overflow>0
                     ? maxCellElements + 1
                     : tabularCell.cardinality();
@@ -171,7 +171,7 @@ record ExcelCellWriter(
 
     private static void setCellValueForDate(final Cell cell, final Date date, final CellStyleProvider cellStyleProvider) {
         cell.setCellValue(date);
-        cell.setCellStyle(cellStyleProvider.dateStyle());
+        cellStyleProvider.applyDateStyle(cell);
     }
 
 }

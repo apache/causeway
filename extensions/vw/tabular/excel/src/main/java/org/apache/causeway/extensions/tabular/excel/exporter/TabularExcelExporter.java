@@ -20,19 +20,30 @@ package org.apache.causeway.extensions.tabular.excel.exporter;
 
 import java.io.File;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.tabular.TabularExporter;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.tabular.TabularModel;
+import org.apache.causeway.extensions.tabular.excel.exporter.ExcelFileWriter.Options;
 
 @Component
 public class TabularExcelExporter
 implements TabularExporter {
 
     @Override
-    public void export(final TabularModel.TabularSheet tabularSheet, final File tempFile) {
-        new ExcelFileWriter().write(new TabularModel(tabularSheet), tempFile);
+    public void export(
+            final TabularModel.TabularSheet tabularSheet,
+            final File tempFile) {
+        export(tabularSheet, tempFile, (Options)null);
+    }
+
+    public void export(
+            final TabularModel.TabularSheet tabularSheet,
+            final File tempFile,
+            @Nullable final ExcelFileWriter.Options options) {
+        new ExcelFileWriter(options).write(new TabularModel(tabularSheet), tempFile);
     }
 
     @Override
