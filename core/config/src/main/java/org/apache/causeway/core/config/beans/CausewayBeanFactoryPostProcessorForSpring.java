@@ -19,6 +19,7 @@
 package org.apache.causeway.core.config.beans;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import jakarta.inject.Named;
 
@@ -35,7 +36,8 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 
@@ -64,56 +66,35 @@ implements
     ApplicationContextAware {
 
     private CausewayBeanTypeClassifier causewayBeanTypeClassifier;
-    private CausewayComponentScanInterceptor causewayComponentScanInterceptor;
+    private Can<CausewayBeanMetaData> componentScanResult;
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance(applicationContext);
-        causewayComponentScanInterceptor = CausewayComponentScanInterceptor.createInstance(causewayBeanTypeClassifier);
     }
 
     @Override
     public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        var stopWatch = _Timing.now();
 
         // make sure we have an applicationContext before calling post processing
         Objects.requireNonNull(causewayBeanTypeClassifier,
                 "postProcessBeanFactory() called before app-ctx was made available");
 
         var registry = (BeanDefinitionRegistry) beanFactory;
+        var beanDefNames = registry.getBeanDefinitionNames();
 
-        for (String beanDefinitionName : registry.getBeanDefinitionNames()) {
+        var componentCollector = new CausewayComponentCollector(registry, causewayBeanTypeClassifier);
 
-            log.debug("processing bean definition {}", beanDefinitionName);
-
-            var beanDefinition = registry.containsBeanDefinition(beanDefinitionName)
-                    ? registry.getBeanDefinition(beanDefinitionName)
-                    : null;
-
-            if(beanDefinition==null || beanDefinition.getBeanClassName() == null) {
-                continue; // check next beanDefinition
-            }
-
-            var typeMetaData = ScannedTypeMetaData.of(
-                    beanDefinition.getBeanClassName(),
-                    beanDefinitionName);
-
-            causewayComponentScanInterceptor.intercept(typeMetaData);
-
-            if(typeMetaData.isVetoedForInjection()) {
-                registry.removeBeanDefinition(beanDefinitionName);
-                log.debug("vetoing bean {}", beanDefinitionName);
-            } else {
-                var beanNameOverride = typeMetaData.getBeanNameOverride();
-                if(_Strings.isNotEmpty(beanNameOverride)) {
-                    registry.removeBeanDefinition(beanDefinitionName);
-                    registry.registerBeanDefinition(beanNameOverride, beanDefinition);
-                    log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
-                }
-            }
-        }
+        Stream.of(beanDefNames)
+            //.parallel()
+            .forEach(componentCollector::collect);
 
         beanFactory.registerScope("causeway-domain-object", new CausewayDomainObjectScope(beanFactory));
 
+        this.componentScanResult = Can.ofCollection(componentCollector.introspectableTypes().values());
+
+        log.info("post processing {} bean definitions took {}ms", _NullSafe.size(beanDefNames), stopWatch.getMillis());
     }
 
     @Bean
@@ -125,7 +106,12 @@ implements
 
     @Bean("causeway.bean-meta-data")
     public Can<CausewayBeanMetaData> getComponentScanResult() {
-        return causewayComponentScanInterceptor.getAndDrainIntrospectableTypes();
+        if(log.isDebugEnabled()) {
+            componentScanResult.forEach(type->{
+                log.debug("to be introspected: {}", type);
+            });
+        }
+        return componentScanResult;
     }
 
 }
