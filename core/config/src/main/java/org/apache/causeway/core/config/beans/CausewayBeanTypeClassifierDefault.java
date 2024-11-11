@@ -37,29 +37,20 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
-import lombok.AccessLevel;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-//@Log4j2
-final class CausewayBeanTypeClassifierDefault
-implements CausewayBeanTypeClassifier {
+final record CausewayBeanTypeClassifierDefault(
+        @NonNull Can<String> activeProfiles,
+        @NonNull Can<CausewayBeanTypeClassifier> classifierPlugins,
+        @NonNull _ClassCache classCache) 
+        implements CausewayBeanTypeClassifier {
+    
+    CausewayBeanTypeClassifierDefault(Can<String> activeProfiles) {
+        this(activeProfiles, CausewayBeanTypeClassifier.get(), _ClassCache.getInstance());
+    }
 
-    private final Can<String> activeProfiles;
-    private final Can<CausewayBeanTypeClassifier> classifierPlugins = CausewayBeanTypeClassifier.get();
-
-    private final _ClassCache classCache = _ClassCache.getInstance();
-
-    // handle arbitrary types ...
     @Override
-    public CausewayBeanMetaData classify(
-            final @NonNull Class<?> type) {
-
-        //debug
-//        _Debug.onClassSimpleNameMatch(type, "class of interest", ()->{
-//            System.err.printf("classifying %s%n", type);
-//        });
+    public CausewayBeanMetaData classify(final @NonNull Class<?> type) {
 
         if(ClassUtils.isPrimitiveOrWrapper(type)
                 || type.isEnum()) {
@@ -172,7 +163,7 @@ implements CausewayBeanTypeClassifier {
 
     // -- HELPER
 
-    //XXX yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
+    //TODO yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
     //either we find a Spring Boot utility class that does this logic for us, or we make it clear with the
     //docs, that we have only limited support for the @Profile annotation
     private boolean isProfileActive(final String profile) {

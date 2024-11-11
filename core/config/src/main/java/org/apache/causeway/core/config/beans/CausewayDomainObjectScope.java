@@ -29,14 +29,10 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor
 @Log4j2
-class CausewayDomainObjectScope implements Scope {
-
-    private final BeanFactory beanFactory;
+record CausewayDomainObjectScope(BeanFactory beanFactory) implements Scope {
 
     @Override
     public Object get(final String name, final ObjectFactory<?> objectFactory) {
