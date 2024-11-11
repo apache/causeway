@@ -54,7 +54,7 @@ implements
         var type = processClassContext.getCls();
 
         // XmlRootElement annotation (with default precedence)
-        var hasXmlRootElementAnnotation = _ClassCache.getInstance().hasJaxbRootElementSemantics(type);
+        var hasXmlRootElementAnnotation = _ClassCache.getInstance().head(type).hasJaxbRootElementSemantics();
         FacetUtil
         .addFacetIfPresent(
                 ViewModelFacetForXmlRootElementAnnotation

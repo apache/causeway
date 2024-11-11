@@ -103,7 +103,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     protected void ensureJaxbAnnotated(final Class<?> domainType) {
-        if(!_ClassCache.getInstance().hasJaxbRootElementSemantics(domainType)) {
+        if(!_ClassCache.getInstance().head(domainType).hasJaxbRootElementSemantics()) {
             throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Requested domain Type '" + domainType.getName() + "' is not annotated with JAXB @XmlRootElement annotation");
         }
     }

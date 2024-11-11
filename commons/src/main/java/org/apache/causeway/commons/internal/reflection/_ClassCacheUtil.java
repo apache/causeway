@@ -30,10 +30,9 @@ import org.apache.causeway.commons.internal.base._Strings;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class _Named {
+class _ClassCacheUtil {
     
-    
-    @Nullable String infer(Class<?> type, MergedAnnotations mergedAnnotations) {
+    @Nullable String inferName(Class<?> type, MergedAnnotations mergedAnnotations) {
         
         var namedAnnot = mergedAnnotations.get(Named.class);
         
@@ -56,9 +55,30 @@ class _Named {
                 }
             }
         }
-        
         return null;
-        
+    }
+
+    boolean isJdoPersistenceCapable(MergedAnnotations mergedAnnotations) {
+        for(var annot : mergedAnnotations) {
+            switch (annot.getType().getName()) {
+                case "javax.jdo.annotations.PersistenceCapable":
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+    boolean isJdoEmbeddedOnly(MergedAnnotations mergedAnnotations) {
+        for(var annot : mergedAnnotations) {
+            switch (annot.getType().getName()) {
+                case "javax.jdo.annotations.PersistenceCapable":
+                    if("true".equals(annot.getString("embeddedOnly"))) return true;
+                    break;
+                case "javax.jdo.annotations.EmbeddedOnly":
+                    return true;
+            }
+        }
+        return false;
     }
     
     @Nullable

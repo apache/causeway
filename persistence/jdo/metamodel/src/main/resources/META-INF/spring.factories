@@ -1,1 +1,0 @@
-org.apache.causeway.core.config.beans.CausewayBeanTypeClassifierSpi=org.apache.causeway.persistence.jdo.metamodel.beans.JdoBeanTypeClassifier

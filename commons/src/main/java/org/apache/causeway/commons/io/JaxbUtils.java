@@ -100,7 +100,7 @@ public class JaxbUtils {
         private boolean shouldMissingXmlRootElementBeHandledOn(final Class<?> mappedType) {
             return isAllowMissingRootElement()
                     // looking for presence of XmlRootElement annotation
-                    && !_ClassCache.getInstance().hasJaxbRootElementSemantics(mappedType);
+                    && !_ClassCache.getInstance().head(mappedType).hasJaxbRootElementSemantics();
         }
         @SneakyThrows
         private JAXBContext jaxbContext(final Class<?> mappedType) {

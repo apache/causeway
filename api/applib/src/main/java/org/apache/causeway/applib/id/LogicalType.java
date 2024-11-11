@@ -101,7 +101,7 @@ implements
      * @deprecated use {@link #correspondingClass()}
      */
     @Deprecated
-    public Class<?> getCorrespondingClass1() {
+    public Class<?> getCorrespondingClass() {
         return correspondingClass();
     }
     
@@ -133,7 +133,7 @@ implements
      */
     @SuppressWarnings("javadoc")
     @Deprecated
-    public String getLogicalTypeName1() {
+    public String getLogicalTypeName() {
         return logicalName;
     }
 

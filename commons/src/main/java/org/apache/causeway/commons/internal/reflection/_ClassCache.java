@@ -101,20 +101,6 @@ public final class _ClassCache implements AutoCloseable {
     // -- TYPE SPECIFIC SEMANTICS
 
     /**
-     * whether type is annotated with {@link XmlRootElement}
-     */
-    public boolean hasJaxbRootElementSemantics(final Class<?> type) {
-        return classModel(type).head().hasJaxbRootElementSemantics();
-    }
-    
-    /**
-     * whether type is annotated with {@link BeanInternal} or {@link Configuration}
-     */
-    public boolean hasInternalBeanSemantics(final Class<?> type) {
-        return classModel(type).head().hasInternalBeanSemantics();
-    }
-
-    /**
      * whether type is explicitly named with {@link Named} or similar
      */
     public boolean isNamed(final Class<?> type) {
@@ -132,6 +118,10 @@ public final class _ClassCache implements AutoCloseable {
                 .or(()->Optional.ofNullable(model.head().named()))
                 .or(()->Optional.ofNullable(type.getCanonicalName()))
                 .orElseGet(type::getName);
+    }
+    
+    public ClassModelHead head(final Class<?> type) {
+        return classModel(type).head();
     }
 
     // -- CONSTRUCTOR SEMANTICS
@@ -274,23 +264,37 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- IMPLEMENATION DETAILS
 
-    private record ClassModelHead(
+    public record ClassModelHead(
             MergedAnnotations mergedAnnotations,
             /** explicit name if any */
             @Nullable String named) {
         
         static ClassModelHead create(final Class<?> type) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
-            return new ClassModelHead(mergedAnnotations, _Named.infer(type, mergedAnnotations));
+            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations));
         }
         
-        boolean hasInternalBeanSemantics() { 
+        /**
+         * whether type is annotated with {@link BeanInternal} or {@link Configuration}
+         */
+        public boolean hasInternalBeanSemantics() { 
             return mergedAnnotations.get(BeanInternal.class).isPresent() 
                     || mergedAnnotations.get(Configuration.class).isPresent();
         }
-        
-        boolean hasJaxbRootElementSemantics() { 
+
+        /**
+         * whether type is annotated with {@link XmlRootElement}
+         */
+        public boolean hasJaxbRootElementSemantics() { 
             return mergedAnnotations.get(XmlRootElement.class).isPresent();
+        }
+        
+        /**
+         * whether type is JDO persistable (but NOT embedded only)
+         */
+        public boolean isJdoPersistenceCapable() { 
+            return _ClassCacheUtil.isJdoPersistenceCapable(mergedAnnotations)
+                    && !_ClassCacheUtil.isJdoEmbeddedOnly(mergedAnnotations);
         }
         
     }

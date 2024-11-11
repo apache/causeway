@@ -27,7 +27,6 @@ import jakarta.persistence.Entity;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
@@ -37,7 +36,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.annotations.BeanInternal;
-import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
@@ -48,7 +46,6 @@ import lombok.NonNull;
 @BeanInternal
 public record CausewayBeanTypeClassifier(
         @NonNull Can<String> activeProfiles,
-        @NonNull Can<CausewayBeanTypeClassifierSpi> classifierPlugins,
         @NonNull _ClassCache classCache) {
     
     public enum Attributes {
@@ -79,10 +76,7 @@ public record CausewayBeanTypeClassifier(
     }
     
     CausewayBeanTypeClassifier(Can<String> activeProfiles) {
-        this(activeProfiles, 
-                Can.ofCollection(SpringFactoriesLoader
-                        .loadFactories(CausewayBeanTypeClassifierSpi.class, _Context.getDefaultClassLoader())), 
-                _ClassCache.getInstance());
+        this(activeProfiles, _ClassCache.getInstance());
     }
 
     public CausewayBeanMetaData classify(final @NonNull LogicalType logicalType, boolean alreadyInferred) {
@@ -137,7 +131,7 @@ public record CausewayBeanTypeClassifier(
         
         // handle internal bean types ...
         
-        if(classCache.hasInternalBeanSemantics(type)) {
+        if(classCache.head(type).hasInternalBeanSemantics()) {
             return CausewayBeanMetaData.injectable(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
@@ -154,12 +148,11 @@ public record CausewayBeanTypeClassifier(
             return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, named.get());
         }
 
-        // allow ServiceLoader plugins to have a say, eg. when classifying entity types
-        for(var classifier : classifierPlugins) {
-            var classification = classifier.classify(named.get());
-            if(classification!=null) return classification;
+        // JDO entity support
+        if(classCache.head(type).isJdoPersistenceCapable()){
+            return CausewayBeanMetaData.entity(PersistenceStack.JDO, logicalType);
         }
-
+  
         var entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
             return CausewayBeanMetaData.entity(PersistenceStack.JPA, named.get());
@@ -184,7 +177,7 @@ public record CausewayBeanTypeClassifier(
             }
         }
 
-        if(_ClassCache.getInstance().hasJaxbRootElementSemantics(type)) {
+        if(_ClassCache.getInstance().head(type).hasJaxbRootElementSemantics()) {
             return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, named.get());
         }
 
