@@ -58,7 +58,7 @@ public class CausewayBeanTypeRegistry {
         introspectableTypes.forEach(typeMeta->{
 
             var cls = typeMeta.getCorrespondingClass();
-
+            
             introspectableTypesByClass.put(typeMeta.getCorrespondingClass(), typeMeta);
 
             switch (typeMeta.beanSort()) {
@@ -102,7 +102,7 @@ public class CausewayBeanTypeRegistry {
     public Stream<CausewayBeanMetaData> streamIntrospectableTypes() { return introspectableTypes.stream(); }
     public Stream<Class<?>> streamManagedBeansContributing() { return managedBeansContributing.keySet().stream(); }
     public Stream<Class<?>> streamEntityTypes() { return entityTypes.keySet().stream(); }
-    public Stream<Class<?>> streamViewmodelTypes() { return entityTypes.keySet().stream(); }
+    public Stream<Class<?>> streamViewmodelTypes() { return viewmodelTypes.keySet().stream(); }
     public Stream<Class<?>> streamMixinTypes() { return mixinTypes.keySet().stream(); }
     public Stream<Class<?>> streamValueTypes() { return valueTypes.keySet().stream(); }
     
