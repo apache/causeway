@@ -104,14 +104,14 @@ implements
                 : (causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance()); // JUnit support
     }
 
-    @Bean("causeway.bean-meta-data")
-    public Can<CausewayBeanMetaData> getComponentScanResult() {
+    @Bean
+    public CausewayBeanTypeRegistry getComponentScanResult() {
         if(log.isDebugEnabled()) {
             componentScanResult.forEach(type->{
                 log.debug("to be introspected: {}", type);
             });
         }
-        return componentScanResult;
+        return new CausewayBeanTypeRegistry(componentScanResult);
     }
 
 }

@@ -66,7 +66,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistryDefault;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -352,7 +351,7 @@ extends MetaModelContext {
 
     public CausewayBeanTypeRegistry getCausewayBeanTypeRegistry() {
         if(causewayBeanTypeRegistry==null) {
-            causewayBeanTypeRegistry = new CausewayBeanTypeRegistryDefault(Can.empty());
+            causewayBeanTypeRegistry = new CausewayBeanTypeRegistry(Can.empty());
         }
         return causewayBeanTypeRegistry;
     }
