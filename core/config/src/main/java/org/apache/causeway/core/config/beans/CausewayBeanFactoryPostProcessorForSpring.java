@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
-@Named(CausewayModuleCoreConfig.NAMESPACE + "..CausewayBeanFactoryPostProcessorForSpring")
+@Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanFactoryPostProcessorForSpring")
 @Import({
     AopPatch.class
 })
@@ -104,7 +104,7 @@ implements
                 : (causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance()); // JUnit support
     }
 
-    @Bean
+    @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeRegistry")
     public CausewayBeanTypeRegistry getComponentScanResult() {
         if(log.isDebugEnabled()) {
             componentScanResult.forEach(type->{
