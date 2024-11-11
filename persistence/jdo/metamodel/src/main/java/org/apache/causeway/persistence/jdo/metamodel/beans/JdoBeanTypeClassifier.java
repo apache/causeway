@@ -23,6 +23,7 @@ import java.util.Locale;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -33,6 +34,7 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
  * ServiceLoader plugin, classifies PersistenceCapable types into BeanSort.ENTITY.
  * @since 2.0
  */
+@BeanInternal
 public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifierSpi {
 
     @Override

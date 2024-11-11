@@ -30,6 +30,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  *
  */
-@Component
+@Configuration(proxyBeanMethods = false)
 @Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanFactoryPostProcessor")
 @Import({
     AopPatch.class

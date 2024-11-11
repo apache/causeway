@@ -35,6 +35,7 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
@@ -129,10 +130,8 @@ public record CausewayBeanTypeClassifier(
         
         // handle internal bean types ...
         
-        var aBeanInternal = _Annotations.synthesize(type, BeanInternal.class);
-        if(aBeanInternal.isPresent()) {
-            var logicalType = LogicalType.infer(type);
-            Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.set(classCache, type, "true");
+        if(classCache.hasInternalBeanSemantics(type)) {
+            var logicalType = LogicalType.infer(type); //TODO should be deprecated in favor of Spring provided bean names
             return CausewayBeanMetaData.injectable(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 

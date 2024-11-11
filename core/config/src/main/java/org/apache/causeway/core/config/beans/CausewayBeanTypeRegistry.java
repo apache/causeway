@@ -26,12 +26,14 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.annotations.BeanInternal;
 
 import lombok.NonNull;
 
 /**
  * Holds discovered domain types grouped by bean-sort.
  */
+@BeanInternal
 public class CausewayBeanTypeRegistry {
 
     /**

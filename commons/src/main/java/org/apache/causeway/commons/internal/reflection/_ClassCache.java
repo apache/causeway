@@ -22,6 +22,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,12 +36,14 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -99,6 +102,13 @@ public final class _ClassCache implements AutoCloseable {
      */
     public boolean hasJaxbRootElementSemantics(final Class<?> type) {
         return classModel(type).hasJaxbRootElementSemantics;
+    }
+    
+    /**
+     * whether type is annotated with {@link BeanInternal} or {@link Configuration}
+     */
+    public boolean hasInternalBeanSemantics(final Class<?> type) {
+        return classModel(type).hasInternalBeanSemantics;
     }
 
     /**
@@ -248,21 +258,44 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- IMPLEMENATION DETAILS
 
-    @RequiredArgsConstructor
-    private static class ClassModel {
-        private final Can<Field> declaredFields;
-        private final boolean hasJaxbRootElementSemantics;
-        private final boolean isAnnotatedWithNamed;
+    private record ClassModel(Can<Field> declaredFields,
+            boolean hasInternalBeanSemantics,
+            boolean hasJaxbRootElementSemantics,
+            boolean isAnnotatedWithNamed,
+            
+            Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey,
+            Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey,
 
-        private final Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey = new HashMap<>();
-        private final Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey = new HashMap<>();
+            Map<MethodKey, ResolvedMethod> resolvedMethodsByKey,
+            Map<MethodKey, ResolvedMethod> publicMethodsByKey,
+            Map<MethodKey, ResolvedMethod> postConstructMethodsByKey,
 
-        private final Map<MethodKey, ResolvedMethod> resolvedMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, ResolvedMethod> publicMethodsByKey = new HashMap<>();
-        private final Map<MethodKey, ResolvedMethod> postConstructMethodsByKey = new HashMap<>();
+            Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute,
+            Map<String, String> attributeMap
+            ) {
 
-        private final Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute = new HashMap<>();
-        private final Map<String, String> attributeMap = new ConcurrentHashMap<>();
+        ClassModel(Can<Field> declaredFields,
+                boolean hasInternalBeanSemantics,
+                boolean hasJaxbRootElementSemantics,
+                boolean isAnnotatedWithNamed) {
+            this(declaredFields, hasInternalBeanSemantics, hasJaxbRootElementSemantics, isAnnotatedWithNamed, 
+                    new HashMap<>(), 
+                    new HashMap<>(), 
+                    new HashMap<>(), 
+                    new HashMap<>(), 
+                    new HashMap<>(), 
+                    new HashMap<>(), 
+                    new ConcurrentHashMap<>());
+        }
+        
+        public static ClassModel INTERNAL = new ClassModel(Can.empty(), true, false, false,
+                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), 
+                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
+                Collections.emptyMap()); 
+        
+        public static ClassModel internal() {
+            return INTERNAL;
+        }
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
@@ -349,8 +382,14 @@ public final class _ClassCache implements AutoCloseable {
 //                    })
 //                    .collect(Can.toCan());
 
+        var hasInternalBeanSemantics = _Annotations.isPresent(type, Configuration.class)
+            || _Annotations.isPresent(type, BeanInternal.class);
+        
+        if(hasInternalBeanSemantics) return ClassModel.internal(); //skip further inspection
+        
         var model = new ClassModel(
                 Can.ofArray(type.getDeclaredFields()),
+                hasInternalBeanSemantics,
                 _Annotations.isPresent(type, XmlRootElement.class),
                 _Annotations.isPresent(type, Named.class));
 

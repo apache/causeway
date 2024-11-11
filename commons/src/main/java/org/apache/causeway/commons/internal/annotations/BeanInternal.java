@@ -16,8 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.causeway.core.config.beans;
+package org.apache.causeway.commons.internal.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
