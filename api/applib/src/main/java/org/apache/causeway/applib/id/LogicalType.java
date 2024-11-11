@@ -21,19 +21,16 @@ package org.apache.causeway.applib.id;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import jakarta.inject.Named;
-import jakarta.persistence.Table;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.reflection._Annotations;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -82,7 +79,6 @@ implements
     public static LogicalType lazy(
             final @NonNull Class<?> correspondingClass,
             final @NonNull Supplier<String> logicalNameProvider) {
-
         return new LogicalType(correspondingClass, logicalNameProvider);
     }
 
@@ -93,7 +89,6 @@ implements
     public static LogicalType eager(
             final @NonNull Class<?> correspondingClass,
             final String logicalName) {
-
         return new LogicalType(correspondingClass, logicalName);
     }
 
@@ -103,49 +98,12 @@ implements
      */
     public static LogicalType fqcn(
             final @NonNull Class<?> correspondingClass) {
-
         return eager(correspondingClass, correspondingClass.getName());
     }
 
-    /**
-     * Infer from annotations.
-     * @apiNote Does only simple inference, not involving classifier plugins.
-     * Use with caution!
-     */
     public static LogicalType infer(
             final @NonNull Class<?> correspondingClass) {
-
-        // has precedence, over any former (deprecated) naming strategies
-        var named = _Strings.emptyToNull(
-                _Annotations.synthesize(correspondingClass, Named.class)
-                .map(Named::value)
-                .orElse(null));
-        if(named!=null) {
-            return eager(correspondingClass, named);
-        }
-
-        // fallback to @Table annotations
-        {
-            var logicalTypeName =
-                    _Annotations.synthesize(correspondingClass, Table.class)
-                    .map(table->
-                        _Strings.nullToEmpty(table.schema())
-                            .toLowerCase(Locale.ROOT)
-                        + "."
-                        + _Strings.nullToEmpty(table.name()))
-                    .orElse(null);
-            if(logicalTypeName!=null
-                    && !logicalTypeName.startsWith(".")
-                    && !logicalTypeName.endsWith(".")) {
-                return eager(correspondingClass, logicalTypeName);
-            }
-        }
-
-        // fallback to fqcn
-        return eager(correspondingClass,
-                Optional
-                    .ofNullable(correspondingClass.getCanonicalName())
-                    .orElseGet(correspondingClass::getName));
+        return eager(correspondingClass, _ClassCache.getInstance().getLogicalName(correspondingClass));
     }
 
     // -- HIDDEN CONSTRUTORS

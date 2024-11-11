@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import org.apache.causeway.applib.id.LogicalType;
+
 /**
  * ServiceLoader SPI that allows for implementing instances to have a say during bean type scanning.
  * @since 2.0
@@ -33,6 +35,6 @@ public interface CausewayBeanTypeClassifierSpi {
      * but later used by the {@code SpecificationLoader} to also
      * classify non-concrete types (interfaces and abstract classes).
      */
-    CausewayBeanMetaData classify(Class<?> type);
+    CausewayBeanMetaData classify(LogicalType logicalType);
 
 }

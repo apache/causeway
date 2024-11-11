@@ -547,7 +547,7 @@ implements
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
                     ? CausewayBeanMetaData.causewayManaged(BeanSort.VALUE, LogicalType.infer(type))
-                    : causewayBeanTypeClassifier.classify(type)
+                    : causewayBeanTypeClassifier.classify(LogicalType.infer(type), true)
                 );
     }
 
@@ -610,7 +610,7 @@ implements
                     .builder()
                     .addVariable("type", cls.getName())
                     .addVariable("beanSort", causewayBeanTypeClassifier
-                            .classify(cls)
+                            .classify(LogicalType.infer(cls), true)
                             .beanSort()
                             .name())
                     .buildMessage();

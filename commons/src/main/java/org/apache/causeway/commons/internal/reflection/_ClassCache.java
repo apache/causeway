@@ -37,6 +37,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.MergedAnnotations;
+import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
@@ -57,6 +59,7 @@ import org.apache.causeway.commons.semantics.AccessorSemantics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -112,10 +115,16 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     /**
-     * whether type is annotated with {@link Named}
+     * whether type is explicitly named with {@link Named} or similar
      */
-    public boolean isAnnotatedWithNamed(final Class<?> type) {
-        return classModel(type).isAnnotatedWithNamed;
+    public boolean isNamed(final Class<?> type) {
+        return classModel(type).named()!=null;
+    }
+    
+    public String getLogicalName(final Class<?> type) {
+        return Optional.ofNullable(classModel(type).named())
+                .or(()->Optional.ofNullable(type.getCanonicalName()))
+                .orElseGet(type::getName);
     }
 
     // -- CONSTRUCTOR SEMANTICS
@@ -261,7 +270,9 @@ public final class _ClassCache implements AutoCloseable {
     private record ClassModel(Can<Field> declaredFields,
             boolean hasInternalBeanSemantics,
             boolean hasJaxbRootElementSemantics,
-            boolean isAnnotatedWithNamed,
+            MergedAnnotations mergedAnnotations,
+            /** explicit name if any */
+            @Nullable String named,
             
             Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey,
             Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey,
@@ -277,18 +288,15 @@ public final class _ClassCache implements AutoCloseable {
         ClassModel(Can<Field> declaredFields,
                 boolean hasInternalBeanSemantics,
                 boolean hasJaxbRootElementSemantics,
-                boolean isAnnotatedWithNamed) {
-            this(declaredFields, hasInternalBeanSemantics, hasJaxbRootElementSemantics, isAnnotatedWithNamed, 
-                    new HashMap<>(), 
-                    new HashMap<>(), 
-                    new HashMap<>(), 
-                    new HashMap<>(), 
-                    new HashMap<>(), 
-                    new HashMap<>(), 
+                @NonNull MergedAnnotations mergedAnnotations,
+                @Nullable String named) {
+            this(declaredFields, hasInternalBeanSemantics, hasJaxbRootElementSemantics, mergedAnnotations, named,
+                    new HashMap<>(), new HashMap<>(), new HashMap<>(), 
+                    new HashMap<>(), new HashMap<>(), new HashMap<>(), 
                     new ConcurrentHashMap<>());
         }
         
-        public static ClassModel INTERNAL = new ClassModel(Can.empty(), true, false, false,
+        public static ClassModel INTERNAL = new ClassModel(Can.empty(), true, false, null, null,
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), 
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
                 Collections.emptyMap()); 
@@ -370,28 +378,20 @@ public final class _ClassCache implements AutoCloseable {
     private ClassModel inspectType(final Class<?> _type) {
 
         final Class<?> type = reloadType(_type);
-
-        //TODO[CAUSEWAY-3556] optimization candidate (needs inspectedTypes to be a ConcurrentHashMap)
-//                var declaredMethods = _Reflect.streamTypeHierarchy(type, InterfacePolicy.INCLUDE)
-//                    .filter(cls->cls.equals(Object.class))
-//                    .flatMap(cls->{
-//                        return cls.equals(type)
-//                            ? _NullSafe.stream(cls.getDeclaredMethods())
-//                                .filter(_ClassCache::methodIncludeFilter)
-//                            : inspectType(cls).declaredMethods.stream();
-//                    })
-//                    .collect(Can.toCan());
-
-        var hasInternalBeanSemantics = _Annotations.isPresent(type, Configuration.class)
-            || _Annotations.isPresent(type, BeanInternal.class);
         
+        var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
+        
+        var hasInternalBeanSemantics = mergedAnnotations.get(BeanInternal.class).isPresent() 
+                || mergedAnnotations.get(Configuration.class).isPresent();
+            
         if(hasInternalBeanSemantics) return ClassModel.internal(); //skip further inspection
-        
+
         var model = new ClassModel(
                 Can.ofArray(type.getDeclaredFields()),
                 hasInternalBeanSemantics,
-                _Annotations.isPresent(type, XmlRootElement.class),
-                _Annotations.isPresent(type, Named.class));
+                mergedAnnotations.get(XmlRootElement.class).isPresent(),
+                mergedAnnotations,
+                _Named.infer(type, mergedAnnotations));
 
         // process public constructors
         var publicConstr = type.getConstructors();

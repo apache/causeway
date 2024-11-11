@@ -89,7 +89,7 @@ extends FacetFactoryAbstract {
         var facetHolder = processClassContext.getFacetHolder();
         var valueIfAny = processClassContext.synthesizeOnType(Value.class);
 
-        var logicalType = LogicalType.infer(valueClass);
+        var logicalType = LogicalType.fqcn(valueClass);
         var identifier = Identifier.classIdentifier(logicalType);
 
         _Casts.castTo(ObjectSpecification.class, facetHolder)

@@ -28,8 +28,8 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 /**
  * DomainObjects must have a non-empty namespace,
- * eg. @DomainObject(logicalTypeName="Customer") is considered invalid,
- * whereas eg. @DomainObject(logicalTypeName="sales.Customer") is valid.
+ * eg. @Named("Customer") is considered invalid,
+ * whereas eg. @Named("sales.Customer") is valid.
  *
  * @since 2.0
  */

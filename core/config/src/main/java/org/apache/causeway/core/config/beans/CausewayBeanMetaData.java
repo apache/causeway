@@ -78,12 +78,6 @@ public record CausewayBeanMetaData(
         return new CausewayBeanMetaData(beanSort, Optional.empty(), logicalType, ManagedBy.NONE);
     }
 
-    public static CausewayBeanMetaData notManaged(
-            final @NonNull BeanSort beanSort,
-            final @NonNull Class<?> type) {
-        return notManaged(beanSort, LogicalType.infer(type));
-    }
-
     public static CausewayBeanMetaData injectable(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
@@ -95,9 +89,8 @@ public record CausewayBeanMetaData(
      */
     public static CausewayBeanMetaData indifferent(
             final @NonNull BeanSort beanSort,
-            final @NonNull Class<?> type) {
-        return new CausewayBeanMetaData(beanSort, Optional.empty(), LogicalType.infer(type),
-                ManagedBy.INDIFFERENT);
+            final @NonNull LogicalType logicalType) {
+        return new CausewayBeanMetaData(beanSort, Optional.empty(), logicalType, ManagedBy.INDIFFERENT);
     }
 
     public static CausewayBeanMetaData entity(
@@ -110,12 +103,6 @@ public record CausewayBeanMetaData(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return new CausewayBeanMetaData(beanSort, Optional.empty(), logicalType, ManagedBy.CAUSEWAY);
-    }
-
-    public static CausewayBeanMetaData causewayManaged(
-            final @NonNull BeanSort beanSort,
-            final @NonNull Class<?> type) {
-        return causewayManaged(beanSort, LogicalType.infer(type));
     }
 
 }

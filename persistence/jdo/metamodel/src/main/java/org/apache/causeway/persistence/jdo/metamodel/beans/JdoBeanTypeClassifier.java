@@ -18,13 +18,10 @@
  */
 package org.apache.causeway.persistence.jdo.metamodel.beans;
 
-import java.util.Locale;
-
 import javax.jdo.annotations.EmbeddedOnly;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.annotations.BeanInternal;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifierSpi;
@@ -36,47 +33,26 @@ import org.apache.causeway.core.config.beans.PersistenceStack;
  */
 @BeanInternal
 public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifierSpi {
-
+    
     @Override
-    public CausewayBeanMetaData classify(final Class<?> type) {
+    public CausewayBeanMetaData classify(final LogicalType logicalType) {
+        
+        var type = logicalType.getCorrespondingClass();
 
-        var persistenceCapableAnnot = _Annotations
+        var persistenceCapableAnnotOpt = _Annotations
                 .synthesize(type, javax.jdo.annotations.PersistenceCapable.class);
-        if(persistenceCapableAnnot.isPresent()) {
+        if(!persistenceCapableAnnotOpt.isPresent()) return null; // we don't see fit to classify given type
+            
+        var persistenceCapableAnnot = persistenceCapableAnnotOpt.orElseThrow();
 
-            var embeddedOnlyAttribute = persistenceCapableAnnot.get().embeddedOnly();
-            // Whether objects of this type can only be embedded,
-            // hence have no ID that binds them to the persistence layer
-            final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
-                    || _Annotations.synthesize(type, EmbeddedOnly.class).isPresent();
-            if(embeddedOnly) {
-                return null; // don't categorize as entity ... fall through in the caller's logic
-            }
+        var embeddedOnlyAttribute = persistenceCapableAnnot.embeddedOnly();
+        // Whether objects of this type can only be embedded,
+        // hence have no ID that binds them to the persistence layer
+        final boolean embeddedOnly = Boolean.valueOf(embeddedOnlyAttribute)
+                || _Annotations.synthesize(type, EmbeddedOnly.class).isPresent();
+        if(embeddedOnly) return null; // don't categorize as entity ... fall through in the caller's logic
 
-            var logicalType = LogicalType.infer(type);
-
-            // don't trample over the @Named(=...) if present
-            if(logicalType.getLogicalTypeName().equals(type.getName())) {
-                var schema = persistenceCapableAnnot.get().schema();
-                if(_Strings.isNotEmpty(schema)) {
-
-                    var table = persistenceCapableAnnot.get().table();
-
-                    var logicalTypeName = String.format("%s.%s",
-                            schema.toLowerCase(Locale.ROOT),
-                            _Strings.isNotEmpty(table)
-                                ? table
-                                : type.getSimpleName());
-
-                    logicalType = LogicalType.eager(type, logicalTypeName);
-
-                }
-            }
-
-            return CausewayBeanMetaData.entity(PersistenceStack.JDO, logicalType);
-        }
-
-        return null; // we don't see fit to classify given type
+        return CausewayBeanMetaData.entity(PersistenceStack.JDO, logicalType);
     }
 
 }

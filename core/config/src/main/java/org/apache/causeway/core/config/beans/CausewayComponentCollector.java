@@ -27,6 +27,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -58,7 +59,8 @@ record CausewayComponentCollector(
         var beanClass = loadClass(beanDefinition).orElse(null);
         if(beanClass==null) return;
 
-        var typeMeta = collectBeanClass(beanClass);
+        var logicalType = LogicalType.eager(beanClass, beanDefinitionName);
+        var typeMeta = collectBeanClass(logicalType);
 
         if(typeMeta.managedBy().isVetoedForInjection()) {
             registry.removeBeanDefinition(beanDefinitionName);
@@ -82,14 +84,16 @@ record CausewayComponentCollector(
      * <br> - Whether given {@link Component} annotated or meta-annotated type should be made
      * available for injection.
      * <br> - Naming strategy to override that of Spring.
+     * @param logicalType 
      *
      * @apiNote implementing classes might have side effects, eg. intercept
      * discovered types into a type registry
      */
-    private CausewayBeanMetaData collectBeanClass(final Class<?> beanClass) {
-        var typeMeta = causewayBeanTypeClassifier.classify(beanClass);
+    private CausewayBeanMetaData collectBeanClass(final LogicalType logicalType) {
+        var typeMeta = causewayBeanTypeClassifier.classify(logicalType, false);
         var beanSort = typeMeta.beanSort();
         if(beanSort.isToBeIntrospected()) {
+            var beanClass = logicalType.getCorrespondingClass();
             introspectableTypes.put(beanClass, typeMeta);
             if(log.isDebugEnabled()) {
                 log.debug("to-be-introspected: {} [{}]",
