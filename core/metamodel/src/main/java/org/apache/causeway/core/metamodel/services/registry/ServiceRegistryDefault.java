@@ -102,9 +102,9 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     }
 
     private Predicate<_SingletonBeanProvider> contributes() {
-        var managedBeansContributing = causewayBeanTypeRegistry.getManagedBeansContributing().keySet();
         return singletonProvider->singletonProvider!=null
-                ? managedBeansContributing.contains(singletonProvider.getBeanClass()) // do not register unknown sort
+                ? causewayBeanTypeRegistry.containsManagedBeansContributing(singletonProvider.getBeanClass())
+                // do not register unknown sort
                 : false;
     }
 

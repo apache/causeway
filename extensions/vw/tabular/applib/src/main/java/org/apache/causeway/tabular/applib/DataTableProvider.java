@@ -59,8 +59,7 @@ public abstract class DataTableProvider {
     }
 
     public Stream<Class<?>> streamEntityClasses() {
-        return beanTypeRegistry.getEntityTypes().keySet()
-            .stream()
+        return beanTypeRegistry.streamEntityTypes()
             //TODO perhaps externalize sorting
             .sorted((a, b)->a.getSimpleName().compareTo(b.getSimpleName()));
     }

@@ -18,23 +18,35 @@
  */
 package org.apache.causeway.core.config.beans;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Maps;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
- * Holds the set of domain services, persistent entities and fixture scripts etc., but not values.
- * @since 2.0
+ * Holds discovered domain types grouped by bean-sort.
  */
 public class CausewayBeanTypeRegistry {
+
+    /**
+     * (immutable) scan result, as used by the SpecificationLoader for introspection
+     */
+    private final Can<CausewayBeanMetaData> introspectableTypes;
+    private final Map<Class<?>, CausewayBeanMetaData> introspectableTypesByClass = new HashMap<>();
+
+    // -- DISTINCT CATEGORIES OF BEAN SORTS
+
+    private final Map<Class<?>, CausewayBeanMetaData> managedBeansContributing = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> entityTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> viewmodelTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> mixinTypes = new HashMap<>();
+    private final Map<Class<?>, CausewayBeanMetaData> valueTypes = new HashMap<>();
 
     // -- CONSTRUCTOR
 
@@ -58,10 +70,10 @@ public class CausewayBeanTypeRegistry {
                 entityTypes.put(cls, typeMeta);
                 return;
             case VIEW_MODEL:
-                viewModelTypes.put(cls, typeMeta);
+                viewmodelTypes.put(cls, typeMeta);
                 return;
             case VALUE:
-                discoveredValueTypes.put(cls, typeMeta);
+                valueTypes.put(cls, typeMeta);
                 return;
 
             // skip introspection for these
@@ -73,16 +85,30 @@ public class CausewayBeanTypeRegistry {
                 return;
             }
         });
-
     }
+    
+    // -- SIZE
+    
+    public int managedBeansContributingCount() { return managedBeansContributing.size(); }
+    public int entityTypeCount() { return entityTypes.size(); }
+    public int viewmodelTypeCount() { return viewmodelTypes.size(); }
+    public int mixinTypeCount() { return mixinTypes.size(); }
+    public int valueTypeCount() { return valueTypes.size(); }
 
-    // -- SHORTCUTS
+    // -- STREAM
 
-    public Stream<Class<?>> streamMixinTypes() {
-        return getMixinTypes().keySet().stream();
-    }
+    public Stream<CausewayBeanMetaData> streamIntrospectableTypes() { return introspectableTypes.stream(); }
+    public Stream<Class<?>> streamManagedBeansContributing() { return managedBeansContributing.keySet().stream(); }
+    public Stream<Class<?>> streamEntityTypes() { return entityTypes.keySet().stream(); }
+    public Stream<Class<?>> streamViewmodelTypes() { return entityTypes.keySet().stream(); }
+    public Stream<Class<?>> streamMixinTypes() { return mixinTypes.keySet().stream(); }
+    public Stream<Class<?>> streamValueTypes() { return valueTypes.keySet().stream(); }
+    
+    // -- AS SET
 
-    // -- LOOKUPS
+    public Set<Class<?>> entityTypeSet() { return Collections.unmodifiableSet(entityTypes.keySet()); }
+
+    // -- LOOKUP
 
     /**
      * If given type is part of the meta-model and is available for injection,
@@ -90,8 +116,12 @@ public class CausewayBeanTypeRegistry {
      * recognized by the IoC container.
      */
     public Optional<String> lookupManagedBeanNameForType(final Class<?> type) {
-        return Optional.ofNullable(getManagedBeansContributing().get(type))
+        return Optional.ofNullable(managedBeansContributing.get(type))
                 .map(CausewayBeanMetaData::getBeanName);
+    }
+    
+    public boolean containsManagedBeansContributing(@NonNull Class<?> type) {
+        return managedBeansContributing.containsKey(type);
     }
 
     /**
@@ -100,7 +130,7 @@ public class CausewayBeanTypeRegistry {
      * @implNote assumes that there can be only one persistence stack
      */
     public PersistenceStack determineCurrentPersistenceStack() {
-        return getEntityTypes().values().stream()
+        return entityTypes.values().stream()
             .map(meta->meta.getPersistenceStack())
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -109,41 +139,8 @@ public class CausewayBeanTypeRegistry {
             .orElse(PersistenceStack.UNSPECIFIED);
     }
 
-
-    /**
-     * (immutable) scan result, as used by the SpecificationLoader for introspection
-     */
-    private final Can<CausewayBeanMetaData> introspectableTypes;
-
-    private final Map<Class<?>, CausewayBeanMetaData> introspectableTypesByClass = _Maps.newHashMap();
-
-    // -- DISTINCT CATEGORIES OF BEAN SORTS
-
-    @Getter
-    private final Map<Class<?>, CausewayBeanMetaData> managedBeansContributing = new HashMap<>();
-
-    @Getter
-    private final Map<Class<?>, CausewayBeanMetaData> entityTypes = new HashMap<>();
-
-    @Getter
-    private final Map<Class<?>, CausewayBeanMetaData> mixinTypes = new HashMap<>();
-
-    @Getter
-    private final Map<Class<?>, CausewayBeanMetaData> viewModelTypes = new HashMap<>();
-
-    @Getter
-    private final Map<Class<?>, CausewayBeanMetaData> discoveredValueTypes = new HashMap<>();
-
-    // -- LOOKUPS
-
     public Optional<CausewayBeanMetaData> lookupIntrospectableType(final Class<?> type) {
         return Optional.ofNullable(introspectableTypesByClass.get(type));
-    }
-
-    // -- ITERATORS
-
-    public Stream<CausewayBeanMetaData> streamIntrospectableTypes() {
-        return _NullSafe.stream(introspectableTypes);
     }
 
 }

@@ -67,8 +67,7 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @PostConstruct
     public void init() {
-        var viewModelTypes = causewayBeanTypeRegistry.getViewModelTypes();
-        viewModelTypeForHomepage = viewModelTypes.keySet().stream()
+        viewModelTypeForHomepage = causewayBeanTypeRegistry.streamViewmodelTypes()
                 .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class))
                 .findFirst();
     }

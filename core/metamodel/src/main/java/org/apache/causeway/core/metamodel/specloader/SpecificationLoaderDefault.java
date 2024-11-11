@@ -247,7 +247,7 @@ implements
 
         Stream
             .concat(
-                causewayBeanTypeRegistry.getDiscoveredValueTypes().keySet().stream(),
+                causewayBeanTypeRegistry.streamValueTypes(),
                 valueSemanticsResolver.get().streamClassesWithValueSemantics())
             .forEach(valueClass -> {
                 var valueSpec = loadSpecification(valueClass, IntrospectionState.NOT_INTROSPECTED);
@@ -294,17 +294,17 @@ implements
         log.info(" - introspecting {} value types", valueTypeSpecs.size());
         introspect(Can.ofCollection(valueTypeSpecs.values()), IntrospectionState.FULLY_INTROSPECTED);
 
-        log.info(" - introspecting {} mixins", causewayBeanTypeRegistry.getMixinTypes().size());
+        log.info(" - introspecting {} mixins", causewayBeanTypeRegistry.mixinTypeCount());
         introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
         log.info(" - introspecting {} managed beans contributing (domain services)",
-                causewayBeanTypeRegistry.getManagedBeansContributing().size());
+                causewayBeanTypeRegistry.managedBeansContributingCount());
 
         log.info(" - introspecting {} entities ({})",
-                causewayBeanTypeRegistry.getEntityTypes().size(),
+                causewayBeanTypeRegistry.entityTypeCount(),
                 causewayBeanTypeRegistry.determineCurrentPersistenceStack().name());
 
-        log.info(" - introspecting {} view models", causewayBeanTypeRegistry.getViewModelTypes().size());
+        log.info(" - introspecting {} view models", causewayBeanTypeRegistry.viewmodelTypeCount());
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 

@@ -77,7 +77,6 @@ import org.apache.causeway.persistence.jdo.spring.integration.LocalPersistenceMa
 import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePersistenceManagerFactoryProxy;
 
 import lombok.SneakyThrows;
-
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -246,19 +245,14 @@ public class CausewayModulePersistenceJdoDatanucleus {
             final List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners,
             final DatanucleusSettings dnSettings) {
 
-        if(_NullSafe.isEmpty(jdoEntityDiscoveryListeners)) {
-            return;
-        }
+        if(_NullSafe.isEmpty(jdoEntityDiscoveryListeners)) return;
         // assuming, as we instantiate a DN PMF, all entities discovered are JDO entities
-        var jdoEntityTypes = beanTypeRegistry.getEntityTypes();
-        if(_NullSafe.isEmpty(jdoEntityTypes)) {
-            return;
-        }
-        var jdoEntityTypesView = Collections.unmodifiableSet(jdoEntityTypes.keySet());
+        if(beanTypeRegistry.entityTypeCount()==0) return;
+        var jdoEntityTypes = beanTypeRegistry.entityTypeSet();
         var dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
         jdoEntityDiscoveryListeners
             .forEach(listener->
-                    listener.onEntitiesDiscovered(pmf, jdoEntityTypesView, dnProps));
+                    listener.onEntitiesDiscovered(pmf, jdoEntityTypes, dnProps));
     }
 
     /**
@@ -301,7 +295,7 @@ public class CausewayModulePersistenceJdoDatanucleus {
         var pumd = new PersistenceUnitMetaData(
                 "dynamic-unit", "RESOURCE_LOCAL", null);
         pumd.setExcludeUnlistedClasses(false);
-        beanTypeRegistry.getEntityTypes().keySet().stream()
+        beanTypeRegistry.streamEntityTypes()
         .map(Class::getName)
         .forEach(pumd::addClassName);
         return pumd;

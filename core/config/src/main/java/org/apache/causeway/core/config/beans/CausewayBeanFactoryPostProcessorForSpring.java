@@ -66,11 +66,11 @@ implements
     ApplicationContextAware {
 
     private CausewayBeanTypeClassifier causewayBeanTypeClassifier;
-    private Can<CausewayBeanMetaData> componentScanResult;
+    private Can<CausewayBeanMetaData> componentScanResult = Can.empty();
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance(applicationContext);
+        this.causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance(applicationContext);
     }
 
     @Override
