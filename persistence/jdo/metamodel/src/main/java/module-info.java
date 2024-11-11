@@ -33,6 +33,6 @@ module org.apache.causeway.persistence.jdo.metamodel {
     exports org.apache.causeway.persistence.jdo.metamodel;
     exports org.apache.causeway.persistence.jdo.metamodel.facets.object.persistencecapable;
 
-    provides org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier
+    provides org.apache.causeway.core.config.beans.CausewayBeanTypeClassifierSpi
         with org.apache.causeway.persistence.jdo.metamodel.beans.JdoBeanTypeClassifier;
 }

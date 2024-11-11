@@ -39,14 +39,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import lombok.Getter;
 
 @ActiveProfiles("test")
 @SpringBootTest(classes = {
-        CausewayBeanFactoryPostProcessorForSpring.class,
+        CausewayBeanFactoryPostProcessor.class,
         CausewayModuleCoreConfig.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,

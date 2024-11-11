@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
-import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -51,7 +51,7 @@ import org.apache.causeway.testdomain.model.stereotypes.MyView;
         classes = {
                 CausewaySystemEnvironment.class,
                 MetaModelContextFactory.class,
-                CausewayBeanFactoryPostProcessorForSpring.class,
+                CausewayBeanFactoryPostProcessor.class,
                 Configuration_usingStereotypes.class,
                 ServiceRegistryDefault.class
         },

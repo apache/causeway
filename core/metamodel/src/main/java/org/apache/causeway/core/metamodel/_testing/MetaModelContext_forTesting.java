@@ -63,7 +63,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -339,8 +339,8 @@ extends MetaModelContext {
         return valueSemanticsResolver;
     }
 
-    private final CausewayBeanFactoryPostProcessorForSpring causewayBeanFactoryPostProcessorForSpring =
-            new CausewayBeanFactoryPostProcessorForSpring();
+    private final CausewayBeanFactoryPostProcessor causewayBeanFactoryPostProcessorForSpring =
+            new CausewayBeanFactoryPostProcessor();
 
     public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
         if(causewayBeanTypeClassifier==null) {

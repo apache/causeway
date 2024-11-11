@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
-import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessorForSpring;
+import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.converters.PatternsConverter;
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService;
 import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
@@ -37,7 +37,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
     // @Component
     PatternsConverter.class,
-    CausewayBeanFactoryPostProcessorForSpring.class,
+    CausewayBeanFactoryPostProcessor.class,
     CausewayLocaleInitializer.class,
     CausewayTimeZoneInitializer.class,
     PatternOptionalStringConstraintValidator.class,

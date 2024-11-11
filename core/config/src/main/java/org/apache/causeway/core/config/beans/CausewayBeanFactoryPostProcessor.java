@@ -55,12 +55,12 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
-@Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanFactoryPostProcessorForSpring")
+@Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanFactoryPostProcessor")
 @Import({
     AopPatch.class
 })
 @Log4j2
-public class CausewayBeanFactoryPostProcessorForSpring
+public class CausewayBeanFactoryPostProcessor
 implements
     BeanFactoryPostProcessor,
     ApplicationContextAware {
@@ -70,7 +70,7 @@ implements
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance(applicationContext);
+        this.causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(applicationContext);
     }
 
     @Override
@@ -97,11 +97,11 @@ implements
         log.info("post processing {} bean definitions took {}ms", _NullSafe.size(beanDefNames), stopWatch.getMillis());
     }
 
-    @Bean
+    @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeClassifier")
     public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
         return causewayBeanTypeClassifier!=null
                 ? causewayBeanTypeClassifier
-                : (causewayBeanTypeClassifier = CausewayBeanTypeClassifier.createInstance()); // JUnit support
+                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(Can.empty())); // JUnit support
     }
 
     @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeRegistry")
