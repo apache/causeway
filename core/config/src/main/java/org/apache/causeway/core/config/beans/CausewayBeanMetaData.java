@@ -24,10 +24,16 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 
 import lombok.NonNull;
-import lombok.Value;
 
-@Value(staticConstructor = "of")
-public class CausewayBeanMetaData {
+public record CausewayBeanMetaData(
+        @NonNull BeanSort beanSort,
+        /**
+         * Optionally the {@link PersistenceStack},
+         * based on whether {@link #beanSort()} is {@link BeanSort#ENTITY}.
+         */
+        @NonNull Optional<PersistenceStack> persistenceStack,
+        @NonNull LogicalType logicalType,
+        @NonNull ManagedBy managedBy) {
 
     public enum ManagedBy {
         NONE,
@@ -55,16 +61,7 @@ public class CausewayBeanMetaData {
             return this == CAUSEWAY;
         }
     }
-
-    private final @NonNull BeanSort beanSort;
-    /**
-     * Optionally the {@link PersistenceStack},
-     * based on whether {@link #getBeanSort()} is {@link BeanSort#ENTITY}.
-     */
-    private final @NonNull Optional<PersistenceStack> persistenceStack;
-    private final @NonNull LogicalType logicalType;
-    private @NonNull ManagedBy managedBy;
-
+    
     public Class<?> getCorrespondingClass() {
         return logicalType.getCorrespondingClass();
     }
@@ -78,7 +75,7 @@ public class CausewayBeanMetaData {
     public static CausewayBeanMetaData notManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, Optional.empty(), logicalType, ManagedBy.NONE);
+        return new CausewayBeanMetaData(beanSort, Optional.empty(), logicalType, ManagedBy.NONE);
     }
 
     public static CausewayBeanMetaData notManaged(
@@ -90,7 +87,7 @@ public class CausewayBeanMetaData {
     public static CausewayBeanMetaData injectable(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, Optional.empty(), logicalType, ManagedBy.SPRING);
+        return new CausewayBeanMetaData(beanSort, Optional.empty(), logicalType, ManagedBy.SPRING);
     }
 
     /**
@@ -99,20 +96,20 @@ public class CausewayBeanMetaData {
     public static CausewayBeanMetaData indifferent(
             final @NonNull BeanSort beanSort,
             final @NonNull Class<?> type) {
-        return of(beanSort, Optional.empty(), LogicalType.infer(type),
+        return new CausewayBeanMetaData(beanSort, Optional.empty(), LogicalType.infer(type),
                 ManagedBy.INDIFFERENT);
     }
 
     public static CausewayBeanMetaData entity(
             final @NonNull PersistenceStack persistenceStack,
             final @NonNull LogicalType logicalType) {
-        return of(BeanSort.ENTITY, Optional.of(persistenceStack), logicalType, ManagedBy.CAUSEWAY);
+        return new CausewayBeanMetaData(BeanSort.ENTITY, Optional.of(persistenceStack), logicalType, ManagedBy.CAUSEWAY);
     }
 
     public static CausewayBeanMetaData causewayManaged(
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
-        return of(beanSort, Optional.empty(), logicalType, ManagedBy.CAUSEWAY);
+        return new CausewayBeanMetaData(beanSort, Optional.empty(), logicalType, ManagedBy.CAUSEWAY);
     }
 
     public static CausewayBeanMetaData causewayManaged(

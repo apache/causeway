@@ -59,7 +59,7 @@ public class CausewayBeanTypeRegistry {
 
             introspectableTypesByClass.put(typeMeta.getCorrespondingClass(), typeMeta);
 
-            switch (typeMeta.getBeanSort()) {
+            switch (typeMeta.beanSort()) {
             case MANAGED_BEAN_CONTRIBUTING:
                 managedBeansContributing.put(cls, typeMeta);
                 return;
@@ -131,7 +131,7 @@ public class CausewayBeanTypeRegistry {
      */
     public PersistenceStack determineCurrentPersistenceStack() {
         return entityTypes.values().stream()
-            .map(meta->meta.getPersistenceStack())
+            .map(meta->meta.persistenceStack())
             .filter(Optional::isPresent)
             .map(Optional::get)
             .filter(persistenceStack->!persistenceStack.isUnspecified())

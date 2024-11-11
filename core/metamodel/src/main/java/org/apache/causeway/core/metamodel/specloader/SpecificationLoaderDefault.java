@@ -273,7 +273,7 @@ implements
 
             knownSpecs.add(spec);
 
-            var sort = typeMeta.getBeanSort();
+            var sort = typeMeta.beanSort();
 
             if(sort.isManagedBeanAny() || sort.isEntity() || sort.isViewModel() ) {
                 domainObjectSpecs.add(spec);
@@ -611,7 +611,7 @@ implements
                     .addVariable("type", cls.getName())
                     .addVariable("beanSort", causewayBeanTypeClassifier
                             .classify(cls)
-                            .getBeanSort()
+                            .beanSort()
                             .name())
                     .buildMessage();
 

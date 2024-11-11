@@ -38,7 +38,6 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @implNote we must not rely on CausewayConfiguration or other provisioned
  * services to be available; type classification happens before the post-construct phase
-
  */
 @Log4j2
 record CausewayComponentCollector(
@@ -61,12 +60,12 @@ record CausewayComponentCollector(
 
         var typeMeta = collectBeanClass(beanClass);
 
-        if(typeMeta.getManagedBy().isVetoedForInjection()) {
+        if(typeMeta.managedBy().isVetoedForInjection()) {
             registry.removeBeanDefinition(beanDefinitionName);
             log.debug("vetoing bean {}", beanDefinitionName);
         } else {
-            var beanNameOverride = typeMeta.getManagedBy().isBeanNameOverride()
-                    ? typeMeta.getLogicalType().getLogicalTypeName()
+            var beanNameOverride = typeMeta.managedBy().isBeanNameOverride()
+                    ? typeMeta.logicalType().getLogicalTypeName()
                     : null;
             if(_Strings.isNotEmpty(beanNameOverride)) {
                 registry.removeBeanDefinition(beanDefinitionName);
@@ -89,7 +88,7 @@ record CausewayComponentCollector(
      */
     private CausewayBeanMetaData collectBeanClass(final Class<?> beanClass) {
         var typeMeta = causewayBeanTypeClassifier.classify(beanClass);
-        var beanSort = typeMeta.getBeanSort();
+        var beanSort = typeMeta.beanSort();
         if(beanSort.isToBeIntrospected()) {
             introspectableTypes.put(beanClass, typeMeta);
             if(log.isDebugEnabled()) {

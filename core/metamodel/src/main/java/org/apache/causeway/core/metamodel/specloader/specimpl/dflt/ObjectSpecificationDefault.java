@@ -96,11 +96,11 @@ implements FacetHolder {
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         super(typeMeta.getCorrespondingClass(),
-                typeMeta.getLogicalType(),
-                typeMeta.getLogicalType().getLogicalTypeSimpleName(),
-                typeMeta.getBeanSort(), facetProcessor, postProcessor);
+                typeMeta.logicalType(),
+                typeMeta.logicalType().getLogicalTypeSimpleName(),
+                typeMeta.beanSort(), facetProcessor, postProcessor);
 
-        this.isVetoedForInjection = typeMeta.getManagedBy().isVetoedForInjection();
+        this.isVetoedForInjection = typeMeta.managedBy().isVetoedForInjection();
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)

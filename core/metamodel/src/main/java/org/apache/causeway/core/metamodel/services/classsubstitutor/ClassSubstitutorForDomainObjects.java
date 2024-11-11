@@ -46,7 +46,7 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
 
         var beanSort = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
-        .map(CausewayBeanMetaData::getBeanSort)
+        .map(CausewayBeanMetaData::beanSort)
         .orElse(null);
 
         if(beanSort!=null) {
