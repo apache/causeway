@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.applib.id;
 
-import java.io.InvalidObjectException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.function.Supplier;
+
+import static java.util.Objects.requireNonNull;
 
 import jakarta.inject.Named;
 
@@ -32,10 +31,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Synchronized;
-import lombok.ToString;
 
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
@@ -50,46 +46,29 @@ import lombok.ToString;
  * @apiNote thread-safe and serializable
  * @since 2.0 {@index}
  */
-@ToString
-public final class LogicalType
+public record LogicalType(
+        /**
+         * the application context unique type name
+         */
+        @org.springframework.lang.NonNull String logicalName,
+        /**
+         * Type (that is, the {@link Class} this identifier represents).
+         */
+        @org.springframework.lang.NonNull Class<?> correspondingClass)
 implements
     Comparable<LogicalType>,
     Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Type (that is, the {@link Class} this identifier represents).
-     */
-    @Getter
-    private final Class<?> correspondingClass;
-
-    @ToString.Exclude
-    private final Supplier<String> logicalNameProvider;
-
-    @ToString.Exclude // lazy, so don't use in toString (keep free from side-effects)
-    private String logicalName;
-
     // -- FACTORIES
-
-    /**
-     * Returns a new {@link LogicalType} based on the corresponding class
-     * and a {@code logicalNameProvider} for lazy logical name lookup.
-     */
-    public static LogicalType lazy(
-            final @NonNull Class<?> correspondingClass,
-            final @NonNull Supplier<String> logicalNameProvider) {
-        return new LogicalType(correspondingClass, logicalNameProvider);
-    }
 
     /**
      * Returns a new TypeIdentifier based on the corresponding class
      * and (ahead of time) known {@code logicalName}.
      */
     public static LogicalType eager(
-            final @NonNull Class<?> correspondingClass,
+            final Class<?> correspondingClass,
             final String logicalName) {
-        return new LogicalType(correspondingClass, logicalName);
+        return new LogicalType(logicalName, correspondingClass);
     }
 
     /**
@@ -97,50 +76,45 @@ implements
      * Most likely used in testing scenarios.
      */
     public static LogicalType fqcn(
-            final @NonNull Class<?> correspondingClass) {
+            final Class<?> correspondingClass) {
         return eager(correspondingClass, correspondingClass.getName());
     }
 
     public static LogicalType infer(
-            final @NonNull Class<?> correspondingClass) {
+            final Class<?> correspondingClass) {
         return eager(correspondingClass, _ClassCache.getInstance().getLogicalName(correspondingClass));
     }
 
-    // -- HIDDEN CONSTRUTORS
+    // -- CANONICAL CONSTRUTORS
 
-    private LogicalType(
-            final @NonNull Class<?> correspondingClass,
-            final @NonNull Supplier<String> logicalNameProvider) {
-
-        //[CAUSEWAY-3687] would allow CGLIB proxies to be added, but we decided to not allow this for UI contributing beans
-        //this.correspondingClass = ClassUtils.getUserClass(correspondingClass);
-        this.correspondingClass = correspondingClass;
-        this.logicalNameProvider = logicalNameProvider;
-    }
-
-    private LogicalType(
-            final @NonNull Class<?> correspondingClass,
-            final String logicalName) {
+    public LogicalType(
+            final String logicalName,
+            final Class<?> correspondingClass) {
 
         //[CAUSEWAY-3687] would allow CGLIB proxies to be added, but we decided to not allow this for UI contributing beans
         //this.correspondingClass = ClassUtils.getUserClass(correspondingClass);
-        this.correspondingClass = correspondingClass;
+        this.correspondingClass = requireNonNull(correspondingClass);
         this.logicalName = requireNonEmpty(logicalName);
-        this.logicalNameProvider = null;
     }
-
+    
+    /**
+     * @deprecated use {@link #correspondingClass()}
+     */
+    @Deprecated
+    public Class<?> getCorrespondingClass1() {
+        return correspondingClass();
+    }
+    
     /**
      * Canonical name of the corresponding class.
      */
     public String getClassName() {
-        return _Strings.nonEmpty(getCorrespondingClass().getCanonicalName())
+        return _Strings.nonEmpty(correspondingClass().getCanonicalName())
                 .orElse("inner");
     }
 
     /**
-     * Returns the logical-type-name (unique amongst non-abstract classes), as per the
-     * {@link LogicalTypeFacet}.
-     *
+     * Returns the logical-type-name (unique amongst non-abstract classes).
      * <p>
      * This will typically be the value of the {@link Named#value()} annotation attribute.
      * If none has been specified then will default to the fully qualified class name (with
@@ -155,12 +129,11 @@ implements
      * @see ObjectTypeFacet
      * @see ObjectSpecification
      * @see SpecificationLoader
+     * @deprecated use {@link #logicalName()}
      */
-    @Synchronized
-    public String getLogicalTypeName() {
-        if(logicalName == null) {
-            logicalName = requireNonEmpty(logicalNameProvider.get());
-        }
+    @SuppressWarnings("javadoc")
+    @Deprecated
+    public String getLogicalTypeName1() {
         return logicalName;
     }
 
@@ -171,11 +144,10 @@ implements
      * @implNote the result is not memoized, to keep it simple
      */
     public String getLogicalTypeSimpleName() {
-        var logicalTypeName = getLogicalTypeName();
-        final int lastDot = logicalTypeName.lastIndexOf('.');
+        final int lastDot = logicalName.lastIndexOf('.');
         return lastDot >= 0
-            ? logicalTypeName.substring(lastDot + 1)
-            : logicalTypeName;
+            ? logicalName.substring(lastDot + 1)
+            : logicalName;
     }
 
     /**
@@ -185,10 +157,9 @@ implements
      * @implNote the result is not memoized, to keep it simple
      */
     public String getNamespace() {
-        var logicalTypeName = getLogicalTypeName();
-        final int lastDot = logicalTypeName.lastIndexOf('.');
+        final int lastDot = logicalName.lastIndexOf('.');
         return lastDot >= 0
-            ? logicalTypeName.substring(0, lastDot)
+            ? logicalName.substring(0, lastDot)
             : "";
     }
 
@@ -203,14 +174,13 @@ implements
     public String getLogicalTypeNameFormatted(
             final @NonNull String root,
             final @NonNull String delimiter) {
-        var logicalTypeName = getLogicalTypeName();
-        final int lastDot = logicalTypeName.lastIndexOf('.');
+        final int lastDot = logicalName.lastIndexOf('.');
         if(lastDot > 0) {
-            var namespace = logicalTypeName.substring(0, lastDot);
-            var simpleTypeName = logicalTypeName.substring(lastDot + 1);
+            var namespace = logicalName.substring(0, lastDot);
+            var simpleTypeName = logicalName.substring(lastDot + 1);
             return namespace + delimiter + simpleTypeName;
         } else {
-            return root + logicalTypeName;
+            return root + logicalName;
         }
     }
 
@@ -242,34 +212,9 @@ implements
     @Override
     public int compareTo(final @Nullable LogicalType other) {
         var otherClassName = other!=null
-                ? other.getCorrespondingClass().getCanonicalName()
+                ? other.correspondingClass().getCanonicalName()
                 : null;
         return _Strings.compareNullsFirst(correspondingClass.getCanonicalName(), otherClassName);
-    }
-
-    // -- SERIALIZATION PROXY
-
-    private Object writeReplace() {
-        return new SerializationProxy(this);
-    }
-
-    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
-        throw new InvalidObjectException("Proxy required");
-    }
-
-    private static class SerializationProxy implements Serializable {
-        private static final long serialVersionUID = 1L;
-        private final @NonNull Class<?> correspondingClass;
-        private final @NonNull String logicalTypeName;
-
-        private SerializationProxy(final LogicalType typeIdentifier) {
-            this.correspondingClass = typeIdentifier.getCorrespondingClass();
-            this.logicalTypeName = typeIdentifier.getLogicalTypeName();
-        }
-
-        private Object readResolve() {
-            return LogicalType.eager(correspondingClass, logicalTypeName);
-        }
     }
 
     // -- HELPER
@@ -277,7 +222,7 @@ implements
     private String requireNonEmpty(final String logicalName) {
         if(_Strings.isEmpty(logicalName)) {
             throw _Exceptions.illegalArgument("logical name for type %s cannot be empty",
-                    getCorrespondingClass().getName());
+                    correspondingClass.getName());
         }
         return logicalName;
     }

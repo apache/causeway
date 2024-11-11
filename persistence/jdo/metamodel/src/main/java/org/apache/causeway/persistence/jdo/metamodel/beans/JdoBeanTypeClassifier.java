@@ -37,7 +37,7 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifierSpi {
     @Override
     public CausewayBeanMetaData classify(final LogicalType logicalType) {
         
-        var type = logicalType.getCorrespondingClass();
+        var type = logicalType.correspondingClass();
 
         var persistenceCapableAnnotOpt = _Annotations
                 .synthesize(type, javax.jdo.annotations.PersistenceCapable.class);

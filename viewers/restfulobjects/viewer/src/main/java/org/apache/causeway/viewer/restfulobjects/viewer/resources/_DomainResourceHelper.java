@@ -315,7 +315,7 @@ class _DomainResourceHelper {
 
         final ManagedObject serviceAdapter = mmc.getSpecificationLoader()
                 .lookupLogicalType(serviceIdOrAlias)
-                .map(LogicalType::getLogicalTypeName)
+                .map(LogicalType::logicalName)
                 .map(mmc::lookupServiceAdapterById)
                 .orElse(null);
 

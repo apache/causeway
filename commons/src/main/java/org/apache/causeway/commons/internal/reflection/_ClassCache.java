@@ -46,6 +46,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.annotations.BeanInternal;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -59,7 +60,6 @@ import org.apache.causeway.commons.semantics.AccessorSemantics;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -104,25 +104,32 @@ public final class _ClassCache implements AutoCloseable {
      * whether type is annotated with {@link XmlRootElement}
      */
     public boolean hasJaxbRootElementSemantics(final Class<?> type) {
-        return classModel(type).hasJaxbRootElementSemantics;
+        return classModel(type).head().hasJaxbRootElementSemantics();
     }
     
     /**
      * whether type is annotated with {@link BeanInternal} or {@link Configuration}
      */
     public boolean hasInternalBeanSemantics(final Class<?> type) {
-        return classModel(type).hasInternalBeanSemantics;
+        return classModel(type).head().hasInternalBeanSemantics();
     }
 
     /**
      * whether type is explicitly named with {@link Named} or similar
      */
     public boolean isNamed(final Class<?> type) {
-        return classModel(type).named()!=null;
+        return classModel(type).head().named()!=null;
+    }
+    
+    public void setNamed(Class<?> beanClass, String beanDefinitionName) {
+        _Assert.assertNotEmpty(beanDefinitionName);
+        classModel(beanClass).attributeMap().put("NAMED", beanDefinitionName);
     }
     
     public String getLogicalName(final Class<?> type) {
-        return Optional.ofNullable(classModel(type).named())
+        var model = classModel(type);
+        return Optional.ofNullable(model.attributeMap().get("NAMED"))
+                .or(()->Optional.ofNullable(model.head().named()))
                 .or(()->Optional.ofNullable(type.getCanonicalName()))
                 .orElseGet(type::getName);
     }
@@ -267,13 +274,30 @@ public final class _ClassCache implements AutoCloseable {
 
     // -- IMPLEMENATION DETAILS
 
-    private record ClassModel(Can<Field> declaredFields,
-            boolean hasInternalBeanSemantics,
-            boolean hasJaxbRootElementSemantics,
+    private record ClassModelHead(
             MergedAnnotations mergedAnnotations,
             /** explicit name if any */
-            @Nullable String named,
-            
+            @Nullable String named) {
+        
+        static ClassModelHead create(final Class<?> type) {
+            var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
+            return new ClassModelHead(mergedAnnotations, _Named.infer(type, mergedAnnotations));
+        }
+        
+        boolean hasInternalBeanSemantics() { 
+            return mergedAnnotations.get(BeanInternal.class).isPresent() 
+                    || mergedAnnotations.get(Configuration.class).isPresent();
+        }
+        
+        boolean hasJaxbRootElementSemantics() { 
+            return mergedAnnotations.get(XmlRootElement.class).isPresent();
+        }
+        
+    }
+    
+    private record ClassModel(
+            ClassModelHead head,
+            Can<Field> declaredFields,
             Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey,
             Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey,
 
@@ -285,25 +309,24 @@ public final class _ClassCache implements AutoCloseable {
             Map<String, String> attributeMap
             ) {
 
-        ClassModel(Can<Field> declaredFields,
-                boolean hasInternalBeanSemantics,
-                boolean hasJaxbRootElementSemantics,
-                @NonNull MergedAnnotations mergedAnnotations,
-                @Nullable String named) {
-            this(declaredFields, hasInternalBeanSemantics, hasJaxbRootElementSemantics, mergedAnnotations, named,
+        ClassModel(
+                ClassModelHead head,
+                Can<Field> declaredFields) {
+            this(head,
+                    declaredFields,
                     new HashMap<>(), new HashMap<>(), new HashMap<>(), 
                     new HashMap<>(), new HashMap<>(), new HashMap<>(), 
                     new ConcurrentHashMap<>());
         }
-        
-        public static ClassModel INTERNAL = new ClassModel(Can.empty(), true, false, null, null,
+
+        public static ClassModel headOnly(ClassModelHead head) {
+            return new ClassModel(head,
+                Can.empty(), 
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), 
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
-                Collections.emptyMap()); 
-        
-        public static ClassModel internal() {
-            return INTERNAL;
+                Collections.emptyMap());
         }
+        
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
@@ -353,7 +376,7 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     // -- HELPER
-
+    
     private ClassModel classModel(final Class<?> type) {
         synchronized(inspectedTypes) {
             return inspectedTypes.computeIfAbsent(type, this::inspectType);
@@ -379,19 +402,15 @@ public final class _ClassCache implements AutoCloseable {
 
         final Class<?> type = reloadType(_type);
         
-        var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
+        var head = ClassModelHead.create(type);
         
-        var hasInternalBeanSemantics = mergedAnnotations.get(BeanInternal.class).isPresent() 
-                || mergedAnnotations.get(Configuration.class).isPresent();
+        var hasInternalBeanSemantics = head.hasInternalBeanSemantics();
             
-        if(hasInternalBeanSemantics) return ClassModel.internal(); //skip further inspection
+        if(hasInternalBeanSemantics) return ClassModel.headOnly(head); //skip further inspection
 
         var model = new ClassModel(
-                Can.ofArray(type.getDeclaredFields()),
-                hasInternalBeanSemantics,
-                mergedAnnotations.get(XmlRootElement.class).isPresent(),
-                mergedAnnotations,
-                _Named.infer(type, mergedAnnotations));
+                head,
+                Can.ofArray(type.getDeclaredFields()));
 
         // process public constructors
         var publicConstr = type.getConstructors();

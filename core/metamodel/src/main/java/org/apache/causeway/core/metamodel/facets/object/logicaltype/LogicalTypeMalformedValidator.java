@@ -45,7 +45,7 @@ extends MetaModelValidatorAbstract {
     public void validateObjectEnter(final ObjectSpecification spec) {
 
         var logicalType = spec.getLogicalType();
-        var logicalTypeName = logicalType.getLogicalTypeName();
+        var logicalTypeName = logicalType.logicalName();
 
         var nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                 .collect(Can.toCan());

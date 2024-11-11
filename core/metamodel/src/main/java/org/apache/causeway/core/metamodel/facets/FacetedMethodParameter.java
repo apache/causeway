@@ -42,9 +42,7 @@ extends TypedHolderAbstract {
                 featureType,
                 methodFacade.resolveParameter(paramIndex),
                 FeatureType.ACTION.identifierFor(
-                        LogicalType.lazy(
-                                declaringType,
-                                ()->mmc.getSpecificationLoader().loadSpecification(declaringType).getLogicalTypeName()),
+                        LogicalType.infer(declaringType),
                         methodFacade));
 
         this.paramIndex = paramIndex;

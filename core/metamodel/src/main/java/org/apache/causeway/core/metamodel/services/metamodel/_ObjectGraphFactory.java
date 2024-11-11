@@ -92,8 +92,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                     // only register association relations if they don't cross namespace boundaries
                     // in other words: only include, if they share the same namespace
                     if(thisNs.equals(refNs)) {
-                        var thisCls = thisType.getCorrespondingClass();
-                        var refCls = refType.getCorrespondingClass();
+                        var thisCls = thisType.correspondingClass();
+                        var refCls = refType.correspondingClass();
                         if(thisCls.equals(refCls)
                                 || !refCls.isAssignableFrom(thisCls)) {
                             // we found a 1-x relation
@@ -158,8 +158,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                 var type1 = e1.getKey();
                 var type2 = e2.getKey();
                 if(type1.equals(type2)) continue;
-                var cls1 = type1.getCorrespondingClass();
-                var cls2 = type2.getCorrespondingClass();
+                var cls1 = type1.correspondingClass();
+                var cls2 = type2.correspondingClass();
                 if(cls2.isAssignableFrom(cls1)) {
                     var o1 = e1.getValue();
                     var o2 = e2.getValue();

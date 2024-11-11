@@ -229,10 +229,7 @@ extends TypedHolderAbstract {
             final FeatureType featureType,
             final Class<?> declaringType,
             final MethodFacade method) {
-        var logicalTypeOfDeclaringType = LogicalType.lazy(
-                declaringType,
-                ()->specificationLoader.specForTypeElseFail(declaringType).getLogicalTypeName());
-        return featureType.identifierFor(logicalTypeOfDeclaringType, method);
+        return featureType.identifierFor(LogicalType.infer(declaringType), method);
     }
 
 }

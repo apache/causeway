@@ -23,15 +23,15 @@ import org.apache.causeway.applib.id.LogicalType;
 final class _LogicalTypeTestFactory {
     
     public static LogicalType cus() {
-        return LogicalType.lazy(Customer.class, ()->"CUS");
+        return LogicalType.eager(Customer.class, "CUS");
     }
     
     public static LogicalType cux() {
-        return LogicalType.lazy(Customer.class, ()->"CUX");
+        return LogicalType.eager(Customer.class, "CUX");
     }
     
     public static LogicalType ord() {
-        return LogicalType.lazy(Order.class, ()->"ORD");
+        return LogicalType.eager(Order.class, "ORD");
     }
 }
 

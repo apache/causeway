@@ -59,7 +59,7 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Optional<_SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {
-        return Optional.ofNullable(contributingDomainServicesById.get().get(id.getLogicalTypeName()));
+        return Optional.ofNullable(contributingDomainServicesById.get().get(id.logicalName()));
     }
 
     @Override

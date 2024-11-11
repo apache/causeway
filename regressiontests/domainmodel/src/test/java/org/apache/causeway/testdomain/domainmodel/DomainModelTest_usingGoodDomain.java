@@ -679,7 +679,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertEquals(Can.of(
                 "testdomain.v1.ProperServiceWithAlias",
                 "testdomain.v2.ProperServiceWithAlias"),
-                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+                objectSpec.getAliases().map(LogicalType::logicalName));
 
         assertEquals(objectSpec,
                 specificationLoader.specForLogicalTypeName("testdomain.v1.ProperServiceWithAlias")
@@ -699,7 +699,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         assertEquals(Can.of(
                 "testdomain.v1.ProperObjectWithAlias",
                 "testdomain.v2.ProperObjectWithAlias"),
-                objectSpec.getAliases().map(LogicalType::getLogicalTypeName));
+                objectSpec.getAliases().map(LogicalType::logicalName));
 
         assertEquals(objectSpec,
                 specificationLoader.specForLogicalTypeName("testdomain.v1.ProperObjectWithAlias")

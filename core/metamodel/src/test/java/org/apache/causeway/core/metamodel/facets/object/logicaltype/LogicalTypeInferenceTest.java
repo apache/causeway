@@ -37,7 +37,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void installsFacet_passedThroughClassSubstitutor() {
-        assertThat(LogicalType.infer(Customer.class).getLogicalTypeName(),
+        assertThat(LogicalType.infer(Customer.class).logicalName(),
                 is(Customer.class.getCanonicalName()));
     }
 
@@ -47,7 +47,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void installsFacet_onValues() {
-        assertThat(LogicalType.infer(ValueExample1.class).getLogicalTypeName(),
+        assertThat(LogicalType.infer(ValueExample1.class).logicalName(),
                 is(ValueExample1.class.getCanonicalName()));
     }
 
@@ -58,7 +58,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void installsFacet_onValuesUsingLogicalTypeName() {
-        assertThat(LogicalType.infer(ValueExample2.class).getLogicalTypeName(),
+        assertThat(LogicalType.infer(ValueExample2.class).logicalName(),
                 is("xxx.ValueExample"));
     }
 

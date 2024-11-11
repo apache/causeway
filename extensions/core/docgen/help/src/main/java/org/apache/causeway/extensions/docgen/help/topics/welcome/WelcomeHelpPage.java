@@ -243,7 +243,7 @@ public class WelcomeHelpPage implements HelpPage {
                                                 html.append(String.format("<li><b>%s</b>: %s.",
                                                         member.getCanonicalFriendlyName(),
                                                         describedAs));
-                                                if (member.getElementType().getLogicalType().getCorrespondingClass()
+                                                if (member.getElementType().getLogicalType().correspondingClass()
                                                         .isAnnotationPresent(DomainObject.class)) {
                                                     html.append(String.format(" <i> See: <a href='#%s'>%s</a></i>",
                                                             member.getElementType().getLogicalTypeName(),

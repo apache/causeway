@@ -94,7 +94,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     @Override
     public Optional<_SingletonBeanProvider> lookupRegisteredBeanById(final LogicalType id) {
-        return Optional.ofNullable(registeredBeanById.get(id.getLogicalTypeName()));
+        return Optional.ofNullable(registeredBeanById.get(id.logicalName()));
     }
 
     @Override

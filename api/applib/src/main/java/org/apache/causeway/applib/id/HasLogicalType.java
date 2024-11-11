@@ -26,10 +26,10 @@ public interface HasLogicalType {
     LogicalType getLogicalType();
 
     /**
-     * @see LogicalType#getLogicalTypeName()
+     * @see LogicalType#logicalName()
      */
     default String getLogicalTypeName() {
-        return getLogicalType().getLogicalTypeName();
+        return getLogicalType().logicalName();
     }
 
 }

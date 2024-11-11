@@ -144,11 +144,11 @@ implements
     }
 
     public static ApplicationFeatureId newType(final LogicalType logicalType) {
-        return newType(logicalType.getLogicalTypeName());
+        return newType(logicalType.logicalName());
     }
 
     public static ApplicationFeatureId newMember(final LogicalType logicalType, final String memberLogicalName) {
-        return newMember(logicalType.getLogicalTypeName(), memberLogicalName);
+        return newMember(logicalType.logicalName(), memberLogicalName);
     }
 
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName) {

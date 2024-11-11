@@ -29,9 +29,9 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -61,20 +61,26 @@ record CausewayComponentCollector(
 
         var logicalType = LogicalType.eager(beanClass, beanDefinitionName);
         var typeMeta = collectBeanClass(logicalType);
+        var isRenamed = !typeMeta.logicalType().logicalName().equals(logicalType.logicalName());
 
-        if(typeMeta.managedBy().isVetoedForInjection()) {
-            registry.removeBeanDefinition(beanDefinitionName);
-            log.debug("vetoing bean {}", beanDefinitionName);
-        } else {
-            var beanNameOverride = typeMeta.managedBy().isBeanNameOverride()
-                    ? typeMeta.logicalType().getLogicalTypeName()
-                    : null;
-            if(_Strings.isNotEmpty(beanNameOverride)) {
-                registry.removeBeanDefinition(beanDefinitionName);
-                registry.registerBeanDefinition(beanNameOverride, beanDefinition);
-                log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
+        switch (typeMeta.managedBy()) {
+            case NONE, CAUSEWAY-> {
+                remove(beanDefinitionName);
+            }
+            case INDIFFERENT -> {
+                if(isRenamed) {
+                    //rename(beanDefinition, beanDefinitionName, typeMeta.logicalType().logicalName()); //TODO does not work yet
+                    _ClassCache.getInstance().setNamed(beanClass, beanDefinitionName);
+                }
+            }
+            case SPRING -> {
+                if(isRenamed) {
+                    // renaming not allowed, report back to class-cache
+                    _ClassCache.getInstance().setNamed(beanClass, beanDefinitionName);
+                }
             }
         }
+
     }
 
     /**
@@ -93,7 +99,7 @@ record CausewayComponentCollector(
         var typeMeta = causewayBeanTypeClassifier.classify(logicalType, false);
         var beanSort = typeMeta.beanSort();
         if(beanSort.isToBeIntrospected()) {
-            var beanClass = logicalType.getCorrespondingClass();
+            var beanClass = logicalType.correspondingClass();
             introspectableTypes.put(beanClass, typeMeta);
             if(log.isDebugEnabled()) {
                 log.debug("to-be-introspected: {} [{}]",
@@ -105,6 +111,17 @@ record CausewayComponentCollector(
     }
 
     // -- HELPER
+    
+    private void remove(String beanDefinitionName) {
+        registry.removeBeanDefinition(beanDefinitionName);
+        log.debug("vetoing bean {}", beanDefinitionName);
+    }
+    
+    private void rename(BeanDefinition beanDefinition, String beanDefinitionName, String beanNameOverride) {
+        registry.removeBeanDefinition(beanDefinitionName);
+        registry.registerBeanDefinition(beanNameOverride, beanDefinition);
+        log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
+    }
 
     private static Optional<Class<?>> loadClass(@Nullable final BeanDefinition beanDefinition) {
         return Optional.ofNullable(beanDefinition.getBeanClassName())

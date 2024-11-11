@@ -163,7 +163,7 @@ public interface SpecificationLoader {
         }
         return lookupLogicalType(logicalTypeName)
             .map(logicalType->
-                    loadSpecification(logicalType.getCorrespondingClass(), introspectionState))
+                    loadSpecification(logicalType.correspondingClass(), introspectionState))
             .orElse(null);
     }
 
@@ -178,7 +178,7 @@ public interface SpecificationLoader {
     default Optional<ObjectSpecification> specForLogicalType(
             final @Nullable LogicalType logicalType) {
         return Optional.ofNullable(logicalType)
-                .map(LogicalType::getCorrespondingClass)
+                .map(LogicalType::correspondingClass)
                 .flatMap(this::specForType);
     }
 

@@ -30,14 +30,14 @@ extends ValueTypeContractTestAbstract<LogicalType> {
     protected List<LogicalType> getObjectsWithSameValue() {
         return List.of(
                 LogicalType.fqcn(SomeDomainClass.class),
-                LogicalType.lazy(SomeDomainClass.class, SomeDomainClass.class::getName));
+                LogicalType.eager(SomeDomainClass.class, SomeDomainClass.class.getName()));
     }
 
     @Override
     protected List<LogicalType> getObjectsWithDifferentValue() {
         return List.of(
                 LogicalType.fqcn(Object.class),
-                LogicalType.lazy(List.class, List.class::getName));
+                LogicalType.eager(List.class, List.class.getName()));
     }
 
 }

@@ -67,7 +67,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
         // adding aliases to the lookup map
         spec.getAliases()
         .forEach(alias->{
-                putWithWarnOnOverride(alias.getLogicalTypeName(), spec);
+                putWithWarnOnOverride(alias.logicalName(), spec);
         });
 
         return spec;
@@ -95,7 +95,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
                     + "with\n "
                     + "%s -> %s\n "
                     + "This will result in the meta-model validation to fail.",
-                    logicalTypeName, previousMapping.getCorrespondingClass(),
+                    logicalTypeName, previousMapping.correspondingClass(),
                     logicalTypeName, spec.getCorrespondingClass());
             log.warn(msg);
         }

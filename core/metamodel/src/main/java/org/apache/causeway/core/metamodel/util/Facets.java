@@ -370,7 +370,7 @@ public final class Facets {
         return spec->
             spec.valueFacet()
             .map(ValueFacet::getLogicalType)
-            .map(LogicalType::getCorrespondingClass)
+            .map(LogicalType::correspondingClass)
             .map(typeMatcher::test)
             .orElse(false);
     }

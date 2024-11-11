@@ -73,7 +73,7 @@ implements
 
             var logicalType = objectSpec.getLogicalType();
 
-            if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())
+            if(logicalType.getClassName().equals(logicalType.logicalName())
                     && !_ClassCache.getInstance().isNamed(objectSpec.getCorrespondingClass())) {
                 ValidationFailure.raise(objectSpec, MessageTemplate.LOGICAL_TYPE_NAME_IS_NOT_EXPLICIT
                         .builder()

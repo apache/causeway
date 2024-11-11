@@ -163,7 +163,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
         }
 
         var logicalType = spec.getLogicalType();
-        var logicalTypeName = logicalType.getLogicalTypeName();
+        var logicalTypeName = logicalType.logicalName();
         var typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 
         // add class to our map

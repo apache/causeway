@@ -87,7 +87,7 @@ public record CausewayBeanTypeClassifier(
 
     public CausewayBeanMetaData classify(final @NonNull LogicalType logicalType, boolean alreadyInferred) {
         
-        var type = logicalType.getCorrespondingClass();
+        var type = logicalType.correspondingClass();
         
         Supplier<LogicalType> named = ()->alreadyInferred
             ? logicalType

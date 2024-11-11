@@ -100,7 +100,10 @@ implements FacetHolder {
                 typeMeta.logicalType().getLogicalTypeSimpleName(),
                 typeMeta.beanSort(), facetProcessor, postProcessor);
 
-        this.isVetoedForInjection = typeMeta.managedBy().isVetoedForInjection();
+        this.isVetoedForInjection = switch (typeMeta.managedBy()) {
+            case NONE, CAUSEWAY -> true;
+            case INDIFFERENT, SPRING  -> false;
+        }; 
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
         // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)

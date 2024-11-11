@@ -40,34 +40,19 @@ public record CausewayBeanMetaData(
         CAUSEWAY,
         SPRING,
         /** other Spring managed component, or not managed at all */
-        INDIFFERENT,
-        ;
+        INDIFFERENT;
         public boolean isNone() { return this == NONE; }
         public boolean isCauseway() { return this == CAUSEWAY; }
         public boolean isSpring() { return this == SPRING; }
-
-        /**
-         * Whether Spring should make that underlying bean injectable.
-         * @implNote if not managed by Causeway, let ultimately Spring decide
-         */
-        public boolean isVetoedForInjection() {
-            return isCauseway()
-                    || isNone();
-        }
-        /**
-         * Whether we interfere with Spring's naming strategy.
-         */
-        public boolean isBeanNameOverride() {
-            return this == CAUSEWAY;
-        }
+        public boolean isUnspecified() { return this == INDIFFERENT; }
     }
     
     public Class<?> getCorrespondingClass() {
-        return logicalType.getCorrespondingClass();
+        return logicalType.correspondingClass();
     }
 
     public String getBeanName() {
-        return logicalType.getLogicalTypeName();
+        return logicalType.logicalName();
     }
 
     // -- FACTORIES

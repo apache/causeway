@@ -94,7 +94,7 @@ class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenNotSet() {
-        var type = logicalTypeResolver.lookup(cus.getLogicalTypeName());
+        var type = logicalTypeResolver.lookup(cus.logicalName());
         assertFalse(type.isPresent());
     }
 

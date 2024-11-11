@@ -40,7 +40,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -544,7 +543,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
-            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).getLogicalTypeName(),
+            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).logicalName(),
                     is("CUS"));
             assertNoMethodsRemoved();
         }

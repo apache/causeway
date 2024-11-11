@@ -64,7 +64,7 @@ public final class Bookmark implements Oid {
 
     public static Bookmark empty(
             final @NonNull LogicalType logicalType) {
-        return emptyForLogicalTypeName(logicalType.getLogicalTypeName());
+        return emptyForLogicalTypeName(logicalType.logicalName());
     }
 
     public static Bookmark emptyForLogicalTypeName(
@@ -88,7 +88,7 @@ public final class Bookmark implements Oid {
             final @NonNull LogicalType logicalType,
             final @NonNull String urlSafeIdentifier) {
         return Bookmark.forLogicalTypeNameAndIdentifier(
-                logicalType.getLogicalTypeName(),
+                logicalType.logicalName(),
                 urlSafeIdentifier);
     }
 
