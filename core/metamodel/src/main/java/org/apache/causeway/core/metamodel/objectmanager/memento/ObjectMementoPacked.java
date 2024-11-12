@@ -18,25 +18,41 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.NonNull;
 
-record ObjectMementoForEmpty(
-        @NonNull LogicalType logicalType)
+record ObjectMementoPacked(
+        @NonNull LogicalType logicalType,
+        @Nullable ArrayList<ObjectMemento> container)
 implements ObjectMemento {
 
     @Override
     public String title() {
-        return PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION);
+        throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     @Override
     public Bookmark bookmark() {
-        return Bookmark.empty(logicalType);
+        throw _Exceptions.notImplemented(); // please unwrap at call-site
+    }
+
+    public Stream<ObjectMemento> streamElements() {
+        return _NullSafe.stream(container);
+    }
+
+    @Deprecated // don't expose
+    Optional<ArrayList<ObjectMemento>> asList() {
+        return Optional.ofNullable(container);
     }
 
 }

@@ -35,7 +35,7 @@ public record ObjectDementifierFactory() {
         EMPTY {
             @Override
             public boolean isHandling(final MementoRecreateRequest request) {
-                return request.memento() instanceof ObjectMementoForEmpty;
+                return request.memento() instanceof ObjectMementoEmpty;
             }
             @Override
             public ManagedObject handle(final MementoRecreateRequest request) {
@@ -45,7 +45,7 @@ public record ObjectDementifierFactory() {
         SCALAR {
             @Override
             public boolean isHandling(final MementoRecreateRequest request) {
-                return request.memento() instanceof ObjectMementoForScalar;
+                return request.memento() instanceof ObjectMementoSingular;
             }
             @Override
             public ManagedObject handle(final MementoRecreateRequest request) {
@@ -60,13 +60,13 @@ public record ObjectDementifierFactory() {
         PACKED {
             @Override
             public boolean isHandling(final MementoRecreateRequest request) {
-                return request.memento() instanceof ObjectMementoCollection;
+                return request.memento() instanceof ObjectMementoPacked;
             }
             @Override
             public ManagedObject handle(final MementoRecreateRequest request) {
                 var elementSpec = request.objectSpecification();
                 var om = elementSpec.getMetaModelContext().getObjectManager();
-                var objects = ((ObjectMementoCollection)request.memento()).streamElements()
+                var objects = ((ObjectMementoPacked)request.memento()).streamElements()
                         .map(om::demementify) // recursively unwrap
                         .collect(Can.toCan());
                 return ManagedObject.packed(elementSpec, objects);

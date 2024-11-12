@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 
 import lombok.NonNull;
 
-record ObjectMementoForScalar(
+record ObjectMementoSingular(
         @NonNull LogicalType logicalType,
         @NonNull Bookmark bookmark,
         String title)
@@ -35,7 +35,7 @@ implements ObjectMemento {
 
     // -- FACTORIES
 
-    static ObjectMementoForScalar create(final @NonNull ManagedObject adapter) {
+    static ObjectMementoSingular create(final @NonNull ManagedObject adapter) {
         var spec = adapter.getSpecification();
 
         _Assert.assertTrue(spec.isIdentifiable()
@@ -48,7 +48,7 @@ implements ObjectMemento {
                         + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
                         .formatted(spec));
 
-        return new ObjectMementoForScalar(
+        return new ObjectMementoSingular(
                 adapter.getLogicalType(),
                 MMHintUtils.bookmarkElseFail(adapter),
                 MmTitleUtils.titleOf(adapter));
@@ -56,7 +56,7 @@ implements ObjectMemento {
 
     @Override public int hashCode() { return bookmark.hashCode(); }
     @Override public boolean equals(final Object o) {
-        return (o instanceof ObjectMementoForScalar other)
+        return (o instanceof ObjectMementoSingular other)
                 ? this.bookmark.equals(other.bookmark)
                 : false;
     }

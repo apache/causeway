@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
  */
 public sealed interface ObjectMemento
 extends Serializable
-permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
+permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
 
     /** arbitrary/random string */
     static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
@@ -60,17 +60,17 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
     // -- FACTORIES
 
     static ObjectMemento empty(final LogicalType logicalType) {
-        return new ObjectMementoForEmpty(logicalType);
+        return new ObjectMementoEmpty(logicalType);
     }
-    static Optional<ObjectMemento> scalar(@Nullable final ManagedObject adapter) {
+    static Optional<ObjectMemento> singular(@Nullable final ManagedObject adapter) {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
-                : Optional.of(ObjectMementoForScalar.create(adapter));
+                : Optional.of(ObjectMementoSingular.create(adapter));
     }
     static ObjectMemento packed(
             final LogicalType logicalType,
             final ArrayList<ObjectMemento> listOfMementos) {
-        return new ObjectMementoCollection(logicalType, listOfMementos);
+        return new ObjectMementoPacked(logicalType, listOfMementos);
     }
     static ObjectMemento packed(
             final LogicalType logicalType,
@@ -80,7 +80,7 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
         final ArrayList<ObjectMemento> arrayList = container instanceof ArrayList orig
                 ? orig
                 : _Lists.newArrayList(container);
-        return new ObjectMementoCollection(logicalType, arrayList);
+        return new ObjectMementoPacked(logicalType, arrayList);
 
     }
 
@@ -88,7 +88,7 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
 
     // ArrayList is serializable
     public static Optional<ArrayList<ObjectMemento>> unpackAsList(final ObjectMemento memento) {
-        return memento instanceof ObjectMementoCollection packed
+        return memento instanceof ObjectMementoPacked packed
                 ? packed.asList()
                 : Optional.empty();
     }
@@ -121,13 +121,13 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
     }
 
     default boolean isEmpty() {
-        return this instanceof ObjectMementoForEmpty;
+        return this instanceof ObjectMementoEmpty;
     }
     default boolean isScalar() {
-        return this instanceof ObjectMementoForScalar;
+        return this instanceof ObjectMementoSingular;
     }
     default boolean isPacked() {
-        return this instanceof ObjectMementoCollection;
+        return this instanceof ObjectMementoPacked;
     }
 
 }

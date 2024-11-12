@@ -95,7 +95,7 @@ implements ManagedObject {
 
     private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
         MmAssertionUtils.assertPojoIsScalar(adapter);
-        return ObjectMemento.scalar(adapter)
+        return ObjectMemento.singular(adapter)
                 .orElseGet(()->
                     ManagedObjects.isSpecified(adapter)
                         ? ObjectMemento.empty(adapter.getLogicalType())
