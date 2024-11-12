@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -41,7 +42,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.Attributes;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -353,9 +353,7 @@ implements FacetHolder {
     }
 
     private _Lazy<Boolean> isDomainServiceLazy = _Lazy.threadSafe(()->
-        Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.lookup(_ClassCache.getInstance(), getCorrespondingClass())
-            .map("true"::equals)
-            .orElse(false));
+        _ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
 
     @Override
     public boolean isDomainService() {

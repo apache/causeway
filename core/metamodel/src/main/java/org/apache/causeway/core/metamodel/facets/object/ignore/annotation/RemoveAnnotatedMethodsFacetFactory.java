@@ -23,8 +23,8 @@ import java.util.function.Predicate;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
+import org.apache.causeway.commons.internal.reflection._ClassCache.Attribute;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.Attributes;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -100,8 +100,7 @@ extends FacetFactoryAbstract {
         }
         // lookup attribute from class-cache as it should have been already processed by the BeanTypeClassifier
         var cls = processClassContext.getCls();
-        var mixinMainMethodName = Attributes.MIXIN_MAIN_METHOD_NAME.lookup(getClassCache(), cls)
-            .orElse(null);
+        var mixinMainMethodName = getClassCache().head(cls).attributeMap().get(Attribute.MIXIN_MAIN_METHOD_NAME);
         return method->method.name().equals(mixinMainMethodName);
     }
 

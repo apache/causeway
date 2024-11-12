@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -37,6 +38,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
@@ -80,6 +82,17 @@ import lombok.SneakyThrows;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _ClassCache implements AutoCloseable {
+    
+    public enum Attribute {
+        /**
+         * Corresponds to the bean name of Spring managed beans.  
+         */
+        SPRING_NAMED,
+        /**
+         * Corresponds to DomainObject#mixinMethod().
+         */
+        MIXIN_MAIN_METHOD_NAME;
+    }
 
     public static _ClassCache getInstance() {
         return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(_Context.getDefaultClassLoader()));
@@ -107,14 +120,14 @@ public final class _ClassCache implements AutoCloseable {
         return classModel(type).head().named()!=null;
     }
     
-    public void setNamed(Class<?> beanClass, String beanDefinitionName) {
+    public void setSpringNamed(Class<?> beanClass, String beanDefinitionName) {
         _Assert.assertNotEmpty(beanDefinitionName);
-        classModel(beanClass).attributeMap().put("NAMED", beanDefinitionName);
+        classModel(beanClass).head().attributeMap().put(Attribute.SPRING_NAMED, beanDefinitionName);
     }
     
     public String getLogicalName(final Class<?> type) {
         var model = classModel(type);
-        return Optional.ofNullable(model.attributeMap().get("NAMED"))
+        return Optional.ofNullable(model.head().attributeMap().get(Attribute.SPRING_NAMED))
                 .or(()->Optional.ofNullable(model.head().named()))
                 .or(()->Optional.ofNullable(type.getCanonicalName()))
                 .orElseGet(type::getName);
@@ -244,49 +257,47 @@ public final class _ClassCache implements AutoCloseable {
         }
     }
 
-    // -- ATTRIBUTES
-
-    public _ClassCache setAttribute(
-            final Class<?> type,
-            final String attributeName,
-            final String value) {
-        var classModel = classModel(type);
-        classModel.attributeMap.put(attributeName, value);
-        return this;
-    }
-
-    public Optional<String> lookupAttribute(
-            final Class<?> type,
-            final String attributeName) {
-        var classModel = classModel(type);
-        return Optional.ofNullable(classModel.attributeMap.get(attributeName));
-    }
-
     // -- IMPLEMENATION DETAILS
 
     public record ClassModelHead(
             MergedAnnotations mergedAnnotations,
             /** explicit name if any */
-            @Nullable String named) {
+            @Nullable String named,
+            Map<Attribute, String> attributeMap) {
         
         static ClassModelHead create(final Class<?> type) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
-            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations));
+            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations), 
+                    new ConcurrentHashMap<>());
+        }
+        
+        /**
+         * @see MergedAnnotations#get(Class)
+         */
+        public <A extends Annotation> MergedAnnotation<A> annotation(Class<A> annotationType) { 
+            return mergedAnnotations.get(annotationType);
+        }
+        
+        /**
+         * whether type is annotated with annotationType
+         */
+        public boolean hasAnnotation(Class<? extends Annotation> annotationType) { 
+            return mergedAnnotations.get(annotationType).isPresent();
         }
         
         /**
          * whether type is annotated with {@link BeanInternal} or {@link Configuration}
          */
         public boolean hasInternalBeanSemantics() { 
-            return mergedAnnotations.get(BeanInternal.class).isPresent() 
-                    || mergedAnnotations.get(Configuration.class).isPresent();
+            return hasAnnotation(BeanInternal.class) 
+                    || hasAnnotation(Configuration.class);
         }
 
         /**
          * whether type is annotated with {@link XmlRootElement}
          */
         public boolean hasJaxbRootElementSemantics() { 
-            return mergedAnnotations.get(XmlRootElement.class).isPresent();
+            return hasAnnotation(XmlRootElement.class);
         }
         
         /**
@@ -308,10 +319,8 @@ public final class _ClassCache implements AutoCloseable {
             Map<MethodKey, ResolvedMethod> resolvedMethodsByKey,
             Map<MethodKey, ResolvedMethod> publicMethodsByKey,
             Map<MethodKey, ResolvedMethod> postConstructMethodsByKey,
-
-            Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute,
-            Map<String, String> attributeMap
-            ) {
+            
+            Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute) {
 
         ClassModel(
                 ClassModelHead head,
@@ -319,16 +328,14 @@ public final class _ClassCache implements AutoCloseable {
             this(head,
                     declaredFields,
                     new HashMap<>(), new HashMap<>(), new HashMap<>(), 
-                    new HashMap<>(), new HashMap<>(), new HashMap<>(), 
-                    new ConcurrentHashMap<>());
+                    new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
 
         public static ClassModel headOnly(ClassModelHead head) {
             return new ClassModel(head,
                 Can.empty(), 
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), 
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
-                Collections.emptyMap());
+                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
         }
         
     }

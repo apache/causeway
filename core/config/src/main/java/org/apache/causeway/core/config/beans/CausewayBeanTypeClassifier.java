@@ -20,7 +20,6 @@ package org.apache.causeway.core.config.beans;
 
 import java.io.Serializable;
 import java.lang.reflect.Modifier;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import jakarta.persistence.Entity;
@@ -49,27 +48,6 @@ import lombok.NonNull;
 public record CausewayBeanTypeClassifier(
         @NonNull Can<String> activeProfiles,
         @NonNull _ClassCache classCache) {
-    
-    public enum Attributes {
-        /**
-         * Corresponds to presence of a {@link DomainService} annotation.
-         * @see _ClassCache#lookupAttribute(Class, String)
-         */
-        HAS_DOMAIN_SERVICE_SEMANTICS,
-
-        /**
-         * Corresponds to {@link DomainObject#mixinMethod()}.
-         * @see _ClassCache#lookupAttribute(Class, String)
-         */
-        MIXIN_MAIN_METHOD_NAME;
-
-        public void set(final _ClassCache classCache, final Class<?> type, final String attributeValue) {
-            classCache.setAttribute(type, this.name(), attributeValue);
-        }
-        public Optional<String> lookup(final _ClassCache classCache, final Class<?> type) {
-            return classCache.lookupAttribute(type, this.name());
-        }
-    }
     
     // -- CONSTRUCTION
     
@@ -133,43 +111,37 @@ public record CausewayBeanTypeClassifier(
             return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
         }
 
-        // handle value types ...
-
-        var aValue = _Annotations.synthesize(type, org.apache.causeway.applib.annotation.Value.class)
-                .orElse(null);
-        if(aValue!=null) {
-            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
-        }
-        
-        // handle internal bean types ...
-        
-        if(classCache.head(type).hasInternalBeanSemantics()) {
-            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
-        }
-
-        // handle actual bean types ...
-
-        var aDomainService = _Annotations.synthesize(type, DomainService.class);
-        if(aDomainService.isPresent()) {
-            Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.set(classCache, type, "true");
-            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
-        }
-
         //[CAUSEWAY-3585] when implements ViewModel, then don't consider alternatives, yield VIEW_MODEL
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
             return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
+        
+        var typeHead = classCache().head(type);
+        
+        // value types
+        if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class)) {
+            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
+        }
+        
+        // internal bean types
+        if(typeHead.hasInternalBeanSemantics()) {
+            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
+        }
 
-        // JDO entity support
-        if(classCache.head(type).isJdoPersistenceCapable()){
+        // domain service
+        if(typeHead.hasAnnotation(DomainService.class)) {
+            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
+        }
+
+        // entity support
+        if(typeHead.isJdoPersistenceCapable()){
             return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JDO, named.get());
         }
-  
-        var entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
-        if(entityAnnotation!=null) {
+        if(typeHead.hasAnnotation(Entity.class)) {
             return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JPA, named.get());
-        }
-
+        }  
+        
+        // domain object
         var aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
@@ -177,7 +149,7 @@ public record CausewayBeanTypeClassifier(
                 return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING, named.get());
             case MIXIN:
                 // memoize mixin main name
-                Attributes.MIXIN_MAIN_METHOD_NAME.set(classCache, type, aDomainObject.mixinMethod());
+                typeHead.attributeMap().put(_ClassCache.Attribute.MIXIN_MAIN_METHOD_NAME, aDomainObject.mixinMethod());
                 return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.MIXIN, named.get());
             case ENTITY:
                 return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.UNSPECIFIED, named.get());
@@ -188,11 +160,11 @@ public record CausewayBeanTypeClassifier(
             }
         }
 
-        if(_ClassCache.getInstance().head(type).hasJaxbRootElementSemantics()) {
+        if(typeHead.hasJaxbRootElementSemantics()) {
             return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
 
-        if(_Annotations.isPresent(type, Component.class)) {
+        if(typeHead.hasAnnotation(Component.class)) {
             return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
