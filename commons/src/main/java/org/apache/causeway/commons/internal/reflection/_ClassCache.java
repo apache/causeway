@@ -23,6 +23,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,11 +39,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
-import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -60,8 +59,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -82,10 +79,10 @@ import lombok.SneakyThrows;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _ClassCache implements AutoCloseable {
-    
+
     public enum Attribute {
         /**
-         * Corresponds to the bean name of Spring managed beans.  
+         * Corresponds to the bean name of Spring managed beans.
          */
         SPRING_NAMED,
         /**
@@ -119,32 +116,36 @@ public final class _ClassCache implements AutoCloseable {
     public boolean isNamed(final Class<?> type) {
         return classModel(type).head().named()!=null;
     }
-    
-    public void setSpringNamed(Class<?> beanClass, String beanDefinitionName) {
+
+    public void setSpringNamed(final Class<?> beanClass, final String beanDefinitionName) {
         _Assert.assertNotEmpty(beanDefinitionName);
-        classModel(beanClass).head().attributeMap().put(Attribute.SPRING_NAMED, beanDefinitionName);
+        head(beanClass).attributeMap().put(Attribute.SPRING_NAMED, beanDefinitionName);
     }
-    
+
     public String getLogicalName(final Class<?> type) {
-        var model = classModel(type);
-        return Optional.ofNullable(model.head().attributeMap().get(Attribute.SPRING_NAMED))
-                .or(()->Optional.ofNullable(model.head().named()))
+        var head = head(type);
+        return Optional.ofNullable(head.attributeMap().get(Attribute.SPRING_NAMED))
+                .or(()->Optional.ofNullable(head.named()))
                 .or(()->Optional.ofNullable(type.getCanonicalName()))
                 .orElseGet(type::getName);
     }
-    
+
     public ClassModelHead head(final Class<?> type) {
         return classModel(type).head();
+    }
+
+    public ClassModelBody body(final Class<?> type) {
+        return classModel(type).body();
     }
 
     // -- CONSTRUCTOR SEMANTICS
 
     public <T> Stream<ResolvedConstructor> streamPublicConstructors(final Class<T> type) {
-        return _Casts.uncheckedCast(classModel(type).publicConstructorsByKey.values().stream());
+        return _Casts.uncheckedCast(body(type).publicConstructorsByKey.values().stream());
     }
 
     public <T> Stream<ResolvedConstructor> streamPublicConstructorsWithInjectSemantics(final Class<T> type) {
-        return _Casts.uncheckedCast(classModel(type).constructorsWithInjectSemanticsByKey.values().stream());
+        return _Casts.uncheckedCast(body(type).constructorsWithInjectSemanticsByKey.values().stream());
     }
 
     public Optional<ResolvedConstructor> lookupPublicConstructor(final Class<?> type, final Class<?>[] paramTypes) {
@@ -154,7 +155,7 @@ public final class _ClassCache implements AutoCloseable {
     // -- POST CONSTRUCT SEMANTICS
 
     public Stream<Method> streamPostConstructMethods(final Class<?> type) {
-        return classModel(type).postConstructMethodsByKey.values().stream()
+        return body(type).postConstructMethodsByKey.values().stream()
                 .map(ResolvedMethod::method);
     }
 
@@ -188,11 +189,11 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     public Stream<ResolvedMethod> streamPublicMethods(final Class<?> type) {
-        return classModel(type).publicMethodsByKey.values().stream();
+        return body(type).publicMethodsByKey.values().stream();
     }
 
     public Stream<ResolvedMethod> streamResolvedMethods(final Class<?> type) {
-        return classModel(type).resolvedMethodsByKey.values().stream();
+        return body(type).resolvedMethodsByKey.values().stream();
     }
 
     @SneakyThrows
@@ -211,7 +212,7 @@ public final class _ClassCache implements AutoCloseable {
     // -- FIELD SEMANTICS
 
     public Stream<Field> streamDeclaredFields(final Class<?> type) {
-        return classModel(type).declaredFields.stream();
+        return body(type).declaredFields.stream();
     }
 
     // -- FIELD vs GETTER
@@ -224,10 +225,6 @@ public final class _ClassCache implements AutoCloseable {
         .filter(_NullSafe::isPresent)
         .filter(resolvedMethod->AccessorSemantics.isGetter(resolvedMethod))
         .findFirst();
-    }
-
-    public Optional<Field> fieldForGetter(final Class<?> type, final Method getterCandidate) {
-        return Optional.ofNullable(findFieldForGetter(getterCandidate));
     }
 
     // -- METHOD STREAMS
@@ -247,9 +244,9 @@ public final class _ClassCache implements AutoCloseable {
 
         var classModel = classModel(type);
 
-        synchronized(classModel.declaredMethodsByAttribute) {
-            return classModel.declaredMethodsByAttribute
-            .computeIfAbsent(attributeName, key->classModel
+        synchronized(classModel.body().declaredMethodsByAttribute) {
+            return classModel.body().declaredMethodsByAttribute
+            .computeIfAbsent(attributeName, key->classModel.body()
                     .resolvedMethodsByKey.values().stream()
                     .filter(filter)
                     .collect(Can.toCan()))
@@ -264,54 +261,51 @@ public final class _ClassCache implements AutoCloseable {
             /** explicit name if any */
             @Nullable String named,
             Map<Attribute, String> attributeMap) {
-        
+
         static ClassModelHead create(final Class<?> type) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
-            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations), 
+            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations),
                     new ConcurrentHashMap<>());
         }
-        
-        /**
-         * @see MergedAnnotations#get(Class)
-         */
-        public <A extends Annotation> MergedAnnotation<A> annotation(Class<A> annotationType) { 
-            return mergedAnnotations.get(annotationType);
+
+        public <A extends Annotation> Optional<A> annotation(final Class<A> annotationType) {
+            return _Annotations_SynthesizedMergedAnnotationInvocationHandler
+                    .createProxy(mergedAnnotations, Optional.empty(), annotationType);
         }
-        
+
         /**
          * whether type is annotated with annotationType
          */
-        public boolean hasAnnotation(Class<? extends Annotation> annotationType) { 
+        public boolean hasAnnotation(final Class<? extends Annotation> annotationType) {
             return mergedAnnotations.get(annotationType).isPresent();
         }
-        
+
         /**
          * whether type is annotated with {@link BeanInternal} or {@link Configuration}
          */
-        public boolean hasInternalBeanSemantics() { 
-            return hasAnnotation(BeanInternal.class) 
+        public boolean hasInternalBeanSemantics() {
+            return hasAnnotation(BeanInternal.class)
                     || hasAnnotation(Configuration.class);
         }
 
         /**
          * whether type is annotated with {@link XmlRootElement}
          */
-        public boolean hasJaxbRootElementSemantics() { 
+        public boolean hasJaxbRootElementSemantics() {
             return hasAnnotation(XmlRootElement.class);
         }
-        
+
         /**
          * whether type is JDO persistable (but NOT embedded only)
          */
-        public boolean isJdoPersistenceCapable() { 
+        public boolean isJdoPersistenceCapable() {
             return _ClassCacheUtil.isJdoPersistenceCapable(mergedAnnotations)
                     && !_ClassCacheUtil.isJdoEmbeddedOnly(mergedAnnotations);
         }
-        
+
     }
-    
-    private record ClassModel(
-            ClassModelHead head,
+
+    private record ClassModelBody(
             Can<Field> declaredFields,
             Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey,
             Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey,
@@ -319,48 +313,108 @@ public final class _ClassCache implements AutoCloseable {
             Map<MethodKey, ResolvedMethod> resolvedMethodsByKey,
             Map<MethodKey, ResolvedMethod> publicMethodsByKey,
             Map<MethodKey, ResolvedMethod> postConstructMethodsByKey,
-            
+
             Map<String, Can<ResolvedMethod>> declaredMethodsByAttribute) {
 
-        ClassModel(
-                ClassModelHead head,
-                Can<Field> declaredFields) {
-            this(head,
-                    declaredFields,
-                    new HashMap<>(), new HashMap<>(), new HashMap<>(), 
+        ClassModelBody(final Can<Field> declaredFields) {
+            this(declaredFields,
+                    new HashMap<>(), new HashMap<>(), new HashMap<>(),
                     new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
 
-        public static ClassModel headOnly(ClassModelHead head) {
-            return new ClassModel(head,
-                Can.empty(), 
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(), 
+        private static ClassModelBody EMPTY = new ClassModelBody(
+                Can.empty(),
+                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
+
+        private static ClassModelBody create(final Class<?> type, final ClassModelHead head) {
+            if(head.hasInternalBeanSemantics()) return EMPTY; //skip further inspection
+
+            var body = new ClassModelBody(Can.ofArray(type.getDeclaredFields()));
+
+            // process public constructors
+            var publicConstr = type.getConstructors();
+            for(var constr : publicConstr) {
+                var key = new ConstructorKey(type, constr);
+                var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+                // collect public constructors
+                body.publicConstructorsByKey.put(key, resolvedConstr);
+                // collect public constructors with inject semantics
+                if(isInjectSemantics(constr)) {
+                    body.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
+                }
+            }
+
+            // process all methods (public and non-public and inherited)
+            _Reflect.streamAllMethods(type, true)
+            .filter(_ClassCache::methodIncludeFilter)
+            .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+            .filter(_NullSafe::isPresent)
+            .forEach(resolved->{
+                var key = new MethodKey(type, resolved.method());
+                var methodToKeep =
+                        putIntoMapHonoringOverridingRelation(body.resolvedMethodsByKey, key, resolved);
+                // collect post-construct methods
+                if(isPostConstruct(methodToKeep.method())) {
+                    body.postConstructMethodsByKey.put(key, methodToKeep);
+                }
+            });
+
+            // process public methods
+            _NullSafe.stream(type.getMethods())
+            .filter(_ClassCache::methodIncludeFilter)
+            .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+            .filter(_NullSafe::isPresent)
+            .forEach(resolved->{
+                var key = new MethodKey(type, resolved.method());
+                putIntoMapHonoringOverridingRelation(body.publicMethodsByKey, key, resolved);
+            });
+
+            return body;
         }
-        
+
+    }
+
+    private record ClassModel(
+            ClassModelHead head,
+            ClassModelBody body) {
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
 
-    @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
-    private static final class ConstructorKey {
-        private final Class<?> type; // constructors's declaring class
-        private final @Nullable Class<?>[] paramTypes;
-
-        public static ConstructorKey of(final Class<?> type, final Constructor<?> constructor) {
-            return ConstructorKey.of(type, _Arrays.emptyToNull(constructor.getParameterTypes()));
+    private record ConstructorKey(
+            Class<?> type, // constructors's declaring class
+            @Nullable Class<?>[] paramTypes) {
+        ConstructorKey(final Class<?> type, final Class<?>[] paramTypes) {
+            this.type = type;
+            this.paramTypes = _Arrays.emptyToNull(paramTypes);
+        }
+        ConstructorKey(final Class<?> type, final Constructor<?> constructor) {
+            this(type, constructor.getParameterTypes());
+        }
+        // java puzzler, why do we need to explicitly declare equals and hash code here?
+        @Override public int hashCode() { return type.hashCode(); }
+        @Override public final boolean equals(final Object o) {
+            return o instanceof ConstructorKey other
+                    ? this.type.equals(other.type)
+                            && Arrays.equals(this.paramTypes, other.paramTypes())
+                    : false;
         }
     }
 
-    @AllArgsConstructor(staticName = "of") @EqualsAndHashCode
-    private static final class MethodKey {
+    private record MethodKey(
         /** Method's implementing class (not necessary the same as its declaring class) */
-        private final Class<?> implementingClass;
+        Class<?> implementingClass,
         /** Method's name */
-        private final String name;
-        private final @Nullable Class<?>[] paramTypes;
-        public static MethodKey of(final Class<?> type, final Method method) {
-            return MethodKey.of(type, method.getName(), _Arrays.emptyToNull(method.getParameterTypes()));
+        String name,
+        @Nullable Class<?>[] paramTypes) {
+        MethodKey(final Class<?> implementingClass, final String name, final Class<?>[] paramTypes) {
+            this.implementingClass = implementingClass;
+            this.name = name;
+            this.paramTypes = _Arrays.emptyToNull(paramTypes);
+        }
+        MethodKey(final Class<?> type, final Method method) {
+            this(type, method.getName(), method.getParameterTypes());
         }
     }
 
@@ -387,7 +441,7 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     // -- HELPER
-    
+
     private ClassModel classModel(final Class<?> type) {
         synchronized(inspectedTypes) {
             return inspectedTypes.computeIfAbsent(type, this::inspectType);
@@ -410,58 +464,10 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     private ClassModel inspectType(final Class<?> _type) {
-
         final Class<?> type = reloadType(_type);
-        
         var head = ClassModelHead.create(type);
-        
-        var hasInternalBeanSemantics = head.hasInternalBeanSemantics();
-            
-        if(hasInternalBeanSemantics) return ClassModel.headOnly(head); //skip further inspection
-
-        var model = new ClassModel(
-                head,
-                Can.ofArray(type.getDeclaredFields()));
-
-        // process public constructors
-        var publicConstr = type.getConstructors();
-        for(var constr : publicConstr) {
-            var key = ConstructorKey.of(type, constr);
-            var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
-            // collect public constructors
-            model.publicConstructorsByKey.put(key, resolvedConstr);
-            // collect public constructors with inject semantics
-            if(isInjectSemantics(constr)) {
-                model.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
-            }
-        }
-
-        // process all methods (public and non-public and inherited)
-        _Reflect.streamAllMethods(type, true)
-        .filter(_ClassCache::methodIncludeFilter)
-        .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-        .filter(_NullSafe::isPresent)
-        .forEach(resolved->{
-            var key = MethodKey.of(type, resolved.method());
-            var methodToKeep =
-                    putIntoMapHonoringOverridingRelation(model.resolvedMethodsByKey, key, resolved);
-            // collect post-construct methods
-            if(isPostConstruct(methodToKeep.method())) {
-                model.postConstructMethodsByKey.put(key, methodToKeep);
-            }
-        });
-
-        // process public methods
-        _NullSafe.stream(type.getMethods())
-        .filter(_ClassCache::methodIncludeFilter)
-        .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-        .filter(_NullSafe::isPresent)
-        .forEach(resolved->{
-            var key = MethodKey.of(type, resolved.method());
-            putIntoMapHonoringOverridingRelation(model.publicMethodsByKey, key, resolved);
-        });
-
-        return model;
+        var body = ClassModelBody.create(type, head);
+        return new ClassModel(head, body);
     }
 
     /**
@@ -488,7 +494,7 @@ public final class _ClassCache implements AutoCloseable {
 
             var winner = weaklySame.reduce(ResolvedMethod::mostSpecific)
                     .getSingletonOrFail();
-            var winnerKey = MethodKey.of(winner.implementationClass(), winner.method());
+            var winnerKey = new MethodKey(winner.implementationClass(), winner.method());
             map.put(winnerKey, winner);
             return winner;
         }
@@ -500,7 +506,7 @@ public final class _ClassCache implements AutoCloseable {
      * signature: any
      * access: public and non-public
      */
-    private boolean isInjectSemantics(final Constructor<?> con) {
+    private static boolean isInjectSemantics(final Constructor<?> con) {
         return _Annotations.synthesize(con, Inject.class).isPresent()
                 || _Annotations.synthesize(con, Autowired.class).map(annot->annot.required()).orElse(false);
     }
@@ -510,7 +516,7 @@ public final class _ClassCache implements AutoCloseable {
      * signature: no args
      * access: public and non-public
      */
-    private boolean isPostConstruct(final Method method) {
+    private static boolean isPostConstruct(final Method method) {
         return void.class.equals(method.getReturnType())
                 && method.getParameterCount()==0
                 ? _Annotations.synthesize(method, PostConstruct.class).isPresent()
@@ -523,9 +529,9 @@ public final class _ClassCache implements AutoCloseable {
             final Class<?>[] paramTypes) {
 
         var model = classModel(type);
-        var key = ConstructorKey.of(type, _Arrays.emptyToNull(paramTypes));
+        var key = new ConstructorKey(type, paramTypes);
 
-        var publicConstructor = model.publicConstructorsByKey.get(key);
+        var publicConstructor = model.body().publicConstructorsByKey.get(key);
         return publicConstructor;
     }
 
@@ -540,7 +546,7 @@ public final class _ClassCache implements AutoCloseable {
 
         var model = classModel(type);
 
-        var publicMethod = model.publicMethodsByKey.values().stream()
+        var publicMethod = model.body().publicMethodsByKey.values().stream()
                 .filter(m->m.name().equals(name))
                 .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
                 .findFirst()
@@ -550,7 +556,7 @@ public final class _ClassCache implements AutoCloseable {
         }
 
         if(includeDeclaredMethods) {
-            var resolvedMethod = model.resolvedMethodsByKey.values().stream()
+            var resolvedMethod = model.body().resolvedMethodsByKey.values().stream()
                 .filter(m->m.name().equals(name))
                 .filter(m->_Reflect.methodSignatureAssignableTo(m.paramTypes(), requiredParamTypes))
                 .findFirst()
@@ -558,39 +564,6 @@ public final class _ClassCache implements AutoCloseable {
             return resolvedMethod;
         }
         return null;
-    }
-
-    // -- HELPER - FIELD FOR GETTER
-
-    private static Field findFieldForGetter(final Method getterCandidate) {
-        if(ReflectionUtils.isObjectMethod(getterCandidate)) {
-            return null;
-        }
-        var fieldNameCandidate = fieldNameForGetter(getterCandidate);
-        if(fieldNameCandidate==null) {
-            return null;
-        }
-        var declaringClass = getterCandidate.getDeclaringClass();
-        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
-    }
-
-    private static String fieldNameForGetter(final Method getter) {
-        if(getter.getParameterCount()>0) {
-            return null;
-        }
-        if(getter.getReturnType()==void.class) {
-            return null;
-        }
-        var methodName = getter.getName();
-        String fieldName = null;
-        if(methodName.startsWith("is") &&  methodName.length() > 2) {
-            fieldName = methodName.substring(2);
-        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
-            fieldName = methodName.substring(3);
-        } else {
-            return null;
-        }
-        return _Strings.decapitalize(fieldName);
     }
 
 }

@@ -71,19 +71,20 @@ record CausewayComponentCollector(
             case UNSPECIFIED -> {
                 if(isRenamed) {
                     //rename(beanDefinition, beanDefinitionName, typeMeta.logicalType().logicalName()); //TODO does not work yet
-                    _ClassCache.getInstance().setSpringNamed(beanClass, beanDefinitionName);
+                    classCache().setSpringNamed(beanClass, beanDefinitionName);
                 }
             }
             case SPRING -> {
                 if(isRenamed) {
                     // renaming not allowed, report back to class-cache
-                    _ClassCache.getInstance().setSpringNamed(beanClass, beanDefinitionName);
+                    classCache().setSpringNamed(beanClass, beanDefinitionName);
                 }
             }
         }
-
     }
 
+    // -- HELPER
+    
     /**
      * Allows for the given type-meta to be modified before bean-definition registration
      * is finalized by Spring, immediately after the type-scan phase.
@@ -110,8 +111,6 @@ record CausewayComponentCollector(
         }
         return typeMeta;
     }
-
-    // -- HELPER
     
     private void remove(String beanDefinitionName) {
         registry.removeBeanDefinition(beanDefinitionName);
@@ -146,6 +145,10 @@ record CausewayComponentCollector(
         } catch (NoSuchBeanDefinitionException e) {
             return Optional.empty();
         }
+    }
+    
+    private _ClassCache classCache() {
+        return causewayBeanTypeClassifier.classCache();
     }
 
 }

@@ -43,6 +43,7 @@ import java.util.stream.Stream;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -810,6 +811,43 @@ public final class _Reflect {
         return a.isAssignableFrom(b)
                 ? b
                 : a;
+    }
+
+    // -- HELPER - FIELD FOR GETTER
+
+    Optional<Field> fieldForGetter(final Method getterCandidate) {
+        return Optional.ofNullable(findFieldForGetter(getterCandidate));
+    }
+
+    private Field findFieldForGetter(final Method getterCandidate) {
+        if(ReflectionUtils.isObjectMethod(getterCandidate)) {
+            return null;
+        }
+        var fieldNameCandidate = fieldNameForGetter(getterCandidate);
+        if(fieldNameCandidate==null) {
+            return null;
+        }
+        var declaringClass = getterCandidate.getDeclaringClass();
+        return ReflectionUtils.findField(declaringClass, fieldNameCandidate);
+    }
+
+    private static String fieldNameForGetter(final Method getter) {
+        if(getter.getParameterCount()>0) {
+            return null;
+        }
+        if(getter.getReturnType()==void.class) {
+            return null;
+        }
+        var methodName = getter.getName();
+        String fieldName = null;
+        if(methodName.startsWith("is") &&  methodName.length() > 2) {
+            fieldName = methodName.substring(2);
+        } else if(methodName.startsWith("get") &&  methodName.length() > 3) {
+            fieldName = methodName.substring(3);
+        } else {
+            return null;
+        }
+        return _Strings.decapitalize(fieldName);
     }
 
 }

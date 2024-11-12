@@ -31,24 +31,24 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _ClassCacheUtil {
-    
-    @Nullable String inferName(Class<?> type, MergedAnnotations mergedAnnotations) {
-        
+
+    @Nullable String inferName(final Class<?> type, final MergedAnnotations mergedAnnotations) {
+
         var namedAnnot = mergedAnnotations.get(Named.class);
-        
-        final String named = namedAnnot.isPresent() 
+
+        final String named = namedAnnot.isPresent()
                 ? mergedAnnotations.get(Named.class).getString("value")
                 : null;
-        
+
         if(!_Strings.isEmpty(named)) return named;
-                
+
         for(var annot : mergedAnnotations) {
             switch (annot.getType().getName()) {
                 case "jakarta.persistence.Table":
                 case "javax.jdo.annotations.PersistenceCapable": {
                     var schema = annot.getString("schema");
                     if(_Strings.isEmpty(schema)) continue;
-                    
+
                     var table = annot.getString("table");
                     return "%s.%s".formatted(schema.toLowerCase(Locale.ROOT), _Strings.nonEmpty(table)
                             .orElseGet(type::getSimpleName));
@@ -58,7 +58,7 @@ class _ClassCacheUtil {
         return null;
     }
 
-    boolean isJdoPersistenceCapable(MergedAnnotations mergedAnnotations) {
+    boolean isJdoPersistenceCapable(final MergedAnnotations mergedAnnotations) {
         for(var annot : mergedAnnotations) {
             switch (annot.getType().getName()) {
                 case "javax.jdo.annotations.PersistenceCapable":
@@ -67,8 +67,8 @@ class _ClassCacheUtil {
         }
         return false;
     }
-    
-    boolean isJdoEmbeddedOnly(MergedAnnotations mergedAnnotations) {
+
+    boolean isJdoEmbeddedOnly(final MergedAnnotations mergedAnnotations) {
         for(var annot : mergedAnnotations) {
             switch (annot.getType().getName()) {
                 case "javax.jdo.annotations.PersistenceCapable":
@@ -80,12 +80,12 @@ class _ClassCacheUtil {
         }
         return false;
     }
-    
+
     @Nullable
-    private String nameFromPersistenceTable(Class<?> type, @Nullable String schema, @Nullable String table) {
+    private String nameFromPersistenceTable(final Class<?> type, @Nullable final String schema, @Nullable final String table) {
         if(_Strings.isEmpty(schema)) return null;
         return "%s.%s".formatted(schema, _Strings.nonEmpty(table)
                 .orElseGet(type::getSimpleName));
     }
-    
+
 }

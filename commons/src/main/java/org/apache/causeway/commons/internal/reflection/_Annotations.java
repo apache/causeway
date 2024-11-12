@@ -228,8 +228,7 @@ public final class _Annotations {
         return (method.getName().startsWith("get")
                     || method.getName().startsWith("is"))
                 && isAnnotationAllowedOnField(annotationType)
-                ? _ClassCache.getInstance()
-                        .fieldForGetter(method.getDeclaringClass(), method)
+                ? _Reflect.fieldForGetter(method)
                 : Optional.empty();
     }
 

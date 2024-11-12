@@ -142,7 +142,7 @@ public record CausewayBeanTypeClassifier(
         }  
         
         // domain object
-        var aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
+        var aDomainObject = typeHead.annotation(DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
