@@ -34,7 +34,6 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.base;
     exports org.apache.causeway.commons.internal.binding;
     exports org.apache.causeway.commons.internal.codec;
-    exports org.apache.causeway.commons.internal.collections.snapshot;
     exports org.apache.causeway.commons.internal.collections;
     exports org.apache.causeway.commons.internal.compare;
     exports org.apache.causeway.commons.internal.concurrent;
