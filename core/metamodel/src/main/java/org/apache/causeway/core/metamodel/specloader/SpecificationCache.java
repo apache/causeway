@@ -18,27 +18,90 @@
  */
 package org.apache.causeway.core.metamodel.specloader;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.collections.snapshot._VersionedList;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-interface SpecificationCache<T extends ObjectSpecification> {
+import lombok.NonNull;
 
-    Optional<T> lookup(Class<?> cls);
+record SpecificationCache(
+        Map<Class<?>, ObjectSpecification> specByClass,
+        // optimization: specialized list to keep track of any additions to the cache fast
+        _VersionedList<ObjectSpecification> vList) {
 
-    T computeIfAbsent(Class<?> cls, Function<Class<?>, T> mappingFunction);
+    SpecificationCache() {
+        this(new HashMap<>(), new _VersionedList<>());
+    }
 
-    T remove(Class<?> cls);
+    Optional<ObjectSpecification> lookup(final Class<?> cls) {
+        synchronized(this) {
+            return Optional.ofNullable(specByClass.get(cls));
+        }
+    }
 
-    void clear();
+    ObjectSpecification computeIfAbsent(
+            final Class<?> cls,
+            final Function<Class<?>, ObjectSpecification> mappingFunction) {
+        synchronized(this) {
+            var spec = specByClass.get(cls);
+            if(spec==null) {
+                spec = mappingFunction.apply(cls);
+                internalPut(spec);
+            }
+            return spec;
+        }
+    }
 
-    /** @returns thread-safe defensive copy */
-    Can<T> snapshotSpecs();
+    void clear() {
+        synchronized(this) {
+            specByClass.clear();
+            vList.clear();
+        }
+    }
 
-    void forEach(Consumer<T> onSpec);
-    void forEachConcurrent(Consumer<T> onSpec);
+    Can<ObjectSpecification> snapshotSpecs() {
+        synchronized(this) {
+            return Can.ofCollection(specByClass.values());
+        }
+    }
+
+    ObjectSpecification remove(@NonNull final Class<?> cls) {
+        synchronized(this) {
+            var removed = specByClass.remove(cls);
+            if(removed!=null) {
+                vList.clear(); // invalidate
+                vList.addAll(specByClass.values());
+            }
+            return removed;
+        }
+    }
+
+    void forEachConcurrent(final Consumer<ObjectSpecification> onSpec) {
+        vList.forEachConcurrent(onSpec);
+    }
+
+    void forEach(final Consumer<ObjectSpecification> onSpec) {
+        vList.forEach(onSpec);
+    }
+
+    // -- HELPER
+
+    private void internalPut(@Nullable final ObjectSpecification spec) {
+        if(spec==null) return;
+
+        var cls = spec.getCorrespondingClass();
+        var existing = specByClass.put(cls, spec);
+        if(existing==null) {
+            vList.add(spec); // add to vList only if we don't have it already
+        }
+    }
 
 }

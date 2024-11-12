@@ -33,7 +33,7 @@ final class _LogUtil {
 
     void logBefore(
             final Logger log,
-            final SpecificationCache<ObjectSpecification> cache,
+            final SpecificationCache cache,
             final List<? extends ObjectSpecification> scanned) {
 
         if(!log.isDebugEnabled()) {
@@ -60,7 +60,7 @@ final class _LogUtil {
 
     void logAfter(
             final Logger log,
-            final SpecificationCache<ObjectSpecification> cache,
+            final SpecificationCache cache,
             final Collection<? extends ObjectSpecification> scanned) {
 
         if(!log.isDebugEnabled()) {

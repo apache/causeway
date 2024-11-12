@@ -132,7 +132,7 @@ implements
 
     private FacetProcessor facetProcessor;
 
-    private final SpecificationCache<ObjectSpecification> cache = new SpecificationCacheDefault<>();
+    private final SpecificationCache cache = new SpecificationCache();
     private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
 
     /**
