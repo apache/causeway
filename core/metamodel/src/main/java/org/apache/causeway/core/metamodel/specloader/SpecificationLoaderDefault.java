@@ -21,8 +21,10 @@ package org.apache.causeway.core.metamodel.specloader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -132,7 +134,7 @@ implements
 
     private FacetProcessor facetProcessor;
 
-    private final SpecificationCache cache = new SpecificationCache();
+    private final Map<Class<?>, ObjectSpecification> cache = new ConcurrentHashMap<>();
     private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
     /**
@@ -287,7 +289,7 @@ implements
         //XXX[CAUSEWAY-2382] when parallel introspecting, make sure we have the mixins before their holders
         // (observation by experiment, no real understanding as to why)
 
-        _LogUtil.logBefore(log, cache, knownSpecs);
+        _LogUtil.logBefore(log, this::snapshotSpecifications, knownSpecs);
 
         log.info(" - introspecting {} type hierarchies", knownSpecs.size());
         introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
@@ -311,10 +313,10 @@ implements
 
         introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.FULLY_INTROSPECTED);
 
-        _LogUtil.logAfter(log, cache, knownSpecs);
+        _LogUtil.logAfter(log, this::snapshotSpecifications, knownSpecs);
 
         if(isFullIntrospect()) {
-            var snapshot = cache.snapshotSpecs();
+            var snapshot = snapshotSpecifications();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
             introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
             introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionState.FULLY_INTROSPECTED);
@@ -452,18 +454,22 @@ implements
 
     @Override
     public Can<ObjectSpecification> snapshotSpecifications() {
-        return cache.snapshotSpecs();
+        return Can.ofCollection(cache.values());
     }
 
     @Override
     public void forEach(final Consumer<ObjectSpecification> onSpec) {
         var shouldRunConcurrent = causewayConfiguration.getCore().getMetaModel().getValidator().isParallelize();
+        var snapshot = snapshotSpecifications();
         if(shouldRunConcurrent) {
-            cache.forEachConcurrent(onSpec);
+            snapshot
+                .stream()
+                .parallel()
+                .forEach(onSpec);
         } else {
-            cache.forEach(onSpec);
+            snapshot
+                .forEach(onSpec);
         }
-
     }
 
     @Override
