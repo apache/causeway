@@ -62,7 +62,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     @Getter(onMethod_ = {@Override}) final LogicalType logicalType;
 
-    _Recreatable.RecreateStrategy recreateStrategy;
+    ObjectMemento.RecreateStrategy recreateStrategy;
 
     @Getter(onMethod_ = {@Override}) private final String title;
     @Getter final Bookmark bookmark;
@@ -86,8 +86,8 @@ implements HasLogicalType, Serializable, ObjectMemento {
         this.title = "?memento?"; // TODO can we do better?
 
         this.recreateStrategy = spec.isValue()
-                ? _Recreatable.RecreateStrategy.VALUE
-                : _Recreatable.RecreateStrategy.LOOKUP;
+                ? RecreateStrategy.VALUE
+                : RecreateStrategy.LOOKUP;
     }
 
     private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
@@ -109,13 +109,13 @@ implements HasLogicalType, Serializable, ObjectMemento {
                         ? bookmark.withHintId(hintId)
                         : bookmark;
 
-            recreateStrategy = _Recreatable.RecreateStrategy.LOOKUP;
+            recreateStrategy = RecreateStrategy.LOOKUP;
             return;
         }
 
         if (spec.isValue()) {
             bookmark = ManagedObjects.bookmarkElseFail(adapter);
-            recreateStrategy = _Recreatable.RecreateStrategy.VALUE;
+            recreateStrategy = RecreateStrategy.VALUE;
             return;
         }
 
@@ -141,20 +141,20 @@ implements HasLogicalType, Serializable, ObjectMemento {
             return spec.getMetaModelContext().lookupServiceAdapterById(getLogicalTypeName());
         }
 
-        return recreateStrategy.recreateObject(this, mmc);
+        return mmc.getObjectManager().loadObjectElseFail(bookmark);
     }
 
     @Override
     public int hashCode() {
-        return recreateStrategy.hashCode(this);
+        return bookmark.hashCode();
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (!(other instanceof ObjectMementoForScalar)) {
-            return false;
-        }
-        return recreateStrategy.equals(this, (ObjectMementoForScalar) other);
+    public boolean equals(final Object o) {
+        return (o instanceof ObjectMementoForScalar other)
+                ? this.recreateStrategy == other.recreateStrategy
+                    && this.bookmark.equals(other.bookmark)
+                : false;
     }
 
 }

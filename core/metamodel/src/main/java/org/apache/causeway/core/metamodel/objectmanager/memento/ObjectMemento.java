@@ -29,16 +29,34 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkHolder;
+import org.apache.causeway.applib.services.bookmark.Oid;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Serializables;
+import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
  * @since 2.0
  */
-public interface ObjectMemento extends BookmarkHolder, HasLogicalType, Serializable {
+public sealed interface ObjectMemento
+extends BookmarkHolder, HasLogicalType, Serializable
+permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
+
+    enum RecreateStrategy {
+        /**
+         * The {@link ManagedObject} that this is the memento for, directly has
+         * an {@link ValueFacet} (it is almost certainly a value), and so is
+         * stored directly.
+         */
+        VALUE,
+        /**
+         * The {@link ManagedObject} that this is for, is already known by its
+         * (persistent) {@link Oid}.
+         */
+        LOOKUP;
+    }
 
     /** arbitrary/random string */
     static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";

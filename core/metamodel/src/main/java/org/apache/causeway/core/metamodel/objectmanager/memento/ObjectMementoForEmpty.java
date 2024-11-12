@@ -33,7 +33,7 @@ import lombok.ToString;
  */
 @ToString
 @RequiredArgsConstructor
-public class ObjectMementoForEmpty implements ObjectMemento {
+public final class ObjectMementoForEmpty implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
