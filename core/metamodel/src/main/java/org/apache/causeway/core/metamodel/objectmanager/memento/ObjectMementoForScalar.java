@@ -62,8 +62,6 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     @Getter(onMethod_ = {@Override}) final LogicalType logicalType;
 
-    ObjectMemento.RecreateStrategy recreateStrategy;
-
     @Getter(onMethod_ = {@Override}) private final String title;
     @Getter final Bookmark bookmark;
 
@@ -84,10 +82,6 @@ implements HasLogicalType, Serializable, ObjectMemento {
         this.logicalType = spec.getLogicalType();
 
         this.title = "?memento?"; // TODO can we do better?
-
-        this.recreateStrategy = spec.isValue()
-                ? RecreateStrategy.VALUE
-                : RecreateStrategy.LOOKUP;
     }
 
     private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
@@ -109,13 +103,11 @@ implements HasLogicalType, Serializable, ObjectMemento {
                         ? bookmark.withHintId(hintId)
                         : bookmark;
 
-            recreateStrategy = RecreateStrategy.LOOKUP;
             return;
         }
 
         if (spec.isValue()) {
             bookmark = ManagedObjects.bookmarkElseFail(adapter);
-            recreateStrategy = RecreateStrategy.VALUE;
             return;
         }
 
@@ -152,8 +144,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
     @Override
     public boolean equals(final Object o) {
         return (o instanceof ObjectMementoForScalar other)
-                ? this.recreateStrategy == other.recreateStrategy
-                    && this.bookmark.equals(other.bookmark)
+                ? this.bookmark.equals(other.bookmark)
                 : false;
     }
 
