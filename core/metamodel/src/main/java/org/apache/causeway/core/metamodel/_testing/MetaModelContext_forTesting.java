@@ -77,7 +77,6 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.facets.object.value.annotcfg.ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
@@ -408,7 +407,7 @@ extends MetaModelContext {
     @Override
     public ObjectManager getObjectManager() {
         if(objectManager==null) {
-            objectManager = ObjectManagerDefault.forTesting(this);
+            objectManager = new ObjectManager(this);
         }
         return objectManager;
     }

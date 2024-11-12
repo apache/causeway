@@ -52,7 +52,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
@@ -111,7 +111,7 @@ implements RepositoryService, HasMetaModelContext {
 
     @SneakyThrows
     @Override
-    public <T> T execInBulk(Callable<T> callable) {
+    public <T> T execInBulk(final Callable<T> callable) {
         try {
             suppressFlushing();
             return callable.call();
@@ -216,7 +216,7 @@ implements RepositoryService, HasMetaModelContext {
             return Collections.emptyList();
         }
 
-        var queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
+        var queryRequest = new BulkLoadRequest(resultTypeSpec, query);
         var allMatching = getObjectManager().queryObjects(queryRequest);
         final List<T> resultList = _Casts.uncheckedCast(MmUnwrapUtils.multipleAsList(allMatching));
         return resultList;

@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
@@ -76,7 +77,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        var chainOfResponsibility = ChainOfResponsibility.of(
+        var chainOfResponsibility = new ChainOfResponsibility<>("test",
                 Arrays.asList(aToUpperCase, bToUpperCase, finallyNoop));
 
         assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
@@ -107,9 +108,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        var handlers = Arrays.asList(aToUpperCase);
-
-        var chainOfResponsibility = ChainOfResponsibility.of(handlers);
+        var chainOfResponsibility = new ChainOfResponsibility<>("test", Can.of(aToUpperCase));
 
         assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
         assertThrows(NoSuchElementException.class, ()->chainOfResponsibility.handle("xxx")); // not handled
@@ -132,7 +131,7 @@ class ChainOfResponsibilityTest {
 
         };
 
-        var chainOfResponsibility = ChainOfResponsibility.of(
+        var chainOfResponsibility = new ChainOfResponsibility<>("test",
                 Arrays.asList(throwingHandler));
 
         assertThrows(RuntimeException.class, ()->chainOfResponsibility.handle("throw"));

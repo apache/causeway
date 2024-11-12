@@ -46,9 +46,7 @@ import org.apache.causeway.core.metamodel.inspect.model.MemberNode;
 import org.apache.causeway.core.metamodel.inspect.model.ParameterNode;
 import org.apache.causeway.core.metamodel.inspect.model.PropertyNode;
 import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManagerDefault;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
@@ -63,6 +61,7 @@ import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshaller
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDefault;
 import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefault;
@@ -191,7 +190,6 @@ import lombok.NonNull;
         LayoutServiceDefault.class,
         MetamodelEventService.class,
         MetaModelServiceDefault.class,
-        ObjectManagerDefault.class,
         ProgrammingModelServiceDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,

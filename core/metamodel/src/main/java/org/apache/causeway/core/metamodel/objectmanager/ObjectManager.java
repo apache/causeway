@@ -21,20 +21,29 @@ package org.apache.causeway.core.metamodel.objectmanager;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import jakarta.inject.Named;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
+import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoCollection;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -50,41 +59,36 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-public interface ObjectManager extends HasMetaModelContext {
+@SuppressWarnings("exports")
+@BeanInternal
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ObjectManager")
+public record ObjectManager(
+        MetaModelContext mmc,
+        ObjectCreator objectCreator,
+        ObjectLoader objectLoader,
+        ObjectBulkLoader objectBulkLoader) implements HasMetaModelContext {
 
-    ObjectCreator getObjectCreator();
-    ObjectLoader getObjectLoader();
-    ObjectBulkLoader getObjectBulkLoader();
+    // -- REQUEST (VALUE) TYPE
 
-    // -- OBJECT MEMENTOS
-
-    default Optional<ObjectMemento> mementify(final @Nullable ManagedObject object) {
-        return Optional.ofNullable(object)
-        .flatMap(ManagedObject::getMemento);
+    public record BulkLoadRequest(
+        ObjectSpecification objectSpecification,
+        Query<?> query) {
     }
 
-    default ObjectMemento mementifyElseFail(final @NonNull ManagedObject object) {
-        return object.getMemento()
-                .orElseThrow(()->
-                    _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
+    public ObjectManager(final MetaModelContext mmc) {
+        this(mmc,
+                new ObjectCreator(mmc),
+                new ObjectLoader(),
+                new ObjectBulkLoader());
     }
-
-    //TODO why not use loadObject(bookmark) instead
-    ManagedObject demementify(final ObjectMemento memento);
-    //TODO why not use loadObject(bookmark) instead
-    default ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
-        return demementify(memento);
-    }
-
-    // -- SHORTCUTS
 
     /**
      * Creates and initializes an instance conforming to given request parameters.
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
      */
-    public default ManagedObject createObject(final ObjectSpecification objectCreateRequest) {
-        return getObjectCreator().createObject(objectCreateRequest);
+    public ManagedObject createObject(final ObjectSpecification objectCreateRequest) {
+        return objectCreator().createObject(objectCreateRequest);
     }
 
     /**
@@ -92,8 +96,8 @@ public interface ObjectManager extends HasMetaModelContext {
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
      */
-    public default ManagedObject loadObject(final ProtoObject objectLoadRequest) {
-        return getObjectLoader().loadObject(objectLoadRequest);
+    public ManagedObject loadObject(final ProtoObject objectLoadRequest) {
+        return objectLoader().loadObject(objectLoadRequest);
     }
 
     /**
@@ -103,7 +107,7 @@ public interface ObjectManager extends HasMetaModelContext {
      * <p>
      * Supports alias lookup.
      */
-    default Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
+    public Optional<ManagedObject> loadObject(final @Nullable Bookmark bookmark) {
         if(bookmark==null) {
             return Optional.empty();
         }
@@ -118,7 +122,7 @@ public interface ObjectManager extends HasMetaModelContext {
      * Does NOT handle {@link PackedManagedObject}. (Needs to be handled by the caller.)
      * @see #debookmark(Bookmark)
      */
-    default Bookmark bookmark(final @NonNull ManagedObject managedObj) {
+    public Bookmark bookmark(final @NonNull ManagedObject managedObj) {
         return ManagedObjects.bookmark(managedObj)
                 .orElseGet(()->Bookmark.empty(managedObj.getLogicalType()));
     }
@@ -128,7 +132,7 @@ public interface ObjectManager extends HasMetaModelContext {
      * Does NOT handle {@link PackedManagedObject}. (Needs to be handled by the caller.)
      * @see #bookmark(ManagedObject)
      */
-    default ManagedObject debookmark(final @NonNull Bookmark bookmark) {
+    public ManagedObject debookmark(final @NonNull Bookmark bookmark) {
         return bookmark.isEmpty()
             ? ManagedObject.empty(getSpecificationLoader().specForBookmarkElseFail(bookmark))
             : loadObjectElseFail(bookmark);
@@ -137,7 +141,7 @@ public interface ObjectManager extends HasMetaModelContext {
     /**
      * @see #loadObject(Bookmark)
      */
-    default ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
+    public ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
         var adapter = loadObject(bookmark)
                 .orElseThrow(() -> new BookmarkNotFoundException(String.format("Bookmark %s was not found.", bookmark)));
         if(adapter.getSpecialization().isEntity()) {
@@ -150,11 +154,11 @@ public interface ObjectManager extends HasMetaModelContext {
     /**
      * Resolves injection-points for the result. (Handles service injection.)
      */
-    public default Can<ManagedObject> queryObjects(final ObjectBulkLoader.Request objectQuery) {
-        return getObjectBulkLoader().loadObject(objectQuery);
+    public Can<ManagedObject> queryObjects(final BulkLoadRequest objectQuery) {
+        return objectBulkLoader().loadObject(objectQuery);
     }
 
-    public default Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
+    public Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
         if(pojo==null) {
             return Optional.empty();
         }
@@ -162,7 +166,7 @@ public interface ObjectManager extends HasMetaModelContext {
     }
 
     @Override
-    default Optional<ObjectSpecification> specForType(final @Nullable Class<?> domainType) {
+    public Optional<ObjectSpecification> specForType(final @Nullable Class<?> domainType) {
         return getMetaModelContext().getSpecificationLoader().specForType(domainType);
     }
 
@@ -181,7 +185,7 @@ public interface ObjectManager extends HasMetaModelContext {
      * @see ManagedObject#adaptParameter(ObjectActionParameter, Object)
      * @see ManagedObject#adaptProperty(OneToOneAssociation, Object)
      */
-    public default ManagedObject adapt(final @Nullable Object pojo) {
+    public ManagedObject adapt(final @Nullable Object pojo) {
         return adapt(pojo, ()->specForType(Object.class).orElseThrow());
     }
 
@@ -191,7 +195,7 @@ public interface ObjectManager extends HasMetaModelContext {
      * <p>
      * Resolves injection-points for the result. (Handles service injection.)
      */
-    public default ManagedObject adapt(
+    public ManagedObject adapt(
             final @Nullable Object pojo,
             final @NonNull Supplier<ObjectSpecification> fallbackElementType) {
         if(pojo==null) {
@@ -219,6 +223,71 @@ public interface ObjectManager extends HasMetaModelContext {
                         _NullSafe.streamAutodetect(pojo)
                         .map(element->adapt(element))
                         .collect(Can.toCan()));
+    }
+
+    // -- OBJECT MEMENTOS
+
+    public Optional<ObjectMemento> mementify(final @Nullable ManagedObject object) {
+        return Optional.ofNullable(object)
+        .flatMap(ManagedObject::getMemento);
+    }
+
+    public ObjectMemento mementifyElseFail(final @NonNull ManagedObject object) {
+        return object.getMemento()
+                .orElseThrow(()->
+                    _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
+    }
+
+
+    //TODO why not use loadObject(bookmark) instead
+    public ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
+        return demementify(memento);
+    }
+
+    //TODO why not use loadObject(bookmark) instead
+    public ManagedObject demementify(final @Nullable ObjectMemento memento) {
+
+        if(memento==null) {
+            return null;
+        }
+
+        if(memento instanceof ObjectMementoForEmpty) {
+            var objectMementoForEmpty = (ObjectMementoForEmpty) memento;
+            var logicalType = objectMementoForEmpty.getLogicalType();
+            /* note: we recover from (corresponding) class not logical-type-name,
+             * as the latter can be ambiguous, when shared in a type hierarchy*/
+            var spec = getSpecificationLoader().specForLogicalType(logicalType);
+            return spec.isPresent()
+                    ? ManagedObject.empty(spec.get())
+                    : ManagedObject.unspecified();
+        }
+
+        if(memento instanceof ObjectMementoCollection) {
+            var objectMementoCollection = (ObjectMementoCollection) memento;
+
+            var logicalType = objectMementoCollection.getLogicalType();
+            /* note: we recover from (corresponding) class not logical-type-name,
+             * as the latter can be ambiguous, when shared in a type hierarchy*/
+            var elementSpec = getSpecificationLoader().specForLogicalTypeElseFail(logicalType);
+
+            var objects = objectMementoCollection.unwrapList().stream()
+                    .map(this::demementify)
+                    .collect(Can.toCan());
+
+            return ManagedObject.packed(elementSpec, objects);
+        }
+
+        if(memento instanceof ObjectMementoForScalar) {
+            var objectMementoAdapter = (ObjectMementoForScalar) memento;
+            return objectMementoAdapter.reconstructObject(getMetaModelContext());
+        }
+
+        throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
+    }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return mmc;
     }
 
 }

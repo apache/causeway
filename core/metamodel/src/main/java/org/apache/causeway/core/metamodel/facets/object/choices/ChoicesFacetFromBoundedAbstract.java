@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvi
 import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.SneakyThrows;
@@ -114,7 +114,7 @@ implements
         var query = Query.allInstances(resulType);
 
         var resultTypeSpec = specForType(resulType).orElse(null);
-        var queryRequest = ObjectBulkLoader.Request.of(resultTypeSpec, query);
+        var queryRequest = new BulkLoadRequest(resultTypeSpec, query);
         var allMatching = getObjectManager().queryObjects(queryRequest)
                 .filter(MmVisibilityUtils.filterOn(interactionInitiatedBy));
 

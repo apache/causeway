@@ -66,15 +66,10 @@ record CausewayComponentCollector(
 
         switch (typeMeta.managedBy()) {
             case NONE, CAUSEWAY, PERSISTENCE -> {
-                remove(beanDefinitionName);
+                registry.removeBeanDefinition(beanDefinitionName);
+                log.debug("vetoing bean {}", beanDefinitionName);
             }
-            case UNSPECIFIED -> {
-                if(isRenamed) {
-                    //rename(beanDefinition, beanDefinitionName, typeMeta.logicalType().logicalName()); //TODO does not work yet
-                    classCache().setSpringNamed(beanClass, beanDefinitionName);
-                }
-            }
-            case SPRING -> {
+            case UNSPECIFIED, SPRING -> {
                 if(isRenamed) {
                     // renaming not allowed, report back to class-cache
                     classCache().setSpringNamed(beanClass, beanDefinitionName);
@@ -84,7 +79,7 @@ record CausewayComponentCollector(
     }
 
     // -- HELPER
-    
+
     /**
      * Allows for the given type-meta to be modified before bean-definition registration
      * is finalized by Spring, immediately after the type-scan phase.
@@ -92,7 +87,7 @@ record CausewayComponentCollector(
      * <br> - Whether given {@link Component} annotated or meta-annotated type should be made
      * available for injection.
      * <br> - Naming strategy to override that of Spring.
-     * @param logicalType 
+     * @param logicalType
      *
      * @apiNote implementing classes might have side effects, eg. intercept
      * discovered types into a type registry
@@ -110,17 +105,6 @@ record CausewayComponentCollector(
             }
         }
         return typeMeta;
-    }
-    
-    private void remove(String beanDefinitionName) {
-        registry.removeBeanDefinition(beanDefinitionName);
-        log.debug("vetoing bean {}", beanDefinitionName);
-    }
-    
-    private void rename(BeanDefinition beanDefinition, String beanDefinitionName, String beanNameOverride) {
-        registry.removeBeanDefinition(beanDefinitionName);
-        registry.registerBeanDefinition(beanNameOverride, beanDefinition);
-        log.debug("renaming bean {} -> {}", beanDefinitionName, beanNameOverride);
     }
 
     private static Optional<Class<?>> loadClass(@Nullable final BeanDefinition beanDefinition) {
@@ -146,7 +130,7 @@ record CausewayComponentCollector(
             return Optional.empty();
         }
     }
-    
+
     private _ClassCache classCache() {
         return causewayBeanTypeClassifier.classCache();
     }

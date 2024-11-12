@@ -18,62 +18,34 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager;
 
-import java.util.List;
-
-import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 
-import lombok.Value;
+import lombok.NonNull;
 
-/**
- * @since 2.0
- */
-public interface ObjectBulkLoader {
+record ObjectBulkLoader(ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> chain) {
 
-    Can<ManagedObject> loadObject(Request objectQuery);
-
-    // -- REQUEST (VALUE) TYPE
-
-    @Value(staticConstructor = "of")
-    public static class Request {
-        ObjectSpecification objectSpecification;
-        Query<?> query;
+    ObjectBulkLoader() {
+        this(new ChainOfResponsibility<>("ObjectBulkLoader", BuiltinHandlers.values()));
     }
 
-    // -- HANDLER
-
-    static interface Handler
-    extends
-        ChainOfResponsibility.Handler<ObjectBulkLoader.Request, Can<ManagedObject>> {
-    }
-
-    // -- FACTORY
-
-    public static ObjectBulkLoader createDefault(final MetaModelContext mmc) {
-        return request ->
-            ChainOfResponsibility.named(
-                    "ObjectBulkLoader",
-                    handlers)
-                .handle(request);
+    Can<ManagedObject> loadObject(@NonNull final BulkLoadRequest objectQuery) {
+        return chain.handle(objectQuery);
     }
 
     // -- HANDLERS
 
-    static final List<Handler> handlers = List.of(BuiltinHandlers.values());
-
-    enum BuiltinHandlers implements Handler {
+    enum BuiltinHandlers implements ChainOfResponsibility.Handler<BulkLoadRequest, Can<ManagedObject>> {
         GuardAgainstNull {
             @Override
-            public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
+            public boolean isHandling(final BulkLoadRequest objectQuery) {
                 if(objectQuery==null) {
                     return true;
                 }
-                var spec = objectQuery.getObjectSpecification();
+                var spec = objectQuery.objectSpecification();
                 if(spec == null) {
                     // eg "NONEXISTENT:123"
                     return true;
@@ -83,36 +55,36 @@ public interface ObjectBulkLoader {
                 return false;
             }
             @Override
-            public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
+            public Can<ManagedObject> handle(final BulkLoadRequest objectQuery) {
                 return Can.empty();
             }
         },
         BulkLoadEntity {
             @Override
-            public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
-                var spec = objectQuery.getObjectSpecification();
+            public boolean isHandling(final BulkLoadRequest objectQuery) {
+                var spec = objectQuery.objectSpecification();
                 return spec.isEntity();
             }
             @Override
-            public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
-                var spec = objectQuery.getObjectSpecification();
+            public Can<ManagedObject> handle(final BulkLoadRequest objectQuery) {
+                var spec = objectQuery.objectSpecification();
                 var entityFacet = spec.entityFacetElseFail();
-                var entities = entityFacet.fetchByQuery(objectQuery.getQuery());
+                var entities = entityFacet.fetchByQuery(objectQuery.query());
                 return entities;
             }
         },
         LoadOther {
             @Override
-            public boolean isHandling(final ObjectBulkLoader.Request objectQuery) {
+            public boolean isHandling(final BulkLoadRequest objectQuery) {
                 return true; // the last handler in the chain
             }
 
             @Override
-            public Can<ManagedObject> handle(final ObjectBulkLoader.Request objectQuery) {
+            public Can<ManagedObject> handle(final BulkLoadRequest objectQuery) {
                 // unknown object load request
                 throw _Exceptions.illegalArgument(
                         "unknown bulk object load request, loader: %s loading ObjectSpecification %s",
-                            this.getClass().getName(), objectQuery.getObjectSpecification());
+                            this.getClass().getName(), objectQuery.objectSpecification());
             }
         }
     }

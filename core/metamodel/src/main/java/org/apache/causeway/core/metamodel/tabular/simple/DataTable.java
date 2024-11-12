@@ -42,8 +42,8 @@ import org.apache.causeway.commons.tabular.TabularModel.TabularSheet;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectBulkLoader;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -249,7 +249,7 @@ public class DataTable implements Serializable {
                             requestType,
                             resultType));
         }
-        var queryRequest = ObjectBulkLoader.Request.of(getElementType(), query);
+        var queryRequest = new BulkLoadRequest(getElementType(), query);
         var allMatching = getElementType().getObjectManager().queryObjects(queryRequest);
         return setDataElements(allMatching);
     }

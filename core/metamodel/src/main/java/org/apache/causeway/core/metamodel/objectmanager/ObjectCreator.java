@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
 import org.apache.causeway.applib.spec.Specification;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -30,88 +31,62 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * Handles injection and lifecycle callbacks.
- *
- * @since 2.0
  */
-interface ObjectCreator {
+@Log4j2
+record ObjectCreator(
+        @NonNull MetaModelContext mmc,
+        _Lazy<ObjectLifecyclePublisher> persistenceLifecyclePublisher) {
 
-    ManagedObject createObject(ObjectSpecification objectSpecification);
-
-    // -- FACTORY
-
-    public static ObjectCreator createDefault(final MetaModelContext metaModelContext) {
-        return new DefaultCreationHandler(metaModelContext);
+    ObjectCreator(final MetaModelContext mmc) {
+        this(mmc, _Lazy.threadSafe(()->mmc.getServiceRegistry()
+                .lookupServiceElseFail(ObjectLifecyclePublisher.class)));
     }
 
-    @Value @Log4j2
-    public static class DefaultCreationHandler implements ObjectCreator {
+    ManagedObject createObject(final ObjectSpecification spec) {
+        log.debug("creating instance of {}", spec);
 
-        @Getter
-        private final @NonNull MetaModelContext metaModelContext;
+        var pojo = instantiate(spec); // can only be a scalar
+        if(Specification.class.isAssignableFrom(spec.getCorrespondingClass())
+                || !spec.isValue()) {
+            spec.getServiceInjector().injectServicesInto(pojo);
+        }
+        var domainObject = ManagedObject.adaptSingular(spec, pojo);
 
-        @Getter(lazy = true, value = AccessLevel.PRIVATE)
-        private final ObjectLifecyclePublisher persistenceLifecyclePublisher =
-            getMetaModelContext().getServiceRegistry()
-                    .lookupServiceElseFail(ObjectLifecyclePublisher.class);
-
-        @Override
-        public ManagedObject createObject(final ObjectSpecification spec) {
-
-            if (log.isDebugEnabled()) {
-                log.debug("creating instance of {}", spec);
-            }
-
-            var pojo = instantiate(spec); // can only be a scalar
-            if(Specification.class.isAssignableFrom(spec.getCorrespondingClass())
-                    || !spec.isValue()) {
-                spec.getServiceInjector().injectServicesInto(pojo);
-            }
-            var domainObject = ManagedObject.adaptSingular(spec, pojo);
-
-            // initialize new object
-            domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+        // initialize new object
+        domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)
             .forEach(field->field.toDefault(domainObject));
 
-            if (domainObject.getSpecification().isEntity()) {
-                getPersistenceLifecyclePublisher().onPostCreate(domainObject);
-            }
-
-            return domainObject;
+        if (domainObject.getSpecification().isEntity()) {
+            persistenceLifecyclePublisher().get().onPostCreate(domainObject);
         }
 
-        //  -- HELPER
+        return domainObject;
+    }
 
-        private Object instantiate(final ObjectSpecification spec) {
+    //  -- HELPER
 
-            var type = spec.getCorrespondingClass();
-            if (type.isArray()) {
-                return Array.newInstance(type.getComponentType(), 0);
-            }
-
-            if (Modifier.isAbstract(type.getModifiers())) {
-                throw _Exceptions.unrecoverable("Cannot create an instance of an abstract class: " + type);
-            }
-
-            try {
-
-                var newInstance = _InstanceUtil.createInstance(type);
-                return newInstance;
-
-            } catch (Exception  e) {
-                throw _Exceptions.unrecoverable(e,
-                        "Failed to create instance of type %s", spec.getFullIdentifier());
-            }
-
+    private Object instantiate(final ObjectSpecification spec) {
+        var type = spec.getCorrespondingClass();
+        if (type.isArray()) {
+            return Array.newInstance(type.getComponentType(), 0);
         }
 
+        if (Modifier.isAbstract(type.getModifiers())) {
+            throw _Exceptions.unrecoverable("Cannot create an instance of an abstract class: " + type);
+        }
+
+        try {
+            var newInstance = _InstanceUtil.createInstance(type);
+            return newInstance;
+        } catch (Exception  e) {
+            throw _Exceptions.unrecoverable(e,
+                    "Failed to create instance of type %s", spec.getFullIdentifier());
+        }
     }
 
 }

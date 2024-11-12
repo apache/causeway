@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 /**
  *
@@ -50,6 +51,11 @@ public class MetaModelContextFactory {
 
         MetaModelContext.set(mmc);
         return mmc;
+    }
+
+    @Bean
+    public ObjectManager objectManager(final MetaModelContext mmc) {
+        return new ObjectManager(mmc);
     }
 
     // -- HELPER

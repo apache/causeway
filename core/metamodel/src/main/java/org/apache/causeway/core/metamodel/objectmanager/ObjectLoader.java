@@ -18,49 +18,30 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 
 import lombok.NonNull;
 
-/**
- * @since 2.0
- */
-public interface ObjectLoader {
+record ObjectLoader(ChainOfResponsibility<ProtoObject, ManagedObject> chain) {
 
-    ManagedObject loadObject(@NonNull ProtoObject objectLoadRequest);
-
-    // -- HANDLER
-
-    static interface Handler
-    extends
-        ChainOfResponsibility.Handler<ProtoObject, ManagedObject> {
+    ObjectLoader() {
+        this(new ChainOfResponsibility<>("ObjectLoader", BuiltinHandlers.values()));
     }
 
-    // -- FACTORY
-
-    public static ObjectLoader createDefault(final MetaModelContext mmc) {
-        return request ->
-            ChainOfResponsibility.named(
-                    "ObjectLoader",
-                    handlers)
-                .handle(Objects.requireNonNull(request));
+    ManagedObject loadObject(@NonNull final ProtoObject objectLoadRequest) {
+        return chain.handle(objectLoadRequest);
     }
 
     // -- HANDLERS
 
-    static final List<Handler> handlers = List.of(BuiltinHandlers.values());
-
-    enum BuiltinHandlers implements Handler {
+    enum BuiltinHandlers implements ChainOfResponsibility.Handler<ProtoObject, ManagedObject> {
         LoadService{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
@@ -144,8 +125,7 @@ public interface ObjectLoader {
                         "None of the registered ObjectLoaders knows how to load this object. (loader: %s loading %s)",
                             this.getClass().getName(), objectLoadRequest);
             }
-        },
-        ;
+        };
     }
 
 }
