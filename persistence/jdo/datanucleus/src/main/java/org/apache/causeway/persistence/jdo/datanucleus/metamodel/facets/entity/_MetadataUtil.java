@@ -29,12 +29,11 @@ import org.datanucleus.identity.SCOID;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata.ColumnOrmMetadata;
 
 import lombok.NonNull;
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testdomain.jdo;
 
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.testdomain.HasPersistenceStandard;
 
 public interface HasPersistenceStandardJdo

@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.annotations.BeanInternal;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
 import lombok.NonNull;
 
@@ -133,9 +134,8 @@ public class CausewayBeanTypeRegistry {
      */
     public PersistenceStack determineCurrentPersistenceStack() {
         return entityTypes.values().stream()
-            .map(meta->meta.persistenceStack())
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+            .map(CausewayBeanMetaData::persistenceStack)
+            .filter(persistenceStack->!persistenceStack.isNone())
             .filter(persistenceStack->!persistenceStack.isUnspecified())
             .findFirst()
             .orElse(PersistenceStack.UNSPECIFIED);

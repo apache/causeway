@@ -39,6 +39,8 @@ import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
 
 import lombok.NonNull;
@@ -79,21 +81,31 @@ public record CausewayBeanTypeClassifier(
         this(activeProfiles, _ClassCache.getInstance());
     }
 
-    public CausewayBeanMetaData classify(final @NonNull LogicalType logicalType, boolean alreadyInferred) {
+    // -- CLASSIFY
+    
+    /**
+     * Classify {@link LogicalType} as detected and named by either Causeway or Spring. 
+     * <p>
+     * Typically Causeway we will use a different fallback naming strategy for 'unnamed' types,
+     * that is, it uses the fully qualified class name.  
+     *  
+     * @param logicalType with name as either forced by Causeway or suggested by Spring 
+     */
+    public CausewayBeanMetaData classify(@NonNull final LogicalType logicalType, final DiscoveredBy discoveredBy) {
         
         var type = logicalType.correspondingClass();
         
-        Supplier<LogicalType> named = ()->alreadyInferred
-            ? logicalType
-            : LogicalType.infer(type); // use only if NOT managed by Spring
+        Supplier<LogicalType> named = ()->discoveredBy.isSpring()
+            ? LogicalType.infer(type) // use only if discovered by Spring but NOT managed by Spring
+            : logicalType; // name is already inferred, when discovered by Causeway
 
         if(ClassUtils.isPrimitiveOrWrapper(type)
                 || type.isEnum()) {
-            return CausewayBeanMetaData.notManaged(BeanSort.VALUE, named.get());
+            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
         }
 
         if(CollectionSemantics.valueOf(type).isPresent()) {
-            return CausewayBeanMetaData.causewayManaged(BeanSort.COLLECTION, named.get());
+            return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.COLLECTION, named.get());
         }
 
         if(type.isInterface()
@@ -105,12 +117,12 @@ public record CausewayBeanTypeClassifier(
             // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
             // however, concrete types that inherit abstract ones with vetoes,
             // will effectively be vetoed through means of annotation synthesis
-            return CausewayBeanMetaData.indifferent(BeanSort.ABSTRACT, named.get());
+            return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.ABSTRACT, named.get());
         }
 
         // handle vetoing ...
         if(TypeExcludeMarker.anyMatchOn(type)) {
-            return CausewayBeanMetaData.notManaged(BeanSort.VETOED, named.get()); // reject
+            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
         }
 
         var profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
@@ -118,7 +130,7 @@ public record CausewayBeanTypeClassifier(
                 .orElse(null));
         if(profiles.isNotEmpty()
                 && !profiles.stream().anyMatch(this::isProfileActive)) {
-            return CausewayBeanMetaData.notManaged(BeanSort.VETOED, named.get()); // reject
+            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
         }
 
         // handle value types ...
@@ -126,13 +138,13 @@ public record CausewayBeanTypeClassifier(
         var aValue = _Annotations.synthesize(type, org.apache.causeway.applib.annotation.Value.class)
                 .orElse(null);
         if(aValue!=null) {
-            return CausewayBeanMetaData.notManaged(BeanSort.VALUE, named.get());
+            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
         }
         
         // handle internal bean types ...
         
         if(classCache.head(type).hasInternalBeanSemantics()) {
-            return CausewayBeanMetaData.injectable(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
+            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
         // handle actual bean types ...
@@ -140,64 +152,61 @@ public record CausewayBeanTypeClassifier(
         var aDomainService = _Annotations.synthesize(type, DomainService.class);
         if(aDomainService.isPresent()) {
             Attributes.HAS_DOMAIN_SERVICE_SEMANTICS.set(classCache, type, "true");
-            return CausewayBeanMetaData.injectable(BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
+            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING, logicalType);
         }
 
         //[CAUSEWAY-3585] when implements ViewModel, then don't consider alternatives, yield VIEW_MODEL
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
-            return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, named.get());
+            return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
 
         // JDO entity support
         if(classCache.head(type).isJdoPersistenceCapable()){
-            return CausewayBeanMetaData.entity(PersistenceStack.JDO, logicalType);
+            return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JDO, named.get());
         }
   
         var entityAnnotation = _Annotations.synthesize(type, Entity.class).orElse(null);
         if(entityAnnotation!=null) {
-            return CausewayBeanMetaData.entity(PersistenceStack.JPA, named.get());
+            return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JPA, named.get());
         }
 
         var aDomainObject = _Annotations.synthesize(type, DomainObject.class).orElse(null);
         if(aDomainObject!=null) {
             switch (aDomainObject.nature()) {
             case BEAN:
-                return CausewayBeanMetaData
-                        .indifferent(BeanSort.MANAGED_BEAN_CONTRIBUTING, named.get());
+                return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.MANAGED_BEAN_CONTRIBUTING, named.get());
             case MIXIN:
                 // memoize mixin main name
                 Attributes.MIXIN_MAIN_METHOD_NAME.set(classCache, type, aDomainObject.mixinMethod());
-                return CausewayBeanMetaData.causewayManaged(BeanSort.MIXIN, named.get());
+                return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.MIXIN, named.get());
             case ENTITY:
-                return CausewayBeanMetaData.entity(PersistenceStack.UNSPECIFIED, named.get());
+                return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.UNSPECIFIED, named.get());
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above
-                return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, named.get());
+                return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
             }
         }
 
         if(_ClassCache.getInstance().head(type).hasJaxbRootElementSemantics()) {
-            return CausewayBeanMetaData.causewayManaged(BeanSort.VIEW_MODEL, named.get());
+            return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
 
         if(_Annotations.isPresent(type, Component.class)) {
-            return CausewayBeanMetaData.indifferent(BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
+            return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
         // unless explicitly declared otherwise, map records to viewmodels
         if(type.isRecord()) {
-            return CausewayBeanMetaData.indifferent(BeanSort.VIEW_MODEL, named.get());
+            return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
 
         if(Serializable.class.isAssignableFrom(type)) {
-            return CausewayBeanMetaData.indifferent(BeanSort.VALUE, named.get());
+            return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.VALUE, named.get());
         }
 
-        return CausewayBeanMetaData.indifferent(BeanSort.UNKNOWN, named.get());
+        return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.UNKNOWN, named.get());
     }
-
-    // -- HELPER
 
     //TODO yet this is a naive implementation, not evaluating any expression logic like eg. @Profile("!dev")
     //either we find a Spring Boot utility class that does this logic for us, or we make it clear with the

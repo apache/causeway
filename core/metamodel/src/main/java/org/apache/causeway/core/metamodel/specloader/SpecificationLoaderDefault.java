@@ -58,6 +58,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -546,8 +547,8 @@ implements
                 .lookupIntrospectableType(type)
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
-                    ? CausewayBeanMetaData.causewayManaged(BeanSort.VALUE, LogicalType.infer(type))
-                    : causewayBeanTypeClassifier.classify(LogicalType.infer(type), true)
+                        ? CausewayBeanMetaData.causewayManaged(DiscoveredBy.CAUSEWAY, BeanSort.VALUE, LogicalType.infer(type))
+                        : causewayBeanTypeClassifier.classify(LogicalType.infer(type), DiscoveredBy.CAUSEWAY)
                 );
     }
 
@@ -610,7 +611,7 @@ implements
                     .builder()
                     .addVariable("type", cls.getName())
                     .addVariable("beanSort", causewayBeanTypeClassifier
-                            .classify(LogicalType.infer(cls), true)
+                            .classify(LogicalType.infer(cls), DiscoveredBy.CAUSEWAY)
                             .beanSort()
                             .name())
                     .buildMessage();

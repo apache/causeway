@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.entity;
 import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
 import lombok.NonNull;
 import lombok.experimental.Accessors;

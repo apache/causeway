@@ -51,7 +51,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
@@ -70,7 +70,6 @@ import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePe
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 

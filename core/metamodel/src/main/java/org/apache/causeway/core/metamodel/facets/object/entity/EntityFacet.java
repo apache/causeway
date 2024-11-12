@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.beans.PersistenceStack;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

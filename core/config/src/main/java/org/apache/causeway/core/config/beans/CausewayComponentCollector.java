@@ -32,6 +32,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -64,10 +65,10 @@ record CausewayComponentCollector(
         var isRenamed = !typeMeta.logicalType().logicalName().equals(logicalType.logicalName());
 
         switch (typeMeta.managedBy()) {
-            case NONE, CAUSEWAY-> {
+            case NONE, CAUSEWAY, PERSISTENCE -> {
                 remove(beanDefinitionName);
             }
-            case INDIFFERENT -> {
+            case UNSPECIFIED -> {
                 if(isRenamed) {
                     //rename(beanDefinition, beanDefinitionName, typeMeta.logicalType().logicalName()); //TODO does not work yet
                     _ClassCache.getInstance().setNamed(beanClass, beanDefinitionName);
@@ -96,7 +97,7 @@ record CausewayComponentCollector(
      * discovered types into a type registry
      */
     private CausewayBeanMetaData collectBeanClass(final LogicalType logicalType) {
-        var typeMeta = causewayBeanTypeClassifier.classify(logicalType, false);
+        var typeMeta = causewayBeanTypeClassifier.classify(logicalType, DiscoveredBy.SPRING);
         var beanSort = typeMeta.beanSort();
         if(beanSort.isToBeIntrospected()) {
             var beanClass = logicalType.correspondingClass();

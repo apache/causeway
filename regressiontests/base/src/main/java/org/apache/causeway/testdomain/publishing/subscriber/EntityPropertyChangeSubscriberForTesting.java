@@ -32,13 +32,12 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChangeSubscriber;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.PersistenceStack;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.log4j.Log4j2;
 
 @Service

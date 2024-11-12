@@ -101,8 +101,8 @@ implements FacetHolder {
                 typeMeta.beanSort(), facetProcessor, postProcessor);
 
         this.isVetoedForInjection = switch (typeMeta.managedBy()) {
-            case NONE, CAUSEWAY -> true;
-            case INDIFFERENT, SPRING  -> false;
+            case NONE, CAUSEWAY, PERSISTENCE -> true;
+            case UNSPECIFIED, SPRING  -> false;
         }; 
         this.classSubstitutorRegistry = classSubstitutorRegistry;
 
