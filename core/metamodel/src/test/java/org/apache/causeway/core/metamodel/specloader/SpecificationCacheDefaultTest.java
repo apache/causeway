@@ -40,7 +40,7 @@ class SpecificationCacheDefaultTest {
     ObjectSpecification orderSpec;
 
     private SpecificationCache specificationCache = new SpecificationCache();
-    private LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
+    private LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @BeforeEach

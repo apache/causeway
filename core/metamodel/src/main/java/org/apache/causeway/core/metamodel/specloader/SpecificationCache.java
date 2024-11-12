@@ -67,6 +67,7 @@ record SpecificationCache(
         }
     }
 
+    /** @returns thread-safe defensive copy */
     Can<ObjectSpecification> snapshotSpecs() {
         synchronized(this) {
             return Can.ofCollection(specByClass.values());

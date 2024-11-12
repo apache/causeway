@@ -133,7 +133,7 @@ implements
     private FacetProcessor facetProcessor;
 
     private final SpecificationCache cache = new SpecificationCache();
-    private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolverDefault();
+    private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
     /**
      * We only ever mark the meta-model as fully introspected if in {@link #isFullIntrospect() full}

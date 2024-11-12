@@ -18,13 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.specloader;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides a lookup table for the purpose of recreating domain objects from bookmarks,
@@ -32,17 +35,30 @@ import lombok.NonNull;
  *
  * @apiNote only bookmark-able types will be ever registered
  * @see DomainObject#logicalTypeName()
- *
- * @since 2.0
  */
-interface LogicalTypeResolver {
+@Log4j2
+record LogicalTypeResolver(
+        Map<String, LogicalType> logicalTypeByName) {
+
+    LogicalTypeResolver() {
+        this(_Maps.newConcurrentHashMap());
+    }
+
+    /**
+     * Removes all entries from the lookup table.
+     */
+    void clear() {
+        logicalTypeByName.clear();
+    }
 
     /**
      * Optionally returns the bookmark-able concrete type as registered by given {@code logicalTypeName},
      * based on whether there had been registered any.
      * @param logicalTypeName
      */
-    Optional<LogicalType> lookup(@NonNull String logicalTypeName);
+    Optional<LogicalType> lookup(final @NonNull String logicalTypeName) {
+        return Optional.ofNullable(logicalTypeByName.get(logicalTypeName));
+    }
 
     /**
      * Collects concrete types, ignores abstract types and interfaces.
@@ -51,12 +67,22 @@ interface LogicalTypeResolver {
      * Acts as an identity operator with side-effects.
      * @param spec - type's ObjectSpecification
      */
-    ObjectSpecification register(@NonNull ObjectSpecification spec);
+    ObjectSpecification register(final @NonNull ObjectSpecification spec) {
 
-    /**
-     * Removes all entries from the lookup table.
-     */
-    void clear();
+        var logicalTypeName = spec.getLogicalTypeName();
+
+        if(logicalTypeByName.containsKey(logicalTypeName)) {
+            return spec;
+        }
+
+        // collect concrete classes (do not collect abstract or anonymous types or interfaces)
+        if(!spec.isAbstract()
+                && hasTypeIdentity(spec)) {
+
+            putWithWarnOnOverride(logicalTypeName, spec);
+        }
+        return spec;
+    }
 
     /**
      * Collects aliases for concrete types, ignores abstract types and interfaces.
@@ -64,6 +90,44 @@ interface LogicalTypeResolver {
      * Acts as an identity operator with side-effects.
      * @param spec - type's ObjectSpecification
      */
-    ObjectSpecification registerAliases(@NonNull ObjectSpecification spec);
+    ObjectSpecification registerAliases(final @NonNull ObjectSpecification spec) {
+
+        // adding aliases to the lookup map
+        spec.getAliases()
+        .forEach(alias->{
+                putWithWarnOnOverride(alias.logicalName(), spec);
+        });
+
+        return spec;
+    }
+
+    // -- HELPER
+
+    private boolean hasTypeIdentity(final ObjectSpecification spec) {
+        // anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
+        // don't have type identity; hence the guard.
+        return spec.getCorrespondingClass().getCanonicalName()!=null;
+    }
+
+    private void putWithWarnOnOverride(
+            final String logicalTypeName,
+            final ObjectSpecification spec) {
+
+        final LogicalType previousMapping =
+                logicalTypeByName.put(logicalTypeName, spec.getLogicalType());
+
+        if(previousMapping!=null
+                && !spec.getLogicalType().equals(previousMapping)) {
+            var msg = String.format("Overriding existing mapping\n"
+                    + "%s -> %s,\n"
+                    + "with\n "
+                    + "%s -> %s\n "
+                    + "This will result in the meta-model validation to fail.",
+                    logicalTypeName, previousMapping.correspondingClass(),
+                    logicalTypeName, spec.getCorrespondingClass());
+            log.warn(msg);
+        }
+
+    }
 
 }
