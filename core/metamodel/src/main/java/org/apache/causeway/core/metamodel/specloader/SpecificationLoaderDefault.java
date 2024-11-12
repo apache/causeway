@@ -144,6 +144,8 @@ implements
     @Getter @Setter
     private boolean metamodelFullyIntrospected = false;
 
+    private final boolean parallel;
+
     @Inject
     public SpecificationLoaderDefault(
             final ProgrammingModelService programmingModelService,
@@ -183,6 +185,7 @@ implements
         this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
         this.valueSemanticsResolver = valueSemanticsRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
+        this.parallel = causewayConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
     }
 
     /** JUnit Test Support */
@@ -459,9 +462,8 @@ implements
 
     @Override
     public void forEach(final Consumer<ObjectSpecification> onSpec) {
-        var shouldRunConcurrent = causewayConfiguration.getCore().getMetaModel().getValidator().isParallelize();
         var snapshot = snapshotSpecifications();
-        if(shouldRunConcurrent) {
+        if(parallel) {
             snapshot
                 .stream()
                 .parallel()
@@ -670,8 +672,7 @@ implements
     private void introspect(
             final Can<ObjectSpecification> specs,
             final IntrospectionState upTo) {
-        var isConcurrentFromConfig = causewayConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
-        if(isConcurrentFromConfig) {
+        if(parallel) {
             introspectParallel(specs, upTo);
         } else {
             introspectSequential(specs, upTo);
