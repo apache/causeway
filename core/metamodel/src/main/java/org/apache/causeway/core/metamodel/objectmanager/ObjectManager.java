@@ -29,6 +29,7 @@ import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundExcep
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -59,14 +60,13 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-@SuppressWarnings("exports")
 @BeanInternal
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ObjectManager")
 public record ObjectManager(
         MetaModelContext mmc,
-        ObjectCreator objectCreator,
-        ObjectLoader objectLoader,
-        ObjectBulkLoader objectBulkLoader) implements HasMetaModelContext {
+        ChainOfResponsibility<ObjectSpecification, ManagedObject> objectCreator,
+        ChainOfResponsibility<ProtoObject, ManagedObject> objectLoader,
+        ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> objectBulkLoader) implements HasMetaModelContext {
 
     // -- REQUEST (VALUE) TYPE
 
@@ -77,9 +77,9 @@ public record ObjectManager(
 
     public ObjectManager(final MetaModelContext mmc) {
         this(mmc,
-                new ObjectCreator(mmc),
-                new ObjectLoader(),
-                new ObjectBulkLoader());
+                ObjectCreatorFactory.createChain(mmc),
+                ObjectLoaderFactory.createChain(),
+                ObjectBulkLoaderFactory.createChain());
     }
 
     /**
@@ -88,7 +88,7 @@ public record ObjectManager(
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public ManagedObject createObject(final ObjectSpecification objectCreateRequest) {
-        return objectCreator().createObject(objectCreateRequest);
+        return objectCreator().handle(objectCreateRequest);
     }
 
     /**
@@ -97,7 +97,7 @@ public record ObjectManager(
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public ManagedObject loadObject(final ProtoObject objectLoadRequest) {
-        return objectLoader().loadObject(objectLoadRequest);
+        return objectLoader().handle(objectLoadRequest);
     }
 
     /**
@@ -155,7 +155,7 @@ public record ObjectManager(
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public Can<ManagedObject> queryObjects(final BulkLoadRequest objectQuery) {
-        return objectBulkLoader().loadObject(objectQuery);
+        return objectBulkLoader().handle(objectQuery);
     }
 
     public Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {

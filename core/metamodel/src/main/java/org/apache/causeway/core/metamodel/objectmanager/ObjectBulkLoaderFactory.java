@@ -24,16 +24,10 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
 
-import lombok.NonNull;
+record ObjectBulkLoaderFactory() {
 
-record ObjectBulkLoader(ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> chain) {
-
-    ObjectBulkLoader() {
-        this(new ChainOfResponsibility<>("ObjectBulkLoader", BuiltinHandlers.values()));
-    }
-
-    Can<ManagedObject> loadObject(@NonNull final BulkLoadRequest objectQuery) {
-        return chain.handle(objectQuery);
+    static ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> createChain() {
+        return new ChainOfResponsibility<>("ObjectBulkLoader", BuiltinHandlers.values());
     }
 
     // -- HANDLERS

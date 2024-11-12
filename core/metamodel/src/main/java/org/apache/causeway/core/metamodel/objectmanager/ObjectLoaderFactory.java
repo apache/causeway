@@ -27,16 +27,10 @@ import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Fo
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 
-import lombok.NonNull;
+record ObjectLoaderFactory() {
 
-record ObjectLoader(ChainOfResponsibility<ProtoObject, ManagedObject> chain) {
-
-    ObjectLoader() {
-        this(new ChainOfResponsibility<>("ObjectLoader", BuiltinHandlers.values()));
-    }
-
-    ManagedObject loadObject(@NonNull final ProtoObject objectLoadRequest) {
-        return chain.handle(objectLoadRequest);
+    static ChainOfResponsibility<ProtoObject, ManagedObject> createChain() {
+        return new ChainOfResponsibility<>("ObjectLoader", BuiltinHandlers.values());
     }
 
     // -- HANDLERS
