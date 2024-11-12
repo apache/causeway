@@ -49,6 +49,7 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -134,7 +135,7 @@ public final class _ClassCache implements AutoCloseable {
         return classModel(type).head();
     }
 
-    public ClassModelBody body(final Class<?> type) {
+    private ClassModelBody body(final Class<?> type) {
         return classModel(type).body();
     }
 
@@ -377,7 +378,10 @@ public final class _ClassCache implements AutoCloseable {
 
     private record ClassModel(
             ClassModelHead head,
-            ClassModelBody body) {
+            _Lazy<ClassModelBody> lazyBody) {
+        ClassModelBody body() {
+            return lazyBody.get();
+        }
     }
 
     private final Map<Class<?>, ClassModel> inspectedTypes = new HashMap<>();
@@ -466,8 +470,7 @@ public final class _ClassCache implements AutoCloseable {
     private ClassModel inspectType(final Class<?> _type) {
         final Class<?> type = reloadType(_type);
         var head = ClassModelHead.create(type);
-        var body = ClassModelBody.create(type, head);
-        return new ClassModel(head, body);
+        return new ClassModel(head, _Lazy.threadSafe(()->ClassModelBody.create(type, head)));
     }
 
     /**
