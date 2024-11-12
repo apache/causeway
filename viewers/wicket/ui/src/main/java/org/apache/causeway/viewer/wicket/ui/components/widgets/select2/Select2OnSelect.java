@@ -163,7 +163,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                 if(XrayUi.isXrayEnabled()) {
                     var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
                     if(objectMementoFromEvent!=null) {
-                        _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.getBookmark());
+                        _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.bookmark());
                     } else {
                         _XrayEvent.event("Select2 event: %s %s", event, "(none)");
                     }

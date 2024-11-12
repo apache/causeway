@@ -160,7 +160,7 @@ implements
         return LambdaModel.<String>of(()->{
             var memento = memento();
             return memento!=null
-                    ? memento.getTitle()
+                    ? memento.title()
                     : null;
         });
     }

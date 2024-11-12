@@ -37,22 +37,17 @@ record ObjectMementoCollection(
 implements ObjectMemento {
 
     @Override
-    public String getTitle() {
+    public String title() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     @Override
-    public Bookmark getBookmark() {
+    public Bookmark bookmark() {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
     public Stream<ObjectMemento> streamElements() {
         return _NullSafe.stream(container);
-    }
-
-    @Override
-    public LogicalType getLogicalType() {
-        return logicalType;
     }
 
     @Deprecated // don't expose

@@ -26,9 +26,8 @@ import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.bookmark.BookmarkHolder;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -40,11 +39,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
  * @since 2.0
  */
 public sealed interface ObjectMemento
-extends BookmarkHolder, HasLogicalType, Serializable
+extends Serializable
 permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
 
     /** arbitrary/random string */
     static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
+
+    LogicalType logicalType();
+    Bookmark bookmark();
 
     /**
      * The object's title for rendering (before translation).
@@ -53,7 +55,7 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
      * Directly support choice rendering, without the need to (re-)fetch entire object graphs.
      * (TODO translated or not?)
      */
-    String getTitle();
+    String title();
 
     // -- FACTORIES
 
@@ -127,7 +129,5 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
     default boolean isPacked() {
         return this instanceof ObjectMementoCollection;
     }
-
-
 
 }

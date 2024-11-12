@@ -246,7 +246,7 @@ public record ObjectManager(
     public ManagedObject demementify(@Nullable final ObjectMemento memento) {
         if(memento==null) return null;
         var spec = mmc.getSpecificationLoader()
-                        .specForLogicalType(memento.getLogicalType())
+                        .specForLogicalType(memento.logicalType())
                 .orElse(null);
         if(spec==null) {
             return memento.isEmpty()

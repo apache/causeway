@@ -16,27 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.objectmanager.memento;
+package org.apache.causeway.core.metamodel.object;
 
-import org.apache.causeway.applib.id.LogicalType;
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.hint.HintIdProvider;
 
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
-record ObjectMementoForEmpty(
-        @NonNull LogicalType logicalType)
-implements ObjectMemento {
+@UtilityClass
+public class MMHintUtils {
 
-    @Override
-    public String title() {
-        return PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION);
+    public String hintId(@Nullable final ManagedObject adapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) return null;
+        var spec = adapter.getSpecification();
+        return (spec.isIdentifiable() || spec.isParented())
+                && adapter.getPojo() instanceof HintIdProvider hp
+             ? hp.hintId()
+             : null;
     }
 
-    @Override
-    public Bookmark bookmark() {
-        return Bookmark.empty(logicalType);
+    public Bookmark bookmarkElseFail(@NonNull final ManagedObject adapter) {
+        var hintId = hintId(adapter);
+        var bookmark = ManagedObjects.bookmarkElseFail(adapter);
+        return hintId != null
+                    ? bookmark.withHintId(hintId)
+                    : bookmark;
     }
-
 }

@@ -55,7 +55,7 @@ implements HasCommonContext {
                 || choiceMemento.isEmpty()) {
             return getPlaceholderRenderService().asText(PlaceholderLiteral.NULL_REPRESENTATION);
         }
-        return translate(choiceMemento.getTitle());
+        return translate(choiceMemento.title());
     }
 
     @Override
@@ -120,7 +120,7 @@ implements HasCommonContext {
         var termLower = term.toLowerCase();
 
         return choiceMementos.filter((final ObjectMemento candidateMemento)->{
-            var title = translator.translate(translationContext, candidateMemento.getTitle());
+            var title = translator.translate(translationContext, candidateMemento.title());
             return title.toLowerCase().contains(termLower);
         });
 

@@ -61,7 +61,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectMement
         var string = ObjectMemento.enstringToUrlBase64(memento);
 
         //XXX ever used ?
-        System.err.printf("ConverterForObjectAdapterMemento: convertFrom ObjectMemento %s->%s%n", memento.getBookmark(), string);
+        System.err.printf("ConverterForObjectAdapterMemento: convertFrom ObjectMemento %s->%s%n", memento.bookmark(), string);
 
         return string;
     }

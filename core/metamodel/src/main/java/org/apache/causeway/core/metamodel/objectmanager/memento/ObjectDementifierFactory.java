@@ -53,8 +53,8 @@ public record ObjectDementifierFactory() {
                 var mmc = spec.getMetaModelContext();
                 // intercept when managed by Spring
                 return spec.getBeanSort().isManagedBeanAny()
-                    ? mmc.lookupServiceAdapterById(request.memento().getLogicalTypeName())
-                    : mmc.getObjectManager().loadObjectElseFail(request.memento().getBookmark());
+                    ? mmc.lookupServiceAdapterById(request.memento().logicalType().logicalName())
+                    : mmc.getObjectManager().loadObjectElseFail(request.memento().bookmark());
             }
         },
         PACKED {
