@@ -57,26 +57,38 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
 
     // -- FACTORIES
 
-    static ObjectMemento pack(
-            final Collection<ObjectMemento> container,
-            final LogicalType logicalType) {
-
+    static ObjectMemento empty(final LogicalType logicalType) {
+        return new ObjectMementoForEmpty(logicalType);
+    }
+    static Optional<ObjectMemento> scalar(@Nullable final ManagedObject adapter) {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                ? Optional.empty()
+                : Optional.of(ObjectMementoForScalar.create(adapter));
+    }
+    static ObjectMemento packed(
+            final LogicalType logicalType,
+            final ArrayList<ObjectMemento> listOfMementos) {
+        return new ObjectMementoCollection(logicalType, listOfMementos);
+    }
+    static ObjectMemento packed(
+            final LogicalType logicalType,
+            final Collection<ObjectMemento> container) {
         // ArrayList is serializable
-        if(container instanceof ArrayList) {
-            return ObjectMementoCollection.of((ArrayList<ObjectMemento>)container, logicalType);
-        }
-        return ObjectMementoCollection.of(_Lists.newArrayList(container), logicalType);
+        @SuppressWarnings("unchecked")
+        final ArrayList<ObjectMemento> arrayList = container instanceof ArrayList orig
+                ? orig
+                : _Lists.newArrayList(container);
+        return new ObjectMementoCollection(logicalType, arrayList);
+
     }
 
+    // -- UTILITY
+
     // ArrayList is serializable
-    static Optional<ArrayList<ObjectMemento>> unpack(final ObjectMemento memento) {
-        if(memento==null) {
-            return Optional.empty();
-        }
-        if(!(memento instanceof ObjectMementoCollection)) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(((ObjectMementoCollection)memento).unwrapList());
+    public static Optional<ArrayList<ObjectMemento>> unpackAsList(final ObjectMemento memento) {
+        return memento instanceof ObjectMementoCollection packed
+                ? packed.asList()
+                : Optional.empty();
     }
 
     @Nullable
@@ -116,18 +128,6 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
         return this instanceof ObjectMementoCollection;
     }
 
-    static ObjectMemento empty(final LogicalType logicalType) {
-        return new ObjectMementoForEmpty(logicalType);
-    }
-    static Optional<ObjectMemento> scalar(final @Nullable ManagedObject adapter) {
-        return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                ? Optional.empty()
-                : Optional.of(new ObjectMementoForScalar(adapter));
-    }
-    static ObjectMemento packed(final ArrayList<ObjectMemento> listOfMementos, final LogicalType logicalType) {
-        return ObjectMementoCollection.of(
-                listOfMementos,
-                logicalType);
-    }
+
 
 }

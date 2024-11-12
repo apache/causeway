@@ -67,14 +67,14 @@ implements HasLogicalType {
     }
 
     public ObjectMemento getPackedModelObject() {
-        return ObjectMemento.pack(this.getModelObject(), this.getLogicalType());
+        return ObjectMemento.packed(this.getLogicalType(), this.getModelObject());
     }
 
     public ObjectMemento getPackedConvertedInput() {
-        return ObjectMemento.pack(this.getConvertedInput(), this.getLogicalType());
+        return ObjectMemento.packed(this.getLogicalType(), this.getConvertedInput());
     }
 
-    public IModel<ObjectMemento> getPackingAdapterModel() {
+    IModel<ObjectMemento> getPackingAdapterModel() {
         if(packingAdapterModel==null) {
             packingAdapterModel = createPackingAdapterModel();
         }
@@ -94,7 +94,7 @@ implements HasLogicalType {
             final IModel<Collection<ObjectMemento>> delegate;
             {
                 this.delegate = multi.getModel();
-                this.memento = ObjectMemento.pack(delegate.getObject(), multi.getLogicalType());
+                this.memento = ObjectMemento.packed(multi.getLogicalType(), delegate.getObject());
             }
 
             @Override
@@ -104,7 +104,7 @@ implements HasLogicalType {
 
             @Override
             public void setObject(final ObjectMemento memento) {
-                delegate.setObject(ObjectMemento.unpack(memento).orElse(null));
+                delegate.setObject(ObjectMemento.unpackAsList(memento).orElse(null));
             }
 
             @Override

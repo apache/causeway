@@ -107,8 +107,8 @@ implements ManagedObject {
                 .map(this::mementoForScalar)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMemento.packed(
-                listOfMementos,
-                packedAdapter.getLogicalType());
+                packedAdapter.getLogicalType(),
+                listOfMementos);
     }
 
     //XXX compares pojos by their 'equals' semantics -

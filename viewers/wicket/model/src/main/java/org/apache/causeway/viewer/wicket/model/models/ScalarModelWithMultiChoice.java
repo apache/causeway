@@ -84,7 +84,7 @@ implements
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
         var logicalType = scalarModel().getElementType().getLogicalType();
-        var packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
+        var packedMemento = ObjectMemento.packed(logicalType, unpackedMemento);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }
 

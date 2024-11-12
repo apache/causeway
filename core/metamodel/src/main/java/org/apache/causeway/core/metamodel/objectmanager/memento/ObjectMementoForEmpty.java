@@ -23,22 +23,11 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
-/**
- * @since 2.0
- */
-@ToString
-@RequiredArgsConstructor
-final class ObjectMementoForEmpty implements ObjectMemento {
-
-    private static final long serialVersionUID = 1L;
-
-    @Getter(onMethod_ = {@Override})
-    @NonNull private LogicalType logicalType;
+record ObjectMementoForEmpty(
+        @NonNull LogicalType logicalType)
+implements ObjectMemento {
 
     @Override
     public String getTitle() {
@@ -48,6 +37,11 @@ final class ObjectMementoForEmpty implements ObjectMemento {
     @Override
     public Bookmark getBookmark() {
         return Bookmark.empty(logicalType);
+    }
+
+    @Override
+    public LogicalType getLogicalType() {
+        return logicalType;
     }
 
 }

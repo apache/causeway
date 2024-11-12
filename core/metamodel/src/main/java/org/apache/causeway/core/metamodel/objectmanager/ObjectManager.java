@@ -75,7 +75,7 @@ public record ObjectManager(
     }
 
     public record MementoRecreateRequest(
-            @Nullable ObjectSpecification objectSpecification,
+            @NonNull ObjectSpecification objectSpecification,
             @NonNull ObjectMemento memento) {
     }
 
@@ -248,6 +248,11 @@ public record ObjectManager(
         var spec = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.getLogicalType())
                 .orElse(null);
+        if(spec==null) {
+            return memento.isEmpty()
+                    ? ManagedObject.unspecified()
+                    : null;
+        }
         return objectDementifier().handle(new MementoRecreateRequest(spec, memento));
     }
 

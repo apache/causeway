@@ -19,27 +19,22 @@
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
 
-/**
- * @since 2.0
- */
-@Value(staticConstructor = "of")
-final class ObjectMementoCollection implements ObjectMemento {
-
-    private static final long serialVersionUID = 1L;
-
-    private final ArrayList<ObjectMemento> container;
-
-    @Getter(onMethod_ = {@Override})
-    @NonNull private final LogicalType logicalType;
+record ObjectMementoCollection(
+        @NonNull LogicalType logicalType,
+        @Nullable ArrayList<ObjectMemento> container)
+implements ObjectMemento {
 
     @Override
     public String getTitle() {
@@ -51,8 +46,18 @@ final class ObjectMementoCollection implements ObjectMemento {
         throw _Exceptions.notImplemented(); // please unwrap at call-site
     }
 
-    public ArrayList<ObjectMemento> unwrapList() {
-        return getContainer();
+    public Stream<ObjectMemento> streamElements() {
+        return _NullSafe.stream(container);
+    }
+
+    @Override
+    public LogicalType getLogicalType() {
+        return logicalType;
+    }
+
+    @Deprecated // don't expose
+    Optional<ArrayList<ObjectMemento>> asList() {
+        return Optional.ofNullable(container);
     }
 
 }

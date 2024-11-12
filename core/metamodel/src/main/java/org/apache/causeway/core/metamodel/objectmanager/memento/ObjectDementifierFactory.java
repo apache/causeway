@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.MementoRecreateRequest;
 
@@ -40,12 +39,7 @@ public record ObjectDementifierFactory() {
             }
             @Override
             public ManagedObject handle(final MementoRecreateRequest request) {
-                /* note: we recover from (corresponding) class not logical-type-name,
-                 * as the latter can be ambiguous, when shared in a type hierarchy*/
-                var spec = request.objectSpecification();
-                return spec!=null
-                        ? ManagedObject.empty(spec)
-                        : ManagedObject.unspecified();
+                return ManagedObject.empty(request.objectSpecification());
             }
         },
         SCALAR {
@@ -56,7 +50,6 @@ public record ObjectDementifierFactory() {
             @Override
             public ManagedObject handle(final MementoRecreateRequest request) {
                 var spec = request.objectSpecification();
-                if(spec==null) return null; // eg. ill-formed request
                 var mmc = spec.getMetaModelContext();
                 // intercept when managed by Spring
                 return spec.getBeanSort().isManagedBeanAny()
@@ -72,13 +65,10 @@ public record ObjectDementifierFactory() {
             @Override
             public ManagedObject handle(final MementoRecreateRequest request) {
                 var elementSpec = request.objectSpecification();
-                if(elementSpec==null) return null; // eg. ill-formed request
                 var om = elementSpec.getMetaModelContext().getObjectManager();
-
-                var objects = _NullSafe.stream(((ObjectMementoCollection)request.memento()).unwrapList())
+                var objects = ((ObjectMementoCollection)request.memento()).streamElements()
                         .map(om::demementify) // recursively unwrap
                         .collect(Can.toCan());
-
                 return ManagedObject.packed(elementSpec, objects);
             }
         }

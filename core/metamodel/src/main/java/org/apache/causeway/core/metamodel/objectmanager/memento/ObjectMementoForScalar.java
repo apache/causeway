@@ -28,56 +28,24 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.Getter;
+import lombok.Builder;
 import lombok.NonNull;
-import lombok.ToString;
 
-@ToString
-final class ObjectMementoForScalar
+@Builder
+record ObjectMementoForScalar(
+        @NonNull LogicalType logicalType,
+        @NonNull Bookmark bookmark,
+        String title)
 implements HasLogicalType, Serializable, ObjectMemento {
-
-    private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
-    static ObjectMementoForScalar createPersistent(
-            final Bookmark bookmark,
-            final SpecificationLoader specificationLoader) {
-        return new ObjectMementoForScalar(bookmark, specificationLoader);
-    }
+    static ObjectMementoForScalar create(final @NonNull ManagedObject adapter) {
 
-    // --
-
-    @Getter(onMethod_ = {@Override}) final LogicalType logicalType;
-
-    @Getter(onMethod_ = {@Override}) private final String title;
-    @Getter final Bookmark bookmark;
-
-    @ToString.Exclude
-    byte[] serializedPayload;
-
-    private ObjectMementoForScalar(
-            final @NonNull Bookmark bookmark,
-            final @NonNull SpecificationLoader specLoader) {
-
-        this.bookmark = bookmark;
-
-        var logicalTypeName = bookmark.getLogicalTypeName();
-        var spec = specLoader.specForLogicalTypeName(logicalTypeName)
-                .orElseThrow(()->_Exceptions.unrecoverable(
-                        "cannot recreate spec from logicalTypeName %s", logicalTypeName));
-
-        this.logicalType = spec.getLogicalType();
-
-        this.title = "?memento?"; // TODO can we do better?
-    }
-
-    ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
-
-        this.logicalType = adapter.getLogicalType();
-        this.title = MmTitleUtils.titleOf(adapter);
+        var builder = ObjectMementoForScalar.builder()
+                .logicalType(adapter.getLogicalType())
+                .title(MmTitleUtils.titleOf(adapter));
 
         var spec = adapter.getSpecification();
 
@@ -88,17 +56,19 @@ implements HasLogicalType, Serializable, ObjectMemento {
                  : null;
 
             var bookmark = ManagedObjects.bookmarkElseFail(adapter);
-            this.bookmark = hintId != null
+            bookmark = hintId != null
                     && bookmark != null
                         ? bookmark.withHintId(hintId)
                         : bookmark;
 
-            return;
+            builder.bookmark(bookmark);
+
+            return builder.build();
         }
 
         if (spec.isValue()) {
-            bookmark = ManagedObjects.bookmarkElseFail(adapter);
-            return;
+            builder.bookmark(ManagedObjects.bookmarkElseFail(adapter));
+            return builder.build();
         }
 
         throw _Exceptions.illegalArgument("Don't know how to create an ObjectMemento for a type "
@@ -110,13 +80,13 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     }
 
-    @Override
-    public int hashCode() {
-        return bookmark.hashCode();
-    }
+    @Override public Bookmark getBookmark() { return bookmark; }
+    @Override public String getTitle() { return title; }
+    @Override public LogicalType getLogicalType() { return logicalType; }
 
-    @Override
-    public boolean equals(final Object o) {
+    @Override public int hashCode() { return bookmark.hashCode(); }
+
+    @Override public boolean equals(final Object o) {
         return (o instanceof ObjectMementoForScalar other)
                 ? this.bookmark.equals(other.bookmark)
                 : false;
