@@ -19,13 +19,11 @@
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.IValidator;
 import org.wicketstuff.select2.AbstractSelect2Choice;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -105,55 +103,12 @@ implements
         asComponent().setEnabled(mutability);
     }
 
-    public void setRequired(final boolean required) {
-        // previously this was commented out because causing more severe issues with the select2 drop-down;
-        // but recent changes (possibly that setOutputMarkupId(true) is called) now seem to have resolved the issue.
-        asComponent().setRequired(required);
-    }
     public boolean checkRequired() {
         return asComponent().checkRequired();
     }
 
     public ManagedObject getConvertedInputValue() {
         return getObjectManager().demementify(convertedInput());
-    }
-
-    public void setLabel(final Model<String> model) {
-        asComponent().setLabel(model);
-    }
-
-    public void add(final Behavior behavior) {
-        asComponent().add(behavior);
-    }
-
-    public final Select2 add(final IValidator<Object> validator) {
-        asComponent().add(validator);
-        return this;
-    }
-
-    public <M extends Behavior> List<M> getBehaviors(final Class<M> behaviorClass) {
-        return asComponent().getBehaviors(behaviorClass);
-    }
-
-    public void remove(final Behavior behavior) {
-        asComponent().remove(behavior);
-    }
-
-    public void syncIfNull(final ScalarModel model) {
-        if(!model.isPlural()) {
-            if(memento() == null) {
-                this.mementoModel().setObject(null);
-                model.setObject(null);
-            }
-        }
-    }
-
-    public boolean isEmpty() {
-        return memento() == null;
-    }
-
-    public void clear() {
-        mementoModel().setObject(null);
     }
 
     public IModel<String> obtainOutputFormatModel() {
@@ -167,23 +122,24 @@ implements
 
     // -- HELPER
 
+    private void setLabel(final Model<String> model) {
+        asComponent().setLabel(model);
+    }
+
+    private void add(final Behavior behavior) {
+        asComponent().add(behavior);
+    }
+
     private ObjectMemento memento() {
         return select2Choice.fold(
                 single->single.getModelObject(),
                 multi->multi.getPackedModelObject());
     }
 
-    private IModel<ObjectMemento> mementoModel() {
-        return select2Choice.fold(
-                single->single.getModel(),
-                multi->multi.getPackingAdapterModel());
-    }
-
     private ObjectMemento convertedInput() {
         final ObjectMemento convertedInput = select2Choice.fold(
                 single->single.getConvertedInput(),
                 multi->multi.getPackedConvertedInput());
-        this.mementoModel().setObject(convertedInput);
         return convertedInput;
     }
 

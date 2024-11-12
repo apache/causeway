@@ -65,7 +65,6 @@ public record ObjectManager(
         ChainOfResponsibility<ObjectSpecification, ManagedObject> objectCreator,
         ChainOfResponsibility<ProtoObject, ManagedObject> objectLoader,
         ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> objectBulkLoader,
-        //TODO why not use loadObject(bookmark) instead
         ChainOfResponsibility<MementoRecreateRequest, ManagedObject> objectDementifier
         ) implements HasMetaModelContext {
 

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.lang.Nullable;
@@ -48,11 +47,6 @@ implements ObjectMemento {
 
     public Stream<ObjectMemento> streamElements() {
         return _NullSafe.stream(container);
-    }
-
-    @Deprecated // don't expose
-    Optional<ArrayList<ObjectMemento>> asList() {
-        return Optional.ofNullable(container);
     }
 
 }

@@ -74,45 +74,6 @@ implements HasLogicalType {
         return ObjectMemento.packed(this.getLogicalType(), this.getConvertedInput());
     }
 
-    IModel<ObjectMemento> getPackingAdapterModel() {
-        if(packingAdapterModel==null) {
-            packingAdapterModel = createPackingAdapterModel();
-        }
-        return packingAdapterModel;
-    }
-
-    // -- HELPER
-
-    private transient IModel<ObjectMemento> packingAdapterModel;
-    private IModel<ObjectMemento> createPackingAdapterModel() {
-        var multi = this;
-
-        return new IModel<ObjectMemento>() {
-            private static final long serialVersionUID = 1L;
-
-            final ObjectMemento memento;
-            final IModel<Collection<ObjectMemento>> delegate;
-            {
-                this.delegate = multi.getModel();
-                this.memento = ObjectMemento.packed(multi.getLogicalType(), delegate.getObject());
-            }
-
-            @Override
-            public ObjectMemento getObject() {
-                return memento;
-            }
-
-            @Override
-            public void setObject(final ObjectMemento memento) {
-                delegate.setObject(ObjectMemento.unpackAsList(memento).orElse(null));
-            }
-
-            @Override
-            public void detach() {
-            }
-        };
-    }
-
     // -- bug in wicket 8.8.0 -------------------------------------------
 
     private boolean workaround;

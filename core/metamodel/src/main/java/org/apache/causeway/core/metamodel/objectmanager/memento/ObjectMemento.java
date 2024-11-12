@@ -86,13 +86,6 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
 
     // -- UTILITY
 
-    // ArrayList is serializable
-    public static Optional<ArrayList<ObjectMemento>> unpackAsList(final ObjectMemento memento) {
-        return memento instanceof ObjectMementoPacked packed
-                ? packed.asList()
-                : Optional.empty();
-    }
-
     @Nullable
     static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
         var base64UrlEncodedMemento = memento!=null
