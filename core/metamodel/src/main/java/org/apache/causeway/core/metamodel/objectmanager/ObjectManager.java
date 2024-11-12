@@ -41,10 +41,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectDementifierFactory;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoCollection;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -66,20 +64,27 @@ public record ObjectManager(
         MetaModelContext mmc,
         ChainOfResponsibility<ObjectSpecification, ManagedObject> objectCreator,
         ChainOfResponsibility<ProtoObject, ManagedObject> objectLoader,
-        ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> objectBulkLoader) implements HasMetaModelContext {
-
-    // -- REQUEST (VALUE) TYPE
+        ChainOfResponsibility<BulkLoadRequest, Can<ManagedObject>> objectBulkLoader,
+        //TODO why not use loadObject(bookmark) instead
+        ChainOfResponsibility<MementoRecreateRequest, ManagedObject> objectDementifier
+        ) implements HasMetaModelContext {
 
     public record BulkLoadRequest(
-        ObjectSpecification objectSpecification,
-        Query<?> query) {
+            ObjectSpecification objectSpecification,
+            Query<?> query) {
+    }
+
+    public record MementoRecreateRequest(
+            @Nullable ObjectSpecification objectSpecification,
+            @NonNull ObjectMemento memento) {
     }
 
     public ObjectManager(final MetaModelContext mmc) {
         this(mmc,
                 ObjectCreatorFactory.createChain(mmc),
                 ObjectLoaderFactory.createChain(),
-                ObjectBulkLoaderFactory.createChain());
+                ObjectBulkLoaderFactory.createChain(),
+                ObjectDementifierFactory.createChain());
     }
 
     /**
@@ -238,51 +243,12 @@ public record ObjectManager(
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
     }
 
-
-    //TODO why not use loadObject(bookmark) instead
-    public ManagedObject demementify(final ObjectSpecification spec, final ObjectMemento memento) {
-        return demementify(memento);
-    }
-
-    //TODO why not use loadObject(bookmark) instead
-    public ManagedObject demementify(final @Nullable ObjectMemento memento) {
-
-        if(memento==null) {
-            return null;
-        }
-
-        if(memento instanceof ObjectMementoForEmpty) {
-            var objectMementoForEmpty = (ObjectMementoForEmpty) memento;
-            var logicalType = objectMementoForEmpty.getLogicalType();
-            /* note: we recover from (corresponding) class not logical-type-name,
-             * as the latter can be ambiguous, when shared in a type hierarchy*/
-            var spec = getSpecificationLoader().specForLogicalType(logicalType);
-            return spec.isPresent()
-                    ? ManagedObject.empty(spec.get())
-                    : ManagedObject.unspecified();
-        }
-
-        if(memento instanceof ObjectMementoCollection) {
-            var objectMementoCollection = (ObjectMementoCollection) memento;
-
-            var logicalType = objectMementoCollection.getLogicalType();
-            /* note: we recover from (corresponding) class not logical-type-name,
-             * as the latter can be ambiguous, when shared in a type hierarchy*/
-            var elementSpec = getSpecificationLoader().specForLogicalTypeElseFail(logicalType);
-
-            var objects = objectMementoCollection.unwrapList().stream()
-                    .map(this::demementify)
-                    .collect(Can.toCan());
-
-            return ManagedObject.packed(elementSpec, objects);
-        }
-
-        if(memento instanceof ObjectMementoForScalar) {
-            var objectMementoAdapter = (ObjectMementoForScalar) memento;
-            return objectMementoAdapter.reconstructObject(getMetaModelContext());
-        }
-
-        throw _Exceptions.unrecoverable("unsupported ObjectMemento type %s", memento.getClass());
+    public ManagedObject demementify(@Nullable final ObjectMemento memento) {
+        if(memento==null) return null;
+        var spec = mmc.getSpecificationLoader()
+                        .specForLogicalType(memento.getLogicalType())
+                .orElse(null);
+        return objectDementifier().handle(new MementoRecreateRequest(spec, memento));
     }
 
     @Override

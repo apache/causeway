@@ -32,7 +32,7 @@ import lombok.Value;
  * @since 2.0
  */
 @Value(staticConstructor = "of")
-public final class ObjectMementoCollection implements ObjectMemento {
+final class ObjectMementoCollection implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 

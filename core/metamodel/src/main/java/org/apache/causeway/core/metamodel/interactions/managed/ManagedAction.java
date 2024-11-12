@@ -224,8 +224,8 @@ public final class ManagedAction extends ManagedMember {
         public Can<ManagedObject> getArgumentList(final ObjectAction actionMeta) {
             var argTypes = actionMeta.getParameterTypes();
             var objectManager = actionMeta.getMetaModelContext().getObjectManager();
-            return argsMementos.zipMap(argTypes, (argSpec, argMemento)->
-                objectManager.demementify(argMemento, argSpec));
+            return argsMementos.zipMap(argTypes, (argMemento, argSpec)->
+                objectManager.demementify(argMemento));
         }
     }
 

@@ -32,7 +32,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 public abstract class ChoiceProviderAbstract
@@ -53,7 +52,7 @@ implements HasCommonContext {
     @Override
     public final String getDisplayValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null
-                || choiceMemento instanceof ObjectMementoForEmpty) {
+                || choiceMemento.isEmpty()) {
             return getPlaceholderRenderService().asText(PlaceholderLiteral.NULL_REPRESENTATION);
         }
         return translate(choiceMemento.getTitle());

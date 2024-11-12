@@ -31,9 +31,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoCollection;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForEmpty;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMementoForScalar;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
@@ -98,11 +95,10 @@ implements ManagedObject {
 
     private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
         MmAssertionUtils.assertPojoIsScalar(adapter);
-        return ObjectMementoForScalar.create(adapter)
-                .map(ObjectMemento.class::cast)
+        return ObjectMemento.scalar(adapter)
                 .orElseGet(()->
-                ManagedObjects.isSpecified(adapter)
-                ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                    ManagedObjects.isSpecified(adapter)
+                        ? ObjectMemento.empty(adapter.getLogicalType())
                         : null);
     }
 
@@ -110,7 +106,7 @@ implements ManagedObject {
         var listOfMementos = packedAdapter.unpack().stream()
                 .map(this::mementoForScalar)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
-        return ObjectMementoCollection.of(
+        return ObjectMemento.packed(
                 listOfMementos,
                 packedAdapter.getLogicalType());
     }

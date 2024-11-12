@@ -19,16 +19,12 @@
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
-import java.util.Optional;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintIdProvider;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
@@ -39,18 +35,12 @@ import lombok.NonNull;
 import lombok.ToString;
 
 @ToString
-public final class ObjectMementoForScalar
+final class ObjectMementoForScalar
 implements HasLogicalType, Serializable, ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
-
-    public static Optional<ObjectMementoForScalar> create(final @Nullable ManagedObject adapter) {
-        return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                ? Optional.empty()
-                : Optional.of(new ObjectMementoForScalar(adapter));
-    }
 
     static ObjectMementoForScalar createPersistent(
             final Bookmark bookmark,
@@ -84,7 +74,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
         this.title = "?memento?"; // TODO can we do better?
     }
 
-    private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
+    ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
 
         this.logicalType = adapter.getLogicalType();
         this.title = MmTitleUtils.titleOf(adapter);
@@ -118,22 +108,6 @@ implements HasLogicalType, Serializable, ObjectMemento {
                 + "nor is a 'parented' Collection, "
                 + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)", spec);
 
-    }
-
-    public ManagedObject reconstructObject(final MetaModelContext mmc) {
-        var spec = mmc.getSpecificationLoader()
-                .specForLogicalType(logicalType).orElse(null);
-        if(spec==null) {
-            // eg. ill-formed request
-            return null;
-        }
-
-        // intercept when managed by Spring
-        if(spec.getBeanSort().isManagedBeanAny()) {
-            return spec.getMetaModelContext().lookupServiceAdapterById(getLogicalTypeName());
-        }
-
-        return mmc.getObjectManager().loadObjectElseFail(bookmark);
     }
 
     @Override

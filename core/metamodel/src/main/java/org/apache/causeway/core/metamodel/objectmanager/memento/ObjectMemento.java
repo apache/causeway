@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 /**
  * @since 2.0
@@ -103,6 +104,30 @@ permits ObjectMementoForEmpty, ObjectMementoForScalar, ObjectMementoCollection {
             return null; // map to null if anything goes wrong
         }
 
+    }
+
+    default boolean isEmpty() {
+        return this instanceof ObjectMementoForEmpty;
+    }
+    default boolean isScalar() {
+        return this instanceof ObjectMementoForScalar;
+    }
+    default boolean isPacked() {
+        return this instanceof ObjectMementoCollection;
+    }
+
+    static ObjectMemento empty(final LogicalType logicalType) {
+        return new ObjectMementoForEmpty(logicalType);
+    }
+    static Optional<ObjectMemento> scalar(final @Nullable ManagedObject adapter) {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                ? Optional.empty()
+                : Optional.of(new ObjectMementoForScalar(adapter));
+    }
+    static ObjectMemento packed(final ArrayList<ObjectMemento> listOfMementos, final LogicalType logicalType) {
+        return ObjectMementoCollection.of(
+                listOfMementos,
+                logicalType);
     }
 
 }
