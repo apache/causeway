@@ -78,11 +78,11 @@ public record CausewayBeanTypeClassifier(
 
         if(ClassUtils.isPrimitiveOrWrapper(type)
                 || type.isEnum()) {
-            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
+            return CausewayBeanMetaData.value(named.get(), discoveredBy);
         }
 
         if(CollectionSemantics.valueOf(type).isPresent()) {
-            return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.COLLECTION, named.get());
+            return CausewayBeanMetaData.collection(named.get(), discoveredBy);
         }
 
         if(type.isInterface()
@@ -94,24 +94,28 @@ public record CausewayBeanTypeClassifier(
             // and should also never be identified as ENTITY, VIEWMODEL or MIXIN
             // however, concrete types that inherit abstract ones with vetoes,
             // will effectively be vetoed through means of annotation synthesis
-            return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.ABSTRACT, named.get());
+            return CausewayBeanMetaData.interfaceOrAbstract(named.get(), discoveredBy);
         }
 
         var typeHead = classCache().head(type);
 
         // handle vetoing ...
         if(TypeVetoMarker.anyMatchOn(typeHead)) {
-            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
+            return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
         }
 
         var profiles = typeHead.springProfiles();
         if(profiles.isNotEmpty()
                 && !profiles.stream().anyMatch(this::isProfileActive)) {
-            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
+            return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
         }
 
         // handle introspection veto ...
         if(TypeProgrammaticMarker.anyMatchOn(typeHead)) {
+            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
+        }
+        // programmatic bean types
+        if(typeHead.hasIntrospectionVetoingSemantics()) {
             return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
@@ -122,12 +126,7 @@ public record CausewayBeanTypeClassifier(
 
         // value types
         if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class)) {
-            return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
-        }
-
-        // internal bean types
-        if(typeHead.hasIntrospectionVetoingSemantics()) {
-            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
+            return CausewayBeanMetaData.value(named.get(), discoveredBy);
         }
 
         // domain service
@@ -137,10 +136,10 @@ public record CausewayBeanTypeClassifier(
 
         // entity support
         if(typeHead.isJdoPersistenceCapable()){
-            return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JDO, named.get());
+            return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.JDO);
         }
         if(typeHead.hasAnnotation(Entity.class)) {
-            return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JPA, named.get());
+            return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.JPA);
         }
 
         // domain object
@@ -154,7 +153,7 @@ public record CausewayBeanTypeClassifier(
                 typeHead.attributeMap().put(_ClassCache.Attribute.MIXIN_MAIN_METHOD_NAME, aDomainObject.mixinMethod());
                 return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.MIXIN, named.get());
             case ENTITY:
-                return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.UNSPECIFIED, named.get());
+                return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.UNSPECIFIED);
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above

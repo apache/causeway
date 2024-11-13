@@ -46,24 +46,9 @@ extends _ManagedObjectSpecified {
             final ObjectSpecification spec,
             final Object pojo) {
         super(ManagedObject.Specialization.SERVICE, spec);
-        _Assert.assertTrue(spec.getBeanSort().isManagedBeanAny()
-                || spec.getBeanSort().isUnknown(), ()->
-                String.format("service %s must be a managed bean (or unknown); sort= %s",
-                        pojo.getClass(), spec.getBeanSort()));
-        _Assert.assertTrue(spec.isInjectable(), ()->
-            String.format("service %s must be injectible; sort= %s",
-                    pojo.getClass(), spec.getBeanSort()));
+        assertInjectable(spec);
         this.pojo = assertCompliance(pojo);
     }
-
-//    _ManagedObjectService(
-//            final ObjectSpecification spec,
-//            final Object pojo) {
-//        super(ManagedObject.Specialization.SERVICE, spec);
-//        _Assert.assertTrue(spec.isInjectable(), ()->"type %s must be injectable to be considered a service; bean-sort: %s"
-//            .formatted(pojo.getClass(), spec.getBeanSort()));
-//        this.pojo = assertCompliance(pojo);
-//    }
 
     @Override
     public Optional<Bookmark> getBookmark() {
@@ -76,6 +61,12 @@ extends _ManagedObjectSpecified {
     }
 
     // -- HELPER
+
+    private void assertInjectable(final ObjectSpecification spec) {
+        _Assert.assertTrue(spec.isInjectable(),
+                ()->"type %s must be injectable to be considered a service; bean-sort: %s"
+                        .formatted(pojo.getClass(), spec.getBeanSort()));
+    }
 
     private Bookmark createBookmark() {
         return createBookmark("1");

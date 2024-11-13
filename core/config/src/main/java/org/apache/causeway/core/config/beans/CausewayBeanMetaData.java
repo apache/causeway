@@ -91,12 +91,12 @@ implements Serializable {
     public static CausewayBeanMetaData value(
             final @NonNull LogicalType logicalType,
             final @NonNull DiscoveredBy discoveredBy) {
-        return new CausewayBeanMetaData(logicalType, BeanSort.VALUE, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+        return new CausewayBeanMetaData(logicalType, BeanSort.VALUE, discoveredBy, ManagedBy.NONE, PersistenceStack.NONE);
     }
     public static CausewayBeanMetaData collection(
             final @NonNull LogicalType logicalType,
             final @NonNull DiscoveredBy discoveredBy) {
-        return new CausewayBeanMetaData(logicalType, BeanSort.COLLECTION, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+        return new CausewayBeanMetaData(logicalType, BeanSort.COLLECTION, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
     }
     public static CausewayBeanMetaData interfaceOrAbstract(
             final @NonNull LogicalType logicalType,
@@ -162,14 +162,6 @@ implements Serializable {
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.SPRING, PersistenceStack.NONE);
-    }
-
-    @Deprecated
-    public static CausewayBeanMetaData entity(
-            final @NonNull DiscoveredBy discoveredBy,
-            final @NonNull PersistenceStack persistenceStack,
-            final @NonNull LogicalType logicalType) {
-        return new CausewayBeanMetaData(logicalType, BeanSort.ENTITY, discoveredBy, ManagedBy.PERSISTENCE, persistenceStack);
     }
 
     /**
