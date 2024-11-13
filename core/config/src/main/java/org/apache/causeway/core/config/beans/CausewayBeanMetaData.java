@@ -141,22 +141,6 @@ implements Serializable {
     // -- FACTORIES
 
     @Deprecated
-    public static CausewayBeanMetaData notManaged(
-            final @NonNull DiscoveredBy discoveredBy,
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
-        return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.NONE, PersistenceStack.NONE);
-    }
-
-    @Deprecated
-    public static CausewayBeanMetaData causewayManaged(
-            final @NonNull DiscoveredBy discoveredBy,
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
-        return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
-    }
-
-    @Deprecated
     public static CausewayBeanMetaData springManaged(
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull BeanSort beanSort,

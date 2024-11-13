@@ -121,7 +121,7 @@ public record CausewayBeanTypeClassifier(
 
         //[CAUSEWAY-3585] when implements ViewModel, then don't consider alternatives, yield VIEW_MODEL
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
-            return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
+            return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
         }
 
         // value types
@@ -151,18 +151,18 @@ public record CausewayBeanTypeClassifier(
             case MIXIN:
                 // memoize mixin main name
                 typeHead.attributeMap().put(_ClassCache.Attribute.MIXIN_MAIN_METHOD_NAME, aDomainObject.mixinMethod());
-                return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.MIXIN, named.get());
+                return CausewayBeanMetaData.mixin(named.get(), discoveredBy);
             case ENTITY:
                 return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.UNSPECIFIED);
             case VIEW_MODEL:
             case NOT_SPECIFIED:
                 //because object is not associated with a persistence context unless discovered above
-                return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
+                return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
             }
         }
 
         if(typeHead.hasJaxbRootElementSemantics()) {
-            return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
+            return CausewayBeanMetaData.viewModel(named.get(), discoveredBy);
         }
 
         if(typeHead.hasAnnotation(Component.class)) {
