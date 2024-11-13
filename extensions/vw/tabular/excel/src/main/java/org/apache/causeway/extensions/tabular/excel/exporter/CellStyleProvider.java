@@ -132,6 +132,9 @@ record CellStyleProvider(
 
         final int ordinal = valueKindOf(cell).ordinal();
 
+        if(ordinal>0)
+            System.err.printf("%d%n", ordinal);
+
         cell.setCellStyle(
             switch (customCellStyle) {
                 case BLUE -> blueStyles()[ordinal];
@@ -149,8 +152,8 @@ record CellStyleProvider(
         MULTILINE;
     }
     private ValueKind valueKindOf(final Cell cell) {
-        if(cell.getCellStyle() == dateStyle()) return ValueKind.DATE;
-        if(cell.getCellStyle() == multilineStyle()) return ValueKind.MULTILINE;
+        if(cell.getCellStyle().getIndex() == dateStyle.getIndex()) return ValueKind.DATE;
+        if(cell.getCellStyle().getIndex() == multilineStyle.getIndex()) return ValueKind.MULTILINE;
         return ValueKind.DEFAULT;
     }
 
@@ -163,7 +166,7 @@ record CellStyleProvider(
         var cellStyles = new CellStyle[valueKinds.length];
         for(var valueKind : valueKinds) {
 
-            var cellStyle = wb.createCellStyle();
+            var cellStyle = cellStyles[valueKind.ordinal()] = wb.createCellStyle();
 
             switch (valueKind) {
                 case DEFAULT -> {}
@@ -173,7 +176,6 @@ record CellStyleProvider(
 
             cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             cellStyle.setFillForegroundColor(createColor(color));
-            cellStyles[valueKind.ordinal()] = cellStyle;
         }
         return cellStyles;
     }
