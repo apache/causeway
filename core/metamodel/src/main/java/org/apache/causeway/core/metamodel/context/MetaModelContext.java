@@ -23,15 +23,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * @since 2.0
  */
-@BeanInternal
+@Programmatic
 public abstract class MetaModelContext implements HasMetaModelContext {
 
     @Override

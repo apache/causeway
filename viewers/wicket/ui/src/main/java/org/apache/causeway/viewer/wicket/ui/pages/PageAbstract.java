@@ -418,7 +418,7 @@ implements ActionPromptProvider {
         }
 
         var dialogMode =
-                sort.isManagedBeanAny()
+                sort.policy().isInjectable()
                         ? getWicketViewerSettings().getDialogModeForMenu()
                         : getWicketViewerSettings().getDialogMode();
         switch (dialogMode) {

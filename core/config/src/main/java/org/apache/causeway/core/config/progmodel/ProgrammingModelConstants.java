@@ -35,7 +35,9 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
@@ -52,6 +54,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
+import org.apache.causeway.commons.internal.reflection._ClassCache.ClassModelHead;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -67,21 +70,39 @@ import lombok.RequiredArgsConstructor;
 
 public final class ProgrammingModelConstants {
 
-    // -- TYPE EXCLUDE MARKERS
+    // -- TYPE MARKERS
 
     @Getter
     @RequiredArgsConstructor
-    public enum TypeExcludeMarker {
-        DOMAIN_EXCLUDE(Domain.Exclude.class)
-        //,VETO(javax.enterprise.inject.Vetoed.class)
+    public enum TypeVetoMarker {
+        //VETO(javax.enterprise.inject.Vetoed.class)
         ;
         private final Class<? extends Annotation> annotationType;
 
-        public static boolean anyMatchOn(final Class<?> type) {
-            for(TypeExcludeMarker excludeMarker : TypeExcludeMarker.values()) {
-                if(_Annotations.synthesize(type, excludeMarker.getAnnotationType()).isPresent()) {
-                    return true;
-                }
+        public static boolean anyMatchOn(final ClassModelHead typeHead) {
+            for(TypeVetoMarker marker : TypeVetoMarker.values()) {
+                if(typeHead.hasAnnotation(marker.annotationType)) return true;
+            }
+            return false;
+        }
+
+        public static boolean anyMatchOn(final Class<?> cls) {
+            return anyMatchOn(_ClassCache.getInstance().head(cls));
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum TypeProgrammaticMarker {
+        SPRING_CONFIG(Configuration.class),
+        SPRING_REPOSITORY(Repository.class),
+        DOMAIN_EXCLUDE(Domain.Exclude.class),
+        ;
+        private final Class<? extends Annotation> annotationType;
+
+        public static boolean anyMatchOn(final ClassModelHead typeHead) {
+            for(TypeProgrammaticMarker marker : TypeProgrammaticMarker.values()) {
+                if(typeHead.hasAnnotation(marker.annotationType)) return true;
             }
             return false;
         }

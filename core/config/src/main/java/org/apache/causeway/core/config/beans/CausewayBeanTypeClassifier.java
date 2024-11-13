@@ -31,48 +31,48 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeExcludeMarker;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
 import lombok.NonNull;
 
-@BeanInternal
+@Programmatic
 public record CausewayBeanTypeClassifier(
         @NonNull Can<String> activeProfiles,
         @NonNull _ClassCache classCache) {
-    
+
     // -- CONSTRUCTION
-    
+
     CausewayBeanTypeClassifier(final ApplicationContext applicationContext) {
         this(Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()));
     }
-    
-    CausewayBeanTypeClassifier(Can<String> activeProfiles) {
+
+    CausewayBeanTypeClassifier(final Can<String> activeProfiles) {
         this(activeProfiles, _ClassCache.getInstance());
     }
 
     // -- CLASSIFY
-    
+
     /**
-     * Classify {@link LogicalType} as detected and named by either Causeway or Spring. 
+     * Classify {@link LogicalType} as detected and named by either Causeway or Spring.
      * <p>
      * Typically Causeway we will use a different fallback naming strategy for 'unnamed' types,
-     * that is, it uses the fully qualified class name.  
-     *  
-     * @param logicalType with name as either forced by Causeway or suggested by Spring 
+     * that is, it uses the fully qualified class name.
+     *
+     * @param logicalType with name as either forced by Causeway or suggested by Spring
      */
     public CausewayBeanMetaData classify(@NonNull final LogicalType logicalType, final DiscoveredBy discoveredBy) {
-        
+
         var type = logicalType.correspondingClass();
-        
+
         Supplier<LogicalType> named = ()->discoveredBy.isSpring()
             ? LogicalType.infer(type) // use only if discovered by Spring but NOT managed by Spring
             : logicalType; // name is already inferred, when discovered by Causeway
@@ -99,7 +99,7 @@ public record CausewayBeanTypeClassifier(
         }
 
         // handle vetoing ...
-        if(TypeExcludeMarker.anyMatchOn(type)) {
+        if(TypeVetoMarker.anyMatchOn(type)) {
             return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
         }
 
@@ -115,16 +115,16 @@ public record CausewayBeanTypeClassifier(
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
             return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
-        
+
         var typeHead = classCache().head(type);
-        
+
         // value types
         if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class)) {
             return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VALUE, named.get());
         }
-        
+
         // internal bean types
-        if(typeHead.hasInternalBeanSemantics()) {
+        if(typeHead.hasIntrospectionVetoingSemantics()) {
             return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
@@ -139,8 +139,8 @@ public record CausewayBeanTypeClassifier(
         }
         if(typeHead.hasAnnotation(Entity.class)) {
             return CausewayBeanMetaData.entity(discoveredBy, PersistenceStack.JPA, named.get());
-        }  
-        
+        }
+
         // domain object
         var aDomainObject = typeHead.annotation(DomainObject.class).orElse(null);
         if(aDomainObject!=null) {

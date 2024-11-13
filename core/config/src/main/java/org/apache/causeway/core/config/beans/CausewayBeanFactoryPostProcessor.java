@@ -39,8 +39,10 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -72,6 +74,7 @@ implements
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(applicationContext);
+        installClassCashOptions();
     }
 
     @Override
@@ -113,6 +116,15 @@ implements
             });
         }
         return new CausewayBeanTypeRegistry(componentScanResult);
+    }
+
+    private void installClassCashOptions() {
+        _ClassCache.Options.builder()
+            .annotationsVetoingIntrospection(
+                    Can.ofArray(ProgrammingModelConstants.TypeProgrammaticMarker.values())
+                        .map(ProgrammingModelConstants.TypeProgrammaticMarker::getAnnotationType))
+            .build()
+            .install();
     }
 
 }

@@ -128,7 +128,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         }
 
         // ignore vetoed types
-        if(ProgrammingModelConstants.TypeExcludeMarker.anyMatchOn(cls)) {
+        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(cls)) {
             return true;
         }
 

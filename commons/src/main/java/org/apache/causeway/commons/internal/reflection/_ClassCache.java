@@ -38,7 +38,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
@@ -46,7 +46,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
@@ -60,6 +59,8 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -81,6 +82,24 @@ import lombok.SneakyThrows;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _ClassCache implements AutoCloseable {
 
+    @Builder(builderMethodName = "builderPlain")
+    public record Options(
+            @Nullable ClassLoader classLoader,
+            @NonNull Can<Class<? extends Annotation>> annotationsVetoingIntrospection) {
+        public static OptionsBuilder builder() {
+            return builderPlain()
+                    .classLoader(_Context.getDefaultClassLoader())
+                    .annotationsVetoingIntrospection(Can.empty());
+        }
+        public void install() {
+            _Context.put(_ClassCache.Options.class, this, true);
+        }
+        static Options fallback() { return builder().build(); }
+        static Options getInstance() {
+            return _Context.computeIfAbsent(Options.class, Options::fallback);
+        }
+    }
+
     public enum Attribute {
         /**
          * Corresponds to the bean name of Spring managed beans.
@@ -93,17 +112,17 @@ public final class _ClassCache implements AutoCloseable {
     }
 
     public static _ClassCache getInstance() {
-        return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(_Context.getDefaultClassLoader()));
+        return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(Options.getInstance()));
     }
 
     /**
      * JUnit support.
      */
     public static void invalidate() {
-        _Context.put(_ClassCache.class, new _ClassCache(_Context.getDefaultClassLoader()), true);
+        _Context.put(_ClassCache.class, new _ClassCache(Options.getInstance()), true);
     }
 
-    private final @Nullable ClassLoader classLoader;
+    private final Options options;
 
     public void add(final Class<?> type) {
         classModel(type);
@@ -261,11 +280,19 @@ public final class _ClassCache implements AutoCloseable {
             MergedAnnotations mergedAnnotations,
             /** explicit name if any */
             @Nullable String named,
+            /**
+             * if true, type is NOT contributing to the UI or WEB API,
+             * consequently will NOT introspect
+             */
+            boolean hasIntrospectionVetoingSemantics,
             Map<Attribute, String> attributeMap) {
 
-        static ClassModelHead create(final Class<?> type) {
+        static ClassModelHead create(final Class<?> type, final Options options) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
-            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations),
+            return new ClassModelHead(mergedAnnotations,
+                    _ClassCacheUtil.inferName(type, mergedAnnotations),
+                    options.annotationsVetoingIntrospection()
+                        .anyMatch(annotationType->mergedAnnotations.get(annotationType).isPresent()),
                     new ConcurrentHashMap<>());
         }
 
@@ -282,14 +309,6 @@ public final class _ClassCache implements AutoCloseable {
         }
 
         /**
-         * whether type is annotated with {@link BeanInternal} or {@link Configuration}
-         */
-        public boolean hasInternalBeanSemantics() {
-            return hasAnnotation(BeanInternal.class)
-                    || hasAnnotation(Configuration.class);
-        }
-
-        /**
          * whether type is annotated with {@link XmlRootElement}
          */
         public boolean hasJaxbRootElementSemantics() {
@@ -302,6 +321,12 @@ public final class _ClassCache implements AutoCloseable {
         public boolean isJdoPersistenceCapable() {
             return _ClassCacheUtil.isJdoPersistenceCapable(mergedAnnotations)
                     && !_ClassCacheUtil.isJdoEmbeddedOnly(mergedAnnotations);
+        }
+
+        public Can<String> springProfiles() {
+            var profileAnnot = mergedAnnotations.get(Profile.class);
+            if(!profileAnnot.isPresent()) return Can.empty();
+            return Can.ofArray(profileAnnot.getStringArray("value"));
         }
 
     }
@@ -329,7 +354,8 @@ public final class _ClassCache implements AutoCloseable {
                 Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
 
         private static ClassModelBody create(final Class<?> type, final ClassModelHead head) {
-            if(head.hasInternalBeanSemantics()) return EMPTY; //skip further inspection
+
+            if(head.hasIntrospectionVetoingSemantics) return EMPTY; //skip further inspection
 
             var body = new ClassModelBody(Can.ofArray(type.getDeclaredFields()));
 
@@ -457,7 +483,7 @@ public final class _ClassCache implements AutoCloseable {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Class<?> reloadType(final Class<?> _type) {
-        return Optional.ofNullable(classLoader)
+        return Optional.ofNullable(options.classLoader())
                 .filter(cl->!_type.isPrimitive())
                 .filter(cl->!_Reflect.isJavaApiClass(_type))
                 .filter(cl->!cl.equals(_type.getClassLoader()))
@@ -469,7 +495,7 @@ public final class _ClassCache implements AutoCloseable {
 
     private ClassModel inspectType(final Class<?> _type) {
         final Class<?> type = reloadType(_type);
-        var head = ClassModelHead.create(type);
+        var head = ClassModelHead.create(type, options);
         return new ClassModel(head, _Lazy.threadSafe(()->ClassModelBody.create(type, head)));
     }
 

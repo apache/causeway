@@ -60,4 +60,16 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
         return Substitution.passThrough(); // indifferent
     }
 
+//    @Override
+//    public Substitution getSubstitution(@NonNull final Class<?> cls) {
+//        var notSubstitutable = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
+//            .map(CausewayBeanMetaData::beanSort)
+//            .map(BeanSort::policy)
+//            .map(BeanPolicy::isNotSubstitutable)
+//            .orElse(false);
+//        return notSubstitutable
+//            ? Substitution.neverReplaceClass()
+//            : Substitution.passThrough(); // indifferent
+//    }
+
 }

@@ -25,12 +25,12 @@ import jakarta.inject.Named;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
-import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -58,7 +58,7 @@ import lombok.NonNull;
  *
  * @since 2.0
  */
-@BeanInternal
+@Programmatic
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ObjectManager")
 public record ObjectManager(
         MetaModelContext mmc,

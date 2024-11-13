@@ -31,7 +31,7 @@ public record CausewayBeanMetaData(
         @NonNull BeanSort beanSort,
         @NonNull DiscoveredBy discoveredBy,
         @NonNull ManagedBy managedBy,
-        @NonNull PersistenceStack persistenceStack) 
+        @NonNull PersistenceStack persistenceStack)
 implements Serializable {
 
     public enum PersistenceStack {
@@ -51,14 +51,14 @@ implements Serializable {
             return _Strings.capitalize(_Strings.lower(name()));
         }
     }
-    
+
     public enum DiscoveredBy {
         CAUSEWAY,
         SPRING;
         boolean isCauseway() { return this == CAUSEWAY; }
         boolean isSpring() { return this == SPRING; }
     }
-    
+
     public enum ManagedBy {
         NONE,
         CAUSEWAY,
@@ -72,7 +72,7 @@ implements Serializable {
         public boolean isPersistence() { return this == PERSISTENCE; }
         public boolean isUnspecified() { return this == UNSPECIFIED; }
     }
-    
+
     public Class<?> getCorrespondingClass() {
         return logicalType.correspondingClass();
     }
@@ -83,6 +83,64 @@ implements Serializable {
 
     // -- FACTORIES
 
+    public static CausewayBeanMetaData vetoed(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.VETOED, discoveredBy, ManagedBy.NONE, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData value(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.VALUE, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData collection(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.COLLECTION, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData interfaceOrAbstract(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.ABSTRACT, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData viewModel(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.VIEW_MODEL, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData entity(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy,
+            final @NonNull PersistenceStack persistenceStack) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.ENTITY, discoveredBy, ManagedBy.PERSISTENCE, persistenceStack);
+    }
+    public static CausewayBeanMetaData mixin(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.MIXIN, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData programmatic(
+            final @NonNull LogicalType logicalType) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.PROGRAMMATIC, DiscoveredBy.CAUSEWAY, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData springContributing(
+            final @NonNull LogicalType logicalType) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.MANAGED_BEAN_CONTRIBUTING, DiscoveredBy.SPRING, ManagedBy.SPRING, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData springNotContributing(
+            final @NonNull LogicalType logicalType) {
+        return new CausewayBeanMetaData(logicalType, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, DiscoveredBy.SPRING, ManagedBy.SPRING, PersistenceStack.NONE);
+    }
+    public static CausewayBeanMetaData unspecified(
+            final @NonNull LogicalType logicalType,
+            final @NonNull DiscoveredBy discoveredBy,
+            final @NonNull BeanSort beanSort) {
+        return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
+    }
+
+    // -- FACTORIES
+
+    @Deprecated
     public static CausewayBeanMetaData notManaged(
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull BeanSort beanSort,
@@ -90,20 +148,23 @@ implements Serializable {
         return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.NONE, PersistenceStack.NONE);
     }
 
+    @Deprecated
     public static CausewayBeanMetaData causewayManaged(
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
     }
-    
+
+    @Deprecated
     public static CausewayBeanMetaData springManaged(
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull BeanSort beanSort,
             final @NonNull LogicalType logicalType) {
         return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.SPRING, PersistenceStack.NONE);
     }
-    
+
+    @Deprecated
     public static CausewayBeanMetaData entity(
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull PersistenceStack persistenceStack,
@@ -112,8 +173,9 @@ implements Serializable {
     }
 
     /**
-     * If discovered by Spring, let Spring decide whether it wants to manage this type. We do not interfere. 
+     * If discovered by Spring, let Spring decide whether it wants to manage this type. We do not interfere.
      */
+    @Deprecated
     public static CausewayBeanMetaData unspecified(
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull BeanSort beanSort,

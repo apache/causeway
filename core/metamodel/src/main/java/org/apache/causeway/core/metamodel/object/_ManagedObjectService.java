@@ -56,6 +56,15 @@ extends _ManagedObjectSpecified {
         this.pojo = assertCompliance(pojo);
     }
 
+//    _ManagedObjectService(
+//            final ObjectSpecification spec,
+//            final Object pojo) {
+//        super(ManagedObject.Specialization.SERVICE, spec);
+//        _Assert.assertTrue(spec.isInjectable(), ()->"type %s must be injectable to be considered a service; bean-sort: %s"
+//            .formatted(pojo.getClass(), spec.getBeanSort()));
+//        this.pojo = assertCompliance(pojo);
+//    }
+
     @Override
     public Optional<Bookmark> getBookmark() {
         return bookmarkLazy.get();

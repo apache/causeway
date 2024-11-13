@@ -25,8 +25,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
 import lombok.NonNull;
@@ -34,7 +34,7 @@ import lombok.NonNull;
 /**
  * Holds discovered domain types grouped by bean-sort.
  */
-@BeanInternal
+@Programmatic
 public class CausewayBeanTypeRegistry {
 
     /**
@@ -59,7 +59,7 @@ public class CausewayBeanTypeRegistry {
         introspectableTypes.forEach(typeMeta->{
 
             var cls = typeMeta.getCorrespondingClass();
-            
+
             introspectableTypesByClass.put(typeMeta.getCorrespondingClass(), typeMeta);
 
             switch (typeMeta.beanSort()) {
@@ -89,9 +89,9 @@ public class CausewayBeanTypeRegistry {
             }
         });
     }
-    
+
     // -- SIZE
-    
+
     public int managedBeansContributingCount() { return managedBeansContributing.size(); }
     public int entityTypeCount() { return entityTypes.size(); }
     public int viewmodelTypeCount() { return viewmodelTypes.size(); }
@@ -106,7 +106,7 @@ public class CausewayBeanTypeRegistry {
     public Stream<Class<?>> streamViewmodelTypes() { return viewmodelTypes.keySet().stream(); }
     public Stream<Class<?>> streamMixinTypes() { return mixinTypes.keySet().stream(); }
     public Stream<Class<?>> streamValueTypes() { return valueTypes.keySet().stream(); }
-    
+
     // -- AS SET
 
     public Set<Class<?>> entityTypeSet() { return Collections.unmodifiableSet(entityTypes.keySet()); }
@@ -122,8 +122,8 @@ public class CausewayBeanTypeRegistry {
         return Optional.ofNullable(managedBeansContributing.get(type))
                 .map(CausewayBeanMetaData::getBeanName);
     }
-    
-    public boolean containsManagedBeansContributing(@NonNull Class<?> type) {
+
+    public boolean containsManagedBeansContributing(@NonNull final Class<?> type) {
         return managedBeansContributing.containsKey(type);
     }
 
