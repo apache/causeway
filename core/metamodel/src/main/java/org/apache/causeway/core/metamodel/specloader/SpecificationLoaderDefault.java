@@ -329,7 +329,7 @@ implements
         _Blackhole.consume(getOrAssessValidationResult()); // as a side effect memoizes the validation result
 
         stopWatch.stop();
-        log.info("Metamodel created in " + stopWatch.getMillis() + " ms.");
+        log.info("Metamodel created in {}ms. ({} introspection)", stopWatch.getMillis(), parallel ? "parallel" : "sequential");
 
         if(isFullIntrospect()) {
             setMetamodelFullyIntrospected(true);
@@ -362,11 +362,14 @@ implements
     @SneakyThrows
     private void waitForValidationToFinish() {
         int maxRetry = 50;
+        int retryCount = 0;
         while(!validationQueue.isEmpty()
                 && maxRetry>0) {
             Thread.sleep(100);
             --maxRetry;
+            ++retryCount;
         }
+        if(retryCount>0) log.info("wait for validation to finish took {}ms", retryCount * 100);
     }
 
     @PreDestroy
