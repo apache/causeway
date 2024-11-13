@@ -131,31 +131,13 @@ implements Serializable {
             final @NonNull LogicalType logicalType) {
         return new CausewayBeanMetaData(logicalType, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, DiscoveredBy.SPRING, ManagedBy.SPRING, PersistenceStack.NONE);
     }
+    /**
+     * If discovered by Spring, let Spring decide whether it wants to manage this type.
+     */
     public static CausewayBeanMetaData unspecified(
             final @NonNull LogicalType logicalType,
             final @NonNull DiscoveredBy discoveredBy,
             final @NonNull BeanSort beanSort) {
-        return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
-    }
-
-    // -- FACTORIES
-
-    @Deprecated
-    public static CausewayBeanMetaData springManaged(
-            final @NonNull DiscoveredBy discoveredBy,
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
-        return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.SPRING, PersistenceStack.NONE);
-    }
-
-    /**
-     * If discovered by Spring, let Spring decide whether it wants to manage this type. We do not interfere.
-     */
-    @Deprecated
-    public static CausewayBeanMetaData unspecified(
-            final @NonNull DiscoveredBy discoveredBy,
-            final @NonNull BeanSort beanSort,
-            final @NonNull LogicalType logicalType) {
         return new CausewayBeanMetaData(logicalType, beanSort, discoveredBy, ManagedBy.UNSPECIFIED, PersistenceStack.NONE);
     }
 

@@ -24,7 +24,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -59,8 +58,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 
 import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -82,24 +79,6 @@ import lombok.SneakyThrows;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class _ClassCache implements AutoCloseable {
 
-    @Builder(builderMethodName = "builderPlain")
-    public record Options(
-            @Nullable ClassLoader classLoader,
-            @NonNull Can<Class<? extends Annotation>> annotationsVetoingIntrospection) {
-        public static OptionsBuilder builder() {
-            return builderPlain()
-                    .classLoader(_Context.getDefaultClassLoader())
-                    .annotationsVetoingIntrospection(Can.empty());
-        }
-        public void install() {
-            _Context.put(_ClassCache.Options.class, this, true);
-        }
-        static Options fallback() { return builder().build(); }
-        static Options getInstance() {
-            return _Context.computeIfAbsent(Options.class, Options::fallback);
-        }
-    }
-
     public enum Attribute {
         /**
          * Corresponds to the bean name of Spring managed beans.
@@ -111,18 +90,18 @@ public final class _ClassCache implements AutoCloseable {
         MIXIN_MAIN_METHOD_NAME;
     }
 
+    @Nullable private final ClassLoader classLoader;
+    private static _ClassCache defaultInstance() { return new _ClassCache(_Context.getDefaultClassLoader()); }
     public static _ClassCache getInstance() {
-        return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(Options.getInstance()));
+        return _Context.computeIfAbsent(_ClassCache.class, ()->defaultInstance());
     }
 
     /**
      * JUnit support.
      */
     public static void invalidate() {
-        _Context.put(_ClassCache.class, new _ClassCache(Options.getInstance()), true);
+        _Context.put(_ClassCache.class, defaultInstance(), true);
     }
-
-    private final Options options;
 
     public void add(final Class<?> type) {
         classModel(type);
@@ -280,19 +259,12 @@ public final class _ClassCache implements AutoCloseable {
             MergedAnnotations mergedAnnotations,
             /** explicit name if any */
             @Nullable String named,
-            /**
-             * if true, type is NOT contributing to the UI or WEB API,
-             * consequently will NOT introspect
-             */
-            boolean hasIntrospectionVetoingSemantics,
             Map<Attribute, String> attributeMap) {
 
-        static ClassModelHead create(final Class<?> type, final Options options) {
+        static ClassModelHead create(final Class<?> type) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
             return new ClassModelHead(mergedAnnotations,
                     _ClassCacheUtil.inferName(type, mergedAnnotations),
-                    options.annotationsVetoingIntrospection()
-                        .anyMatch(annotationType->mergedAnnotations.get(annotationType).isPresent()),
                     new ConcurrentHashMap<>());
         }
 
@@ -348,14 +320,12 @@ public final class _ClassCache implements AutoCloseable {
                     new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
 
-        private static ClassModelBody EMPTY = new ClassModelBody(
-                Can.empty(),
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
+//        private static ClassModelBody EMPTY = new ClassModelBody(
+//                Can.empty(),
+//                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
+//                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
 
         private static ClassModelBody create(final Class<?> type, final ClassModelHead head) {
-
-            if(head.hasIntrospectionVetoingSemantics) return EMPTY; //skip further inspection
 
             var body = new ClassModelBody(Can.ofArray(type.getDeclaredFields()));
 
@@ -483,7 +453,7 @@ public final class _ClassCache implements AutoCloseable {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private Class<?> reloadType(final Class<?> _type) {
-        return Optional.ofNullable(options.classLoader())
+        return Optional.ofNullable(classLoader)
                 .filter(cl->!_type.isPrimitive())
                 .filter(cl->!_Reflect.isJavaApiClass(_type))
                 .filter(cl->!cl.equals(_type.getClassLoader()))
@@ -495,7 +465,7 @@ public final class _ClassCache implements AutoCloseable {
 
     private ClassModel inspectType(final Class<?> _type) {
         final Class<?> type = reloadType(_type);
-        var head = ClassModelHead.create(type, options);
+        var head = ClassModelHead.create(type);
         return new ClassModel(head, _Lazy.threadSafe(()->ClassModelBody.create(type, head)));
     }
 

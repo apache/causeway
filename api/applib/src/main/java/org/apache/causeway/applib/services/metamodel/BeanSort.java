@@ -141,6 +141,10 @@ public enum BeanSort {
          * Contributes actions, members and/or object support to the UI or Web API.
          */
         public boolean contributesToUiOrWebApi() { return isIntrospectionAllowed(); } // seems to be just a synonym
+        /**
+         * Whether corresponding type is in principle injectable,
+         * that is, provided it is also registered with a Spring context.
+         */
         public boolean isInjectable() { return (flags & INJECTABLE) !=0; }
         public boolean isWrappingSupported() { return (flags & WRAPPING) !=0; }
         public boolean isAllowedAsMemberElementType() { return (flags & ELEMENTTYPE) !=0; }
@@ -167,7 +171,6 @@ public enum BeanSort {
     public boolean isVetoed() { return this == VETOED; }
     public boolean isUnknown() { return this == UNKNOWN; }
 
-    @Deprecated
     public boolean isManagedBeanAny() {
         return this == MANAGED_BEAN_CONTRIBUTING
                 || this == MANAGED_BEAN_NOT_CONTRIBUTING;
