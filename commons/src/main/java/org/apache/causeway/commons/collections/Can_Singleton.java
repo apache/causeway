@@ -330,6 +330,15 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
+    public boolean anyMatch(final Predicate<? super T> predicate) {
+        return predicate.test(element);
+    }
+    @Override
+    public boolean allMatch(final Predicate<? super T> predicate) {
+        return predicate.test(element);
+    }
+
+    @Override
     public String toString() {
         return "Can["+element+"]";
     }

@@ -679,6 +679,18 @@ extends ImmutableCollection<T>, Comparable<Can<T>>, Serializable {
      */
     int indexOf(@Nullable T element);
 
+    // -- MATCH
+
+    /**
+     * Returns whether any elements of this {@link Can} match the provided
+     * predicate.
+     */
+    boolean anyMatch(final Predicate<? super T> predicate);
+    /**
+     * Returns whether all elements of this stream match the provided predicate.
+     */
+    boolean allMatch(final Predicate<? super T> predicate);
+
     // -- EQUALITY
 
     /**

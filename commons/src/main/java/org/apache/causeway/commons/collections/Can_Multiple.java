@@ -366,6 +366,19 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
+    public boolean anyMatch(final Predicate<? super T> predicate) {
+        // equivalent to stream().anyMatch(predicate); hoping the loop is faster..
+        for(var el : elements) if(predicate.test(el)) return true;
+        return false;
+    }
+    @Override
+    public boolean allMatch(final Predicate<? super T> predicate) {
+        // equivalent to stream().allMatch(predicate); hoping the loop is faster..
+        for(var el : elements) if(!predicate.test(el)) return false;
+        return true;
+    }
+
+    @Override
     public String toString() {
         var literal = stream()
                 .map(s->""+s)

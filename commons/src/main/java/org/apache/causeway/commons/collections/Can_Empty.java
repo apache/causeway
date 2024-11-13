@@ -238,6 +238,15 @@ record Can_Empty<T>() implements Can<T> {
     }
 
     @Override
+    public boolean anyMatch(final Predicate<? super T> predicate) {
+        return false;
+    }
+    @Override
+    public boolean allMatch(final Predicate<? super T> predicate) {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return "Can[]";
     }
