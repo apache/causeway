@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 import jakarta.persistence.Entity;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
@@ -35,11 +34,11 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeProgrammaticMarker;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
 import lombok.NonNull;
@@ -98,25 +97,28 @@ public record CausewayBeanTypeClassifier(
             return CausewayBeanMetaData.unspecified(discoveredBy, BeanSort.ABSTRACT, named.get());
         }
 
+        var typeHead = classCache().head(type);
+
         // handle vetoing ...
-        if(TypeVetoMarker.anyMatchOn(type)) {
+        if(TypeVetoMarker.anyMatchOn(typeHead)) {
             return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
         }
 
-        var profiles = Can.ofArray(_Annotations.synthesize(type, Profile.class)
-                .map(Profile::value)
-                .orElse(null));
+        var profiles = typeHead.springProfiles();
         if(profiles.isNotEmpty()
                 && !profiles.stream().anyMatch(this::isProfileActive)) {
             return CausewayBeanMetaData.notManaged(discoveredBy, BeanSort.VETOED, named.get()); // reject
+        }
+
+        // handle introspection veto ...
+        if(TypeProgrammaticMarker.anyMatchOn(typeHead)) {
+            return CausewayBeanMetaData.springManaged(discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING, logicalType);
         }
 
         //[CAUSEWAY-3585] when implements ViewModel, then don't consider alternatives, yield VIEW_MODEL
         if(org.apache.causeway.applib.ViewModel.class.isAssignableFrom(type)) {
             return CausewayBeanMetaData.causewayManaged(discoveredBy, BeanSort.VIEW_MODEL, named.get());
         }
-
-        var typeHead = classCache().head(type);
 
         // value types
         if(typeHead.hasAnnotation(org.apache.causeway.applib.annotation.Value.class)) {

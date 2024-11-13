@@ -60,7 +60,7 @@ public class CausewayBeanTypeRegistry {
 
             var cls = typeMeta.getCorrespondingClass();
 
-            introspectableTypesByClass.put(typeMeta.getCorrespondingClass(), typeMeta);
+            introspectableTypesByClass.put(cls, typeMeta);
 
             switch (typeMeta.beanSort()) {
             case MANAGED_BEAN_CONTRIBUTING:
@@ -80,6 +80,7 @@ public class CausewayBeanTypeRegistry {
                 return;
 
             // skip introspection for these
+            case PROGRAMMATIC:
             case MANAGED_BEAN_NOT_CONTRIBUTING:
             case COLLECTION:
             case ABSTRACT: // <-- unexpected code reach
