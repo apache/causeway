@@ -558,7 +558,7 @@ extends MetaModelContext {
     private Optional<ServiceInstance> toServiceInstance(final _SingletonBeanProvider managedBeanAdapter) {
         var servicePojo = managedBeanAdapter.getInstanceElseFail();
 
-        if(ProgrammingModelConstants.TypeExcludeMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
+        if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.getBeanClass())) {
             return Optional.empty();
         }
         return getSpecificationLoader()

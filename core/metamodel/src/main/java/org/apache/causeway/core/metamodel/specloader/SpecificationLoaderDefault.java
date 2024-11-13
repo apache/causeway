@@ -47,7 +47,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
-import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
@@ -558,7 +557,7 @@ implements
                 .lookupIntrospectableType(type)
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
-                        ? CausewayBeanMetaData.causewayManaged(DiscoveredBy.CAUSEWAY, BeanSort.VALUE, LogicalType.infer(type))
+                        ? CausewayBeanMetaData.value(LogicalType.infer(type), DiscoveredBy.CAUSEWAY)
                         : causewayBeanTypeClassifier.classify(LogicalType.infer(type), DiscoveredBy.CAUSEWAY)
                 );
     }

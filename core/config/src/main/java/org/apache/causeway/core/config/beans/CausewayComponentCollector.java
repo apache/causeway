@@ -67,7 +67,7 @@ record CausewayComponentCollector(
         switch (typeMeta.managedBy()) {
             case NONE, CAUSEWAY, PERSISTENCE -> {
                 registry.removeBeanDefinition(beanDefinitionName);
-                log.debug("vetoing bean {}", beanDefinitionName);
+                log.debug("removing bean from spring registry {}", beanDefinitionName);
             }
             case UNSPECIFIED, SPRING -> {
                 if(isRenamed) {
@@ -95,7 +95,7 @@ record CausewayComponentCollector(
     private CausewayBeanMetaData collectBeanClass(final LogicalType logicalType) {
         var typeMeta = causewayBeanTypeClassifier.classify(logicalType, DiscoveredBy.SPRING);
         var beanSort = typeMeta.beanSort();
-        if(beanSort.isToBeIntrospected()) {
+        if(beanSort.policy().isIntrospectionAllowed()) {
             var beanClass = logicalType.correspondingClass();
             introspectableTypes.put(beanClass, typeMeta);
             if(log.isDebugEnabled()) {

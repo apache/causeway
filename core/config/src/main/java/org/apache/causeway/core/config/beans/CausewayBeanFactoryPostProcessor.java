@@ -40,6 +40,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.Mode;
 import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 
 import lombok.extern.log4j.Log4j2;
@@ -102,7 +103,7 @@ implements
     public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
         return causewayBeanTypeClassifier!=null
                 ? causewayBeanTypeClassifier
-                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(Can.empty())); // JUnit support
+                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(Can.empty(), Mode.MOCKUP)); // JUnit support
     }
 
     @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeRegistry")

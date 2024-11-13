@@ -24,6 +24,8 @@ import jakarta.inject.Named;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
+import org.apache.causeway.applib.services.metamodel.BeanSort.BeanPolicy;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
@@ -44,20 +46,14 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
     @Override
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
-
-        var beanSort = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
-        .map(CausewayBeanMetaData::beanSort)
-        .orElse(null);
-
-        if(beanSort!=null) {
-            if(beanSort.isEntity()
-                    || beanSort.isViewModel()
-                    || beanSort.isManagedBeanAny()) {
-                return Substitution.neverReplaceClass();
-            }
-        }
-
-        return Substitution.passThrough(); // indifferent
+        var notSubstitutable = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
+            .map(CausewayBeanMetaData::beanSort)
+            .map(BeanSort::policy)
+            .map(BeanPolicy::isNotSubstitutable)
+            .orElse(false);
+        return notSubstitutable
+            ? Substitution.neverReplaceClass()
+            : Substitution.passThrough(); // indifferent
     }
 
 }

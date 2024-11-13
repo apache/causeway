@@ -561,7 +561,7 @@ implements WrapperFactory, HasMetaModelContext {
 
         var adapter = getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
+                || !adapter.getSpecification().getBeanSort().policy().isWrappingSupported()) {
             throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
                     domainObject.getClass().getName());
         }

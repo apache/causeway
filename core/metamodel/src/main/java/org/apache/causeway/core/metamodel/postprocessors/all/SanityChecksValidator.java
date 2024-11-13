@@ -96,9 +96,7 @@ implements
             final ObjectSpecification elementType) {
 
         if(elementType == null
-                || elementType.getBeanSort().isManagedBeanAny()
-                || elementType.getBeanSort().isMixin()
-                || elementType.getBeanSort().isVetoed()) {
+                || !elementType.getBeanSort().policy().isAllowedAsMemberElementType()) {
 
             ValidationFailureUtils.raiseInvalidMemberElementType(facetHolder, declaringType, elementType);
         }

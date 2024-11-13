@@ -24,7 +24,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +37,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
@@ -46,7 +45,6 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.annotations.BeanInternal;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
@@ -92,18 +90,18 @@ public final class _ClassCache implements AutoCloseable {
         MIXIN_MAIN_METHOD_NAME;
     }
 
+    @Nullable private final ClassLoader classLoader;
+    private static _ClassCache defaultInstance() { return new _ClassCache(_Context.getDefaultClassLoader()); }
     public static _ClassCache getInstance() {
-        return _Context.computeIfAbsent(_ClassCache.class, ()->new _ClassCache(_Context.getDefaultClassLoader()));
+        return _Context.computeIfAbsent(_ClassCache.class, ()->defaultInstance());
     }
 
     /**
      * JUnit support.
      */
     public static void invalidate() {
-        _Context.put(_ClassCache.class, new _ClassCache(_Context.getDefaultClassLoader()), true);
+        _Context.put(_ClassCache.class, defaultInstance(), true);
     }
-
-    private final @Nullable ClassLoader classLoader;
 
     public void add(final Class<?> type) {
         classModel(type);
@@ -265,7 +263,8 @@ public final class _ClassCache implements AutoCloseable {
 
         static ClassModelHead create(final Class<?> type) {
             var mergedAnnotations = MergedAnnotations.from(type, SearchStrategy.TYPE_HIERARCHY);
-            return new ClassModelHead(mergedAnnotations, _ClassCacheUtil.inferName(type, mergedAnnotations),
+            return new ClassModelHead(mergedAnnotations,
+                    _ClassCacheUtil.inferName(type, mergedAnnotations),
                     new ConcurrentHashMap<>());
         }
 
@@ -282,14 +281,6 @@ public final class _ClassCache implements AutoCloseable {
         }
 
         /**
-         * whether type is annotated with {@link BeanInternal} or {@link Configuration}
-         */
-        public boolean hasInternalBeanSemantics() {
-            return hasAnnotation(BeanInternal.class)
-                    || hasAnnotation(Configuration.class);
-        }
-
-        /**
          * whether type is annotated with {@link XmlRootElement}
          */
         public boolean hasJaxbRootElementSemantics() {
@@ -302,6 +293,12 @@ public final class _ClassCache implements AutoCloseable {
         public boolean isJdoPersistenceCapable() {
             return _ClassCacheUtil.isJdoPersistenceCapable(mergedAnnotations)
                     && !_ClassCacheUtil.isJdoEmbeddedOnly(mergedAnnotations);
+        }
+
+        public Can<String> springProfiles() {
+            var profileAnnot = mergedAnnotations.get(Profile.class);
+            if(!profileAnnot.isPresent()) return Can.empty();
+            return Can.ofArray(profileAnnot.getStringArray("value"));
         }
 
     }
@@ -323,13 +320,12 @@ public final class _ClassCache implements AutoCloseable {
                     new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
 
-        private static ClassModelBody EMPTY = new ClassModelBody(
-                Can.empty(),
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
-                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
+//        private static ClassModelBody EMPTY = new ClassModelBody(
+//                Can.empty(),
+//                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap(),
+//                Collections.emptyMap(), Collections.emptyMap(), Collections.emptyMap());
 
         private static ClassModelBody create(final Class<?> type, final ClassModelHead head) {
-            if(head.hasInternalBeanSemantics()) return EMPTY; //skip further inspection
 
             var body = new ClassModelBody(Can.ofArray(type.getDeclaredFields()));
 
