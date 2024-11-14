@@ -86,7 +86,7 @@ implements MetaModelRefiner {
 
                 ValidationFailure.raiseFormatted(
                         objectSpec,
-                        "%s: conflict for determining a strategy for retrievar of title for class, "
+                        "%s: conflict for determining a strategy for retrieval of title for class, "
                         + "conflicting title facets %s",
                         objectSpec.getFeatureIdentifier().getClassName(),
                         conflictingFeatures.toString());

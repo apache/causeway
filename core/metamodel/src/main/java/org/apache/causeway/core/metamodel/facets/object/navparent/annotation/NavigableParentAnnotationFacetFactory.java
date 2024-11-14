@@ -156,7 +156,7 @@ implements MetaModelRefiner {
 
                 ValidationFailure.raiseFormatted(
                         spec,
-                        "%s: conflict for determining a strategy for retrievar of (navigable) parent for class, "
+                        "%s: conflict for determining a strategy for retrieval of (navigable) parent for class, "
                                 + "contains multiple annotations '@%s' having navigable=PARENT, "
                                 + "while at most one is allowed.\n\tConflicting members: %s",
                                 spec.getFeatureIdentifier().getClassName(),
@@ -179,7 +179,7 @@ implements MetaModelRefiner {
 
                     ValidationFailure.raiseFormatted(
                             spec,
-                            "%s: unable to determine a strategy for retrievar of (navigable) parent for class, "
+                            "%s: unable to determine a strategy for retrieval of (navigable) parent for class, "
                                     + "field '%s' annotated with '@%s' having navigable=PARENT does not provide a getter.",
                                     spec.getFeatureIdentifier().getClassName(),
                                     fieldEvaluator.getField().getName(),
