@@ -118,7 +118,7 @@ class DomainModelTest_usingBadDomain {
     void ambiguousTitle_shouldFail() {
         validator.assertAnyFailuresContaining(
                 Identifier.classIdentifier(LogicalType.fqcn(AmbiguousTitle.class)),
-                "conflict for determining a strategy for retrievar of title");
+                "conflict for determining a strategy for retrieval of title");
     }
 
     @Test

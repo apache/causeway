@@ -350,7 +350,7 @@ extends MetaModelContext {
 
     public CausewayBeanTypeRegistry getCausewayBeanTypeRegistry() {
         if(causewayBeanTypeRegistry==null) {
-            causewayBeanTypeRegistry = new CausewayBeanTypeRegistry(Can.empty());
+            causewayBeanTypeRegistry = CausewayBeanTypeRegistry.empty();
         }
         return causewayBeanTypeRegistry;
     }

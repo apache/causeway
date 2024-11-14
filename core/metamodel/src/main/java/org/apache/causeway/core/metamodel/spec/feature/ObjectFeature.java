@@ -55,7 +55,7 @@ public interface ObjectFeature extends Specification {
      *
      * @apiNote argument is a {@link Supplier}, because the {@link ManagedObject}
      * is only required when the name is provided imperatively and domain-object
-     * retrievar might be expensive
+     * retrieval might be expensive
      *
      * @see #getFeatureIdentifier()
      */
@@ -103,7 +103,7 @@ public interface ObjectFeature extends Specification {
      *
      * @apiNote argument is a {@link Supplier}, because the {@link ManagedObject}
      * is only required when the description is provided imperatively and domain-object
-     * retrievar might be expensive
+     * retrieval might be expensive
      *
      */
     Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider);

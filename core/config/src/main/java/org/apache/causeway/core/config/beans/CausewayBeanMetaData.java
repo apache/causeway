@@ -46,6 +46,7 @@ implements Serializable {
         public boolean isJpa() { return this == JPA; }
         public boolean isJdo() { return this == JDO; }
         public boolean isUnspecified() { return this == UNSPECIFIED; }
+        public boolean isPresent() { return this == JPA || this == JDO; }
 
         public String titleCase() {
             return _Strings.capitalize(_Strings.lower(name()));
@@ -53,9 +54,11 @@ implements Serializable {
     }
 
     public enum DiscoveredBy {
-        CAUSEWAY,
+        CAUSEWAY_UPFRONT,
+        CAUSEWAY_ONTHEFLY,
         SPRING;
-        boolean isCauseway() { return this == CAUSEWAY; }
+        //boolean isCauseway() { return this == CAUSEWAY; }
+        //boolean isCausewayTest() { return this == CAUSEWAY_LAZY; }
         boolean isSpring() { return this == SPRING; }
     }
 
@@ -121,7 +124,7 @@ implements Serializable {
     }
     public static CausewayBeanMetaData programmatic(
             final @NonNull LogicalType logicalType) {
-        return new CausewayBeanMetaData(logicalType, BeanSort.PROGRAMMATIC, DiscoveredBy.CAUSEWAY, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
+        return new CausewayBeanMetaData(logicalType, BeanSort.PROGRAMMATIC, DiscoveredBy.CAUSEWAY_ONTHEFLY, ManagedBy.CAUSEWAY, PersistenceStack.NONE);
     }
     public static CausewayBeanMetaData springContributing(
             final @NonNull LogicalType logicalType) {

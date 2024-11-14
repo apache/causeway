@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.specloader;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,9 +55,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
@@ -221,6 +222,37 @@ implements
         this.facetProcessor = new FacetProcessor(programmingModel, metaModelContext);
     }
 
+    record SpecCollector(
+            List<ObjectSpecification> knownSpecs,
+            Map<Class<?>, ObjectSpecification> valueSpecs,
+            List<ObjectSpecification> domainServiceSpecs,
+            List<ObjectSpecification> mixinSpecs,
+            List<ObjectSpecification> entitySpecs,
+            List<ObjectSpecification> viewmodelSpecs,
+            List<ObjectSpecification> otherSpecs) {
+
+        SpecCollector() {
+            this(new ArrayList<>(),
+                    new HashMap<>(),
+                    new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>(), new ArrayList<>());
+        }
+
+        public void collect(@Nullable final ObjectSpecification spec) {
+            if(spec==null) return; // might be vetoed
+            knownSpecs.add(spec);
+            switch (spec.getBeanSort()) {
+                case VALUE -> valueSpecs.put(spec.getCorrespondingClass(), spec);
+                case MANAGED_BEAN_CONTRIBUTING -> domainServiceSpecs.add(spec);
+                case MIXIN -> mixinSpecs.add(spec);
+                case ENTITY -> entitySpecs.add(spec);
+                case VIEW_MODEL -> viewmodelSpecs.add(spec);
+                case PROGRAMMATIC, UNKNOWN, COLLECTION, ABSTRACT -> otherSpecs.add(spec);
+                case VETOED, MANAGED_BEAN_NOT_CONTRIBUTING -> {}
+            }
+        }
+    }
+
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link CausewayBeanTypeRegistry}).
@@ -229,93 +261,44 @@ implements
     public void createMetaModel() {
 
         log.info("About to create the Metamodel ...");
+        var stopWatch = _Timing.now();
 
         // initialize subcomponents, only after @PostConstruct has globally completed
         facetProcessor.init();
         postProcessor.init();
 
-        var knownSpecs = _Lists.<ObjectSpecification>newArrayList();
-
-        var stopWatch = _Timing.now();
+        var specs = new SpecCollector();
 
         // preload otherwise not eagerly discovered classes
         var prealoadCount = preloadableTypes.stream()
             .flatMap(PreloadableTypes::stream)
-            .peek(this::loadSpecification)
+            .map(this::loadSpecification)
+            .filter(_NullSafe::isPresent)
             .count();
-
         log.info(" - preloaded {} otherwise not eagerly discovered types", prealoadCount);
 
-        log.info(" - adding value types from from class-path scan and ValueTypeProviders");
-
-        var valueTypeSpecs = _Maps.<Class<?>, ObjectSpecification>newHashMap();
-
+        var valueTypesFromProviders = valueSemanticsResolver.get().streamClassesWithValueSemantics()
+            .map(valueClass->CausewayBeanMetaData.value(LogicalType.infer(valueClass), DiscoveredBy.CAUSEWAY_UPFRONT))
+            .toList();
+        log.info(" - found {} value types via ValueTypeProviders", valueTypesFromProviders.size());
+        
         Stream
             .concat(
-                causewayBeanTypeRegistry.streamValueTypes(),
-                valueSemanticsResolver.get().streamClassesWithValueSemantics())
-            .forEach(valueClass -> {
-                var valueSpec = loadSpecification(valueClass, IntrospectionState.NOT_INTROSPECTED);
-                if(valueSpec!=null) {
-                    knownSpecs.add(valueSpec);
-                    valueTypeSpecs.put(valueClass, valueSpec);
-                }
-            });
+                valueTypesFromProviders.stream(),
+                causewayBeanTypeRegistry.streamScannedTypes())
+            // prime (up to NOT_INTROSPECTED)
+            .map(this::primeSpecification)
+            .forEach(specs::collect);
 
-        log.info(" - categorizing types from class-path scan");
-
-        var domainObjectSpecs = _Lists.<ObjectSpecification>newArrayList();
-        var mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
-
-        causewayBeanTypeRegistry.streamIntrospectableTypes()
-        .forEach(typeMeta->{
-
-            var spec = primeSpecification(typeMeta);
-            if(spec==null) {
-                //XXX only ever happens when the class substitutor vetoes
-                return;
-            }
-
-            knownSpecs.add(spec);
-
-            var sort = typeMeta.beanSort();
-
-            if(sort.isManagedBeanAny() || sort.isEntity() || sort.isViewModel() ) {
-                domainObjectSpecs.add(spec);
-            } else if(sort.isMixin()) {
-                mixinSpecs.add(spec);
-            }
-
-        });
-
-        //XXX[CAUSEWAY-2382] when parallel introspecting, make sure we have the mixins before their holders
-        // (observation by experiment, no real understanding as to why)
-
-        _LogUtil.logBefore(log, this::snapshotSpecifications, knownSpecs);
-
-        log.info(" - introspecting {} type hierarchies", knownSpecs.size());
-        introspect(Can.ofCollection(knownSpecs), IntrospectionState.TYPE_INTROSPECTED);
-
-        log.info(" - introspecting {} value types", valueTypeSpecs.size());
-        introspect(Can.ofCollection(valueTypeSpecs.values()), IntrospectionState.FULLY_INTROSPECTED);
-
-        log.info(" - introspecting {} mixins", causewayBeanTypeRegistry.mixinTypeCount());
-        introspect(Can.ofCollection(mixinSpecs), IntrospectionState.FULLY_INTROSPECTED);
-
-        log.info(" - introspecting {} managed beans contributing (domain services)",
-                causewayBeanTypeRegistry.managedBeansContributingCount());
-
-        log.info(" - introspecting {} entities ({})",
-                causewayBeanTypeRegistry.entityTypeCount(),
-                causewayBeanTypeRegistry.determineCurrentPersistenceStack().name());
-
-        log.info(" - introspecting {} view models", causewayBeanTypeRegistry.viewmodelTypeCount());
+        introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionState.TYPE_INTROSPECTED);
+        introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionState.FULLY_INTROSPECTED);
+        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionState.FULLY_INTROSPECTED);
+        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionState.FULLY_INTROSPECTED);
+        introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
+                specs.entitySpecs(), IntrospectionState.FULLY_INTROSPECTED);
+        introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionState.FULLY_INTROSPECTED);
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
-
-        introspect(Can.ofCollection(domainObjectSpecs), IntrospectionState.FULLY_INTROSPECTED);
-
-        _LogUtil.logAfter(log, this::snapshotSpecifications, knownSpecs);
 
         if(isFullIntrospect()) {
             var snapshot = snapshotSpecifications();
@@ -412,7 +395,7 @@ implements
     public ObjectSpecification loadSpecification(
             final @Nullable Class<?> type,
             final @NonNull IntrospectionState upTo) {
-        return _loadSpecification(type, this::classify, upTo);
+        return loadSpecificationNullable(type, this::classify, upTo);
     }
 
     @Override
@@ -511,8 +494,8 @@ implements
     public void addValidationFailure(final ValidationFailure validationFailure) {
 //        if(validationResult.isMemoized()) {
 //            validationResult.clear(); // invalidate
-////            throw _Exceptions.illegalState(
-////                    "Validation result was already created and can no longer be modified.");
+//            throw _Exceptions.illegalState(
+//                    "Validation result was already created and can no longer be modified.");
 //        }
         synchronized(validationFailures) {
             validationFailures.add(validationFailure);
@@ -553,25 +536,42 @@ implements
      * here.
      */
     private CausewayBeanMetaData classify(final @Nullable Class<?> type) {
-        return causewayBeanTypeRegistry
-                .lookupIntrospectableType(type)
+
+        var discoveredBy = isMetamodelFullyIntrospected()
+                ? DiscoveredBy.CAUSEWAY_ONTHEFLY
+                : DiscoveredBy.CAUSEWAY_UPFRONT;
+
+        var typeMeta = causewayBeanTypeRegistry
+                .lookupScannedType(type)
                 .orElseGet(()->
                     valueSemanticsResolver.get().hasValueSemantics(type)
-                        ? CausewayBeanMetaData.value(LogicalType.infer(type), DiscoveredBy.CAUSEWAY)
-                        : causewayBeanTypeClassifier.classify(LogicalType.infer(type), DiscoveredBy.CAUSEWAY)
+                        ? CausewayBeanMetaData.value(LogicalType.infer(type), discoveredBy)
+                        : causewayBeanTypeClassifier.classify(LogicalType.infer(type), discoveredBy)
                 );
+
+        if(isMetamodelFullyIntrospected()) {
+            var warningMessage = ProgrammingModelConstants.MessageTemplate.TYPE_NOT_EAGERLY_DISCOVERED
+                    .builder()
+                    .addVariable("type", type.getName())
+                    .addVariable("beanSort", typeMeta.beanSort().name())
+                    .buildMessage();
+
+            log.warn(warningMessage);
+        }
+
+        return typeMeta;
     }
 
     @Nullable
     private ObjectSpecification primeSpecification(
             final @NonNull CausewayBeanMetaData typeMeta) {
-        return _loadSpecification(
+        return loadSpecificationNullable(
                 typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionState.NOT_INTROSPECTED);
 
     }
 
     @Nullable
-    private ObjectSpecification _loadSpecification(
+    private ObjectSpecification loadSpecificationNullable(
             final @Nullable Class<?> type,
             final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
             final @NonNull IntrospectionState upTo) {
@@ -581,9 +581,7 @@ implements
         }
 
         var substitute = classSubstitutorRegistry.getSubstitution(type);
-        if (substitute.isNeverIntrospect()) {
-            return null; // never inspect
-        }
+        if (substitute.isNeverIntrospect()) return null; // never inspect
 
         var substitutedType = substitute.apply(type);
 
@@ -613,39 +611,16 @@ implements
         return spec;
     }
 
-    private void guardAgainstMetamodelLockedAfterFullIntrospection(final Class<?> cls) {
-        if(isMetamodelFullyIntrospected()
-                && causewayConfiguration.getCore().getMetaModel().getIntrospector().isLockAfterFullIntrospection()) {
-
-            var warningMessage = ProgrammingModelConstants.MessageTemplate.TYPE_NOT_EAGERLY_DISCOVERED
-                    .builder()
-                    .addVariable("type", cls.getName())
-                    .addVariable("beanSort", causewayBeanTypeClassifier
-                            .classify(LogicalType.infer(cls), DiscoveredBy.CAUSEWAY)
-                            .beanSort()
-                            .name())
-                    .buildMessage();
-
-            log.warn(warningMessage);
-        }
-    }
-
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
     private ObjectSpecification createSpecification(final CausewayBeanMetaData typeMeta) {
-
-        guardAgainstMetamodelLockedAfterFullIntrospection(typeMeta.getCorrespondingClass());
-
-        // ... and create the specs
-
         var objectSpec = new ObjectSpecificationDefault(
                         typeMeta,
                         metaModelContext,
                         facetProcessor,
                         postProcessor,
                         classSubstitutorRegistry);
-
         return objectSpec;
     }
 
@@ -669,6 +644,16 @@ implements
                 throw ex;
             }
         });
+    }
+
+    private void introspectAndLog(
+            final String info,
+            final Iterable<ObjectSpecification> specs,
+            final IntrospectionState upTo) {
+        var stopWatch = _Timing.now();
+        introspect(Can.ofIterable(specs), upTo);
+        stopWatch.stop();
+        log.info(" - introspecting {} {} took {}ms", _NullSafe.sizeAutodetect(specs), info, stopWatch.getMillis());
     }
 
     private void introspect(

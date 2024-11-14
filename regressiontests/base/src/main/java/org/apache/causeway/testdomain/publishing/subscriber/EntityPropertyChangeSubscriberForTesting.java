@@ -60,7 +60,7 @@ implements EntityPropertyChangeSubscriber {
     @Override
     public void onChanging(final EntityPropertyChange entityPropertyChange) {
 
-        PersistenceStack persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
+        PersistenceStack persistenceStack = causewayBeanTypeRegistry.persistenceStack();
 
         var target = entityPropertyChange.getTarget();
         var targetLogicalTypeName = target.getLogicalTypeName();

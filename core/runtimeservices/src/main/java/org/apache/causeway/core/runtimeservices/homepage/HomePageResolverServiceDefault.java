@@ -67,14 +67,11 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     @PostConstruct
     public void init() {
-        viewModelTypeForHomepage = causewayBeanTypeRegistry.streamViewmodelTypes()
-                .filter(viewModelType -> _Annotations.isPresent(viewModelType, HomePage.class))
-                .findFirst();
+        viewModelTypeForHomepage = causewayBeanTypeRegistry.findHomepageViewmodel();
     }
 
     @Override
     public Object getHomePage() {
-
         return viewModelTypeForHomepage
                 .map(ClassExtensions::newInstance)
                 .map(factoryService::viewModel)

@@ -47,9 +47,9 @@ import lombok.NonNull;
 public record CausewayBeanTypeClassifier(
         @NonNull Can<String> activeProfiles,
         @NonNull _ClassCache classCache,
-        @NonNull Mode mode) {
+        @NonNull ContextType contextType) {
 
-    public enum Mode {
+    public enum ContextType {
         SPRING,
         MOCKUP
     }
@@ -57,11 +57,11 @@ public record CausewayBeanTypeClassifier(
     // -- CONSTRUCTION
 
     CausewayBeanTypeClassifier(final ApplicationContext applicationContext) {
-        this(Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()), Mode.SPRING);
+        this(Can.ofArray(applicationContext.getEnvironment().getActiveProfiles()), ContextType.SPRING);
     }
 
-    CausewayBeanTypeClassifier(final Can<String> activeProfiles, final Mode mode) {
-        this(activeProfiles, _ClassCache.getInstance(), mode);
+    CausewayBeanTypeClassifier(final Can<String> activeProfiles, final ContextType contextType) {
+        this(activeProfiles, _ClassCache.getInstance(), contextType);
     }
 
     // -- CLASSIFY
@@ -116,14 +116,12 @@ public record CausewayBeanTypeClassifier(
             return CausewayBeanMetaData.vetoed(named.get(), discoveredBy); // reject
         }
 
-        // handle introspection veto ...
+        // handle introspection veto (programmatic bean) ...
         if(TypeProgrammaticMarker.anyMatchOn(typeHead)) {
-            return switch (mode) {
-                case SPRING -> switch (discoveredBy) {
-                     case SPRING -> CausewayBeanMetaData.springNotContributing(logicalType);
-                     case CAUSEWAY -> CausewayBeanMetaData.programmatic(named.get());
-                };
-                case MOCKUP -> CausewayBeanMetaData.springNotContributing(logicalType);
+            if(contextType==ContextType.MOCKUP) return CausewayBeanMetaData.springNotContributing(logicalType);
+            return switch (discoveredBy) {
+                 case SPRING, CAUSEWAY_UPFRONT -> CausewayBeanMetaData.springNotContributing(logicalType);
+                 case CAUSEWAY_ONTHEFLY -> CausewayBeanMetaData.programmatic(named.get());
             };
         }
 

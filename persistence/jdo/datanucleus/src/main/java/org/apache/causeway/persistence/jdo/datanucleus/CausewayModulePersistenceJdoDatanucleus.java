@@ -20,6 +20,7 @@ package org.apache.causeway.persistence.jdo.datanucleus;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManagerFactory;
@@ -40,6 +41,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -247,8 +249,9 @@ public class CausewayModulePersistenceJdoDatanucleus {
 
         if(_NullSafe.isEmpty(jdoEntityDiscoveryListeners)) return;
         // assuming, as we instantiate a DN PMF, all entities discovered are JDO entities
-        if(beanTypeRegistry.entityTypeCount()==0) return;
-        var jdoEntityTypes = beanTypeRegistry.entityTypeSet();
+        if(!beanTypeRegistry.persistenceStack().isJdo()) return;
+        var jdoEntityTypes = beanTypeRegistry.streamEntityTypes(PersistenceStack.JDO)
+                .collect(Collectors.toSet());
         var dnProps = Collections.unmodifiableMap(dnSettings.getAsProperties());
         jdoEntityDiscoveryListeners
             .forEach(listener->
@@ -295,9 +298,9 @@ public class CausewayModulePersistenceJdoDatanucleus {
         var pumd = new PersistenceUnitMetaData(
                 "dynamic-unit", "RESOURCE_LOCAL", null);
         pumd.setExcludeUnlistedClasses(false);
-        beanTypeRegistry.streamEntityTypes()
-        .map(Class::getName)
-        .forEach(pumd::addClassName);
+        beanTypeRegistry.streamEntityTypes(PersistenceStack.JDO)
+            .map(Class::getName)
+            .forEach(pumd::addClassName);
         return pumd;
     }
 

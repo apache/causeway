@@ -244,7 +244,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(cleBookmarkIfAny).isPresent();
         Bookmark cleBookmark = cleBookmarkIfAny.get();
         String identifier = cleBookmark.getIdentifier();
-        if (causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
+        if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
             assertThat(identifier).startsWith("u_");
             UUID.fromString(identifier.substring("u_".length())); // should not fail, ie check the format is as we expect
         } else {
@@ -365,7 +365,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Assertions.assertThat(notYetReplayed).isEmpty();
 
-        if (causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
+        if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
 
             // fails in JPA; possibly need to get the agent working for dirty tracking.
 
@@ -447,7 +447,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         Assertions.assertThat(mostRecentReplayedIfAny).isEmpty();
 
-        if (causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJdo()) {
+        if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
 
             // fails in JPA; possibly need to get the agent working for dirty tracking.
 

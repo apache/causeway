@@ -46,7 +46,7 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
 
     @Override
     public Substitution getSubstitution(@NonNull final Class<?> cls) {
-        var notSubstitutable = causewayBeanTypeRegistry.lookupIntrospectableType(cls)
+        var notSubstitutable = causewayBeanTypeRegistry.lookupScannedType(cls)
             .map(CausewayBeanMetaData::beanSort)
             .map(BeanSort::policy)
             .map(BeanPolicy::isNotSubstitutable)

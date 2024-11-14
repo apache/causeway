@@ -40,7 +40,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.Mode;
+import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.ContextType;
 import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 
 import lombok.extern.log4j.Log4j2;
@@ -68,7 +68,7 @@ implements
     ApplicationContextAware {
 
     private CausewayBeanTypeClassifier causewayBeanTypeClassifier;
-    private Can<CausewayBeanMetaData> componentScanResult = Can.empty();
+    private CausewayBeanTypeRegistry componentScanResult = CausewayBeanTypeRegistry.empty();
 
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
@@ -94,26 +94,27 @@ implements
 
         beanFactory.registerScope("causeway-domain-object", new CausewayDomainObjectScope(beanFactory));
 
-        this.componentScanResult = Can.ofCollection(componentCollector.introspectableTypes().values());
+        this.componentScanResult = new CausewayBeanTypeRegistry(
+                Can.ofCollection(componentCollector.introspectableTypes().values()));
 
         log.info("post processing {} bean definitions took {}ms", _NullSafe.size(beanDefNames), stopWatch.getMillis());
+
+        if(log.isDebugEnabled()) {
+            componentScanResult.streamScannedTypes()
+                .forEach(type->log.debug("discovered: {}", type));
+        }
     }
 
     @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeClassifier")
     public CausewayBeanTypeClassifier getCausewayBeanTypeClassifier() {
         return causewayBeanTypeClassifier!=null
                 ? causewayBeanTypeClassifier
-                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(Can.empty(), Mode.MOCKUP)); // JUnit support
+                : (causewayBeanTypeClassifier = new CausewayBeanTypeClassifier(Can.empty(), ContextType.MOCKUP)); // JUnit support
     }
 
     @Bean(name = CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanTypeRegistry")
     public CausewayBeanTypeRegistry getComponentScanResult() {
-        if(log.isDebugEnabled()) {
-            componentScanResult.forEach(type->{
-                log.debug("to be introspected: {}", type);
-            });
-        }
-        return new CausewayBeanTypeRegistry(componentScanResult);
+        return componentScanResult;
     }
 
 }

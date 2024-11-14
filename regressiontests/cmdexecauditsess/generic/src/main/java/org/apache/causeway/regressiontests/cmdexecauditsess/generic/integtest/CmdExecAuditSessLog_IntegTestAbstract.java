@@ -336,7 +336,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
     boolean isJpa() {
-        return causewayBeanTypeRegistry.determineCurrentPersistenceStack().isJpa();
+        return causewayBeanTypeRegistry.persistenceStack().isJpa();
     }
 
     @Inject AuditTrailEntryRepository auditTrailEntryRepository;

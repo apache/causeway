@@ -85,7 +85,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
     protected void execute(final ExecutionContext executionContext) {
 
         var secmanConfig = config.getExtensions().getSecman();
-        var persistenceStack = causewayBeanTypeRegistry.determineCurrentPersistenceStack();
+        var persistenceStack = causewayBeanTypeRegistry.persistenceStack();
 
         // used as log message provider below - assuming file was found and is readable
         final Supplier<String> yamlFilePath = ()->new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath();

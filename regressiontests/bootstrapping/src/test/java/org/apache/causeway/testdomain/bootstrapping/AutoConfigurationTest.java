@@ -97,7 +97,7 @@ class AutoConfigurationTest {
     @Test
     void domainObjects_shouldBeDiscovered() {
         for(var cls : nonManaged()) {
-            var type = causewayBeanTypeRegistry.lookupIntrospectableType(cls);
+            var type = causewayBeanTypeRegistry.lookupScannedType(cls);
             assertTrue(type.isPresent());
         }
     }
