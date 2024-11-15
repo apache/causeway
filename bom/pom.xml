@@ -77,7 +77,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 		<datanucleus-maven-plugin.verbose>false</datanucleus-maven-plugin.verbose>
 		<datanucleus-maven-plugin.fork>false</datanucleus-maven-plugin.fork>
 
-		<maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
 		<maven-source-plugin.version>3.2.1</maven-source-plugin.version>
 		<maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
 		<maven-surefire-report-plugin.version>3.5.2</maven-surefire-report-plugin.version>
