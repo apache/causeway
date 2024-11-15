@@ -1,4 +1,4 @@
-name: Build, Test (JDK 22)
+name: Build, Test (JDK 23)
 
 on:
   push:
