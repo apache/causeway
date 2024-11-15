@@ -1,4 +1,4 @@
-name: Build, Test (JDK 22)
+name: Build, Test (JDK 23)
 
 on:
   push:
@@ -53,12 +53,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up JDK (zulu 22)
+    - name: Set up JDK (zulu 23)
       if: matrix.language == 'java'
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: 22
+        java-version: 23
     - name: Set up Maven (3.9.9)
       uses: stCarolas/setup-maven@v5
       with:
@@ -109,12 +109,14 @@ jobs:
         # -Dmodule-all ... build all modules (default if all is well)
         # -Dmodule-all-except-incubator ... build all modules except 'incubator'
         # -Dmodule-all-except-kroviz ... build all modules except 'kroviz' (eg. when kroviz build fails)
+        # -Dmaven.compiler.proc=full ... required to enable annotation processing for javac since JDK23
         # -Denforcer.failFast=true ... fail fast on convergence issues (enforcer plugin)
         # -Dmaven.source.skip=true ... no need for the CI build to pull sources
         # -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z see https://maven.apache.org/guides/mini/guide-reproducible-builds.html
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -Dmodule-all
+          -Dmaven.compiler.proc=full
           -Denforcer.failFast=true
           -Dmaven.source.skip=true
           -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z
