@@ -152,6 +152,9 @@ public class CausewayBeanTypeRegistry {
         return Optional.ofNullable(scannedTypesByClass.get(type));
     }
 
+    /**
+     * Will only find if initially discovered by Spring.
+     */
     public Optional<Class<?>> findHomepageViewmodel() {
         var classCache = _ClassCache.getInstance();
         return viewmodelTypes.keySet().stream()

@@ -30,7 +30,6 @@ import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
-import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
