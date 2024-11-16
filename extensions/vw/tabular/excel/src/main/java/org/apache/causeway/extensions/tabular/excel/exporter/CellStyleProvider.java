@@ -132,9 +132,6 @@ record CellStyleProvider(
 
         final int ordinal = valueKindOf(cell).ordinal();
 
-        if(ordinal>0)
-            System.err.printf("%d%n", ordinal);
-
         cell.setCellStyle(
             switch (customCellStyle) {
                 case BLUE -> blueStyles()[ordinal];
