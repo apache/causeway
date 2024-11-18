@@ -52,11 +52,11 @@ implements MixedInMember {
     public static class forTesting {
         public static OneToOneAssociationMixedIn forMixinMain(
                 final ObjectSpecification mixeeSpec,
-                final Class<?> mixinType,
+                final ObjectSpecification mixinSpec,
                 final String mixinMethodName,
                 final FacetedMethod facetedMethod) {
             final ObjectActionDefault mixinAction = (ObjectActionDefault) ObjectActionDefault.forTesting.forMixinMain(facetedMethod);
-            return new OneToOneAssociationMixedIn(mixeeSpec, mixinAction, mixinType, mixinMethodName);
+            return new OneToOneAssociationMixedIn(mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
         }
     }
 
@@ -65,7 +65,7 @@ implements MixedInMember {
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.causeway.applib.annotation.Mixin}.
      */
-    private final Class<?> mixinType;
+    private final ObjectSpecification mixinSpec;
 
     /**
      * The {@link ObjectActionDefault} for the action being mixed in (ie on the {@link #mixinType}.
@@ -86,7 +86,7 @@ implements MixedInMember {
     public OneToOneAssociationMixedIn(
             final ObjectSpecification mixeeSpec,
             final ObjectActionDefault mixinAction,
-            final Class<?> mixinType,
+            final ObjectSpecification mixinSpec,
             final String mixinMethodName) {
         super(
                 identifierForMixedInProperty(mixeeSpec, mixinAction),
@@ -97,7 +97,7 @@ implements MixedInMember {
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
 
-        this.mixinType = mixinType;
+        this.mixinSpec = mixinSpec;
         this.mixinAction = mixinAction;
         this.mixeeSpec = mixeeSpec;
 
@@ -122,7 +122,7 @@ implements MixedInMember {
     protected InteractionHead headFor(final ManagedObject mixeeAdapter) {
         return InteractionHead.mixin(
                 mixeeAdapter,
-                mixinAdapterFor(mixinType, mixeeAdapter));
+                mixinAdapterFor(mixinSpec, mixeeAdapter));
     }
 
     private DisabledFacet disabledFacet() {
@@ -154,7 +154,7 @@ implements MixedInMember {
 
     @Override
     public ObjectSpecification getMixinType() {
-        return getSpecificationLoader().loadSpecification(mixinType);
+        return mixinSpec;
     }
 
     @Override

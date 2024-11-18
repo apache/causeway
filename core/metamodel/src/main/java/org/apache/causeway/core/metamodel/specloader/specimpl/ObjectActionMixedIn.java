@@ -58,11 +58,11 @@ implements MixedInMember {
     public static class forTesting {
         public static ObjectActionMixedIn forMixinMain(
                 final ObjectSpecification mixeeSpec,
-                final Class<?> mixinType,
+                final ObjectSpecification mixinSpec,
                 final String mixinMethodName,
                 final FacetedMethod facetedMethod) {
             final ObjectActionDefault mixinAction = (ObjectActionDefault) ObjectActionDefault.forTesting.forMixinMain(facetedMethod);
-            return new ObjectActionMixedIn(mixinType, mixinMethodName, mixinAction, mixeeSpec);
+            return new ObjectActionMixedIn(mixinSpec, mixinMethodName, mixinAction, mixeeSpec);
         }
     }
 
@@ -71,7 +71,7 @@ implements MixedInMember {
     /**
      * The type of the mixin (providing the action), eg annotated with @{@link DomainObject DomainObject}#{@link DomainObject#nature() nature} of {@link org.apache.causeway.applib.annotation.Nature#MIXIN MIXIN}.
      */
-    private final Class<?> mixinType;
+    private final ObjectSpecification mixinSpec;
 
     /**
      * The {@link ObjectActionDefault} for the action being mixed in (ie on the {@link #mixinType}.
@@ -90,7 +90,7 @@ implements MixedInMember {
     private final FacetHolder facetHolder;
 
     public ObjectActionMixedIn(
-            final Class<?> mixinType,
+            final ObjectSpecification mixinSpec,
             final String mixinMethodName,
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixeeSpec) {
@@ -106,7 +106,7 @@ implements MixedInMember {
         this.facetHolder = FacetHolder.layered(
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
-        this.mixinType = mixinType;
+        this.mixinSpec = mixinSpec;
         this.mixinAction = mixinAction;
         this.mixeeSpec = mixeeSpec;
 
@@ -126,7 +126,7 @@ implements MixedInMember {
     protected InteractionHead headFor(final ManagedObject owner) {
         return InteractionHead.mixin(
                 owner,
-                mixinAdapterFor(mixinType, owner));
+                mixinAdapterFor(mixinSpec, owner));
     }
 
     @Override
@@ -163,7 +163,7 @@ implements MixedInMember {
     }
 
     protected ManagedObject mixinAdapterFor(final ManagedObject mixeeAdapter) {
-        return mixinAdapterFor(mixinType, mixeeAdapter);
+        return mixinAdapterFor(mixinSpec, mixeeAdapter);
     }
 
     @Override
@@ -173,7 +173,7 @@ implements MixedInMember {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ManagedObject owner = head.getOwner();
-        final ManagedObject target = mixinAdapterFor(mixinType, owner);
+        final ManagedObject target = mixinAdapterFor(mixinSpec, owner);
         _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
@@ -199,7 +199,7 @@ implements MixedInMember {
 
     @Override
     public ObjectSpecification getMixinType() {
-        return getSpecificationLoader().loadSpecification(mixinType);
+        return mixinSpec;
     }
 
     @Getter(lazy=true, onMethod_ = {@Override})

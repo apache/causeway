@@ -33,24 +33,24 @@ class _MixedInMemberFactory {
 
     Function<ObjectActionDefault, ObjectActionMixedIn> mixedInAction(
             final ObjectSpecification mixeeSpec,
-            final Class<?> mixinType,
+            final ObjectSpecification mixinSpec,
             final String mixinMethodName) {
 
         return mixinAction -> new ObjectActionMixedIn(
-                mixinType, mixinMethodName, mixinAction, mixeeSpec);
+                mixinSpec, mixinMethodName, mixinAction, mixeeSpec);
     }
 
     Function<ObjectActionDefault, ObjectAssociation> mixedInAssociation(
             final ObjectSpecification mixeeSpec,
-            final Class<?> mixinType,
+            final ObjectSpecification mixinSpec,
             final String mixinMethodName) {
 
         return mixinAction ->
             mixinAction.getReturnType().isSingular()
                 ? new OneToOneAssociationMixedIn(
-                        mixeeSpec, mixinAction, mixinType, mixinMethodName)
+                        mixeeSpec, mixinAction, mixinSpec, mixinMethodName)
                 : new OneToManyAssociationMixedIn(
-                        mixeeSpec, mixinAction, mixinType, mixinMethodName);
+                        mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
     }
 
 }

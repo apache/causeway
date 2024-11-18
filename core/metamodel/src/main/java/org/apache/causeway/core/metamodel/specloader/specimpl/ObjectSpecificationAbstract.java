@@ -786,7 +786,7 @@ implements ObjectSpecification {
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
         .filter(_SpecPredicates::isMixedInAssociation)
         .map(ObjectActionDefault.class::cast)
-        .map(_MixedInMemberFactory.mixedInAssociation(this, mixinType, mixinMethodName))
+        .map(_MixedInMemberFactory.mixedInAssociation(this, mixinSpec, mixinMethodName))
         .peek(facetProcessor::processMemberOrder);
     }
 
@@ -828,7 +828,7 @@ implements ObjectSpecification {
         .filter(this::whenIsValueThenIsAlsoConstructorMixin)
         .filter(_SpecPredicates::isMixedInAction)
         .map(ObjectActionDefault.class::cast)
-        .map(_MixedInMemberFactory.mixedInAction(this, mixinType, mixinMethodName))
+        .map(_MixedInMemberFactory.mixedInAction(this, mixinSpec, mixinMethodName))
         .peek(facetProcessor::processMemberOrder);
     }
 
