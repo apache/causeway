@@ -174,7 +174,7 @@ identified
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.3.0</poi.version>
 
-        <quartz-scheduler.version>2.3.2</quartz-scheduler.version>
+        <quartz-scheduler.version>2.5.0</quartz-scheduler.version>
         <querydsl.version>5.1.0</querydsl.version>
 
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
