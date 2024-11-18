@@ -333,7 +333,7 @@ extends MetaModelContext {
     private ValueSemanticsResolver getValueSemanticsResolver(){
         if(valueSemanticsResolver==null) {
             valueSemanticsResolver = new ValueSemanticsResolverDefault(valueSemantics,
-                    getTranslationService(), this::getSpecificationLoader);
+                    getTranslationService());
         }
         return valueSemanticsResolver;
     }

@@ -201,7 +201,7 @@ implements
         var instance = new SpecificationLoaderDefault(
                 programmingModel, causewayConfiguration, causewaySystemEnvironment,
                 serviceRegistry, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
-                ()->new ValueSemanticsResolverDefault(List.of(), null, null),
+                ()->new ValueSemanticsResolverDefault(List.of(), null),
                 classSubstitutorRegistry);
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
@@ -281,7 +281,7 @@ implements
             .map(valueClass->CausewayBeanMetaData.value(LogicalType.infer(valueClass), DiscoveredBy.CAUSEWAY_UPFRONT))
             .toList();
         log.info(" - found {} value types via ValueTypeProviders", valueTypesFromProviders.size());
-        
+
         Stream
             .concat(
                 valueTypesFromProviders.stream(),

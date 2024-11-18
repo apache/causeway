@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.inject.Provider;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
@@ -39,8 +38,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemanticsAbstract;
+import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemantics;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +53,6 @@ implements ValueSemanticsResolver {
     // managed by Spring
     private final List<ValueSemanticsProvider<?>> valueSemanticsProviders;
     private final TranslationService translationService;
-    private final Provider<SpecificationLoader> specificationLoaderProvider;
 
     @Override
     public boolean hasValueSemantics(final Class<?> valueType) {
@@ -109,8 +106,7 @@ implements ValueSemanticsResolver {
     @SuppressWarnings("unchecked")
     private <T extends Enum<T>> ValueSemanticsProvider<T> defaultEnumSemantics(final Class<T> enumType) {
         return enumSemantics.computeIfAbsent(enumType, t->
-            EnumValueSemanticsAbstract
-                .create(specificationLoaderProvider, translationService, enumType));
+            EnumValueSemantics.create(translationService, enumType));
     }
 
 }
