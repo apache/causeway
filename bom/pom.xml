@@ -117,7 +117,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 
         <docx4j.version>11.3.2</docx4j.version>
 
-        <easymock.version>5.4.0</easymock.version>
+        <easymock.version>5.5.0</easymock.version>
         <eclipselink.version>2.7.15</eclipselink.version> <!-- do not upgrade 2.x to 3.x or higher until Spring 6 -->
         <error_prone_annotations.version>2.35.1</error_prone_annotations.version>
 
