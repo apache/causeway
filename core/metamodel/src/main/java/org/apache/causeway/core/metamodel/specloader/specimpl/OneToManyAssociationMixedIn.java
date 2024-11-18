@@ -55,11 +55,11 @@ implements MixedInMember {
     public static class forTesting {
         public static OneToManyAssociationMixedIn forMixinMain(
                 final ObjectSpecification mixeeSpec,
-                final Class<?> mixinType,
+                final ObjectSpecification mixinSpec,
                 final String mixinMethodName,
                 final FacetedMethod facetedMethod) {
             final ObjectActionDefault mixinAction = (ObjectActionDefault) ObjectActionDefault.forTesting.forMixinMain(facetedMethod);
-            return new OneToManyAssociationMixedIn(mixeeSpec, mixinAction, mixinType, mixinMethodName);
+            return new OneToManyAssociationMixedIn(mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
         }
     }
 
@@ -70,7 +70,7 @@ implements MixedInMember {
      * {@link org.apache.causeway.applib.annotation.DomainObject} with a {@link DomainObject#nature() nature} of
      * {@link org.apache.causeway.applib.annotation.Nature#MIXIN MIXIN}.
      */
-    private final Class<?> mixinType;
+    private final ObjectSpecification mixinSpec;
 
     /**
      * The {@link ObjectActionDefault} for the action being mixed in (ie on the {@link #mixinType}).
@@ -106,7 +106,7 @@ implements MixedInMember {
     public OneToManyAssociationMixedIn(
             final ObjectSpecification mixeeSpec,
             final ObjectActionDefault mixinAction,
-            final Class<?> mixinType,
+            final ObjectSpecification mixinSpec,
             final String mixinMethodName) {
 
         super(identifierForMixedInCollection(mixeeSpec, mixinAction),
@@ -116,7 +116,7 @@ implements MixedInMember {
                 super.getFeatureIdentifier(),
                 mixinAction.getFacetedMethod());
 
-        this.mixinType = mixinType;
+        this.mixinSpec = mixinSpec;
         this.mixinAction = mixinAction;
         this.mixeeSpec = mixeeSpec;
 
@@ -140,7 +140,7 @@ implements MixedInMember {
 
     @Override
     protected InteractionHead headFor(final ManagedObject mixedInAdapter) {
-        var mixinAdapter = mixinAdapterFor(mixinType, mixedInAdapter);
+        var mixinAdapter = mixinAdapterFor(mixinSpec, mixedInAdapter);
         return InteractionHead.mixin(mixedInAdapter, mixinAdapter);
     }
 
@@ -171,7 +171,7 @@ implements MixedInMember {
 
     @Override
     public ObjectSpecification getMixinType() {
-        return getSpecificationLoader().loadSpecification(mixinType);
+        return mixinSpec;
     }
 
     @Override

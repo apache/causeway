@@ -51,6 +51,7 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -265,17 +266,15 @@ implements
     // -- MIXIN ADAPTER FACTORY
 
     protected ManagedObject mixinAdapterFor(
-            final @NonNull Class<?> mixinType,
+            final @NonNull ObjectSpecification mixinSpec,
             final @NonNull ManagedObject mixee) {
-
-        var mixinSpec = getSpecificationLoader().loadSpecification(mixinType);
 
         // nullable for action parameter mixins
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee)) {
             return ManagedObject.empty(mixinSpec);
         }
 
-        var mixinPojo = getMetaModelContext().getFactoryService().mixin(mixinType, mixee.getPojo());
+        var mixinPojo = getFactoryService().mixin(mixinSpec.getCorrespondingClass(), mixee.getPojo());
         return ManagedObject.mixin(mixinSpec, mixinPojo);
     }
 

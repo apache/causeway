@@ -258,8 +258,9 @@ implements HasMetaModelContext {
                 methodRemover, facetedMethod, true);
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
         final ObjectActionMixedIn mixedInAct =
-                ObjectActionMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "act", facetedMethod);
+                ObjectActionMixedIn.forTesting.forMixinMain(mixeeSpec, mixinSpec, "act", facetedMethod);
 
         consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInAct);
     }
@@ -352,8 +353,9 @@ implements HasMetaModelContext {
                 methodRemover, facetedMethod, true);
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
         final OneToOneAssociationMixedIn mixedInProp =
-                OneToOneAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "prop", facetedMethod);
+                OneToOneAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinSpec, "prop", facetedMethod);
 
         consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInProp);
     }
@@ -412,8 +414,9 @@ implements HasMetaModelContext {
                 methodRemover, facetedMethod, true);
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
+        final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
         final OneToManyAssociationMixedIn mixedInColl =
-                OneToManyAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinClass, "coll", facetedMethod);
+                OneToManyAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinSpec, "coll", facetedMethod);
 
         consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInColl);
     }
