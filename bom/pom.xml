@@ -123,7 +123,7 @@ identified
 
         <docx4j.version>11.3.2</docx4j.version>
 
-        <easymock.version>5.4.0</easymock.version>
+        <easymock.version>5.5.0</easymock.version>
         <eclipselink.version>4.0.4</eclipselink.version>
         <error_prone_annotations.version>2.35.1</error_prone_annotations.version>
 
