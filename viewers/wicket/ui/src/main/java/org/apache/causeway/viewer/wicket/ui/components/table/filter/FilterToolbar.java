@@ -34,6 +34,8 @@ public class FilterToolbar extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_TABLE_SEARCH_INPUT = "table-search-input";
+    private static final String ID_TABLE_SEARCH_BUTTON = "table-search-button";
+    private static final String ID_TABLE_SEARCH_CLEAR = "table-search-clear";
 
     /**
      * DataTable this search bar is attached to.
@@ -64,19 +66,33 @@ public class FilterToolbar extends Panel {
         var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
         Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
 
+        Wkt.linkAdd(this, ID_TABLE_SEARCH_BUTTON, target->{
+            propagateUpdate(target, searchField.getValue());
+        });
+
+        Wkt.linkAdd(this, ID_TABLE_SEARCH_CLEAR, target->{
+            searchField.setModelObject(null);
+            target.add(searchField);
+            propagateUpdate(target, searchField.getValue());
+        });
+
         searchField.add(new OnChangeAjaxBehavior() {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-                // on searchArg update originating from end-user in UI
-                table.setSearchArg(searchField.getValue());
-                table.setSearchHintAndBroadcast(target);
-                // tells the table component to re-render
-                target.add(table);
+                // no-op; however it seems we need to install this behavior, in order for the server side model to receive updates at all
             }
         });
 
         addOrReplace(searchField);
+    }
+
+    private void propagateUpdate(final AjaxRequestTarget target, final String searchArg) {
+        // on searchArg update originating from end-user in UI
+        table.setSearchArg(searchArg);
+        table.setSearchHintAndBroadcast(target);
+        // tells the table component to re-render
+        target.add(table);
     }
 
 }
