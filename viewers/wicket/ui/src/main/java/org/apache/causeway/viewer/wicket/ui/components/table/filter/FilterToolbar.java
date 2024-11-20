@@ -80,7 +80,8 @@ public class FilterToolbar extends Panel {
             private static final long serialVersionUID = 1L;
             @Override
             protected void onUpdate(final AjaxRequestTarget target) {
-                // no-op; however it seems we need to install this behavior, in order for the server side model to receive updates at all
+                // no-op; however, it seems we need to install this behavior,
+                // in order for the server side model to receive updates at all
             }
         });
 
