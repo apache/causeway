@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.commons.internal.collections;
 
+import java.util.Comparator;
 import java.util.stream.Stream;
+
+import org.springframework.lang.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -41,7 +44,7 @@ public final class _Streams {
     /**
      * 3 param variant of {@link Stream#concat(Stream, Stream)}
      */
-    public static <T> Stream<T> concat(Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c) {
+    public static <T> Stream<T> concat(final Stream<? extends T> a, final Stream<? extends T> b, final Stream<? extends T> c) {
         return Stream.concat(Stream.concat(a, b), c);
     }
 
@@ -49,7 +52,7 @@ public final class _Streams {
      * 4 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d) {
+            final Stream<? extends T> a, final Stream<? extends T> b, final Stream<? extends T> c, final Stream<? extends T> d) {
 
         return Stream.concat(Stream.concat(a, b), Stream.concat(c, d));
     }
@@ -58,8 +61,8 @@ public final class _Streams {
      * 5 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
-            Stream<? extends T> e) {
+            final Stream<? extends T> a, final Stream<? extends T> b, final Stream<? extends T> c, final Stream<? extends T> d,
+            final Stream<? extends T> e) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
@@ -70,8 +73,8 @@ public final class _Streams {
      * 6 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
-            Stream<? extends T> e, Stream<? extends T> f) {
+            final Stream<? extends T> a, final Stream<? extends T> b, final Stream<? extends T> c, final Stream<? extends T> d,
+            final Stream<? extends T> e, final Stream<? extends T> f) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
@@ -82,8 +85,8 @@ public final class _Streams {
      * 7 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
-            Stream<? extends T> e, Stream<? extends T> f, Stream<? extends T> g) {
+            final Stream<? extends T> a, final Stream<? extends T> b, final Stream<? extends T> c, final Stream<? extends T> d,
+            final Stream<? extends T> e, final Stream<? extends T> f, final Stream<? extends T> g) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
@@ -94,11 +97,24 @@ public final class _Streams {
      * 8 param variant of {@link Stream#concat(Stream, Stream)}
      */
     public static <T> Stream<T> concat(
-            Stream<? extends T> a, Stream<? extends T> b, Stream<? extends T> c, Stream<? extends T> d,
-            Stream<? extends T> e, Stream<? extends T> f, Stream<? extends T> g, Stream<? extends T> h) {
+            final Stream<? extends T> a, final Stream<? extends T> b, final Stream<? extends T> c, final Stream<? extends T> d,
+            final Stream<? extends T> e, final Stream<? extends T> f, final Stream<? extends T> g, final Stream<? extends T> h) {
 
         return Stream.concat(
                 Stream.concat(Stream.concat(a, b), Stream.concat(c, d)),
                 Stream.concat(Stream.concat(e, f), Stream.concat(g, h)));
     }
+
+    /**
+     * Conditionally sorts the stream based on presence of a comparator.
+     * @return null for null
+     */
+    public static <T> Stream<T> sortConditionally(
+        @Nullable final Stream<T> input,
+        @Nullable final Comparator<? super T> comparator) {
+        if(comparator==null) return input;
+        if(input==null) return null;
+        return input.sorted(comparator);
+    }
+
 }

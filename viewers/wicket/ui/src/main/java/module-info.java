@@ -77,7 +77,6 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.layout.bs.col;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.bootstrap;
     exports org.apache.causeway.viewer.wicket.ui.components.actioninfo;
-    exports org.apache.causeway.viewer.wicket.ui.components.collection.bulk;
     exports org.apache.causeway.viewer.wicket.ui.pages.entity;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.bool;
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt.register;

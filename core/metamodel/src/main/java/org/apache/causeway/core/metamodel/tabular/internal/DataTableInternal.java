@@ -39,6 +39,7 @@ import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
+import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
@@ -108,7 +109,6 @@ implements DataTableInteractive {
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRows;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSorted;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
-    @Getter private final _BindableAbstract<Boolean> selectAllToggle;
     @Getter private final _BindableAbstract<ColumnSort> columnSort;
 
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
@@ -150,10 +150,9 @@ implements DataTableInteractive {
                 .collect(Can.toCan()));
 
         this.dataRowsFilteredAndSorted = _Observables.lazy(()->
-            dataRows.getValue().stream()
-                .filter(adaptSearchPredicate())
-                .sorted(sortingComparator()
-                        .orElseGet(()->(a, b)->0)) // else don't sort (no-op comparator for streams)
+            _Streams.sortConditionally(
+                    dataRows.getValue().stream().filter(adaptSearchPredicate()),
+                    sortingComparator().orElse(null))
                 .collect(Can.toCan()));
 
         this.dataRowsSelected = _Observables.lazy(()->
@@ -162,15 +161,6 @@ implements DataTableInteractive {
                 .collect(Can.toCan()));
 
         this.selectionChanges = _Bindables.forValue(Boolean.FALSE);
-        this.selectAllToggle = _Bindables.forValue(Boolean.FALSE);
-        this.selectAllToggle.addListener((e,o,isAllOn)->{
-            //_Debug.onClearToggleAll(o, isAllOn, isClearToggleAllEvent.get());
-            if(isClearToggleAllEvent.get()) return;
-
-            doProgrammaticToggle(()->{
-                dataRows.getValue().forEach(dataRow->dataRow.getSelectToggle().setValue(isAllOn));
-            });
-        });
 
         this.searchArgument.addListener((e,o,n)->{
             dataRowsFilteredAndSorted.invalidate();
@@ -272,15 +262,6 @@ implements DataTableInteractive {
     // -- TOGGLE ALL
 
     private final AtomicBoolean isProgrammaticToggle = new AtomicBoolean();
-    private final AtomicBoolean isClearToggleAllEvent = new AtomicBoolean();
-    public void clearToggleAll() {
-        try {
-            isClearToggleAllEvent.set(true);
-            selectAllToggle.setValue(Boolean.FALSE);
-        } finally {
-            isClearToggleAllEvent.set(false);
-        }
-    }
 
     @Override
     public void doProgrammaticToggle(final @NonNull Runnable runnable) {
@@ -297,8 +278,6 @@ implements DataTableInteractive {
 
     void handleRowSelectToggle() {
         if(isProgrammaticToggle.get()) return;
-        // in any case, if we have a toggle state change, clear the toggle all bindable
-        clearToggleAll();
         invalidateSelectionThenNotifyListeners();
     }
 
@@ -306,6 +285,26 @@ implements DataTableInteractive {
         dataRowsSelected.invalidate();
         // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
+    }
+
+    @Override
+    public void selectAll(final boolean select) {
+        doProgrammaticToggle(()->{
+            dataRows.getValue()
+                .forEach(dataRow->{
+                    dataRow.getSelectToggle().setValue(select);
+                });
+        });
+    }
+
+    @Override
+    public void selectAllFiltered(final boolean select) {
+        doProgrammaticToggle(()->{
+            dataRowsFilteredAndSorted.getValue()
+                .forEach(dataRow->{
+                    dataRow.getSelectToggle().setValue(select);
+                });
+        });
     }
 
     @Override

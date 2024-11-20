@@ -85,13 +85,12 @@ class CollectionInteractionTest extends InteractionTestAbstract {
                 expectedElements.get(3)));
 
         // toggle all on
-        tableTester.getDataTable().getSelectAllToggle().setValue(true);
+        tableTester.getDataTable().selectAll(true);
         tableTester.assertDataRowSelectionIsAll();
 
         // toggle all off
-        tableTester.getDataTable().getSelectAllToggle().setValue(false);
+        tableTester.getDataTable().selectAll(false);
         tableTester.assertDataRowSelectionIsEmpty();
-
     }
 
     @Test

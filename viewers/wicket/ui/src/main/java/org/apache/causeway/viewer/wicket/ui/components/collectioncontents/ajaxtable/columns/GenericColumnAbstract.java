@@ -118,7 +118,7 @@ implements GenericColumn, HasMetaModelContext {
     }
 
     protected String translate(final String raw) {
-        return getMetaModelContext().getTranslationService().translate(TranslationContext.empty(), raw);
+        return getTranslationService().translate(TranslationContext.empty(), raw);
     }
 
 }

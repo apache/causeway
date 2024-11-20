@@ -120,11 +120,12 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- SELECTION
 
-    Bindable<Boolean> getSelectAllToggle();
     void doProgrammaticToggle(Runnable runnable);
     Set<Integer> getSelectedRowIndexes();
     Observable<Can<DataRow>> getDataRowsSelected();
     void selectRangeOfRowsByIndex(IntStream range, boolean select);
+    void selectAllFiltered(boolean select);
+    void selectAll(boolean select);
 
     // -- EXPORTING
 

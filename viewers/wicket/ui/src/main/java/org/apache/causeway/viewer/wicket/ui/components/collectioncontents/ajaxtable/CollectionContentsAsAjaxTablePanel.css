@@ -119,7 +119,12 @@
 
 .collectionContentsAsAjaxTablePanel table.contents tbody .togglebox-column {
     width: 2%;
+    text-align: center;
 }
+.collectionContentsAsAjaxTablePanel table.contents thead .togglebox-column .dropdown-item li {
+	opacity:1;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents thead .title-column,
 .collectionContentsAsAjaxTablePanel table.contents tbody .title-column {
     text-align: center;

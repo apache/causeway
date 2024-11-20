@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -38,7 +37,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
-import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
+import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ActionColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
@@ -49,6 +48,7 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterToolbar;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -121,10 +121,6 @@ implements CollectionCountProvider {
                 getWicketViewerSettings(),
                 columns);
 
-        // prepend toggle-box column (left most), if enabled
-        getToggleboxColumn()
-            .ifPresent(toggleboxColumn->columns.add(0, toggleboxColumn));
-
         // last append action column
         //TODO[CAUSEWAY-3815] disabled until action column rendering is fleshed out
         addActionsColumnIfRequired(elementType, columns);
@@ -134,21 +130,21 @@ implements CollectionCountProvider {
                 ID_TABLE, columns, dataProvider, collectionModel.getPageSize());
         addOrReplace(dataTable);
 
+        // prepend toggle-box column (left most), if enabled
+        createToggleboxColumn(dataTable)
+            .ifPresent(toggleboxColumn->columns.add(0, toggleboxColumn));
+
         addFilterToolbar(dataTable);
     }
 
-    private Optional<ToggleboxColumn> getToggleboxColumn() {
-        return getMultiselectToggleProvider()
-                .map(MultiselectToggleProvider::getToggleboxColumn);
-    }
+    // -- MULTI SELECTION SUPPORT
 
-    private Optional<MultiselectToggleProvider> getMultiselectToggleProvider() {
-        Component component = this;
-        while(component != null) {
-            if(component instanceof MultiselectToggleProvider) {
-                return Optional.of((MultiselectToggleProvider) component);
-            }
-            component = component.getParent();
+    private Optional<ToggleboxColumn> createToggleboxColumn(final DataTableWithPagesAndFilter<?, ?> dataTable) {
+        if(entityCollectionModel() instanceof EntityCollectionModelParented collModel) {
+            var collMetaModel = collModel.getMetaModel();
+            return collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
+                    ? Optional.of(new ToggleboxColumn(collModel.getElementType(), dataTable))
+                    : Optional.empty();
         }
         return Optional.empty();
     }

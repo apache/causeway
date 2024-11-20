@@ -18,13 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn.BulkToggle;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -40,31 +36,13 @@ extends PanelAbstract<Boolean, Model<Boolean>> {
     private static final String ID_FORM = "form";
     private static final String ID_TOGGLEBOX = "togglebox";
 
-    private final AjaxCheckBox checkbox;
-
     public ContainedToggleboxPanel(
             final String id,
             final IModel<Boolean> model) {
-        this(id, model, (x,y)->{/*noop*/});
-    }
-
-    public ContainedToggleboxPanel(
-            final String id,
-            final IModel<Boolean> model,
-            final SerializableBiConsumer<Boolean, AjaxRequestTarget> onUpdate) {
         super(id);
         var markupContainer = Wkt.containerAdd(this, ID_CONTAINER);
         var form = Wkt.formAdd(markupContainer, ID_FORM);
-        this.checkbox = Wkt.checkboxAdd(
-                form, ID_TOGGLEBOX, model, ajaxTarget->
-                    onUpdate.accept(model.getObject(), ajaxTarget));
-    }
-
-    public void set(
-            final BulkToggle bulkToggle,
-            final AjaxRequestTarget target) {
-        checkbox.setModelObject(bulkToggle.isSetAll());
-        target.add(this);
+        Wkt.checkboxAdd(form, ID_TOGGLEBOX, model, ajaxTarget->{/*noop*/});
     }
 
 }

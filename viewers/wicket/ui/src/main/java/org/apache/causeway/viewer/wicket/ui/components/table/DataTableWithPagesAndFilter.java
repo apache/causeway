@@ -161,8 +161,10 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     public List<PageActionChoice> getPageActionChoices() {
         return isRowSelectionEnabled()
                 ? List.of(
-                    new PageActionChoice("PAGE_SEL", translate("select all rows of this page")),
-                    new PageActionChoice("PAGE_UNSEL", translate("unselect all rows of this page")))
+                    new PageActionChoice("SEL_ALL", translate("select ALL (filtered) rows of this table")),
+                    new PageActionChoice("CLEAR", translate("CLEAR selection")),
+                    new PageActionChoice("PAGE_SEL", translate("select ALL rows of this PAGE")),
+                    new PageActionChoice("PAGE_UNSEL", translate("unselect ALL rows of this PAGE")))
                 : Collections.emptyList();
     }
 
@@ -174,16 +176,24 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      */
     public boolean executePageAction(final PageActionChoice pageActionChoice) {
         switch(pageActionChoice.getKey()) {
-        case "PAGE_SEL": {
-            _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
-            return true;
-        }
-        case "PAGE_UNSEL": {
-            _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
-            return true;
-        }
-        default:
-            return false; // ignore, bale out
+            case "SEL_ALL": {
+                _TableUtils.interactive(this).selectAllFiltered(true);
+                return true;
+            }
+            case "CLEAR": {
+                _TableUtils.interactive(this).selectAll(false);
+                return true;
+            }
+            case "PAGE_SEL": {
+                _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
+                return true;
+            }
+            case "PAGE_UNSEL": {
+                _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
+                return true;
+            }
+            default:
+                return false; // ignore, bale out
         }
     }
 

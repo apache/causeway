@@ -21,14 +21,13 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.List;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.pageact.PageActionChooser;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -45,14 +44,14 @@ extends GenericColumnAbstract {
         public boolean isSetAll() { return this == SET_ALL; }
     }
 
-    private final IModel<DataTableInteractive> dataTableModelHolder;
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
+    private DataTableWithPagesAndFilter<?, ?> table;
 
     public ToggleboxColumn(
             final ObjectSpecification elementType,
-            final IModel<DataTableInteractive> dataTableModelHolder) {
+            final DataTableWithPagesAndFilter<?, ?> table) {
         super(elementType, "");
-        this.dataTableModelHolder = dataTableModelHolder;
+        this.table = table;
     }
 
     public void removeToggles() {
@@ -64,31 +63,14 @@ extends GenericColumnAbstract {
         var dataRowToggle = new DataRowToggleWkt(dataRowWkt);
         var rowToggle = new ContainedToggleboxPanel(componentId, dataRowToggle);
         rowToggles.add(rowToggle);
-        return rowToggle.setOutputMarkupId(true);
+        return rowToggle;
     }
 
     @Override
     public Component getHeader(final String componentId) {
-        var bulkToggle = new ContainedToggleboxPanel(
-                componentId,
-                new BulkToggleWkt(dataTableModelHolder),
-                    this::onBulkUpdate);
-        Wkt.cssAppend(bulkToggle, "togglebox-column");
-        return bulkToggle;
-    }
-
-    // -- HELPER
-
-    private void onBulkUpdate(final Boolean isChecked, final AjaxRequestTarget target) {
-        var dataTableInteractive = dataTableModelHolder.getObject();
-
-        dataTableInteractive.doProgrammaticToggle(()->{
-            var bulkToggle = BulkToggle.valueOf(isChecked);
-            for (ContainedToggleboxPanel rowToggle : rowToggles) {
-                rowToggle.set(bulkToggle, target);
-            }
-        });
-
+        var pageActionChooser = new PageActionChooser(componentId, table);
+        Wkt.cssAppend(pageActionChooser, "togglebox-column");
+        return pageActionChooser;
     }
 
 }

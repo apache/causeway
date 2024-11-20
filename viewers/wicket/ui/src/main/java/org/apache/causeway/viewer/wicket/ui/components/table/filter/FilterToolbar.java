@@ -49,7 +49,7 @@ public class FilterToolbar extends Panel {
     }
 
     /**
-     * Only shows this search bar when there are more than 1 rows.
+     * Only shows this search bar when there are more than 1 rows (unfiltered).
      */
     @Override
     protected void onConfigure() {

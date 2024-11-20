@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
-import org.apache.causeway.viewer.wicket.ui.components.table.nav.pageact.PageActionChooser;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.PageNavigator;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -36,7 +35,6 @@ implements HasCommonContext {
     private static final long serialVersionUID = 1L;
 
     private static final String NAVIGATOR_CONTAINER_ID = "span";
-    private static final String ID_PAGE_ACTION_CHOOSER = "pageActionChooser";
     private static final String ID_PAGESIZE_CHOOSER = "pagesizeChooser";
 
     /**
@@ -62,9 +60,6 @@ implements HasCommonContext {
 
     private void buildGui() {
         var navigatorContainer = navigatorContainer();
-
-        Wkt.add(navigatorContainer,
-                new PageActionChooser(ID_PAGE_ACTION_CHOOSER, getTable()));
 
         Wkt.add(navigatorContainer,
                 new PagesizeChooser(ID_PAGESIZE_CHOOSER, getTable()));
