@@ -38,7 +38,9 @@ public class Integers extends AbstractRandomValueGenerator {
     }
 
     public int between(final int min, final int max) {
-        return min + fake.randomService.nextInt(max - min);
+        return min==max
+            ? min
+            : min + fake.randomService.nextInt(max - min);
     }
 
 }

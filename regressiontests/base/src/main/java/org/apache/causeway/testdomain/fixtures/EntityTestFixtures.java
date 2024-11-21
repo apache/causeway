@@ -29,7 +29,7 @@ import java.util.stream.IntStream;
 
 import jakarta.inject.Inject;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -220,7 +220,7 @@ implements
      * VALUES (?,?,?,?,?,?,?,?,?) [42122-214]
      * ----
      * This is an attempt to force the JDO schema to properly initialize. */
-    protected void initSchema() {};
+    protected void initSchema() {}
 
     @SneakyThrows
     public final Lock aquireLockAndClear() {

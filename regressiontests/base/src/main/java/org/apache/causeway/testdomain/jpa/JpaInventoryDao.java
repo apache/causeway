@@ -20,8 +20,8 @@ package org.apache.causeway.testdomain.jpa;
 
 import jakarta.inject.Inject;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

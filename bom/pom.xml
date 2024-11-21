@@ -2105,7 +2105,7 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.jmock</groupId>
-                <artifactId>jmock-junit4</artifactId>
+                <artifactId>jmock-junit5</artifactId>
                 <version>${jmock.version}</version>
             </dependency>
 

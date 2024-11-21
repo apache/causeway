@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assume.assumeThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Contract test for value types ({@link #equals(Object) equals} and
@@ -99,11 +99,11 @@ public abstract class ValueTypeContractTestAbstract<T> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void comparableEquivalence() throws Exception {
         for (final T o1 : getObjectsWithSameValue()) {
-            assumeThat(o1 instanceof Comparable, is(true));
+            assumeTrue(o1 instanceof Comparable);
             Comparable c1 = (Comparable)o1;
 
             for (final T o2 : getObjectsWithSameValue()) {
-                assumeThat(o2 instanceof Comparable, is(true));
+                assumeTrue(o2 instanceof Comparable);
                 Comparable c2 = (Comparable)o2;
 
                 assertThat(c1.compareTo(c2), is(0));
@@ -111,7 +111,7 @@ public abstract class ValueTypeContractTestAbstract<T> {
             }
 
             for (final T o2 : getObjectsWithDifferentValue()) {
-                assumeThat(o2 instanceof Comparable, is(true));
+                assumeTrue(o2 instanceof Comparable);
                 Comparable c2 = (Comparable)o2;
 
                 final int x = c1.compareTo(c2);

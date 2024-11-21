@@ -31,11 +31,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,39 +45,28 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.testing.unittestsupport.applib.jmocking.JUnitRuleMockery2;
 
-public class FakeDataServiceTest {
-
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+class FakeDataServiceTest {
 
     FakeDataService fakeDataService;
+    RepositoryService mockRepositoryService = Mockito.mock(RepositoryService.class);
+    ClockService mockClockService = Mockito.mock(ClockService.class);
 
-    @Mock
-    RepositoryService mockRepositoryService;
-
-    @Mock
-    ClockService mockClockService;
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         fakeDataService = new FakeDataService(mockClockService, mockRepositoryService);
         fakeDataService.init();
 
-        final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now()); 
-        
-        context.checking(new Expectations() {{
-            allowing(mockClockService).getClock();
-            will(returnValue(virtualClock));
-        }});
+        final VirtualClock virtualClock = VirtualClock.frozenAt(Instant.now());
+        Mockito.when(mockClockService.getClock()).thenReturn(virtualClock);
     }
 
     public static class CausewayBlobsTest extends FakeDataServiceTest {
 
         CausewayBlobs causewayBlobs;
 
-        @Before
+        @Override
+        @BeforeEach
         public void setUp() throws Exception {
             super.setUp();
             causewayBlobs = fakeDataService.causewayBlobs();
@@ -127,7 +114,8 @@ public class FakeDataServiceTest {
 
         CausewayClobs causewayClobs;
 
-        @Before
+        @Override
+        @BeforeEach
         public void setUp() throws Exception {
             super.setUp();
             causewayClobs = fakeDataService.causewayClobs();
@@ -209,14 +197,6 @@ public class FakeDataServiceTest {
         assertThat(pwd.getPassword().length()).isEqualTo(12);
     }
 
-  //TODO[2249] deprecated    
-//    @Test
-//    public void moneys_any() throws Exception {
-//        final Money pwd = fakeDataService.causewayMoneys().any();
-//        assertThat(pwd.getAmount()).isNotNull();
-//        assertThat(pwd.getCurrency()).isNotNull();
-//    }
-
     @Test
     public void jodaDateTimes_any() throws Exception {
         final OffsetDateTime any = fakeDataService.javaTimeDateTimes().any();
@@ -285,12 +265,7 @@ public class FakeDataServiceTest {
             final Collection<Object> ints = _Lists.newArrayList(Arrays.asList(new Object(), thisOne, new Object()));
 
             for (int i = 0; i < 1000; i++) {
-                final Object rand = fakeDataService.collections().anyOfExcept(ints, new Predicate<Object>() {
-                    @Override
-                    public boolean test(final Object obj) {
-                        return obj == thisOne;
-                    }
-                });
+                final Object rand = fakeDataService.collections().anyOfExcept(ints, (Predicate<Object>) obj -> obj == thisOne);
                 seen.add(rand);
             }
 
@@ -323,12 +298,7 @@ public class FakeDataServiceTest {
            final Collection<Integer> ints = _Lists.newArrayList(Arrays.asList(1, 2, 3, 4));
 
            for (int i = 0; i < 1000; i++) {
-               final int rand = fakeDataService.collections().anyOfExcept(ints, new Predicate<Integer>() {
-                   @Override
-                   public boolean test(final Integer integer) {
-                       return integer == 2;
-                   }
-               });
+               final int rand = fakeDataService.collections().anyOfExcept(ints, (Predicate<Integer>) integer -> integer == 2);
                 seen.add(rand);
            }
 

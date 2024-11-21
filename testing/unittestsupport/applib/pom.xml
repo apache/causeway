@@ -76,6 +76,10 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-api</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -97,7 +101,7 @@
 
         <dependency>
             <groupId>org.jmock</groupId>
-            <artifactId>jmock-junit4</artifactId>
+            <artifactId>jmock-junit5</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
@@ -115,6 +119,14 @@
                     <groupId>org.objenesis</groupId>
                     <artifactId>objenesis</artifactId>
                 </exclusion>
+<!--                <exclusion>-->
+<!--                    <groupId>org.junit.jupiter</groupId>-->
+<!--                    <artifactId>junit-jupiter-api</artifactId>-->
+<!--                </exclusion>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.junit.platform</groupId>-->
+<!--                    <artifactId>junit-platform-launcher</artifactId>-->
+<!--                </exclusion>-->
             </exclusions>
         </dependency>
 
