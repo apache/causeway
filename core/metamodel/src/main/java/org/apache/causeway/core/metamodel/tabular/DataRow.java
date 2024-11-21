@@ -37,7 +37,7 @@ public interface DataRow {
     /**
      * If the table supports row selection, represents the bindable row selection status for this {@link DataRow}.
      */
-    Bindable<Boolean> selectToggle();
+    Bindable<Boolean> selectToggleBindable();
 
     Optional<Tokens> filterTokens();
 

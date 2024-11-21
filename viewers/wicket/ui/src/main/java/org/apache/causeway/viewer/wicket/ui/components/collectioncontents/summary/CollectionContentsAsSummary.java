@@ -102,7 +102,7 @@ implements CollectionCountProvider {
             var propertyColumnName = numberAssociation.getCanonicalFriendlyName();
             Wkt.labelAdd(item, ID_PROPERTY_NAME, propertyColumnName);
 
-            var visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
+            var visibleAdapters = model.getDataTableModel().dataRowsFilteredAndSortedObservable()
                     .getValue()
                     .map(DataRow::rowElement)
                     .toList();

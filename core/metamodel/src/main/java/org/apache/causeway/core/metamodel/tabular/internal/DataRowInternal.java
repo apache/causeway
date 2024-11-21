@@ -39,7 +39,7 @@ import lombok.NonNull;
 record DataRowInternal(
     int rowIndex,
     ManagedObject rowElement,
-    BooleanBindable selectToggle,
+    BooleanBindable selectToggleBindable,
     DataTableInternal parentTable,
     Optional<CollectionFilterService.Tokens> filterTokens
     ) implements DataRow {
@@ -50,7 +50,7 @@ record DataRowInternal(
             final @NonNull ManagedObject rowElement,
             final @Nullable CollectionFilterService.Tokens filterTokens) {
         this(rowIndex, rowElement, _Bindables.forBoolean(false), parentTable, Optional.ofNullable(filterTokens));
-        selectToggle.addListener((event, old, neW)->parentTable.handleRowSelectToggle());
+        selectToggleBindable.addListener((event, old, neW)->parentTable.handleRowSelectToggle());
     }
 
     @Override

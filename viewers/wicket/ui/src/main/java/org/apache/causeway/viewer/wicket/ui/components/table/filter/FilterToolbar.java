@@ -63,7 +63,7 @@ public class FilterToolbar extends Panel {
     private void buildGui() {
 
         var dataTableInteractive = _TableUtils.interactive(table);
-        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.getSearchArgument().getValue()));
+        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.searchArgumentBindable().getValue()));
         Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
 
         Wkt.linkAdd(this, ID_TABLE_SEARCH_BUTTON, target->{

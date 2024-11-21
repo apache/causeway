@@ -124,7 +124,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         if(_Strings.nullToEmpty(this.searchArg).equals(_Strings.nullToEmpty(value))) return;
         this.searchArg = value;
         // update the interactive model
-        _TableUtils.interactive(this).getSearchArgument().setValue(searchArg);
+        _TableUtils.interactive(this).searchArgumentBindable().setValue(searchArg);
     }
 
     // -- PAGESIZE

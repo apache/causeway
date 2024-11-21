@@ -51,7 +51,7 @@ public abstract class EventProviderAbstract implements EventProvider {
         var commonContext = collectionModel.getMetaModelContext();
 
         collectionModel.getDataTableModel()
-        .getDataElements().getValue()
+        .dataElementsObservable().getValue()
         .stream()
         .map(newEvent(commonContext, calendarName))
         .filter(Objects::nonNull)

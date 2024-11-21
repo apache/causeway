@@ -46,7 +46,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     private void buildGui() {
         final EntityCollectionModel model = getModel();
 
-        var visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
+        var visibleAdapters = model.getDataTableModel().dataRowsFilteredAndSortedObservable()
                 .getValue()
                 .map(DataRow::rowElement)
                 .toList();

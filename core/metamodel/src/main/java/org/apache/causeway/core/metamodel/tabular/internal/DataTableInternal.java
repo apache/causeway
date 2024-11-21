@@ -104,12 +104,20 @@ implements DataTableInteractive {
     final @NonNull ManagedMember managedMember;
     final @NonNull Where where;
 
-    @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElements;
-    @Getter private final @NonNull _BindableAbstract<String> searchArgument; // filter the data rows
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<ManagedObject>> dataElementsObservable;
 
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRows;
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSorted;
-    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
+    @Accessors(fluent=true)
+    @Getter private final @NonNull _BindableAbstract<String> searchArgumentBindable; // filter the data rows
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSortedObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelectedObservable;
 
     @Accessors(fluent=true)
     @Getter private final _BindableAbstract<ColumnSort> columnSortBinable;
@@ -142,38 +150,38 @@ implements DataTableInteractive {
         this.where = where;
         this.filterHandler = _FilterUtils.createFilterHandler(elementType);
 
-        this.searchArgument = _Bindables.forValue("");
+        this.searchArgumentBindable = _Bindables.forValue("");
         this.columnSortBinable = _Bindables.forValue(null);
 
-        this.dataElements = _Observables.lazy(()->elements
+        this.dataElementsObservable = _Observables.lazy(()->elements
                 //.map(mmc::injectServicesInto) // I believe is redundant, has major performance impact
                 //.filter(this::ignoreHidden) // I believe is redundant, has major performance impact
                 );
 
-        this.dataRows = _Observables.lazy(()->
-            dataElements.getValue().stream()
+        this.dataRowsObservable = _Observables.lazy(()->
+            dataElementsObservable.getValue().stream()
                 .map(IndexedFunction.zeroBased((rowIndex, element)->new DataRowInternal(rowIndex, this, element, tokens(element))))
                 .collect(Can.toCan()));
 
-        this.dataRowsFilteredAndSorted = _Observables.lazy(()->
+        this.dataRowsFilteredAndSortedObservable = _Observables.lazy(()->
             _Streams.sortConditionally(
-                    dataRows.getValue().stream().filter(adaptSearchPredicate()),
+                dataRowsObservable.getValue().stream().filter(adaptSearchPredicate()),
                     sortingComparator().orElse(null))
                 .collect(Can.toCan()));
 
-        this.dataRowsSelected = _Observables.lazy(()->
-            dataRows.getValue().stream()
-                .filter(dataRow->dataRow.selectToggle().getValue().booleanValue())
+        this.dataRowsSelectedObservable = _Observables.lazy(()->
+            dataRowsObservable.getValue().stream()
+                .filter(dataRow->dataRow.selectToggleBindable().getValue().booleanValue())
                 .collect(Can.toCan()));
 
         this.selectionChanges = _Bindables.forValue(Boolean.FALSE);
 
-        this.searchArgument.addListener((e,o,n)->{
-            dataRowsFilteredAndSorted.invalidate();
+        this.searchArgumentBindable.addListener((e,o,n)->{
+            dataRowsFilteredAndSortedObservable.invalidate();
         });
 
         this.columnSortBinable.addListener((e,o,n)->{
-            dataRowsFilteredAndSorted.invalidate();
+            dataRowsFilteredAndSortedObservable.invalidate();
         });
 
         this.dataColumnsObservable = _Observables.lazy(()->
@@ -208,7 +216,7 @@ implements DataTableInteractive {
      * Count all data rows (the user is allowed to see).
      */
     public int getVisibleElementCount() {
-        return dataElements.getValue().size();
+        return dataElementsObservable.getValue().size();
     }
 
     /**
@@ -216,7 +224,7 @@ implements DataTableInteractive {
      */
     @Override
     public int getFilteredElementCount() {
-        return dataRowsFilteredAndSorted.getValue().size();
+        return dataRowsFilteredAndSortedObservable.getValue().size();
     }
 
     @Override
@@ -230,7 +238,7 @@ implements DataTableInteractive {
 
     @Override
     public Optional<DataRow> lookupDataRow(final int rowIndex) {
-        return getDataRows().getValue().get(rowIndex)
+        return dataRowsObservable().getValue().get(rowIndex)
                 .map(DataRow.class::cast);
     }
 
@@ -246,7 +254,7 @@ implements DataTableInteractive {
         return filterHandler.isEmpty()
                 ? dataRow->true
                 : dataRow->filterHandler.get().getDataRowFilter()
-                    .test(dataRow, searchArgument.getValue());
+                    .test(dataRow, searchArgumentBindable.getValue());
     }
 
     @Nullable
@@ -288,7 +296,7 @@ implements DataTableInteractive {
     }
 
     private void invalidateSelectionThenNotifyListeners() {
-        dataRowsSelected.invalidate();
+        dataRowsSelectedObservable.invalidate();
         // simply toggles the boolean value, to trigger any listeners
         selectionChanges.setValue(!selectionChanges.getValue());
     }
@@ -296,9 +304,9 @@ implements DataTableInteractive {
     @Override
     public void selectAll(final boolean select) {
         doProgrammaticToggle(()->{
-            dataRows.getValue()
+            dataRowsObservable.getValue()
                 .forEach(dataRow->{
-                    dataRow.selectToggle().setValue(select);
+                    dataRow.selectToggleBindable().setValue(select);
                 });
         });
     }
@@ -306,9 +314,9 @@ implements DataTableInteractive {
     @Override
     public void selectAllFiltered(final boolean select) {
         doProgrammaticToggle(()->{
-            dataRowsFilteredAndSorted.getValue()
+            dataRowsFilteredAndSortedObservable.getValue()
                 .forEach(dataRow->{
-                    dataRow.selectToggle().setValue(select);
+                    dataRow.selectToggleBindable().setValue(select);
                 });
         });
     }
@@ -316,10 +324,10 @@ implements DataTableInteractive {
     @Override
     public void selectRangeOfRowsByIndex(final IntStream range, final boolean select) {
         doProgrammaticToggle(()->{
-            dataRowsFilteredAndSorted.getValue()
+            dataRowsFilteredAndSortedObservable.getValue()
                 .pickByIndex(range)
                 .forEach(dataRow->{
-                    dataRow.selectToggle().setValue(select);
+                    dataRow.selectToggleBindable().setValue(select);
                 });
         });
     }
@@ -343,13 +351,13 @@ implements DataTableInteractive {
 
     @Override
     public Can<ManagedObject> getSelected() {
-        return dataRowsSelected.getValue()
+        return dataRowsSelectedObservable.getValue()
             .map(DataRow::rowElement);
     }
 
     @Override
     public Set<Integer> getSelectedRowIndexes() {
-        return dataRowsSelected.getValue()
+        return dataRowsSelectedObservable.getValue()
             .stream()
             .map(DataRow::rowIndex)
             .collect(Collectors.toSet());
@@ -377,7 +385,7 @@ implements DataTableInteractive {
                 titleObservable().getValue(),
                 dataColumnsObservable().getValue()
                     .map(DataColumn::associationMetaModel),
-                getDataRowsFilteredAndSorted().getValue()
+                dataRowsFilteredAndSortedObservable().getValue()
                     .stream()
                     .map(dr->dr.rowElement())
                     .collect(Can.toCan()));
@@ -390,7 +398,7 @@ implements DataTableInteractive {
                 titleObservable().getValue(),
                 dataColumnsObservable().getValue()
                     .map(DataColumn::associationMetaModel),
-                getDataElements().getValue());
+                dataElementsObservable().getValue());
     }
 
     // -- MEMENTO
@@ -420,7 +428,7 @@ implements DataTableInteractive {
                     tableInteractive.managedMember.getIdentifier(),
                     tableInteractive.where,
                     tableInteractive.exportAll(),
-                    tableInteractive.searchArgument.getValue(),
+                    tableInteractive.searchArgumentBindable.getValue(),
                     tableInteractive.getSelectedRowIndexes(),
                     tableInteractive.columnSortBinable().getValue());
         }
@@ -462,18 +470,18 @@ implements DataTableInteractive {
             if(columnSort!=null)  {
                 dataTableInteractive.columnSortBinable.setValue(columnSort);
             }
-            dataTableInteractive.searchArgument.setValue(searchArgument);
+            dataTableInteractive.searchArgumentBindable.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{
-                dataTableInteractive.dataRows.getValue().stream()
+                dataTableInteractive.dataRowsObservable.getValue().stream()
                     .filter(dataRow->selectedRowIndexes.contains(dataRow.rowIndex()))
-                    .forEach(dataRow->dataRow.selectToggle().setValue(true));
+                    .forEach(dataRow->dataRow.selectToggleBindable().setValue(true));
             });
             return dataTableInteractive;
         }
 
         @Override
         public void setupBindings(final DataTableInteractive tableInteractive) {
-            tableInteractive.getSearchArgument().addListener((e, o, searchArg)->{
+            tableInteractive.searchArgumentBindable().addListener((e, o, searchArg)->{
                 this.searchArgument = searchArg;
             });
             ((DataTableInternal)tableInteractive).selectionChanges.addListener((e, o, n)->{

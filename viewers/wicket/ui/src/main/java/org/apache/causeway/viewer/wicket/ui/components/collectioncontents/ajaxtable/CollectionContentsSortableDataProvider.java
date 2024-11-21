@@ -80,7 +80,7 @@ extends SortableDataProvider<DataRow, String> {
     @Override
     public Iterator<DataRow> iterator(final long skip, final long limit) {
         var dataTable = getDataTableModel();
-        return dataTable.getDataRowsFilteredAndSorted().getValue()
+        return dataTable.dataRowsFilteredAndSortedObservable().getValue()
                 .iterator(Math.toIntExact(skip), Math.toIntExact(limit));
     }
 

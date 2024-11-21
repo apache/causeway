@@ -79,8 +79,8 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     Observable<String> titleObservable();
     Observable<Can<DataColumn>> dataColumnsObservable();
-    Observable<Can<ManagedObject>> getDataElements();
-    Observable<Can<DataRow>> getDataRowsFilteredAndSorted();
+    Observable<Can<ManagedObject>> dataElementsObservable();
+    Observable<Can<DataRow>> dataRowsFilteredAndSortedObservable();
 
     // -- META DATA
 
@@ -94,7 +94,7 @@ public interface DataTableInteractive extends MultiselectChoices {
     // -- ROW COUNT
 
     /**
-     * Counts number of rows in {@link #getDataRowsFilteredAndSorted()}.
+     * Counts number of rows in {@link #dataRowsFilteredAndSortedObservable()}.
      */
     int getFilteredElementCount();
 
@@ -117,7 +117,7 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     void doProgrammaticToggle(Runnable runnable);
     Set<Integer> getSelectedRowIndexes();
-    Observable<Can<DataRow>> getDataRowsSelected();
+    Observable<Can<DataRow>> dataRowsSelectedObservable();
     void selectRangeOfRowsByIndex(IntStream range, boolean select);
     void selectAllFiltered(boolean select);
     void selectAll(boolean select);
@@ -132,7 +132,7 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- FILTER SUPPORT
 
-    Bindable<String> getSearchArgument();
+    Bindable<String> searchArgumentBindable();
     boolean isSearchSupported();
     /**
      * @apiNote never called when not {@link #isSearchSupported()}

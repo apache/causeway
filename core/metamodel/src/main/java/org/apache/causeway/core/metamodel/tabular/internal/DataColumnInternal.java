@@ -30,8 +30,8 @@ import lombok.NonNull;
 record DataColumnInternal(
     @NonNull String columnId,
     @NonNull ObjectAssociation associationMetaModel,
-    @NonNull LazyObservable<String> columnFriendlyName,
-    @NonNull LazyObservable<Optional<String>> columnDescription)
+    @NonNull LazyObservable<String> columnFriendlyNameObservable,
+    @NonNull LazyObservable<Optional<String>> columnDescriptionObservable)
 implements DataColumn {
 
     DataColumnInternal(final DataTableInternal parentTable, final ObjectAssociation associationMetaModel) {

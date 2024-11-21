@@ -30,7 +30,7 @@ public interface DataColumn {
      */
     String columnId();
     ObjectAssociation associationMetaModel();
-    Observable<String> columnFriendlyName();
-    Observable<Optional<String>> columnDescription();
+    Observable<String> columnFriendlyNameObservable();
+    Observable<Optional<String>> columnDescriptionObservable();
 
 }

@@ -88,7 +88,7 @@ public class StandaloneCollectionPage extends PageAbstract {
         Supplier<List<Bookmark>> listSupplier = () -> {
 
             final var dataTableInteractive = collectionModel.getObject();
-            Observable<Can<ManagedObject>> dataElements = dataTableInteractive.getDataElements();
+            Observable<Can<ManagedObject>> dataElements = dataTableInteractive.dataElementsObservable();
             Can<ManagedObject> managedObjects = dataElements.getValue();
 
             final var bookmarks =
