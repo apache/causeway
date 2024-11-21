@@ -105,6 +105,14 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         honorPageNumberHint();
     }
 
+    /**
+     * Gets the number of table rows (unfiltered) directly from the underlying model.
+     * While {@link #getRowCount()} might return zero, when the component was no yet populated.
+     */
+    public int elementCount() {
+        return _TableUtils.interactive(this).dataElementsObservable().getValue().size();
+    }
+
     // -- SELECTABLE
 
     /**

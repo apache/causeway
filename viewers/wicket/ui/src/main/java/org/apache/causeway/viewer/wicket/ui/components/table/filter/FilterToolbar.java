@@ -55,7 +55,7 @@ public class FilterToolbar extends Panel {
     protected void onConfigure() {
         super.onConfigure();
         buildGui();
-        setVisible(getTable().getRowCount() > 1);
+        setVisible(table.elementCount() > 1);
     }
 
     // -- HELPER
