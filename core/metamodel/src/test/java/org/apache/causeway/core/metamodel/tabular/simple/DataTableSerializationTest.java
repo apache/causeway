@@ -91,12 +91,11 @@ class DataTableSerializationTest implements HasMetaModelContext {
         assertNotNull(afterRoundtrip);
         assertEquals(2, afterRoundtrip.getDataRows().size());
 
-        var cus1 = (Customer) afterRoundtrip.getDataRows().getElseFail(0).getRowElement().getPojo();
-        var cus2 = (Customer) afterRoundtrip.getDataRows().getElseFail(1).getRowElement().getPojo();
+        var cus1 = (Customer) afterRoundtrip.getDataRows().getElseFail(0).rowElement().getPojo();
+        var cus2 = (Customer) afterRoundtrip.getDataRows().getElseFail(1).rowElement().getPojo();
 
         assertEquals("cus-1", cus1.getMemento());
         assertEquals("cus-2", cus2.getMemento());
-
     }
 
 }

@@ -100,7 +100,7 @@ extends AssociationColumnAbstract {
         if(overflow>0) {
 
             var href = getMetaModelContext().getServiceRegistry().lookupService(DeepLinkService.class)
-                    .map(deepLinkService->deepLinkService.deepLinkFor(dataRow.getRowElement()))
+                    .map(deepLinkService->deepLinkService.deepLinkFor(dataRow.rowElement()))
                     .map(URI::toString)
                     .orElse("#");
 
@@ -120,7 +120,7 @@ extends AssociationColumnAbstract {
             final String componentId, final DataColumn dataColumn, final ManagedObject cellElement) {
 
         if(ManagedObjects.isValue(cellElement)) {
-            var valueModel = ValueModel.of(dataColumn.getAssociationMetaModel(), cellElement);
+            var valueModel = ValueModel.of(dataColumn.associationMetaModel(), cellElement);
             var componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }

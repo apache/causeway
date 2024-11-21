@@ -49,7 +49,7 @@ extends AssociationColumnAbstract {
     @Override
     protected Component createCellComponent(final String componentId, final DataRowWkt dataRowWkt) {
         var dataRow = dataRowWkt.getObject();
-        var rowElement = dataRow.getRowElement();
+        var rowElement = dataRow.rowElement();
         var rowElementModel = UiObjectWkt.ofAdapter(rowElement);
         var property = rowElement.getSpecification().getPropertyElseFail(memberId);
 

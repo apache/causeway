@@ -25,26 +25,20 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 
-import lombok.Getter;
 import lombok.NonNull;
 
-class DataColumnInternal
+record DataColumnInternal(
+    @NonNull String columnId,
+    @NonNull ObjectAssociation associationMetaModel,
+    @NonNull LazyObservable<String> columnFriendlyName,
+    @NonNull LazyObservable<Optional<String>> columnDescription)
 implements DataColumn {
 
-    @Getter private final @NonNull String columnId;
-    @Getter private final @NonNull ObjectAssociation associationMetaModel;
-    @Getter private final @NonNull LazyObservable<String> columnFriendlyName;
-    @Getter private final @NonNull LazyObservable<Optional<String>> columnDescription;
-
     DataColumnInternal(final DataTableInternal parentTable, final ObjectAssociation associationMetaModel) {
-        this.associationMetaModel = associationMetaModel;
-        this.columnId = associationMetaModel.getId();
-
-        columnFriendlyName = _Observables.lazy(()->
-            associationMetaModel.getCanonicalFriendlyName());
-
-        columnDescription = _Observables.lazy(()->
-            associationMetaModel.getCanonicalDescription());
+        this(associationMetaModel.getId(),
+            associationMetaModel,
+            _Observables.lazy(associationMetaModel::getCanonicalFriendlyName),
+            _Observables.lazy(associationMetaModel::getCanonicalDescription));
     }
 
 }

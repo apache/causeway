@@ -56,10 +56,10 @@ extends GenericColumnAbstract {
     protected Component createCellComponent(
             final String componentId, final DataRowWkt dataRowWkt) {
         var dataRow = dataRowWkt.getObject();
-        var rowElement = dataRow.getRowElement();
+        var rowElement = dataRow.rowElement();
 
         if(ManagedObjects.isValue(rowElement)) {
-            var objectMember = dataRow.getParentTable().getMetaModel();
+            var objectMember = dataRow.parentTable().getMetaModel();
             var valueModel = ValueModel.of(objectMember, rowElement);
             var componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);

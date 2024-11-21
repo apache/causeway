@@ -1118,7 +1118,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var sb = new StringBuilder();
         dataTable.visit((column, cellValues) ->
             sb.append(String.format("%s: %s\n",
-                    column.getColumnFriendlyName(),
+                    column.columnFriendlyName(),
                     "" + cellValues.getFirstElseFail().getPojo())));
         return sb.toString();
     }

@@ -20,60 +20,43 @@ package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.annotation.Where;
-
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 
-import lombok.Getter;
 import lombok.NonNull;
 
-class DataRowInternal
-implements DataRow {
-
-    @Getter private final int rowIndex;
-    private final ManagedObject rowElement;
-    @Getter private final BooleanBindable selectToggle;
-    @Getter private final DataTableInternal parentTable;
-    @Getter final Optional<CollectionFilterService.Tokens> filterTokens;
+record DataRowInternal(
+    int rowIndex,
+    ManagedObject rowElement,
+    BooleanBindable selectToggle,
+    DataTableInternal parentTable,
+    Optional<CollectionFilterService.Tokens> filterTokens
+    ) implements DataRow {
 
     DataRowInternal(
             final int rowIndex,
             final @NonNull DataTableInternal parentTable,
             final @NonNull ManagedObject rowElement,
             final @Nullable CollectionFilterService.Tokens filterTokens) {
-        this.rowIndex = rowIndex;
-        this.parentTable = parentTable;
-        this.rowElement = rowElement;
-
-        selectToggle = _Bindables.forBoolean(false);
-        selectToggle.addListener((e,o,n)->{
-            //_ToggleDebug.onSelectRowToggle(rowElement, o, n, parentTable.isToggleAllEvent.get());
-            parentTable.handleRowSelectToggle();
-        });
-        this.filterTokens = Optional.ofNullable(filterTokens);
-    }
-
-    @Override
-    public ManagedObject getRowElement() {
-        return rowElement;
+        this(rowIndex, rowElement, _Bindables.forBoolean(false), parentTable, Optional.ofNullable(filterTokens));
+        selectToggle.addListener((event, old, neW)->parentTable.handleRowSelectToggle());
     }
 
     @Override
     public Optional<DataColumn> lookupColumnById(final @NonNull String columnId) {
         return parentTable.getDataColumns().getValue().stream()
-                .filter(dataColumn->dataColumn.getColumnId().equals(columnId))
+                .filter(dataColumn->dataColumn.columnId().equals(columnId))
                 .findFirst();
     }
 
@@ -82,17 +65,17 @@ implements DataRow {
      */
     @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
-        final ObjectAssociation assoc = column.getAssociationMetaModel();
+        final ObjectAssociation assoc = column.associationMetaModel();
         var interactionInitiatedBy = InteractionInitiatedBy.PASS_THROUGH;
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
-                        property.isVisible(getRowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
-                                ? property.get(getRowElement(), interactionInitiatedBy)
+                        property.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                                ? property.get(rowElement(), interactionInitiatedBy)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                        collection.isVisible(getRowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
-                                ? collection.get(getRowElement(), interactionInitiatedBy)
+                        collection.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                                ? collection.get(rowElement(), interactionInitiatedBy)
                                 : null
                 ));
     }

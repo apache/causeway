@@ -52,8 +52,8 @@ class TabularUtil {
     private TabularModel.TabularColumn tabularColumn(final int index, final DataColumn dc) {
         return new TabularModel.TabularColumn(
                 index,
-                dc.getColumnFriendlyName(),
-                dc.getColumnDescription().orElse(""));
+                dc.columnFriendlyName(),
+                dc.columnDescription().orElse(""));
     }
 
     private TabularModel.TabularRow tabularRow(
@@ -63,7 +63,7 @@ class TabularUtil {
         var cells = dataColumns.map(dataColumn->{
             var cellElements = dataRow.getCellElements(dataColumn, interactionInitiatedBy);
             final int cardinality = cellElements.size();
-            final boolean forceUseTitle = !dataColumn.getMetamodel().getElementType().isValue();
+            final boolean forceUseTitle = !dataColumn.metamodel().getElementType().isValue();
 
             var tabularCell = cardinality==1
                     && !forceUseTitle

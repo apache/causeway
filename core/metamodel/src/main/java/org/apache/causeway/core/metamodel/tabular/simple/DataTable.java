@@ -181,7 +181,7 @@ public class DataTable implements Serializable {
 
     public Stream<ManagedObject> streamDataElements() {
         return dataRows.stream()
-            .map(DataRow::getRowElement);
+            .map(DataRow::rowElement);
     }
 
     // -- CONCATENATION (ADD ROWS)
@@ -257,8 +257,8 @@ public class DataTable implements Serializable {
     // -- TRAVERSAL
 
     public static interface CellVisitor {
-        default void onRowEnter(final DataRow row) {};
-        default void onRowLeave(final DataRow row) {};
+        default void onRowEnter(final DataRow row) {}
+        default void onRowLeave(final DataRow row) {}
         void onCell(DataColumn column, Can<ManagedObject> cellValues);
     }
 
@@ -363,7 +363,7 @@ public class DataTable implements Serializable {
                     .map(ManagedObject::getBookmarkElseFail)
                     .collect(Can.toCan());
             this.tableFriendlyName = dataTable.getTableFriendlyName();
-            this.columnIds = dataTable.getDataColumns().map(DataColumn::getColumnId);
+            this.columnIds = dataTable.getDataColumns().map(DataColumn::columnId);
         }
 
         private Object readResolve() {

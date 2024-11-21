@@ -32,22 +32,24 @@ public interface DataRow {
     /**
      * The underlying domain object or value object this {@link DataRow} is associated with.
      */
-    ManagedObject getRowElement();
+    ManagedObject rowElement();
 
     /**
      * If the table supports row selection, represents the bindable row selection status for this {@link DataRow}.
      */
-    Bindable<Boolean> getSelectToggle();
+    Bindable<Boolean> selectToggle();
+
+    Optional<Tokens> filterTokens();
 
     /**
      * Absolute zero-based index of this row, invariant with respect to sorting.
      */
-    int getRowIndex();
+    int rowIndex();
 
     /**
      * Table model this {@link DataRow} is a part of.
      */
-    DataTableInteractive getParentTable();
+    DataTableInteractive parentTable();
 
     /**
      * Lookup the {@link DataColumn} given its id.
@@ -63,6 +65,6 @@ public interface DataRow {
      * Can be none, one or many per table cell. (returns empty Can if column not found)
      */
     Can<ManagedObject> getCellElementsForColumn(@NonNull String columnId);
-    Optional<Tokens> getFilterTokens();
+
 
 }

@@ -45,7 +45,7 @@ extends ChainingModel<DataRow> {
             final IModel<DataTableInteractive> dataTableModelHolder,
             final DataRow dataRow) {
         super(dataTableModelHolder);
-        this.rowIndex = dataRow.getRowIndex();
+        this.rowIndex = dataRow.rowIndex();
     }
 
     @Override

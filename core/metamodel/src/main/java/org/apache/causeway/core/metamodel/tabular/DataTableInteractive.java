@@ -74,7 +74,7 @@ public interface DataTableInteractive extends MultiselectChoices {
         final MmSortUtils.SortDirection sortDirection;
         public Optional<Comparator<ManagedObject>> asComparator(final Can<? extends DataColumn> columns) {
             var columnToSort = columns.get(columnIndex).orElse(null);
-            var sortProperty = columnToSort.getAssociationMetaModel().getSpecialization().leftIfAny();
+            var sortProperty = columnToSort.associationMetaModel().getSpecialization().leftIfAny();
             return Optional.ofNullable(sortProperty)
                     .map(prop->MmSortUtils.orderingBy(sortProperty, sortDirection));
         }

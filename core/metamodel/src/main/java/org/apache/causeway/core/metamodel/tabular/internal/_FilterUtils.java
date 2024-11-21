@@ -46,7 +46,7 @@ class _FilterUtils {
 
         @NonNull final BiPredicate<DataRow, String> getDataRowFilter() {
             return (dataRow, searchArg) ->
-                tokenFilter.test(dataRow.getFilterTokens().orElse(null), searchArg);
+                tokenFilter.test(dataRow.filterTokens().orElse(null), searchArg);
         }
     }
 

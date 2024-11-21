@@ -48,7 +48,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
         var visibleAdapters = model.getDataTableModel().getDataRowsFilteredAndSorted()
                 .getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .toList();
 
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);

@@ -157,7 +157,7 @@ implements DataTableInteractive {
 
         this.dataRowsSelected = _Observables.lazy(()->
             dataRows.getValue().stream()
-                .filter(dataRow->dataRow.getSelectToggle().getValue().booleanValue())
+                .filter(dataRow->dataRow.selectToggle().getValue().booleanValue())
                 .collect(Can.toCan()));
 
         this.selectionChanges = _Bindables.forValue(Boolean.FALSE);
@@ -256,7 +256,7 @@ implements DataTableInteractive {
         return Optional.ofNullable(columnSort.getValue())
                 .flatMap(sort->sort.asComparator(dataColumns.getValue()))
                 .or(()->managedMember.getMetaModel().getElementComparator())
-                .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.getRowElement(), rowB.getRowElement()));
+                .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.rowElement(), rowB.rowElement()));
     }
 
     // -- TOGGLE ALL
@@ -292,7 +292,7 @@ implements DataTableInteractive {
         doProgrammaticToggle(()->{
             dataRows.getValue()
                 .forEach(dataRow->{
-                    dataRow.getSelectToggle().setValue(select);
+                    dataRow.selectToggle().setValue(select);
                 });
         });
     }
@@ -302,7 +302,7 @@ implements DataTableInteractive {
         doProgrammaticToggle(()->{
             dataRowsFilteredAndSorted.getValue()
                 .forEach(dataRow->{
-                    dataRow.getSelectToggle().setValue(select);
+                    dataRow.selectToggle().setValue(select);
                 });
         });
     }
@@ -313,7 +313,7 @@ implements DataTableInteractive {
             dataRowsFilteredAndSorted.getValue()
                 .pickByIndex(range)
                 .forEach(dataRow->{
-                    dataRow.getSelectToggle().setValue(select);
+                    dataRow.selectToggle().setValue(select);
                 });
         });
     }
@@ -338,14 +338,14 @@ implements DataTableInteractive {
     @Override
     public Can<ManagedObject> getSelected() {
         return dataRowsSelected.getValue()
-            .map(DataRow::getRowElement);
+            .map(DataRow::rowElement);
     }
 
     @Override
     public Set<Integer> getSelectedRowIndexes() {
         return dataRowsSelected.getValue()
             .stream()
-            .map(DataRow::getRowIndex)
+            .map(DataRow::rowIndex)
             .collect(Collectors.toSet());
     }
 
@@ -370,10 +370,10 @@ implements DataTableInteractive {
                 getElementType(),
                 getTitle().getValue(),
                 getDataColumns().getValue()
-                    .map(DataColumn::getAssociationMetaModel),
+                    .map(DataColumn::associationMetaModel),
                 getDataRowsFilteredAndSorted().getValue()
                     .stream()
-                    .map(dr->dr.getRowElement())
+                    .map(dr->dr.rowElement())
                     .collect(Can.toCan()));
     }
 
@@ -383,7 +383,7 @@ implements DataTableInteractive {
                 getElementType(),
                 getTitle().getValue(),
                 getDataColumns().getValue()
-                    .map(DataColumn::getAssociationMetaModel),
+                    .map(DataColumn::associationMetaModel),
                 getDataElements().getValue());
     }
 
@@ -459,8 +459,8 @@ implements DataTableInteractive {
             dataTableInteractive.searchArgument.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{
                 dataTableInteractive.dataRows.getValue().stream()
-                    .filter(dataRow->selectedRowIndexes.contains(dataRow.getRowIndex()))
-                    .forEach(dataRow->dataRow.getSelectToggle().setValue(true));
+                    .filter(dataRow->selectedRowIndexes.contains(dataRow.rowIndex()))
+                    .forEach(dataRow->dataRow.selectToggle().setValue(true));
             });
             return dataTableInteractive;
         }

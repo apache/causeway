@@ -46,7 +46,7 @@ extends BooleanBinding<DataRow> {
     protected Optional<Bindable<Boolean>> getBindable(
             final @Nullable DataRow dataRow) {
         return dataRow!=null
-                ? Optional.ofNullable(dataRow.getSelectToggle())
+                ? Optional.ofNullable(dataRow.selectToggle())
                 : Optional.empty();
     }
 

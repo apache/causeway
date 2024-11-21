@@ -113,7 +113,7 @@ extends SortableDataProvider<DataRow, String> {
         if(sortParam==null) return OptionalInt.empty();
         int columnIndex = 0;
         for(var column : dataTableModelInternal().getDataColumns().getValue()) {
-            if(column.getAssociationMetaModel().getId().equals(sortParam.getProperty())) {
+            if(column.associationMetaModel().getId().equals(sortParam.getProperty())) {
                 return OptionalInt.of(columnIndex);
             }
             ++columnIndex;

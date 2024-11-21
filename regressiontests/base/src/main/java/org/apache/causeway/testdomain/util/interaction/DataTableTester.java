@@ -47,14 +47,14 @@ public class DataTableTester {
     public void assertFilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataRowsFilteredAndSorted().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertSelectedDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataRowsSelected().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
@@ -62,7 +62,7 @@ public class DataTableTester {
             final List<Integer> toggleOnIndices,
             final List<Object> expectedPojoElements) {
         toggleOnIndices.forEach(index->
-            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).getSelectToggle().setValue(true));
+            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).selectToggle().setValue(true));
         assertSelectedDataElements(expectedPojoElements);
     }
 
@@ -70,17 +70,17 @@ public class DataTableTester {
             final List<Integer> toggleOffIndices,
             final List<Object> expectedPojoElements) {
         toggleOffIndices.forEach(index->
-            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).getSelectToggle().setValue(false));
+            dataTable.getDataRowsFilteredAndSorted().getValue().getElseFail(index).selectToggle().setValue(false));
         assertSelectedDataElements(expectedPojoElements);
     }
 
     public void assertDataRowSelectionIsAll() {
         assertEquals(
                 dataTable.getDataRowsFilteredAndSorted().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList(),
                 dataTable.getDataRowsSelected().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
@@ -91,7 +91,7 @@ public class DataTableTester {
     public void assertColumnNames(final List<String> expectedColumnNames) {
         assertEquals(expectedColumnNames,
                 dataTable.getDataColumns().getValue().stream()
-                .map(DataColumn::getColumnFriendlyName)
+                .map(DataColumn::columnFriendlyName)
                 .map(Observable::getValue)
                 .collect(Collectors.toList()));
     }
