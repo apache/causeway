@@ -115,7 +115,7 @@ extends
     }
 
     default String getName() {
-        return getDataTableModel().getTitle().getValue();
+        return getDataTableModel().titleObservable().getValue();
     }
 
     default int getPageSize() {

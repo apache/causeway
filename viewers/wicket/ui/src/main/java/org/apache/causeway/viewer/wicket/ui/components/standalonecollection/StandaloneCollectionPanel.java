@@ -65,7 +65,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         var featureId = collectionModel.getIdentifier();
 
         Wkt.labelAdd(outerDiv, StandaloneCollectionPanel.ID_ACTION_NAME,
-                table.getTitle().getValue());
+                table.titleObservable().getValue());
 
         Wkt.cssAppend(outerDiv, featureId);
         Wkt.cssAppend(outerDiv, collectionModel.getElementType().getFeatureIdentifier());

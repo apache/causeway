@@ -72,27 +72,26 @@ class DataTableSerializationTest implements HasMetaModelContext {
         assertNotNull(afterRoundtrip);
         assertEquals(
                 "DataTableSerializationTest.Customer",
-                afterRoundtrip.getElementType().getLogicalTypeName());
+                afterRoundtrip.elementType().getLogicalTypeName());
         assertEquals(0, afterRoundtrip.getElementCount());
-        assertEquals(1, afterRoundtrip.getDataColumns().size());
-        assertEquals(0, afterRoundtrip.getDataRows().size());
+        assertEquals(1, afterRoundtrip.dataColumns().size());
+        assertEquals(0, afterRoundtrip.dataRows().size());
     }
 
     @Test
     void roundtripOnPopulatedTable() {
-        var original = DataTable.forDomainType(Customer.class);
-
-        original.setDataElements(Can.of(
+        var original = DataTable.forDomainType(Customer.class)
+            .withDataElementPojos(Can.of(
                 getObjectManager().adapt(new Customer("cus-1")),
                 getObjectManager().adapt(new Customer("cus-2"))
                 ));
 
         var afterRoundtrip = _SerializationTester.roundtrip(original);
         assertNotNull(afterRoundtrip);
-        assertEquals(2, afterRoundtrip.getDataRows().size());
+        assertEquals(2, afterRoundtrip.dataRows().size());
 
-        var cus1 = (Customer) afterRoundtrip.getDataRows().getElseFail(0).rowElement().getPojo();
-        var cus2 = (Customer) afterRoundtrip.getDataRows().getElseFail(1).rowElement().getPojo();
+        var cus1 = (Customer) afterRoundtrip.dataRows().getElseFail(0).rowElement().getPojo();
+        var cus2 = (Customer) afterRoundtrip.dataRows().getElseFail(1).rowElement().getPojo();
 
         assertEquals("cus-1", cus1.getMemento());
         assertEquals("cus-2", cus2.getMemento());

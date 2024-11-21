@@ -93,10 +93,10 @@ extends SortableDataProvider<DataRow, String> {
     private DataTableInteractive applyColumnSortTo(final DataTableInteractive dataTableInteractive) {
         // honor (single) column sort (if any)
         // optimization: set only, if value actually changes
-        var oldColumnSort = dataTableInteractive.getColumnSort().getValue();
+        var oldColumnSort = dataTableInteractive.columnSortBinable().getValue();
         var newColumnSort = columnSort().orElse(null);
         if(!Objects.equals(oldColumnSort, newColumnSort)) {
-            dataTableInteractive.getColumnSort().setValue(newColumnSort);
+            dataTableInteractive.columnSortBinable().setValue(newColumnSort);
         }
         return dataTableInteractive;
     }
@@ -112,7 +112,7 @@ extends SortableDataProvider<DataRow, String> {
     private OptionalInt lookupColumnIndexFor(final @Nullable SortParam<String> sortParam) {
         if(sortParam==null) return OptionalInt.empty();
         int columnIndex = 0;
-        for(var column : dataTableModelInternal().getDataColumns().getValue()) {
+        for(var column : dataTableModelInternal().dataColumnsObservable().getValue()) {
             if(column.associationMetaModel().getId().equals(sortParam.getProperty())) {
                 return OptionalInt.of(columnIndex);
             }

@@ -1076,12 +1076,12 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     void javaRecordAsDataRowModel(final RecordScenario scenario) {
         final Class<?> classUnderTest = scenario.recordClass;
 
-        var dataTable = DataTable.forDomainType(classUnderTest);
-        dataTable.setDataElementPojos(scenario.samples);
+        var dataTable = DataTable.forDomainType(classUnderTest)
+            .withDataElementPojos(scenario.samples);
 
-        assertEquals(scenario.classFriendlyName(), dataTable.getTableFriendlyName());
-        assertEquals(scenario.samples.size(), dataTable.getDataRows().size());
-        assertEquals(4, dataTable.getDataColumns().size());
+        assertEquals(scenario.classFriendlyName(), dataTable.tableFriendlyName());
+        assertEquals(scenario.samples.size(), dataTable.dataRows().size());
+        assertEquals(4, dataTable.dataColumns().size());
 
         assertEquals("""
                 Additional String: add Hello!

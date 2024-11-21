@@ -50,7 +50,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -58,15 +57,13 @@ import lombok.NonNull;
  *
  * @since 2.0 {@index}
  */
-public class DataTable implements Serializable {
-    private static final long serialVersionUID = 1L;
+public record DataTable(
+    @NonNull ObjectSpecification elementType,
+    @NonNull Can<DataColumn> dataColumns,
+    @NonNull Can<DataRow> dataRows,
+    @NonNull String tableFriendlyName) implements Serializable {
 
     // -- CONSTRUCTION
-
-    @Getter private final @NonNull ObjectSpecification elementType;
-    @Getter private final @NonNull Can<DataColumn> dataColumns;
-    @Getter private @NonNull Can<DataRow> dataRows;
-    @Getter private @NonNull String tableFriendlyName;
 
     /**
      * Returns an empty {@link DataTable} for given domain object type,
@@ -74,8 +71,8 @@ public class DataTable implements Serializable {
      * (For more control on which columns to include,
      * consider {@link #forDomainType(Class, Predicate)} or a constructor that fits.)
      * <p>
-     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
-     * {@link #setDataElementPojos(Iterable)}.
+     * The table can be populated later on using {@link DataTable#withDataElements(Iterable)} or
+     * {@link #withDataElementPojos(Iterable)}.
      */
     public static DataTable forDomainType(
             final @NonNull Class<?> domainType) {
@@ -88,8 +85,8 @@ public class DataTable implements Serializable {
      * with all (including mixed-in) associations as columns,
      * that pass given {@code columnFilter}. If the filter is {@code null} it acts as a pass-through.
      * <p>
-     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
-     * {@link #setDataElementPojos(Iterable)}.
+     * The table can be populated later on using {@link DataTable#withDataElements(Iterable)} or
+     * {@link #withDataElementPojos(Iterable)}.
      */
     public static DataTable forDomainType(
             final @NonNull Class<?> domainType,
@@ -103,8 +100,8 @@ public class DataTable implements Serializable {
      * with all properties as columns, excluding mixed-in ones.
      * (For more control on which columns to include, consider a different constructor.)
      * <p>
-     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
-     * {@link #setDataElementPojos(Iterable)}.
+     * The table can be populated later on using {@link DataTable#withDataElements(Iterable)} or
+     * {@link #withDataElementPojos(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType) {
@@ -121,8 +118,8 @@ public class DataTable implements Serializable {
      * with all (including mixed-in) associations as columns,
      * that pass given {@code columnFilter}. If the filter is {@code null} it acts as a pass-through.
      * <p>
-     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
-     * {@link #setDataElementPojos(Iterable)}.
+     * The table can be populated later on using {@link DataTable#withDataElements(Iterable)} or
+     * {@link #withDataElementPojos(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType,
@@ -139,8 +136,8 @@ public class DataTable implements Serializable {
     /**
      * Returns an empty {@link DataTable} for given domain object type.
      * <p>
-     * The table can be populated later on using {@link DataTable#setDataElements(Iterable)} or
-     * {@link #setDataElementPojos(Iterable)}.
+     * The table can be populated later on using {@link DataTable#withDataElements(Iterable)} or
+     * {@link #withDataElementPojos(Iterable)}.
      */
     public DataTable(
             final @NonNull ObjectSpecification elementType,
@@ -153,54 +150,49 @@ public class DataTable implements Serializable {
             final @Nullable String tableFriendlyName,
             final @NonNull Can<? extends ObjectAssociation> dataColumns,
             final @NonNull Can<ManagedObject> dataElements) {
-
-        this.tableFriendlyName = _Strings.nonEmpty(tableFriendlyName)
-                .orElse("Collection"); // fallback to a generic name
-
-        this.elementType = elementType;
-
-        this.dataColumns = dataColumns
-                .map(assoc->new DataColumn(this, assoc));
-
-        setDataElements(dataElements);
+        this(elementType,
+            dataColumns.map(DataColumn::new),
+            Can.ofIterable(dataElements).map(DataRow::new),
+            _Strings.nonEmpty(tableFriendlyName).orElse("Collection")); // fallback to a generic name
     }
 
     /**
      * Unique within application scope, can act as an id.
      */
     public String getLogicalName() {
-        return getElementType().getLogicalTypeName();
+        return elementType().getLogicalTypeName();
     }
 
     /**
      * Count data rows.
      */
     public int getElementCount() {
-        return dataRows.size();
+        return dataRows().size();
     }
 
     public Stream<ManagedObject> streamDataElements() {
-        return dataRows.stream()
+        return dataRows().stream()
             .map(DataRow::rowElement);
     }
 
     // -- CONCATENATION (ADD ROWS)
 
     /**
-     * Adds all data-elements from the other table to this table.
+     * Returns a new table, populated from this and the other table.
      */
-    public DataTable addDataElementsFrom(final @Nullable DataTable otherTable) {
+    public DataTable withDataElementsFrom(final @Nullable DataTable otherTable) {
         if(otherTable==null) return this;
         { // sanity check
-            var thisType = otherTable.getElementType().getCorrespondingClass();
-            var otherType = this.getElementType().getCorrespondingClass();
+            var thisType = otherTable.elementType().getCorrespondingClass();
+            var otherType = this.elementType().getCorrespondingClass();
             _Assert.assertEquals(thisType, otherType, ()->
                     String.format("Other tables's element-type %s must match the this table's element-type %s.",
                             otherType,
                             thisType));
         }
-        if(otherTable.dataRows.isNotEmpty()) {
-            this.dataRows = this.dataRows.addAll(otherTable.dataRows);
+        if(otherTable.dataRows().isNotEmpty()) {
+            var mergedDataRows = this.dataRows().addAll(otherTable.dataRows());
+            return new DataTable(elementType, dataColumns, mergedDataRows, tableFriendlyName);
         }
         return this;
     }
@@ -208,50 +200,50 @@ public class DataTable implements Serializable {
     // -- POPULATE
 
     /**
-     * Sets the data-elements of this table, which make up the rows of this table.
+     * Returns a new table instance with the data-elements, which make up the rows of the new table.
      */
-    public DataTable setDataElements(final @Nullable Iterable<ManagedObject> dataElements) {
-        this.dataRows = Can.ofIterable(dataElements)
-                .map(domainObject->new DataRow(this, domainObject));
-        return this;
+    public DataTable withDataElements(final @Nullable Iterable<ManagedObject> dataElements) {
+        var newDataRows = Can.ofIterable(dataElements)
+            .map(domainObject->new DataRow(domainObject));
+        return new DataTable(elementType, dataColumns, newDataRows, tableFriendlyName);
     }
     /**
-     * Sets the data-elements of this table from given pojos, that are adapted to {@link ManagedObject}(s).
-     * @see #setDataElements(Iterable)
+     * Returns a new table instance with data-elements from given pojos, that are adapted to {@link ManagedObject}(s)..
+     * @see #withDataElements(Iterable)
      */
-    public void setDataElementPojos(final @Nullable Iterable<?> dataElementPojos) {
+    public DataTable withDataElementPojos(final @Nullable Iterable<?> dataElementPojos) {
         var dataElements = _NullSafe.stream(dataElementPojos)
                 .map(objectManager()::adapt)
                 .collect(Can.toCan());
-        setDataElements(dataElements);
+        return withDataElements(dataElements);
     }
 
     /**
-     * Populates this table from the underlying (default) persistence layer.
-     * @see #setDataElements(Iterable)
+     * Returns a new table, populated from the underlying (default) persistence layer.
+     * @see #withDataElements(Iterable)
      */
-    public DataTable populateEntities() {
+    public DataTable withEntities() {
         var query = Query.allInstances(elementType.getCorrespondingClass());
-        return populateEntities(query);
+        return withEntities(query);
     }
 
     /**
-     * Populates this table from the underlying (default) persistence layer,
+     * Returns a new table, populated from the underlying (default) persistence layer,
      * using given {@link Query} to refine the result.
-     * @see #setDataElements(Iterable)
+     * @see #withDataElements(Iterable)
      */
-    public DataTable populateEntities(final Query<?> query) {
+    public DataTable withEntities(final Query<?> query) {
         { // sanity check
             var requestType = query.getResultType();
-            var resultType = getElementType().getCorrespondingClass();
+            var resultType = elementType().getCorrespondingClass();
             _Assert.assertEquals(requestType, resultType, ()->
                     String.format("Query's result-type %s must match the table's element-type %s.",
                             requestType,
                             resultType));
         }
-        var queryRequest = new BulkLoadRequest(getElementType(), query);
-        var allMatching = getElementType().getObjectManager().queryObjects(queryRequest);
-        return setDataElements(allMatching);
+        var queryRequest = new BulkLoadRequest(elementType(), query);
+        var allMatching = elementType().getObjectManager().queryObjects(queryRequest);
+        return withDataElements(allMatching);
     }
 
     // -- TRAVERSAL
@@ -266,9 +258,9 @@ public class DataTable implements Serializable {
         return visit(visitor, _Predicates.alwaysTrue());
     }
     public DataTable visit(final CellVisitor visitor, final Predicate<DataColumn> columnFilter) {
-        var columnsOfInterest = getDataColumns().filter(columnFilter);
+        var columnsOfInterest = dataColumns().filter(columnFilter);
         if(columnsOfInterest.isNotEmpty()) {
-            getDataRows().forEach(row->{
+            dataRows().forEach(row->{
                 visitor.onRowEnter(row);
                 columnsOfInterest.forEach(col->{
                     visitor.onCell(col, row.getCellElements(col, InteractionInitiatedBy.PASS_THROUGH));
@@ -358,22 +350,23 @@ public class DataTable implements Serializable {
         private final @NonNull Can<String> columnIds;
 
         private SerializationProxy(final DataTable dataTable) {
-            this.elementTypeClass = dataTable.getElementType().getCorrespondingClass();
+            this.elementTypeClass = dataTable.elementType().getCorrespondingClass();
             this.rowElementBookmarks = dataTable.streamDataElements()
                     .map(ManagedObject::getBookmarkElseFail)
                     .collect(Can.toCan());
-            this.tableFriendlyName = dataTable.getTableFriendlyName();
-            this.columnIds = dataTable.getDataColumns().map(DataColumn::columnId);
+            this.tableFriendlyName = dataTable.tableFriendlyName();
+            this.columnIds = dataTable.dataColumns().map(DataColumn::columnId);
         }
 
         private Object readResolve() {
             var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
             var elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(elementTypeClass);
-            var dataTable = new DataTable(elementType, columnIds
-                    .map(columnId->elementType.getAssociationElseFail(columnId, MixedIn.INCLUDED)));
             var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
-            dataTable.setDataElements(rowElements);
-            dataTable.tableFriendlyName = tableFriendlyName;
+            var dataTable = new DataTable(elementType,
+                tableFriendlyName,
+                columnIds
+                        .map(columnId->elementType.getAssociationElseFail(columnId, MixedIn.INCLUDED)),
+                rowElements);
             return dataTable;
         }
     }
@@ -381,7 +374,7 @@ public class DataTable implements Serializable {
     // -- HELPER
 
     private ObjectManager objectManager() {
-        return getElementType().getObjectManager();
+        return elementType().getObjectManager();
     }
 
 }

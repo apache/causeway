@@ -33,7 +33,6 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  */
 public record DataRow(
-    @NonNull DataTable parentTable,
     @NonNull ManagedObject rowElement) {
 
     /**

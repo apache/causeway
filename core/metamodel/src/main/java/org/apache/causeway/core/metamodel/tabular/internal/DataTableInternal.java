@@ -62,6 +62,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 public class DataTableInternal
 implements DataTableInteractive {
@@ -109,10 +110,15 @@ implements DataTableInteractive {
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRows;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsFilteredAndSorted;
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelected;
-    @Getter private final _BindableAbstract<ColumnSort> columnSort;
 
-    @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumns;
-    @Getter private final @NonNull LazyObservable<String> title;
+    @Accessors(fluent=true)
+    @Getter private final _BindableAbstract<ColumnSort> columnSortBinable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumnsObservable;
+
+    @Accessors(fluent=true)
+    @Getter private final @NonNull LazyObservable<String> titleObservable;
 
     private final Optional<FilterHandler> filterHandler;
 
@@ -137,7 +143,7 @@ implements DataTableInteractive {
         this.filterHandler = _FilterUtils.createFilterHandler(elementType);
 
         this.searchArgument = _Bindables.forValue("");
-        this.columnSort = _Bindables.forValue(null);
+        this.columnSortBinable = _Bindables.forValue(null);
 
         this.dataElements = _Observables.lazy(()->elements
                 //.map(mmc::injectServicesInto) // I believe is redundant, has major performance impact
@@ -166,11 +172,11 @@ implements DataTableInteractive {
             dataRowsFilteredAndSorted.invalidate();
         });
 
-        this.columnSort.addListener((e,o,n)->{
+        this.columnSortBinable.addListener((e,o,n)->{
             dataRowsFilteredAndSorted.invalidate();
         });
 
-        this.dataColumns = _Observables.lazy(()->
+        this.dataColumnsObservable = _Observables.lazy(()->
             managedMember.getElementType()
             .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
             .map(assoc->new DataColumnInternal(this, assoc))
@@ -178,7 +184,7 @@ implements DataTableInteractive {
 
         //XXX future extension: the title could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
-        this.title = _Observables.lazy(()->
+        this.titleObservable = _Observables.lazy(()->
             managedMember
             .getFriendlyName());
     }
@@ -253,8 +259,8 @@ implements DataTableInteractive {
     // -- SORTING
 
     private Optional<Comparator<DataRow>> sortingComparator() {
-        return Optional.ofNullable(columnSort.getValue())
-                .flatMap(sort->sort.asComparator(dataColumns.getValue()))
+        return Optional.ofNullable(columnSortBinable.getValue())
+                .flatMap(sort->sort.asComparator(dataColumnsObservable.getValue()))
                 .or(()->managedMember.getMetaModel().getElementComparator())
                 .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.rowElement(), rowB.rowElement()));
     }
@@ -368,8 +374,8 @@ implements DataTableInteractive {
     public DataTable export() {
         return new DataTable(
                 getElementType(),
-                getTitle().getValue(),
-                getDataColumns().getValue()
+                titleObservable().getValue(),
+                dataColumnsObservable().getValue()
                     .map(DataColumn::associationMetaModel),
                 getDataRowsFilteredAndSorted().getValue()
                     .stream()
@@ -381,8 +387,8 @@ implements DataTableInteractive {
     private DataTable exportAll() {
         return new DataTable(
                 getElementType(),
-                getTitle().getValue(),
-                getDataColumns().getValue()
+                titleObservable().getValue(),
+                dataColumnsObservable().getValue()
                     .map(DataColumn::associationMetaModel),
                 getDataElements().getValue());
     }
@@ -416,7 +422,7 @@ implements DataTableInteractive {
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgument.getValue(),
                     tableInteractive.getSelectedRowIndexes(),
-                    tableInteractive.getColumnSort().getValue());
+                    tableInteractive.columnSortBinable().getValue());
         }
 
         private final @NonNull Identifier featureId;
@@ -454,7 +460,7 @@ implements DataTableInteractive {
                     .collect(Can.toCan()));
 
             if(columnSort!=null)  {
-                dataTableInteractive.columnSort.setValue(columnSort);
+                dataTableInteractive.columnSortBinable.setValue(columnSort);
             }
             dataTableInteractive.searchArgument.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{

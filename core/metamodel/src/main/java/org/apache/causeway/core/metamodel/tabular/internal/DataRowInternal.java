@@ -55,7 +55,7 @@ record DataRowInternal(
 
     @Override
     public Optional<DataColumn> lookupColumnById(final @NonNull String columnId) {
-        return parentTable.getDataColumns().getValue().stream()
+        return parentTable.dataColumnsObservable().getValue().stream()
                 .filter(dataColumn->dataColumn.columnId().equals(columnId))
                 .findFirst();
     }

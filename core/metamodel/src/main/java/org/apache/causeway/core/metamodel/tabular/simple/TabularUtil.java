@@ -40,11 +40,11 @@ class TabularUtil {
             default -> InteractionInitiatedBy.USER;
         };
 
-        var columns = dataTable.getDataColumns()
+        var columns = dataTable.dataColumns()
                 .map(IndexedFunction.zeroBased(TabularUtil::tabularColumn));
-        var rows = dataTable.getDataRows()
-                .map(dr->tabularRow(dataTable.getDataColumns(), dr, interactionInitiatedBy));
-        return new TabularModel.TabularSheet(dataTable.getTableFriendlyName(), columns, rows);
+        var rows = dataTable.dataRows()
+                .map(dr->tabularRow(dataTable.dataColumns(), dr, interactionInitiatedBy));
+        return new TabularModel.TabularSheet(dataTable.tableFriendlyName(), columns, rows);
     }
 
     // -- HELPER

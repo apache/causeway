@@ -32,7 +32,6 @@ import lombok.NonNull;
  * @since 2.0 {@index}
  */
 public record DataColumn(
-        @NonNull DataTable parentTable,
         @NonNull ObjectAssociation metamodel,
         @NonNull String columnId,
         @NonNull String columnFriendlyName,
@@ -40,8 +39,8 @@ public record DataColumn(
         boolean isMultivalued
     ) {
 
-    public DataColumn(final DataTable parentTable, final ObjectAssociation metamodel) {
-        this(parentTable, metamodel, metamodel.getId(),
+    public DataColumn(final ObjectAssociation metamodel) {
+        this(metamodel, metamodel.getId(),
             metamodel.getCanonicalFriendlyName(),
             metamodel.getCanonicalDescription(),
             metamodel.isCollection());

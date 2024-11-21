@@ -40,9 +40,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.internal.DataTableInternal;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-
 public interface DataTableInteractive extends MultiselectChoices {
 
     // -- FACTORIES
@@ -66,12 +63,10 @@ public interface DataTableInteractive extends MultiselectChoices {
     /**
      * Sorting helper class, that has the column index to be sorted by and the sort direction.
      */
-    @RequiredArgsConstructor
-    @EqualsAndHashCode
-    public static class ColumnSort implements Serializable {
-        private static final long serialVersionUID = 1L;
-        final int columnIndex;
-        final MmSortUtils.SortDirection sortDirection;
+    public record ColumnSort(
+        int columnIndex,
+        MmSortUtils.SortDirection sortDirection) implements Serializable {
+
         public Optional<Comparator<ManagedObject>> asComparator(final Can<? extends DataColumn> columns) {
             var columnToSort = columns.get(columnIndex).orElse(null);
             var sortProperty = columnToSort.associationMetaModel().getSpecialization().leftIfAny();
@@ -82,8 +77,8 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- TITLE, ROWS AND COLUMNS
 
-    Observable<String> getTitle();
-    Observable<Can<DataColumn>> getDataColumns();
+    Observable<String> titleObservable();
+    Observable<Can<DataColumn>> dataColumnsObservable();
     Observable<Can<ManagedObject>> getDataElements();
     Observable<Can<DataRow>> getDataRowsFilteredAndSorted();
 
@@ -116,7 +111,7 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- SORTING
 
-    Bindable<ColumnSort> getColumnSort();
+    Bindable<ColumnSort> columnSortBinable();
 
     // -- SELECTION
 

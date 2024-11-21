@@ -90,7 +90,7 @@ public class DataTableTester {
 
     public void assertColumnNames(final List<String> expectedColumnNames) {
         assertEquals(expectedColumnNames,
-                dataTable.getDataColumns().getValue().stream()
+                dataTable.dataColumnsObservable().getValue().stream()
                 .map(DataColumn::columnFriendlyName)
                 .map(Observable::getValue)
                 .collect(Collectors.toList()));
