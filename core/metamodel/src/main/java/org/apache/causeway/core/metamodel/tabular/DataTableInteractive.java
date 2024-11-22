@@ -111,7 +111,7 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- SORTING
 
-    Bindable<ColumnSort> columnSortBinable();
+    Bindable<ColumnSort> columnSortBindable();
 
     // -- SELECTION
 

@@ -120,7 +120,7 @@ implements DataTableInteractive {
     @Getter private final @NonNull LazyObservable<Can<DataRow>> dataRowsSelectedObservable;
 
     @Accessors(fluent=true)
-    @Getter private final _BindableAbstract<ColumnSort> columnSortBinable;
+    @Getter private final _BindableAbstract<ColumnSort> columnSortBindable;
 
     @Accessors(fluent=true)
     @Getter private final @NonNull LazyObservable<Can<DataColumn>> dataColumnsObservable;
@@ -151,7 +151,7 @@ implements DataTableInteractive {
         this.filterHandler = _FilterUtils.createFilterHandler(elementType);
 
         this.searchArgumentBindable = _Bindables.forValue("");
-        this.columnSortBinable = _Bindables.forValue(null);
+        this.columnSortBindable = _Bindables.forValue(null);
 
         this.dataElementsObservable = _Observables.lazy(()->elements
                 //.map(mmc::injectServicesInto) // I believe is redundant, has major performance impact
@@ -180,7 +180,7 @@ implements DataTableInteractive {
             dataRowsFilteredAndSortedObservable.invalidate();
         });
 
-        this.columnSortBinable.addListener((e,o,n)->{
+        this.columnSortBindable.addListener((e,o,n)->{
             dataRowsFilteredAndSortedObservable.invalidate();
         });
 
@@ -267,7 +267,7 @@ implements DataTableInteractive {
     // -- SORTING
 
     private Optional<Comparator<DataRow>> sortingComparator() {
-        return Optional.ofNullable(columnSortBinable.getValue())
+        return Optional.ofNullable(columnSortBindable.getValue())
                 .flatMap(sort->sort.asComparator(dataColumnsObservable.getValue()))
                 .or(()->managedMember.getMetaModel().getElementComparator())
                 .map(elementComparator->(rowA, rowB)->elementComparator.compare(rowA.rowElement(), rowB.rowElement()));
@@ -430,7 +430,7 @@ implements DataTableInteractive {
                     tableInteractive.exportAll(),
                     tableInteractive.searchArgumentBindable.getValue(),
                     tableInteractive.getSelectedRowIndexes(),
-                    tableInteractive.columnSortBinable().getValue());
+                    tableInteractive.columnSortBindable().getValue());
         }
 
         private final @NonNull Identifier featureId;
@@ -468,7 +468,7 @@ implements DataTableInteractive {
                     .collect(Can.toCan()));
 
             if(columnSort!=null)  {
-                dataTableInteractive.columnSortBinable.setValue(columnSort);
+                dataTableInteractive.columnSortBindable.setValue(columnSort);
             }
             dataTableInteractive.searchArgumentBindable.setValue(searchArgument);
             dataTableInteractive.doProgrammaticToggle(()->{

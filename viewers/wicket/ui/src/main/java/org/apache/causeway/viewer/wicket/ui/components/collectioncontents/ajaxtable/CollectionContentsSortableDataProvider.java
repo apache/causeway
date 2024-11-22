@@ -93,10 +93,10 @@ extends SortableDataProvider<DataRow, String> {
     private DataTableInteractive applyColumnSortTo(final DataTableInteractive dataTableInteractive) {
         // honor (single) column sort (if any)
         // optimization: set only, if value actually changes
-        var oldColumnSort = dataTableInteractive.columnSortBinable().getValue();
+        var oldColumnSort = dataTableInteractive.columnSortBindable().getValue();
         var newColumnSort = columnSort().orElse(null);
         if(!Objects.equals(oldColumnSort, newColumnSort)) {
-            dataTableInteractive.columnSortBinable().setValue(newColumnSort);
+            dataTableInteractive.columnSortBindable().setValue(newColumnSort);
         }
         return dataTableInteractive;
     }
