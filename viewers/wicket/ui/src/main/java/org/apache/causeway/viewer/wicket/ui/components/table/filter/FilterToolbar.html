@@ -21,9 +21,19 @@
 <body>
 	<wicket:panel>
 		<div class="input-group table-filter-bar">
-			  <input wicket:id="table-search-input" class="form-control" type="text" placeholder="Search" />
+			  <input wicket:id="table-search-input" class="form-control" type="text" placeholder="Search" onkeydown="keyDownHandler(event)" />
               <button wicket:id="table-search-button" class="btn btn-light"><i class="fa-solid fa-magnifying-glass"></i></button>
               <button wicket:id="table-search-clear" class="btn btn-light"><i class="fa-regular fa-trash-can"></i></button>
+              
+              <script>
+                  function keyDownHandler(event) {
+                      if (event.key === "Enter") {
+                          event.preventDefault();
+                          event.target.nextElementSibling.click();
+                      }
+                  }
+              </script>
+              
 		</div>
 	</wicket:panel>
 </body>
