@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,6 +45,7 @@ import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -72,7 +76,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ObjectActionDefault
 extends ObjectMemberAbstract
-implements ObjectAction {
+implements ObjectAction, Serializable {
+    private static final long serialVersionUID = 1L;
 
     public static ActionScope getType(final String typeStr) {
         final ActionScope type = ActionScope.valueOf(typeStr);
@@ -587,7 +592,7 @@ implements ObjectAction {
 
     // -- HELPER
 
-    protected String argsFor(Can<ObjectActionParameter> parameters, Can<ManagedObject> arguments) {
+    protected String argsFor(final Can<ObjectActionParameter> parameters, final Can<ManagedObject> arguments) {
         if(parameters.size() != arguments.size()) {
             return "???"; // shouldn't happen
         }
@@ -618,6 +623,29 @@ implements ObjectAction {
         var methodFacade = getFacetedMethod().getMethod();
         return methodFacade.synthesize(Action.class).isPresent()
                 || methodFacade.synthesize(ActionLayout.class).isPresent();
+    }
+
+    // -- SERIALIZATION PROXY
+
+    protected final Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    protected final void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    protected record SerializationProxy(Identifier identifier) implements Serializable {
+        SerializationProxy(final ObjectActionDefault action) {
+            this(action.getFeatureIdentifier());
+        }
+        private Object readResolve() {
+            return MetaModelContext.instanceElseFail()
+                .getSpecificationLoader()
+                .specForLogicalTypeElseFail(identifier.getLogicalType())
+                .getActionElseFail(
+                        identifier.getMemberNameAndParameterClassNamesIdentityString());
+        }
     }
 
 }

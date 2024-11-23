@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ActionParameterMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
@@ -284,10 +283,4 @@ extends ObjectFeature, CurrentHolder {
         return getAction().getCssClass(prefix) + "-" + getId();
     }
 
-    /**
-     * Returns a serializable representation of this parameter.
-     */
-    default ActionParameterMemento getMemento() {
-        return ActionParameterMemento.forActionParameter(this);
-    }
 }

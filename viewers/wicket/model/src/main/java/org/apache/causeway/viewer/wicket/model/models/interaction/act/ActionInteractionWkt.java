@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -38,7 +37,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
@@ -80,7 +78,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      * <p>
      * nullable in support of lazy evaluation
      */
-    private @Nullable ActionMemento actionMemento;
+    private @Nullable ObjectAction actionMemento;
 
     private Can<UiParameterWkt> childModels;
     private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
@@ -128,7 +126,6 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         this.memberId = memberId;
         this.where = where;
         this.actionMemento = objectAction
-                    .map(ObjectAction::getMemento) // if present, eagerly memoize
                     .orElse(null);
         this.associatedWithPropertyIfAny = associatedWithPropertyIfAny;
         this.associatedWithParameterIfAny = associatedWithParameterIfAny;
@@ -170,14 +167,13 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             var objectAction = actionInteraction().getMetamodel()
                 .orElseThrow(()->_Exceptions
                         .noSuchElement("could not resolve action by memberId '%s'", memberId));
-            this.actionMemento = objectAction.getMemento();
+            this.actionMemento = objectAction;
             return objectAction;
         }
 
         // re-attachment fails, if the owner is not found (eg. deleted entity),
         // hence we return the directly memoized meta-model of the underlying action
-        return Objects.requireNonNull(actionMemento.getAction(this::getSpecificationLoader),
-                ()->"framework bug: lost objectAction on model recycling (serialization issue)");
+        return actionMemento;
     }
 
     public Optional<ScalarPropertyModel> associatedWithProperty() {

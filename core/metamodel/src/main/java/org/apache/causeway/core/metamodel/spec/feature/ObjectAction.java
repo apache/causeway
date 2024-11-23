@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ActionMemento;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 
@@ -262,13 +261,6 @@ public interface ObjectAction extends ObjectMember {
     default String getCssClass(final String prefix) {
         final String ownerId = getDeclaringType().getLogicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
-    }
-
-    /**
-     * Returns a serializable representation of this action.
-     */
-    default ActionMemento getMemento() {
-        return ActionMemento.forAction(this);
     }
 
     default PromptStyle getPromptStyle() {
