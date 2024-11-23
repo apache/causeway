@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
@@ -34,8 +34,6 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInte
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import lombok.Getter;
-
 /**
  * Represents an action (a member) of an entity.
  *
@@ -45,17 +43,13 @@ import lombok.Getter;
  * ActionModel --bound-to--> ActionInteractionWkt (delegate)
  * </pre>
  */
-final class ActionModelImpl
-extends ChainingModel<ManagedObject>
-implements ActionModel {
-
-    private static final long serialVersionUID = 1L;
+record ActionModelImpl(
+    UiObjectWkt parentEntityModel,
+    ActionInteractionWkt delegate,
+    ColumnActionModifier columnActionModifier)
+implements IModel<ManagedObject>, ActionModel {
 
     // -- CONSTRUCTION
-
-    private final ActionInteractionWkt delegate;
-    @Getter
-    private final ColumnActionModifier columnActionModifier;
 
     ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
         this(parentEntityModel, delegate, ColumnActionModifier.NONE);
@@ -63,7 +57,7 @@ implements ActionModel {
 
     ActionModelImpl(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate,
             final ColumnActionModifier columnActionModifier) {
-        super(parentEntityModel);
+        this.parentEntityModel = parentEntityModel;
         this.delegate = delegate;
         this.columnActionModifier = columnActionModifier;
     }
@@ -102,7 +96,7 @@ implements ActionModel {
 
     @Override
     public UiObjectWkt getParentUiModel() {
-        return (UiObjectWkt) super.getTarget();
+        return parentEntityModel;
     }
 
     @Override
@@ -145,6 +139,27 @@ implements ActionModel {
     @Override
     public Optional<ScalarParameterModel> getAssociatedParameter() {
         return delegate.associatedWithParameter();
+    }
+
+    // -- MODEL CHAINING
+
+    @Override
+    public void detach() {
+        // Detach nested object
+        parentEntityModel.detach();
+    }
+
+    @Override
+    public ManagedObject getObject() {
+        return parentEntityModel.getObject();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Model:classname=[");
+        sb.append(getClass().getName()).append(']');
+        sb.append(":nestedModel=[").append(parentEntityModel).append(']');
+        return sb.toString();
     }
 
 }

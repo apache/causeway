@@ -63,7 +63,7 @@ class _ResponseUtil {
         var response = actionResultResponse(actionModel, ajaxTarget, actionResultModel);
 
         // honor any modifiers
-        switch(actionModel.getColumnActionModifier()) {
+        switch(actionModel.columnActionModifier()) {
         case NONE:
             return response;
         case FORCE_STAY_ON_PAGE:
@@ -71,7 +71,7 @@ class _ResponseUtil {
         case FORCE_NEW_BROWSER_WINDOW:
             return response.withForceNewBrowserWindow();
         default:
-            throw _Exceptions.unmatchedCase(actionModel.getColumnActionModifier());
+            throw _Exceptions.unmatchedCase(actionModel.columnActionModifier());
         }
     }
 

@@ -45,7 +45,7 @@ public class ActionResultModel {
             final ManagedObject resultAdapter,
             final AjaxRequestTarget targetIfAny) {
 
-        if(actionModel.getColumnActionModifier().isForceStayOnPage()) {
+        if(actionModel.columnActionModifier().isForceStayOnPage()) {
             return new ActionResultModel(ActionResultResponseType.RELOAD, resultAdapter);
         }
 

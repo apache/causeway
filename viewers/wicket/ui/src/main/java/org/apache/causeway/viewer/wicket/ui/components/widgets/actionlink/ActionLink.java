@@ -98,9 +98,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
         _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
-        final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
-        this.indicatorAppenderIfAny =
-                useIndicatorForNoArgAction
+        this.indicatorAppenderIfAny = getSettings().isUseIndicatorForNoArgAction()
                 ? new AjaxIndicatorAppender()
                 : null;
 

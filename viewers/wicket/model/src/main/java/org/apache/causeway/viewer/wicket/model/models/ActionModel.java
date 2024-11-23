@@ -181,7 +181,7 @@ extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObje
      * </ul>
      * @since CAUSEWAY-3815
      */
-    ColumnActionModifier getColumnActionModifier();
+    ColumnActionModifier columnActionModifier();
 
     @Override
     default PromptStyle getPromptStyle() {
