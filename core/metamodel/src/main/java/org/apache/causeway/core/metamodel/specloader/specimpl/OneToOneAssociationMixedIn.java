@@ -43,6 +43,7 @@ import lombok.Getter;
 public class OneToOneAssociationMixedIn
 extends OneToOneAssociationDefault
 implements MixedInMember {
+    private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 

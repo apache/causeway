@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -28,6 +29,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -35,7 +37,6 @@ import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -43,7 +44,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.memento.PropertyMemento;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
@@ -200,10 +200,10 @@ implements
 
     // -- PROPERTY MODELS (CHILDREN)
 
-    private transient Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels;
-    private Map<PropertyMemento, ScalarPropertyModel> propertyScalarModels() {
+    private transient Map<Identifier, ScalarPropertyModel> propertyScalarModels;
+    private Map<Identifier, ScalarPropertyModel> propertyScalarModels() {
         if(propertyScalarModels==null) {
-            propertyScalarModels = _Maps.<PropertyMemento, ScalarPropertyModel>newHashMap();
+            propertyScalarModels = new HashMap<>();
         }
         return propertyScalarModels;
     }
@@ -231,29 +231,29 @@ implements
                     bookmarkedObjectModel.getBookmark().getIdentifier());
         }
 
-        var pm = property.getMemento();
+        var propIdentifier = property.getFeatureIdentifier();
         var propertyScalarModels = propertyScalarModels();
-        final ScalarModel existingScalarModel = propertyScalarModels.get(pm);
+        final ScalarModel existingScalarModel = propertyScalarModels.get(propIdentifier);
         if (existingScalarModel != null) {
             return existingScalarModel;
         }
 
         var propertyInteractionModel = new PropertyInteractionWkt(
                 bookmarkedObjectModel,
-                pm.getIdentifier().getMemberLogicalName(),
+                propIdentifier.getMemberLogicalName(),
                 renderingHint.asWhere());
 
         final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
         .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
         .peek(scalarModel->log.debug("adding: {}", scalarModel))
-        .filter(scalarModel->propertyScalarModels.put(pm, scalarModel)==null)
+        .filter(scalarModel->propertyScalarModels.put(propIdentifier, scalarModel)==null)
         .count(); // consume the stream
 
         // future extensions might allow to add multiple UI models per single property model (typed tuple support)
         _Assert.assertEquals(1L, modelsAdded, ()->
             String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
 
-        return propertyScalarModels.get(pm);
+        return propertyScalarModels.get(propIdentifier);
     }
 
     @Override
@@ -303,8 +303,7 @@ implements
     public boolean isContextAdapter(final ManagedObject other) {
         return contextBookmarkIfAny==null
                 ? false
-                : Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null))
-                ;
+                : Objects.equals(contextBookmarkIfAny, other.getBookmark().orElse(null));
     }
 
     // -- HELPER

@@ -34,6 +34,8 @@ import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefaul
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
+import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
+import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
@@ -58,6 +60,8 @@ class DomainModelTest_serialization extends CausewayIntegrationTestAbstract {
 
     @Inject private SpecificationLoader specificationLoader;
 
+    // -- ACT
+
     @Test
     void objectActionDefault_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
@@ -72,6 +76,25 @@ class DomainModelTest_serialization extends CausewayIntegrationTestAbstract {
         assertEquals(ObjectActionMixedIn.class, act.getClass());
         _SerializationTester.assertEqualsOnRoundtrip(act);
     }
+
+    // -- PROP
+
+    @Test
+    void oneToOneAssociationDefault_shouldBe_Serializable() {
+        var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
+        var prop = (OneToOneAssociationDefault) holderSpec.getPropertyElseFail("myProp");
+        assertEquals(OneToOneAssociationDefault.class, prop.getClass());
+        _SerializationTester.assertEqualsOnRoundtrip(prop);
+    }
+    @Test
+    void oneToOneAssociationMixedIn_shouldBe_Serializable() {
+        var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
+        var prop = (OneToOneAssociationMixedIn) holderSpec.getPropertyElseFail("property1");
+        assertEquals(OneToOneAssociationMixedIn.class, prop.getClass());
+        _SerializationTester.assertEqualsOnRoundtrip(prop);
+    }
+
+    // -- COLL
 
     @Test
     void oneToManyAssociationDefault_shouldBe_Serializable() {
