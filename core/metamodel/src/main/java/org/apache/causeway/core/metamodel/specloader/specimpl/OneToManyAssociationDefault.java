@@ -18,10 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.io.InvalidObjectException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
@@ -31,7 +27,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
@@ -50,7 +45,7 @@ import lombok.Getter;
 
 public class OneToManyAssociationDefault
 extends ObjectAssociationAbstract
-implements OneToManyAssociation, Serializable {
+implements OneToManyAssociation {
     private static final long serialVersionUID = 1L;
 
     public static OneToManyAssociationDefault forMethod(final FacetedMethod facetedMethod) {
@@ -197,29 +192,6 @@ implements OneToManyAssociation, Serializable {
         var methodFacade = getFacetedMethod().getMethod();
         return methodFacade.synthesize(Collection.class).isPresent()
                 || methodFacade.synthesize(CollectionLayout.class).isPresent();
-    }
-
-    // -- SERIALIZATION PROXY
-
-    protected final Object writeReplace() {
-        return new SerializationProxy(this);
-    }
-
-    protected final void readObject(final ObjectInputStream stream) throws InvalidObjectException {
-        throw new InvalidObjectException("Proxy required");
-    }
-
-    protected record SerializationProxy(Identifier identifier) implements Serializable {
-        SerializationProxy(final OneToManyAssociationDefault collection) {
-            this(collection.getFeatureIdentifier());
-        }
-        private Object readResolve() {
-            return MetaModelContext.instanceElseFail()
-                .getSpecificationLoader()
-                .specForLogicalTypeElseFail(identifier.getLogicalType())
-                .getCollectionElseFail(
-                        identifier.getMemberLogicalName());
-        }
     }
 
 }

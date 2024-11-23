@@ -112,9 +112,6 @@ open module org.apache.causeway.core.metamodel {
 
     exports org.apache.causeway.core.metamodel.spec;
     exports org.apache.causeway.core.metamodel.spec.feature;
-    exports org.apache.causeway.core.metamodel.spec.feature.memento
-            //TODO don't expose impl. details
-            to org.apache.causeway.viewer.wicket.model;
 
     exports org.apache.causeway.core.metamodel.specloader
             to org.apache.causeway.core.runtimeservices,

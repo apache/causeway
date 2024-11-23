@@ -22,7 +22,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.feature.memento.ObjectMemberMemento;
 
 import lombok.NonNull;
 
@@ -50,7 +49,7 @@ extends ModelAbstract<ManagedObject> {
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
         super();
-        this.objectMemberMemento = ObjectMemberMemento.forMember(objectMember);
+        this.objectMemberMemento = objectMember;
         this.adapterMemento = valueAdapter.getMemento().orElseThrow();
     }
 
@@ -61,13 +60,13 @@ extends ModelAbstract<ManagedObject> {
 
     // -- META MODEL
 
-    private final ObjectMemberMemento objectMemberMemento;
+    private final ObjectMember objectMemberMemento;
 
     /**
      * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
      */
     public ObjectMember getObjectMember() {
-        return objectMemberMemento.getObjectMember(getMetaModelContext()::getSpecificationLoader);
+        return objectMemberMemento;
     }
 
 //    @SuppressWarnings("unchecked")
@@ -80,7 +79,7 @@ extends ModelAbstract<ManagedObject> {
 
     private ActionModel actionModelHint;
     /**
-     * The {@link ActionModelImpl model} of the {@link ObjectAction action}
+     * The {@link ActionModel} of the {@link ObjectAction action}
      * that generated this {@link ValueModel}.
      *
      * @see #setActionHint(ActionModel)

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
@@ -31,6 +34,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -62,7 +66,8 @@ import lombok.NonNull;
 public abstract class ObjectMemberAbstract
 implements
     ObjectMember,
-    HasMetaModelContext {
+    HasMetaModelContext, Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Identifier featureIdentifier;
     @Getter(onMethod_ = {@Override}) private final @NonNull FeatureType featureType;
@@ -322,6 +327,29 @@ implements
     @Override
     public String asciiId() {
         return getMetaModelContext().getAsciiIdentifierService().asciiIdFor(getId());
+    }
+
+    // -- SERIALIZATION PROXY
+
+    protected final Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    protected final void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
+    }
+
+    protected record SerializationProxy(Identifier identifier) implements Serializable {
+        SerializationProxy(final ObjectMember objectMember) {
+            this(objectMember.getFeatureIdentifier());
+        }
+        private Object readResolve() {
+            return MetaModelContext.instanceElseFail()
+                .getSpecificationLoader()
+                .specForLogicalTypeElseFail(identifier.getLogicalType())
+                .getMemberElseFail(
+                        identifier.getMemberNameAndParameterClassNamesIdentityString());
+        }
     }
 
 }

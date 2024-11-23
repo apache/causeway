@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
-import java.io.InvalidObjectException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import org.apache.causeway.applib.Identifier;
@@ -33,7 +31,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -346,29 +343,6 @@ implements OneToOneAssociation, Serializable {
         var methodFacade = getFacetedMethod().getMethod();
         return methodFacade.synthesize(Property.class).isPresent()
                 || methodFacade.synthesize(PropertyLayout.class).isPresent();
-    }
-
-    // -- SERIALIZATION PROXY
-
-    protected final Object writeReplace() {
-        return new SerializationProxy(this);
-    }
-
-    protected final void readObject(final ObjectInputStream stream) throws InvalidObjectException {
-        throw new InvalidObjectException("Proxy required");
-    }
-
-    protected record SerializationProxy(Identifier identifier) implements Serializable {
-        SerializationProxy(final OneToOneAssociationDefault property) {
-            this(property.getFeatureIdentifier());
-        }
-        private Object readResolve() {
-            return MetaModelContext.instanceElseFail()
-                .getSpecificationLoader()
-                .specForLogicalTypeElseFail(identifier.getLogicalType())
-                .getPropertyElseFail(
-                        identifier.getMemberLogicalName());
-        }
     }
 
 }
