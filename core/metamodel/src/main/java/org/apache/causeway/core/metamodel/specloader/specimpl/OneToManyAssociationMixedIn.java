@@ -46,6 +46,7 @@ import lombok.Getter;
 public class OneToManyAssociationMixedIn
 extends OneToManyAssociationDefault
 implements MixedInMember {
+    private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
