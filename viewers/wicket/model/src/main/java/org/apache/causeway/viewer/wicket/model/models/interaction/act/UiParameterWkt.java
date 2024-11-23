@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -36,30 +36,21 @@ import lombok.NonNull;
  *
  * @see ActionInteractionWkt
  */
-public final class UiParameterWkt
-extends ChainingModel<ActionInteraction>
+public record UiParameterWkt(
+    ActionInteractionWkt actionInteractionModel,
+    int paramIndex)
 implements
+    IModel<ActionInteraction>,
     HasCommonContext,
     HasUiParentObject<UiObject>,
     UiParameter {
 
-    private static final long serialVersionUID = 1L;
-
-    final int paramIndex;
-
-    UiParameterWkt(
-            final ActionInteractionWkt model,
-            final int paramIndex) {
-        super(model);
-        this.paramIndex = paramIndex;
-    }
-
-    public final ActionInteraction actionInteraction() {
+    public ActionInteraction actionInteraction() {
         return getObject();
     }
 
-    public final ActionInteractionWkt actionInteractionModel() {
-        return (ActionInteractionWkt) getChainedModel();
+    public ActionInteractionWkt actionInteractionModel() {
+        return actionInteractionModel;
     }
 
     @Override
@@ -90,6 +81,31 @@ implements
     @Override
     public ParameterNegotiationModel getParameterNegotiationModel() {
         return actionInteractionModel().parameterNegotiationModel();
+    }
+
+    // -- MODEL CHAINING
+
+    @Override
+    public void detach() {
+        actionInteractionModel.detach();
+    }
+
+    @Override
+    public void setObject(final ActionInteraction object) {
+        actionInteractionModel.setObject(object);
+    }
+
+    @Override
+    public ActionInteraction getObject() {
+        return actionInteractionModel.getObject();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Model:classname=[");
+        sb.append(getClass().getName()).append(']');
+        sb.append(":nestedModel=[").append(actionInteractionModel).append(']');
+        return sb.toString();
     }
 
 }
