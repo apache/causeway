@@ -31,14 +31,14 @@ import lombok.experimental.UtilityClass;
 final class _Xray {
 
     static void onSclarModelUpdate(
-            final UiAttributeWkt scalarModel, final ManagedObject oldValue, final ManagedObject newValue) {
+            final UiAttributeWkt attributeModel, final ManagedObject oldValue, final ManagedObject newValue) {
         if(!XrayUi.isXrayEnabled()) return;
 
         var oldPojo = MmUnwrapUtils.single(oldValue);
         var newPojo = MmUnwrapUtils.single(newValue);
         var changed = !Objects.equals(oldPojo, newPojo);
 
-        final String updatingWhat = scalarModel.getSpecialization()
+        final String updatingWhat = attributeModel.getSpecialization()
                 .fold(
                     param->
                         String.format("param[index=%d,name=%s,changed=%b]",
@@ -50,7 +50,7 @@ final class _Xray {
                     );
 
         _XrayEvent.user("%s Model - updating %s: %s -> %s",
-                scalarModel.isParameter() ? "Parameter" : "Property",
+                attributeModel.isParameter() ? "Parameter" : "Property",
                 updatingWhat,
                 oldPojo, newPojo);
     }

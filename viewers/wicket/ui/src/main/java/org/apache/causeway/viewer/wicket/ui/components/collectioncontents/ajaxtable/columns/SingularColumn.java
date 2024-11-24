@@ -53,14 +53,14 @@ extends AssociationColumnAbstract {
         var rowElementModel = UiObjectWkt.ofAdapter(rowElement);
         var property = rowElement.getSpecification().getPropertyElseFail(memberId);
 
-        var scalarModel = rowElementModel
+        var propertyModel = rowElementModel
                 .getPropertyModel(
                         property,
                         ViewOrEditMode.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
-        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel)
-                .createComponent(componentId, scalarModel);
+        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, propertyModel)
+                .createComponent(componentId, propertyModel);
     }
 
 }

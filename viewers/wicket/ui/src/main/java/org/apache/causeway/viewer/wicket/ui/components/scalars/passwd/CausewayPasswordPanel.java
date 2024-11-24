@@ -33,8 +33,8 @@ extends ScalarPanelTextFieldWithValueSemantics<Password> {
 
     private static final long serialVersionUID = 1L;
 
-    public CausewayPasswordPanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel, Password.class);
+    public CausewayPasswordPanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel, Password.class);
     }
 
     @Override

@@ -32,9 +32,9 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoice;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
@@ -54,26 +54,26 @@ implements
 
     public static Select2 createSelect2(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final ChoiceProviderAbstract choiceProvider,
             final ScalarModelChangeDispatcher select2ChangeDispatcher) {
-        var select2 = new Select2(scalarModel.isSingular()
+        var select2 = new Select2(attributeModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithSingleChoice.chain(scalarModel),
-                                scalarModel,
+                                ScalarModelWithSingleChoice.chain(attributeModel),
+                                attributeModel,
                                 choiceProvider))
                 : Either.right(
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiChoice.chain(scalarModel),
-                                scalarModel,
+                                ScalarModelWithMultiChoice.chain(attributeModel),
+                                attributeModel,
                                 choiceProvider)));
 
-        select2.setLabel(Model.of(scalarModel.getFriendlyName()));
+        select2.setLabel(Model.of(attributeModel.getFriendlyName()));
         select2.getSettings().setWidth("100%");
 
         // listen on select2:select/unselect events (client-side)
-        select2.add(new Select2OnSelect(scalarModel, select2ChangeDispatcher));
+        select2.add(new Select2OnSelect(attributeModel, select2ChangeDispatcher));
 
         return select2;
     }

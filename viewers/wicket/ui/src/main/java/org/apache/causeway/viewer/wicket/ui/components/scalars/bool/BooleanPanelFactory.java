@@ -35,8 +35,8 @@ public class BooleanPanelFactory extends ComponentFactoryScalarTypeConstrainedAb
     }
 
     @Override
-    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-        return new BooleanPanel(id, scalarModel);
+    public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+        return new BooleanPanel(id, attributeModel);
     }
 
 }

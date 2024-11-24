@@ -118,12 +118,12 @@ public interface UiAttribute extends UiModel, HasMetaModelContext {
         CHOICES,
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
-        public static ChoiceProviderSort valueOf(final UiAttribute scalarModel) {
-            if (scalarModel.hasChoices()) {
+        public static ChoiceProviderSort valueOf(final UiAttribute uiAttribute) {
+            if (uiAttribute.hasChoices()) {
                 return ChoiceProviderSort.CHOICES;
-            } else if(scalarModel.hasAutoComplete()) {
+            } else if(uiAttribute.hasAutoComplete()) {
                 return ChoiceProviderSort.AUTO_COMPLETE;
-            } else if(scalarModel.hasObjectAutoComplete()) {
+            } else if(uiAttribute.hasObjectAutoComplete()) {
                 return ChoiceProviderSort.OBJECT_AUTO_COMPLETE;
             }
             return NO_CHOICES;

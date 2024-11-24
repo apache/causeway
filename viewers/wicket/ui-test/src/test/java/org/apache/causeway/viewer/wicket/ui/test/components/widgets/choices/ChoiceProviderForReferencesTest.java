@@ -50,7 +50,7 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         var isRequired = true;
-        var choiceProvider = new ChoiceProviderDefault(mockScalarModel(choices, isRequired));
+        var choiceProvider = new ChoiceProviderDefault(mockAttributeModel(choices, isRequired));
 
         var response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);

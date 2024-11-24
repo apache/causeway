@@ -59,8 +59,8 @@ public class MarkupPanelFactories {
         }
 
         @Override
-        protected Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-            return new ScalarMarkupPanel<T>(id, scalarModel, valueType, this.key());
+        protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new ScalarMarkupPanel<T>(id, attributeModel, valueType, this.key());
         }
 
         protected abstract MarkupComponent newMarkupComponent(String id, UiAttributeWkt model);

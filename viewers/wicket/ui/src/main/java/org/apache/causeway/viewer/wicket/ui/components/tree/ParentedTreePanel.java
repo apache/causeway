@@ -33,8 +33,8 @@ extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 
-    public ParentedTreePanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    public ParentedTreePanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
     @Override
@@ -58,11 +58,11 @@ extends ScalarPanelAbstract2 {
 
     private MarkupContainer createTreeComponent(final String id) {
         var container = getScalarFrameContainer();
-        var scalarModel = scalarModel();
-        var tree = CausewayToWicketTreeAdapter.adapt(id, scalarModel);
+        var attributeModel = attributeModel();
+        var tree = CausewayToWicketTreeAdapter.adapt(id, attributeModel);
         container.add(tree);
         // adds the tree-theme behavior to the tree's parent
-        container.add(getTreeThemeProvider().treeThemeFor(scalarModel));
+        container.add(getTreeThemeProvider().treeThemeFor(attributeModel));
         return tree;
     }
 

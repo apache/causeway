@@ -40,21 +40,21 @@ implements
 
     // -- FACTORY
 
-    public static ScalarModelWithSingleChoice chain(final @NonNull UiAttributeWkt scalarModel) {
-        return new ScalarModelWithSingleChoice(scalarModel);
+    public static ScalarModelWithSingleChoice chain(final @NonNull UiAttributeWkt attributeModel) {
+        return new ScalarModelWithSingleChoice(attributeModel);
     }
 
     // -- CONSTRUCTION
 
-    private ScalarModelWithSingleChoice(final UiAttributeWkt scalarModel) {
-        super(scalarModel); // chaining to scalarModel
+    private ScalarModelWithSingleChoice(final UiAttributeWkt attributeModel) {
+        super(attributeModel); // chaining to attributeModel
     }
 
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
     @Override
-    public UiAttributeWkt scalarModel() {
+    public UiAttributeWkt attributeModel() {
         return (UiAttributeWkt) super.getTarget();
     }
 

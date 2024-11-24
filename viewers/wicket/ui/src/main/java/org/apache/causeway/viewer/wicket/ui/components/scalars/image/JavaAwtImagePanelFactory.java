@@ -33,13 +33,13 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-        return new JavaAwtImagePanel(id, scalarModel);
+    protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+        return new JavaAwtImagePanel(id, attributeModel);
     }
 
     @Override
-    protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
-        var typeSpec = scalarModel.getElementType();
+    protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
+        var typeSpec = attributeModel.getElementType();
         return appliesIf(typeSpec != null
                 && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
     }

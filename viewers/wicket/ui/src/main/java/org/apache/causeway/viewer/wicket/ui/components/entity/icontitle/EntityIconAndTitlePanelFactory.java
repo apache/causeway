@@ -85,9 +85,9 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         if (model instanceof ObjectAdapterModel) {
             objectAdapterModel = (ObjectAdapterModel) model;
         } else if (model instanceof UiAttributeWkt) {
-            var scalarModel = (UiAttributeWkt) model;
-            // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
-            objectAdapterModel = ChainingObjectModel.chain(scalarModel);
+            var attributeModel = (UiAttributeWkt) model;
+            // effectively acts as an adapter from UiAttribute to ObjectAdapterModel
+            objectAdapterModel = ChainingObjectModel.chain(attributeModel);
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }

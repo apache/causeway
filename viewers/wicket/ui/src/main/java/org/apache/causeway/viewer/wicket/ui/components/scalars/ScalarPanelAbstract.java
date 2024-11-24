@@ -131,26 +131,26 @@ implements ScalarModelChangeListener {
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }
 
         static RenderScenario inferFrom(final ScalarPanelAbstract scalarPanel) {
-            var scalarModel = scalarPanel.scalarModel();
-            if(scalarModel.getRenderingHint().isInTable()) {
+            var attributeModel = scalarPanel.attributeModel();
+            if(attributeModel.getRenderingHint().isInTable()) {
                 return COMPACT;
             }
-            if(scalarModel.isParameter()) {
-                return _Util.canParameterEnterNestedEdit(scalarModel)
+            if(attributeModel.isParameter()) {
+                return _Util.canParameterEnterNestedEdit(attributeModel)
                         ? EDITING_WITH_LINK_TO_NESTED // nested/embedded dialog
                         : EDITING; // for params always EDITING even if editing is vetoed
             }
             // at this point we are processing a property (not a parameter)
-            if(scalarModel.isEditingMode()) {
+            if(attributeModel.isEditingMode()) {
                 return EDITING;
             }
-            if(_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
+            if(_Util.canPropertyEnterInlineEditDirectly(attributeModel)) {
                 return CAN_EDIT_INLINE;
             }
-            if(_Util.lookupPropertyActionForInlineEdit(scalarModel).isPresent()) {
+            if(_Util.lookupPropertyActionForInlineEdit(attributeModel).isPresent()) {
                 return CAN_EDIT_INLINE_VIA_ACTION;
             }
-            return scalarModel.disabledReason().isPresent()
+            return attributeModel.disabledReason().isPresent()
                     ? READONLY
                     : CAN_EDIT;
         }
@@ -187,7 +187,7 @@ implements ScalarModelChangeListener {
     /**
      * Identical to super.getModel()
      */
-    public final UiAttributeWkt scalarModel() {
+    public final UiAttributeWkt attributeModel() {
         return super.getModel();
     }
 
@@ -243,8 +243,8 @@ implements ScalarModelChangeListener {
 
     // -- CONSTRUCTION
 
-    protected ScalarPanelAbstract(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    protected ScalarPanelAbstract(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
 
         var formatModifiers = EnumSet.noneOf(FormatModifier.class);
         setupFormatModifiers(formatModifiers);
@@ -280,12 +280,12 @@ implements ScalarModelChangeListener {
      */
     private void buildGui() {
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
         scalarFrameContainer = Wkt.containerAdd(this, ID_SCALAR_TYPE_CONTAINER);
         Wkt.cssAppend(scalarFrameContainer, getCssClassName());
 
-        if(scalarModel.getRenderingHint().isInTable()) {
+        if(attributeModel.getRenderingHint().isInTable()) {
             regularFrame = createShallowRegularFrame();
             compactFrame = createCompactFrame();
             regularFrame.setVisible(false);
@@ -302,7 +302,7 @@ implements ScalarModelChangeListener {
             scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
                     formFrame = createFormFrame());
 
-            var associatedLinksAndLabels = _Util.associatedActionModels(scalarModel);
+            var associatedLinksAndLabels = _Util.associatedActionModels(attributeModel);
             addPositioningCssTo(regularFrame, associatedLinksAndLabels);
             addActionLinksBelowAndRight(regularFrame, associatedLinksAndLabels);
 
@@ -312,7 +312,7 @@ implements ScalarModelChangeListener {
         }
 
         // prevent from tabbing into non-editable widgets.
-        if(_Util.isPropertyWithEnterEditNotAvailable(scalarModel)) {
+        if(_Util.isPropertyWithEnterEditNotAvailable(attributeModel)) {
             Wkt.noTabbing(getValidationFeedbackReceiver());
         }
 
@@ -354,7 +354,7 @@ implements ScalarModelChangeListener {
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected WebMarkupContainer createFormFrame() {
-        var isNotInTable = scalarModel().getRenderingHint().isNotInTable();
+        var isNotInTable = attributeModel().getRenderingHint().isNotInTable();
         return (WebMarkupContainer)FrameFragment.INLINE_PROMPT_FORM
                 .createComponent(WebMarkupContainer::new)
                 .setVisible(false)
@@ -369,7 +369,7 @@ implements ScalarModelChangeListener {
                     getScalarFrameContainer(),
                     FrameFragment.INLINE_PROMPT_FORM.getContainerId(),
                     UiComponentType.PROPERTY_EDIT_FORM,
-                    scalarModel());
+                    attributeModel());
 
         getRegularFrame().setVisible(false);
         getFormFrame().setVisible(true);
@@ -379,9 +379,9 @@ implements ScalarModelChangeListener {
 
     private void callHooks() {
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        if (scalarModel.disabledReason().isPresent()) {
+        if (attributeModel.disabledReason().isPresent()) {
 
             /*
              * Whether this model should be surfaced in the UI using a widget rendered such that it is either already in
@@ -391,15 +391,15 @@ implements ScalarModelChangeListener {
              * <tt>true</tt> if the widget for this model must be editable.
              */
             final boolean isOrCanBeSwitchedToEditable =
-                    scalarModel.isEditingMode()
-                        || scalarModel.isParameter()
-                        || scalarModel.hasAssociatedActionWithInlineAsIfEdit();
+                attributeModel.isEditingMode()
+                        || attributeModel.isParameter()
+                        || attributeModel.hasAssociatedActionWithInlineAsIfEdit();
 
             if(isOrCanBeSwitchedToEditable) {
                 onInitializeNotEditable();
             } else {
 
-                final String disabledReason = scalarModel.disabledReason()
+                final String disabledReason = attributeModel.disabledReason()
                         .flatMap(InteractionVeto::getReasonAsString)
                         .orElseThrow(()->_Exceptions
                                 .unrecoverable("framework bug: ScalarModel indicates it has a disabled-reason, yet its empty"));
@@ -407,7 +407,7 @@ implements ScalarModelChangeListener {
                 onInitializeReadonly(disabledReason);
             }
         } else {
-            if (scalarModel.isViewingMode()) {
+            if (attributeModel.isViewingMode()) {
                 onInitializeNotEditable();
             } else {
                 onInitializeEditable();
@@ -441,11 +441,11 @@ implements ScalarModelChangeListener {
     protected abstract void onMakeEditable();
 
     private void addCssFromMetaModel() {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        Wkt.cssAppend(this, scalarModel.getCssClass());
+        Wkt.cssAppend(this, attributeModel.getCssClass());
 
-        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(attributeModel.getMetaModel(), attributeModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }
@@ -464,7 +464,7 @@ implements ScalarModelChangeListener {
      */
     @Override
     protected void onConfigure() {
-        final boolean hidden = scalarModel().whetherHidden();
+        final boolean hidden = attributeModel().whetherHidden();
         setVisibilityAllowed(!hidden);
         super.onConfigure();
     }
@@ -544,9 +544,9 @@ implements ScalarModelChangeListener {
      */
     protected final void scalarNameLabelAddTo(final MarkupContainer container, final IModel<String> labelCaption) {
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        var helper = ScalarNameHelper.from(scalarModel);
+        var helper = ScalarNameHelper.from(attributeModel);
 
         helper.hideHiddenLabels(container);
 
@@ -559,17 +559,17 @@ implements ScalarModelChangeListener {
 
             WktDecorators.formLabel()
                 .decorate(scalarNameLabel, FormLabelDecorationModel
-                        .mandatory(scalarModel.isShowMandatoryIndicator()));
+                        .mandatory(attributeModel.isShowMandatoryIndicator()));
 
-            scalarModel.getDescribedAs()
+            attributeModel.getDescribedAs()
                 .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
         });
     }
 
     @Value
     private static class ScalarNameHelper {
-        static ScalarNameHelper from(final UiAttributeWkt scalarModel) {
-            final LabelPosition labelPostion = Facets.labelAt(scalarModel.getMetaModel());
+        static ScalarNameHelper from(final UiAttributeWkt attributeModel) {
+            final LabelPosition labelPostion = Facets.labelAt(attributeModel.getMetaModel());
             return labelPostion == LabelPosition.NONE
                     ? new ScalarNameHelper(Optional.empty(), new String[]{ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_NAME_AFTER_VALUE})
                     : labelPostion == LabelPosition.RIGHT
@@ -635,8 +635,8 @@ implements ScalarModelChangeListener {
         Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
 
-    private static String determinePropParamLayoutCss(final UiAttributeWkt scalarModel) {
-        return Facets.labelAtCss(scalarModel.getMetaModel());
+    private static String determinePropParamLayoutCss(final UiAttributeWkt attributeModel) {
+        return Facets.labelAtCss(attributeModel.getMetaModel());
     }
 
     private static String determineActionLayoutPositioningCss(final Can<ActionModel> entityActionLinks) {

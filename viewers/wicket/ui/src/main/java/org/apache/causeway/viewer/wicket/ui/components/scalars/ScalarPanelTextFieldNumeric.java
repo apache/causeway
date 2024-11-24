@@ -30,9 +30,9 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     public ScalarPanelTextFieldNumeric(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final Class<T> type) {
-        super(id, scalarModel, type);
+        super(id, attributeModel, type);
     }
 
 }

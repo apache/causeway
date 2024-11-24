@@ -34,8 +34,8 @@ public class CausewayPasswordPanelFactory extends ComponentFactoryScalarTypeCons
     }
 
     @Override
-    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-        return new CausewayPasswordPanel(id, scalarModel);
+    public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+        return new CausewayPasswordPanel(id, attributeModel);
     }
 
 }

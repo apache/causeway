@@ -46,8 +46,8 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     private CheckBoxX checkBox;
 
-    public BooleanPanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel, Boolean.class);
+    public BooleanPanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel, Boolean.class);
     }
 
     @Override
@@ -56,20 +56,20 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected FormComponent<Boolean> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
+    protected FormComponent<Boolean> createFormComponent(final String id, final UiAttributeWkt attributeModel) {
         checkBox = Wkt.checkboxX(
                 id,
-                BooleanModel.forScalarModel(scalarModel),
-                scalarModel.isRequired(),
+                BooleanModel.forAttributeModel(attributeModel),
+                attributeModel.isRequired(),
                 CheckBoxXConfig.Sizes.xl);
         return checkBox;
     }
 
     @Override
     protected Component createComponentForOutput(final String id) {
-        Boolean b = (Boolean) scalarModel().getObject().getPojo();
+        Boolean b = (Boolean) attributeModel().getObject().getPojo();
         if(b==null
-                && scalarModel().isRequired()) {
+                && attributeModel().isRequired()) {
             b = false;
         }
         return getRenderScenario().isCompact()

@@ -35,7 +35,7 @@ public class InlinePromptContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final UiAttributeWkt scalarModel;
+    private final UiAttributeWkt attributeModel;
 
     @Getter
     private final MarkupContainer scalarTypeContainer;
@@ -54,7 +54,7 @@ public class InlinePromptContext implements Serializable {
         .accept(_Functions.noopConsumer(), prop->{
             // reset the UI form input field to the untouched property value
             var untouchedPropertyValue = prop.getManagedProperty().getPropertyValue();
-            scalarModel.setObject(untouchedPropertyValue);
+            attributeModel.setObject(untouchedPropertyValue);
         });
 
         scalarIfRegular.setVisible(true);

@@ -200,12 +200,12 @@ implements
 
     // -- PROPERTY MODELS (CHILDREN)
 
-    private transient Map<Identifier, PropertyModel> propertyScalarModels;
-    private Map<Identifier, PropertyModel> propertyScalarModels() {
-        if(propertyScalarModels==null) {
-            propertyScalarModels = new HashMap<>();
+    private transient Map<Identifier, PropertyModel> propertyModels;
+    private Map<Identifier, PropertyModel> propertyModels() {
+        if(propertyModels==null) {
+            propertyModels = new HashMap<>();
         }
-        return propertyScalarModels;
+        return propertyModels;
     }
 
     /**
@@ -232,10 +232,10 @@ implements
         }
 
         var propIdentifier = property.getFeatureIdentifier();
-        var propertyScalarModels = propertyScalarModels();
-        final UiAttributeWkt existingScalarModel = propertyScalarModels.get(propIdentifier);
-        if (existingScalarModel != null) {
-            return existingScalarModel;
+        var propertyModels = propertyModels();
+        final UiAttributeWkt existingPropertyModel = propertyModels.get(propIdentifier);
+        if (existingPropertyModel != null) {
+            return existingPropertyModel;
         }
 
         var propertyInteractionModel = new PropertyInteractionWkt(
@@ -245,15 +245,15 @@ implements
 
         final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
         .map(uiModel->PropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
-        .peek(scalarModel->log.debug("adding: {}", scalarModel))
-        .filter(scalarModel->propertyScalarModels.put(propIdentifier, scalarModel)==null)
+        .peek(propertyModel->log.debug("adding: {}", propertyModel))
+        .filter(propertyModel->propertyModels.put(propIdentifier, propertyModel)==null)
         .count(); // consume the stream
 
         // future extensions might allow to add multiple UI models per single property model (typed tuple support)
         _Assert.assertEquals(1L, modelsAdded, ()->
-            String.format("unexpected number of propertyScalarModels added %d", modelsAdded));
+            String.format("unexpected number of propertyModels added %d", modelsAdded));
 
-        return propertyScalarModels.get(propIdentifier);
+        return propertyModels.get(propIdentifier);
     }
 
     @Override
@@ -287,10 +287,10 @@ implements
 
     @Override
     protected void onDetach() {
-        propertyScalarModels().values()
+        propertyModels().values()
             .forEach(PropertyModel::detach);
         super.onDetach();
-        propertyScalarModels = null;
+        propertyModels = null;
     }
 
     // -- TAB AND COLUMN (metadata if any)

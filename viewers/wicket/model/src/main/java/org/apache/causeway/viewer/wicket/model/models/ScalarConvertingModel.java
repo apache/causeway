@@ -37,23 +37,23 @@ extends ChainingModel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarConvertingModel(final @NonNull UiAttributeWkt scalarModel) {
-        super(scalarModel);
+    protected ScalarConvertingModel(final @NonNull UiAttributeWkt attributeModel) {
+        super(attributeModel);
     }
 
     @Override
     public void setObject(final T modelValue) {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
         var value = toScalarValue(modelValue);
         var objectAdapter = value != null
-                ? scalarModel().getMetaModelContext().getObjectManager().adapt(value)
-                : ManagedObject.empty(scalarModel.getElementType());
-        scalarModel.setObject(objectAdapter);
+                ? attributeModel().getMetaModelContext().getObjectManager().adapt(value)
+                : ManagedObject.empty(attributeModel.getElementType());
+        attributeModel.setObject(objectAdapter);
     }
 
     @Override
     public T getObject() {
-        var adapter = scalarModel().getObject();
+        var adapter = attributeModel().getObject();
         final V scalarValue = !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? _Casts.uncheckedCast(adapter.getPojo())
                 : null;
@@ -67,7 +67,7 @@ extends ChainingModel<T> {
 
     // -- HELPER
 
-    protected UiAttributeWkt scalarModel() {
+    protected UiAttributeWkt attributeModel() {
         return (UiAttributeWkt) super.getTarget();
     }
 

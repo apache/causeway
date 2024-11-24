@@ -52,9 +52,9 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     protected ScalarPanelTextFieldAbstract(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final Class<T> type) {
-        super(id, scalarModel, type);
+        super(id, attributeModel, type);
         guardAgainstIncompatibleScalarType();
     }
 
@@ -84,13 +84,13 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     protected final IModel<T> unwrappedModel() {
-        return scalarModel().unwrapped(type);
+        return attributeModel().unwrapped(type);
     }
 
     // --
 
     @Override
-    protected final FormComponent<T> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
+    protected final FormComponent<T> createFormComponent(final String id, final UiAttributeWkt attributeModel) {
         this.formField = createTextField(id);
         formField.setOutputMarkupId(true);
         return applyFormComponentAttributes(formField);
@@ -124,20 +124,20 @@ extends ScalarPanelFormFieldAbstract<T> {
     // -- HELPER
 
     private void guardAgainstIncompatibleScalarType() {
-        _Assert.assertTrue(scalarModel().getElementType().isAssignableFrom(type), ()->
+        _Assert.assertTrue(attributeModel().getElementType().isAssignableFrom(type), ()->
             String.format("[%s:%s] cannot possibly unwrap model of type %s into target type %s",
                     this.getClass().getSimpleName(),
-                    scalarModel().getIdentifier(),
-                    scalarModel().getElementType().getCorrespondingClass(),
+                    attributeModel().getIdentifier(),
+                    attributeModel().getElementType().getCorrespondingClass(),
                     type));
     }
 
     <F extends FormComponent<?>> F applyFormComponentAttributes(final F formComponent) {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
         Wkt.setFormComponentAttributes(formComponent,
-                scalarModel::multilineNumberOfLines,
-                scalarModel::maxLength,
-                scalarModel::typicalLength);
+                attributeModel::multilineNumberOfLines,
+                attributeModel::maxLength,
+                attributeModel::typicalLength);
         return formComponent;
     }
 

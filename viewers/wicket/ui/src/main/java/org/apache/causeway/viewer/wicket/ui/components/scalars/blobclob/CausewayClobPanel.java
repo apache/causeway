@@ -48,7 +48,7 @@ class CausewayClobPanel extends CausewayBlobOrClobPanelAbstract<Clob> {
 
     @Override
     protected IModel<List<FileUpload>> fileUploadModel() {
-        return FileUploadModels.clob(scalarModel(), StandardCharsets.UTF_8);
+        return FileUploadModels.clob(attributeModel(), StandardCharsets.UTF_8);
     }
 
     @Override

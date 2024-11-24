@@ -62,11 +62,11 @@ extends PanelAbstract<Object, IModel<Object>> {
                 buf.append("??? objectAdapter is NULL");
             }
         } else if(model instanceof UiAttributeWkt) {
-            var scalarModel = (UiAttributeWkt) model;
-            var scalarAdapter = scalarModel.getObject();
-            if(ManagedObjects.isSpecified(scalarAdapter)) {
+            var attributeModel = (UiAttributeWkt) model;
+            var attributeAdapter = attributeModel.getObject();
+            if(ManagedObjects.isSpecified(attributeAdapter)) {
                 buf.append(String.format("??? spec=%s, value='%s'",
-                        scalarAdapter.getSpecification(), scalarAdapter.getPojo()));
+                        attributeAdapter.getSpecification(), attributeAdapter.getPojo()));
             } else {
                 buf.append("??? scalarAdapter is NULL or UNSPECIFIED");
             }

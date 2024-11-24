@@ -69,23 +69,23 @@ extends ScalarPanelAbstract {
 
     // -- CONSTRUCTION
 
-    protected ScalarPanelAbstract2(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    protected ScalarPanelAbstract2(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
     @Override
     protected final void setupInlinePrompt() {
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
         var regularFrame = getRegularFrame();
         var fieldFrame = getFieldFrame();
         var scalarFrameContainer = getScalarFrameContainer();
 
-        // even if this particular scalarModel (property) is not configured for inline edits,
+        // even if this particular attributeModel (property) is not configured for inline edits,
         // it's possible that one of the associated actions is.  Thus we set the prompt context
-        scalarModel.setInlinePromptContext(
+        attributeModel.setInlinePromptContext(
                 new InlinePromptContext(
-                        scalarModel,
+                        attributeModel,
                         scalarFrameContainer,
                         regularFrame,
                         getFormFrame()));
@@ -140,11 +140,11 @@ extends ScalarPanelAbstract {
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
                         var textArea = Wkt.textAreaNoTab(scalarValueId, this::outputFormatAsString);
-                        var scalarModel = scalarModel();
+                        var attributeModel = attributeModel();
                         Wkt.setFormComponentAttributes(textArea,
-                                scalarModel::multilineNumberOfLines,
-                                scalarModel::maxLength,
-                                scalarModel::typicalLength);
+                                attributeModel::multilineNumberOfLines,
+                                attributeModel::maxLength,
+                                attributeModel::typicalLength);
                         return textArea;
                     });
         }
@@ -162,7 +162,7 @@ extends ScalarPanelAbstract {
             return false;
         }
         // only render a text-area if it has content
-        return !scalarModel().isEmpty();
+        return !attributeModel().isEmpty();
     }
 
     /**
@@ -178,7 +178,7 @@ extends ScalarPanelAbstract {
      * Usually HTML, except for (non-empty) text-areas or badges (that are already modeled in HTML).
      */
     protected UiString obtainOutputFormat() {
-        var proposedValue = scalarModel().proposedValue();
+        var proposedValue = attributeModel().proposedValue();
         if(!proposedValue.isPresent()) {
             return UiString.markup(
                     getPlaceholderRenderService()
@@ -223,11 +223,11 @@ extends ScalarPanelAbstract {
 
         if(clickReceiver==null) return;
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
+        if (_Util.canPropertyEnterInlineEditDirectly(attributeModel)) {
 
-            _Util.lookupMixinForCompositeValueUpdate(scalarModel)
+            _Util.lookupMixinForCompositeValueUpdate(attributeModel)
             .ifPresentOrElse((final ActionModel mixinForCompositeValueEdit)->{
                 // composite value type support
                 var actionLink = ActionLink.create(mixinForCompositeValueEdit);
@@ -239,7 +239,7 @@ extends ScalarPanelAbstract {
 
         } else {
 
-            _Util.lookupPropertyActionForInlineEdit(scalarModel)
+            _Util.lookupPropertyActionForInlineEdit(attributeModel)
             .ifPresent((final ActionModel actionLinkInlineAsIfEdit)->{
                 var actionLink = ActionLink.create(actionLinkInlineAsIfEdit);
                 Wkt.behaviorAddOnClick(clickReceiver, actionLink::onClick);
@@ -251,7 +251,7 @@ extends ScalarPanelAbstract {
             final @NonNull RepeatingView buttonContainer, final FieldFragment fieldFragment) {
 
         for(var additionalButton : ScalarPanelAdditionalButton.values()) {
-            if(additionalButton.isVisible(scalarModel(), getRenderScenario(), fieldFragment)) {
+            if(additionalButton.isVisible(attributeModel(), getRenderScenario(), fieldFragment)) {
                 switch (additionalButton) {
                 case COPY_TO_CLIPBOARD:
                     //XXX Future extension
@@ -282,14 +282,14 @@ extends ScalarPanelAbstract {
         var disableReasonButton = Wkt.linkAddWithBody(buttonContainer,
                 Wkt.faIcon(faClass), ajaxTarget->{/*no-op*/});
 
-        var disabledReason = scalarModel().disabledReason()
+        var disabledReason = attributeModel().disabledReason()
                 .flatMap(InteractionVeto::getReasonAsString)
                 .orElse("framework bug: should provide a reason");
 
         WktTooltips.addTooltip(disableReasonButton, translate(disabledReason) + translate(reasonSuffix));
         Wkt.noTabbing(disableReasonButton);
 
-        if(scalarModel().isParameter()) {
+        if(attributeModel().isParameter()) {
             // allow the client-side popover cleaner to kick in
             disableReasonButton.setEventPropagation(EventPropagation.BUBBLE);
         } // properties otherwise do recreate the entire page anyway
@@ -302,7 +302,7 @@ extends ScalarPanelAbstract {
         Wkt.cssAppend(clearFieldButton, "btn-warning");
         WktTooltips.addTooltip(clearFieldButton, translate("Click to clear the field"));
 
-        if(scalarModel().isParameter()) {
+        if(attributeModel().isParameter()) {
             // allow the client-side popover cleaner to kick in
             clearFieldButton.setEventPropagation(EventPropagation.BUBBLE);
         } // properties otherwise do recreate the entire page anyway
@@ -324,7 +324,7 @@ extends ScalarPanelAbstract {
     }
 
     private void onPropertyInlineEditClick(final AjaxRequestTarget target) {
-        scalarModel().toEditingMode();
+        attributeModel().toEditingMode();
 
         switchRegularFrameToFormFrame();
         onSwitchFormForInlinePrompt(getFormFrame(), target);
@@ -337,8 +337,8 @@ extends ScalarPanelAbstract {
     }
 
     private void onClearFieldButtonClick(final AjaxRequestTarget target) {
-        scalarModel().proposedValue().clear();
-        scalarModel().getSpecialization().accept(
+        attributeModel().proposedValue().clear();
+        attributeModel().getSpecialization().accept(
                 param->{
                     clearBootstrapFileInputField();
                     this.setupInlinePrompt(); // recreate the param field
@@ -360,7 +360,7 @@ extends ScalarPanelAbstract {
             var formComponent = formContainer.getFormComponent();
             if(formComponent instanceof BootstrapFileInputField) {
                 // recreate from scratch
-                var replacement = formContainer.createFormComponent(formComponent.getId(), scalarModel());
+                var replacement = formContainer.createFormComponent(formComponent.getId(), attributeModel());
                 formComponent.replaceWith(replacement);
             }
         }

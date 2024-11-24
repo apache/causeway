@@ -52,29 +52,29 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     protected ScalarPanelSelectAbstract(
             final String id,
-            final UiAttributeWkt scalarModel) {
-        super(id, scalarModel, ManagedObject.class);
+            final UiAttributeWkt attributeModel) {
+        super(id, attributeModel, ManagedObject.class);
         setOutputMarkupId(true);
     }
 
     protected final Select2 createSelect2(
             final String id,
             final Function<UiAttributeWkt, ChoiceProviderAbstract> choiceProviderFactory) {
-        var scalarModel = scalarModel();
-        var select2 = Select2.createSelect2(id, scalarModel,
-                choiceProviderFactory.apply(scalarModel),
+        var attributeModel = attributeModel();
+        var select2 = Select2.createSelect2(id, attributeModel,
+                choiceProviderFactory.apply(attributeModel),
                 getScalarModelChangeDispatcher());
         var settings = select2.getSettings();
-        settings.setPlaceholder(scalarModel.getFriendlyName());
+        settings.setPlaceholder(attributeModel.getFriendlyName());
 
-        switch(scalarModel.getChoiceProviderSort()) {
+        switch(attributeModel.getChoiceProviderSort()) {
         case CHOICES:
             break;
         case AUTO_COMPLETE:
-            settings.setMinimumInputLength(scalarModel.getAutoCompleteMinLength());
+            settings.setMinimumInputLength(attributeModel.getAutoCompleteMinLength());
             break;
         case OBJECT_AUTO_COMPLETE:
-            Facets.autoCompleteMinLength(scalarModel.getElementType())
+            Facets.autoCompleteMinLength(attributeModel.getElementType())
             .ifPresent(settings::setMinimumInputLength);
             break;
         case NO_CHOICES:
@@ -94,14 +94,14 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     }
 
     protected final boolean isEditable() {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
         // cannot edit if in table or is view-mode
-        return !scalarModel.getRenderingHint().isInTable()
-                && !scalarModel.isViewingMode();
+        return !attributeModel.getRenderingHint().isInTable()
+                && !attributeModel.isViewingMode();
     }
 
     protected final boolean hasAnyChoices() {
-        return scalarModel().getChoiceProviderSort().isChoicesAny();
+        return attributeModel().getChoiceProviderSort().isChoicesAny();
     }
 
     public final boolean checkSelect2Required() {

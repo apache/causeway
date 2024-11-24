@@ -133,23 +133,23 @@ class InteractionTestWkt extends InteractionTestAbstract {
         objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(prop->{
 
-            final PropertyModel scalarModel = (PropertyModel) entityModel
+            final PropertyModel propertyModel = (PropertyModel) entityModel
                     .getPropertyModel(
                             prop,
                             ViewOrEditMode.VIEWING,
                             RenderingHint.PARENTED_PROPERTY_COLUMN);
 
             // owner sharing (should be the same object)
-            assertTrue(domainObject == scalarModel.getOwner());
+            assertTrue(domainObject == propertyModel.getOwner());
 
             if(!prop.getId().equals("stringMultiline")) {
                 return true; // continue
             }
 
             // the scalar model should be in sync with the underlying interaction API
-            var pendingPropModel = scalarModel.getPendingPropertyModel();
+            var pendingPropModel = propertyModel.getPendingPropertyModel();
             var propBackendValue = pendingPropModel.getValue().getValue();
-            var propUIValue = scalarModel.getObject();
+            var propUIValue = propertyModel.getObject();
 
             assertEquals(
                     "initial",

@@ -53,13 +53,13 @@ class CausewayToWicketTreeAdapter {
     }
 
     /**
-     * @param scalarModel - holder of {@link TreeNode}
+     * @param attributeModel - holder of {@link TreeNode}
      */
-    public static MarkupContainer adapt(final String id, final UiAttributeWkt scalarModel) {
-        return scalarModel==null
-                || ManagedObjects.isNullOrUnspecifiedOrEmpty(scalarModel.getObject())
+    public static MarkupContainer adapt(final String id, final UiAttributeWkt attributeModel) {
+        return attributeModel==null
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(attributeModel.getObject())
             ? emptyTreeComponent(id)
-            : DomainObjectTree.of(id, scalarModel.getObject());
+            : DomainObjectTree.of(id, attributeModel.getObject());
     }
 
     // -- FALLBACK

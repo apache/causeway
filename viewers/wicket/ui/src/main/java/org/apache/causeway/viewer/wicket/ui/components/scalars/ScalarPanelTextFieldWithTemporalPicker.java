@@ -53,25 +53,25 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     private TemporalDecompositionModel<T> temporalDecomposition;
 
     public ScalarPanelTextFieldWithTemporalPicker(
-            final String id, final UiAttributeWkt scalarModel, final Class<T> type) {
-        super(id, scalarModel, type);
+            final String id, final UiAttributeWkt attributeModel, final Class<T> type) {
+        super(id, attributeModel, type);
     }
 
     protected int getDateRenderAdjustDays() {
-        return Facets.dateRenderAdjustDays(scalarModel().getMetaModel());
+        return Facets.dateRenderAdjustDays(attributeModel().getMetaModel());
     }
 
     @Override
     protected final TextField<T> createTextField(final String id) {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
         this.temporalDecomposition = TemporalDecompositionModel.create(type,
-                scalarModel,
+                attributeModel,
                 offsetCharacteristic(),
                 (ConverterBasedOnValueSemantics<T>)converterElseFail());
 
         var textField = new TextFieldWithDateTimePicker<T>(
-                        id, scalarModel.unwrapped(type), type, scalarModel.isRequired(),
+                        id, attributeModel.unwrapped(type), type, attributeModel.isRequired(),
                         temporalDecomposition,
                         temporalDecomposition.getEditingPattern());
 
@@ -80,7 +80,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
 
     @Override
     protected void onFormGroupCreated(final FormGroup formGroup) {
-        if(!scalarModel().isEditingMode()) return;
+        if(!attributeModel().isEditingMode()) return;
 
         // find the scalarValue container, which we want to add the additional fields to
         var container = WktComponents.findById(formGroup, "container-scalarValue", MarkupContainer.class)
@@ -131,7 +131,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     // -- HELPER
 
     private TemporalSupport<?> temporalSupport() {
-        return MmValueUtils.temporalSupportElseFail(scalarModel().getMetaModel(), scalarModel().getElementType());
+        return MmValueUtils.temporalSupportElseFail(attributeModel().getMetaModel(), attributeModel().getElementType());
     }
 
     private OffsetCharacteristic offsetCharacteristic() {

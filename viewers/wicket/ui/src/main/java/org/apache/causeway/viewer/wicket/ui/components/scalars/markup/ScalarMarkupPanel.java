@@ -37,10 +37,10 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     public ScalarMarkupPanel(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final Class<T> valueType,
             final ComponentFactoryKey markupComponentFactoryKey) {
-        super(id, scalarModel, valueType);
+        super(id, attributeModel, valueType);
         this.markupComponentFactoryKey = markupComponentFactoryKey;
     }
 
@@ -56,7 +56,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
     }
 
     protected final MarkupComponent createMarkupComponent(final String id) {
-        return markupComponentFactory().newMarkupComponent(id, scalarModel());
+        return markupComponentFactory().newMarkupComponent(id, attributeModel());
     }
 
     protected final MarkupPanelFactories.ParentedAbstract<?> markupComponentFactory() {

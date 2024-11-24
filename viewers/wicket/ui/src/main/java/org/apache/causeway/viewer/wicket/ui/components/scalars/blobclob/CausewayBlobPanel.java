@@ -42,7 +42,7 @@ class CausewayBlobPanel extends CausewayBlobOrClobPanelAbstract<Blob> {
 
     @Override
     protected IModel<List<FileUpload>> fileUploadModel() {
-        return FileUploadModels.blob(scalarModel());
+        return FileUploadModels.blob(attributeModel());
     }
 
     @Override

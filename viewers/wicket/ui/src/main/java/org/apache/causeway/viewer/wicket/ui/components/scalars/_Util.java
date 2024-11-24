@@ -46,62 +46,62 @@ class _Util {
     /**
      * Whether to prevent tabbing into non-editable widgets.
      */
-    boolean isPropertyWithEnterEditNotAvailable(final UiAttributeWkt scalarModel) {
-        return scalarModel.isProperty()
-                && scalarModel.isViewingMode()
-                && (scalarModel.getPromptStyle().isDialogAny()
-                        || !canEnterEditMode(scalarModel));
+    boolean isPropertyWithEnterEditNotAvailable(final UiAttributeWkt attributeModel) {
+        return attributeModel.isProperty()
+                && attributeModel.isViewingMode()
+                && (attributeModel.getPromptStyle().isDialogAny()
+                        || !canEnterEditMode(attributeModel));
     }
 
-    boolean canPropertyEnterInlineEditDirectly(final UiAttributeWkt scalarModel) {
-        return scalarModel.getPromptStyle().isInline()
-                && scalarModel.isViewingMode()
-                && !scalarModel.disabledReason().isPresent();
+    boolean canPropertyEnterInlineEditDirectly(final UiAttributeWkt attributeModel) {
+        return attributeModel.getPromptStyle().isInline()
+                && attributeModel.isViewingMode()
+                && !attributeModel.disabledReason().isPresent();
     }
 
     /**
      * Parameter disabled case should already be handled earlier.
      * <p>
-     * @implNote {@code !scalarModel.disabledReason().isPresent()} is not checked nor asserted here
+     * @implNote {@code !attributeModel.disabledReason().isPresent()} is not checked nor asserted here
      */
-    boolean canParameterEnterNestedEdit(final UiAttributeWkt scalarModel) {
-        return scalarModel.isParameter()
-                && !scalarModel.hasChoices() // handled by select2 panels instead
-                && lookupCompositeValueMixinForFeature(scalarModel).isPresent();
+    boolean canParameterEnterNestedEdit(final UiAttributeWkt attributeModel) {
+        return attributeModel.isParameter()
+                && !attributeModel.hasChoices() // handled by select2 panels instead
+                && lookupCompositeValueMixinForFeature(attributeModel).isPresent();
     }
 
-    Optional<ActionModel> lookupMixinForCompositeValueUpdate(final UiAttributeWkt scalarModel) {
-        return lookupCompositeValueMixinForFeature(scalarModel)
+    Optional<ActionModel> lookupMixinForCompositeValueUpdate(final UiAttributeWkt attributeModel) {
+        return lookupCompositeValueMixinForFeature(attributeModel)
             .flatMap(compositeValueMixinForFeature->
-                toActionModelWithRuleChecking(compositeValueMixinForFeature, scalarModel))
+                toActionModelWithRuleChecking(compositeValueMixinForFeature, attributeModel))
             .filter(_Util::guardAgainstInvalidCompositeMixinScenarios);
     }
 
-    Optional<ActionModel> lookupPropertyActionForInlineEdit(final UiAttributeWkt scalarModel) {
+    Optional<ActionModel> lookupPropertyActionForInlineEdit(final UiAttributeWkt attributeModel) {
         // not editable property, but maybe one of the actions is.
-        return scalarModel.getAssociatedActions()
+        return attributeModel.getAssociatedActions()
                 .getFirstAssociatedWithInlineAsIfEdit()
-                .flatMap(action->toActionModelWithRuleChecking(action, scalarModel));
+                .flatMap(action->toActionModelWithRuleChecking(action, attributeModel));
     }
 
-    Can<ActionModel> associatedActionModels(final UiAttributeWkt scalarModel) {
+    Can<ActionModel> associatedActionModels(final UiAttributeWkt attributeModel) {
         // find associated actions for this scalar property (only properties will have any.)
         // convert those actions into UI layer widgets
-        return scalarModel.getAssociatedActions()
+        return attributeModel.getAssociatedActions()
                 .getRemainingAssociated()
                 .stream()
-                .map(act->ActionModel.forPropertyOrParameter(act, scalarModel))
+                .map(act->ActionModel.forPropertyOrParameter(act, attributeModel))
                 .collect(Can.toCan());
     }
 
-    IValidator<Object> createValidatorFor(final UiAttributeWkt scalarModel) {
+    IValidator<Object> createValidatorFor(final UiAttributeWkt attributeModel) {
         return new IValidator<Object>() {
             private static final long serialVersionUID = 1L;
             @Override
             public void validate(final IValidatable<Object> validatable) {
-                recoverProposedValue(validatable.getValue(), scalarModel)
+                recoverProposedValue(validatable.getValue(), attributeModel)
                 .ifPresent(proposedAdapter->{
-                    _Strings.nonEmpty(scalarModel.validate(proposedAdapter))
+                    _Strings.nonEmpty(attributeModel.validate(proposedAdapter))
                     .ifPresent(validationFeedback->
                         validatable.error(new ValidationError(validationFeedback)));
                 });
@@ -111,22 +111,22 @@ class _Util {
 
     // -- HELPER
 
-    private boolean canEnterEditMode(final UiAttributeWkt scalarModel) {
-        return scalarModel.isViewingMode()
-                && !scalarModel.disabledReason().isPresent();
+    private boolean canEnterEditMode(final UiAttributeWkt attributeModel) {
+        return attributeModel.isViewingMode()
+                && !attributeModel.disabledReason().isPresent();
     }
 
     private Optional<ActionModel> toActionModelNoRuleChecking(
             final @Nullable ObjectAction action,
-            final UiAttributeWkt scalarModel) {
+            final UiAttributeWkt attributeModel) {
         return Optional.ofNullable(action)
-        .map(act->ActionModel.forPropertyOrParameter(act, scalarModel));
+        .map(act->ActionModel.forPropertyOrParameter(act, attributeModel));
     }
 
     private Optional<ActionModel> toActionModelWithRuleChecking(
             final @Nullable ObjectAction action,
-            final UiAttributeWkt scalarModel) {
-        return toActionModelNoRuleChecking(action, scalarModel)
+            final UiAttributeWkt attributeModel) {
+        return toActionModelNoRuleChecking(action, attributeModel)
         .filter(ActionModel::isVisible)
         .filter(ActionModel::isEnabled);
     }
@@ -148,54 +148,54 @@ class _Util {
     //XXX its rather unfortunate, that this method has to deal with 4 different cases
     private Optional<ManagedObject> recoverProposedValue(
             final Object valueObject,
-            final UiAttributeWkt scalarModel){
+            final UiAttributeWkt attributeModel){
 
         if(valueObject instanceof Collection) {
 
-            if(scalarModel.isSingular()) {
+            if(attributeModel.isSingular()) {
                 // seeing this code-path with FileUpload being wrapped in an ArrayList of size 1
                 // as a more general rule of thumb, use the first element in the ArrayList if present
                 var unpackedValue = ((Collection<?>)valueObject).stream()
                         .limit(1)
-                        .map(v->scalarModel.getObjectManager()
+                        .map(v->attributeModel.getObjectManager()
                                 .adapt(valueObject))
                         .findFirst();
                 return unpackedValue;
             }
 
             var unpackedValues = ((Collection<?>)valueObject).stream()
-            .map(v->scalarModel
+            .map(v->attributeModel
                     .getObjectManager().demementify((ObjectMemento)v))
             .collect(Can.toCan());
-            return Optional.of(ManagedObject.packed(scalarModel.getElementType(), unpackedValues));
+            return Optional.of(ManagedObject.packed(attributeModel.getElementType(), unpackedValues));
         }
 
         if(valueObject instanceof ObjectMemento) {
             // seeing this code-path particularly with enum choices
             return Optional.ofNullable(
-                    scalarModel
+                    attributeModel
                         .getObjectManager().demementify((ObjectMemento)valueObject));
         }
 
         return Optional.ofNullable(
-                    scalarModel
+                    attributeModel
                         .getObjectManager()
                         .adapt(valueObject));
     }
 
-    private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final UiAttributeWkt scalarModel) {
-        var spec = scalarModel.getElementType();
+    private Optional<ObjectAction> lookupCompositeValueMixinForFeature(final UiAttributeWkt attributeModel) {
+        var spec = attributeModel.getElementType();
         if(!spec.isValue()) {
             return Optional.empty();
         }
-        return scalarModel.getSpecialization().<Optional<ObjectAction>>fold(
+        return attributeModel.getSpecialization().<Optional<ObjectAction>>fold(
                 param->
                     Facets.valueCompositeMixinForParameter(
-                            scalarModel.getMetaModel(),
+                            attributeModel.getMetaModel(),
                             param.getParameterNegotiationModel(), param.getParameterIndex()),
                 prop->
                     Facets.valueCompositeMixinForProperty(
-                            scalarModel.getMetaModel(),
+                            attributeModel.getMetaModel(),
                             prop.getManagedProperty()));
     }
 

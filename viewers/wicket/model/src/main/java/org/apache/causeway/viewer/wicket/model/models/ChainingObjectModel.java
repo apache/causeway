@@ -35,18 +35,18 @@ implements ObjectAdapterModel {
 
     private static final long serialVersionUID = 1L;
 
-    public static ChainingObjectModel chain(final UiAttributeWkt scalarModel) {
-        return new ChainingObjectModel(scalarModel);
+    public static ChainingObjectModel chain(final UiAttributeWkt attributeModel) {
+        return new ChainingObjectModel(attributeModel);
     }
 
-    private ChainingObjectModel(final UiAttributeWkt scalarModel) {
-        super(scalarModel);
+    private ChainingObjectModel(final UiAttributeWkt attributeModel) {
+        super(attributeModel);
     }
 
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
-    public UiAttributeWkt scalarModel() {
+    public UiAttributeWkt attributeModel() {
         return (UiAttributeWkt) super.getTarget();
     }
 
@@ -55,17 +55,17 @@ implements ObjectAdapterModel {
      */
     @Override
     public ManagedObject getObject() {
-        return scalarModel().proposedValue().getValue().getValue();
+        return attributeModel().proposedValue().getValue().getValue();
     }
 
     @Override
     public RenderingHint getRenderingHint() {
-        return scalarModel().getRenderingHint();
+        return attributeModel().getRenderingHint();
     }
 
     @Override
     public ObjectSpecification getTypeOfSpecification() {
-        return scalarModel().getElementType();
+        return attributeModel().getElementType();
     }
 
     @Override
@@ -75,8 +75,8 @@ implements ObjectAdapterModel {
 
     @Override
     public boolean isInlinePrompt() {
-        return scalarModel().getPromptStyle().isInlineAny()
-                && !scalarModel().disabledReason().isPresent();
+        return attributeModel().getPromptStyle().isInlineAny()
+                && !attributeModel().disabledReason().isPresent();
     }
 
     @Override

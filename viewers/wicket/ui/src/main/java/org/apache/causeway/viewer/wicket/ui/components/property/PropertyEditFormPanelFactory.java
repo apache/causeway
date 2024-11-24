@@ -42,8 +42,8 @@ public class PropertyEditFormPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final PropertyModel scalarModel = (PropertyModel) model;
-        return new PropertyEditFormPanel(id, scalarModel);
+        var propertyModel = (PropertyModel) model;
+        return new PropertyEditFormPanel(id, propertyModel);
     }
 
 }

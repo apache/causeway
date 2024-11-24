@@ -32,36 +32,36 @@ extends ChoiceProviderAbstractForScalarModel {
     private static final long serialVersionUID = 1L;
 
     public ChoiceProviderDefault(
-            final UiAttributeWkt scalarModel) {
-        super(scalarModel);
+            final UiAttributeWkt attributeModel) {
+        super(attributeModel);
     }
 
     @Override
     protected Can<ObjectMemento> queryAll() {
-        return scalarModel().getChoices() // must not return detached entities
+        return attributeModel().getChoices() // must not return detached entities
                 .map(ManagedObject::getMementoElseFail);
     }
 
     @Override
     protected Can<ObjectMemento> queryWithAutoCompleteUsingObjectSpecification(final String term) {
         var autoCompleteAdapters = Facets
-                .autoCompleteExecute(scalarModel().getElementType(), term);
+                .autoCompleteExecute(attributeModel().getElementType(), term);
         return autoCompleteAdapters
                 .map(ManagedObject::getMementoElseFail);
     }
 
     @Override
     protected Can<ObjectMemento> queryWithAutoComplete(final String term) {
-        var scalarModel = scalarModel();
-        var pendingArgs = scalarModel.isParameter()
-                ? ((UiParameter)scalarModel).getParameterNegotiationModel().getParamValues()
+        var attributeModel = attributeModel();
+        var pendingArgs = attributeModel.isParameter()
+                ? ((UiParameter)attributeModel).getParameterNegotiationModel().getParamValues()
                 : Can.<ManagedObject>empty();
         var pendingArgMementos = pendingArgs
                 .map(ManagedObject::getMementoElseFail);
 
-        if(scalarModel.isParameter()) {
+        if(attributeModel.isParameter()) {
             // recover any pendingArgs
-            var paramModel = (UiParameter)scalarModel;
+            var paramModel = (UiParameter)attributeModel;
 
             paramModel
                 .getParameterNegotiationModel()
@@ -69,7 +69,7 @@ extends ChoiceProviderAbstractForScalarModel {
                         reconstructPendingArgs(paramModel, pendingArgMementos));
         }
 
-        return scalarModel
+        return attributeModel
                 .getAutoComplete(term)
                 .map(ManagedObject::getMementoElseFail);
     }

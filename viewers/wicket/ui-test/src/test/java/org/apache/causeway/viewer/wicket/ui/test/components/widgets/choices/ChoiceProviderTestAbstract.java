@@ -45,13 +45,13 @@ abstract class ChoiceProviderTestAbstract {
                 ;
     }
 
-    protected UiAttributeWkt mockScalarModel(final Can<ManagedObject> choices, final boolean isRequired) {
-        var mockScalarModel = mock(UiAttributeWkt.class);
-        when(mockScalarModel.getChoices()).thenReturn(choices);
-        when(mockScalarModel.isRequired()).thenReturn(isRequired);
-        when(mockScalarModel.hasChoices()).thenReturn(true);
-        when(mockScalarModel.getMetaModelContext()).thenReturn(mmc);
-        return mockScalarModel;
+    protected UiAttributeWkt mockAttributeModel(final Can<ManagedObject> choices, final boolean isRequired) {
+        var mockAttributeModel = mock(UiAttributeWkt.class);
+        when(mockAttributeModel.getChoices()).thenReturn(choices);
+        when(mockAttributeModel.isRequired()).thenReturn(isRequired);
+        when(mockAttributeModel.hasChoices()).thenReturn(true);
+        when(mockAttributeModel.getMetaModelContext()).thenReturn(mmc);
+        return mockAttributeModel;
     }
 
 }

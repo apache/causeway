@@ -58,14 +58,14 @@ public class TemporalDecompositionModel<T> implements IConverter<T> {
     private static final long serialVersionUID = 1L;
 
     public static <T extends Temporal> TemporalDecompositionModel<T> create(final Class<T> type,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final OffsetCharacteristic offsetCharacteristic,
             final ConverterBasedOnValueSemantics<T> fullConverter) {
 
         _Assert.assertTrue(fullConverter.canHandle(type));
 
         var needsDecomposition = !offsetCharacteristic.isLocal()
-                && scalarModel.getViewOrEditMode().isEditing();
+                && attributeModel.getViewOrEditMode().isEditing();
 
         var baseEditingPattern = fullConverter.getEditingPattern();
         var editingPattern = needsDecomposition
@@ -73,7 +73,7 @@ public class TemporalDecompositionModel<T> implements IConverter<T> {
             : baseEditingPattern;
 
         var userZoneId = needsDecomposition
-                ? scalarModel.getInteractionService().currentInteractionContext()
+                ? attributeModel.getInteractionService().currentInteractionContext()
                         .map(InteractionContext::getTimeZone)
                         .orElse(ZoneOffset.UTC)
                 : ZoneOffset.UTC; // not used
@@ -82,11 +82,11 @@ public class TemporalDecompositionModel<T> implements IConverter<T> {
                 offsetCharacteristic,
                 userZoneId,
                 fullConverter,
-                scalarModel.getViewOrEditMode(),
+                attributeModel.getViewOrEditMode(),
                 editingPattern);
 
         if(needsDecomposition) {
-            tempDecomp.initFrom(scalarModel.getMetaModel(), scalarModel.proposedValue());
+            tempDecomp.initFrom(attributeModel.getMetaModel(), attributeModel.proposedValue());
         }
         return tempDecomp;
     }

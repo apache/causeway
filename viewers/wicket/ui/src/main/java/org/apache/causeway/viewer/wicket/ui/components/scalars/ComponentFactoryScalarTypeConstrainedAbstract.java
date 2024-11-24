@@ -48,17 +48,17 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected final ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
+    protected final ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
 
         // discriminates based on given scalarTypes, if any
         if(scalarTypes.isNotEmpty()
-                && !scalarModel.isScalarTypeAnyOf(scalarTypes)) {
+                && !attributeModel.isScalarTypeAnyOf(scalarTypes)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
         // if has any choices, use select-2 component instead
-        return appliesIf( !scalarModel.hasChoices()
-                && !scalarModel.hasAutoComplete() );
+        return appliesIf( !attributeModel.hasChoices()
+                && !attributeModel.hasAutoComplete() );
     }
 
 }

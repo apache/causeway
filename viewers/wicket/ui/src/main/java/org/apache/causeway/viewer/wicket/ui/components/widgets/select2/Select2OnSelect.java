@@ -62,7 +62,7 @@ import lombok.RequiredArgsConstructor;
 class Select2OnSelect extends AbstractAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
-    private final UiAttributeWkt scalarModel;
+    private final UiAttributeWkt attributeModel;
     private final ScalarModelChangeDispatcher select2ChangeDispatcher;
 
     private static enum Event {
@@ -76,7 +76,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
             }
             return Optional.empty();
         }
-    };
+    }
 
     @Override
     public void renderHead(final Component component, final IHeaderResponse response) {
@@ -193,7 +193,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private ManagedObject demementify(final ObjectMemento memento) {
-        return scalarModel.getObjectManager().demementify(memento);
+        return attributeModel.getObjectManager().demementify(memento);
     }
 
     private PackedManagedObject demementify(
@@ -204,7 +204,7 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private @NonNull Bindable<ManagedObject> updateReceiver() {
-        var updateReceiver = scalarModel.getSpecialization().fold(
+        var updateReceiver = attributeModel.getSpecialization().fold(
                 param->
                     param.getParameterNegotiationModel().getBindableParamValue(param.getParameterIndex()),
                 prop->
@@ -213,14 +213,14 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     }
 
     private @NonNull ObjectSpecification elementSpec() {
-        var updateReceiver = scalarModel.getSpecialization().fold(
+        var updateReceiver = attributeModel.getSpecialization().fold(
                 param->param.getElementType(),
                 prop->prop.getElementType());
         return updateReceiver;
     }
 
     private void clearUpdateReceiver() {
-        scalarModel.getSpecialization().accept(
+        attributeModel.getSpecialization().accept(
             param->
                 param.getParameterNegotiationModel().getParamModels()
                 .getElseFail(param.getParameterIndex())

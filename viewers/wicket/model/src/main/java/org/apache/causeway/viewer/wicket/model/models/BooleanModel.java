@@ -31,22 +31,22 @@ extends ChainingModel<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
-    public static BooleanModel forScalarModel(final @NonNull UiAttributeWkt scalarModel) {
-        return new BooleanModel(scalarModel);
+    public static BooleanModel forAttributeModel(final @NonNull UiAttributeWkt attributeModel) {
+        return new BooleanModel(attributeModel);
     }
 
     final boolean isPrimitive;
 
-    protected BooleanModel(final UiAttributeWkt scalarModel) {
-        super(scalarModel);
+    protected BooleanModel(final UiAttributeWkt attributeModel) {
+        super(attributeModel);
 
-        var spec = scalarModel().getElementType();
+        var spec = attributeModel().getElementType();
         this.isPrimitive = spec.getFullIdentifier().equals("boolean");
     }
 
     @Override
     public Boolean getObject() {
-        var adapter = scalarModel().getObject();
+        var adapter = attributeModel().getObject();
         final Boolean value = adapter != null
                 ? (Boolean) adapter.getPojo()
                 : null;
@@ -59,12 +59,12 @@ extends ChainingModel<Boolean> {
     @Override
     public void setObject(final Boolean value) {
         var adaptedValue = ManagedObject.value(
-                scalarModel().getElementType(),
+            attributeModel().getElementType(),
                 (value==null
                     && isPrimitive)
                 ? Boolean.FALSE
                 : value);
-        scalarModel().setObject(adaptedValue);
+        attributeModel().setObject(adaptedValue);
     }
 
     // -- UTILITY
@@ -94,7 +94,7 @@ extends ChainingModel<Boolean> {
 
     // -- HELPER
 
-    protected UiAttributeWkt scalarModel() {
+    protected UiAttributeWkt attributeModel() {
         return (UiAttributeWkt) super.getTarget();
     }
 

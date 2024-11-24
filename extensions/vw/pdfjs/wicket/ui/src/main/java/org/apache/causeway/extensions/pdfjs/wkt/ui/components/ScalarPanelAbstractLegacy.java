@@ -35,11 +35,11 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
     protected Component compactFrame;
     private Component regularFrame;
 
-    public ScalarPanelAbstractLegacy(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    public ScalarPanelAbstractLegacy(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
-    protected final UiAttributeWkt scalarModel() {
+    protected final UiAttributeWkt attributeModel() {
         return super.getModel();
     }
 
@@ -53,7 +53,7 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     private void buildGui() {
 
-        if(scalarModel().getRenderingHint().isInTable()) {
+        if(attributeModel().getRenderingHint().isInTable()) {
             regularFrame = createShallowRegularFrame();
             compactFrame = createCompactFrame();
             regularFrame.setVisible(false);
@@ -71,11 +71,11 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
     }
 
     private void addCssFromMetaModel() {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        Wkt.cssAppend(this, scalarModel.getCssClass());
+        Wkt.cssAppend(this, attributeModel.getCssClass());
 
-        Facets.cssClass(scalarModel.getMetaModel(), scalarModel.getParentUiModel().getManagedObject())
+        Facets.cssClass(attributeModel.getMetaModel(), attributeModel.getParentUiModel().getManagedObject())
         .ifPresent(cssClass->
             Wkt.cssAppend(this, cssClass));
     }

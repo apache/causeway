@@ -43,30 +43,30 @@ extends ChainingModel<T> {
 
     public ScalarUnwrappingModel(
             final @NonNull Class<T> type,
-            final @NonNull UiAttributeWkt scalarModel) {
-        super(scalarModel);
+            final @NonNull UiAttributeWkt attributeModel) {
+        super(attributeModel);
         this.type = type;
-        _Assert.assertTrue(scalarModel.getElementType().isAssignableFrom(type), ()->
+        _Assert.assertTrue(attributeModel.getElementType().isAssignableFrom(type), ()->
                 String.format("cannot possibly unwrap model of type %s into target type %s",
-                        scalarModel.getElementType().getCorrespondingClass(),
+                        attributeModel.getElementType().getCorrespondingClass(),
                         type));
     }
 
     @Override
     public T getObject() {
-        var objectAdapter = scalarModel().getObject();
+        var objectAdapter = attributeModel().getObject();
         var pojo = unwrap(objectAdapter);
         return pojo;
     }
 
     @Override
     public void setObject(final T object) {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
         if (object == null) {
-            scalarModel.setObject(null);
+            attributeModel.setObject(null);
         } else {
-            var objectAdapter = scalarModel.getMetaModelContext().getObjectManager().adapt(object);
-            scalarModel.setObject(objectAdapter);
+            var objectAdapter = attributeModel.getMetaModelContext().getObjectManager().adapt(object);
+            attributeModel.setObject(objectAdapter);
         }
     }
 
@@ -82,7 +82,7 @@ extends ChainingModel<T> {
         return _Casts.uncheckedCast(pojo);
     }
 
-    private UiAttributeWkt scalarModel() {
+    private UiAttributeWkt attributeModel() {
         return (UiAttributeWkt) super.getTarget();
     }
 

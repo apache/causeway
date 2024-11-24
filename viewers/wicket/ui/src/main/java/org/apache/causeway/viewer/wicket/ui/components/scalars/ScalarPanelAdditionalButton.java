@@ -34,12 +34,12 @@ enum ScalarPanelAdditionalButton {
     DISABLED_REASON {
         @Override
         boolean isVisible(
-                final UiAttributeWkt scalarModel,
+                final UiAttributeWkt attributeModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
             var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION;
             return precondition
-                    && scalarModel.disabledReason()
+                    && attributeModel.disabledReason()
                         .map(InteractionVeto::getVetoConsent)
                         .flatMap(Consent::getReason)
                         .map(VetoReason::uiHint)
@@ -50,14 +50,14 @@ enum ScalarPanelAdditionalButton {
     DISABLED_REASON_PROTOTYPING {
         @Override
         boolean isVisible(
-                final UiAttributeWkt scalarModel,
+                final UiAttributeWkt attributeModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
             var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
-                    && scalarModel.getSystemEnvironment().isPrototyping()
-                    && scalarModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled();
+                    && attributeModel.getSystemEnvironment().isPrototyping()
+                    && attributeModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled();
             return precondition
-                    && scalarModel.disabledReason()
+                    && attributeModel.disabledReason()
                         .map(InteractionVeto::getVetoConsent)
                         .flatMap(Consent::getReason)
                         .map(VetoReason::uiHint)
@@ -70,7 +70,7 @@ enum ScalarPanelAdditionalButton {
     CLEAR_FIELD {
         @Override
         boolean isVisible(
-                final UiAttributeWkt scalarModel,
+                final UiAttributeWkt attributeModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
 
@@ -88,23 +88,23 @@ enum ScalarPanelAdditionalButton {
             default:
                 // fall through
             }
-            
+
             // hide if editing is vetoed
-            if(scalarModel.disabledReason().isPresent()) {
+            if(attributeModel.disabledReason().isPresent()) {
                 return false;
             }
 
             // visible only if feature is not required and not already cleared
-            return scalarModel.getConfiguration().getViewer().getWicket().isClearFieldButtonEnabled()
-                    && !scalarModel.isRequired()
-                    && scalarModel.proposedValue().isPresent();
+            return attributeModel.getConfiguration().getViewer().getWicket().isClearFieldButtonEnabled()
+                    && !attributeModel.isRequired()
+                    && attributeModel.proposedValue().isPresent();
 
         }
     },
     COPY_TO_CLIPBOARD {
         @Override
         boolean isVisible(
-                final UiAttributeWkt scalarModel,
+                final UiAttributeWkt attributeModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
             //XXX Future extension
@@ -114,6 +114,6 @@ enum ScalarPanelAdditionalButton {
     ;
 
     abstract boolean isVisible(
-            UiAttributeWkt scalarModel, RenderScenario renderScenario, FieldFragment fieldFragment);
+            UiAttributeWkt attributeModel, RenderScenario renderScenario, FieldFragment fieldFragment);
 
 }

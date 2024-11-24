@@ -55,8 +55,8 @@ public class ListeningMarkupPanelFactoriesForWicket {
 
         // -- HELPER
 
-        private LocalResourcePath getEventStreamResource(final UiAttributeWkt scalarModel) {
-            var observeFacet  = scalarModel.getMetaModel().getFacet(SseObserveFacet.class);
+        private LocalResourcePath getEventStreamResource(final UiAttributeWkt attributeModel) {
+            var observeFacet  = attributeModel.getMetaModel().getFacet(SseObserveFacet.class);
             return observeFacet!=null
                     ? observeFacet.getEventStreamResource()
                     : null;

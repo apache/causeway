@@ -33,10 +33,10 @@ public class StringPanelFactory extends ComponentFactoryScalarTypeConstrainedAbs
     }
 
     @Override
-    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-        return Facets.multilineIsPresent(scalarModel.getMetaModel())
-            ? new MultiLineStringPanel(id, scalarModel)
-            : new StringPanel(id, scalarModel);
+    public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+        return Facets.multilineIsPresent(attributeModel.getMetaModel())
+            ? new MultiLineStringPanel(id, attributeModel)
+            : new StringPanel(id, attributeModel);
     }
 
     public static CssResourceReference cssResourceReferenceForMultiLineString() {

@@ -38,14 +38,14 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     public CompositeValuePanel(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final Class<T> valueType) {
-        super(id, scalarModel, valueType);
+        super(id, attributeModel, valueType);
     }
 
     @Override
     protected Component createComponentForOutput(final String id) {
-        return new MarkupComponent(id, scalarModel());
+        return new MarkupComponent(id, attributeModel());
     }
 
     @Override
@@ -61,7 +61,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     @Override
-    protected FormComponent<T> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
+    protected FormComponent<T> createFormComponent(final String id, final UiAttributeWkt attributeModel) {
         // read-only FormComponent, to receive the param/property name label
         return new AbstractTextComponent<T>(id) {
             private static final long serialVersionUID = 1L;
@@ -72,8 +72,8 @@ extends ScalarPanelFormFieldAbstract<T> {
             }
             @Override
             public boolean checkRequired() {
-                if (scalarModel().isRequired()){
-                    return !scalarModel().isEmpty();
+                if (attributeModel().isRequired()){
+                    return !attributeModel().isEmpty();
                 }
                 return true;
             }

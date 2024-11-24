@@ -45,12 +45,12 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        var scalarModel = (UiAttributeWkt) model;
-        if(!scalarModel.getMetaModel().containsFacet(PdfJsViewerFacet.class)) {
+        var attributeModel = (UiAttributeWkt) model;
+        if(!attributeModel.getMetaModel().containsFacet(PdfJsViewerFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        return appliesIf(isPdf(scalarModel.getObject()));
+        return appliesIf(isPdf(attributeModel.getObject()));
     }
 
     private static boolean isPdf(final ManagedObject objectAdapter) {

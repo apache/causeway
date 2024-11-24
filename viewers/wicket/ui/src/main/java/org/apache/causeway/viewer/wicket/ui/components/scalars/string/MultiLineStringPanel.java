@@ -31,8 +31,8 @@ extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public MultiLineStringPanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    public MultiLineStringPanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
     @Override

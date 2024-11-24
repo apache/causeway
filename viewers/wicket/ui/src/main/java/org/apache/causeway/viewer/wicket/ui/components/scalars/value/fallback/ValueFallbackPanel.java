@@ -37,8 +37,8 @@ extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValueFallbackPanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    public ValueFallbackPanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
 }

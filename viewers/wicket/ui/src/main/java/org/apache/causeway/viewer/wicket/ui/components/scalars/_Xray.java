@@ -30,7 +30,7 @@ class _Xray {
     static void onParamOrPropertyEdited(final ScalarPanelAbstract scalarPanel) {
         if(!XrayUi.isXrayEnabled()) return;
 
-        scalarPanel.scalarModel().getSpecialization()
+        scalarPanel.attributeModel().getSpecialization()
         .accept(
             param->{
                 var data = MmDebugUtils

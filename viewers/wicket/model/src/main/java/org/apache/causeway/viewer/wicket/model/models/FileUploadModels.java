@@ -36,8 +36,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class FileUploadModels {
 
-    public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull UiAttributeWkt scalarModel) {
-        return new ScalarConvertingModel<List<FileUpload>, Blob>(scalarModel) {
+    public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull UiAttributeWkt attributeModel) {
+        return new ScalarConvertingModel<List<FileUpload>, Blob>(attributeModel) {
 
             private static final long serialVersionUID = 1L;
 
@@ -68,14 +68,14 @@ public class FileUploadModels {
     }
 
     public ScalarConvertingModel<List<FileUpload>, Clob> clob(
-            final @NonNull UiAttributeWkt scalarModel,
+            final @NonNull UiAttributeWkt attributeModel,
             final @NonNull Charset charset) {
 
         // Charset is not serializable.
         // (NB: can't reference 'charset' in constructor, as javac creates a hidden instance field in the inner class)
         final String charsetName = charset.name();
 
-        return new ScalarConvertingModel<List<FileUpload>, Clob>(scalarModel) {
+        return new ScalarConvertingModel<List<FileUpload>, Clob>(attributeModel) {
 
             private static final long serialVersionUID = 1L;
 

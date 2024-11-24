@@ -100,7 +100,7 @@ public class ComponentFactoryConfigWkt {
     @Bean
     public ComponentFactoryList componentFactoryList(
             @Autowired(required = true) final ValueSemanticsResolver valueSemanticsResolver,
-            @Autowired(required = false) List<TabularExporter> tabularExporters,
+            @Autowired(required = false) final List<TabularExporter> tabularExporters,
             final List<ComponentFactory> componentFactoriesPluggedIn) {
         var factoryList = new ComponentFactoryList();
 
@@ -180,7 +180,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     protected void addComponentFactoriesForEntityCollectionContents(
-            final ComponentFactoryList componentFactories, List<TabularExporter> tabularExporters) {
+            final ComponentFactoryList componentFactories, final List<TabularExporter> tabularExporters) {
         componentFactories.add(new CollectionContentsAsAjaxTablePanelFactory());
         _NullSafe.stream(tabularExporters)
             .map(CollectionContentsAsExportFactory::new)
@@ -297,8 +297,8 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-            return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new ScalarPanelTextFieldWithValueSemantics<T>(id, attributeModel, valueTypeClass);
         }
     }
 
@@ -313,8 +313,8 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-            return new ScalarPanelTextFieldNumeric<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new ScalarPanelTextFieldNumeric<T>(id, attributeModel, valueTypeClass);
         }
     }
 
@@ -331,8 +331,8 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, attributeModel, valueTypeClass);
         }
     }
 
@@ -349,8 +349,8 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-            return new CompositeValuePanel<T>(id, scalarModel, valueTypeClass);
+        public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new CompositeValuePanel<T>(id, attributeModel, valueTypeClass);
         }
     }
 

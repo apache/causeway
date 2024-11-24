@@ -38,9 +38,9 @@ implements HasLogicalType {
     public static Select2ChoiceExt create(
             final String id,
             final IModel<ObjectMemento> modelObject,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final ChoiceProviderAbstract choiceProvider) {
-        return new Select2ChoiceExt(id, modelObject, scalarModel, choiceProvider);
+        return new Select2ChoiceExt(id, modelObject, attributeModel, choiceProvider);
     }
 
     @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
@@ -48,11 +48,11 @@ implements HasLogicalType {
     private Select2ChoiceExt(
             final String id,
             final IModel<ObjectMemento> model,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final ChoiceProviderAbstract choiceProvider) {
         super(id, model, choiceProvider);
 
-        logicalType = scalarModel.getElementType().getLogicalType();
+        logicalType = attributeModel.getElementType().getLogicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");

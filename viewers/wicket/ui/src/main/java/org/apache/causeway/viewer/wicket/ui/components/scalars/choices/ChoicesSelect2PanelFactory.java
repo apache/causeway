@@ -30,10 +30,10 @@ extends ComponentFactoryScalarAbstract {
         TITLE_BADGE,
         VALUE_CHOICES,
         OBJECT_CHOICES;
-        static ComponentSort valueOf(final UiAttributeWkt scalarModel) {
-            if(scalarModel.getElementType().isValue()
-                    && scalarModel.getChoiceProviderSort().isChoicesAny()) {
-                return scalarModel.isViewingMode()
+        static ComponentSort valueOf(final UiAttributeWkt attributeModel) {
+            if(attributeModel.getElementType().isValue()
+                    && attributeModel.getChoiceProviderSort().isChoicesAny()) {
+                return attributeModel.isViewingMode()
                     ? TITLE_BADGE
                     : VALUE_CHOICES;
             }
@@ -46,23 +46,23 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected ScalarPanelAbstract createComponent(final String id, final UiAttributeWkt scalarModel) {
-        var componentSort = ComponentSort.valueOf(scalarModel);
+    protected ScalarPanelAbstract createComponent(final String id, final UiAttributeWkt attributeModel) {
+        var componentSort = ComponentSort.valueOf(attributeModel);
         switch(componentSort) {
         case TITLE_BADGE:
-            var valueType = scalarModel.getElementType().getCorrespondingClass();
-            return new ScalarTitleBadgePanel<>(id, scalarModel, valueType);
+            var valueType = attributeModel.getElementType().getCorrespondingClass();
+            return new ScalarTitleBadgePanel<>(id, attributeModel, valueType);
         case VALUE_CHOICES:
-            return new ValueChoicesSelect2Panel(id, scalarModel);
+            return new ValueChoicesSelect2Panel(id, attributeModel);
         case OBJECT_CHOICES:
-            return new ObjectChoicesSelect2Panel(id, scalarModel);
+            return new ObjectChoicesSelect2Panel(id, attributeModel);
         default:
             throw _Exceptions.unmatchedCase(componentSort);
         }
     }
 
     @Override
-    protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
+    protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
         return ApplicationAdvice.APPLIES; //XXX depends on registration order, can we do better?
     }
 

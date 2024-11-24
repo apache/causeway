@@ -45,7 +45,7 @@ extends
     public default PageParameters getPageParameters() {
         //FIXME
 //        return _HintPageParameterSerializer
-//                .hintStoreToPageParameters(getPageParametersWithoutUiHints(), scalarModel);
+//                .hintStoreToPageParameters(getPageParametersWithoutUiHints(), attributeModel);
         return getPageParametersWithoutUiHints();
     }
 

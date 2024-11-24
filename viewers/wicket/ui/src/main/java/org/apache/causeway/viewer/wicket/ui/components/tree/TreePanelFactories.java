@@ -42,16 +42,16 @@ public class TreePanelFactories {
         }
 
         @Override
-        protected Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-            return new ParentedTreePanel(id, scalarModel);
+        protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+            return new ParentedTreePanel(id, attributeModel);
         }
 
         @Override
-        protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
-            if(!scalarModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
+        protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
+            if(!attributeModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }
-            return appliesIf( !scalarModel.hasChoices() );
+            return appliesIf( !attributeModel.hasChoices() );
         }
     }
 

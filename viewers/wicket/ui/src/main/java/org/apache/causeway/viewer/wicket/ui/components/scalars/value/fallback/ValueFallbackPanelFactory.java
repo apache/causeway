@@ -36,18 +36,18 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-        return new ValueFallbackPanel(id, scalarModel);
+    public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+        return new ValueFallbackPanel(id, attributeModel);
     }
 
     @Override
-    protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
-        if(!scalarModel.getElementType().isValue()) {
+    protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
+        if(!attributeModel.getElementType().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         return appliesIf(
-                !scalarModel.hasChoices()
-                && !scalarModel.hasAutoComplete());
+                !attributeModel.hasChoices()
+                && !attributeModel.hasAutoComplete());
     }
 
 }

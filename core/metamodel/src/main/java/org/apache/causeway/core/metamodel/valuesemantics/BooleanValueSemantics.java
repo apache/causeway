@@ -129,7 +129,7 @@ implements
     }
 
     //XXX not localized yet - maybe can be done at a more fundamental level - or replace with universal symbols
-//  return BooleanModel.forScalarModel(scalarModel())
+//  return BooleanModel.forAttributeModel(attributeModel())
 //          .asStringModel("(not set)", "Yes", "No");
 
 }

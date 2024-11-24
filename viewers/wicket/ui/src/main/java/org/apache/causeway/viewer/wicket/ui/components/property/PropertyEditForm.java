@@ -42,21 +42,21 @@ extends PromptFormAbstract<PropertyModel> {
         super(id, parentPanel, propertyModel);
     }
 
-    private PropertyModel scalarPropertyModel() {
+    private PropertyModel propertyModel() {
         return (PropertyModel) super.getModel();
     }
 
     @Override
     protected void addParameters() {
-        var scalarModel = scalarPropertyModel();
+        var propertyModel = propertyModel();
         var container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
         var component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, propertyModel);
 
         _Casts.castTo(ScalarPanelAbstract.class, component)
-        .ifPresent(scalarModelSubscriber->
-            scalarModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
+        .ifPresent(propertyModelSubscriber->
+            propertyModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
     }
 
     @Override
@@ -66,7 +66,7 @@ extends PromptFormAbstract<PropertyModel> {
 
     @Override
     protected Either<ActionModel, PropertyModel> getMemberModel() {
-        return Either.right(scalarPropertyModel());
+        return Either.right(propertyModel());
     }
 
 }

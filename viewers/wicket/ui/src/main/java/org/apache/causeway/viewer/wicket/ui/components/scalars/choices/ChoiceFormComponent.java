@@ -34,7 +34,7 @@ implements CancelHintRequired  {
     private ObjectChoicesSelect2Panel owningPanel;
 
     public ChoiceFormComponent(final String id, final ObjectChoicesSelect2Panel owningPanel) {
-        super(id, owningPanel.scalarModel());
+        super(id, owningPanel.attributeModel());
         this.owningPanel = owningPanel;
         setType(ManagedObject.class);
     }

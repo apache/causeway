@@ -36,8 +36,8 @@ class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T>
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarTitleBadgePanel(final String id, final UiAttributeWkt scalarModel, final Class<T> type) {
-        super(id, scalarModel, type);
+    public ScalarTitleBadgePanel(final String id, final UiAttributeWkt attributeModel, final Class<T> type) {
+        super(id, attributeModel, type);
     }
 
     @Override

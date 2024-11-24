@@ -34,8 +34,8 @@ public class CausewayBlobPanelFactory extends ComponentFactoryScalarTypeConstrai
     }
 
     @Override
-    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
-        return new CausewayBlobPanel(id, scalarModel);
+    public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
+        return new CausewayBlobPanel(id, attributeModel);
     }
 
 }

@@ -46,7 +46,7 @@ extends ComponentFactoryAbstract {
         return appliesTo((UiAttributeWkt)model);
     }
 
-    protected abstract Component createComponent(String id, UiAttributeWkt scalarModel);
-    protected abstract ApplicationAdvice appliesTo(UiAttributeWkt scalarModel);
+    protected abstract Component createComponent(String id, UiAttributeWkt attributeModel);
+    protected abstract ApplicationAdvice appliesTo(UiAttributeWkt attributeModel);
 
 }

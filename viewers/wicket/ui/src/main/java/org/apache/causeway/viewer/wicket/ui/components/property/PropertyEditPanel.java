@@ -24,7 +24,6 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -48,27 +47,23 @@ extends PanelAbstract<ManagedObject, PropertyModel> {
 
     public PropertyEditPanel(
             final String id,
-            final PropertyModel scalarModel) {
+            final PropertyModel propertyModel) {
 
-        super(id, scalarModel.copyHaving(
+        super(id, propertyModel.copyHaving(
                 ViewOrEditMode.EDITING,
                 RenderingHint.REGULAR));
 
-        buildGui(scalarModel);
+        buildGui(propertyModel);
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
 
-        buildGui(scalarModel());
+        buildGui(propertyModel());
     }
 
-    private void buildGui(final UiAttributeWkt scalarModel) {
-        buildGuiForParameters(scalarModel);
-    }
-
-    PropertyModel scalarModel() {
+    PropertyModel propertyModel() {
         return super.getModel();
     }
 
@@ -77,14 +72,14 @@ extends PanelAbstract<ManagedObject, PropertyModel> {
         return this;
     }
 
-    private void buildGuiForParameters(final UiAttributeWkt scalarModel) {
+    private void buildGui(final PropertyModel propertyModel) {
 
         WebMarkupContainer header = addHeader();
 
-        getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PROPERTY_EDIT_FORM, scalarModel());
-        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE, scalarModel.getParentUiModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PROPERTY_EDIT_FORM, propertyModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE, propertyModel.getParentUiModel());
 
-        Wkt.labelAdd(header, ID_PROPERTY_NAME, scalarModel()::getFriendlyName)
+        Wkt.labelAdd(header, ID_PROPERTY_NAME, propertyModel()::getFriendlyName)
             .setEscapeModelStrings(true);
     }
 

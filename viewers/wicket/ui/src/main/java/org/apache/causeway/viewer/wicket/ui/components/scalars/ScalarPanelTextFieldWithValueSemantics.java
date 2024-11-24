@@ -37,14 +37,14 @@ extends ScalarPanelTextFieldAbstract<T> {
 
     public ScalarPanelTextFieldWithValueSemantics(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final Class<T> type) {
-        super(id, scalarModel, type);
+        super(id, attributeModel, type);
     }
 
     @Override
     protected final Optional<IConverter<T>> converter() {
-        return scalarModel().getConverter(type);
+        return attributeModel().getConverter(type);
     }
 
 }

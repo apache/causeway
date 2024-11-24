@@ -79,8 +79,8 @@ implements IRequestListener {
     AbstractDefaultAjaxBehavior updateScale;
     AbstractDefaultAjaxBehavior updateHeight;
 
-    PdfJsViewerPanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    PdfJsViewerPanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
     }
 
     interface Updater{
@@ -165,9 +165,9 @@ implements IRequestListener {
     private PdfJsViewerAdvisor.InstanceKey toInstanceKey(final UserService userService) {
         String userName = userService.currentUserNameElseNobody();
 
-        var scalarModel = getModel();
-        var propertyId = scalarModel.getIdentifier();
-        var bookmark = scalarModel.getParentUiModel().getOwnerBookmark();
+        var attributeModel = getModel();
+        var propertyId = attributeModel.getIdentifier();
+        var bookmark = attributeModel.getParentUiModel().getOwnerBookmark();
         var logicalTypeName = bookmark.getLogicalTypeName();
         var identifier = bookmark.getIdentifier();
 
@@ -181,12 +181,12 @@ implements IRequestListener {
             return createShallowRegularFrame();
         }
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
         var regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
         var pdfJsConfig =
-                scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
+            attributeModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
                 .withDocumentUrl(urlFor(
@@ -295,7 +295,7 @@ implements IRequestListener {
     // -- HELPER
 
     private Blob getBlob() {
-        return (Blob) MmUnwrapUtils.single(scalarModel().getObject());
+        return (Blob) MmUnwrapUtils.single(attributeModel().getObject());
     }
 
     private static ByteArrayResource asBlobResource(final @NonNull Blob blob) {

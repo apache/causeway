@@ -60,19 +60,19 @@ implements ChoiceTitleHandler {
     private EntityLinkSimplePanel entityLinkOutputFormat;
     private final boolean isCompactFormat;
 
-    public ObjectChoicesSelect2Panel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
-        this.isCompactFormat = scalarModel.getRenderingHint().isInTable();
+    public ObjectChoicesSelect2Panel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
+        this.isCompactFormat = attributeModel.getRenderingHint().isInTable();
     }
 
     @Override
     protected Component createComponentForOutput(final String id) {
 
-        var scalarModel = scalarModel();
-        final String name = scalarModel.getFriendlyName();
+        var attributeModel = attributeModel();
+        final String name = attributeModel.getFriendlyName();
 
         this.entityLinkOutputFormat = (EntityLinkSimplePanel) getComponentFactoryRegistry()
-                .createComponent(UiComponentType.ENTITY_LINK, scalarModel);
+                .createComponent(UiComponentType.ENTITY_LINK, attributeModel);
 
         entityLinkOutputFormat.setOutputMarkupId(true);
         entityLinkOutputFormat.setLabel(Model.of(name));
@@ -82,10 +82,10 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected FormComponent<ManagedObject> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
+    protected FormComponent<ManagedObject> createFormComponent(final String id, final UiAttributeWkt attributeModel) {
 
         this.entityLink = new ChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
-        entityLink.setRequired(scalarModel.isRequired());
+        entityLink.setRequired(attributeModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
                 ChoiceProviderDefault::new);
@@ -144,22 +144,22 @@ implements ChoiceTitleHandler {
     private void syncWithInput() {
         if(isCompactFormat) return;
 
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
         lookupScalarValueContainer()
         .ifPresent(container->{
             var componentFactory = getComponentFactoryRegistry()
-                    .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, scalarModel);
+                    .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, attributeModel);
             var iconAndTitle = componentFactory
-                    .createComponent(UiComponentType.ENTITY_ICON_AND_TITLE.getId(), scalarModel);
+                    .createComponent(UiComponentType.ENTITY_ICON_AND_TITLE.getId(), attributeModel);
             container.addOrReplace(iconAndTitle);
 
-            var isInlinePrompt = scalarModel.isInlinePrompt();
+            var isInlinePrompt = attributeModel.isInlinePrompt();
             if(isInlinePrompt) {
                 iconAndTitle.setVisible(false);
             }
 
-            var adapter = scalarModel.getObject();
+            var adapter = attributeModel.getObject();
             if(adapter != null
                     || isInlinePrompt) {
                 WktComponents.permanentlyHide(container, ID_ENTITY_TITLE_IF_NULL);
@@ -221,7 +221,7 @@ implements ChoiceTitleHandler {
     // -- GET INPUT AS TITLE
 
     String getTitleForFormComponentInput() {
-        var pendingElseCurrentAdapter = scalarModel().getObject();
+        var pendingElseCurrentAdapter = attributeModel().getObject();
         return pendingElseCurrentAdapter != null
                 ? pendingElseCurrentAdapter.getTitle()
                 : "(no object)";
@@ -240,8 +240,8 @@ implements ChoiceTitleHandler {
     */
     void convertInput() {
 
-        var scalarModel = scalarModel();
-        var pendingValue = scalarModel.proposedValue().getValue();
+        var attributeModel = attributeModel();
+        var pendingValue = attributeModel.proposedValue().getValue();
 
         if(isEditable()) {
 

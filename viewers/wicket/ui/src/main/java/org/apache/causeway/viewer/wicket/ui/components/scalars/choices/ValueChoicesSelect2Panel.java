@@ -41,9 +41,9 @@ implements ChoiceTitleHandler {
 
     private final boolean isCompactFormat;
 
-    public ValueChoicesSelect2Panel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
-        this.isCompactFormat = scalarModel.getRenderingHint().isInTable();
+    public ValueChoicesSelect2Panel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
+        this.isCompactFormat = attributeModel.getRenderingHint().isInTable();
     }
 
     @Override
@@ -53,7 +53,7 @@ implements ChoiceTitleHandler {
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(
-            final String id, final UiAttributeWkt scalarModel) {
+            final String id, final UiAttributeWkt attributeModel) {
         if(select2 == null) {
             this.select2 = createSelect2(id, ChoiceProviderDefault::new);
         } else {

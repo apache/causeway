@@ -32,18 +32,18 @@ extends ChoiceProviderAbstract {
     private static final long serialVersionUID = 1L;
 
     @Getter @Accessors(fluent = true)
-    private final UiAttributeWkt scalarModel;
+    private final UiAttributeWkt attributeModel;
     private final UiAttribute.ChoiceProviderSort choiceProviderSort;
 
-    protected ChoiceProviderAbstractForScalarModel(final UiAttributeWkt scalarModel) {
+    protected ChoiceProviderAbstractForScalarModel(final UiAttributeWkt attributeModel) {
         super();
-        this.scalarModel = scalarModel;
-        this.choiceProviderSort = UiAttribute.ChoiceProviderSort.valueOf(scalarModel);
+        this.attributeModel = attributeModel;
+        this.choiceProviderSort = UiAttribute.ChoiceProviderSort.valueOf(attributeModel);
     }
 
     @Override
     protected final boolean isRequired() {
-        return scalarModel().isRequired();
+        return attributeModel().isRequired();
     }
 
     @Override

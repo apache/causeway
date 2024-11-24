@@ -51,9 +51,9 @@ extends ScalarPanelAbstract2 {
 
     protected ScalarPanelFormFieldAbstract(
             final String id,
-            final UiAttributeWkt scalarModel,
+            final UiAttributeWkt attributeModel,
             final Class<T> type) {
-        super(id, scalarModel);
+        super(id, attributeModel);
         this.type = type;
     }
 
@@ -85,7 +85,7 @@ extends ScalarPanelAbstract2 {
             break;
         case EDITING:
             // setup as input-format
-            fieldFragment = scalarModel().isEditingMode()
+            fieldFragment = attributeModel().isEditingMode()
                 ? FieldFragment.NO_LINK_EDITING // supports additional buttons (clear, ...)
                 : FieldFragment.NO_LINK_VIEWING;
             break;
@@ -107,17 +107,17 @@ extends ScalarPanelAbstract2 {
     /**
      * Builds the component to render the form input field.
      */
-    protected abstract FormComponent<T> createFormComponent(String id, UiAttributeWkt scalarModel);
+    protected abstract FormComponent<T> createFormComponent(String id, UiAttributeWkt attributeModel);
 
     // -- REGULAR
 
     @Override
     protected final MarkupContainer createRegularFrame() {
-        var scalarModel = scalarModel();
+        var attributeModel = attributeModel();
 
-        var friendlyNameModel = Model.of(scalarModel.getFriendlyName());
+        var friendlyNameModel = Model.of(attributeModel.getFriendlyName());
 
-        formComponent = createFormComponent(ID_SCALAR_VALUE, scalarModel);
+        formComponent = createFormComponent(ID_SCALAR_VALUE, attributeModel);
         formComponent.setLabel(friendlyNameModel);
 
         var formGroup = FrameFragment.REGULAR
@@ -126,15 +126,15 @@ extends ScalarPanelAbstract2 {
 
         formGroup.add(fieldFrame = createFieldFrame());
 
-        formComponent.setRequired(scalarModel.isRequired());
+        formComponent.setRequired(attributeModel.isRequired());
 
-        if(scalarModel.isShowMandatoryIndicator()) {
+        if(attributeModel.isShowMandatoryIndicator()) {
             Wkt.cssAppend(formGroup, "mandatory");
         }
 
         scalarNameLabelAddTo(formGroup, friendlyNameModel);
 
-        formComponent.add(_Util.createValidatorFor(scalarModel));
+        formComponent.add(_Util.createValidatorFor(attributeModel));
 
         var renderScenario = getRenderScenario();
 
@@ -148,13 +148,13 @@ extends ScalarPanelAbstract2 {
                     .orElseGet(()->formComponent.getClass().getName()));
             xrayDetails.put("formComponent.id", formComponent.getId());
             xrayDetails.put("formComponent.validators (count)", ""+_NullSafe.size(formComponent.getValidators()));
-            xrayDetails.put("scalarModel.disableReason", ""+scalarModel().disabledReason().map(InteractionVeto::getReason).orElse(null));
-            xrayDetails.put("scalarModel.whetherHidden", ""+scalarModel().whetherHidden());
-            xrayDetails.put("scalarModel.identifier", ""+scalarModel().getIdentifier());
-            xrayDetails.put("scalarModel.choices (count)", ""+scalarModel().getChoices().size());
-            xrayDetails.put("scalarModel.metaModel.featureIdentifier", ""+scalarModel().getMetaModel().getFeatureIdentifier());
-            xrayDetails.put("scalarModel.scalarTypeSpec", ""+scalarModel().getElementType().toString());
-            xrayDetails.put("scalarModel.proposedValue", ""+scalarModel().proposedValue().getValue().getValue());
+            xrayDetails.put("attributeModel.disableReason", ""+attributeModel().disabledReason().map(InteractionVeto::getReason).orElse(null));
+            xrayDetails.put("attributeModel.whetherHidden", ""+attributeModel().whetherHidden());
+            xrayDetails.put("attributeModel.identifier", ""+attributeModel().getIdentifier());
+            xrayDetails.put("attributeModel.choices (count)", ""+attributeModel().getChoices().size());
+            xrayDetails.put("attributeModel.metaModel.featureIdentifier", ""+attributeModel().getMetaModel().getFeatureIdentifier());
+            xrayDetails.put("attributeModel.elementTypeSpec", ""+attributeModel().getElementType().toString());
+            xrayDetails.put("attributeModel.proposedValue", ""+attributeModel().proposedValue().getValue().getValue());
 //                    getSpecialization()
 //                    .fold(
 //                            param->""+param.getValue(),
@@ -202,7 +202,7 @@ extends ScalarPanelAbstract2 {
     /**
      * Optional hook, to eg. add additional components (like Blob which adds preview image)
      */
-    protected void onFormGroupCreated(final FormGroup formGroup) {};
+    protected void onFormGroupCreated(final FormGroup formGroup) {}
 
     @Override
     protected void onInitializeNotEditable() {
@@ -270,7 +270,7 @@ extends ScalarPanelAbstract2 {
         WktTooltips.clearTooltip(getFormComponent());
         WktTooltips.clearTooltip(inlinePromptLink);
     }
-    
+
     private void replaceDisabledTagWithReadonlyTagIfApplicable() {
         if(!getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) return;
         //[CAUSEWAY-3727] select2 does not seem to support this replacement behavior

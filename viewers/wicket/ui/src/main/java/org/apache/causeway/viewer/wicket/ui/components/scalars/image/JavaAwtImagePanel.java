@@ -43,8 +43,8 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
     private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_FEEDBACK = "feedback";
 
-    public JavaAwtImagePanel(final String id, final UiAttributeWkt scalarModel) {
-        super(id, scalarModel);
+    public JavaAwtImagePanel(final String id, final UiAttributeWkt attributeModel) {
+        super(id, attributeModel);
         buildGui();
     }
 
@@ -52,7 +52,7 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
         Wkt.add(this, createScalarNameLabel(ID_SCALAR_NAME));
 
-        var wicketImage = _WktImageUtil.asWicketImage(ID_SCALAR_VALUE, scalarModel())
+        var wicketImage = _WktImageUtil.asWicketImage(ID_SCALAR_VALUE, attributeModel())
                 .orElse(null);
         if(wicketImage != null) {
             addOrReplace(wicketImage);
@@ -69,26 +69,26 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     @Override
     public String getVariation() {
-        return Facets.labelAt(scalarModel().getMetaModel())
+        return Facets.labelAt(attributeModel().getMetaModel())
                 .name();
     }
 
     /** see also {@link ScalarPanelAbstract} */
     protected Label createScalarNameLabel(final String id) {
 
-        var scalarModel = scalarModel();
-        var scalarNameLabel = Wkt.label(id, scalarModel.getFriendlyName());
+        var attributeModel = attributeModel();
+        var scalarNameLabel = Wkt.label(id, attributeModel.getFriendlyName());
 
         WktDecorators.formLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
-                    .mandatory(scalarModel.isShowMandatoryIndicator()));
+                    .mandatory(attributeModel.isShowMandatoryIndicator()));
 
-        scalarModel.getDescribedAs()
+        attributeModel.getDescribedAs()
             .ifPresent(describedAs->WktTooltips.addTooltip(scalarNameLabel, describedAs));
         return scalarNameLabel;
     }
 
-    protected final UiAttributeWkt scalarModel() {
+    protected final UiAttributeWkt attributeModel() {
         return getModel();
     }
 

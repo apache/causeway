@@ -46,21 +46,21 @@ implements
 
     // -- FACTORY
 
-    public static ScalarModelWithMultiChoice chain(final @NonNull UiAttributeWkt scalarModel) {
-        return new ScalarModelWithMultiChoice(scalarModel);
+    public static ScalarModelWithMultiChoice chain(final @NonNull UiAttributeWkt attributeModel) {
+        return new ScalarModelWithMultiChoice(attributeModel);
     }
 
     // -- CONSTRUCTION
 
-    private ScalarModelWithMultiChoice(final UiAttributeWkt scalarModel) {
-        super(scalarModel); // chaining to scalarModel
+    private ScalarModelWithMultiChoice(final UiAttributeWkt attributeModel) {
+        super(attributeModel); // chaining to attributeModel
     }
 
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
     @Override
-    public UiAttributeWkt scalarModel() {
+    public UiAttributeWkt attributeModel() {
         return (UiAttributeWkt) super.getTarget();
     }
 
@@ -83,7 +83,7 @@ implements
     @Override
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
-        var logicalType = scalarModel().getElementType().getLogicalType();
+        var logicalType = attributeModel().getElementType().getLogicalType();
         var packedMemento = ObjectMemento.packed(logicalType, unpackedMemento);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }
