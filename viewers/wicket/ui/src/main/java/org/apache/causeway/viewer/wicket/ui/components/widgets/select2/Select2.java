@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithSingleChoice;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeModelChangeDispatcher;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.NonNull;

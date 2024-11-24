@@ -112,7 +112,7 @@ import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEven
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput.FileUploadFieldWithNestingFix;

@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeModelChangeDispatcher;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

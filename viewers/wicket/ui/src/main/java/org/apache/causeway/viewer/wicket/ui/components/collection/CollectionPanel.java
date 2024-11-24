@@ -25,9 +25,9 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.Getter;

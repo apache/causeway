@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryAbstract;
 
 /**
  * {@link ComponentFactory} for {@link TreeAttributePanel}.

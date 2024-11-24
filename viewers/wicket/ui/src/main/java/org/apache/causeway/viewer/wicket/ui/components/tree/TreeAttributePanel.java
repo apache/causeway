@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeFragmentFactory.FrameFragment;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FrameFragment;
 
 /**
  * Renders a non-editable tree.
