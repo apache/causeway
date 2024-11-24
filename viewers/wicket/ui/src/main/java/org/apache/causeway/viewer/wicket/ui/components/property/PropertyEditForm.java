@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -54,14 +54,14 @@ extends PromptFormAbstract<PropertyModel> {
         var component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, propertyModel);
 
-        _Casts.castTo(ScalarPanelAbstract.class, component)
+        _Casts.castTo(AttributePanel.class, component)
         .ifPresent(propertyModelSubscriber->
             propertyModelSubscriber.addChangeListener(this)); // handling onUpdate and onError
     }
 
     @Override
     public void onUpdate(
-            final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+            final AjaxRequestTarget target, final AttributePanel scalarPanel) {
     }
 
     @Override

@@ -38,8 +38,8 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Repaint;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel.Repaint;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
@@ -87,7 +87,7 @@ extends PromptFormAbstract<ActionModel> {
     private void newParamPanel(
             final WebMarkupContainer container,
             final UiParameterWkt paramModel,
-            final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
+            final Consumer<AttributePanel> onNewScalarPanel) {
 
         var scalarParamModel = ParameterModel.wrap(paramModel);
 
@@ -96,7 +96,7 @@ extends PromptFormAbstract<ActionModel> {
                 .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
                         UiComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
 
-        _Casts.castTo(ScalarPanelAbstract.class, component)
+        _Casts.castTo(AttributePanel.class, component)
         .ifPresent(scalarPanel->{
             scalarPanel.addChangeListener(this); // handling onUpdate and onError
             onNewScalarPanel.accept(scalarPanel);
@@ -126,7 +126,7 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanelUpdated) {
+    public void onUpdate(final AjaxRequestTarget target, final AttributePanel scalarPanelUpdated) {
 
         var actionModel = actionModel();
         var updatedParamModel = (UiParameter)scalarPanelUpdated.getModel();

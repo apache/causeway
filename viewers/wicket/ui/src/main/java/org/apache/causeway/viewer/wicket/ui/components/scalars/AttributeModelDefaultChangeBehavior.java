@@ -24,9 +24,9 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 class AttributeModelDefaultChangeBehavior extends AjaxFormComponentUpdatingBehavior {
     private static final long serialVersionUID = 1L;
 
-    private final ScalarPanelAbstract scalarPanel;
+    private final AttributePanel scalarPanel;
 
-    AttributeModelDefaultChangeBehavior(final ScalarPanelAbstract scalarPanel) {
+    AttributeModelDefaultChangeBehavior(final AttributePanel scalarPanel) {
         super("change");
         this.scalarPanel = scalarPanel;
     }

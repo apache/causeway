@@ -43,7 +43,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeModelChangeListener;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -58,7 +58,7 @@ implements AttributeModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
-    protected final List<ScalarPanelAbstract> paramPanels = _Lists.newArrayList();
+    protected final List<AttributePanel> paramPanels = _Lists.newArrayList();
 
     private final Component parentPanel;
 
@@ -140,7 +140,7 @@ implements AttributeModelChangeListener {
     }
 
     @Override
-    public final void onError(final AjaxRequestTarget target, final ScalarPanelAbstract scalarPanel) {
+    public final void onError(final AjaxRequestTarget target, final AttributePanel scalarPanel) {
         if (scalarPanel != null) {
             // ensure that any feedback error associated with the providing component is shown.
             target.add(scalarPanel);

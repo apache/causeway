@@ -27,13 +27,13 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
  * Panel for rendering any value types that do not have their own custom
- * {@link ScalarPanelAbstract panel} to render them.
+ * {@link AttributePanel panel} to render them.
  */
 class StandaloneValuePanel
 extends PanelAbstract<ManagedObject, ValueModel> {

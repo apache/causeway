@@ -26,24 +26,24 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeComponentFactoryAbstract;
 
 /**
- * {@link ComponentFactory} for {@link ParentedTreePanel}.
+ * {@link ComponentFactory} for {@link TreeAttributePanel}.
  */
 public class TreePanelFactories {
 
     // -- PARENTED
 
-    static class Parented extends ComponentFactoryScalarAbstract {
+    static class Parented extends AttributeComponentFactoryAbstract {
 
         public Parented() {
-            super(ParentedTreePanel.class);
+            super(TreeAttributePanel.class);
         }
 
         @Override
         protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-            return new ParentedTreePanel(id, attributeModel);
+            return new TreeAttributePanel(id, attributeModel);
         }
 
         @Override

@@ -25,7 +25,7 @@ import lombok.NonNull;
 public interface AttributeModelChangeDispatcher {
 
     @NonNull Iterable<AttributeModelChangeListener> getChangeListeners();
-    @NonNull ScalarPanelAbstract getScalarPanel();
+    @NonNull AttributePanel getScalarPanel();
 
     default void notifyUpdate(final AjaxRequestTarget target) {
         for (var listener : getChangeListeners()) {

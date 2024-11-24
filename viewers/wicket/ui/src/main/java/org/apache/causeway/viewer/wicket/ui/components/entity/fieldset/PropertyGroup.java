@@ -43,7 +43,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -62,7 +62,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
     private static final String ID_PROPERTY = "property";
 
     private final FieldSet fieldSet;
-    private final Can<ScalarPanelAbstract> childScalarPanels;
+    private final Can<AttributePanel> childScalarPanels;
     private final List<Component> childComponents;
 
     public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
@@ -73,8 +73,8 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         childComponents = buildGui();
         childScalarPanels =
                 _NullSafe.stream(childComponents)
-                .filter(ScalarPanelAbstract.class::isInstance)
-                .map(ScalarPanelAbstract.class::cast)
+                .filter(AttributePanel.class::isInstance)
+                .map(AttributePanel.class::cast)
                 .collect(Can.toCan());
 
     }
@@ -204,7 +204,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 
     @Override
     public void onConfigure() {
-        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
+        for (final AttributePanel childComponent : childScalarPanels) {
             childComponent.configure();
         }
         super.onConfigure();
@@ -224,7 +224,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         }
         // HACK:END
 
-        for (final ScalarPanelAbstract childComponent : childScalarPanels) {
+        for (final AttributePanel childComponent : childScalarPanels) {
             if(childComponent.isVisibilityAllowed()) {
                 return true;
             }

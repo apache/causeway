@@ -22,8 +22,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 public interface AttributeModelChangeListener {
 
-    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
+    void onUpdate(AjaxRequestTarget target, AttributePanel scalarPanel);
 
-    void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
+    void onError(AjaxRequestTarget target, AttributePanel scalarPanel);
 
 }

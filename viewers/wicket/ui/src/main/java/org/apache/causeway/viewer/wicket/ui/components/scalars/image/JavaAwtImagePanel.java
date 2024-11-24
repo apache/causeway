@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -73,7 +73,7 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
                 .name();
     }
 
-    /** see also {@link ScalarPanelAbstract} */
+    /** see also {@link AttributePanel} */
     protected Label createScalarNameLabel(final String id) {
 
         var attributeModel = attributeModel();

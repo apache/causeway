@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.commons.model.UiModel;
  * {@link UiAttribute#isSingular}
  * <p>
  * The parameter case is either singular or plural.
- * {@link UiAttribute#isSingular} and {@link UiAttribute#isPlural}
+ * {@link UiAttribute#isSingular} or {@link UiAttribute#isPlural}
  */
 public interface UiAttribute extends UiModel, HasMetaModelContext {
 

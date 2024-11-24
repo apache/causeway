@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 
 public class ChoicesSelect2PanelFactory
-extends ComponentFactoryScalarAbstract {
+extends AttributeComponentFactoryAbstract {
 
     private static enum ComponentSort {
         TITLE_BADGE,
@@ -42,20 +42,20 @@ extends ComponentFactoryScalarAbstract {
     }
 
     public ChoicesSelect2PanelFactory() {
-        super(ScalarPanelAbstract.class);
+        super(AttributePanel.class);
     }
 
     @Override
-    protected ScalarPanelAbstract createComponent(final String id, final UiAttributeWkt attributeModel) {
+    protected AttributePanel createComponent(final String id, final UiAttributeWkt attributeModel) {
         var componentSort = ComponentSort.valueOf(attributeModel);
         switch(componentSort) {
         case TITLE_BADGE:
             var valueType = attributeModel.getElementType().getCorrespondingClass();
-            return new ScalarTitleBadgePanel<>(id, attributeModel, valueType);
+            return new TitleBadgeAttributePanel<>(id, attributeModel, valueType);
         case VALUE_CHOICES:
-            return new ValueChoicesSelect2Panel(id, attributeModel);
+            return new ValueChoicesAttributePanel(id, attributeModel);
         case OBJECT_CHOICES:
-            return new ObjectChoicesSelect2Panel(id, attributeModel);
+            return new ObjectChoicesAttributePanel(id, attributeModel);
         default:
             throw _Exceptions.unmatchedCase(componentSort);
         }

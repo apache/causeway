@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 import lombok.Getter;
@@ -37,7 +37,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
- * of) {@link ScalarPanelAbstract}.
+ * of) {@link AttributePanel}.
  */
 public class CollectionPanel
 extends PanelAbstract<DataTableInteractive, EntityCollectionModelParented>

@@ -31,7 +31,7 @@ import org.apache.wicket.request.resource.ResourceReference;
  * Helper for MarkupComponents to reload a specified java-script reference, when rendering.
  * @implNote used by AsciiDoc and Markdown extensions
  */
-public class MarkupComponent_reloadJs {
+class MarkupComponent_reloadJs {
 
     public static CharSequence decorate(final CharSequence htmlContent, final Iterable<JavaScriptResourceReference> jsRefs) {
         var targetId = UUID.randomUUID().toString();

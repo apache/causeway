@@ -23,7 +23,7 @@ import java.io.Serializable;
 import org.apache.wicket.model.IModel;
 
 @FunctionalInterface
-public interface MarkupComponentFactory<T extends IModel<?>> extends Serializable {
+interface MarkupComponentFactory<T extends IModel<?>> extends Serializable {
 
     MarkupComponent newMarkupComponent(String id, T model);
 

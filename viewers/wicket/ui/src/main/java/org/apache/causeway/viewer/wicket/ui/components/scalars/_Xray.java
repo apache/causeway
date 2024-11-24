@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 class _Xray {
 
-    static void onParamOrPropertyEdited(final ScalarPanelAbstract scalarPanel) {
+    static void onParamOrPropertyEdited(final AttributePanel scalarPanel) {
         if(!XrayUi.isXrayEnabled()) return;
 
         scalarPanel.attributeModel().getSpecialization()

@@ -31,9 +31,9 @@ implements CancelHintRequired  {
 
     private static final long serialVersionUID = 1L;
 
-    private ObjectChoicesSelect2Panel owningPanel;
+    private ObjectChoicesAttributePanel owningPanel;
 
-    public ChoiceFormComponent(final String id, final ObjectChoicesSelect2Panel owningPanel) {
+    public ChoiceFormComponent(final String id, final ObjectChoicesAttributePanel owningPanel) {
         super(id, owningPanel.attributeModel());
         this.owningPanel = owningPanel;
         setType(ManagedObject.class);

@@ -24,11 +24,11 @@ import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupAttributePanelFactories;
 
 /**
  * @implNote Almost a copy of {@code Parented} and {@code Standalone} in
- * {@link MarkupPanelFactories}, but specific to
+ * {@link MarkupAttributePanelFactories}, but specific to
  * the {@link AsciiDoc} value-type which requires client-side java-script to be
  * executed to enable syntax highlighting
  */
@@ -37,7 +37,7 @@ public class AsciiDocPanelFactoriesWkt {
     // -- PARENTED
 
     @Component
-    public static class Parented extends MarkupPanelFactories.ParentedAbstract<AsciiDoc> {
+    public static class Parented extends MarkupAttributePanelFactories.ParentedAbstract<AsciiDoc> {
 
         public Parented() {
             super(AsciiDoc.class);
@@ -55,7 +55,7 @@ public class AsciiDocPanelFactoriesWkt {
     // -- STANDALONE
 
     @Component
-    public static class Standalone extends MarkupPanelFactories.StandaloneAbstract<AsciiDoc> {
+    public static class Standalone extends MarkupAttributePanelFactories.StandaloneAbstract<AsciiDoc> {
 
         public Standalone() {
             super(AsciiDoc.class);

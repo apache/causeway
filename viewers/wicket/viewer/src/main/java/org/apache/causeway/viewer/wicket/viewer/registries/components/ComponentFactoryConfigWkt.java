@@ -64,20 +64,20 @@ import org.apache.causeway.viewer.wicket.ui.components.header.HeaderPanelFactory
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldNumeric;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithTemporalPicker;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayBlobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.CausewayClobPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.NumericAttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.BlobAttributePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob.ClobAttributePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.bool.BooleanAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.choices.ChoicesSelect2PanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.composite.CompositeValuePanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.image.JavaAwtImagePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.passwd.CausewayPasswordPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.string.StringPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback.ValueFallbackPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupAttributePanelFactories;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.passwd.PasswordAttributePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.string.StringAttributePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.temporal.TemporalAttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.value.CompositeValueAttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.value.ValueAttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.value.ValueFallbackAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.tree.TreePanelFactories;
 import org.apache.causeway.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
@@ -193,7 +193,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     protected void addComponentFactoriesForValue(final ComponentFactoryList componentFactories) {
-        componentFactories.add(MarkupPanelFactories.standalone());
+        componentFactories.add(MarkupAttributePanelFactories.standalone());
         componentFactories.add(TreePanelFactories.standalone());
         componentFactories.add(new StandaloneValuePanelFactory());
     }
@@ -203,23 +203,23 @@ public class ComponentFactoryConfigWkt {
             final ValueSemanticsResolver valueSemanticsResolver) {
 
         componentFactories.add(TreePanelFactories.parented());
-        componentFactories.add(MarkupPanelFactories.parented());
+        componentFactories.add(MarkupAttributePanelFactories.parented());
 
-        componentFactories.add(new BooleanPanelFactory());
+        componentFactories.add(new BooleanAttributePanelFactory());
 
-        componentFactories.add(new StringPanelFactory());
+        componentFactories.add(new StringAttributePanelFactory());
 
         componentFactories.add(new JavaAwtImagePanelFactory());
 
-        componentFactories.add(new CausewayPasswordPanelFactory());
+        componentFactories.add(new PasswordAttributePanelFactory());
 
-        componentFactories.add(new CausewayBlobPanelFactory());
-        componentFactories.add(new CausewayClobPanelFactory());
+        componentFactories.add(new BlobAttributePanelFactory());
+        componentFactories.add(new ClobAttributePanelFactory());
 
         // install after explicit values, but before fallbacks
         addGenericComponentFactoriesForScalar(componentFactories, valueSemanticsResolver);
 
-        componentFactories.add(new ValueFallbackPanelFactory());
+        componentFactories.add(new ValueFallbackAttributePanelFactory());
 
         // or for choices
         componentFactories.add(new ChoicesSelect2PanelFactory());
@@ -268,7 +268,7 @@ public class ComponentFactoryConfigWkt {
     // -- UTILTIY
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static <T extends Serializable> ComponentFactoryScalarTypeConstrainedAbstract
+    public static <T extends Serializable> AttributeComponentFactoryTypeConstrainedAbstract
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
         if(valueSemantics.isNumberType()) {
@@ -287,44 +287,44 @@ public class ComponentFactoryConfigWkt {
     }
 
     public static class ScalarPanelFactoryForTextField<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    extends AttributeComponentFactoryTypeConstrainedAbstract {
 
         private final Class<T> valueTypeClass;
 
         protected ScalarPanelFactoryForTextField(final Class<T> valueTypeClass) {
-            super(ScalarPanelTextFieldWithValueSemantics.class, withPrimitiveVariant(valueTypeClass));
+            super(ValueAttributePanel.class, withPrimitiveVariant(valueTypeClass));
             this.valueTypeClass = valueTypeClass;
         }
 
         @Override
         public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-            return new ScalarPanelTextFieldWithValueSemantics<T>(id, attributeModel, valueTypeClass);
+            return new ValueAttributePanel<T>(id, attributeModel, valueTypeClass);
         }
     }
 
     public static class ScalarPanelFactoryForNumberField<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    extends AttributeComponentFactoryTypeConstrainedAbstract {
 
         private final Class<T> valueTypeClass;
 
         protected ScalarPanelFactoryForNumberField(final Class<T> valueTypeClass) {
-            super(ScalarPanelTextFieldNumeric.class, withPrimitiveVariant(valueTypeClass));
+            super(NumericAttributePanel.class, withPrimitiveVariant(valueTypeClass));
             this.valueTypeClass = valueTypeClass;
         }
 
         @Override
         public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-            return new ScalarPanelTextFieldNumeric<T>(id, attributeModel, valueTypeClass);
+            return new NumericAttributePanel<T>(id, attributeModel, valueTypeClass);
         }
     }
 
     public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable & Temporal>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    extends AttributeComponentFactoryTypeConstrainedAbstract {
 
         private final Class<T> valueTypeClass;
 
         protected ScalarPanelFactoryForTemporalPicker(final Class<T> valueTypeClass) {
-            super(ScalarPanelTextFieldWithTemporalPicker.class,
+            super(TemporalAttributePanel.class,
                     // assuming there is no primitive temporal type
                     valueTypeClass);
             this.valueTypeClass = valueTypeClass;
@@ -332,17 +332,17 @@ public class ComponentFactoryConfigWkt {
 
         @Override
         public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-            return new ScalarPanelTextFieldWithTemporalPicker<T>(id, attributeModel, valueTypeClass);
+            return new TemporalAttributePanel<T>(id, attributeModel, valueTypeClass);
         }
     }
 
     public static class ScalarPanelFactoryForCompositeValue<T extends Serializable>
-    extends ComponentFactoryScalarTypeConstrainedAbstract {
+    extends AttributeComponentFactoryTypeConstrainedAbstract {
 
         private final Class<T> valueTypeClass;
 
         protected ScalarPanelFactoryForCompositeValue(final Class<T> valueTypeClass) {
-            super(CompositeValuePanel.class,
+            super(CompositeValueAttributePanel.class,
                     // assuming there is no primitive composite type
                     valueTypeClass);
             this.valueTypeClass = valueTypeClass;
@@ -350,7 +350,7 @@ public class ComponentFactoryConfigWkt {
 
         @Override
         public Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-            return new CompositeValuePanel<T>(id, attributeModel, valueTypeClass);
+            return new CompositeValueAttributePanel<T>(id, attributeModel, valueTypeClass);
         }
     }
 
@@ -363,7 +363,7 @@ public class ComponentFactoryConfigWkt {
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
         var registeredScalarTypes =
-                componentFactories.stream(ComponentFactoryScalarTypeConstrainedAbstract.class)
+                componentFactories.stream(AttributeComponentFactoryTypeConstrainedAbstract.class)
                 .flatMap(f->f.getScalarTypes().stream())
                 .collect(Collectors.toSet());
 
