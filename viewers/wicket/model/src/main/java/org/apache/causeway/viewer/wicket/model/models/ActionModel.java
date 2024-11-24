@@ -141,7 +141,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
 
     public static ActionModel forPropertyOrParameter(
             final ObjectAction action,
-            final ScalarModel scalarModel) {
+            final UiAttributeWkt scalarModel) {
         return scalarModel instanceof ScalarPropertyModel
                 ? forProperty(action, (ScalarPropertyModel)scalarModel)
                 : forParameter(action, (ScalarParameterModel)scalarModel);

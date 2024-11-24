@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 public class ChoiceProviderDefault
 extends ChoiceProviderAbstractForScalarModel {
@@ -32,7 +32,7 @@ extends ChoiceProviderAbstractForScalarModel {
     private static final long serialVersionUID = 1L;
 
     public ChoiceProviderDefault(
-            final ScalarModel scalarModel) {
+            final UiAttributeWkt scalarModel) {
         super(scalarModel);
     }
 

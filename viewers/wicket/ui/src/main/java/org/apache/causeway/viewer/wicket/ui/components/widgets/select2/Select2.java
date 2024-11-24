@@ -32,7 +32,7 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoice;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
@@ -54,7 +54,7 @@ implements
 
     public static Select2 createSelect2(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final ChoiceProviderAbstract choiceProvider,
             final ScalarModelChangeDispatcher select2ChangeDispatcher) {
         var select2 = new Select2(scalarModel.isSingular()

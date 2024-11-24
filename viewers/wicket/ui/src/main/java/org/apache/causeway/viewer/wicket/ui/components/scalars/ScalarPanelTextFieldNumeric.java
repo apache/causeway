@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 /**
  * Panel for rendering numeric scalars.
@@ -30,7 +30,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     public ScalarPanelTextFieldNumeric(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final Class<T> type) {
         super(id, scalarModel, type);
     }

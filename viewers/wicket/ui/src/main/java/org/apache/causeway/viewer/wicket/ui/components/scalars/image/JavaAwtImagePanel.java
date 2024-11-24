@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 class JavaAwtImagePanel
-extends PanelAbstract<ManagedObject, ScalarModel> {
+extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
     private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_FEEDBACK = "feedback";
 
-    public JavaAwtImagePanel(final String id, final ScalarModel scalarModel) {
+    public JavaAwtImagePanel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
         buildGui();
     }
@@ -88,7 +88,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
         return scalarNameLabel;
     }
 
-    protected final ScalarModel scalarModel() {
+    protected final UiAttributeWkt scalarModel() {
         return getModel();
     }
 

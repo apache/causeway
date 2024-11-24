@@ -28,7 +28,7 @@ import lombok.NonNull;
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;
  * synchronizes the {@link Model} of the <tt>Select2Choice</tt>
- * with the parent {@link ScalarModel}.
+ * with the parent {@link UiAttributeWkt}.
  */
 //@Log4j2
 public class ScalarModelWithSingleChoice
@@ -40,22 +40,22 @@ implements
 
     // -- FACTORY
 
-    public static ScalarModelWithSingleChoice chain(final @NonNull ScalarModel scalarModel) {
+    public static ScalarModelWithSingleChoice chain(final @NonNull UiAttributeWkt scalarModel) {
         return new ScalarModelWithSingleChoice(scalarModel);
     }
 
     // -- CONSTRUCTION
 
-    private ScalarModelWithSingleChoice(final ScalarModel scalarModel) {
+    private ScalarModelWithSingleChoice(final UiAttributeWkt scalarModel) {
         super(scalarModel); // chaining to scalarModel
     }
 
     /**
-     * chaining idiom: the {@link ScalarModel} we are chained to
+     * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
     @Override
-    public ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    public UiAttributeWkt scalarModel() {
+        return (UiAttributeWkt) super.getTarget();
     }
 
     @Override

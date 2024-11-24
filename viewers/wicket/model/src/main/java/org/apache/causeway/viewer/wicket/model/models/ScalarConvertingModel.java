@@ -37,7 +37,7 @@ extends ChainingModel<T> {
 
     private static final long serialVersionUID = 1L;
 
-    protected ScalarConvertingModel(final @NonNull ScalarModel scalarModel) {
+    protected ScalarConvertingModel(final @NonNull UiAttributeWkt scalarModel) {
         super(scalarModel);
     }
 
@@ -67,8 +67,8 @@ extends ChainingModel<T> {
 
     // -- HELPER
 
-    protected ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    protected UiAttributeWkt scalarModel() {
+        return (UiAttributeWkt) super.getTarget();
     }
 
 }

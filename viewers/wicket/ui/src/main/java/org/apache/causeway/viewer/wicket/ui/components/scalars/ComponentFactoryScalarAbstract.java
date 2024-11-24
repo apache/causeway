@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 public abstract class ComponentFactoryScalarAbstract
@@ -35,18 +35,18 @@ extends ComponentFactoryAbstract {
 
     @Override
     public final Component createComponent(final String id, final IModel<?> model) {
-        return createComponent(id, (ScalarModel) model);
+        return createComponent(id, (UiAttributeWkt) model);
     }
 
     @Override
     public final ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
+        if (!(model instanceof UiAttributeWkt)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        return appliesTo((ScalarModel)model);
+        return appliesTo((UiAttributeWkt)model);
     }
 
-    protected abstract Component createComponent(String id, ScalarModel scalarModel);
-    protected abstract ApplicationAdvice appliesTo(ScalarModel scalarModel);
+    protected abstract Component createComponent(String id, UiAttributeWkt scalarModel);
+    protected abstract ApplicationAdvice appliesTo(UiAttributeWkt scalarModel);
 
 }

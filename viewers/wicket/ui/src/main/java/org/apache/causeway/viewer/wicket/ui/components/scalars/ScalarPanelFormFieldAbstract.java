@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -51,7 +51,7 @@ extends ScalarPanelAbstract2 {
 
     protected ScalarPanelFormFieldAbstract(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final Class<T> type) {
         super(id, scalarModel);
         this.type = type;
@@ -107,7 +107,7 @@ extends ScalarPanelAbstract2 {
     /**
      * Builds the component to render the form input field.
      */
-    protected abstract FormComponent<T> createFormComponent(String id, ScalarModel scalarModel);
+    protected abstract FormComponent<T> createFormComponent(String id, UiAttributeWkt scalarModel);
 
     // -- REGULAR
 

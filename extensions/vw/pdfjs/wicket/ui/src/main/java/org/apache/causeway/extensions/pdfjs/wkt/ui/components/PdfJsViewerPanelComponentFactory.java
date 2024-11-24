@@ -28,7 +28,7 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
 @org.springframework.stereotype.Component
@@ -41,11 +41,11 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof ScalarModel)) {
+        if (!(model instanceof UiAttributeWkt)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        var scalarModel = (ScalarModel) model;
+        var scalarModel = (UiAttributeWkt) model;
         if(!scalarModel.getMetaModel().containsFacet(PdfJsViewerFacet.class)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
@@ -67,6 +67,6 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new PdfJsViewerPanel(id, (ScalarModel) model);
+        return new PdfJsViewerPanel(id, (UiAttributeWkt) model);
     }
 }

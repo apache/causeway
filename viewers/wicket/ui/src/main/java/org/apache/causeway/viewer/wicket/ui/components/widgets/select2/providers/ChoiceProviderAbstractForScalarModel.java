@@ -20,9 +20,8 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.provider
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
-import org.apache.causeway.viewer.commons.model.scalar.UiScalar.ChoiceProviderSort;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.commons.model.scalar.UiAttribute;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -33,13 +32,13 @@ extends ChoiceProviderAbstract {
     private static final long serialVersionUID = 1L;
 
     @Getter @Accessors(fluent = true)
-    private final ScalarModel scalarModel;
-    private final UiScalar.ChoiceProviderSort choiceProviderSort;
+    private final UiAttributeWkt scalarModel;
+    private final UiAttribute.ChoiceProviderSort choiceProviderSort;
 
-    protected ChoiceProviderAbstractForScalarModel(final ScalarModel scalarModel) {
+    protected ChoiceProviderAbstractForScalarModel(final UiAttributeWkt scalarModel) {
         super();
         this.scalarModel = scalarModel;
-        this.choiceProviderSort = ChoiceProviderSort.valueOf(scalarModel);
+        this.choiceProviderSort = UiAttribute.ChoiceProviderSort.valueOf(scalarModel);
     }
 
     @Override

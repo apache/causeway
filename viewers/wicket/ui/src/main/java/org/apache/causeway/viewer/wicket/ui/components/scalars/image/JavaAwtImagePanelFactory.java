@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
 public class JavaAwtImagePanelFactory
@@ -33,12 +33,12 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected Component createComponent(final String id, final ScalarModel scalarModel) {
+    protected Component createComponent(final String id, final UiAttributeWkt scalarModel) {
         return new JavaAwtImagePanel(id, scalarModel);
     }
 
     @Override
-    protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
+    protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
         var typeSpec = scalarModel.getElementType();
         return appliesIf(typeSpec != null
                 && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));

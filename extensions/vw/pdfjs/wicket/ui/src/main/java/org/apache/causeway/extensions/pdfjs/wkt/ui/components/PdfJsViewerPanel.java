@@ -45,7 +45,7 @@ import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 import org.apache.causeway.extensions.pdfjs.applib.spi.PdfJsViewerAdvisor;
 import org.apache.causeway.extensions.pdfjs.metamodel.facet.PdfJsViewerFacet;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.components.PdfJsPanel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -79,7 +79,7 @@ implements IRequestListener {
     AbstractDefaultAjaxBehavior updateScale;
     AbstractDefaultAjaxBehavior updateHeight;
 
-    PdfJsViewerPanel(final String id, final ScalarModel scalarModel) {
+    PdfJsViewerPanel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
     }
 

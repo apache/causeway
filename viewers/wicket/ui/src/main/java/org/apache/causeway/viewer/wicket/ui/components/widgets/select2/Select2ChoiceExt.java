@@ -24,7 +24,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
@@ -38,7 +38,7 @@ implements HasLogicalType {
     public static Select2ChoiceExt create(
             final String id,
             final IModel<ObjectMemento> modelObject,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final ChoiceProviderAbstract choiceProvider) {
         return new Select2ChoiceExt(id, modelObject, scalarModel, choiceProvider);
     }
@@ -48,7 +48,7 @@ implements HasLogicalType {
     private Select2ChoiceExt(
             final String id,
             final IModel<ObjectMemento> model,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final ChoiceProviderAbstract choiceProvider) {
         super(id, model, choiceProvider);
 

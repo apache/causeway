@@ -31,13 +31,13 @@ extends ChainingModel<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
-    public static BooleanModel forScalarModel(final @NonNull ScalarModel scalarModel) {
+    public static BooleanModel forScalarModel(final @NonNull UiAttributeWkt scalarModel) {
         return new BooleanModel(scalarModel);
     }
 
     final boolean isPrimitive;
 
-    protected BooleanModel(final ScalarModel scalarModel) {
+    protected BooleanModel(final UiAttributeWkt scalarModel) {
         super(scalarModel);
 
         var spec = scalarModel().getElementType();
@@ -94,8 +94,8 @@ extends ChainingModel<Boolean> {
 
     // -- HELPER
 
-    protected ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    protected UiAttributeWkt scalarModel() {
+        return (UiAttributeWkt) super.getTarget();
     }
 
 }

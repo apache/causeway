@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 abstract class ChoiceProviderTestAbstract {
 
@@ -45,8 +45,8 @@ abstract class ChoiceProviderTestAbstract {
                 ;
     }
 
-    protected ScalarModel mockScalarModel(final Can<ManagedObject> choices, final boolean isRequired) {
-        var mockScalarModel = mock(ScalarModel.class);
+    protected UiAttributeWkt mockScalarModel(final Can<ManagedObject> choices, final boolean isRequired) {
+        var mockScalarModel = mock(UiAttributeWkt.class);
         when(mockScalarModel.getChoices()).thenReturn(choices);
         when(mockScalarModel.isRequired()).thenReturn(isRequired);
         when(mockScalarModel.hasChoices()).thenReturn(true);

@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
@@ -33,7 +33,7 @@ public class StringPanelFactory extends ComponentFactoryScalarTypeConstrainedAbs
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
+    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
         return Facets.multilineIsPresent(scalarModel.getMetaModel())
             ? new MultiLineStringPanel(id, scalarModel)
             : new StringPanel(id, scalarModel);

@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.AccessLevel;
@@ -58,7 +58,7 @@ public class TemporalDecompositionModel<T> implements IConverter<T> {
     private static final long serialVersionUID = 1L;
 
     public static <T extends Temporal> TemporalDecompositionModel<T> create(final Class<T> type,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final OffsetCharacteristic offsetCharacteristic,
             final ConverterBasedOnValueSemantics<T> fullConverter) {
 

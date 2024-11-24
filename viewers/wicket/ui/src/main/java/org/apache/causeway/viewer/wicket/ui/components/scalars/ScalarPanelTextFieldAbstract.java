@@ -28,13 +28,13 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.model.components.UiString;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
- * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
+ * Adapter for {@link PanelAbstract panel}s that use a {@link UiAttributeWkt} as
  * their backing model.
  * <p>
  * Supports the concept of being
@@ -52,7 +52,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     protected ScalarPanelTextFieldAbstract(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final Class<T> type) {
         super(id, scalarModel, type);
         guardAgainstIncompatibleScalarType();
@@ -90,7 +90,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     // --
 
     @Override
-    protected final FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected final FormComponent<T> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
         this.formField = createTextField(id);
         formField.setOutputMarkupId(true);
         return applyFormComponentAttributes(formField);

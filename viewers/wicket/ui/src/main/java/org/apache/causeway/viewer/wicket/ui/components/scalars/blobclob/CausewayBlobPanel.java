@@ -27,7 +27,7 @@ import org.apache.wicket.request.resource.IResource;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.viewer.wicket.model.models.FileUploadModels;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.causeway.applib.value.Blob Causeway' applib.Blob}.
@@ -36,7 +36,7 @@ class CausewayBlobPanel extends CausewayBlobOrClobPanelAbstract<Blob> {
 
     private static final long serialVersionUID = 1L;
 
-    public CausewayBlobPanel(final String id, final ScalarModel model) {
+    public CausewayBlobPanel(final String id, final UiAttributeWkt model) {
         super(id, model, Blob.class);
     }
 

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ChainingObjectModel;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -34,9 +34,9 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  * {@link ComponentFactory} for {@link EntityIconAndTitlePanel}.
  *
  * @implNote Knows how to deal with {@link ObjectAdapterModel}. And for
- * {@link ScalarModel} we have an adapter {@link ChainingObjectModel}
+ * {@link UiAttributeWkt} we have an adapter {@link ChainingObjectModel}
  * that implements {@link ObjectAdapterModel}, such that it can also deal
- * with {@link ScalarModel}.
+ * with {@link UiAttributeWkt}.
  *
  */
 public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
@@ -65,8 +65,8 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         if (model instanceof ObjectAdapterModel) {
             spec = ((ObjectAdapterModel) model).getTypeOfSpecification();
-        } else if (model instanceof ScalarModel) {
-            spec = ((ScalarModel) model).getElementType();
+        } else if (model instanceof UiAttributeWkt) {
+            spec = ((UiAttributeWkt) model).getElementType();
         } else {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
@@ -84,8 +84,8 @@ public class EntityIconAndTitlePanelFactory extends ComponentFactoryAbstract {
 
         if (model instanceof ObjectAdapterModel) {
             objectAdapterModel = (ObjectAdapterModel) model;
-        } else if (model instanceof ScalarModel) {
-            var scalarModel = (ScalarModel) model;
+        } else if (model instanceof UiAttributeWkt) {
+            var scalarModel = (UiAttributeWkt) model;
             // effectively acts as an adapter from ScalarModel to ObjectAdapterModel
             objectAdapterModel = ChainingObjectModel.chain(scalarModel);
         } else {

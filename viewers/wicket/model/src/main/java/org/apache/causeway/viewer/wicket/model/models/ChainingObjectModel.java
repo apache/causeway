@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 
 /**
- * Wraps a {@link ScalarModel} to act as an {@link ObjectAdapterModel}.
+ * Wraps a {@link UiAttributeWkt} to act as an {@link ObjectAdapterModel}.
  */
 public final class ChainingObjectModel
 extends ChainingModel<ManagedObject>
@@ -35,19 +35,19 @@ implements ObjectAdapterModel {
 
     private static final long serialVersionUID = 1L;
 
-    public static ChainingObjectModel chain(final ScalarModel scalarModel) {
+    public static ChainingObjectModel chain(final UiAttributeWkt scalarModel) {
         return new ChainingObjectModel(scalarModel);
     }
 
-    private ChainingObjectModel(final ScalarModel scalarModel) {
+    private ChainingObjectModel(final UiAttributeWkt scalarModel) {
         super(scalarModel);
     }
 
     /**
-     * chaining idiom: the {@link ScalarModel} we are chained to
+     * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
-    public ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    public UiAttributeWkt scalarModel() {
+        return (UiAttributeWkt) super.getTarget();
     }
 
     /**

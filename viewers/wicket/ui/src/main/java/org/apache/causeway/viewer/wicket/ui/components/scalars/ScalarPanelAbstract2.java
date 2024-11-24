@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
@@ -69,7 +69,7 @@ extends ScalarPanelAbstract {
 
     // -- CONSTRUCTION
 
-    protected ScalarPanelAbstract2(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelAbstract2(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
     }
 

@@ -55,7 +55,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.RegularFrame;
@@ -75,7 +75,7 @@ import lombok.Value;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
-extends PanelAbstract<ManagedObject, ScalarModel>
+extends PanelAbstract<ManagedObject, UiAttributeWkt>
 implements ScalarModelChangeListener {
 
     private static final long serialVersionUID = 1L;
@@ -158,7 +158,7 @@ implements ScalarModelChangeListener {
     }
 
     /**
-     * During AJAX requests, first the {@link ScalarModel} gets updated,
+     * During AJAX requests, first the {@link UiAttributeWkt} gets updated,
      * then later, changed components get a chance to participate in the partial page update
      * based on whether their models have changed.
      * <p>
@@ -187,7 +187,7 @@ implements ScalarModelChangeListener {
     /**
      * Identical to super.getModel()
      */
-    public final ScalarModel scalarModel() {
+    public final UiAttributeWkt scalarModel() {
         return super.getModel();
     }
 
@@ -243,7 +243,7 @@ implements ScalarModelChangeListener {
 
     // -- CONSTRUCTION
 
-    protected ScalarPanelAbstract(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelAbstract(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
 
         var formatModifiers = EnumSet.noneOf(FormatModifier.class);
@@ -568,7 +568,7 @@ implements ScalarModelChangeListener {
 
     @Value
     private static class ScalarNameHelper {
-        static ScalarNameHelper from(final ScalarModel scalarModel) {
+        static ScalarNameHelper from(final UiAttributeWkt scalarModel) {
             final LabelPosition labelPostion = Facets.labelAt(scalarModel.getMetaModel());
             return labelPostion == LabelPosition.NONE
                     ? new ScalarNameHelper(Optional.empty(), new String[]{ID_SCALAR_NAME_BEFORE_VALUE, ID_SCALAR_NAME_AFTER_VALUE})
@@ -635,7 +635,7 @@ implements ScalarModelChangeListener {
         Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
 
-    private static String determinePropParamLayoutCss(final ScalarModel scalarModel) {
+    private static String determinePropParamLayoutCss(final UiAttributeWkt scalarModel) {
         return Facets.labelAtCss(scalarModel.getMetaModel());
     }
 

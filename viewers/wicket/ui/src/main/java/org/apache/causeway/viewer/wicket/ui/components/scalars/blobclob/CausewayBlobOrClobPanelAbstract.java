@@ -33,7 +33,7 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.viewer.commons.model.components.UiString;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
@@ -48,7 +48,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     /** Model that maps to either {@link Blob} or {@link Clob} */
     private IModel<T> unwrapped;
 
-    protected CausewayBlobOrClobPanelAbstract(final String id, final ScalarModel scalarModel, final Class<T> type) {
+    protected CausewayBlobOrClobPanelAbstract(final String id, final UiAttributeWkt scalarModel, final Class<T> type) {
         super(id, scalarModel, type);
         this.unwrapped = scalarModel.unwrapped(type);
     }
@@ -66,7 +66,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     // generic type mismatch; no issue as long as we don't use conversion
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected FormComponent createFormComponent(final String id, final UiAttributeWkt scalarModel) {
         var initialCaption = outputFormatAsString();
         var fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
         addAcceptFilterTo(fileUploadField);

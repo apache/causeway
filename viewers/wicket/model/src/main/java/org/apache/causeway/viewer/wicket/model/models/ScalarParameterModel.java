@@ -26,13 +26,17 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.scalar.HasUiParameter;
+import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
 import lombok.Getter;
 import lombok.NonNull;
 
-public class ScalarParameterModel
-extends ScalarModel
+/**
+ * @see UiParameter
+ */
+public final class ScalarParameterModel
+extends UiAttributeWkt
 implements HasUiParameter {
 
     private static final long serialVersionUID = 1L;

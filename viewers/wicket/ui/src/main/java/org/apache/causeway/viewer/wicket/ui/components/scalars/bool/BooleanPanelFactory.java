@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.bool;
 import org.apache.wicket.Component;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
@@ -35,7 +35,7 @@ public class BooleanPanelFactory extends ComponentFactoryScalarTypeConstrainedAb
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
+    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
         return new BooleanPanel(id, scalarModel);
     }
 

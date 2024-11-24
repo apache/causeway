@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2MultiChoice</tt>;
  * synchronizes the {@link Model} of the <tt>Select2MultiChoice</tt>
- * with the parent {@link ScalarModel}, allowing also for pending values.
+ * with the parent {@link UiAttributeWkt}, allowing also for pending values.
  */
 @Log4j2
 public class ScalarModelWithMultiChoice
@@ -46,22 +46,22 @@ implements
 
     // -- FACTORY
 
-    public static ScalarModelWithMultiChoice chain(final @NonNull ScalarModel scalarModel) {
+    public static ScalarModelWithMultiChoice chain(final @NonNull UiAttributeWkt scalarModel) {
         return new ScalarModelWithMultiChoice(scalarModel);
     }
 
     // -- CONSTRUCTION
 
-    private ScalarModelWithMultiChoice(final ScalarModel scalarModel) {
+    private ScalarModelWithMultiChoice(final UiAttributeWkt scalarModel) {
         super(scalarModel); // chaining to scalarModel
     }
 
     /**
-     * chaining idiom: the {@link ScalarModel} we are chained to
+     * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
     @Override
-    public ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    public UiAttributeWkt scalarModel() {
+        return (UiAttributeWkt) super.getTarget();
     }
 
     @Override

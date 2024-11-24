@@ -38,7 +38,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -297,7 +297,7 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
+        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
             return new ScalarPanelTextFieldWithValueSemantics<T>(id, scalarModel, valueTypeClass);
         }
     }
@@ -313,7 +313,7 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
+        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
             return new ScalarPanelTextFieldNumeric<T>(id, scalarModel, valueTypeClass);
         }
     }
@@ -331,7 +331,7 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
+        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
             return new ScalarPanelTextFieldWithTemporalPicker<T>(id, scalarModel, valueTypeClass);
         }
     }
@@ -349,7 +349,7 @@ public class ComponentFactoryConfigWkt {
         }
 
         @Override
-        public Component createComponent(final String id, final ScalarModel scalarModel) {
+        public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
             return new CompositeValuePanel<T>(id, scalarModel, valueTypeClass);
         }
     }

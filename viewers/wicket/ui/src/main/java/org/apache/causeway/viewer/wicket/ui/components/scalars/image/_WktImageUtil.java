@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -76,7 +76,7 @@ class _WktImageUtil {
 
     public Optional<Image> asWicketImage(
             final @NonNull String id,
-            final @NonNull ScalarModel model) {
+            final @NonNull UiAttributeWkt model) {
 
       final ManagedObject adapter = model.getObject();
       if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {

@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 /**
  * Specialization of {@link ScalarPanelTextFieldAbstract},
@@ -37,7 +37,7 @@ extends ScalarPanelTextFieldAbstract<T> {
 
     public ScalarPanelTextFieldWithValueSemantics(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final Class<T> type) {
         super(id, scalarModel, type);
     }

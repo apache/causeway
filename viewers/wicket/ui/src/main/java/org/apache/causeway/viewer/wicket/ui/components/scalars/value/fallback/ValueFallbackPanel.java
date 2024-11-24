@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback;
 
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.value.semantics.Parser;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 
@@ -37,7 +37,7 @@ extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public ValueFallbackPanel(final String id, final ScalarModel scalarModel) {
+    public ValueFallbackPanel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
     }
 

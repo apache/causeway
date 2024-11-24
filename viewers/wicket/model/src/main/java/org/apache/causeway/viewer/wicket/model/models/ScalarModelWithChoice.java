@@ -27,7 +27,7 @@ extends
     IModel<T>,
     HasCommonContext {
 
-    ScalarModel scalarModel();
+    UiAttributeWkt scalarModel();
 
     default ManagedValue pendingValue() { return scalarModel().proposedValue(); }
 

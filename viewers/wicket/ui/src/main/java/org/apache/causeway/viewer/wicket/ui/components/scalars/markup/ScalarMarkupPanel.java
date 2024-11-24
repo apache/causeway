@@ -22,7 +22,7 @@ import java.util.EnumSet;
 
 import org.apache.wicket.Component;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 
@@ -37,7 +37,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T> {
 
     public ScalarMarkupPanel(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final Class<T> valueType,
             final ComponentFactoryKey markupComponentFactoryKey) {
         super(id, scalarModel, valueType);

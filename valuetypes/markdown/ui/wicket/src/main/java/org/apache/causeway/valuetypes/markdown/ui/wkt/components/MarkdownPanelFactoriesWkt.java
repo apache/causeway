@@ -21,7 +21,7 @@ package org.apache.causeway.valuetypes.markdown.ui.wkt.components;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.valuetypes.markdown.applib.value.Markdown;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.markup.MarkupPanelFactories;
@@ -44,7 +44,7 @@ public class MarkdownPanelFactoriesWkt {
         }
 
         @Override
-        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
+        protected MarkupComponent newMarkupComponent(final String id, final UiAttributeWkt model) {
             var markupComponent = new MarkdownComponentWkt(id, model);
             markupComponent.setEnabled(false);
             return markupComponent;

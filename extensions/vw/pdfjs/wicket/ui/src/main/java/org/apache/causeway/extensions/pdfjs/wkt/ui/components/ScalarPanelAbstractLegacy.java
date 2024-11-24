@@ -23,23 +23,23 @@ import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 abstract class ScalarPanelAbstractLegacy
-extends PanelAbstract<ManagedObject, ScalarModel> {
+extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     private static final long serialVersionUID = 1L;
 
     protected Component compactFrame;
     private Component regularFrame;
 
-    public ScalarPanelAbstractLegacy(final String id, final ScalarModel scalarModel) {
+    public ScalarPanelAbstractLegacy(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
     }
 
-    protected final ScalarModel scalarModel() {
+    protected final UiAttributeWkt scalarModel() {
         return super.getModel();
     }
 

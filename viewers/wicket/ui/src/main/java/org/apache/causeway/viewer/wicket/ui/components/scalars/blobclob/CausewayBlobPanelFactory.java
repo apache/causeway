@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
 
 import org.apache.wicket.Component;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
 
@@ -34,7 +34,7 @@ public class CausewayBlobPanelFactory extends ComponentFactoryScalarTypeConstrai
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
+    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
         return new CausewayBlobPanel(id, scalarModel);
     }
 

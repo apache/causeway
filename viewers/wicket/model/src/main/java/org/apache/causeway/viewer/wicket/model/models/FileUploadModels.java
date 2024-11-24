@@ -36,7 +36,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class FileUploadModels {
 
-    public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull ScalarModel scalarModel) {
+    public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull UiAttributeWkt scalarModel) {
         return new ScalarConvertingModel<List<FileUpload>, Blob>(scalarModel) {
 
             private static final long serialVersionUID = 1L;
@@ -68,7 +68,7 @@ public class FileUploadModels {
     }
 
     public ScalarConvertingModel<List<FileUpload>, Clob> clob(
-            final @NonNull ScalarModel scalarModel,
+            final @NonNull UiAttributeWkt scalarModel,
             final @NonNull Charset charset) {
 
         // Charset is not serializable.

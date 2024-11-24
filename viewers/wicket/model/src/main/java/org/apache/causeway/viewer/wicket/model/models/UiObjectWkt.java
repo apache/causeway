@@ -211,7 +211,7 @@ implements
     /**
      * Lazily populates with the current value of each property.
      */
-    public ScalarModel getPropertyModel(
+    public UiAttributeWkt getPropertyModel(
             final OneToOneAssociation property,
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
@@ -233,7 +233,7 @@ implements
 
         var propIdentifier = property.getFeatureIdentifier();
         var propertyScalarModels = propertyScalarModels();
-        final ScalarModel existingScalarModel = propertyScalarModels.get(propIdentifier);
+        final UiAttributeWkt existingScalarModel = propertyScalarModels.get(propIdentifier);
         if (existingScalarModel != null) {
             return existingScalarModel;
         }

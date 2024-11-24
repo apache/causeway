@@ -32,7 +32,15 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.NonNull;
 
-public interface UiParameter extends UiScalar {
+/**
+ * Represents a parameter of a method of a domain object.
+ * <p>
+ * A parameter is either singular or plural.
+ * {@link UiAttribute#isSingular} or {@link UiAttribute#isPlural}
+ * @See UiProperty
+ * @see UiAttribute
+ */
+public interface UiParameter extends UiAttribute {
 
     /** param meta model */
     @Override

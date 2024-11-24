@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.tree;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 
@@ -33,7 +33,7 @@ extends ScalarPanelAbstract2 {
 
     private static final long serialVersionUID = 1L;
 
-    public ParentedTreePanel(final String id, final ScalarModel scalarModel) {
+    public ParentedTreePanel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
     }
 

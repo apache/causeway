@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 import lombok.Getter;
 
@@ -27,7 +27,7 @@ public abstract class ComponentFactoryScalarTypeConstrainedAbstract
 extends ComponentFactoryScalarAbstract {
 
     /**
-     * Provides discrimination based on {@link ScalarModel#isScalarTypeAnyOf(Can)}.
+     * Provides discrimination based on {@link UiAttributeWkt#isScalarTypeAnyOf(Can)}.
      * <p>
      * If empty, no type constraints are applied.
      */
@@ -48,7 +48,7 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected final ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
+    protected final ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
 
         // discriminates based on given scalarTypes, if any
         if(scalarTypes.isNotEmpty()

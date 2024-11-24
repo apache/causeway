@@ -30,7 +30,17 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.UiModel;
 
-public interface UiScalar extends UiModel, HasMetaModelContext {
+/**
+ * We refer to both method parameters and instance fields collectively
+ * as "attributes" of a class or method.
+ * <p>
+ * The field case (aka property) is always singular.
+ * {@link UiAttribute#isSingular}
+ * <p>
+ * The parameter case is either singular or plural.
+ * {@link UiAttribute#isSingular} and {@link UiAttribute#isPlural}
+ */
+public interface UiAttribute extends UiModel, HasMetaModelContext {
 
     ObjectFeature getMetaModel();
 
@@ -108,7 +118,7 @@ public interface UiScalar extends UiModel, HasMetaModelContext {
         CHOICES,
         AUTO_COMPLETE,
         OBJECT_AUTO_COMPLETE;
-        public static ChoiceProviderSort valueOf(final UiScalar scalarModel) {
+        public static ChoiceProviderSort valueOf(final UiAttribute scalarModel) {
             if (scalarModel.hasChoices()) {
                 return ChoiceProviderSort.CHOICES;
             } else if(scalarModel.hasAutoComplete()) {

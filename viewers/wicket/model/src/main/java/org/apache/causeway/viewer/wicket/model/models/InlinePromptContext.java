@@ -35,7 +35,7 @@ public class InlinePromptContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final ScalarModel scalarModel;
+    private final UiAttributeWkt scalarModel;
 
     @Getter
     private final MarkupContainer scalarTypeContainer;

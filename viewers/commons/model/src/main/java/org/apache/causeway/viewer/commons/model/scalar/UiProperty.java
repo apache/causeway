@@ -28,7 +28,15 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiati
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-public interface UiProperty extends UiScalar {
+/**
+ * Represents a field of a domain object.
+ * <p>
+ * A property is always singular (never plural).
+ * {@link UiAttribute#isSingular} and {@link UiAttribute#isPlural}
+ * @See UiParameter
+ * @see UiAttribute
+ */
+public interface UiProperty extends UiAttribute {
 
     /** prop meta model */
     @Override

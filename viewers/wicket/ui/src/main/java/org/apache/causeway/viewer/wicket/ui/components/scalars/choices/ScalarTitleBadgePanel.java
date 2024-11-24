@@ -22,7 +22,7 @@ import java.util.EnumSet;
 
 import org.apache.wicket.Component;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldWithValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -36,7 +36,7 @@ class ScalarTitleBadgePanel<T> extends ScalarPanelTextFieldWithValueSemantics<T>
 
     private static final long serialVersionUID = 1L;
 
-    public ScalarTitleBadgePanel(final String id, final ScalarModel scalarModel, final Class<T> type) {
+    public ScalarTitleBadgePanel(final String id, final UiAttributeWkt scalarModel, final Class<T> type) {
         super(id, scalarModel, type);
     }
 

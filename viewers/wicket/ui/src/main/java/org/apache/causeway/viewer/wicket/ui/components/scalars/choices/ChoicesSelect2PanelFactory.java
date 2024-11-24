@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.scalars.choices;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 
@@ -30,7 +30,7 @@ extends ComponentFactoryScalarAbstract {
         TITLE_BADGE,
         VALUE_CHOICES,
         OBJECT_CHOICES;
-        static ComponentSort valueOf(final ScalarModel scalarModel) {
+        static ComponentSort valueOf(final UiAttributeWkt scalarModel) {
             if(scalarModel.getElementType().isValue()
                     && scalarModel.getChoiceProviderSort().isChoicesAny()) {
                 return scalarModel.isViewingMode()
@@ -46,7 +46,7 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected ScalarPanelAbstract createComponent(final String id, final ScalarModel scalarModel) {
+    protected ScalarPanelAbstract createComponent(final String id, final UiAttributeWkt scalarModel) {
         var componentSort = ComponentSort.valueOf(scalarModel);
         switch(componentSort) {
         case TITLE_BADGE:
@@ -62,7 +62,7 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
+    protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
         return ApplicationAdvice.APPLIES; //XXX depends on registration order, can we do better?
     }
 

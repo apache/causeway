@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.string;
 
 import java.util.EnumSet;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldTextualAbstract;
 
 /**
@@ -31,7 +31,7 @@ extends ScalarPanelTextFieldTextualAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public MultiLineStringPanel(final String id, final ScalarModel scalarModel) {
+    public MultiLineStringPanel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
     }
 

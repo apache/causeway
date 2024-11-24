@@ -24,7 +24,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.FormComponent;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelFormFieldAbstract;
@@ -38,7 +38,7 @@ extends ScalarPanelFormFieldAbstract<T> {
 
     public CompositeValuePanel(
             final String id,
-            final ScalarModel scalarModel,
+            final UiAttributeWkt scalarModel,
             final Class<T> valueType) {
         super(id, scalarModel, valueType);
     }
@@ -61,7 +61,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     }
 
     @Override
-    protected FormComponent<T> createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected FormComponent<T> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
         // read-only FormComponent, to receive the param/property name label
         return new AbstractTextComponent<T>(id) {
             private static final long serialVersionUID = 1L;

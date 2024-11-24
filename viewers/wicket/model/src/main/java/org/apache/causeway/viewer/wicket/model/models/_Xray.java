@@ -31,7 +31,7 @@ import lombok.experimental.UtilityClass;
 final class _Xray {
 
     static void onSclarModelUpdate(
-            final ScalarModel scalarModel, final ManagedObject oldValue, final ManagedObject newValue) {
+            final UiAttributeWkt scalarModel, final ManagedObject oldValue, final ManagedObject newValue) {
         if(!XrayUi.isXrayEnabled()) return;
 
         var oldPojo = MmUnwrapUtils.single(oldValue);

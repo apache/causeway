@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
@@ -60,7 +60,7 @@ implements ChoiceTitleHandler {
     private EntityLinkSimplePanel entityLinkOutputFormat;
     private final boolean isCompactFormat;
 
-    public ObjectChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
+    public ObjectChoicesSelect2Panel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel);
         this.isCompactFormat = scalarModel.getRenderingHint().isInTable();
     }
@@ -82,7 +82,7 @@ implements ChoiceTitleHandler {
     }
 
     @Override
-    protected FormComponent<ManagedObject> createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected FormComponent<ManagedObject> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
 
         this.entityLink = new ChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
         entityLink.setRequired(scalarModel.isRequired());

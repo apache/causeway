@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
+import org.apache.causeway.viewer.commons.model.scalar.UiAttribute;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
@@ -47,23 +47,26 @@ import lombok.NonNull;
 import lombok.Setter;
 
 /**
- * Represents a scalar of an entity, either a PROPERTY or
- * a PARAMETER.
- *
+ * We refer to both method parameters and instance fields collectively
+ * as "attributes" of a class or method.
  * <p>
- * Is the backing model to each of the fields that appear in forms (for entities
+ * Represents an attribute of a domain object, either a PROPERTY or
+ * a PARAMETER. Potentially plural in the latter case.
+ * <p>
+ * Is also the backing model to each of the fields that appear in forms (for entities
  * or action dialogs).
  *
  * @implSpec
  * <pre>
- * ScalarModel --chained-to--> UiObjectWkt
- * ScalarModel --provides--> ManagedObject <--provides-- ManagedValue
+ * UiAttributeWkt --chained-to--> UiObjectWkt
+ * UiAttributeWkt --provides--> ManagedObject <--provides-- ManagedValue
  * </pre>
+ * @see UiAttribute
  */
 //@Log4j2
-public abstract class ScalarModel
+public abstract class UiAttributeWkt
 extends ChainingModel<ManagedObject>
-implements HasRenderingHints, UiScalar, FormExecutorContext {
+implements HasRenderingHints, UiAttribute, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,7 +84,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    protected ScalarModel(
+    protected UiAttributeWkt(
             final UiObjectWkt parentUiObject,
             final ViewOrEditMode viewOrEdit) {
         this(parentUiObject, viewOrEdit, RenderingHint.REGULAR);
@@ -92,7 +95,7 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
      * {@link #getObject() value of this model} to be current value of the
      * property.
      */
-    protected ScalarModel(
+    protected UiAttributeWkt(
             final @NonNull UiObjectWkt parentEntityModel,
             final @NonNull ViewOrEditMode viewOrEdit,
             final @NonNull RenderingHint renderingHint) {

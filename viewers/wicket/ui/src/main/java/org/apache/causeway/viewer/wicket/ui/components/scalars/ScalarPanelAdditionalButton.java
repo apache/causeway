@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.RenderScenario;
 
@@ -34,7 +34,7 @@ enum ScalarPanelAdditionalButton {
     DISABLED_REASON {
         @Override
         boolean isVisible(
-                final ScalarModel scalarModel,
+                final UiAttributeWkt scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
             var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION;
@@ -50,7 +50,7 @@ enum ScalarPanelAdditionalButton {
     DISABLED_REASON_PROTOTYPING {
         @Override
         boolean isVisible(
-                final ScalarModel scalarModel,
+                final UiAttributeWkt scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
             var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
@@ -70,7 +70,7 @@ enum ScalarPanelAdditionalButton {
     CLEAR_FIELD {
         @Override
         boolean isVisible(
-                final ScalarModel scalarModel,
+                final UiAttributeWkt scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
 
@@ -104,7 +104,7 @@ enum ScalarPanelAdditionalButton {
     COPY_TO_CLIPBOARD {
         @Override
         boolean isVisible(
-                final ScalarModel scalarModel,
+                final UiAttributeWkt scalarModel,
                 final RenderScenario renderScenario,
                 final FieldFragment fieldFragment) {
             //XXX Future extension
@@ -114,6 +114,6 @@ enum ScalarPanelAdditionalButton {
     ;
 
     abstract boolean isVisible(
-            ScalarModel scalarModel, RenderScenario renderScenario, FieldFragment fieldFragment);
+            UiAttributeWkt scalarModel, RenderScenario renderScenario, FieldFragment fieldFragment);
 
 }

@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -64,7 +64,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         buildGui(scalarModel());
     }
 
-    private void buildGui(final ScalarModel scalarModel) {
+    private void buildGui(final UiAttributeWkt scalarModel) {
         buildGuiForParameters(scalarModel);
     }
 
@@ -77,7 +77,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         return this;
     }
 
-    private void buildGuiForParameters(final ScalarModel scalarModel) {
+    private void buildGuiForParameters(final UiAttributeWkt scalarModel) {
 
         WebMarkupContainer header = addHeader();
 

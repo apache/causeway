@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -42,12 +42,12 @@ public class TreePanelFactories {
         }
 
         @Override
-        protected Component createComponent(final String id, final ScalarModel scalarModel) {
+        protected Component createComponent(final String id, final UiAttributeWkt scalarModel) {
             return new ParentedTreePanel(id, scalarModel);
         }
 
         @Override
-        protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
+        protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
             if(!scalarModel.isScalarTypeSubtypeOf(org.apache.causeway.applib.graph.tree.TreeNode.class)) {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             }

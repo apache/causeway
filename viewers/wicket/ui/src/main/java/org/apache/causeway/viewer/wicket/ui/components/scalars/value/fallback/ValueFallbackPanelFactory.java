@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars.value.fallback;
 
 import org.apache.wicket.Component;
 
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarAbstract;
 
@@ -36,12 +36,12 @@ extends ComponentFactoryScalarAbstract {
     }
 
     @Override
-    public Component createComponent(final String id, final ScalarModel scalarModel) {
+    public Component createComponent(final String id, final UiAttributeWkt scalarModel) {
         return new ValueFallbackPanel(id, scalarModel);
     }
 
     @Override
-    protected ApplicationAdvice appliesTo(final ScalarModel scalarModel) {
+    protected ApplicationAdvice appliesTo(final UiAttributeWkt scalarModel) {
         if(!scalarModel.getElementType().isValue()) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }

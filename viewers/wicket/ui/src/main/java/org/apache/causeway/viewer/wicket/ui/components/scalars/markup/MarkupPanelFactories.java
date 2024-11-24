@@ -26,7 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -59,11 +59,11 @@ public class MarkupPanelFactories {
         }
 
         @Override
-        protected Component createComponent(final String id, final ScalarModel scalarModel) {
+        protected Component createComponent(final String id, final UiAttributeWkt scalarModel) {
             return new ScalarMarkupPanel<T>(id, scalarModel, valueType, this.key());
         }
 
-        protected abstract MarkupComponent newMarkupComponent(String id, ScalarModel model);
+        protected abstract MarkupComponent newMarkupComponent(String id, UiAttributeWkt model);
 
     }
 
@@ -113,7 +113,7 @@ public class MarkupPanelFactories {
         }
 
         @Override
-        protected MarkupComponent newMarkupComponent(final String id, final ScalarModel model) {
+        protected MarkupComponent newMarkupComponent(final String id, final UiAttributeWkt model) {
             var markupComponent = new MarkupComponent(id, model);
             markupComponent.setEnabled(false);
             return markupComponent;

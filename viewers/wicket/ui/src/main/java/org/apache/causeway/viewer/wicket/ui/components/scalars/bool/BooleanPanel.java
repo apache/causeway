@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.BooleanModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
@@ -46,7 +46,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
 
     private CheckBoxX checkBox;
 
-    public BooleanPanel(final String id, final ScalarModel scalarModel) {
+    public BooleanPanel(final String id, final UiAttributeWkt scalarModel) {
         super(id, scalarModel, Boolean.class);
     }
 
@@ -56,7 +56,7 @@ extends ScalarPanelFormFieldAbstract<Boolean> {
     }
 
     @Override
-    protected FormComponent<Boolean> createFormComponent(final String id, final ScalarModel scalarModel) {
+    protected FormComponent<Boolean> createFormComponent(final String id, final UiAttributeWkt scalarModel) {
         checkBox = Wkt.checkboxX(
                 id,
                 BooleanModel.forScalarModel(scalarModel),

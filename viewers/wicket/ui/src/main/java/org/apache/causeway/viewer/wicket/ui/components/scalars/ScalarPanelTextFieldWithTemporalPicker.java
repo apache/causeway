@@ -33,7 +33,7 @@ import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvide
 import org.apache.causeway.applib.value.semantics.TemporalSupport;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.TemporalDecompositionModel;
@@ -53,7 +53,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     private TemporalDecompositionModel<T> temporalDecomposition;
 
     public ScalarPanelTextFieldWithTemporalPicker(
-            final String id, final ScalarModel scalarModel, final Class<T> type) {
+            final String id, final UiAttributeWkt scalarModel, final Class<T> type) {
         super(id, scalarModel, type);
     }
 

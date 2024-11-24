@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
 
@@ -62,7 +62,7 @@ import lombok.RequiredArgsConstructor;
 class Select2OnSelect extends AbstractAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
-    private final ScalarModel scalarModel;
+    private final UiAttributeWkt scalarModel;
     private final ScalarModelChangeDispatcher select2ChangeDispatcher;
 
     private static enum Event {

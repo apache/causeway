@@ -32,7 +32,7 @@ import lombok.NonNull;
 
 /**
  * Wraps and unwraps the contained value within {@link ManagedObject},
- * as provided by a {@link ScalarModel}.
+ * as provided by a {@link UiAttributeWkt}.
  */
 public class ScalarUnwrappingModel<T>
 extends ChainingModel<T> {
@@ -43,7 +43,7 @@ extends ChainingModel<T> {
 
     public ScalarUnwrappingModel(
             final @NonNull Class<T> type,
-            final @NonNull ScalarModel scalarModel) {
+            final @NonNull UiAttributeWkt scalarModel) {
         super(scalarModel);
         this.type = type;
         _Assert.assertTrue(scalarModel.getElementType().isAssignableFrom(type), ()->
@@ -82,8 +82,8 @@ extends ChainingModel<T> {
         return _Casts.uncheckedCast(pojo);
     }
 
-    private ScalarModel scalarModel() {
-        return (ScalarModel) super.getTarget();
+    private UiAttributeWkt scalarModel() {
+        return (UiAttributeWkt) super.getTarget();
     }
 
 }

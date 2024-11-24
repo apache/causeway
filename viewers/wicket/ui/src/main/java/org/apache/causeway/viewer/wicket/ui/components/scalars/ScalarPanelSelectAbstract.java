@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -52,14 +52,14 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
 
     protected ScalarPanelSelectAbstract(
             final String id,
-            final ScalarModel scalarModel) {
+            final UiAttributeWkt scalarModel) {
         super(id, scalarModel, ManagedObject.class);
         setOutputMarkupId(true);
     }
 
     protected final Select2 createSelect2(
             final String id,
-            final Function<ScalarModel, ChoiceProviderAbstract> choiceProviderFactory) {
+            final Function<UiAttributeWkt, ChoiceProviderAbstract> choiceProviderFactory) {
         var scalarModel = scalarModel();
         var select2 = Select2.createSelect2(id, scalarModel,
                 choiceProviderFactory.apply(scalarModel),
