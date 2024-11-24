@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.actionresponse.ActionResultResponse;
 
 import lombok.NonNull;
@@ -51,20 +51,20 @@ implements FormExecutor, HasCommonContext {
         return new FormExecutorDefault(Either.left(actionModel));
     }
 
-    public static FormExecutor forProperty(final ScalarPropertyModel propertyModel) {
+    public static FormExecutor forProperty(final PropertyModel propertyModel) {
         return new FormExecutorDefault(Either.right(propertyModel));
     }
 
-    public static FormExecutor forMember(final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
+    public static FormExecutor forMember(final Either<ActionModel, PropertyModel> actionOrPropertyModel) {
         return new FormExecutorDefault(actionOrPropertyModel);
     }
 
     // -- CONSTRUCTION
 
-    private final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
+    private final Either<ActionModel, PropertyModel> actionOrPropertyModel;
 
     private FormExecutorDefault(
-            final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
+            final Either<ActionModel, PropertyModel> actionOrPropertyModel) {
         this.actionOrPropertyModel = actionOrPropertyModel;
     }
 

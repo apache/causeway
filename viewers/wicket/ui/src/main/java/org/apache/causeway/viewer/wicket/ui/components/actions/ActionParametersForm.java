@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract.Repaint;
@@ -174,7 +174,7 @@ extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+    protected Either<ActionModel, PropertyModel> getMemberModel() {
         return Either.left(actionModel());
     }
 

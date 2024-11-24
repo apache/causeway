@@ -53,7 +53,7 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
@@ -133,7 +133,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
         objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(prop->{
 
-            final ScalarPropertyModel scalarModel = (ScalarPropertyModel) entityModel
+            final PropertyModel scalarModel = (PropertyModel) entityModel
                     .getPropertyModel(
                             prop,
                             ViewOrEditMode.VIEWING,

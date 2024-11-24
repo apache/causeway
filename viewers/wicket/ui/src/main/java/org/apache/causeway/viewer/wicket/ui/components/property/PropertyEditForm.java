@@ -25,25 +25,25 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 final class PropertyEditForm
-extends PromptFormAbstract<ScalarPropertyModel> {
+extends PromptFormAbstract<PropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
     public PropertyEditForm(
             final String id,
             final Component parentPanel,
-            final ScalarPropertyModel propertyModel) {
+            final PropertyModel propertyModel) {
         super(id, parentPanel, propertyModel);
     }
 
-    private ScalarPropertyModel scalarPropertyModel() {
-        return (ScalarPropertyModel) super.getModel();
+    private PropertyModel scalarPropertyModel() {
+        return (PropertyModel) super.getModel();
     }
 
     @Override
@@ -65,7 +65,7 @@ extends PromptFormAbstract<ScalarPropertyModel> {
     }
 
     @Override
-    protected Either<ActionModel, ScalarPropertyModel> getMemberModel() {
+    protected Either<ActionModel, PropertyModel> getMemberModel() {
         return Either.right(scalarPropertyModel());
     }
 

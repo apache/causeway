@@ -80,7 +80,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
             final Identifier actionIdentifier,
             final Where where,
             final ColumnActionModifier columnActionModifier,
-            final ScalarPropertyModel associatedWithPropertyIfAny,
+            final PropertyModel associatedWithPropertyIfAny,
             final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         var delegate = ActionInteractionWkt.forEntity(
@@ -142,14 +142,14 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
     public static ActionModel forPropertyOrParameter(
             final ObjectAction action,
             final UiAttributeWkt scalarModel) {
-        return scalarModel instanceof ScalarPropertyModel
-                ? forProperty(action, (ScalarPropertyModel)scalarModel)
+        return scalarModel instanceof PropertyModel
+                ? forProperty(action, (PropertyModel)scalarModel)
                 : forParameter(action, (ParameterModel)scalarModel);
     }
 
     public static ActionModel forProperty(
             final ObjectAction action,
-            final ScalarPropertyModel propertyModel) {
+            final PropertyModel propertyModel) {
         return forEntity(
                         propertyModel.getParentUiModel(),
                         action.getFeatureIdentifier(),

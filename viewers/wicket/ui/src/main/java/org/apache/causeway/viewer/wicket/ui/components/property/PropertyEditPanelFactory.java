@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -37,12 +37,12 @@ public class PropertyEditPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof ScalarPropertyModel);
+        return appliesIf(model instanceof PropertyModel);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final ScalarPropertyModel scalarModel = (ScalarPropertyModel) model;
+        final PropertyModel scalarModel = (PropertyModel) model;
         return new PropertyEditPanel(id, scalarModel);
     }
 

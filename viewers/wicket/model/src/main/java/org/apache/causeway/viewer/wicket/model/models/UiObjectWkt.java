@@ -200,8 +200,8 @@ implements
 
     // -- PROPERTY MODELS (CHILDREN)
 
-    private transient Map<Identifier, ScalarPropertyModel> propertyScalarModels;
-    private Map<Identifier, ScalarPropertyModel> propertyScalarModels() {
+    private transient Map<Identifier, PropertyModel> propertyScalarModels;
+    private Map<Identifier, PropertyModel> propertyScalarModels() {
         if(propertyScalarModels==null) {
             propertyScalarModels = new HashMap<>();
         }
@@ -244,7 +244,7 @@ implements
                 renderingHint.asWhere());
 
         final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()
-        .map(uiModel->ScalarPropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
+        .map(uiModel->PropertyModel.wrap(uiModel, viewOrEdit, renderingHint))
         .peek(scalarModel->log.debug("adding: {}", scalarModel))
         .filter(scalarModel->propertyScalarModels.put(propIdentifier, scalarModel)==null)
         .count(); // consume the stream
@@ -288,7 +288,7 @@ implements
     @Override
     protected void onDetach() {
         propertyScalarModels().values()
-            .forEach(ScalarPropertyModel::detach);
+            .forEach(PropertyModel::detach);
         super.onDetach();
         propertyScalarModels = null;
     }

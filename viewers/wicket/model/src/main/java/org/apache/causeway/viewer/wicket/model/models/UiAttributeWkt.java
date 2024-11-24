@@ -106,12 +106,12 @@ implements HasRenderingHints, UiAttribute, FormExecutorContext {
     }
 
     /**
-     * This instance is either a {@link ParameterModel} or a {@link ScalarPropertyModel}.
+     * This instance is either a {@link ParameterModel} or a {@link PropertyModel}.
      */
-    public final Either<ParameterModel, ScalarPropertyModel> getSpecialization() {
+    public final Either<ParameterModel, PropertyModel> getSpecialization() {
         return this.isParameter()
                 ? Either.left((ParameterModel) this)
-                : Either.right((ScalarPropertyModel) this);
+                : Either.right((PropertyModel) this);
     }
 
     public <T> IModel<T> unwrapped(final Class<T> type) {

@@ -32,9 +32,10 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.prop.UiPropert
 import lombok.Getter;
 
 /**
+ * Wraps a {@link UiPropertyWkt}.
  * @see UiProperty
  */
-public final class ScalarPropertyModel
+public final class PropertyModel
 extends UiAttributeWkt
 implements HasUiProperty {
 
@@ -43,11 +44,11 @@ implements HasUiProperty {
     @Getter(onMethod_={@Override})
     private UiPropertyWkt uiProperty;
 
-    public static ScalarPropertyModel wrap(
+    public static PropertyModel wrap(
             final UiPropertyWkt uiProperty,
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
-        return new ScalarPropertyModel(uiProperty, viewOrEdit, renderingHint);
+        return new PropertyModel(uiProperty, viewOrEdit, renderingHint);
     }
 
     /**
@@ -55,7 +56,7 @@ implements HasUiProperty {
      * {@link #getObject() value of this model} to be current value of the
      * property.
      */
-    private ScalarPropertyModel(
+    private PropertyModel(
             final UiPropertyWkt uiProperty,
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
@@ -65,7 +66,7 @@ implements HasUiProperty {
     }
 
     /** @return new instance bound to the same delegate */
-    public ScalarPropertyModel copyHaving(
+    public PropertyModel copyHaving(
             final ViewOrEditMode viewOrEdit,
             final RenderingHint renderingHint) {
         return wrap(uiProperty, viewOrEdit, renderingHint);

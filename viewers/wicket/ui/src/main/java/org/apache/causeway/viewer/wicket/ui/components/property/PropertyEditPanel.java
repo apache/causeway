@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * {@link org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel}.
  */
 class PropertyEditPanel
-extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
+extends PanelAbstract<ManagedObject, PropertyModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
 
     public PropertyEditPanel(
             final String id,
-            final ScalarPropertyModel scalarModel) {
+            final PropertyModel scalarModel) {
 
         super(id, scalarModel.copyHaving(
                 ViewOrEditMode.EDITING,
@@ -68,7 +68,7 @@ extends PanelAbstract<ManagedObject, ScalarPropertyModel> {
         buildGuiForParameters(scalarModel);
     }
 
-    ScalarPropertyModel scalarModel() {
+    PropertyModel scalarModel() {
         return super.getModel();
     }
 

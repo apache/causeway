@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
+import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeListener;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
@@ -81,7 +81,7 @@ implements ScalarModelChangeListener {
     // -- SETUP
 
     protected abstract void addParameters();
-    protected abstract Either<ActionModel, ScalarPropertyModel> getMemberModel();
+    protected abstract Either<ActionModel, PropertyModel> getMemberModel();
 
     @Override
     public final void renderHead(final IHeaderResponse response) {
