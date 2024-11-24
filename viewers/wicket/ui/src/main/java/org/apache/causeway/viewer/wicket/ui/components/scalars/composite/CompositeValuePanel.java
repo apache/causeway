@@ -80,7 +80,7 @@ extends ScalarPanelFormFieldAbstract<T> {
             @Override
             public void updateModel() {
                 // update not allowed; the CompositeValueUpdaterForParameter updates
-                // the underlying ScalarModel on nested dialog submission
+                // the underlying attribute model on nested dialog submission
             }
 
         };

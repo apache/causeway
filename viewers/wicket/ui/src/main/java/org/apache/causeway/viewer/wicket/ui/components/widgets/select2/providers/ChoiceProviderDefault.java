@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 public class ChoiceProviderDefault
-extends ChoiceProviderAbstractForScalarModel {
+extends ChoiceProviderAbstractForAttributeModel {
 
     private static final long serialVersionUID = 1L;
 

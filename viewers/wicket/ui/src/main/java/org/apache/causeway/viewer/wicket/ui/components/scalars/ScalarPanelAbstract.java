@@ -76,7 +76,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, UiAttributeWkt>
-implements ScalarModelChangeListener {
+implements AttributeModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -319,7 +319,7 @@ implements ScalarModelChangeListener {
         addCssFromMetaModel();
 
         addChangeListener(this);
-        installScalarModelChangeBehavior();
+        installModelChangeBehavior();
     }
 
     protected abstract void setupInlinePrompt();
@@ -402,7 +402,7 @@ implements ScalarModelChangeListener {
                 final String disabledReason = attributeModel.disabledReason()
                         .flatMap(InteractionVeto::getReasonAsString)
                         .orElseThrow(()->_Exceptions
-                                .unrecoverable("framework bug: ScalarModel indicates it has a disabled-reason, yet its empty"));
+                                .unrecoverable("framework bug: AttributeModel indicates it has a disabled-reason, yet its empty"));
 
                 onInitializeReadonly(disabledReason);
             }
@@ -471,15 +471,15 @@ implements ScalarModelChangeListener {
 
     // //////////////////////////////////////
 
-    protected void installScalarModelChangeBehavior() {
-        addOrReplaceBehavoir(ScalarModelDefaultChangeBehavior.class, ()->new ScalarModelDefaultChangeBehavior(this));
+    protected void installModelChangeBehavior() {
+        addOrReplaceBehavoir(AttributeModelDefaultChangeBehavior.class, ()->new AttributeModelDefaultChangeBehavior(this));
     }
 
     @RequiredArgsConstructor
-    static class ScalarModelChangeDispatcherImpl
-    implements ScalarModelChangeDispatcher, Serializable {
+    static class AttributeModelChangeDispatcherImpl
+    implements AttributeModelChangeDispatcher, Serializable {
         private static final long serialVersionUID = 1L;
-        private final List<ScalarModelChangeListener> changeListeners = _Lists.newArrayList();
+        private final List<AttributeModelChangeListener> changeListeners = _Lists.newArrayList();
 
         @Getter(onMethod_={@Override})
         private final ScalarPanelAbstract scalarPanel;
@@ -490,25 +490,25 @@ implements ScalarModelChangeListener {
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
             _Xray.onParamOrPropertyEdited(scalarPanel);
-            ScalarModelChangeDispatcher.super.notifyUpdate(target);
+            AttributeModelChangeDispatcher.super.notifyUpdate(target);
         }
 
         @Override
-        public @NonNull Iterable<ScalarModelChangeListener> getChangeListeners() {
+        public @NonNull Iterable<AttributeModelChangeListener> getChangeListeners() {
             return Collections.unmodifiableCollection(changeListeners);
         }
 
-        void addChangeListener(final ScalarModelChangeListener listener) {
+        void addChangeListener(final AttributeModelChangeListener listener) {
             changeListeners.add(listener);
         }
     }
 
     @Getter
-    private final ScalarModelChangeDispatcher scalarModelChangeDispatcher =
-            new ScalarModelChangeDispatcherImpl(this);
+    private final AttributeModelChangeDispatcher attributeModelChangeDispatcher =
+            new AttributeModelChangeDispatcherImpl(this);
 
-    public void addChangeListener(final ScalarModelChangeListener listener) {
-        ((ScalarModelChangeDispatcherImpl)getScalarModelChangeDispatcher()).addChangeListener(listener);
+    public void addChangeListener(final AttributeModelChangeListener listener) {
+        ((AttributeModelChangeDispatcherImpl)getAttributeModelChangeDispatcher()).addChangeListener(listener);
     }
 
     protected final <T extends Behavior> void addOrReplaceBehavoir(

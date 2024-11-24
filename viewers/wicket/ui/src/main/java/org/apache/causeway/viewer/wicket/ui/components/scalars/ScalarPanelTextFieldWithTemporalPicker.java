@@ -124,7 +124,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
     }
 
     @Override
-    protected void installScalarModelChangeBehavior() {
+    protected void installModelChangeBehavior() {
         // don't install the default change listener, instead OnChangeAjaxBehavior is installed above
     }
 
@@ -150,7 +150,7 @@ extends ScalarPanelTextFieldWithValueSemantics<T>  {
             protected void onUpdate(final AjaxRequestTarget target) {
                 // triggers update of following args (action prompt)
                 ScalarPanelTextFieldWithTemporalPicker.this
-                    .getScalarModelChangeDispatcher().notifyUpdate(target);
+                    .getAttributeModelChangeDispatcher().notifyUpdate(target);
             }
         });
         return textField;

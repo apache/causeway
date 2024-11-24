@@ -21,25 +21,25 @@ package org.apache.causeway.viewer.wicket.ui.components.scalars;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 
-class ScalarModelDefaultChangeBehavior extends AjaxFormComponentUpdatingBehavior {
+class AttributeModelDefaultChangeBehavior extends AjaxFormComponentUpdatingBehavior {
     private static final long serialVersionUID = 1L;
 
     private final ScalarPanelAbstract scalarPanel;
 
-    ScalarModelDefaultChangeBehavior(final ScalarPanelAbstract scalarPanel) {
+    AttributeModelDefaultChangeBehavior(final ScalarPanelAbstract scalarPanel) {
         super("change");
         this.scalarPanel = scalarPanel;
     }
 
     @Override
     protected void onUpdate(final AjaxRequestTarget target) {
-        scalarPanel.getScalarModelChangeDispatcher().notifyUpdate(target);
+        scalarPanel.getAttributeModelChangeDispatcher().notifyUpdate(target);
     }
 
     @Override
     protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
         super.onError(target, e);
-        scalarPanel.getScalarModelChangeDispatcher().notifyError(target);
+        scalarPanel.getAttributeModelChangeDispatcher().notifyError(target);
     }
 
 }

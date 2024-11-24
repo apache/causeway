@@ -63,7 +63,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
         var attributeModel = attributeModel();
         var select2 = Select2.createSelect2(id, attributeModel,
                 choiceProviderFactory.apply(attributeModel),
-                getScalarModelChangeDispatcher());
+                getAttributeModelChangeDispatcher());
         var settings = select2.getSettings();
         settings.setPlaceholder(attributeModel.getFriendlyName());
 
@@ -87,7 +87,7 @@ extends ScalarPanelFormFieldAbstract<ManagedObject> {
     // -- CUSTOM UPDATING BEHAVIOR
 
     @Override
-    protected final void installScalarModelChangeBehavior() {
+    protected final void installModelChangeBehavior() {
         /* no-op, as we already have the Select2OnSelect behavior
          * (directly) installed with the Select2 form component
          */

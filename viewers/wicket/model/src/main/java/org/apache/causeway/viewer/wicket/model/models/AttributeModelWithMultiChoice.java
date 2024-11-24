@@ -37,22 +37,22 @@ import lombok.extern.log4j.Log4j2;
  * with the parent {@link UiAttributeWkt}, allowing also for pending values.
  */
 @Log4j2
-public class ScalarModelWithMultiChoice
+public class AttributeModelWithMultiChoice
 extends ChainingModel<ArrayList<ObjectMemento>>
 implements
-    ScalarModelWithChoice<ArrayList<ObjectMemento>> {
+    AttributeModelWithChoice<ArrayList<ObjectMemento>> {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORY
 
-    public static ScalarModelWithMultiChoice chain(final @NonNull UiAttributeWkt attributeModel) {
-        return new ScalarModelWithMultiChoice(attributeModel);
+    public static AttributeModelWithMultiChoice chain(final @NonNull UiAttributeWkt attributeModel) {
+        return new AttributeModelWithMultiChoice(attributeModel);
     }
 
     // -- CONSTRUCTION
 
-    private ScalarModelWithMultiChoice(final UiAttributeWkt attributeModel) {
+    private AttributeModelWithMultiChoice(final UiAttributeWkt attributeModel) {
         super(attributeModel); // chaining to attributeModel
     }
 

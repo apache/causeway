@@ -32,10 +32,10 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithMultiChoice;
-import org.apache.causeway.viewer.wicket.model.models.ScalarModelWithSingleChoice;
+import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithMultiChoice;
+import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithSingleChoice;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeDispatcher;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.NonNull;
@@ -56,16 +56,16 @@ implements
             final String id,
             final UiAttributeWkt attributeModel,
             final ChoiceProviderAbstract choiceProvider,
-            final ScalarModelChangeDispatcher select2ChangeDispatcher) {
+            final AttributeModelChangeDispatcher select2ChangeDispatcher) {
         var select2 = new Select2(attributeModel.isSingular()
                 ? Either.left(
                         Select2ChoiceExt.create(id,
-                                ScalarModelWithSingleChoice.chain(attributeModel),
+                                AttributeModelWithSingleChoice.chain(attributeModel),
                                 attributeModel,
                                 choiceProvider))
                 : Either.right(
                         Select2MultiChoiceExt.create(id,
-                                ScalarModelWithMultiChoice.chain(attributeModel),
+                                AttributeModelWithMultiChoice.chain(attributeModel),
                                 attributeModel,
                                 choiceProvider)));
 

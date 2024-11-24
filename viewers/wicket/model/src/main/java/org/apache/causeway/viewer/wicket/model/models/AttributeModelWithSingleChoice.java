@@ -31,22 +31,22 @@ import lombok.NonNull;
  * with the parent {@link UiAttributeWkt}.
  */
 //@Log4j2
-public class ScalarModelWithSingleChoice
+public class AttributeModelWithSingleChoice
 extends ChainingModel<ObjectMemento>
 implements
-    ScalarModelWithChoice<ObjectMemento> {
+    AttributeModelWithChoice<ObjectMemento> {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORY
 
-    public static ScalarModelWithSingleChoice chain(final @NonNull UiAttributeWkt attributeModel) {
-        return new ScalarModelWithSingleChoice(attributeModel);
+    public static AttributeModelWithSingleChoice chain(final @NonNull UiAttributeWkt attributeModel) {
+        return new AttributeModelWithSingleChoice(attributeModel);
     }
 
     // -- CONSTRUCTION
 
-    private ScalarModelWithSingleChoice(final UiAttributeWkt attributeModel) {
+    private AttributeModelWithSingleChoice(final UiAttributeWkt attributeModel) {
         super(attributeModel); // chaining to attributeModel
     }
 

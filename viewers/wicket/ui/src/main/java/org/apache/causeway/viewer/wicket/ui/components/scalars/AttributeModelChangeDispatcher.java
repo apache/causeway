@@ -22,9 +22,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import lombok.NonNull;
 
-public interface ScalarModelChangeDispatcher {
+public interface AttributeModelChangeDispatcher {
 
-    @NonNull Iterable<ScalarModelChangeListener> getChangeListeners();
+    @NonNull Iterable<AttributeModelChangeListener> getChangeListeners();
     @NonNull ScalarPanelAbstract getScalarPanel();
 
     default void notifyUpdate(final AjaxRequestTarget target) {

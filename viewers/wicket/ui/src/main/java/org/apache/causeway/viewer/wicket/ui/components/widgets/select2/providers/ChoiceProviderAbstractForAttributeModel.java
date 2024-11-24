@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-public abstract class ChoiceProviderAbstractForScalarModel
+public abstract class ChoiceProviderAbstractForAttributeModel
 extends ChoiceProviderAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ extends ChoiceProviderAbstract {
     private final UiAttributeWkt attributeModel;
     private final UiAttribute.ChoiceProviderSort choiceProviderSort;
 
-    protected ChoiceProviderAbstractForScalarModel(final UiAttributeWkt attributeModel) {
+    protected ChoiceProviderAbstractForAttributeModel(final UiAttributeWkt attributeModel) {
         super();
         this.attributeModel = attributeModel;
         this.choiceProviderSort = UiAttribute.ChoiceProviderSort.valueOf(attributeModel);

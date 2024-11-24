@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
-import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarModelChangeListener;
+import org.apache.causeway.viewer.wicket.ui.components.scalars.AttributeModelChangeListener;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
@@ -54,7 +54,7 @@ public abstract class PromptFormAbstract<T extends
     FormExecutorContext
     & IModel<ManagedObject>>
 extends OkCancelForm<T>
-implements ScalarModelChangeListener {
+implements AttributeModelChangeListener {
 
     private static final long serialVersionUID = 1L;
 

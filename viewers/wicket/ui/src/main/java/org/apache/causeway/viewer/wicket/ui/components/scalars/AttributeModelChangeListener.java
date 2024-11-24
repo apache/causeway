@@ -16,19 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
+public interface AttributeModelChangeListener {
 
-public interface ScalarModelWithChoice<T>
-extends
-    IModel<T>,
-    HasCommonContext {
+    void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
 
-    UiAttributeWkt attributeModel();
-
-    default ManagedValue pendingValue() { return attributeModel().proposedValue(); }
+    void onError(AjaxRequestTarget target, ScalarPanelAbstract scalarPanel);
 
 }
