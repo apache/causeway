@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.commons.model.decorators.ConfirmDecorator.Conf
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
@@ -89,7 +89,7 @@ extends PromptFormAbstract<ActionModel> {
             final UiParameterWkt paramModel,
             final Consumer<ScalarPanelAbstract> onNewScalarPanel) {
 
-        var scalarParamModel = ScalarParameterModel.wrap(paramModel);
+        var scalarParamModel = ParameterModel.wrap(paramModel);
 
         // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
         var component = getComponentFactoryRegistry()

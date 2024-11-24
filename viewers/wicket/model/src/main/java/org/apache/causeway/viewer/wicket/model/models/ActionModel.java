@@ -81,7 +81,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
             final Where where,
             final ColumnActionModifier columnActionModifier,
             final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
+            final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         var delegate = ActionInteractionWkt.forEntity(
                 parentEntityModel,
@@ -144,7 +144,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
             final UiAttributeWkt scalarModel) {
         return scalarModel instanceof ScalarPropertyModel
                 ? forProperty(action, (ScalarPropertyModel)scalarModel)
-                : forParameter(action, (ScalarParameterModel)scalarModel);
+                : forParameter(action, (ParameterModel)scalarModel);
     }
 
     public static ActionModel forProperty(
@@ -160,7 +160,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
 
     public static ActionModel forParameter(
             final ObjectAction action,
-            final ScalarParameterModel parameterModel) {
+            final ParameterModel parameterModel) {
         //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
         var param = parameterModel.getMetaModel();
         if(param.isSingular()
@@ -246,7 +246,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
     }
 
     @Override
-    public Optional<ScalarParameterModel> getAssociatedParameter() {
+    public Optional<ParameterModel> getAssociatedParameter() {
         return delegate.associatedWithParameter();
     }
 

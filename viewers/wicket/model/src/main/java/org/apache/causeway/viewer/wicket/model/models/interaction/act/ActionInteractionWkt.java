@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
-import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
+import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
@@ -82,7 +82,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     private Can<UiParameterWkt> childModels;
     private @Nullable ScalarPropertyModel associatedWithPropertyIfAny;
-    private @Nullable ScalarParameterModel associatedWithParameterIfAny;
+    private @Nullable ParameterModel associatedWithParameterIfAny;
     private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
 
     public static ActionInteractionWkt forEntity(
@@ -90,7 +90,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final Identifier actionIdentifier,
             final Where where,
             final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
+            final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
 
         var onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
@@ -120,7 +120,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
              */
             final Optional<ObjectAction> objectAction,
             final ScalarPropertyModel associatedWithPropertyIfAny,
-            final ScalarParameterModel associatedWithParameterIfAny,
+            final ParameterModel associatedWithParameterIfAny,
             final EntityCollectionModel associatedWithCollectionIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
@@ -180,7 +180,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         return Optional.ofNullable(associatedWithPropertyIfAny);
     }
 
-    public Optional<ScalarParameterModel> associatedWithParameter() {
+    public Optional<ParameterModel> associatedWithParameter() {
         return Optional.ofNullable(associatedWithParameterIfAny);
     }
 

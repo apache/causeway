@@ -33,16 +33,17 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
+ * Wraps a {@link UiParameterWkt}.
  * @see UiParameter
  */
-public final class ScalarParameterModel
+public final class ParameterModel
 extends UiAttributeWkt
 implements HasUiParameter {
 
     private static final long serialVersionUID = 1L;
 
-    public static ScalarParameterModel wrap(final UiParameterWkt delegate) {
-        return new ScalarParameterModel(delegate);
+    public static ParameterModel wrap(final UiParameterWkt delegate) {
+        return new ParameterModel(delegate);
     }
 
     @Getter(onMethod_={@Override})
@@ -53,7 +54,7 @@ implements HasUiParameter {
      * object, with the {@link #getObject() value of this model} to be default
      * value (if any) of that action parameter.
      */
-    private ScalarParameterModel(
+    private ParameterModel(
             final UiParameterWkt uiParameter) {
         super(
                 UiObjectWkt.ofAdapter(uiParameter.getOwner()),
