@@ -106,7 +106,7 @@ implements HasMetaModelContext {
 
     }
 
-    private final ObjectSpecificationAbstract inspectedTypeSpec;
+    private final ObjectSpecificationDefault inspectedTypeSpec;
 
     @Getter private final Class<?> introspectedClass;
 
@@ -122,7 +122,7 @@ implements HasMetaModelContext {
     // -- CONSTRUCTOR
 
     public FacetedMethodsBuilder(
-            final ObjectSpecificationAbstract inspectedTypeSpec,
+            final ObjectSpecificationDefault inspectedTypeSpec,
             final FacetProcessor facetProcessor,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 

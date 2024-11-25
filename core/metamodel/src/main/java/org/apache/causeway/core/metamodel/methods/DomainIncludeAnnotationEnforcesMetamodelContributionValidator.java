@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
@@ -60,7 +60,10 @@ extends MetaModelValidatorAbstract {
 
     @Inject
     public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
-        super(mmc, spec->((spec instanceof ObjectSpecificationAbstract) && !spec.isAbstract() && !spec.getBeanSort().isManagedBeanNotContributing() && !spec.isValue()));
+        super(mmc, spec->((spec instanceof ObjectSpecificationDefault)
+            && !spec.isAbstract()
+            && !spec.getBeanSort().isManagedBeanNotContributing()
+            && !spec.isValue()));
         this.classCache = _ClassCache.getInstance();
     }
 
@@ -132,7 +135,7 @@ extends MetaModelValidatorAbstract {
         methodsIntendedToBeIncludedButNotPickedUp.stream()
         .forEach(notPickedUpMethod->{
             var unmetContraints =
-                    unmetContraints((ObjectSpecificationAbstract) spec, notPickedUpMethod)
+                    unmetContraints((ObjectSpecificationDefault) spec, notPickedUpMethod)
                     .stream()
                     .collect(Collectors.joining("; "));
 
@@ -147,7 +150,7 @@ extends MetaModelValidatorAbstract {
                     unmetContraints);
         });
 
-        _OrphanedSupportingMethodValidator.validate((ObjectSpecificationAbstract)spec,
+        _OrphanedSupportingMethodValidator.validate((ObjectSpecificationDefault)spec,
                 supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp);
 
     }
@@ -155,7 +158,7 @@ extends MetaModelValidatorAbstract {
     // -- HELPER - VALIDATION LOGIC
 
     private List<String> unmetContraints(
-            final ObjectSpecificationAbstract spec,
+            final ObjectSpecificationDefault spec,
             final ResolvedMethod method) {
 
         //var type = spec.getCorrespondingClass();

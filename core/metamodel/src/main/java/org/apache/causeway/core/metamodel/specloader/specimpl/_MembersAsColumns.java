@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
+package org.apache.causeway.core.metamodel.specloader.specimpl;
 
 import java.util.Comparator;
 import java.util.HashMap;

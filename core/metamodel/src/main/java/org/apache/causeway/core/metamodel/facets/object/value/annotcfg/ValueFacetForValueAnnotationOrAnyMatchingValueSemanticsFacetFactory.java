@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacet
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
@@ -140,7 +140,7 @@ extends FacetFactoryAbstract {
         FacetUtil.addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec));
         FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
 
-        ((ObjectSpecificationAbstract)valueSpec).invalidateCachedFacets(); // optimization stuff
+        ((ObjectSpecificationDefault)valueSpec).invalidateCachedFacets(); // optimization stuff
 
         _Assert.assertTrue(valueSpec.valueFacet().isPresent());
         _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());

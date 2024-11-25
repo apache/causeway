@@ -18,18 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
@@ -37,27 +42,39 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
@@ -66,9 +83,11 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
+import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.causeway.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
@@ -81,6 +100,7 @@ import org.apache.causeway.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -95,15 +115,327 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
-@EqualsAndHashCode(of = "correspondingClass", callSuper = false)
-@lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
 @Log4j2
-public abstract class ObjectSpecificationAbstract
+public class ObjectSpecificationDefault
 implements ObjectSpecification {
+
+    // -- CONSTRUCTION
+
+    /**
+     * Lazily built by {@link #getMember(Method)}.
+     */
+    private Map<ResolvedMethod, ObjectMember> membersByMethod = null;
+
+    private final FacetedMethodsBuilder facetedMethodsBuilder;
+    private final ClassSubstitutorRegistry classSubstitutorRegistry;
+
+    @Getter
+    private final IntrospectionPolicy introspectionPolicy;
+
+    public ObjectSpecificationDefault(
+            final CausewayBeanMetaData typeMeta,
+            final MetaModelContext mmc,
+            final FacetProcessor facetProcessor,
+            final PostProcessor postProcessor,
+            final ClassSubstitutorRegistry classSubstitutorRegistry) {
+
+        this.correspondingClass = typeMeta.getCorrespondingClass();
+        this.logicalType = typeMeta.logicalType();
+        this.fullName = correspondingClass.getName();
+        this.shortName = typeMeta.logicalType().getLogicalTypeSimpleName();
+        this.beanSort = typeMeta.beanSort();
+
+        this.facetHolder = FacetHolder.simple(
+            facetProcessor.getMetaModelContext(),
+            Identifier.classIdentifier(logicalType));
+
+        this.facetProcessor = facetProcessor;
+        this.postProcessor = postProcessor;
+
+        this.isVetoedForInjection = switch (typeMeta.managedBy()) {
+            case NONE, CAUSEWAY, PERSISTENCE -> true;
+            case UNSPECIFIED, SPRING  -> false;
+        };
+        this.classSubstitutorRegistry = classSubstitutorRegistry;
+
+        // must install EncapsulationFacet (if any) and MemberAnnotationPolicyFacet (if any)
+        facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
+
+        // naturally supports attribute inheritance from the type's hierarchy
+        final IntrospectionPolicy introspectionPolicy =
+                this.lookupFacet(IntrospectionPolicyFacet.class)
+                .map(introspectionPolicyFacet->
+                        introspectionPolicyFacet
+                        .getIntrospectionPolicy(mmc.getConfiguration()))
+                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
+
+        this.introspectionPolicy = introspectionPolicy;
+
+        this.facetedMethodsBuilder =
+                new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);
+    }
+
+    // -- CONTRACT
+
+    @Override
+    public int hashCode() {
+        return correspondingClass.hashCode();
+    }
+    @Override
+    public boolean equals(final Object o) {
+        return (o instanceof ObjectSpecification other)
+            ? Objects.equals(this.correspondingClass, other.getCorrespondingClass())
+            : false;
+    }
+    @Override
+    public String toString() {
+        return "ObjSpec[class=%s, sort=%s, super=%s]"
+            .formatted(getFullIdentifier(), getBeanSort().name(), superclass() == null
+                ? "Object"
+                : superclass().getFullIdentifier());
+    }
+
+    protected void introspectTypeHierarchy() {
+
+        facetedMethodsBuilder.introspectClass();
+
+        // name
+        addNamedFacetIfRequired();
+
+        // go no further if a value
+        if(this.isValue()) {
+            if (log.isDebugEnabled()) {
+                log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
+            }
+            return;
+        }
+
+        // superclass
+        final Class<?> superclass = getCorrespondingClass().getSuperclass();
+        loadSpecOfSuperclass(superclass);
+
+        // walk superinterfaces
+
+        //
+        // REVIEW: the processing here isn't quite the same as with
+        // superclasses, in that with superclasses the superclass adds this type as its
+        // subclass, whereas here this type defines itself as the subtype.
+        //
+        // it'd be nice to push the responsibility for adding subclasses to
+        // the interface type... needs some tests around it, though, before
+        // making that refactoring.
+        //
+        final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
+        final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
+        for (var interfaceType : interfaceTypes) {
+            var interfaceSubstitute = classSubstitutorRegistry.getSubstitution(interfaceType);
+            if (interfaceSubstitute.isReplace()) {
+                var interfaceSpec = getSpecificationLoader().loadSpecification(interfaceSubstitute.getReplacement());
+                interfaceSpecList.add(interfaceSpec);
+            }
+        }
+
+        updateAsSubclassTo(interfaceSpecList);
+        updateInterfaces(interfaceSpecList);
+    }
+
+    protected void introspectMembers() {
+
+        // yet this logic does not skip UNKNONW
+        if(this.getBeanSort().isCollection()
+                || this.getBeanSort().isVetoed()
+                || this.isValue()) {
+            if (log.isDebugEnabled()) {
+                log.debug("skipping full introspection for {} type {}", this.getBeanSort(), getFullIdentifier());
+            }
+            return;
+        }
+
+        // create associations and actions
+        replaceAssociations(createAssociations());
+        replaceActions(createActions());
+
+        postProcess();
+    }
+
+    private void addNamedFacetIfRequired() {
+        if (getFacet(MemberNamedFacet.class) == null) {
+            addFacet(new MemberNamedFacetForStaticMemberName(
+                    _Strings.asNaturalName.apply(getShortIdentifier()),
+                    this));
+        }
+    }
+
+    // -- create associations and actions
+    private Stream<ObjectAssociation> createAssociations() {
+        return facetedMethodsBuilder.getAssociationFacetedMethods()
+                .stream()
+                .map(this::createAssociation)
+                .filter(_NullSafe::isPresent);
+    }
+
+    private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
+        if (facetMethod.getFeatureType().isCollection()) {
+            return OneToManyAssociationDefault.forMethod(facetMethod);
+        } else if (facetMethod.getFeatureType().isProperty()) {
+            return OneToOneAssociationDefault.forMethod(facetMethod);
+        } else {
+            return null;
+        }
+    }
+
+    private Stream<ObjectAction> createActions() {
+        return facetedMethodsBuilder.getActionFacetedMethods()
+                .stream()
+                .map(this::createAction)
+                .filter(_NullSafe::isPresent);
+    }
+
+    private ObjectAction createAction(final FacetedMethod facetedMethod) {
+        if (facetedMethod.getFeatureType().isAction()) {
+            /* Assuming, that facetedMethod was already populated with ContributingFacet,
+             * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
+             * that is held by the mixin's type spec. */
+            mixinFacet()
+            .flatMap(mixinFacet->_Casts.castTo(MixinFacetAbstract.class, mixinFacet))
+            .ifPresent(mixinFacetAbstract->
+                mixinFacetAbstract.initMixinSortFrom(facetedMethod));
+
+            return this.isMixin()
+                    ? ObjectActionDefault.forMixinMain(facetedMethod)
+                    : ObjectActionDefault.forMethod(facetedMethod);
+        } else {
+            return null;
+        }
+    }
+
+    // -- getObjectAction
+
+    @Override
+    public Optional<ObjectAction> getDeclaredAction(
+            final @Nullable String id,
+            final ImmutableEnumSet<ActionScope> actionScopes,
+            final MixedIn mixedIn) {
+
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+
+        return _Strings.isEmpty(id)
+            ? Optional.empty()
+            : streamDeclaredActions(actionScopes, mixedIn)
+                .filter(action->
+                    id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
+                            || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
+                )
+                .findFirst();
+    }
+
+    @Override
+    public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+
+        if (membersByMethod == null) {
+            this.membersByMethod = catalogueMembers();
+        }
+
+        var member = membersByMethod.get(method);
+        return Optional.ofNullable(member);
+    }
+
+    private Map<ResolvedMethod, ObjectMember> catalogueMembers() {
+        var membersByMethod = _Maps.<ResolvedMethod, ObjectMember>newHashMap();
+        cataloguePropertiesAndCollections(membersByMethod::put);
+        catalogueActions(membersByMethod::put);
+        return membersByMethod;
+    }
+
+    private void cataloguePropertiesAndCollections(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
+        streamDeclaredAssociations(MixedIn.EXCLUDED)
+        .forEach(field->
+            field.streamFacets(ImperativeFacet.class)
+                .map(ImperativeFacet::getMethods)
+                .flatMap(Can::stream)
+                .map(MethodFacade::asMethodElseFail) // expected regular
+                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
+                .forEach(imperativeFacetMethod->onMember.accept(imperativeFacetMethod, field)));
+    }
+
+    private void catalogueActions(final BiConsumer<ResolvedMethod, ObjectMember> onMember) {
+        streamDeclaredActions(MixedIn.INCLUDED)
+        .forEach(userAction->
+            userAction.streamFacets(ImperativeFacet.class)
+                .map(ImperativeFacet::getMethods)
+                .flatMap(Can::stream)
+                .map(MethodFacade::asMethodForIntrospection)
+                .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
+                .forEach(imperativeFacetMethod->
+                    onMember.accept(imperativeFacetMethod, userAction)));
+    }
+
+    // -- ELEMENT SPECIFICATION
+
+    private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
+            _Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
+                    .map(typeOfFacet -> typeOfFacet.elementSpec()));
+
+    @Override
+    public Optional<ObjectSpecification> getElementSpecification() {
+        return elementSpecification.get();
+    }
+
+    // -- TABLE COLUMN RENDERING
+
+    @Override
+    public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
+            final Identifier memberIdentifier,
+            final ManagedObject parentObject) {
+
+        return new _MembersAsColumns(getMetaModelContext())
+            .streamAssociationsForColumnRendering(this, memberIdentifier, parentObject);
+    }
+
+    @Override
+    public Stream<ObjectAction> streamActionsForColumnRendering(
+            final Identifier memberIdentifier) {
+        return new _MembersAsColumns(getMetaModelContext())
+                .streamActionsForColumnRendering(this, memberIdentifier);
+    }
+
+    // -- DETERMINE INJECTABILITY
+
+    private boolean isVetoedForInjection;
+
+    private _Lazy<Boolean> isInjectableLazy = _Lazy.threadSafe(()->
+        !isVetoedForInjection
+                && !getBeanSort().isAbstract()
+                && !getBeanSort().isValue()
+                && !getBeanSort().isEntity()
+                && !getBeanSort().isViewModel()
+                && !getBeanSort().isMixin()
+                && (getBeanSort().isManagedBeanAny()
+                        || getServiceRegistry()
+                                .lookupRegisteredBeanById(getLogicalType())
+                                .isPresent())
+                );
+
+    @Override
+    public boolean isInjectable() {
+        return isInjectableLazy.get();
+    }
+
+    private _Lazy<Boolean> isDomainServiceLazy = _Lazy.threadSafe(()->
+        _ClassCache.getInstance().head(getCorrespondingClass()).hasAnnotation(DomainService.class));
+
+    @Override
+    public boolean isDomainService() {
+        return isDomainServiceLazy.get();
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // MERGED FROM FORMER ObjectSpecificationAbstract
+    //-----------------------------------------------------------------------------------------------------------------
 
     /**
      * @implNote thread-safe
@@ -112,22 +444,21 @@ implements ObjectSpecification {
 
         // List performs better compared to a Set, when the number of elements is low
         private Can<ObjectSpecification> classes = Can.empty();
-        private final Object $lock = new Object();
 
         public void addSubclass(final ObjectSpecification subclass) {
-            synchronized($lock) {
+            synchronized(classes) {
                 classes = classes.addUnique(subclass);
             }
         }
 
         public boolean hasSubclasses() {
-            synchronized($lock) {
+            synchronized(classes) {
                 return classes.isNotEmpty();
             }
         }
 
         public Can<ObjectSpecification> snapshot() {
-            synchronized($lock) {
+            synchronized(classes) {
                 return classes;
             }
         }
@@ -197,28 +528,7 @@ implements ObjectSpecification {
 
     @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
 
-    // -- Constructor
-    protected ObjectSpecificationAbstract(
-            final Class<?> introspectedClass,
-            final LogicalType logicalType,
-            final String shortName,
-            final BeanSort beanSort,
-            final FacetProcessor facetProcessor,
-            final PostProcessor postProcessor) {
 
-        this.facetHolder = FacetHolder.simple(
-            facetProcessor.getMetaModelContext(),
-            Identifier.classIdentifier(logicalType));
-
-        this.correspondingClass = introspectedClass;
-        this.logicalType = logicalType;
-        this.fullName = introspectedClass.getName();
-        this.shortName = shortName;
-        this.beanSort = beanSort;
-
-        this.facetProcessor = facetProcessor;
-        this.postProcessor = postProcessor;
-    }
 
     // -- Stuff immediately derivable from class
     @Override
@@ -249,8 +559,6 @@ implements ObjectSpecification {
     public final String getFullIdentifier() {
         return fullName;
     }
-
-    public abstract IntrospectionPolicy getIntrospectionPolicy();
 
     @Override
     public void introspectUpTo(final IntrospectionState upTo) {
@@ -329,9 +637,6 @@ implements ObjectSpecification {
         return this.introspectionState.compareTo(upTo) < 0;
     }
 
-    protected abstract void introspectTypeHierarchy();
-    protected abstract void introspectMembers();
-
     protected void loadSpecOfSuperclass(final Class<?> superclass) {
         if (superclass == null) {
             return;
@@ -354,12 +659,8 @@ implements ObjectSpecification {
     }
 
     private void updateAsSubclassTo(final ObjectSpecification supertypeSpec) {
-        if (!(supertypeSpec instanceof ObjectSpecificationAbstract)) {
-            return;
-        }
-        // downcast required because addSubclass is (deliberately) not public
         // API
-        var introspectableSpec = (ObjectSpecificationAbstract) supertypeSpec;
+        var introspectableSpec = (ObjectSpecificationDefault) supertypeSpec;
         introspectableSpec.updateSubclasses(this);
     }
 
