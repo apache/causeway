@@ -197,7 +197,7 @@ identified
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
         module-path for testing, that is, put everything on the class-path -->
-        <swagger-core.version>2.2.25</swagger-core.version>
+        <swagger-core.version>2.2.26</swagger-core.version>
 
         <wicket.version>10.2.0</wicket.version>
         <wicket-bootstrap.version>7.0.5</wicket-bootstrap.version> <!--
