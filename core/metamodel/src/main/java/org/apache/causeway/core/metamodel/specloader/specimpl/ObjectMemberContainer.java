@@ -22,11 +22,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
@@ -35,9 +32,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
-
-import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * Responsibility: member lookup and streaming with support for inheritance,
@@ -49,25 +43,17 @@ import lombok.NonNull;
  * but avoid doing redundant work when walking the type-hierarchy;
  * (current elegant recursive solution will then need some tweaks to be efficient)
  */
-public abstract class ObjectMemberContainer
-implements
+public interface ObjectMemberContainer
+extends
     HasFacetHolder,
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical {
 
-    @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
-
-    protected ObjectMemberContainer(
-            final @NonNull MetaModelContext mmc,
-            final @NonNull Identifier featureIdentifier) {
-        this.facetHolder = FacetHolder.simple(mmc, featureIdentifier);
-    }
-
     // -- ACTIONS
 
     @Override
-    public Optional<ObjectAction> getAction(
+    default Optional<ObjectAction> getAction(
             final String id, final ImmutableEnumSet<ActionScope> scopes, final MixedIn mixedIn) {
 
         var declaredAction = getDeclaredAction(id, mixedIn); // no inheritance nor type considered
@@ -86,7 +72,7 @@ implements
     }
 
     @Override
-    public Stream<ObjectAction> streamActions(
+    default Stream<ObjectAction> streamActions(
             final ImmutableEnumSet<ActionScope> actionTypes,
             final MixedIn mixedIn,
             final Consumer<ObjectAction> onActionOverloaded) {
@@ -125,7 +111,7 @@ implements
     // -- ASSOCIATIONS
 
     @Override
-    public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
+    default Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
 
         var declaredAssociation = getDeclaredAssociation(id, mixedIn); // no inheritance considered
 
@@ -139,7 +125,7 @@ implements
     }
 
     @Override
-    public Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
+    default Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
 
         if(isTypeHierarchyRoot()) {
             return streamDeclaredAssociations(mixedIn); // stop going deeper

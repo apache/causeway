@@ -26,8 +26,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
-
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
@@ -55,6 +53,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
@@ -91,6 +90,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
+import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
@@ -103,7 +103,6 @@ import lombok.extern.log4j.Log4j2;
 @lombok.ToString(of = {"correspondingClass", "fullName", "beanSort"})
 @Log4j2
 public abstract class ObjectSpecificationAbstract
-extends ObjectMemberContainer
 implements ObjectSpecification {
 
     /**
@@ -196,6 +195,8 @@ implements ObjectSpecification {
 
     private IntrospectionState introspectionState = IntrospectionState.NOT_INTROSPECTED;
 
+    @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
+
     // -- Constructor
     protected ObjectSpecificationAbstract(
             final Class<?> introspectedClass,
@@ -205,7 +206,9 @@ implements ObjectSpecification {
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
 
-        super(facetProcessor.getMetaModelContext(), Identifier.classIdentifier(logicalType));
+        this.facetHolder = FacetHolder.simple(
+            facetProcessor.getMetaModelContext(),
+            Identifier.classIdentifier(logicalType));
 
         this.correspondingClass = introspectedClass;
         this.logicalType = logicalType;
@@ -586,7 +589,7 @@ implements ObjectSpecification {
         synchronized(unmodifiableInterfaces) {
 
             // lookup facet holder's facet
-            var facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
+            var facets1 = _NullSafe.streamNullable(facetHolder.getFacet(facetType));
 
             // lookup all interfaces
             var facets2 = _NullSafe.stream(interfaces())

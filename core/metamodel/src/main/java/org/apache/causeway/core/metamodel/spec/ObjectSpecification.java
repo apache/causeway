@@ -72,10 +72,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberContainer;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -93,9 +92,7 @@ import lombok.experimental.UtilityClass;
 public interface ObjectSpecification
 extends
     Specification,
-    ObjectActionContainer,
-    ObjectAssociationContainer,
-    Hierarchical,
+    ObjectMemberContainer,
     HasLogicalType,
     Comparable<ObjectSpecification> {
 
