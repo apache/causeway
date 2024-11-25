@@ -36,14 +36,6 @@ extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public static enum BulkToggle {
-        CLEAR_ALL, SET_ALL;
-        static BulkToggle valueOf(final boolean b) {
-            return b ? SET_ALL : CLEAR_ALL;
-        }
-        public boolean isSetAll() { return this == SET_ALL; }
-    }
-
     private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
     private DataTableWithPagesAndFilter<?, ?> table;
 
