@@ -37,7 +37,6 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.applib.client.SuppressionType;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
@@ -312,7 +311,7 @@ extends ContentNegotiationServiceAbstract {
         var dto = valSpec.isCompositeValue()
                 ? ScalarValueDtoV2.forValue(valueObject.getPojo(),
                         //XXX honor value semantics context?
-                        _Casts.uncheckedCast(valSpec.valueFacetElseFail().selectDefaultSemantics().orElseThrow()))
+                        valSpec.valueFacetElseFail(Object.class).selectDefaultSemantics().orElseThrow())
                 : ScalarValueDtoV2.forValue(valueObject.getPojo());
         return Optional.of(dto);
     }

@@ -528,8 +528,6 @@ implements ObjectSpecification {
 
     @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
 
-
-
     // -- Stuff immediately derivable from class
     @Override
     public final FeatureType getFeatureType() {
@@ -716,7 +714,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public final Optional<ValueFacet> valueFacet() {
+    public final Optional<ValueFacet<?>> valueFacet() {
         return Optional.ofNullable(valueFacet);
     }
 

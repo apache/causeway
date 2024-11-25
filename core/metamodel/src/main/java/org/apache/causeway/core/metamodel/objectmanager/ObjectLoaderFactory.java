@@ -64,7 +64,7 @@ record ObjectLoaderFactory() {
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
                 var spec = objectLoadRequest.getObjectSpecification();
-                var valueFacet = spec.valueFacetElseFail();
+                var valueFacet = spec.valueFacetElseFail(Object.class);
 
                 var bookmark = objectLoadRequest.getBookmark();
                 var valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.getIdentifier());

@@ -682,11 +682,10 @@ extends
     // -- VALUE SEMANTICS SUPPORT
 
     /** introduced for lookup optimization / allow memoization */
-    @SuppressWarnings("rawtypes")
-    Optional<ValueFacet> valueFacet();
-    @SuppressWarnings("rawtypes")
-    default ValueFacet valueFacetElseFail() {
-        return valueFacet().orElseThrow(()->
+    Optional<ValueFacet<?>> valueFacet();
+    @SuppressWarnings("unchecked")
+    default <T> ValueFacet<T> valueFacetElseFail(final Class<T> type) {
+        return valueFacet().map(f->(ValueFacet<T>)f).orElseThrow(()->
             _Exceptions.unrecoverable("Value type %s must have a ValueFacet", toString()));
     }
 

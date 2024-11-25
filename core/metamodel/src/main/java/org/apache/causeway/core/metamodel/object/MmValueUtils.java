@@ -80,12 +80,12 @@ public class MmValueUtils {
 
     // -- TEMPORAL SUPPORT
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes"})
     public Optional<TemporalSupport> temporalSupport(
             final @Nullable ObjectFeature objectFeature,
             final @Nullable ObjectSpecification elementType) {
         return valueFacet(elementType)
-                .flatMap(valueFacet->(Optional<TemporalSupport>)valueFacet
+                .flatMap(valueFacet->valueFacet
                         .selectTemporalSupportForFeature(objectFeature));
     }
 
@@ -103,7 +103,7 @@ public class MmValueUtils {
             final @Nullable ManagedObject valueObject) {
         return valueFacet(valueObject)
                 .filter(valueFacet->!ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject))
-                .flatMap(valueFacet->(Optional<TemporalSupport>)valueFacet.selectTemporalSupportForFeature(objectFeature))
+                .flatMap(valueFacet->valueFacet.selectTemporalSupportForFeature(objectFeature))
                 .flatMap((final TemporalSupport temporalDecomposer)->{
                     var pojo = MmUnwrapUtils.single(valueObject);
                     return temporalDecomposer.decomposeTemporal(pojo);
@@ -112,15 +112,13 @@ public class MmValueUtils {
 
     // -- HELPER
 
-    @SuppressWarnings({ "rawtypes" })
-    private Optional<ValueFacet> valueFacet(final @Nullable ObjectSpecification elementType) {
+    private Optional<ValueFacet<?>> valueFacet(final @Nullable ObjectSpecification elementType) {
         return elementType!=null
                 ? elementType.valueFacet()
                 : Optional.empty();
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    private Optional<ValueFacet> valueFacet(final @Nullable ManagedObject valueObject) {
+    private Optional<ValueFacet<?>> valueFacet(final @Nullable ManagedObject valueObject) {
         if(!ManagedObjects.isSpecified(valueObject)) {
             return Optional.empty();
         }

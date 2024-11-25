@@ -66,7 +66,7 @@ extends _ManagedObjectSpecified {
     // -- HELPER
 
     private ValueFacet<?> valueFacet() {
-        return getSpecification().valueFacetElseFail();
+        return getSpecification().valueFacetElseFail(Object.class);
     }
 
     private Bookmark createBookmark() {
