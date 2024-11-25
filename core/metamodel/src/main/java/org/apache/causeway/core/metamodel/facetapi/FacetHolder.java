@@ -40,7 +40,7 @@ extends HasMetaModelContext, HasTranslationContext {
 
     // -- FACTORIES
 
-    public static FacetHolderAbstract simple(
+    public static FacetHolder simple(
             final MetaModelContext mmc,
             final Identifier featureIdentifier) {
         return new FacetHolderSimple(mmc, featureIdentifier);
@@ -57,7 +57,7 @@ extends HasMetaModelContext, HasTranslationContext {
     /**
      *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
      */
-    public static FacetHolderAbstract forTesting(final MetaModelContext mmc) {
+    public static FacetHolder forTesting(final MetaModelContext mmc) {
         return simple(mmc, Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
     }
 

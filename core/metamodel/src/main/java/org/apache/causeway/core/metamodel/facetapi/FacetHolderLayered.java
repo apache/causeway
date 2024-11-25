@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -44,20 +43,21 @@ import lombok.NonNull;
  *
  * @see Facet#isAllowedToBeSharedWhenMixedIn()
  */
-final class FacetHolderLayered
+record FacetHolderLayered(
+    @NonNull Identifier featureIdentifier,
+    @NonNull FacetHolder shared,
+    @NonNull FacetHolder local)
 implements FacetHolder {
 
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull Identifier featureIdentifier;
-    private final @NonNull FacetHolder shared;
-    private final @NonNull FacetHolder local;
+    @Override
+    public Identifier getFeatureIdentifier() { return featureIdentifier; }
+    public FacetHolder getShared() { return shared; }
+    public FacetHolder getLocal() { return local; }
 
     public FacetHolderLayered(
             final @NonNull Identifier featureIdentifier,
             final @NonNull FacetHolder shared) {
-        this.featureIdentifier = featureIdentifier;
-        this.shared = shared;
-        this.local = FacetHolder.simple(shared.getMetaModelContext(), featureIdentifier);
+        this(featureIdentifier, shared, FacetHolder.simple(shared.getMetaModelContext(), featureIdentifier));
     }
 
     @Override
