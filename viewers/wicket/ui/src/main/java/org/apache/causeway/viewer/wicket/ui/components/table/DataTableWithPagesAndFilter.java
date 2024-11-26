@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -39,8 +40,9 @@ import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.tableoption.PageActionChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
+import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoice;
+import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoiceKey;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
@@ -164,44 +166,28 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
 
     /**
      * Provides the page actions as presented in the table view's footer bar (drop-down menu).
-     * @see #executePageAction(PageActionChoice)
+     * @see #executeSelectOperation(SelectOperationChoice)
      */
-    public List<PageActionChoice> getPageActionChoices() {
+    public List<SelectOperationChoice> getSelectOperationChoices() {
         return isRowSelectionEnabled()
-                ? List.of(
-                    new PageActionChoice("SEL_ALL", translate("select ALL (filtered) rows of this table")),
-                    new PageActionChoice("CLEAR", translate("CLEAR selection")),
-                    new PageActionChoice("PAGE_SEL", translate("select ALL rows of this PAGE")),
-                    new PageActionChoice("PAGE_UNSEL", translate("unselect ALL rows of this PAGE")))
+                ? Stream.of(SelectOperationChoiceKey.values())
+                    .map(key->new SelectOperationChoice(key, translate(key.englishTitle), ""))
+                    .toList()
                 : Collections.emptyList();
     }
 
     /**
      * Executes a page action from the table view's footer bar (drop-down menu).
      * <p>
-     * @return whether the action was executed.
-     * @see #getPageActionChoices
+     * @see #getSelectOperationChoices()
      */
-    public boolean executePageAction(final PageActionChoice pageActionChoice) {
-        switch(pageActionChoice.getKey()) {
-            case "SEL_ALL": {
-                _TableUtils.interactive(this).selectAllFiltered(true);
-                return true;
-            }
-            case "CLEAR": {
-                _TableUtils.interactive(this).selectAll(false);
-                return true;
-            }
-            case "PAGE_SEL": {
-                _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
-                return true;
-            }
-            case "PAGE_UNSEL": {
-                _TableUtils.interactive(this).selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
-                return true;
-            }
-            default:
-                return false; // ignore, bale out
+    public void executeSelectOperation(final SelectOperationChoice selectOperationChoice) {
+        var table = _TableUtils.interactive(this);
+        switch(selectOperationChoice.key()) {
+            case SEL_ALL -> table.selectAllFiltered(true);
+            case CLEAR -> table.selectAll(false);
+            case PAGE_SEL -> table.selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
+            case PAGE_UNSEL -> table.selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
         }
     }
 

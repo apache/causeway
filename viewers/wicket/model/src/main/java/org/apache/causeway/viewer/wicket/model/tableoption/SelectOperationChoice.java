@@ -20,12 +20,12 @@ package org.apache.causeway.viewer.wicket.model.tableoption;
 
 import java.io.Serializable;
 
-@lombok.Value
-public class PageActionChoice implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    final String key;
-    final String title;
-    final String cssClass = ""; // for future use
+/**
+ * Various choices for the select-operation dropdown.
+ */
+public record SelectOperationChoice(
+    SelectOperationChoiceKey key,
+    String translatedTitle,
+    String cssClass)
+implements Serializable{
 }

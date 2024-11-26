@@ -25,7 +25,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.viewer.wicket.model.tableoption.PageActionChoice;
+import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoice;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoPropagate;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -62,16 +62,15 @@ public class PageActionChooser extends Panel {
 
     private void buildGui() {
 
-        var pageActionChoices = table.getPageActionChoices();
+        var selectOperationChoices = table.getSelectOperationChoices();
 
         var button = Wkt.add(this, new Button(ID_PAGE_ACTION_BUTTON));
 
-        Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, pageActionChoices, item->{
+        Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, selectOperationChoices, item->{
             var link = Wkt.linkAdd(item, ID_PAGE_ACTION_CHOICE, target->{
-                var pageActionChoice = item.getModelObject();
-                if(table.executePageAction(pageActionChoice)) {
-                    target.add(table);
-                }
+                var selectActionChoice = item.getModelObject();
+                table.executeSelectOperation(selectActionChoice);
+                target.add(table);
             });
             // add title and icon to the link
             addIconAndTitle(item, link);
@@ -80,7 +79,7 @@ public class PageActionChooser extends Panel {
         });
 
         // hide the drop-down menu, if empty
-        if(pageActionChoices.isEmpty()) {
+        if(selectOperationChoices.isEmpty()) {
             this.setVisible(false);
         } else {
             WktTooltips.addTooltip(button, translate("Select actions"));
@@ -94,11 +93,11 @@ public class PageActionChooser extends Panel {
     }
 
     private static void addIconAndTitle(
-            final @NonNull ListItem<PageActionChoice> item,
+            final @NonNull ListItem<SelectOperationChoice> item,
             final @NonNull AjaxLinkNoPropagate link) {
         WktLinks.listItemAsDropdownLink(item, link,
-                ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.getTitle()),
-                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.getCssClass()),
+                ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.translatedTitle()),
+                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.cssClass()),
                 null);
     }
 
