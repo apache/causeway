@@ -122,7 +122,6 @@ implements CollectionCountProvider {
                 columns);
 
         // last append action column
-        //TODO[CAUSEWAY-3815] disabled until action column rendering is fleshed out
         addActionsColumnIfRequired(elementType, columns);
 
         var dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
