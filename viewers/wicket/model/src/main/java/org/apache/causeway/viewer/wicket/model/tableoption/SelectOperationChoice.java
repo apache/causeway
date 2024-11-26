@@ -27,5 +27,12 @@ public record SelectOperationChoice(
     SelectOperationChoiceKey key,
     String translatedTitle,
     String cssClass)
-implements Serializable{
+implements Serializable {
+
+    public SelectOperationChoice(
+        final SelectOperationChoiceKey key,
+        final String translatedTitle) {
+        this(key, translatedTitle, "");
+    }
+
 }

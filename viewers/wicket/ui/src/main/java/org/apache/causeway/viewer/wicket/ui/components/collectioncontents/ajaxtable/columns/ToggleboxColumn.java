@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
-import org.apache.causeway.viewer.wicket.ui.components.table.nav.pageact.PageActionChooser;
+import org.apache.causeway.viewer.wicket.ui.components.table.nav.selop.SelectOperationChooser;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -60,7 +60,7 @@ extends GenericColumnAbstract {
 
     @Override
     public Component getHeader(final String componentId) {
-        var pageActionChooser = new PageActionChooser(componentId, table);
+        var pageActionChooser = new SelectOperationChooser(componentId, table);
         Wkt.cssAppend(pageActionChooser, "togglebox-column");
         return pageActionChooser;
     }

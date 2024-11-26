@@ -184,8 +184,8 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     public List<SelectOperationChoice> getSelectOperationChoices() {
         return isRowSelectionEnabled()
                 ? Stream.of(SelectOperationChoiceKey.values())
-                    .filter(key->isPaged() ? true : !key.isPageSpecific())
-                    .map(key->new SelectOperationChoice(key, translate(key.englishTitle), ""))
+                    .filter(SelectOperationChoiceKey.isAvailableWhen(isPaged()))
+                    .map(key->new SelectOperationChoice(key, translate(key.englishTitle)))
                     .toList()
                 : Collections.emptyList();
     }

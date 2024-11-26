@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.table.nav.pageact;
+package org.apache.causeway.viewer.wicket.ui.components.table.nav.selop;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -35,19 +35,19 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class PageActionChooser extends Panel {
+public class SelectOperationChooser extends Panel {
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_PAGE_ACTION_BUTTON = "pageActionButton";
-    private static final String ID_PAGE_ACTION_CHOICE = "pageActionChoice";
-    private static final String ID_PAGE_ACTION_CHOICES = "pageActionChoices";
+    private static final String ID_SELECT_OPERATION_BUTTON = "selectOperationButton";
+    private static final String ID_SELECT_OPERATION_CHOICE = "selectOperationChoice";
+    private static final String ID_SELECT_OPERATION_CHOICES = "selectOperationChoices";
 
     private static final String ID_VIEW_ITEM_TITLE = "viewItemTitle";
     private static final String ID_VIEW_ITEM_ICON = "viewItemIcon";
 
     @Getter final DataTableWithPagesAndFilter<?, ?> table;
 
-    public PageActionChooser(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
+    public SelectOperationChooser(final String id, final DataTableWithPagesAndFilter<?, ?> table) {
         super(id);
         this.table = table;
     }
@@ -64,10 +64,10 @@ public class PageActionChooser extends Panel {
 
         var selectOperationChoices = table.getSelectOperationChoices();
 
-        var button = Wkt.add(this, new Button(ID_PAGE_ACTION_BUTTON));
+        var button = Wkt.add(this, new Button(ID_SELECT_OPERATION_BUTTON));
 
-        Wkt.listViewAdd(this, ID_PAGE_ACTION_CHOICES, selectOperationChoices, item->{
-            var link = Wkt.linkAdd(item, ID_PAGE_ACTION_CHOICE, target->{
+        Wkt.listViewAdd(this, ID_SELECT_OPERATION_CHOICES, selectOperationChoices, item->{
+            var link = Wkt.linkAdd(item, ID_SELECT_OPERATION_CHOICE, target->{
                 var selectActionChoice = item.getModelObject();
                 table.executeSelectOperation(selectActionChoice);
                 target.add(table);
@@ -82,7 +82,7 @@ public class PageActionChooser extends Panel {
         if(selectOperationChoices.isEmpty()) {
             this.setVisible(false);
         } else {
-            WktTooltips.addTooltip(button, translate("Select actions"));
+            WktTooltips.addTooltip(button, translate("Select operations"));
         }
 
     }

@@ -21,7 +21,7 @@
     <body>
         <wicket:panel>
         	<div class="dropdown">
-	            <button wicket:id="pageActionButton" 
+	            <button wicket:id="selectOperationButton" 
 						class="btn btn-sm btn-light dropdown-toggle" 
 						type="button"
 						data-bs-toggle="dropdown" 
@@ -29,11 +29,11 @@
 	            	<i class="fa-regular fa-square"></i>
 	            </button>
 	            <ul class="dropdown-menu" role="menu">
-	                <li wicket:id="pageActionChoices">
+	                <li wicket:id="selectOperationChoices">
 						<!-- link entry -->
-						<a href="#" wicket:id="pageActionChoice" class="dropdown-item">
+						<a href="#" wicket:id="selectOperationChoice" class="dropdown-item">
 						    <span wicket:id="viewItemIcon" class="ViewLinkItem"></span>
-						    <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[link title]</span>
+						    <span wicket:id="viewItemTitle" class="ViewLinkItemTitle">[select operation title]</span>
 						</a>
 					</li>
 	            </ul>

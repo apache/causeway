@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.model.tableoption;
 
+import java.util.function.Predicate;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -38,4 +40,11 @@ public enum SelectOperationChoiceKey {
         return this==PAGE_SEL
             || this == PAGE_UNSEL;
     }
+
+    public static Predicate<SelectOperationChoiceKey> isAvailableWhen(final boolean isTablePaged) {
+        return (final SelectOperationChoiceKey key)->isTablePaged
+            ? true
+            : !key.isPageSpecific();
+    }
+
 }
