@@ -41,6 +41,14 @@
   vertical-align: middle;
 }
 
+/* action column fixed width */
+.collectionContentsAsAjaxTablePanel th.action-column  {
+  width: 4rem;
+}
+.collectionContentsAsAjaxTablePanel td.action-column  {
+  padding-left: 2rem;
+}
+
 /* table search bar is present only optionally on tables, so if present, 
 	it needs a bit of top spacing (but only in parented tables, 
 	standalone tables don't have the 'padding-top: 0px' CSS hack) */
