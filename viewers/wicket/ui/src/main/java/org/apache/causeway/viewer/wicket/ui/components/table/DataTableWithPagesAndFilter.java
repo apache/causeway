@@ -184,6 +184,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
     public List<SelectOperationChoice> getSelectOperationChoices() {
         return isRowSelectionEnabled()
                 ? Stream.of(SelectOperationChoiceKey.values())
+                    .filter(key->isPaged() ? true : !key.isPageSpecific())
                     .map(key->new SelectOperationChoice(key, translate(key.englishTitle), ""))
                     .toList()
                 : Collections.emptyList();
@@ -201,6 +202,10 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
             case PAGE_SEL -> tableModel().selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
             case PAGE_UNSEL -> tableModel().selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
         }
+    }
+
+    public boolean isPaged() {
+        return getPageCount() > 1;
     }
 
     public IntStream getCurrentPageRowIndexes() {

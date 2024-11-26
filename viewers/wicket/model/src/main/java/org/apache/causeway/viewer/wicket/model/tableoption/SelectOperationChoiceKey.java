@@ -30,4 +30,12 @@ public enum SelectOperationChoiceKey {
     PAGE_SEL("select ALL rows of this PAGE"),
     PAGE_UNSEL("unselect ALL rows of this PAGE");
     public final String englishTitle;
+
+    /**
+     * Associated operation should only be available when table is showing pages.
+     */
+    public boolean isPageSpecific() {
+        return this==PAGE_SEL
+            || this == PAGE_UNSEL;
+    }
 }
