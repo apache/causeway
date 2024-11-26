@@ -707,7 +707,8 @@ public class XmlSnapshot implements Snapshot {
                     causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
 
                     // value as JSON
-                    var valueStr = fieldSpec.valueFacetElseFail(Object.class)
+                    @SuppressWarnings("unchecked")
+                    var valueStr = fieldSpec.valueFacetElseFail()
                             .enstring(Format.JSON, value.getPojo());
 
                     if (_Strings.isNotEmpty(valueStr)) {

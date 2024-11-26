@@ -33,6 +33,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -51,6 +52,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
 import lombok.NonNull;
+
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -94,8 +96,8 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         // handle composite value types (requires a ValueSemanticsProvider for the valueClass to be registered with Spring)
         if(spec.isCompositeValue()) {
             _Assert.assertTrue(valueRepr.isString(), ()->"expected to receive a String originating from ValueDecomposition#stringify");
-            var valueFacet = spec.valueFacetElseFail(Object.class);
-            var valSemantics = valueFacet.selectDefaultSemantics().orElseThrow();
+            var valueFacet = spec.valueFacetElseFail();
+            var valSemantics = (ValueSemanticsProvider<?>)valueFacet.selectDefaultSemantics().orElseThrow();
             var valDecomposition = ValueDecomposition.destringify(ValueType.COMPOSITE, valueRepr.asString());
             var pojo = valSemantics.compose(valDecomposition);
             return ManagedObject.value(spec, pojo);
