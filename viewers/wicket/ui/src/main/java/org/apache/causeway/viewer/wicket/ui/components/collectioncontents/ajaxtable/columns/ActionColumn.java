@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel.ColumnActionModifier;
+import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
@@ -42,26 +43,30 @@ extends GenericColumnAbstract {
 
     public static Optional<ActionColumn> create(
             @NonNull final Identifier featureId,
-            @NonNull final ObjectSpecification elementType) {
+            @NonNull final ObjectSpecification elementType,
+            @NonNull final Variant collectionVariant) {
+        var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
+        if(!wktConfig.isActionColumnEnabled()) return Optional.empty();
+
         var actions = elementType.streamActionsForColumnRendering(featureId)
                 .collect(Can.toCan());
         if(actions.isEmpty()) return Optional.empty();
 
-        var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
-        return wktConfig.isActionColumnEnabled()
-                ? Optional.of(new ActionColumn(elementType, actions))
-                : Optional.empty();
+        return Optional.of(new ActionColumn(elementType, actions, collectionVariant));
     }
 
     private final Can<String> actionIds;
     private transient Can<ObjectAction> actions;
+    private final Variant collectionVariant;
 
     private ActionColumn(
             final ObjectSpecification elementType,
-            final Can<ObjectAction> actionsForColumnRendering) {
+            final Can<ObjectAction> actionsForColumnRendering,
+            final Variant collectionVariant) {
         super(elementType, "Actions");
         this.actions = actionsForColumnRendering;
         this.actionIds = actions.map(ObjectAction::getId);
+        this.collectionVariant = collectionVariant;
     }
 
     @Override
@@ -88,6 +93,10 @@ extends GenericColumnAbstract {
     private ColumnActionModifier determineColumnActionModifier(
             final ObjectAction action,
             final ObjectSpecification collectionElementType) {
+
+        // refreshing of standalone collections currently not supported
+        if(collectionVariant.isStandalone()) return ColumnActionModifier.FORCE_NEW_BROWSER_WINDOW;
+
         return action.getElementType().isVoid()
                 || action.getElementType().isOfType(collectionElementType)
                 ? ColumnActionModifier.FORCE_STAY_ON_PAGE

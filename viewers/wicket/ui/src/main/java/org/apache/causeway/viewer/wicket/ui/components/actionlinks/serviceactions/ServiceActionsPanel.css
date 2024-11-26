@@ -353,10 +353,6 @@
     padding-left: 39px;
 }
 
-.additionalLinkListDropDown .dropdown-menu > li > a {
-    padding-left: 0px;
-}
-
 .dropdown-menu > li > a.btn.btn-warning {
     text-align: start;
     border-radius: 0;
