@@ -126,7 +126,7 @@ public class PageParameterUtils {
             .ifPresent(oidStr->PageParameterNames.OBJECT_OID.addStringTo(pageParameters, oidStr));
         } else {
             // don't do anything; instead the page should be redirected back to
-            // an EntityPage so that the underlying EntityModel that contains
+            // a DomainObjectPage so that the underlying EntityModel that contains
             // the memento for the transient ObjectAdapter can be accessed.
         }
         return pageParameters;

@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
  * <p>
  * Some are fine-grained (such as {@link UiComponentType#ATTRIBUTE_NAME_AND_VALUE}, a
  * panel to represent a single property or parameter), but others are
- * somewhat larger (such as {@link UiComponentType#ENTITY}, representing an
+ * somewhat larger (such as {@link UiComponentType#DOMAIN_OBJECT}, representing an
  * entity, with its actions, properties and collections).
  */
 @RequiredArgsConstructor
@@ -54,9 +54,9 @@ public enum UiComponentType {
      */
     SERVICE_ACTIONS,
     /**
-     * A single domain entity.
+     * A single domain object.
      */
-    ENTITY,
+    DOMAIN_OBJECT,
     /**
      * Icon and title for a single entity.
      */

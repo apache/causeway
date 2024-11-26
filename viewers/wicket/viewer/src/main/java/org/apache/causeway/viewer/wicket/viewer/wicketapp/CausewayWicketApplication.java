@@ -320,7 +320,7 @@ implements
         mountPage("/signup", PageType.SIGN_UP);
         mountPage("/signup/verify", PageType.SIGN_UP_VERIFY);
         mountPage("/password/reset", PageType.PASSWORD_RESET);
-        mountPage("/entity/#{objectOid}", PageType.ENTITY);
+        mountPage("/object/#{objectOid}", PageType.DOMAIN_OBJECT);
         mountPage("/logout", WicketLogoutPage.class);
     }
 

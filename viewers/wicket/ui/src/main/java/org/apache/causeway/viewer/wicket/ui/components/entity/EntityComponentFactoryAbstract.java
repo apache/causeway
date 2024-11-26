@@ -54,7 +54,8 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
         }
         final UiObjectWkt entityModel = (UiObjectWkt) model;
         // hit a scenario on a redirect-and-post strategy where the component is rendered not on an
-        // EntityPage but instead using a custom home page.  The hacky override in entity page (in EntityPage#onBeforeRender)
+        // DomainObjectPage but instead using a custom home page.
+        // The hacky override in entity page (in DomainObjectPage#onBeforeRender)
         // is therefore not called. resulting in a concurrency exception.
         //
         // Therefore, we do the same processing here instead.

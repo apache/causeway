@@ -72,7 +72,7 @@ public class PageClassListDefault implements PageClassList {
         pageRegistry.registerPage(PageType.SIGN_UP_VERIFY, getSignUpVerifyPageClass());
         pageRegistry.registerPage(PageType.PASSWORD_RESET, getPasswordResetPageClass());
         pageRegistry.registerPage(PageType.ABOUT, getAboutPageClass());
-        pageRegistry.registerPage(PageType.ENTITY, getEntityPageClass());
+        pageRegistry.registerPage(PageType.DOMAIN_OBJECT, getDomainObjectPageClass());
         pageRegistry.registerPage(PageType.HOME, getHomePageClass());
         pageRegistry.registerPage(PageType.HOME_AFTER_PAGETIMEOUT, getHomePageClass());
         pageRegistry.registerPage(PageType.STANDALONE_COLLECTION, getStandaloneCollectionPageClass());
@@ -83,7 +83,7 @@ public class PageClassListDefault implements PageClassList {
     /**
      * For subclassing if required.
      */
-    protected Class<? extends Page> getEntityPageClass() {
+    protected Class<? extends Page> getDomainObjectPageClass() {
         return DomainObjectPage.class;
     }
 

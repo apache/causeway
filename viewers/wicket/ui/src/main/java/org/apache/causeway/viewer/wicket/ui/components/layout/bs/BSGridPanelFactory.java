@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFac
 public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
 
     public BSGridPanelFactory() {
-        super(UiComponentType.ENTITY, BSGridPanel.class);
+        super(UiComponentType.DOMAIN_OBJECT, BSGridPanel.class);
     }
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {

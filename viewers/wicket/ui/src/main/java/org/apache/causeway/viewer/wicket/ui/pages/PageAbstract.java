@@ -504,7 +504,7 @@ implements ActionPromptProvider {
      * this is a hack that came after re-designing the entity-model
      */
     public void onNewRequestCycle() {
-        // implemented only by EntityPage
+        // implemented only by DomainObjectPage
     }
 
     /**

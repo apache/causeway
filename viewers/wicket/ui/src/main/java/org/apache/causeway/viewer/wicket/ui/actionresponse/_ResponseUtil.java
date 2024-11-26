@@ -96,7 +96,7 @@ class _ResponseUtil {
         }
         case OBJECT: {
             determineScalarAdapter(actionModel.getMetaModelContext(), resultAdapter); // intercepts collections
-            return ActionResultResponse.toEntityPage(resultAdapter);
+            return ActionResultResponse.toDomainObjectPage(resultAdapter);
         }
         case SIGN_IN: {
             var signInPage = actionModel.getMetaModelContext()

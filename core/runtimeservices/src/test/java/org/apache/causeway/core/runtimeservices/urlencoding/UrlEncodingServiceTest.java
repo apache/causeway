@@ -47,7 +47,7 @@ class UrlEncodingServiceTest {
 
     private void roundtrip(final UrlEncodingService service, final boolean testIsCompressing) throws Exception {
 
-        final String original = "0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-tabPanel-rows-1-rowContents-1-col-fieldSets-1-memberGroup-properties-1-property-scalarTypeContainer-scalarIfRegular-associatedActionLinksBelow-additionalLinkList-additionalLinkItem-0-additionalLink";
+        final String original = "0-theme-domainObjectContainer-domainObject-rows-2-rowContents-1-col-tabGroups-1-panel-tabPanel-rows-1-rowContents-1-col-fieldSets-1-memberGroup-properties-1-property-scalarTypeContainer-scalarIfRegular-associatedActionLinksBelow-additionalLinkList-additionalLinkItem-0-additionalLink";
 
         final String encoded = service.encodeString(original);
         final String decoded = service.decodeToString(encoded);

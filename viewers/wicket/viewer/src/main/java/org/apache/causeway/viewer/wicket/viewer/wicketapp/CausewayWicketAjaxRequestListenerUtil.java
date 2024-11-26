@@ -77,8 +77,7 @@ public final class CausewayWicketAjaxRequestListenerUtil {
 //            @Override
 //            public void onBeforeRespond(final Map<String, Component> map, final AjaxRequestTarget target) {
 //                _Debug.log("AJAX via IListener");
-//                EntityPage.broadcastAjaxRequest(target.getPage(), target);
-//
+//                DomainObjectPage.broadcastAjaxRequest(target.getPage(), target);
 //            }
 //        };
 //    }

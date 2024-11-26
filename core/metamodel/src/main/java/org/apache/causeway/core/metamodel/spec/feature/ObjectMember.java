@@ -186,7 +186,7 @@ public interface ObjectMember extends ObjectFeature {
      * </p>
      *
      * <p>
-     *     For the latter case, is thrown by <tt>EntityPage</tt>
+     *     For the latter case, is thrown by <tt>DomainObjectPage</tt>
      *
      * </p>
      */

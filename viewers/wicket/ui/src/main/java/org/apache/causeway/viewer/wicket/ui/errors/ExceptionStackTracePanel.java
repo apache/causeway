@@ -130,7 +130,7 @@ extends PanelBase<List<StackTraceDetail>> {
         final Class<? extends Page> pageClass;
         final PageParameters pageParameters;
         if (entityModel != null) {
-            pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
+            pageClass = pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT);
             pageParameters = Try.call(()->entityModel.getPageParameters())
                     .getValue()
                     // silently ignore, if we fail to generate a 'continue' button target

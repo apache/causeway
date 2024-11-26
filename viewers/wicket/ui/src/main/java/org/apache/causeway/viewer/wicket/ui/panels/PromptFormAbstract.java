@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -169,14 +168,11 @@ implements AttributeModelChangeListener {
 
     private void setLastFocusHint() {
         final UiHintContainer entityModel = pageUiHintContainerIfAny();
-        if (entityModel == null) {
-            return;
-        }
-        final MarkupContainer parentContainer = this.parentPanel.getParent();
-        if (parentContainer == null) {
-            return;
+        if (entityModel == null) return;
 
-        }
+        var parentContainer = this.parentPanel.getParent();
+        if (parentContainer == null) return;
+
         entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
     }
 
@@ -187,9 +183,8 @@ implements AttributeModelChangeListener {
         } catch(org.apache.wicket.WicketRuntimeException ex) {
             return null;
         }
-        if (page instanceof DomainObjectPage) {
-            DomainObjectPage entityPage = (DomainObjectPage) page;
-            return entityPage.getUiHintContainerIfAny();
+        if (page instanceof DomainObjectPage domainObjectPage) {
+            return domainObjectPage.getUiHintContainerIfAny();
         }
         return null;
     }

@@ -43,7 +43,7 @@ class BytesTest {
     private static final byte[] testimonial =
             _Strings.toBytes(
                     "https://docs.oracle.com/javase/8/docs/api/java/util/Base64.html#basic?"+
-                            "0-theme-entityPageContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-"
+                            "0-theme-domainObjectContainer-entity-rows-2-rowContents-1-col-tabGroups-1-panel-"
                             + "tabPanel-rows-1-rowContents-1-col-fieldSets-1-memberGroup-properties-1-property-"
                             + "scalarTypeContainer-scalarIfRegular-associatedActionLinksBelow-additionalLinkList-"
                             + "additionalLinkItem-0-additionalLink",

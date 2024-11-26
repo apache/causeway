@@ -94,13 +94,13 @@ public class Configuration_usingWicket {
         }
     }
 
-    public static class EntityPageTester
+    public static class DomainObjectPageTester
     extends WicketTester
     implements HasMetaModelContext {
 
         // -- HOMEPAGE (TEST APP)
 
-        public static final String OPEN_SAMPLE_ACTION = "theme:entityPageContainer:entity:rows:1"
+        public static final String OPEN_SAMPLE_ACTION = "theme:domainObjectContainer:domainObject:rows:1"
                 + ":rowContents:1"
                 + ":col:entityHeaderPanel:entityActions:additionalLinkList:additionalLinkItem:1"
                 + ":actionLink";
@@ -111,7 +111,7 @@ public class Configuration_usingWicket {
         // -- BOOK PAGE
 
         /** strange asymmetry with JPA, to investigate another day */
-        public static final String BOOK_DELETE_ACTION_JDO = "theme:entityPageContainer:entity:rows:2"
+        public static final String BOOK_DELETE_ACTION_JDO = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
                 + ":col:rows:1:rowContents:1:col:tabGroups:1"
                 + ":panel:tabPanel"
@@ -121,7 +121,7 @@ public class Configuration_usingWicket {
                 + ":additionalLinkList:additionalLinkItem:0:actionLink";
 
         /** strange asymmetry with JDO, to investigate another day */
-        public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
+        public static final String BOOK_DELETE_ACTION_JPA = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
                 + ":col:rows:1:rowContents:1:col:tabGroups:1"
                 + ":1:rowContents:1"
@@ -137,7 +137,7 @@ public class Configuration_usingWicket {
 
         // -- INVENTORY JAXB VM
 
-        public static final String FAVORITE_BOOK_SCALAR = "theme:entityPageContainer:entity:rows:2"
+        public static final String FAVORITE_BOOK_SCALAR = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
                 + ":col:fieldSets:1"
                 + ":memberGroup:properties:2"
@@ -155,18 +155,18 @@ public class Configuration_usingWicket {
 
         @RequiredArgsConstructor
         public static enum SimulatedProperties implements SimulatedProperty {
-            INVENTORY_NAME("theme:entityPageContainer:entity:rows:2"
+            INVENTORY_NAME("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1"
                     + ":col:fieldSets:1"
                     + ":memberGroup:properties:1"
                     + ":property"),
-            JDO_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+            JDO_BOOK_ISBN("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1:col:rows:1:rowContents:1"
                     + ":col:tabGroups:1:panel:tabPanel:rows:1:rowContents:1:col"
                     + ":fieldSets:1"
                     + ":memberGroup:properties:3"
                     + ":property"),
-            JPA_BOOK_ISBN("theme:entityPageContainer:entity:rows:2"
+            JPA_BOOK_ISBN("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1:col:rows:1:rowContents:1"
                     + ":col:tabGroups:1:1"
                     + ":rowContents:1:col"
@@ -209,7 +209,7 @@ public class Configuration_usingWicket {
         private final MetaModelContext metaModelContext;
         private final Function<BookDto, IBook> bookFactory;
 
-        public EntityPageTester(
+        public DomainObjectPageTester(
                 final MetaModelContext metaModelContext,
                 final Function<BookDto, IBook> bookFactory) {
             super(newWicketApplication(metaModelContext));
@@ -282,9 +282,9 @@ public class Configuration_usingWicket {
          * Renders the {@link DomainObjectPage}.
          * @see #startPage(IPageProvider)
          */
-        public DomainObjectPage startEntityPage(final PageParameters pageParameters) {
-            var entityPage = DomainObjectPage.forPageParameters(pageParameters);
-            var startedPage = startPage(entityPage);
+        public DomainObjectPage startDomainObjectPage(final PageParameters pageParameters) {
+            var domainObjectPage = DomainObjectPage.forPageParameters(pageParameters);
+            var startedPage = startPage(domainObjectPage);
             assertRenderedPage(DomainObjectPage.class);
             return startedPage;
         }
@@ -293,11 +293,9 @@ public class Configuration_usingWicket {
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class WicketTesterFactory {
-
         private final MetaModelContext commonContext;
-
-        public EntityPageTester createTester(final Function<BookDto, IBook> bookFactory) {
-            return new EntityPageTester(commonContext, bookFactory);
+        public DomainObjectPageTester createTester(final Function<BookDto, IBook> bookFactory) {
+            return new DomainObjectPageTester(commonContext, bookFactory);
         }
     }
 
@@ -330,7 +328,7 @@ public class Configuration_usingWicket {
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
             if(DomainObjectPage.class.equals(pageClass)) {
-                throw _Exceptions.illegalArgument("cannot instantiate EntityPage without PageParameters");
+                throw _Exceptions.illegalArgument("cannot instantiate DomainObjectPage without PageParameters");
             }
             return delegate.newPage(pageClass);
         }

@@ -74,7 +74,7 @@ public class DeepLinkServiceWicket implements DeepLinkService {
                 .orElseThrow(()->
                     new RuntimeException("Cannot create a deep link to domain object: " + domainObject));
 
-        final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
+        final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT);
         final CharSequence urlForPojo = requestCycle.urlFor(pageClass, pageParameters);
         final String fullUrl = requestCycle.getUrlRenderer().renderFullUrl(Url.parse(urlForPojo));
         try {

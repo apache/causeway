@@ -40,7 +40,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -60,6 +59,12 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 public class DomainObjectPage extends PageAbstract {
 
     private static final long serialVersionUID = 144368606134796079L;
+
+    private static final String ID_DOMAIN_OBJECT_CONTAINER = "domainObjectContainer";
+    private static final String ID_DOMAIN_OBJECT = "domainObject";
+    private static final String ID_WHEREAMI_CONTAINER = "whereAmI-container";
+    private static final String ID_WHEREAMI_ITEMS = "whereAmI-items";
+
     private static final CssResourceReference DOMAIN_OBJECT_PAGE_CSS =
             new CssResourceReference(DomainObjectPage.class, "DomainObjectPage.css");
 
@@ -78,12 +83,10 @@ public class DomainObjectPage extends PageAbstract {
      * @return An EntityModel for the requested OID
      */
     public static DomainObjectPage forPageParameters(final PageParameters pageParameters) {
-
         var bookmark = PageParameterUtils.toBookmark(pageParameters);
         if(!bookmark.isPresent()) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
-
         return new DomainObjectPage(
                 pageParameters,
                 UiObjectWkt.ofPageParameters(pageParameters));
@@ -94,7 +97,6 @@ public class DomainObjectPage extends PageAbstract {
      */
     public static DomainObjectPage forAdapter(
             final ManagedObject adapter) {
-
         return new DomainObjectPage(
                 PageParameterUtils.createPageParametersForObject(adapter),
                 UiObjectWkt.ofAdapter(adapter));
@@ -105,7 +107,7 @@ public class DomainObjectPage extends PageAbstract {
     private DomainObjectPage(
             final PageParameters pageParameters,
             final UiObjectWkt entityModel) {
-        super(pageParameters, null/*titleString*/, UiComponentType.ENTITY);
+        super(pageParameters, null/*titleString*/, UiComponentType.DOMAIN_OBJECT);
         this.model = entityModel;
     }
 
@@ -144,54 +146,54 @@ public class DomainObjectPage extends PageAbstract {
             throw new ObjectMember.AuthorizationException();
         }
 
-        final ObjectSpecification objectSpec = model.getTypeOfSpecification();
+        var objectSpec = model.getTypeOfSpecification();
 
         Facets.gridPreload(objectSpec, objectAdapter);
 
-        final String titleStr = objectAdapter.getTitle();
+        var titleStr = objectAdapter.getTitle();
         setTitle(titleStr);
 
-        WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
-        Wkt.cssAppend(entityPageContainer, objectSpec.getFeatureIdentifier());
+        var domainObjectContainer = new WebMarkupContainer(ID_DOMAIN_OBJECT_CONTAINER);
+        Wkt.cssAppend(domainObjectContainer, objectSpec.getFeatureIdentifier());
 
         Facets.cssClass(objectSpec, objectAdapter)
-        .ifPresent(cssClass->
-            Wkt.cssAppend(entityPageContainer, cssClass)
-        );
+            .ifPresent(cssClass->
+                Wkt.cssAppend(domainObjectContainer, cssClass)
+            );
 
-        themeDiv.addOrReplace(entityPageContainer);
+        themeDiv.addOrReplace(domainObjectContainer);
 
-        addWhereAmIIfShown(entityPageContainer, WhereAmIHelper.of(model));
+        addWhereAmIIfShown(domainObjectContainer, WhereAmIHelper.of(model));
 
         // bookmarks and breadcrumbs
         bookmarkPageIfShown(model);
         addBreadcrumbIfShown(model);
 
-        addBookmarkedPages(entityPageContainer);
+        addBookmarkedPages(domainObjectContainer);
 
         // CAUSEWAY[3626] do this last, could throw ObjectNotFoundException:
-        Try.run(()->addChildComponents(entityPageContainer, model))
-        .ifFailure(__->{
-            // For the non happy case, ensure we have the model populated for Wicket,
-            // such that we don't provoke an ErrorPage simply because the model is missing parts.
-            Wkt.add(entityPageContainer, new EmptyPanel("entity"));
-        })
-        .ifFailureFail(); // simply re-throw
+        Try.run(()->addChildComponents(domainObjectContainer, model))
+            .ifFailure(__->{
+                // For the non happy case, ensure we have the model populated for Wicket,
+                // such that we don't provoke an ErrorPage simply because the model is missing parts.
+                Wkt.add(domainObjectContainer, new EmptyPanel(ID_DOMAIN_OBJECT));
+            })
+            .ifFailureFail(); // simply re-throw
     }
 
     protected void addWhereAmIIfShown(
-            final WebMarkupContainer entityPageContainer,
+            final WebMarkupContainer domainObjectContainer,
             final WhereAmIHelper whereAmIModel) {
 
-        var whereAmIContainer = new WebMarkupContainer("whereAmI-container");
-        entityPageContainer.addOrReplace(whereAmIContainer);
+        var whereAmIContainer = new WebMarkupContainer(ID_WHEREAMI_CONTAINER);
+        domainObjectContainer.addOrReplace(whereAmIContainer);
 
         if(!whereAmIModel.isShowWhereAmI()) {
             whereAmIContainer.setVisible(false);
             return;
         }
 
-        final RepeatingView listItems = new RepeatingView("whereAmI-items");
+        final RepeatingView listItems = new RepeatingView(ID_WHEREAMI_ITEMS);
 
         whereAmIModel.streamParentChainReversed().forEach(entityModel->
             listItems.add(EntityIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), entityModel)));
@@ -199,7 +201,6 @@ public class DomainObjectPage extends PageAbstract {
         Wkt.labelAdd(listItems, listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle());
 
         whereAmIContainer.addOrReplace(listItems);
-
     }
 
     // -- REFRESH ENTITIES

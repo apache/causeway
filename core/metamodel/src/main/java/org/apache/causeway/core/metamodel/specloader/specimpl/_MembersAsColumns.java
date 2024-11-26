@@ -113,9 +113,9 @@ class _MembersAsColumns implements HasMetaModelContext {
     private Optional<Comparator<String>> propertyIdComparator(
             final @NonNull ObjectSpecification elementTypeSpec) {
 
-        // same code also appears in EntityPage.
+        // same code also appears in DomainObjectPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
-        // one object of that type has been rendered via EntityPage.
+        // one object of that type has been rendered via DomainObjectPage.
         var elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
 
         if(elementTypeGridFacet == null) {

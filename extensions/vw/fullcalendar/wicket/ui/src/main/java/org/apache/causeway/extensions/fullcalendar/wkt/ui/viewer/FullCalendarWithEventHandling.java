@@ -57,9 +57,7 @@ implements HasMetaModelContext {
 
         final String oidStr = (String) event.getEvent().getPayload();
         final Bookmark bookmark = Bookmark.parse(oidStr).orElse(null);
-        if(bookmark==null) {
-            return;
-        }
+        if(bookmark==null) return;
 
         var commonContext = getMetaModelContext();
 

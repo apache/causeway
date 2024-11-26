@@ -111,7 +111,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         Wkt.listViewAdd(container, ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel, item->{
             final BookmarkTreeNode bookmarkNode = item.getModelObject();
             try {
-                final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.ENTITY);
+                final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT);
 
                 var clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
                     bookmarkedPagesModel.remove(bookmarkNode);

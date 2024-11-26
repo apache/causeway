@@ -125,7 +125,7 @@ implements FormExecutor, HasCommonContext {
                     act->ActionResultResponse
                             .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
                     prop->ActionResultResponse
-                            .toEntityPage(resultAdapter));
+                            .toDomainObjectPage(resultAdapter));
 
             // redirect using associated strategy
             // XXX note: on property edit, triggers SQL update (on JPA)

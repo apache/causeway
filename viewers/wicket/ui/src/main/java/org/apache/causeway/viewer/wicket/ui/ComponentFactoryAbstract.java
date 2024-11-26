@@ -111,7 +111,7 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
     @Override
     public final Component createComponent(final IModel<?> model) {
         log.debug("creating component {}", getComponentType()::toString);
-        return createComponent(getComponentType().toString(), model);
+        return createComponent(getComponentType().getId(), model);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class ActionResultResponse {
     private final AjaxRequestTarget target;
     private final String url;
 
-    public static ActionResultResponse toEntityPage(final @NonNull ManagedObject entityOrViewmodel) {
+    public static ActionResultResponse toDomainObjectPage(final @NonNull ManagedObject entityOrViewmodel) {
         var pageRedirectRequest = PageRedirectRequest.forPageClassAndBookmark(
                 DomainObjectPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
         return ActionResultResponse.toPage(pageRedirectRequest);

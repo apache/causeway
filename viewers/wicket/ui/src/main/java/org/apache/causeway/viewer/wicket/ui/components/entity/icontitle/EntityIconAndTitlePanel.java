@@ -156,7 +156,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private AbstractLink createDynamicallyVisibleLink(final ManagedObject linkedDomainObject) {
         var pageParameters = PageParameterUtils
                 .createPageParametersForBookmarkablePageLink(linkedDomainObject);
-        var pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
+        var pageClass = getPageClassRegistry().getPageClass(PageType.DOMAIN_OBJECT);
 
         return Wkt.bookmarkablePageLinkWithVisibility(ID_ENTITY_LINK, pageClass, pageParameters,
                 ()->isLinkVisible(linkedDomainObject()));

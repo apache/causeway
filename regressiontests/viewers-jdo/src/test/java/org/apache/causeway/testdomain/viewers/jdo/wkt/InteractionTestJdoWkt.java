@@ -46,9 +46,9 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
-import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
-import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperties;
-import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.SimulatedProperty;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.SimulatedProperties;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.SimulatedProperty;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
@@ -56,10 +56,10 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.BOOK_DELETE_ACTION_JDO;
-import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION;
-import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.OPEN_SAMPLE_ACTION_TITLE;
-import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester.STANDALONE_COLLECTION_LABEL;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.BOOK_DELETE_ACTION_JDO;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.OPEN_SAMPLE_ACTION;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.OPEN_SAMPLE_ACTION_TITLE;
+import static org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.STANDALONE_COLLECTION_LABEL;
 
 @SpringBootTest(
         classes = {
@@ -81,10 +81,10 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
     @Inject private WicketTesterFactory wicketTesterFactory;
 
-    private EntityPageTester wktTester;
+    private DomainObjectPageTester wktTester;
 
     // optimization: reuse Wicket application across tests
-    private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
+    private static _Refs.ObjectReference<DomainObjectPageTester> wktTesterHolder =
             _Refs.objectRef(null);
 
     @BeforeEach
@@ -96,7 +96,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
     @AfterAll
     static void cleanUp() {
         wktTesterHolder.getValue()
-            .ifPresent(EntityPageTester::destroy);
+            .ifPresent(DomainObjectPageTester::destroy);
     }
 
     @Test
@@ -110,7 +110,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
         //System.err.printf("pageParameters %s%n", pageParameters);
 
         run(()->{
-            wktTester.startEntityPage(pageParameters);
+            wktTester.startDomainObjectPage(pageParameters);
 
             //XXX activate for test troubleshooting
             // wktTester.dumpComponentTree(comp->true);
@@ -135,7 +135,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
         // open homepage for TestHomePage
         run(()->{
-            wktTester.startEntityPage(pageParameters);
+            wktTester.startDomainObjectPage(pageParameters);
 
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("Hello, __system");
@@ -215,7 +215,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
         // open Dune page
         run(()->{
-            wktTester.startEntityPage(pageParameters);
+            wktTester.startDomainObjectPage(pageParameters);
             wktTester.assertHeaderBrandText("Smoke Tests");
             wktTester.assertPageTitle("Dune [ISBN-A]");
         });
@@ -291,7 +291,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
 
         // open Dune page and click on the Delete action
         run(()->{
-            wktTester.startEntityPage(pageParameters);
+            wktTester.startDomainObjectPage(pageParameters);
             wktTester.clickLink(BOOK_DELETE_ACTION_JDO);
 
             // then should render a standalone collection labeled 'Delete'
@@ -312,7 +312,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
         // should throw an (causeway) ObjectNotFoundException
         assertThrows(ObjectNotFoundException.class, ()->{
             run(()->{
-                wktTester.startEntityPage(pageParameters);
+                wktTester.startDomainObjectPage(pageParameters);
             });
         });
 
@@ -331,7 +331,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
                         "999"));
         assertThrows(BookmarkNotFoundException.class, ()->{
             run(()->{
-                wktTester.startEntityPage(pageParameters);
+                wktTester.startDomainObjectPage(pageParameters);
             });
         });
     }

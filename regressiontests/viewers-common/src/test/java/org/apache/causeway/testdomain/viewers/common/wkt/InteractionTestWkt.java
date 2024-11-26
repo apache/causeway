@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
-import org.apache.causeway.testdomain.conf.Configuration_usingWicket.EntityPageTester;
+import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
 import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
@@ -86,7 +86,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     private PageParameters pageParameters;
 
     // optimization: reuse Wicket application across tests
-    private static _Refs.ObjectReference<EntityPageTester> wktTesterHolder =
+    private static _Refs.ObjectReference<DomainObjectPageTester> wktTesterHolder =
             _Refs.objectRef(null);
 
     @BeforeEach
@@ -100,14 +100,14 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @AfterAll
     static void cleanUp() {
         wktTesterHolder.getValue()
-            .ifPresent(EntityPageTester::destroy);
+            .ifPresent(DomainObjectPageTester::destroy);
     }
 
     @Test
     void shouldHaveARequestCycle() {
 
-        var entityPage = DomainObjectPage.forPageParameters(pageParameters);
-        wktTester.startPage(entityPage);
+        var domainObjectPage = DomainObjectPage.forPageParameters(pageParameters);
+        wktTester.startPage(domainObjectPage);
 
         assertNotNull(RequestCycle.get());
 
