@@ -25,20 +25,18 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 import lombok.RequiredArgsConstructor;
 
 /**
- *
- * Uses Wicket's default page factory, except for {@link EntityPage}s which require special instantiation:
+ * Uses Wicket's default page factory, except for {@link DomainObjectPage}s which require special instantiation:
  * <p>
  * Constructor
- * {@link EntityPage#EntityPage(MetaModelContext, PageParameters)}
+ * {@link DomainObjectPage#DomainObjectPage(MetaModelContext, PageParameters)}
  * needs the common-context as argument.
  *
  * @since 2.0
- *
  */
 @RequiredArgsConstructor
 class _PageFactory implements IPageFactory {
@@ -49,8 +47,8 @@ class _PageFactory implements IPageFactory {
     @Override
     public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
 
-        if(EntityPage.class.equals(pageClass)) {
-            return _Casts.uncheckedCast(EntityPage.forPageParameters(parameters));
+        if(DomainObjectPage.class.equals(pageClass)) {
+            return _Casts.uncheckedCast(DomainObjectPage.forPageParameters(parameters));
         }
 
         return delegate.newPage(pageClass, parameters);
@@ -59,7 +57,7 @@ class _PageFactory implements IPageFactory {
     @Override
     public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
 
-        if(EntityPage.class.equals(pageClass)) {
+        if(DomainObjectPage.class.equals(pageClass)) {
             //TODO whenever this happens we should redirect to home,
             // almost certainly the session has timed out
 
@@ -73,7 +71,7 @@ class _PageFactory implements IPageFactory {
     @Override
     public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
 
-        if(EntityPage.class.equals(pageClass)) {
+        if(DomainObjectPage.class.equals(pageClass)) {
             return true;
         }
 

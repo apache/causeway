@@ -100,7 +100,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js;
-    exports org.apache.causeway.viewer.wicket.ui.pages.entity;
+    exports org.apache.causeway.viewer.wicket.ui.pages.obj;
     exports org.apache.causeway.viewer.wicket.ui.pages.error;
     exports org.apache.causeway.viewer.wicket.ui.pages.home;
     exports org.apache.causeway.viewer.wicket.ui.pages.login;

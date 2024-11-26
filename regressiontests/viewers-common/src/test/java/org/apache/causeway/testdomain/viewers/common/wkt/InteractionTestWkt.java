@@ -56,7 +56,7 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 @SpringBootTest(
         classes = {
@@ -106,7 +106,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void shouldHaveARequestCycle() {
 
-        var entityPage = EntityPage.forPageParameters(pageParameters);
+        var entityPage = DomainObjectPage.forPageParameters(pageParameters);
         wktTester.startPage(entityPage);
 
         assertNotNull(RequestCycle.get());

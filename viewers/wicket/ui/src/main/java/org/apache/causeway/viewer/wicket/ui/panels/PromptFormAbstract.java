@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeListener;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -187,8 +187,8 @@ implements AttributeModelChangeListener {
         } catch(org.apache.wicket.WicketRuntimeException ex) {
             return null;
         }
-        if (page instanceof EntityPage) {
-            EntityPage entityPage = (EntityPage) page;
+        if (page instanceof DomainObjectPage) {
+            DomainObjectPage entityPage = (DomainObjectPage) page;
             return entityPage.getUiHintContainerIfAny();
         }
         return null;

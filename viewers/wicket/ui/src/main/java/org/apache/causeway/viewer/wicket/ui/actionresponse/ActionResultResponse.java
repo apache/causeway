@@ -27,7 +27,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,7 +49,7 @@ public class ActionResultResponse {
 
     public static ActionResultResponse toEntityPage(final @NonNull ManagedObject entityOrViewmodel) {
         var pageRedirectRequest = PageRedirectRequest.forPageClassAndBookmark(
-                EntityPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
+                DomainObjectPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
         return ActionResultResponse.toPage(pageRedirectRequest);
     }
 

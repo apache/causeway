@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FrameFragment;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -188,7 +188,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     // -- HELPER
 
     private void executeWithoutParams() {
-        var actionModel = this.getActionModel();
+        var actionModel = getActionModel();
 
         // on non-recoverable exception throws
         var outcome = FormExecutorDefault
@@ -209,7 +209,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
             getTransactionService().flushTransaction();
 
             // "redirect-after-post"
-            RequestCycle.get().setResponsePage(EntityPage.class,
+            RequestCycle.get().setResponsePage(DomainObjectPage.class,
                     PageParameterUtils.createPageParametersForBookmark(bookmark));
         }
     }

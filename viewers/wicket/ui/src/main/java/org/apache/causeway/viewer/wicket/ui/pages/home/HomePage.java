@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 /**
@@ -62,7 +62,7 @@ public class HomePage extends PageAbstract {
             getComponentFactoryRegistry().addOrReplaceComponent(themeDiv, UiComponentType.WELCOME, null);
         } else {
             var requestCycle = RequestCycle.get();
-            var page = EntityPage.forAdapter(homePageAdapter);
+            var page = DomainObjectPage.forAdapter(homePageAdapter);
             requestCycle.setResponsePage(page);
         }
 

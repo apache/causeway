@@ -61,7 +61,7 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegi
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.RegularFrame;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketAjaxRequestListenerUtil;
 
@@ -279,13 +279,13 @@ public class Configuration_usingWicket {
         }
 
         /**
-         * Renders the {@link EntityPage}.
+         * Renders the {@link DomainObjectPage}.
          * @see #startPage(IPageProvider)
          */
-        public EntityPage startEntityPage(final PageParameters pageParameters) {
-            var entityPage = EntityPage.forPageParameters(pageParameters);
+        public DomainObjectPage startEntityPage(final PageParameters pageParameters) {
+            var entityPage = DomainObjectPage.forPageParameters(pageParameters);
             var startedPage = startPage(entityPage);
-            assertRenderedPage(EntityPage.class);
+            assertRenderedPage(DomainObjectPage.class);
             return startedPage;
         }
 
@@ -321,15 +321,15 @@ public class Configuration_usingWicket {
 
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
-            if(EntityPage.class.equals(pageClass)) {
-                return _Casts.uncheckedCast(EntityPage.forPageParameters(parameters));
+            if(DomainObjectPage.class.equals(pageClass)) {
+                return _Casts.uncheckedCast(DomainObjectPage.forPageParameters(parameters));
             }
             return delegate.newPage(pageClass, parameters);
         }
 
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
-            if(EntityPage.class.equals(pageClass)) {
+            if(DomainObjectPage.class.equals(pageClass)) {
                 throw _Exceptions.illegalArgument("cannot instantiate EntityPage without PageParameters");
             }
             return delegate.newPage(pageClass);
@@ -337,7 +337,7 @@ public class Configuration_usingWicket {
 
         @Override
         public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
-            if(EntityPage.class.equals(pageClass)) {
+            if(DomainObjectPage.class.equals(pageClass)) {
                 return true;
             }
             return delegate.isBookmarkable(pageClass);

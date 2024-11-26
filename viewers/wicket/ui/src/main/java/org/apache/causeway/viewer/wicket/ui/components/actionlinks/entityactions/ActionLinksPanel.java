@@ -60,7 +60,7 @@ extends MenuablePanelAbstract {
             }
         };
         abstract ActionLinksPanel newPanel(String id, Can<ActionLink> links);
-        final ActionStyle actionStyle;                
+        final ActionStyle actionStyle;
 
     }
 
@@ -79,7 +79,7 @@ extends MenuablePanelAbstract {
         }
         return Wkt.add(markupContainer, panel.get());
     }
-    
+
     public static Optional<ActionLinksPanel> actionLinks(
             final String id,
             final Can<ActionModel> links,
@@ -92,15 +92,15 @@ extends MenuablePanelAbstract {
 
     protected ActionLinksPanel(
             final String id,
-            final Can<ActionLink> menuables,
+            final Can<ActionLink> actionLinks,
             final Style style) {
-        super(id, menuables);
+        super(id, actionLinks);
         setOutputMarkupId(true);
 
         var container = Wkt.add(this, Wkt.containerWithVisibility(ID_ADDITIONAL_LINK_LIST,
                     this::hasAnyVisibleLink));
 
-        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfLinkAndLabels(), item->{
+        Wkt.listViewAdd(container, ID_ADDITIONAL_LINK_ITEM, listOfActionLinks(), item->{
             var linkAndLabel = item.getModelObject();
             item.addOrReplace(WktLinks
                     .asActionLink(item, ID_ADDITIONAL_LINK_TITLE, linkAndLabel, style.actionStyle));
@@ -117,16 +117,16 @@ extends MenuablePanelAbstract {
 
     }
 
-    protected final Stream<ActionLink> streamLinkAndLabels() {
+    protected final Stream<ActionLink> streamActionLinks() {
         return menuablesModel().streamMenuables(ActionLink.class);
     }
 
-    protected final List<ActionLink> listOfLinkAndLabels() {
-        return streamLinkAndLabels().collect(Collectors.toList());
+    protected final List<ActionLink> listOfActionLinks() {
+        return streamActionLinks().collect(Collectors.toList());
     }
 
     public final boolean hasAnyVisibleLink() {
-        return streamLinkAndLabels().anyMatch(actionLink->actionLink.isVisible());
+        return streamActionLinks().anyMatch(ActionLink::isVisible);
     }
 
 }

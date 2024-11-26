@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.pages.entity;
+package org.apache.causeway.viewer.wicket.ui.pages.obj;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -38,8 +38,6 @@ import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -59,11 +57,11 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  */
 @AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
 //@Log4j2
-public class EntityPage extends PageAbstract {
+public class DomainObjectPage extends PageAbstract {
 
     private static final long serialVersionUID = 144368606134796079L;
-    private static final CssResourceReference ENTITY_PAGE_CSS =
-            new CssResourceReference(EntityPage.class, "EntityPage.css");
+    private static final CssResourceReference DOMAIN_OBJECT_PAGE_CSS =
+            new CssResourceReference(DomainObjectPage.class, "DomainObjectPage.css");
 
     private final UiObjectWkt model;
 
@@ -79,18 +77,14 @@ public class EntityPage extends PageAbstract {
      * @param pageParameters The page parameters with the OID
      * @return An EntityModel for the requested OID
      */
-    public static EntityPage forPageParameters(final PageParameters pageParameters) {
-
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("new EntityPage from PageParameters %s", pageParameters);
-        });
+    public static DomainObjectPage forPageParameters(final PageParameters pageParameters) {
 
         var bookmark = PageParameterUtils.toBookmark(pageParameters);
         if(!bookmark.isPresent()) {
             throw new RestartResponseException(Application.get().getHomePage());
         }
 
-        return new EntityPage(
+        return new DomainObjectPage(
                 pageParameters,
                 UiObjectWkt.ofPageParameters(pageParameters));
     }
@@ -98,21 +92,17 @@ public class EntityPage extends PageAbstract {
     /**
      * Ensures that any exception that might have occurred already (eg from an action invocation) is shown.
      */
-    public static EntityPage forAdapter(
+    public static DomainObjectPage forAdapter(
             final ManagedObject adapter) {
 
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("new EntityPage from Adapter %s", adapter.getSpecification());
-        });
-
-        return new EntityPage(
+        return new DomainObjectPage(
                 PageParameterUtils.createPageParametersForObject(adapter),
                 UiObjectWkt.ofAdapter(adapter));
     }
 
     // -- CONSTRUCTOR
 
-    private EntityPage(
+    private DomainObjectPage(
             final PageParameters pageParameters,
             final UiObjectWkt entityModel) {
         super(pageParameters, null/*titleString*/, UiComponentType.ENTITY);
@@ -128,7 +118,7 @@ public class EntityPage extends PageAbstract {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(ENTITY_PAGE_CSS));
+        response.render(CssHeaderItem.forReference(DOMAIN_OBJECT_PAGE_CSS));
     }
 
     @Override
@@ -226,7 +216,7 @@ public class EntityPage extends PageAbstract {
     @Override
     public void onRendering(final Can<PageRenderSubscriber> pageRenderSubscribers) {
         onRenderingOrRendered(pageRenderSubscribers, (pageRenderSubscriber, bookmark) -> {
-            pageRenderSubscriber.onRenderingDomainObject(bookmark);;
+            pageRenderSubscriber.onRenderingDomainObject(bookmark);
             return null;
         });
     }
@@ -234,7 +224,7 @@ public class EntityPage extends PageAbstract {
     @Override
     public void onRendered(final Can<PageRenderSubscriber> pageRenderSubscribers) {
         onRenderingOrRendered(pageRenderSubscribers, (pageRenderSubscriber, bookmark) -> {
-            pageRenderSubscriber.onRenderedDomainObject(bookmark);;
+            pageRenderSubscriber.onRenderedDomainObject(bookmark);
             return null;
         });
     }

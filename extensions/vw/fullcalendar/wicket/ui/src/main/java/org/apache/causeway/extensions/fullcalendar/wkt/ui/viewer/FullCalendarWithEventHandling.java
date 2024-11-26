@@ -30,7 +30,7 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarRe
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.ClickedEvent;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -73,7 +73,7 @@ implements HasMetaModelContext {
 
         var pageParameters = entityModel.getPageParameters();
         if(pageParameters!=null) {
-            throw new RestartResponseException(EntityPage.class, pageParameters);
+            throw new RestartResponseException(DomainObjectPage.class, pageParameters);
         }
 
         // otherwise ignore

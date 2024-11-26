@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.errors.JGrowlUtil;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 public class BreadcrumbPanel
@@ -134,7 +134,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                             breadcrumbModel.remove(oidStr);
                             return;
                         }
-                        setResponsePage(EntityPage.class, selectedModel.getPageParametersWithoutUiHints());
+                        setResponsePage(DomainObjectPage.class, selectedModel.getPageParametersWithoutUiHints());
                     }
 
                     private MetaModelContext getMetaModelContext() {

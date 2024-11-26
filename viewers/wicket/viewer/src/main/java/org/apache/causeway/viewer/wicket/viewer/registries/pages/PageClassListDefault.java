@@ -36,9 +36,9 @@ import org.apache.causeway.viewer.wicket.ui.pages.about.AboutPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
 import org.apache.causeway.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
-import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
@@ -84,7 +84,7 @@ public class PageClassListDefault implements PageClassList {
      * For subclassing if required.
      */
     protected Class<? extends Page> getEntityPageClass() {
-        return EntityPage.class;
+        return DomainObjectPage.class;
     }
 
     /**
