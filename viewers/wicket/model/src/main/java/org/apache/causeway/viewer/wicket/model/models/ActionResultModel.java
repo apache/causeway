@@ -30,15 +30,11 @@ import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.security.authentication.logout.LogoutMenu.LoginRedirect;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor.ActionResultResponseType;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
-@AllArgsConstructor @Getter @Accessors(fluent=true) //java record candidate
-public class ActionResultModel {
-    private final ActionResultResponseType responseType;
-    private final ManagedObject resultAdapter;
+public record ActionResultModel(
+    ActionResultResponseType responseType,
+    ManagedObject resultAdapter) {
 
     public static ActionResultModel determineFor(
             @NonNull final ActionModel actionModel,

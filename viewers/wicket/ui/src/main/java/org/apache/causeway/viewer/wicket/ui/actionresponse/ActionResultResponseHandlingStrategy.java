@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.actionresponse;
 import java.time.Duration;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.request.IRequestHandler;
@@ -58,7 +57,7 @@ public enum ActionResultResponseHandlingStrategy {
             MetaModelContext.instance().ifPresent(mmc->mmc.getTransactionService().flushTransaction());
 
             // "redirect-after-post"
-            resultResponse.getPageRedirect().applyTo(RequestCycle.get());
+            resultResponse.pageRedirect().apply();
         }
     },
     SCHEDULE_HANDLER {
@@ -67,34 +66,31 @@ public enum ActionResultResponseHandlingStrategy {
                 final ActionResultResponse resultResponse) {
 
             final RequestCycle requestCycle = RequestCycle.get();
-            AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class).orElse(null);
+            var ajaxTarget = requestCycle.find(AjaxRequestTarget.class).orElse(null);
 
-            if (target == null) {
+            if (ajaxTarget == null) {
                 // non-Ajax request => just stream the Lob to the browser
                 // or if this is a no-arg action, there also will be no parent for the component
-                requestCycle.scheduleRequestHandlerAfterCurrent(resultResponse.getHandler());
+                requestCycle.scheduleRequestHandlerAfterCurrent(resultResponse.handler());
             } else {
                 // otherwise,
                 // Ajax request => respond with a redirect to be able to stream the Lob to the client
-                final IRequestHandler requestHandler = resultResponse.getHandler();
-                if(requestHandler instanceof ResourceStreamRequestHandler) {
-                    ResourceStreamRequestHandler scheduledHandler = (ResourceStreamRequestHandler) requestHandler;
-                    StreamAfterAjaxResponseBehavior streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
-                    final Page page = target.getPage();
+                final IRequestHandler requestHandler = resultResponse.handler();
+                if(requestHandler instanceof ResourceStreamRequestHandler scheduledHandler) {
+                    var streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
+                    var page = ajaxTarget.getPage();
                     page.add(streamingBehavior);
                     CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
-                    scheduleJs(target, javascriptFor_sameWindow(callbackUrl), 10);
-                } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy) {
-                    final RedirectRequestHandlerWithOpenUrlStrategy redirectHandler =
-                            (RedirectRequestHandlerWithOpenUrlStrategy) requestHandler;
+                    scheduleJs(ajaxTarget, javascriptFor_sameWindow(callbackUrl), 10);
+                } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy redirectHandler) {
 
                     final String url = redirectHandler.getRedirectUrl();
                     final String fullUrl = expanded(requestCycle, url);
 
                     if(redirectHandler.getOpenUrlStrategy().isNewWindow()) {
-                        scheduleJs(target, javascriptFor_newWindow(fullUrl), 100);
+                        scheduleJs(ajaxTarget, javascriptFor_newWindow(fullUrl), 100);
                     } else {
-                        scheduleJs(target, javascriptFor_sameWindow(fullUrl), 100);
+                        scheduleJs(ajaxTarget, javascriptFor_sameWindow(fullUrl), 100);
                     }
                 } else {
                     throw _Exceptions.unrecoverable(
@@ -110,11 +106,11 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 final ActionResultResponse resultResponse) {
 
-            final String url = resultResponse.getUrl();
+            final String url = resultResponse.url();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
 
-            scheduleJs(resultResponse.getAjaxTarget(), javascriptFor_newWindow(fullUrl), 100);
+            scheduleJs(resultResponse.ajaxTarget(), javascriptFor_newWindow(fullUrl), 100);
         }
     },
     OPEN_URL_IN_SAME_BROWSER_WINDOW {
@@ -122,11 +118,11 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(
                 final ActionResultResponse resultResponse) {
 
-            final String url = resultResponse.getUrl();
+            final String url = resultResponse.url();
             final RequestCycle requestCycle = RequestCycle.get();
             final String fullUrl = expanded(requestCycle, url);
 
-            scheduleJs(resultResponse.getAjaxTarget(), javascriptFor_sameWindow(fullUrl), 100);
+            scheduleJs(resultResponse.ajaxTarget(), javascriptFor_sameWindow(fullUrl), 100);
         }
     };
 

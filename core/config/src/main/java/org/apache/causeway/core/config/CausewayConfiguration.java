@@ -2923,10 +2923,8 @@ public class CausewayConfiguration {
              * That is, collections of domain objects are presented in the UI as tables,
              * where corresponding domain object actions are gathered into an additional
              * (typically trailing) column (labeled 'action-column').
-             * <p>
-             * Defaults to disabled, while we are still working on this feature [CAUSEWAY-3815].
              */
-            private boolean actionColumnEnabled = false;
+            private boolean actionColumnEnabled = true;
 
             /**
              * Whether actions, that on click will show a dialog,

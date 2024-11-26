@@ -65,8 +65,17 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
      * @since CAUSEWAY-3815
      */
     public enum ColumnActionModifier {
+        /**
+         * don't interfere with the default action result route
+         */
         NONE,
+        /**
+         * reload current page, irrespective of the action result
+         */
         FORCE_STAY_ON_PAGE,
+        /**
+         * open the action result in a new (blank) browser tab or window
+         */
         FORCE_NEW_BROWSER_WINDOW;
         public boolean isNone() { return this == NONE; }
         public boolean isForceStayOnPage() { return this == FORCE_STAY_ON_PAGE; }

@@ -62,17 +62,21 @@ class _ResponseUtil {
         var actionResultModel = ActionResultModel.determineFor(actionModel, resultAdapterIfAny, ajaxTarget);
         var response = actionResultResponse(actionModel, ajaxTarget, actionResultModel);
 
-        // honor any modifiers
-        switch(actionModel.columnActionModifier()) {
-        case NONE:
-            return response;
-        case FORCE_STAY_ON_PAGE:
-            return response.withForceReload();
-        case FORCE_NEW_BROWSER_WINDOW:
-            return response.withForceNewBrowserWindow();
-        default:
-            throw _Exceptions.unmatchedCase(actionModel.columnActionModifier());
-        }
+        //TODO[causeway-viewer-wicket-ui-3815] handling only if we have a page redirect, other cases ignored (eg. download action)
+        return response.pageRedirect()!=null
+            ? switch (actionModel.columnActionModifier()) {
+                // identity op
+                case NONE -> response;
+                // force full page reload
+                case FORCE_STAY_ON_PAGE -> new ActionResultResponse(
+                    ActionResultResponseHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
+                    null, null, ajaxTarget, response.pageRedirect().toUrl()); // page redirect should point to current page
+                // open result page in new browser tab/win
+                case FORCE_NEW_BROWSER_WINDOW -> new ActionResultResponse(
+                    ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW,
+                    null, null, ajaxTarget, response.pageRedirect().toUrl()); // page redirect should point to action result
+                }
+            : response;
     }
 
     // -- HELPER

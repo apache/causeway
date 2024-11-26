@@ -130,7 +130,7 @@ implements FormExecutor, HasCommonContext {
             // redirect using associated strategy
             // XXX note: on property edit, triggers SQL update (on JPA)
             resultResponse
-                .getHandlingStrategy()
+                .handlingStrategy()
                 .handleResults(resultResponse);
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect

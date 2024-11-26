@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.actionresponse;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.springframework.lang.Nullable;
 
@@ -29,7 +28,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -38,14 +36,30 @@ import lombok.NonNull;
  * {@link #withHandler(IRequestHandler) redirect} to a
  * handler (eg a download).
  */
-public class ActionResultResponse {
-
-    @Getter
-    private final ActionResultResponseHandlingStrategy handlingStrategy;
-    private final IRequestHandler handler;
-    private final PageRedirectRequest<?> pageRedirect;
-    private final AjaxRequestTarget target;
-    private final String url;
+public record ActionResultResponse(
+    ActionResultResponseHandlingStrategy handlingStrategy,
+    /**
+     * Populated only if {@link #handlingStrategy()}
+     * is {@link ActionResultResponseHandlingStrategy#SCHEDULE_HANDLER}
+     */
+    IRequestHandler handler,
+    /**
+     * Populated only if {@link #handlingStrategy()}
+     * is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
+     */
+    PageRedirectRequest<?> pageRedirect,
+    /**
+     * Populated only if {@link #handlingStrategy()} is
+     * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
+     * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
+     */
+    AjaxRequestTarget ajaxTarget,
+    /**
+     * Populated only if {@link #handlingStrategy()} is
+     * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
+     * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
+     */
+    String url) {
 
     public static ActionResultResponse toDomainObjectPage(final @NonNull ManagedObject entityOrViewmodel) {
         var pageRedirectRequest = PageRedirectRequest.forPageClassAndBookmark(
@@ -71,109 +85,13 @@ public class ActionResultResponse {
     }
 
     static ActionResultResponse openUrlInBrowser(
-            final AjaxRequestTarget target,
+            final AjaxRequestTarget ajaxTarget,
             final String url,
             final @NonNull OpenUrlStrategy openUrlStrategy) {
         return new ActionResultResponse(
                 openUrlStrategy.isNewWindow()
                     ? ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW
                     : ActionResultResponseHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
-                null, null, target, url);
+                null, null, ajaxTarget, url);
     }
-
-    ActionResultResponse(
-            final ActionResultResponseHandlingStrategy strategy,
-            final IRequestHandler handler,
-            final PageRedirectRequest<?> pageRedirect,
-            final AjaxRequestTarget target,
-            final String url) {
-        this.handlingStrategy = strategy;
-        this.handler = handler;
-        this.pageRedirect = pageRedirect;
-        this.target = target;
-        this.url = url;
-    }
-
-    //TODO[CAUSEWAY-3815] WIP should create URL from current page then open in new browser
-    ActionResultResponse withForceNewBrowserWindow() {
-        var url = this.url!=null
-                ? this.url
-                : RequestCycle.get().getRequest().getOriginalUrl().toString();
-
-        return new ActionResultResponse(
-                ActionResultResponseHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW,
-                handler, pageRedirect, target, url);
-    }
-
-    //TODO[CAUSEWAY-3815] WIP should force reload the entire page (or do a proper partial page update (AJAX) of the originating table)
-    ActionResultResponse withForceReload() {
-        return this;
-    }
-
-    /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy}
-     * is {@link ActionResultResponseHandlingStrategy#SCHEDULE_HANDLER}
-     */
-    public IRequestHandler getHandler() {
-        return handler;
-    }
-
-    /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy}
-     * is {@link ActionResultResponseHandlingStrategy#REDIRECT_TO_PAGE}
-     */
-    public PageRedirectRequest<?> getPageRedirect() {
-        return pageRedirect;
-    }
-
-    /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is
-     * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
-     * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
-     */
-    public AjaxRequestTarget getAjaxTarget() {
-        return target;
-    }
-
-    /**
-     * Populated only if {@link #getHandlingStrategy() handling strategy} is
-     * either {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
-     * or {@link ActionResultResponseHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("ActionResultResponse["
-                + "handlingStrategy=%s,"
-                + "requestHandler=%s,"
-                + "pageRedirect=%s,"
-                + "ajaxTarget=%s,"
-                + "url=%s"
-                + "]",
-                handlingStrategy.name(),
-                handler,
-                pageRedirect,
-                target,
-                url);
-    }
-
-    /** introduced for debugging */
-    public String toStringMultiline() {
-        return String.format("ActionResultResponse {\n"
-                + "\thandlingStrategy=%s,\n"
-                + "\trequestHandler=%s,\n"
-                + "\tpageRedirect=%s,\n"
-                + "\tajaxTarget=%s,\n"
-                + "\turl=%s\n"
-                + "}",
-                handlingStrategy.name(),
-                handler,
-                pageRedirect,
-                target,
-                url);
-    }
-
 }

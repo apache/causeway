@@ -164,7 +164,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     }
 
     @Override
-    public void onClick(final AjaxRequestTarget target) {
+    public void onClick(final AjaxRequestTarget ajaxTarget) {
 
         _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                 + "originating from User clicking an Action Link.");
@@ -175,13 +175,13 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
                 || actionModel.getInlinePromptContext() == null) {
 
             if(actionModel.hasParameters()) {
-                startDialogWithParams(target);
+                startDialogWithParams(ajaxTarget);
             } else {
                 executeWithoutParams();
             }
 
         } else {
-            startDialogInline(target);
+            startDialogInline(ajaxTarget);
         }
     }
 

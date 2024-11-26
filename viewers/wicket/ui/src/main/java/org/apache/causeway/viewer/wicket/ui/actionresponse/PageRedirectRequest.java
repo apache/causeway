@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.actionresponse;
 
+import org.apache.wicket.core.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -27,16 +29,12 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class PageRedirectRequest<T extends IRequestablePage> {
-
-    private final @NonNull Class<T> pageClass;
-    private final @Nullable PageParameters pageParameters;
-    private final @Nullable IRequestablePage pageInstance;
+public record PageRedirectRequest<T extends IRequestablePage>(
+    @NonNull Class<T> pageClass,
+    @Nullable PageParameters pageParameters,
+    @Nullable IRequestablePage pageInstance) {
 
     public static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
             final @NonNull Class<T> pageClass,
@@ -63,11 +61,16 @@ public class PageRedirectRequest<T extends IRequestablePage> {
         return new PageRedirectRequest<>(pageClass, null, pageInstance);
     }
 
-    public void applyTo(
-            final @Nullable RequestCycle requestCycle) {
-        if(requestCycle==null) {
-            return;
-        }
+    public String toUrl() {
+        var handler = new BookmarkablePageRequestHandler(
+                new PageProvider(pageClass, pageParameters));
+        return RequestCycle.get().urlFor(handler)
+            .toString();
+    }
+
+    public void apply() {
+        var requestCycle = RequestCycle.get();
+        if(requestCycle==null) return;
         if(pageParameters!=null) {
             requestCycle.setResponsePage(pageClass, pageParameters);
             return;
@@ -77,12 +80,6 @@ public class PageRedirectRequest<T extends IRequestablePage> {
             return;
         }
         requestCycle.setResponsePage(pageClass);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("PageRedirectRequest[pageClass=%s,pageParameters=%s]",
-                pageClass.getName(), pageParameters);
     }
 
 }

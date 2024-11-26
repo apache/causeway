@@ -61,7 +61,7 @@ public class DomainObjectPage extends PageAbstract {
     private static final long serialVersionUID = 144368606134796079L;
 
     private static final String ID_DOMAIN_OBJECT_CONTAINER = "domainObjectContainer";
-    private static final String ID_DOMAIN_OBJECT = "domainObject";
+    private static final String ID_DOMAIN_OBJECT = UiComponentType.DOMAIN_OBJECT.getId();
     private static final String ID_WHEREAMI_CONTAINER = "whereAmI-container";
     private static final String ID_WHEREAMI_ITEMS = "whereAmI-items";
 
