@@ -22,13 +22,13 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
 /**
  * {@link ComponentFactory} for the {@link ValueFallbackAttributePanel}.
  */
 public class ValueFallbackAttributePanelFactory
-extends AttributeComponentFactoryAbstract {
+extends AttributeComponentFactory {
 
     public ValueFallbackAttributePanelFactory() {
         // not asking the super-type to validate types, so no value types need be provided.

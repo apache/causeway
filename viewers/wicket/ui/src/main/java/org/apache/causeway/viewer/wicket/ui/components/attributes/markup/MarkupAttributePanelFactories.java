@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 
 /**
  * {@link ComponentFactory} for {@link MarkupAttributePanel}.
@@ -50,7 +50,7 @@ public class MarkupAttributePanelFactories {
     // -- PARENTED (ABSTRACT)
 
     public static abstract class ParentedAbstract<T extends Serializable>
-    extends AttributeComponentFactoryTypeConstrainedAbstract {
+    extends AttributeComponentFactoryWithTypeConstraint {
         private final Class<T> valueType;
 
         protected ParentedAbstract(final Class<T> valueType) {

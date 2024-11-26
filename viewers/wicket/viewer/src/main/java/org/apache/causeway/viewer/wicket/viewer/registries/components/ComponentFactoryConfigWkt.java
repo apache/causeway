@@ -48,7 +48,7 @@ import org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceaction
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.serviceactions.TertiaryMenuPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.NumericAttributePanel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.blobclob.BlobAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.blobclob.ClobAttributePanelFactory;
@@ -268,7 +268,7 @@ public class ComponentFactoryConfigWkt {
     // -- UTILTIY
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static <T extends Serializable> AttributeComponentFactoryTypeConstrainedAbstract
+    public static <T extends Serializable> AttributeComponentFactoryWithTypeConstraint
     createForValueSemantics(final ValueSemanticsProvider<T> valueSemantics) {
 
         if(valueSemantics.isNumberType()) {
@@ -287,7 +287,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     public static class ScalarPanelFactoryForTextField<T extends Serializable>
-    extends AttributeComponentFactoryTypeConstrainedAbstract {
+    extends AttributeComponentFactoryWithTypeConstraint {
 
         private final Class<T> valueTypeClass;
 
@@ -303,7 +303,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     public static class ScalarPanelFactoryForNumberField<T extends Serializable>
-    extends AttributeComponentFactoryTypeConstrainedAbstract {
+    extends AttributeComponentFactoryWithTypeConstraint {
 
         private final Class<T> valueTypeClass;
 
@@ -319,7 +319,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     public static class ScalarPanelFactoryForTemporalPicker<T extends Serializable & Temporal>
-    extends AttributeComponentFactoryTypeConstrainedAbstract {
+    extends AttributeComponentFactoryWithTypeConstraint {
 
         private final Class<T> valueTypeClass;
 
@@ -337,7 +337,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     public static class ScalarPanelFactoryForCompositeValue<T extends Serializable>
-    extends AttributeComponentFactoryTypeConstrainedAbstract {
+    extends AttributeComponentFactoryWithTypeConstraint {
 
         private final Class<T> valueTypeClass;
 
@@ -363,7 +363,7 @@ public class ComponentFactoryConfigWkt {
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
         var registeredScalarTypes =
-                componentFactories.stream(AttributeComponentFactoryTypeConstrainedAbstract.class)
+                componentFactories.stream(AttributeComponentFactoryWithTypeConstraint.class)
                 .flatMap(f->f.getScalarTypes().stream())
                 .collect(Collectors.toSet());
 

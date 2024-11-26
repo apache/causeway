@@ -23,10 +23,10 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
-public class StringAttributePanelFactory extends AttributeComponentFactoryTypeConstrainedAbstract {
+public class StringAttributePanelFactory extends AttributeComponentFactoryWithTypeConstraint {
 
     public StringAttributePanelFactory() {
         super(StringAttributePanel.class, String.class);

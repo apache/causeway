@@ -1,0 +1,33 @@
+= Migrating from 3.1.0 to 3.2.0
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+== Renaming of Term 'scalar' -> 'attribute'
+
+Since the initial design of the framework, UI components exist to represent a single `property` or `parameter` 
+such as domain-object references or values (textual, temporal, numerical etc.).  
+
+The term to refer to both (action) parameters and (domain object) properties collectively was `scalar`. 
+Unfortunately this is a misnomer, because parameters are also allowed to be multi-valued, 
+hence the term `scalar` is potentially misleading.  
+
+Searching for a better fitting term we came up with `attribute`, 
+as we are referring to both method parameters and instance fields collectively as *attributes* of a _class_ or _method_. 
+(While not on point, at least `attribute` is not misleading regarding cardinality.)
+
+Hence many UI and model classes needed to be renamed accordingly.  
+
+[source,java]
+.some examples
+----
+//UiComponentType.SCALAR_NAME_AND_VALUE 
+UiComponentType.ATTRIBUTE_NAME_AND_VALUE
+
+//import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+
+//import org.apache.causeway.viewer.wicket.ui.components.scalars.ComponentFactoryScalarTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
+
+----

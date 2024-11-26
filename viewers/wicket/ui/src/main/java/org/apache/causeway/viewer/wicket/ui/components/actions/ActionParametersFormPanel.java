@@ -38,7 +38,7 @@ extends PromptFormPanelAbstract<ManagedObject, ActionModel> {
 
     static final String ID_ACTION_PARAMETERS = "parameters";
     static final String ID_INPUT_FORM = "inputForm";
-    public static final String ID_SCALAR_NAME_AND_VALUE = "scalarNameAndValue";
+    public static final String ID_ATTRIBUTE_NAME_AND_VALUE = "attributeNameAndValue";
 
     public ActionParametersFormPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);

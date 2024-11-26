@@ -25,12 +25,12 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-public abstract class AttributeComponentFactoryAbstract
+public abstract class AttributeComponentFactory
 extends ComponentFactoryAbstract {
 
-    protected AttributeComponentFactoryAbstract(
+    protected AttributeComponentFactory(
             final Class<?> componentClass) {
-        super(UiComponentType.SCALAR_NAME_AND_VALUE, componentClass);
+        super(UiComponentType.ATTRIBUTE_NAME_AND_VALUE, componentClass);
     }
 
     @Override

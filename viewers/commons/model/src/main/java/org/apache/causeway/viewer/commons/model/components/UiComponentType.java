@@ -29,10 +29,9 @@ import lombok.RequiredArgsConstructor;
 /**
  * Enumerates the different types of UI <i>Components</i> that can be constructed
  * using component factories.
- *
  * <p>
- * Some are fine-grained (such as {@link UiComponentType#SCALAR_NAME_AND_VALUE}, a
- * panel to represent a single scalar property or parameter), but others are
+ * Some are fine-grained (such as {@link UiComponentType#ATTRIBUTE_NAME_AND_VALUE}, a
+ * panel to represent a single property or parameter), but others are
  * somewhat larger (such as {@link UiComponentType#ENTITY}, representing an
  * entity, with its actions, properties and collections).
  */
@@ -49,7 +48,6 @@ public enum UiComponentType {
     WELCOME,
     /**
      * List of services and their actions.
-     *
      * <p>
      * Could be rendered using a JavaScript or DHTML menu, an accordion, or a
      * tree view.
@@ -73,14 +71,12 @@ public enum UiComponentType {
     ENTITY_SUMMARY,
     /**
      * A single &quot;parented&quot; collection of an entity.
-     *
      * <p>
-     *     Note that the default implementation is actually a wrapper that provides a selector over all available
-     *     individual representations of the entity by way of {@link #COLLECTION_CONTENTS} component type.  The
-     *     framework provides a number of implementations of this lower-level component: as a table, as
-     *     collapsed/hidden, as a summary.  Any additional representations that are found that can render the
-     *     collection (eg map, calendar) are added to the selector.
-     * </p>
+     * Note that the default implementation is actually a wrapper that provides a selector over all available
+     * individual representations of the entity by way of {@link #COLLECTION_CONTENTS} component type.  The
+     * framework provides a number of implementations of this lower-level component: as a table, as
+     * collapsed/hidden, as a summary.  Any additional representations that are found that can render the
+     * collection (eg map, calendar) are added to the selector.
      */
     ENTITY_COLLECTION,
     /**
@@ -88,9 +84,12 @@ public enum UiComponentType {
      */
     VALUE,
     /**
-     * The name and value of a single property or parameter, ie a scalar.
+     * The name and value of a single property or parameter, ie an attribute.
+     * <p>
+     * We refer to both method parameters and instance fields collectively as "attributes" of a class or method.
+     * (Parameters can be single- or multi-valued.)
      */
-    SCALAR_NAME_AND_VALUE,
+    ATTRIBUTE_NAME_AND_VALUE,
     /**
      * The parameter form (dialog box) of an action.
      */
@@ -147,12 +146,10 @@ public enum UiComponentType {
      * acts as a fallback whenever a more suitable factory cannot be located.
      */
     UNKNOWN,
-
     /**
      * The header (navigation bar) of the page
      */
     HEADER,
-
     /**
      * The footer of the page
      */

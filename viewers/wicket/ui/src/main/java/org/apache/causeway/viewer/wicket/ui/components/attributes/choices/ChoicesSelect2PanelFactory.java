@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.attributes.choices;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 
 public class ChoicesSelect2PanelFactory
-extends AttributeComponentFactoryAbstract {
+extends AttributeComponentFactory {
 
     private static enum ComponentSort {
         TITLE_BADGE,

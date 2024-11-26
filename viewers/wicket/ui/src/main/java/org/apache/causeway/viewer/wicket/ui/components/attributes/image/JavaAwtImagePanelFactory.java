@@ -23,10 +23,10 @@ import org.apache.wicket.Component;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
 public class JavaAwtImagePanelFactory
-extends AttributeComponentFactoryAbstract {
+extends AttributeComponentFactory {
 
     public JavaAwtImagePanelFactory() {
         super(JavaAwtImagePanel.class);

@@ -22,12 +22,12 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 
 /**
  * {@link ComponentFactory} for {@link PasswordAttributePanel}.
  */
-public class PasswordAttributePanelFactory extends AttributeComponentFactoryTypeConstrainedAbstract {
+public class PasswordAttributePanelFactory extends AttributeComponentFactoryWithTypeConstraint {
 
     public PasswordAttributePanelFactory() {
         super(PasswordAttributePanel.class, org.apache.causeway.applib.value.Password.class);

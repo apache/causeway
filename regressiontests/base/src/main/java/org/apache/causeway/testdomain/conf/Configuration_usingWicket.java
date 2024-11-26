@@ -187,7 +187,7 @@ public class Configuration_usingWicket {
                 return id() + ":scalarTypeContainer:scalarIfRegularInlinePromptForm:inputForm";
             }
             default String scalarField() {
-                return "property:scalarNameAndValue:scalarTypeContainer:scalarIfRegular:"
+                return "property:attributeNameAndValue:scalarTypeContainer:scalarIfRegular:"
                     + RegularFrame.FIELD.getContainerId() + ":"
                     + FieldFrame.SCALAR_VALUE_CONTAINER.getContainerId() + ":scalarValue";
             }

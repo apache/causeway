@@ -23,8 +23,8 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 import lombok.Getter;
 
-public abstract class AttributeComponentFactoryTypeConstrainedAbstract
-extends AttributeComponentFactoryAbstract {
+public abstract class AttributeComponentFactoryWithTypeConstraint
+extends AttributeComponentFactory {
 
     /**
      * Provides discrimination based on {@link UiAttributeWkt#isScalarTypeAnyOf(Can)}.
@@ -34,13 +34,13 @@ extends AttributeComponentFactoryAbstract {
     @Getter
     private final Can<Class<?>> scalarTypes;
 
-    protected AttributeComponentFactoryTypeConstrainedAbstract(
+    protected AttributeComponentFactoryWithTypeConstraint(
             final Class<?> componentClass,
             final Class<?> scalarType) {
         this(componentClass, Can.ofSingleton(scalarType));
     }
 
-    protected AttributeComponentFactoryTypeConstrainedAbstract(
+    protected AttributeComponentFactoryWithTypeConstraint(
             final Class<?> componentClass,
             final Can<Class<?>> scalarTypes) {
         super(componentClass);

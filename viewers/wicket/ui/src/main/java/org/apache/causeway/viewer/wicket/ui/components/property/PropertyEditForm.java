@@ -52,7 +52,7 @@ extends PromptFormAbstract<PropertyModel> {
         var container = Wkt.containerAdd(this, PropertyEditFormPanel.ID_PROPERTY);
 
         var component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, UiComponentType.SCALAR_NAME_AND_VALUE, propertyModel);
+                .addOrReplaceComponent(container, UiComponentType.ATTRIBUTE_NAME_AND_VALUE, propertyModel);
 
         _Casts.castTo(AttributePanel.class, component)
         .ifPresent(propertyModelSubscriber->

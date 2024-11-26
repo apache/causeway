@@ -93,8 +93,8 @@ extends PromptFormAbstract<ActionModel> {
 
         // returned ScalarPanelAbstract should already have added any associated LinkAndLabel(s)
         var component = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ActionParametersFormPanel.ID_SCALAR_NAME_AND_VALUE,
-                        UiComponentType.SCALAR_NAME_AND_VALUE, scalarParamModel);
+                .addOrReplaceComponent(container, ActionParametersFormPanel.ID_ATTRIBUTE_NAME_AND_VALUE,
+                        UiComponentType.ATTRIBUTE_NAME_AND_VALUE, scalarParamModel);
 
         _Casts.castTo(AttributePanel.class, component)
         .ifPresent(scalarPanel->{

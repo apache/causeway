@@ -23,12 +23,12 @@ import org.apache.wicket.Component;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 
 /**
  * {@link ComponentFactory} for {@link BooleanAttributePanel}.
  */
-public class BooleanAttributePanelFactory extends AttributeComponentFactoryTypeConstrainedAbstract {
+public class BooleanAttributePanelFactory extends AttributeComponentFactoryWithTypeConstraint {
 
     public BooleanAttributePanelFactory() {
         super(BooleanAttributePanel.class, Can.of(boolean.class, Boolean.class));

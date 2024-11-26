@@ -59,7 +59,7 @@ extends AssociationColumnAbstract {
                         ViewOrEditMode.VIEWING,
                         collectionVariant.getColumnRenderingHint());
 
-        return findComponentFactory(UiComponentType.SCALAR_NAME_AND_VALUE, propertyModel)
+        return findComponentFactory(UiComponentType.ATTRIBUTE_NAME_AND_VALUE, propertyModel)
                 .createComponent(componentId, propertyModel);
     }
 

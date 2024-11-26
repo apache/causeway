@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
 /**
  * {@link ComponentFactory} for {@link TreeAttributePanel}.
@@ -35,7 +35,7 @@ public class TreePanelFactories {
 
     // -- PARENTED
 
-    static class Parented extends AttributeComponentFactoryAbstract {
+    static class Parented extends AttributeComponentFactory {
 
         public Parented() {
             super(TreeAttributePanel.class);

@@ -22,12 +22,12 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryTypeConstrainedAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 
 /**
  * {@link ComponentFactory} for {@link BlobAttributePanel}.
  */
-public class ClobAttributePanelFactory extends AttributeComponentFactoryTypeConstrainedAbstract {
+public class ClobAttributePanelFactory extends AttributeComponentFactoryWithTypeConstraint {
 
     public ClobAttributePanelFactory() {
         super(ClobAttributePanel.class, org.apache.causeway.applib.value.Clob.class);

@@ -187,7 +187,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
                 entityModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
-                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.SCALAR_NAME_AND_VALUE, attributeModel);
+                .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.ATTRIBUTE_NAME_AND_VALUE, attributeModel);
 //XXX[CAUSEWAY-3026] this is a bad idea
 //        if(scalarNameAndValueComponent instanceof MarkupContainer) {
 //            Wkt.cssAppend(scalarNameAndValueComponent, attributeModel.getIdentifier());
