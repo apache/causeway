@@ -20,12 +20,15 @@ package org.apache.causeway.viewer.wicket.model.tableoption;
 
 import java.io.Serializable;
 
-@lombok.Value
-public class PagesizeChoice implements Serializable {
+public record PagesizeChoice(
+    String translatedTitle,
+    long itemsPerPage,
+    String cssClass) implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    public PagesizeChoice(
+        final String translatedTitle,
+        final long itemsPerPage) {
+        this(translatedTitle, itemsPerPage, "");
+    }
 
-    final String title;
-    final long itemsPerPage;
-    final String cssClass = ""; // for future use
 }

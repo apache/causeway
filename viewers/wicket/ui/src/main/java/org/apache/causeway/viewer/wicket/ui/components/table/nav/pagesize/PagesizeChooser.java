@@ -73,7 +73,7 @@ public class PagesizeChooser extends Panel {
         Wkt.listViewAdd(this, ID_PAGESIZE_CHOICES, table.getPagesizeChoices(), item->{
             var link = Wkt.linkAdd(item, ID_PAGESIZE_CHOICE, target->{
                 var pagesizeChoice = item.getModelObject();
-                table.setItemsPerPage(pagesizeChoice.getItemsPerPage());
+                table.setItemsPerPage(pagesizeChoice.itemsPerPage());
                 table.setPageSizeHintAndBroadcast(target);
                 target.add(table);
             });
@@ -98,8 +98,8 @@ public class PagesizeChooser extends Panel {
             final @NonNull ListItem<PagesizeChoice> item,
             final @NonNull AjaxLinkNoPropagate link) {
         WktLinks.listItemAsDropdownLink(item, link,
-                ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.getTitle()),
-                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.getCssClass()),
+                ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.translatedTitle()),
+                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.cssClass()),
                 null);
     }
 

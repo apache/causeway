@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
-import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
@@ -62,9 +61,9 @@ public class FilterToolbar extends Panel {
 
     private void buildGui() {
 
-        var dataTableInteractive = _TableUtils.interactive(table);
-        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(dataTableInteractive.searchArgumentBindable().getValue()));
-        Wkt.attributeReplace(searchField, "placeholder", dataTableInteractive.getSearchPromptPlaceholderText());
+        var tableModel = table.tableModel();
+        var searchField = new TextField<>(ID_TABLE_SEARCH_INPUT, Model.of(tableModel.searchArgumentBindable().getValue()));
+        Wkt.attributeReplace(searchField, "placeholder", tableModel.getSearchPromptPlaceholderText());
 
         Wkt.linkAdd(this, ID_TABLE_SEARCH_BUTTON, target->{
             propagateUpdate(target, searchField.getValue());

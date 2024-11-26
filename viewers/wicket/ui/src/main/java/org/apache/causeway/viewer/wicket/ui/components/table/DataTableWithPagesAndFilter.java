@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.table;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.stream.IntStream;
@@ -38,13 +39,14 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Longs;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoiceKey;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
-import org.apache.causeway.viewer.wicket.ui.components.table.internal._TableUtils;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 
 public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> {
@@ -107,12 +109,23 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         honorPageNumberHint();
     }
 
+    public DataTableInteractive tableModel() {
+        var dataTableInteractive =  (this.getDataProvider() instanceof CollectionContentsSortableDataProvider dataProvider)
+            ? dataProvider.getDataTableModel()
+            : null;
+        Objects.requireNonNull(dataTableInteractive, ()->
+            "could not resolve the underlying model for this table component due to an unexpected DataProvider type %s"
+            .formatted(Optional.ofNullable(this.getDataProvider()).map(Object::getClass).map(Class::getName).orElse("null"))
+            );
+        return dataTableInteractive;
+    }
+
     /**
      * Gets the number of table rows (unfiltered) directly from the underlying model.
      * While {@link #getRowCount()} might return zero, when the component was no yet populated.
      */
     public int elementCount() {
-        return _TableUtils.interactive(this).dataElementsObservable().getValue().size();
+        return tableModel().dataElementsObservable().getValue().size();
     }
 
     // -- SELECTABLE
@@ -134,7 +147,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
         if(_Strings.nullToEmpty(this.searchArg).equals(_Strings.nullToEmpty(value))) return;
         this.searchArg = value;
         // update the interactive model
-        _TableUtils.interactive(this).searchArgumentBindable().setValue(searchArg);
+        tableModel().searchArgumentBindable().setValue(searchArg);
     }
 
     // -- PAGESIZE
@@ -153,7 +166,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      */
     public List<PagesizeChoice> getPagesizeChoices() {
         var choices = List.of(
-                new PagesizeChoice("All", Long.MAX_VALUE),
+                new PagesizeChoice(translate("All"), Long.MAX_VALUE),
                 new PagesizeChoice("1000", 1000L),
                 new PagesizeChoice("100", 100L),
                 new PagesizeChoice("25", 25L), // in line with standalone table default size
@@ -182,12 +195,11 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      * @see #getSelectOperationChoices()
      */
     public void executeSelectOperation(final SelectOperationChoice selectOperationChoice) {
-        var table = _TableUtils.interactive(this);
         switch(selectOperationChoice.key()) {
-            case SEL_ALL -> table.selectAllFiltered(true);
-            case CLEAR -> table.selectAll(false);
-            case PAGE_SEL -> table.selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
-            case PAGE_UNSEL -> table.selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
+            case SEL_ALL -> tableModel().selectAllFiltered(true);
+            case CLEAR -> tableModel().selectAll(false);
+            case PAGE_SEL -> tableModel().selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), true);
+            case PAGE_UNSEL -> tableModel().selectRangeOfRowsByIndex(getCurrentPageRowIndexes(), false);
         }
     }
 
@@ -205,7 +217,7 @@ public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> 
      */
     public final Optional<PagesizeChoice> getCurrentPagesizeChoice() {
         return getPagesizeChoices().stream()
-                .filter(c->c.getItemsPerPage() == getItemsPerPage())
+                .filter(c->c.itemsPerPage() == getItemsPerPage())
                 .findFirst();
     }
 
