@@ -26,13 +26,13 @@ import java.io.Serializable;
 public record SelectOperationChoice(
     SelectOperationChoiceKey key,
     String translatedTitle,
-    String cssClass)
+    String faIconCss)
 implements Serializable {
 
     public SelectOperationChoice(
         final SelectOperationChoiceKey key,
         final String translatedTitle) {
-        this(key, translatedTitle, "");
+        this(key, translatedTitle, key.cssClass);
     }
 
 }

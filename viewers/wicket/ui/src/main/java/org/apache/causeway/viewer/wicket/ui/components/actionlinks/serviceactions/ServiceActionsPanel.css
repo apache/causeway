@@ -334,8 +334,8 @@
     padding-left: 3px;
 }
 
-.dropdown-menu .fa,
-.dropdown-menu .fa-stack {
+.nav-item .dropdown-menu .fa,
+.nav-item .dropdown-menu .fa-stack {
     margin-left: 10px;
     margin-right: 4px;
     min-width: 20px;

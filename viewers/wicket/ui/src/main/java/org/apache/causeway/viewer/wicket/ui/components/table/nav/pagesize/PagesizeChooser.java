@@ -99,7 +99,7 @@ public class PagesizeChooser extends Panel {
             final @NonNull AjaxLinkNoPropagate link) {
         WktLinks.listItemAsDropdownLink(item, link,
                 ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.translatedTitle()),
-                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.cssClass()),
+                ID_VIEW_ITEM_ICON, null,
                 null);
     }
 

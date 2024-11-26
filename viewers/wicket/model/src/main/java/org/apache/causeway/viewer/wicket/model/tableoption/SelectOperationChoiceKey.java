@@ -27,11 +27,13 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public enum SelectOperationChoiceKey {
-    SEL_ALL("select ALL (filtered) rows of this table"),
-    CLEAR("CLEAR selection"),
-    PAGE_SEL("select ALL rows of this PAGE"),
-    PAGE_UNSEL("unselect ALL rows of this PAGE");
+    SEL_ALL("select ALL (filtered) rows of this table", "solid check-double"),
+    CLEAR("CLEAR selection", "solid xmark"),
+    PAGE_SEL("select ALL rows of this PAGE", "regular square-check"),
+    PAGE_UNSEL("unselect ALL rows of this PAGE", "regular rectangle-xmark");
+
     public final String englishTitle;
+    public final String cssClass;
 
     /**
      * Associated operation should only be available when table is showing pages.

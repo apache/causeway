@@ -35,6 +35,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
@@ -58,10 +59,10 @@ public final class WktLinks {
             final String titleId,
             final ActionLink link,
             final ActionStyle actionStyle) {
-        
+
         var actionLabel = Wkt.labelAdd(link, titleId,
                 link::getFriendlyName);
-        
+
         WktDecorators.decorateActionLink(
                 link, tooltipReceiver, actionLabel,
                 ActionDecorationModel.builder(link)
@@ -75,8 +76,25 @@ public final class WktLinks {
             final @NonNull ListItem<T> item,
             final @NonNull R container,
             final @NonNull String titleId, final @NonNull Function<T, IModel<String>> titleProvider,
-            final @NonNull String iconId, final @Nullable Function<T, IModel<String>> iconProvider,
-            final @Nullable BiFunction<T, Label, IModel<String>> cssFactory) {
+            final @NonNull String faIconId, final @Nullable Function<T, FontAwesomeLayers> faIconCssProvider) {
+
+        var t = item.getModelObject();
+
+        // add title and icon to the link
+        Wkt.labelAdd(container, titleId, titleProvider.apply(t));
+        Wkt.faIconLayersAdd(container, faIconId, Optional.ofNullable(faIconCssProvider)
+            .map(iconProv->iconProv.apply(t))
+            .orElseGet(FontAwesomeLayers::empty));
+
+        return container;
+    }
+
+    public static <T, R extends MarkupContainer> R listItemAsDropdownLink(
+        final @NonNull ListItem<T> item,
+        final @NonNull R container,
+        final @NonNull String titleId, final @NonNull Function<T, IModel<String>> titleProvider,
+        final @NonNull String iconId, final @Nullable Function<T, IModel<String>> iconProvider,
+        final @Nullable BiFunction<T, Label, IModel<String>> cssFactory) {
 
         var t = item.getModelObject();
 
@@ -93,4 +111,5 @@ public final class WktLinks {
             .ifPresent(cssModel->Wkt.cssAppend(viewItemIcon, cssModel));
 
         return container;
-    }}
+    }
+}

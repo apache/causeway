@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoice;
@@ -68,8 +69,8 @@ public class SelectOperationChooser extends Panel {
 
         Wkt.listViewAdd(this, ID_SELECT_OPERATION_CHOICES, selectOperationChoices, item->{
             var link = Wkt.linkAdd(item, ID_SELECT_OPERATION_CHOICE, target->{
-                var selectActionChoice = item.getModelObject();
-                table.executeSelectOperation(selectActionChoice);
+                var selectOperationChoice = item.getModelObject();
+                table.executeSelectOperation(selectOperationChoice);
                 target.add(table);
             });
             // add title and icon to the link
@@ -97,8 +98,7 @@ public class SelectOperationChooser extends Panel {
             final @NonNull AjaxLinkNoPropagate link) {
         WktLinks.listItemAsDropdownLink(item, link,
                 ID_VIEW_ITEM_TITLE, pagesizeChoice->Model.of(pagesizeChoice.translatedTitle()),
-                ID_VIEW_ITEM_ICON, pagesizeChoice->Model.of(pagesizeChoice.cssClass()),
-                null);
+                ID_VIEW_ITEM_ICON, pagesizeChoice->FontAwesomeLayers.fromQuickNotation(pagesizeChoice.faIconCss()));
     }
 
 }
