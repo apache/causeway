@@ -21,51 +21,43 @@ package org.apache.causeway.testing.unittestsupport.applib.util;
 import java.io.File;
 import java.io.IOException;
 
-import org.jmock.auto.Mock;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class Files_deleteFileUtils_Test {
 
-    @Mock
-    private FileUtils.Deleter deleter;
+    private FileUtils.Deleter deleter = Mockito.mock(FileUtils.Deleter.class);
 
-    //@Test
-    public void test() throws IOException {
+    @Test
+    void test() throws IOException {
         final File cusIdxFile = new File("xml/objects/CUS.xml").getAbsoluteFile();
         final File cus1File = new File("xml/objects/CUS/1.xml").getAbsoluteFile();
         final File cus2File = new File("xml/objects/CUS/2.xml").getAbsoluteFile();
-//        context.checking(new Expectations() {
-//            {
-//                oneOf(deleter).deleteFile(with(equalsFile(cusIdxFile)));
-//                oneOf(deleter).deleteFile(with(equalsFile(cus1File)));
-//                oneOf(deleter).deleteFile(with(equalsFile(cus2File)));
-//            }
-//        });
 
         FileUtils.deleteFiles(
                 new File("xml/objects").getAbsoluteFile(),
                 FileUtils.filterFileNameExtension(".xml"),
                 FileUtils.Recursion.DO_RECURSE,
                 deleter);
+
+        verify(deleter, times(1)).deleteFile(Mockito.argThat(equalsFile(cusIdxFile)));
+        verify(deleter, times(1)).deleteFile(Mockito.argThat(equalsFile(cus1File)));
+        verify(deleter, times(1)).deleteFile(Mockito.argThat(equalsFile(cus2File)));
+        verify(deleter, times(3)).deleteFile(Mockito.any(File.class));
     }
 
-//    private static Matcher<File> equalsFile(final File file) throws IOException {
-//        final String canonicalPath = file.getCanonicalPath();
-//        return new TypeSafeMatcher<File>() {
-//
-//            @Override
-//            public void describeTo(final Description arg0) {
-//                arg0.appendText("file '" + canonicalPath + "'");
-//            }
-//
-//            @Override
-//            public boolean matchesSafely(final File arg0) {
-//                try {
-//                    return arg0.getCanonicalPath().equals(canonicalPath);
-//                } catch (IOException e) {
-//                    return false;
-//                }
-//            }
-//        };
-//    }
+    private static ArgumentMatcher<File> equalsFile(final File file) throws IOException {
+        return file1 -> {
+            try {
+                return file1.getCanonicalPath().equals(file.getCanonicalPath());
+            } catch (IOException e) {
+                return false;
+            }
+        };
+    }
 
 }
