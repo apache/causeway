@@ -60,7 +60,6 @@ implements
     Renderer<T>,
     OrderRelation<T, Void>{
 
-    private final TranslationService translationService;
     @Getter(onMethod_ = {@Override}) private final Class<T> correspondingClass;
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final int maxLength;
 
