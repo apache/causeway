@@ -26,9 +26,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 
 public final class SingularColumn
 extends AssociationColumnAbstract {

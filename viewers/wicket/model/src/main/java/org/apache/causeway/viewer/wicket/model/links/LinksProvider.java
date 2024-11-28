@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.link.Link;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 
 /**
  * For models - such as {@link CollectionModel} - that can provide an

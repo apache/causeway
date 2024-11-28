@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
+package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import java.util.Optional;
 

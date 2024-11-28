@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
@@ -55,7 +55,7 @@ import lombok.NonNull;
 /**
  * Provides a list of links for selecting other views that support
  * {@link org.apache.causeway.viewer.commons.model.components.UiComponentType#COLLECTION_CONTENTS} with a backing
- * {@link org.apache.causeway.viewer.wicket.model.models.CollectionModel}.
+ * {@link org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel}.
  */
 public class CollectionPresentationSelectorPanel
 extends PanelAbstract<DataTableInteractive, CollectionModel> {

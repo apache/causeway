@@ -16,11 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
 
 import lombok.NonNull;
 

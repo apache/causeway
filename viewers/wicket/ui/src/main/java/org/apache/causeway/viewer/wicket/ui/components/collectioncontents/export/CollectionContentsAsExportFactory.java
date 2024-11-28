@@ -30,7 +30,7 @@ import org.apache.causeway.applib.tabular.TabularExporter;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;

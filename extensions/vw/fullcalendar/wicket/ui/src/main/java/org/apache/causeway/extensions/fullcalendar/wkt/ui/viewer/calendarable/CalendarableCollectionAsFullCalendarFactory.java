@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.extensions.fullcalendar.applib.Calendarable;
 import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CalendaredCollectionFactoryAbstract;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 /**

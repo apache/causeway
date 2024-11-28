@@ -28,7 +28,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 
 /**
  * Item reuse strategy for {@link DataRowWkt} models based on row index.

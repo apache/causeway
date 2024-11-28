@@ -34,7 +34,7 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModelStandalone;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 

@@ -35,8 +35,8 @@ import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorF
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 
 import lombok.NonNull;
 

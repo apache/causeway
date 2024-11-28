@@ -24,8 +24,8 @@ import org.apache.wicket.Component;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowToggleWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.selop.SelectOperationChooser;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.checkbox.ContainedToggleboxPanel;

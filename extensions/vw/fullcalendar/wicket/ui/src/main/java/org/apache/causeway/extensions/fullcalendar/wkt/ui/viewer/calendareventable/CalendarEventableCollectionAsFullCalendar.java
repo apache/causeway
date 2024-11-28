@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
 import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CalendaredCollectionAbstract;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 
 public class CalendarEventableCollectionAsFullCalendar
 extends CalendaredCollectionAbstract {

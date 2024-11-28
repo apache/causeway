@@ -110,8 +110,8 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowToggleWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowToggleWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextAreaWithConverter;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
@@ -522,7 +522,7 @@ public class Wkt {
              * Whether it is safe (free of side-effects) to load/access given model's object.
              * <p>
              * As of [CAUSEWAY-3658], don't call
-             * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
+             * {@link org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt#getObject()},
              * when the model's object is not transiently already loaded, because otherwise it would
              * enforce a page-reload as side-effect.
              */

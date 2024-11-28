@@ -26,10 +26,10 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel.Variant;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 public final class TitleColumn
 extends GenericColumnAbstract {

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import org.apache.wicket.Component;
 
@@ -24,7 +24,7 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTableModelWkt;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.Getter;
 import lombok.NonNull;

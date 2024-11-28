@@ -38,6 +38,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.action.UiActionForm;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;

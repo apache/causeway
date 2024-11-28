@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved;
 
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 /**

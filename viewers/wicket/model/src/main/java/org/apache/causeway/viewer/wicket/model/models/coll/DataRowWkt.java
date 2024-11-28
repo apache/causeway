@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
+package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import java.util.Optional;
 
@@ -24,7 +24,6 @@ import org.apache.wicket.model.ChainingModel;
 
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 
 import lombok.Getter;
 
@@ -61,7 +60,7 @@ extends ChainingModel<DataRow> {
      * Whether it is safe (free of side-effects) to load/access given model's object.
      * <p>
      * As of [CAUSEWAY-3658], don't call
-     * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
+     * {@link org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt#getObject()},
      * when the model's object is not transiently already loaded, because otherwise it would
      * enforce a page-reload as side-effect.
      */
