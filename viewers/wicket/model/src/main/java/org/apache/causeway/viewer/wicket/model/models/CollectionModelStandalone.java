@@ -24,20 +24,20 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTable
 
 import lombok.NonNull;
 
-public class EntityCollectionModelStandalone
-extends EntityCollectionModelAbstract {
+public final class CollectionModelStandalone
+extends CollectionModelAbstract {
 
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
 
-    public static EntityCollectionModelStandalone forActionModel(
+    public static CollectionModelStandalone forActionModel(
             final @NonNull PackedManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel) {
 
         var action = actionModel.getAction();
 
-        return new EntityCollectionModelStandalone(
+        return new CollectionModelStandalone(
                 DataTableModelWkt.forActionModel(
                         BookmarkedObjectWkt
                             .ofAdapter(actionModel.getParentObject()),
@@ -47,7 +47,7 @@ extends EntityCollectionModelAbstract {
 
     // -- CONSTRUCTOR
 
-    private EntityCollectionModelStandalone(
+    private CollectionModelStandalone(
             final @NonNull DataTableModelWkt delegate) {
         super(delegate, Variant.STANDALONE);
     }

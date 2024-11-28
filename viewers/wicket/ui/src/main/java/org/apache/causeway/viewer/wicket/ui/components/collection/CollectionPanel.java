@@ -24,7 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
@@ -40,7 +40,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * of) {@link AttributePanel}.
  */
 public class CollectionPanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModelParented>
+extends PanelAbstract<DataTableInteractive, CollectionModelParented>
 implements
     CollectionPresentationSelectorProvider {
 
@@ -52,7 +52,7 @@ implements
 
     public CollectionPanel(
             final String id,
-            final EntityCollectionModelParented collectionModel) {
+            final CollectionModelParented collectionModel) {
         super(id, collectionModel);
 
         var collMetaModel = getModel().getMetaModel();

@@ -26,20 +26,20 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
 import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CalendaredCollectionAbstract;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 
 public class CalendarEventableCollectionAsFullCalendar
 extends CalendaredCollectionAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public CalendarEventableCollectionAsFullCalendar(final String id, final EntityCollectionModel model) {
+    public CalendarEventableCollectionAsFullCalendar(final String id, final CollectionModel model) {
         super(id, model);
     }
 
     @Override
     protected EventProvider newEventProvider(
-            final EntityCollectionModel model,
+            final CollectionModel model,
             final String calendarName) {
         return new CalendarEventableEventProvider(model, calendarName);
     }

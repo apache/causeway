@@ -24,7 +24,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -44,10 +44,10 @@ implements
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if(!(model instanceof EntityCollectionModel)) {
+        if(!(model instanceof CollectionModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        final CollectionModel entityCollectionModel = (CollectionModel) model;
 
         final ObjectSpecification elementSpec = entityCollectionModel.getElementType();
         final Class<?> correspondingClass = elementSpec.getCorrespondingClass();
@@ -57,11 +57,11 @@ implements
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        final CollectionModel collectionModel = (CollectionModel) model;
         return newComponent(id, collectionModel);
     }
 
-    protected abstract Component newComponent(final String id, final EntityCollectionModel collectionModel);
+    protected abstract Component newComponent(final String id, final CollectionModel collectionModel);
 
     @Override
     public IModel<String> getTitleLabel() {

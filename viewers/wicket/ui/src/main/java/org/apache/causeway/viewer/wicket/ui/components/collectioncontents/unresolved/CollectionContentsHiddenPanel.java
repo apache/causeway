@@ -19,20 +19,20 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved;
 
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * {@link PanelAbstract Panel} that represents a placeholder for a
- * {@link EntityCollectionModel collection of entity}s so that they can be only
+ * {@link CollectionModel collection of entity}s so that they can be only
  * lazily resolved.
  */
 class CollectionContentsHiddenPanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionContentsHiddenPanel(final String id, final EntityCollectionModel model) {
+    public CollectionContentsHiddenPanel(final String id, final CollectionModel model) {
         super(id, model);
         buildGui();
     }

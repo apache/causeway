@@ -33,8 +33,8 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
@@ -49,22 +49,22 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    static final String UIHINT_EVENT_VIEW_KEY = EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM;
+    static final String UIHINT_EVENT_VIEW_KEY = CollectionModelParented.HINT_KEY_SELECTED_ITEM;
 
-    private final EntityCollectionModel collectionModel;
+    private final CollectionModel collectionModel;
 
     @Getter
     private final Can<ComponentFactoryKey> componentFactories;
     private final ComponentHintKey componentHintKey;
 
     public CollectionPresentationSelectorHelper(
-            final EntityCollectionModel collectionModel,
+            final CollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry) {
         this(collectionModel, componentFactoryRegistry, ComponentHintKey.noop());
     }
 
     public CollectionPresentationSelectorHelper(
-            final EntityCollectionModel collectionModel,
+            final CollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
         this.collectionModel = collectionModel;
@@ -125,7 +125,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
         // else grid layout hint
         final CollectionLayoutData layoutData = toParentedEntityCollectionModel(collectionModel)
-                .map(EntityCollectionModelParented::getLayoutData)
+                .map(CollectionModelParented::getLayoutData)
                 .orElse(null);
 
         if(layoutData != null) {
@@ -158,19 +158,19 @@ public class CollectionPresentationSelectorHelper implements Serializable {
     }
 
     private static UiHintContainer getUiHintContainer(final Component component) {
-        return UiHintContainer.Util.hintContainerOf(component, EntityCollectionModelParented.class);
+        return UiHintContainer.Util.hintContainerOf(component, CollectionModelParented.class);
     }
 
     private static boolean hasRenderEagerlySemantics(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
-        .map(EntityCollectionModelParented::getMetaModel)
+        .map(CollectionModelParented::getMetaModel)
         .map(Facets::defaultViewIsTable)
         .orElse(false);
     }
 
     private static boolean hasDefaultViewFacet(final IModel<?> model) {
         return toParentedEntityCollectionModel(model)
-        .map(EntityCollectionModelParented::getMetaModel)
+        .map(CollectionModelParented::getMetaModel)
         .map(Facets::defaultViewIsPresent)
         .orElse(false);
     }
@@ -215,10 +215,10 @@ public class CollectionPresentationSelectorHelper implements Serializable {
 
     // -- HELPER
 
-    private static Optional<EntityCollectionModelParented> toParentedEntityCollectionModel(
+    private static Optional<CollectionModelParented> toParentedEntityCollectionModel(
             final @Nullable IModel<?> model) {
-        if (model instanceof EntityCollectionModelParented) {
-            return Optional.of((EntityCollectionModelParented) model);
+        if (model instanceof CollectionModelParented) {
+            return Optional.of((CollectionModelParented) model);
         }
         return Optional.empty();
     }

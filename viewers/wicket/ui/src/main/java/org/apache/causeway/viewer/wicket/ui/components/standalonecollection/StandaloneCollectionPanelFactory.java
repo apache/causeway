@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -37,12 +37,12 @@ public class StandaloneCollectionPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        return appliesIf(model instanceof EntityCollectionModelStandalone);
+        return appliesIf(model instanceof CollectionModelStandalone);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        var collectionModel = (EntityCollectionModelStandalone) model;
+        var collectionModel = (CollectionModelStandalone) model;
         return new StandaloneCollectionPanel(id, collectionModel);
     }
 

@@ -25,14 +25,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.EventProviderAbstract;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 
 public class CalendarEventableEventProvider extends EventProviderAbstract {
 
     private static final long serialVersionUID = 1L;
 
     public CalendarEventableEventProvider(
-            final EntityCollectionModel collectionModel,
+            final CollectionModel collectionModel,
             final String calendarName) {
         super(collectionModel, calendarName);
     }

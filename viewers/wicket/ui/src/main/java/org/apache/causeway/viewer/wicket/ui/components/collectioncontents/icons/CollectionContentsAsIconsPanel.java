@@ -22,29 +22,29 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.entity.header.EntityHeaderPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * {@link PanelAbstract Panel} that represents a {@link CollectionModel
  * collection of entity}s rendered using a simple list of icons.
  */
 class CollectionContentsAsIconsPanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_INSTANCE = "entityInstance";
 
-    public CollectionContentsAsIconsPanel(final String id, final EntityCollectionModel model) {
+    public CollectionContentsAsIconsPanel(final String id, final CollectionModel model) {
         super(id, model);
         buildGui();
     }
 
     private void buildGui() {
-        final EntityCollectionModel model = getModel();
+        final CollectionModel model = getModel();
 
         var visibleAdapters = model.getDataTableModel().dataRowsFilteredAndSortedObservable()
                 .getValue()

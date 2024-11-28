@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
@@ -63,7 +63,7 @@ extends AssociationColumnAbstract {
 
     public PluralColumn(
             final ObjectSpecification elementType,
-            final EntityCollectionModel.Variant collectionVariant,
+            final CollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             final String propertyId,
             final String parentTypeName,

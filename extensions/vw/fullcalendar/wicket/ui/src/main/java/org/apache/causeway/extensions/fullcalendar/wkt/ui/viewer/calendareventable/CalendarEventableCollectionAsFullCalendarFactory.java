@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.extensions.fullcalendar.applib.CalendarEventable;
 import org.apache.causeway.extensions.fullcalendar.wkt.ui.viewer.CalendaredCollectionFactoryAbstract;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 /**
@@ -39,7 +39,7 @@ extends CalendaredCollectionFactoryAbstract<CalendarEventable> {
     }
 
     @Override
-    protected Component newComponent(final String id, final EntityCollectionModel collectionModel) {
+    protected Component newComponent(final String id, final CollectionModel collectionModel) {
         return new CalendarEventableCollectionAsFullCalendar(id, collectionModel);
     }
 }

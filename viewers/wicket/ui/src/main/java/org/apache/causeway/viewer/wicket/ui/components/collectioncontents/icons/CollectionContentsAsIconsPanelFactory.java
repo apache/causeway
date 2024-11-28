@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
@@ -41,11 +41,11 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof EntityCollectionModel)) {
+        if (!(model instanceof CollectionModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 
-        var entityCollectionModel = (EntityCollectionModel) model;
+        var entityCollectionModel = (CollectionModel) model;
 
         return Facets.iconIsPresent(entityCollectionModel.getElementType())
                 ? ApplicationAdvice.APPLIES
@@ -54,7 +54,7 @@ public class CollectionContentsAsIconsPanelFactory extends ComponentFactoryAbstr
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        final CollectionModel collectionModel = (CollectionModel) model;
         return new CollectionContentsAsIconsPanel(id, collectionModel);
     }
 

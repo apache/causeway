@@ -24,7 +24,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -44,16 +44,16 @@ implements CollectionContentsAsFactory {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof EntityCollectionModel)) {
+        if (!(model instanceof CollectionModel)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        final CollectionModel entityCollectionModel = (CollectionModel) model;
         return appliesIf(entityCollectionModel.getVariant().isParented());
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        return new CollectionContentsHiddenPanel(id, (EntityCollectionModel) model);
+        return new CollectionContentsHiddenPanel(id, (CollectionModel) model);
     }
 
     @Override

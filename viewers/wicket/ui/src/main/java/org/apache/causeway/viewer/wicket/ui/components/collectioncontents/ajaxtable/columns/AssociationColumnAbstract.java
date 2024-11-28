@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -48,14 +48,14 @@ extends GenericColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    protected final EntityCollectionModel.Variant collectionVariant;
+    protected final CollectionModel.Variant collectionVariant;
     protected final String memberId;
     protected final String parentTypeName;
     protected final String describedAs;
 
     public AssociationColumnAbstract(
             final ObjectSpecification elementType,
-            final EntityCollectionModel.Variant collectionVariant,
+            final CollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
             /**
              * If empty, sorting is disabled for this column.

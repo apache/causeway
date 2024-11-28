@@ -32,8 +32,8 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
@@ -85,7 +85,7 @@ implements HasDynamicallyVisibleContent {
 
         selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
                 this::getSelectorDropdownPanel,
-                EntityCollectionModelParented.HINT_KEY_SELECTED_ITEM);
+                CollectionModelParented.HINT_KEY_SELECTED_ITEM);
 
         buildGui();
     }
@@ -161,10 +161,10 @@ implements HasDynamicallyVisibleContent {
     }
 
     // EntityCollectionModelParented caching
-    private transient EntityCollectionModelParented entityCollectionModelParented;
-    private EntityCollectionModelParented entityCollectionModelParented() {
+    private transient CollectionModelParented entityCollectionModelParented;
+    private CollectionModelParented entityCollectionModelParented() {
         if(entityCollectionModelParented == null) {
-            this.entityCollectionModelParented = EntityCollectionModelParented.forParentObjectModel(getModel(), layoutData);
+            this.entityCollectionModelParented = CollectionModelParented.forParentObjectModel(getModel(), layoutData);
         }
         return entityCollectionModelParented;
     }
@@ -180,7 +180,7 @@ implements HasDynamicallyVisibleContent {
         return tableDecorator;
     }
 
-    private void createSelectorDropdownPanel(final EntityCollectionModel collectionModel) {
+    private void createSelectorDropdownPanel(final CollectionModel collectionModel) {
 
         final CollectionPresentationSelectorHelper selectorHelper =
                 new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),

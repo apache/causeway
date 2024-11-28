@@ -35,11 +35,12 @@ import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-public interface EntityCollectionModel
+public sealed interface CollectionModel
 extends
     IModel<DataTableInteractive>,
     HasCommonContext,
-    LinksProvider {
+    LinksProvider
+permits CollectionModelAbstract {
 
     // -- VARIANTS
 
@@ -58,6 +59,8 @@ extends
          */
         PARENTED(RenderingHint.PARENTED_PROPERTY_COLUMN, 12),
         ;
+        public boolean isStandalone() { return this == STANDALONE; }
+        public boolean isParented() { return this == PARENTED; }
 
         @Getter private final RenderingHint columnRenderingHint;
         @Getter private final int pageSizeDefault;
@@ -66,14 +69,6 @@ extends
             return isParented()
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN;
-        }
-
-        public boolean isStandalone() {
-            return this == STANDALONE;
-        }
-
-        public boolean isParented() {
-            return this == PARENTED;
         }
     }
 
@@ -129,16 +124,16 @@ extends
     // -- PARENTED SPECIFICS
 
     @Deprecated // there is no reason to distinguish parented and standalone, I think
-    default Optional<EntityCollectionModelParented> parented() {
-        return this instanceof EntityCollectionModelParented
-            ? Optional.of((EntityCollectionModelParented)this)
+    default Optional<CollectionModelParented> parented() {
+        return this instanceof CollectionModelParented
+            ? Optional.of((CollectionModelParented)this)
             : Optional.empty();
     }
 
     @Deprecated // there is no reason to distinguish parented and standalone, I think
     default Optional<Bookmark> parentedHintingBookmark() {
         return parented()
-                .map(EntityCollectionModelParented::asHintingBookmark);
+                .map(CollectionModelParented::asHintingBookmark);
     }
 
 }

@@ -34,7 +34,7 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
@@ -46,12 +46,12 @@ public class StandaloneCollectionPage extends PageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private final EntityCollectionModelStandalone collectionModel;
+    private final CollectionModelStandalone collectionModel;
 
     /**
      * For use with {@link Component#setResponsePage(org.apache.wicket.request.component.IRequestablePage)}
      */
-    public StandaloneCollectionPage(final EntityCollectionModelStandalone collectionModel) {
+    public StandaloneCollectionPage(final CollectionModelStandalone collectionModel) {
         super(PageParameterUtils.newPageParameters(),
                 collectionModel.getName(),
                 UiComponentType.STANDALONE_COLLECTION);

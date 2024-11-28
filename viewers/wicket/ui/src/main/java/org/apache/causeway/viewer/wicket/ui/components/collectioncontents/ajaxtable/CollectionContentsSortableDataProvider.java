@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorF
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelAbstract;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 import lombok.NonNull;
@@ -51,8 +51,8 @@ extends SortableDataProvider<DataRow, String> {
     private final IModel<DataTableInteractive> dataTableModelHolder;
 
     public CollectionContentsSortableDataProvider(final IModel<DataTableInteractive> dataTableModelHolder) {
-        this.dataTableModelHolder = dataTableModelHolder instanceof EntityCollectionModelAbstract
-                ? ((EntityCollectionModelAbstract)dataTableModelHolder).delegate()
+        this.dataTableModelHolder = dataTableModelHolder instanceof CollectionModelAbstract
+                ? ((CollectionModelAbstract)dataTableModelHolder).delegate()
                 : dataTableModelHolder;
     }
 

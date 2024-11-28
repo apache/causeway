@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
@@ -60,8 +60,8 @@ implements CollectionContentsAsFactory {
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
         final boolean hasAnyBigDecProperty =
-            _Casts.castTo(EntityCollectionModel.class, model)
-                .map(EntityCollectionModel::getElementType)
+            _Casts.castTo(CollectionModel.class, model)
+                .map(CollectionModel::getElementType)
                 .map((final ObjectSpecification elementSpec)->elementSpec.streamAssociations(MixedIn.EXCLUDED)
                         .anyMatch(OF_TYPE_BIGDECIMAL))
                 .orElse(false);
@@ -70,8 +70,8 @@ implements CollectionContentsAsFactory {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        _Assert.assertNullableObjectIsInstanceOf(model, EntityCollectionModel.class);
-        final EntityCollectionModel collectionModel = (EntityCollectionModel) model;
+        _Assert.assertNullableObjectIsInstanceOf(model, CollectionModel.class);
+        final CollectionModel collectionModel = (CollectionModel) model;
         return new CollectionContentsAsSummary(id, collectionModel);
     }
 

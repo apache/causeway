@@ -37,7 +37,7 @@ import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
 import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 
 public abstract class EventProviderAbstract implements EventProvider {
 
@@ -47,7 +47,7 @@ public abstract class EventProviderAbstract implements EventProvider {
 
     // //////////////////////////////////////
 
-    public EventProviderAbstract(final EntityCollectionModel collectionModel, final String calendarName) {
+    public EventProviderAbstract(final CollectionModel collectionModel, final String calendarName) {
         var commonContext = collectionModel.getMetaModelContext();
 
         collectionModel.getDataTableModel()

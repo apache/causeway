@@ -27,8 +27,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorHelper;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 class StandaloneCollectionPanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, CollectionModel>
 implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
     private static final long serialVersionUID = 1L;
@@ -54,7 +54,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
     public StandaloneCollectionPanel(
             final String id,
-            final EntityCollectionModelStandalone collectionModel) {
+            final CollectionModelStandalone collectionModel) {
         super(id, collectionModel);
 
         outerDiv = new WebMarkupContainer(ID_STANDALONE_COLLECTION);
@@ -114,7 +114,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
 
     @Override
     public Integer getCount() {
-        final EntityCollectionModel model = getModel();
+        final CollectionModel model = getModel();
         return model.getElementCount();
     }
 

@@ -33,22 +33,23 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTable
 import lombok.NonNull;
 
 /**
- * Represents a collection (a member) of an entity.
+ * Represents a collection (a member) of a domain object.
  *
  * @implSpec
  * <pre>
- * EntityCollectionModel --chained-to--> CollectionInteractionWkt (delegate)
+ * CollectionModel --chained-to--> CollectionInteractionWkt (delegate)
  * </pre>
  */
-public abstract class EntityCollectionModelAbstract
+public sealed abstract class CollectionModelAbstract
 extends ChainingModel<DataTableInteractive>
-implements EntityCollectionModel {
+implements CollectionModel
+permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalone {
 
     private static final long serialVersionUID = 1L;
 
     private final @NonNull Variant variant;
 
-    protected EntityCollectionModelAbstract(
+    protected CollectionModelAbstract(
             final DataTableModelWkt dataTableModelWkt,
             final @NonNull Variant variant) {
         super(dataTableModelWkt);
@@ -91,7 +92,7 @@ implements EntityCollectionModel {
      * even when switching back and forth between presentations ('table', 'hidden'). */
     @Override
     public final int getPageSize() {
-        return EntityCollectionModel.super.getPageSize();
+        return CollectionModel.super.getPageSize();
     }
 
     // -- VARIANT SUPPORT
@@ -106,16 +107,16 @@ implements EntityCollectionModel {
     /**
      * Additional links to render (if any)
      */
-    private List<ActionModel> linkAndLabels = _Lists.newArrayList();
+    private List<ActionModel> actionModels = _Lists.newArrayList();
 
-    public final void setLinkAndLabels(final @NonNull Iterable<ActionModel> linkAndLabels) {
-        this.linkAndLabels.clear();
-        linkAndLabels.forEach(this.linkAndLabels::add);
+    public final void setLinkAndLabels(final @NonNull Iterable<ActionModel> actionModels) {
+        this.actionModels.clear();
+        actionModels.forEach(this.actionModels::add);
     }
 
     @Override
     public final Can<ActionModel> getLinks() {
-        return Can.ofCollection(linkAndLabels);
+        return Can.ofCollection(actionModels);
     }
 
 }

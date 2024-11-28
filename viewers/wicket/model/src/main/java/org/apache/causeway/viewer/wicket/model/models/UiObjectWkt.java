@@ -89,7 +89,7 @@ implements
 
     public static UiObjectWkt ofAdapterForCollection(
             final ManagedObject adapter,
-            final @NonNull EntityCollectionModel.Variant variant) {
+            final @NonNull CollectionModel.Variant variant) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
                 ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
     }

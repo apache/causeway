@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionResultModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelStandalone;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelStandalone;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor.ActionResultResponseType;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
@@ -92,7 +92,7 @@ class _ResponseUtil {
         switch(responseType) {
         case COLLECTION: {
             _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
-            var collectionModel = EntityCollectionModelStandalone
+            var collectionModel = CollectionModelStandalone
                     .forActionModel((PackedManagedObject)resultAdapter, actionModel);
             var pageRedirectRequest = PageRedirectRequest.forPage(
                     StandaloneCollectionPage.class, new StandaloneCollectionPage(collectionModel));

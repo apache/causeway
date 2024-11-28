@@ -91,7 +91,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
             final ColumnActionModifier columnActionModifier,
             final PropertyModel associatedWithPropertyIfAny,
             final ParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
+            final CollectionModel associatedWithCollectionIfAny) {
         var delegate = ActionInteractionWkt.forEntity(
                 parentEntityModel,
                 actionIdentifier,
@@ -139,7 +139,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
 
     public static ActionModel forCollection(
             final ObjectAction action,
-            final EntityCollectionModelParented collectionModel) {
+            final CollectionModelParented collectionModel) {
         return forEntity(
                         collectionModel.getEntityModel(),
                         action.getFeatureIdentifier(),

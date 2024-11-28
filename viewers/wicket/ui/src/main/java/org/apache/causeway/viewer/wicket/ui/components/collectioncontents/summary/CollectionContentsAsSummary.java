@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -47,12 +47,12 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * {@link PanelAbstract Panel} that represents a {@link CollectionModel
  * collection of entity}s rendered using as a table of summary values with a
  * chart alongside.
  */
 class CollectionContentsAsSummary
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, CollectionModel>
 implements CollectionCountProvider {
 
     private static final String ID_MAX = "max";
@@ -71,7 +71,7 @@ implements CollectionCountProvider {
 
     private static final String ID_FEEDBACK = "feedback";
 
-    public CollectionContentsAsSummary(final String id, final EntityCollectionModel model) {
+    public CollectionContentsAsSummary(final String id, final CollectionModel model) {
         super(id, model);
 
         buildGui();
@@ -79,7 +79,7 @@ implements CollectionCountProvider {
 
     private void buildGui() {
 
-        final EntityCollectionModel model = getModel();
+        final CollectionModel model = getModel();
 
         final ObjectSpecification elementSpec = model.getElementType();
 
@@ -204,7 +204,7 @@ implements CollectionCountProvider {
 
     @Override
     public Integer getCount() {
-        final EntityCollectionModel model = getModel();
+        final CollectionModel model = getModel();
         return model.getElementCount();
     }
 

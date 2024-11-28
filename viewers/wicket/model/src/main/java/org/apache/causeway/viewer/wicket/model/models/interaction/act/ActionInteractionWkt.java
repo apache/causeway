@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
@@ -83,7 +83,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private Can<UiParameterWkt> childModels;
     private @Nullable PropertyModel associatedWithPropertyIfAny;
     private @Nullable ParameterModel associatedWithParameterIfAny;
-    private @Nullable EntityCollectionModel associatedWithCollectionIfAny;
+    private @Nullable CollectionModel associatedWithCollectionIfAny;
 
     public static ActionInteractionWkt forEntity(
             final UiObjectWkt parentEntityModel,
@@ -91,7 +91,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final Where where,
             final PropertyModel associatedWithPropertyIfAny,
             final ParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
+            final CollectionModel associatedWithCollectionIfAny) {
 
         var onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
         var objectAction = onwerSpec.getAction(actionIdentifier.getMemberLogicalName());
@@ -121,7 +121,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final Optional<ObjectAction> objectAction,
             final PropertyModel associatedWithPropertyIfAny,
             final ParameterModel associatedWithParameterIfAny,
-            final EntityCollectionModel associatedWithCollectionIfAny) {
+            final CollectionModel associatedWithCollectionIfAny) {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
@@ -184,7 +184,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         return Optional.ofNullable(associatedWithParameterIfAny);
     }
 
-    public Optional<EntityCollectionModel> associatedWithCollection() {
+    public Optional<CollectionModel> associatedWithCollection() {
         return Optional.ofNullable(associatedWithCollectionIfAny);
     }
 

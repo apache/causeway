@@ -29,8 +29,8 @@ import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataTable
 import lombok.Getter;
 import lombok.NonNull;
 
-public class EntityCollectionModelParented
-extends EntityCollectionModelAbstract
+public final class CollectionModelParented
+extends CollectionModelAbstract
 implements
     UiHintContainer {
 
@@ -43,7 +43,7 @@ implements
 
     // -- FACTORIES
 
-    public static EntityCollectionModelParented forParentObjectModel(
+    public static CollectionModelParented forParentObjectModel(
             final @NonNull UiObjectWkt entityModel, final @NonNull CollectionLayoutData layoutData) {
 
         var coll = entityModel
@@ -53,7 +53,7 @@ implements
         var dataTableModel = DataTableModelWkt
                 .forCollection(entityModel.bookmarkedObjectModel(), coll);
 
-        return new EntityCollectionModelParented(
+        return new CollectionModelParented(
                 dataTableModel,
                 entityModel,
                 layoutData);
@@ -61,7 +61,7 @@ implements
 
     // -- CONSTRUCTOR
 
-    protected EntityCollectionModelParented(
+    protected CollectionModelParented(
             final @NonNull DataTableModelWkt delegate,
             final @NonNull UiObjectWkt parentObjectModel,  //TODO maybe instead use the delegate (?)
             final @NonNull CollectionLayoutData layoutData) {

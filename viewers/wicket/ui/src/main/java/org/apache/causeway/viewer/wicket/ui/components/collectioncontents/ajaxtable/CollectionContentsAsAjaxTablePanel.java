@@ -35,9 +35,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel.Variant;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ActionColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
@@ -54,11 +54,11 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * {@link PanelAbstract Panel} that represents a {@link CollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 class CollectionContentsAsAjaxTablePanel
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel>
+extends PanelAbstract<DataTableInteractive, CollectionModel>
 implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
@@ -68,7 +68,7 @@ implements CollectionCountProvider {
     private static final CssResourceReference TABLE_CSS =
             new CssResourceReference(CollectionContentsAsAjaxTablePanel.class, "CollectionContentsAsAjaxTablePanel.css");
 
-    public CollectionContentsAsAjaxTablePanel(final String id, final EntityCollectionModel model) {
+    public CollectionContentsAsAjaxTablePanel(final String id, final CollectionModel model) {
         super(id, model);
     }
 
@@ -96,7 +96,7 @@ implements CollectionCountProvider {
 
     // -- HELPER
 
-    private EntityCollectionModel entityCollectionModel() {
+    private CollectionModel entityCollectionModel() {
         return getModel();
     }
 
@@ -139,7 +139,7 @@ implements CollectionCountProvider {
     // -- MULTI SELECTION SUPPORT
 
     private Optional<ToggleboxColumn> createToggleboxColumn(final DataTableWithPagesAndFilter<?, ?> dataTable) {
-        if(entityCollectionModel() instanceof EntityCollectionModelParented collModel) {
+        if(entityCollectionModel() instanceof CollectionModelParented collModel) {
             var collMetaModel = collModel.getMetaModel();
             return collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
                     ? Optional.of(new ToggleboxColumn(collModel.getElementType(), dataTable))

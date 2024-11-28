@@ -20,18 +20,18 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import lombok.NonNull;
 
-public class EntityCollectionModelHidden
-extends EntityCollectionModelAbstract {
+public final class CollectionModelHidden
+extends CollectionModelAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public static EntityCollectionModelHidden forCollectionModel(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
-        return new EntityCollectionModelHidden(collectionModel);
+    public static CollectionModelHidden forCollectionModel(
+            final @NonNull CollectionModelAbstract collectionModel) {
+        return new CollectionModelHidden(collectionModel);
     }
 
-    protected EntityCollectionModelHidden(
-            final @NonNull EntityCollectionModelAbstract collectionModel) {
+    protected CollectionModelHidden(
+            final @NonNull CollectionModelAbstract collectionModel) {
         super(collectionModel.delegate(), collectionModel.getVariant());
     }
 

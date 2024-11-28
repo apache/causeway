@@ -31,7 +31,7 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvi
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventSource;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.FullCalendar;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.selector.EventSourceSelector;
-import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -39,11 +39,11 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
- * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
+ * {@link PanelAbstract Panel} that represents a {@link CollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
  */
 public abstract class CalendaredCollectionAbstract
-extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
+extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,7 +55,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
         "#63BA68", "#B1ADAC", "#E6CC7F"
     };
 
-    public CalendaredCollectionAbstract(final String id, final EntityCollectionModel model) {
+    public CalendaredCollectionAbstract(final String id, final CollectionModel model) {
         super(id, model);
         buildGui();
     }
@@ -67,7 +67,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
     private void buildGui() {
 
-        final EntityCollectionModel model = getModel();
+        final CollectionModel model = getModel();
 
         final NotificationPanel feedback = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
         addOrReplace(feedback);
@@ -101,7 +101,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
     }
 
     protected abstract EventProvider newEventProvider(
-            final EntityCollectionModel model, final String calendarName);
+            final CollectionModel model, final String calendarName);
 
     protected abstract Set<String> getCalendarNames(final Iterable<ManagedObject> entityList);
 
