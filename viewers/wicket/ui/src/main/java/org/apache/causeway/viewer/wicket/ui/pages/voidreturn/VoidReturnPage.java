@@ -22,7 +22,6 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.VoidModel;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
@@ -38,25 +37,13 @@ public class VoidReturnPage extends PageAbstract {
 
     private static final String ID_ACTION_NAME = "actionName";
 
-    public VoidReturnPage(final VoidModel model) {
-        this(model, actionNameFrom(model));
-    }
+    public VoidReturnPage(final VoidModel model, final String actionFriendlyName) {
+        super(PageParameterUtils.newPageParameters(), actionFriendlyName, UiComponentType.VOID_RETURN);
 
-    private VoidReturnPage(final VoidModel model, final String actionName) {
-        super(PageParameterUtils.newPageParameters(), actionName, UiComponentType.VOID_RETURN);
-
-        Wkt.labelAdd(themeDiv, ID_ACTION_NAME, actionName);
+        Wkt.labelAdd(themeDiv, ID_ACTION_NAME, actionFriendlyName);
 
         addChildComponents(themeDiv, model);
         addBookmarkedPages(themeDiv);
-    }
-
-    private static String actionNameFrom(final VoidModel model) {
-        ActionModel actionModel = model.getActionModelHint();
-        if(actionModel != null) {
-            return actionModel.getFriendlyName();
-        }
-        return "Results"; // fallback, probably not required because hint should always exist on the model.
     }
 
 }

@@ -121,6 +121,13 @@ permits CollectionModelAbstract {
         return getDataTableModel().getTableDecoratorIfAny();
     }
 
+    // -- INITIALIZATION STATE
+
+    /**
+     * Whether the table model is initialized with row data.
+     */
+    boolean isTableDataLoaded();
+
     // -- PARENTED SPECIFICS
 
     @Deprecated // there is no reason to distinguish parented and standalone, I think

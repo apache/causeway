@@ -154,9 +154,8 @@ class _ResponseUtil {
             return ActionResultResponse.withHandler(handler);
         }
         case VOID_AS_EMPTY: {
-            VoidModel voidModel = new VoidModel();
-            voidModel.setActionHint(actionModel);
-            var pageRedirectRequest = PageRedirectRequest.forPage(VoidReturnPage.class, new VoidReturnPage(voidModel));
+            var pageRedirectRequest = PageRedirectRequest
+                .forPage(VoidReturnPage.class, new VoidReturnPage(new VoidModel(), actionModel.getFriendlyName()));
             return ActionResultResponse.toPage(pageRedirectRequest);
         }
         case RELOAD: {

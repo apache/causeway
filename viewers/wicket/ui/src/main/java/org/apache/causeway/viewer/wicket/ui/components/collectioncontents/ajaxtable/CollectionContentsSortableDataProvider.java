@@ -35,6 +35,7 @@ import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorF
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 import lombok.NonNull;
@@ -47,10 +48,10 @@ extends SortableDataProvider<DataRow, String> {
 
     private static final long serialVersionUID = 1L;
 
-    private final IModel<DataTableInteractive> dataTableModel;
+    private final CollectionModel collectionModel;
 
-    public CollectionContentsSortableDataProvider(final IModel<DataTableInteractive> dataTableModel) {
-        this.dataTableModel = dataTableModel;
+    public CollectionContentsSortableDataProvider(final CollectionModel collectionModel) {
+        this.collectionModel = collectionModel;
     }
 
     public boolean isDecoratedWithDataTablesNet() {
@@ -61,12 +62,12 @@ extends SortableDataProvider<DataRow, String> {
     }
 
     public DataTableInteractive getDataTableModel() {
-        return applyColumnSortTo(dataTableModelInternal());
+        return applyColumnSortTo(dataTableInternal());
     }
 
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
-        return DataRowWkt.chain(dataTableModel, dataRow);
+        return DataRowWkt.chain(collectionModel, dataRow);
     }
 
     @Override
@@ -83,8 +84,8 @@ extends SortableDataProvider<DataRow, String> {
 
     // -- HELPER
 
-    private DataTableInteractive dataTableModelInternal() {
-        return dataTableModel.getObject();
+    private DataTableInteractive dataTableInternal() {
+        return collectionModel.getObject();
     }
 
     private DataTableInteractive applyColumnSortTo(final DataTableInteractive dataTableInteractive) {
@@ -109,7 +110,7 @@ extends SortableDataProvider<DataRow, String> {
     private OptionalInt lookupColumnIndexFor(final @Nullable SortParam<String> sortParam) {
         if(sortParam==null) return OptionalInt.empty();
         int columnIndex = 0;
-        for(var column : dataTableModelInternal().dataColumnsObservable().getValue()) {
+        for(var column : dataTableInternal().dataColumnsObservable().getValue()) {
             if(column.associationMetaModel().getId().equals(sortParam.getProperty())) {
                 return OptionalInt.of(columnIndex);
             }

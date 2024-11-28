@@ -529,9 +529,8 @@ public class Wkt {
             private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
                 if(model instanceof DataRowToggleWkt) {
                     var chainedModel = ((DataRowToggleWkt)model).getChainedModel();
-                    if(chainedModel instanceof DataRowWkt) {
-                        final DataRowWkt dataRowWkt = (DataRowWkt)chainedModel;
-                        return dataRowWkt.hasMemoizedDataRow();
+                    if(chainedModel instanceof DataRowWkt dataRowWkt) {
+                        return dataRowWkt.isTableDataLoaded();
                     }
                 }
                 return false;

@@ -33,19 +33,8 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
-import org.apache.causeway.viewer.wicket.model.models.VoidModel;
-import org.apache.causeway.viewer.wicket.model.util.PageUtils;
-import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public enum ActionResultResponseHandlingStrategy {
-    REDIRECT_TO_VOID {
-        @Override
-        public void handleResults(
-                final ActionResultResponse resultResponse) {
-
-            PageUtils.pageRedirect(new VoidReturnPage(new VoidModel()));
-        }
-    },
     REDIRECT_TO_PAGE {
         @Override
         public void handleResults(

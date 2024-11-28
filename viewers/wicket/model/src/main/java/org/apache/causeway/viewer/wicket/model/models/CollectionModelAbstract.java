@@ -56,6 +56,12 @@ permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalon
         this.variant = variant;
     }
 
+
+    @Override
+    public final boolean isTableDataLoaded() {
+        return delegate().isAttached();
+    }
+
     public final DataTableModelWkt delegate() {
         return (DataTableModelWkt) super.getTarget();
     }

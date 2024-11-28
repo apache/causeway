@@ -18,38 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.wicket.model.IModel;
 
 /**
  * Represents the result of invoking a <tt>void</tt> action.
  */
-public class VoidModel extends ModelAbstract<Void> {
-
-    private static final long serialVersionUID = 1L;
+public record VoidModel()
+implements IModel<Void> {
 
     @Override
-    protected Void load() {
+    public Void getObject() {
         return null;
-    }
-
-    // --
-
-    private ActionModel actionModelHint;
-    /**
-     * The {@link ActionModel model} of the {@link ObjectAction action}
-     * that generated this {@link VoidModel}.
-     *
-     * @see #setActionHint(ActionModel)
-     */
-    public ActionModel getActionModelHint() {
-        return actionModelHint;
-    }
-    /**
-     * Called by action.
-     *
-     * @see #getActionModelHint()
-     */
-    public void setActionHint(final ActionModel actionModelHint) {
-        this.actionModelHint = actionModelHint;
     }
 }

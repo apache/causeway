@@ -21,10 +21,10 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.coll;
 import java.util.Optional;
 
 import org.apache.wicket.model.ChainingModel;
-import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
+import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
 
 import lombok.Getter;
 
@@ -34,17 +34,17 @@ extends ChainingModel<DataRow> {
     private static final long serialVersionUID = 1L;
 
     public static DataRowWkt chain(
-            final IModel<DataTableInteractive> dataTableModelHolder,
+            final CollectionModel collectionModel,
             final DataRow dataRow) {
-        return new DataRowWkt(dataTableModelHolder, dataRow);
+        return new DataRowWkt(collectionModel, dataRow);
     }
 
     @Getter private final int rowIndex;
 
     private DataRowWkt(
-            final IModel<DataTableInteractive> dataTableModelHolder,
+            final CollectionModel collectionModel,
             final DataRow dataRow) {
-        super(dataTableModelHolder);
+        super(collectionModel);
         this.rowIndex = dataRow.rowIndex();
     }
 
@@ -54,17 +54,29 @@ extends ChainingModel<DataRow> {
     }
 
     public Optional<DataRow> dataRow() {
-        return dataTableModel().lookupDataRow(rowIndex);
+        return dataTable().lookupDataRow(rowIndex);
     }
 
-    public boolean hasMemoizedDataRow() {
-        return ((DataTableModelWkt) super.getTarget()).isAttached();
+    /**
+     * Whether it is safe (free of side-effects) to load/access given model's object.
+     * <p>
+     * As of [CAUSEWAY-3658], don't call
+     * {@link org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt#getObject()},
+     * when the model's object is not transiently already loaded, because otherwise it would
+     * enforce a page-reload as side-effect.
+     */
+    public boolean isTableDataLoaded() {
+        return collectionModel().isTableDataLoaded();
     }
 
     // -- HELPER
 
-    private DataTableInteractive dataTableModel() {
-        return ((DataTableModelWkt) super.getTarget()).getObject();
+    private CollectionModel collectionModel() {
+        return (CollectionModel) super.getTarget();
+    }
+
+    private DataTableInteractive dataTable() {
+        return collectionModel().getObject();
     }
 
 }
