@@ -96,7 +96,7 @@ implements CollectionCountProvider {
 
     // -- HELPER
 
-    private CollectionModel entityCollectionModel() {
+    private CollectionModel collectionModel() {
         return getModel();
     }
 
@@ -108,7 +108,7 @@ implements CollectionCountProvider {
 
         final List<GenericColumn> columns = _Lists.newArrayList();
 
-        var collectionModel = entityCollectionModel();
+        var collectionModel = collectionModel();
         var elementType = collectionModel.getElementType();
 
         // first create property columns, so we know how many columns there are
@@ -139,7 +139,7 @@ implements CollectionCountProvider {
     // -- MULTI SELECTION SUPPORT
 
     private Optional<ToggleboxColumn> createToggleboxColumn(final DataTableWithPagesAndFilter<?, ?> dataTable) {
-        if(entityCollectionModel() instanceof CollectionModelParented collModel) {
+        if(collectionModel() instanceof CollectionModelParented collModel) {
             var collMetaModel = collModel.getMetaModel();
             return collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
                     ? Optional.of(new ToggleboxColumn(collModel.getElementType(), dataTable))
@@ -165,7 +165,7 @@ implements CollectionCountProvider {
             final Wicket wktConfig,
             final List<GenericColumn> columns) {
 
-        var contextBookmark = entityCollectionModel().getParentObject().getBookmark()
+        var contextBookmark = collectionModel().getParentObject().getBookmark()
                 .orElse(null);
 
         final int maxColumnTitleLength = getModel().getVariant().isParented()

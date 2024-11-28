@@ -35,7 +35,6 @@ import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorF
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
 
 import lombok.NonNull;
@@ -48,12 +47,10 @@ extends SortableDataProvider<DataRow, String> {
 
     private static final long serialVersionUID = 1L;
 
-    private final IModel<DataTableInteractive> dataTableModelHolder;
+    private final IModel<DataTableInteractive> dataTableModel;
 
-    public CollectionContentsSortableDataProvider(final IModel<DataTableInteractive> dataTableModelHolder) {
-        this.dataTableModelHolder = dataTableModelHolder instanceof CollectionModelAbstract
-                ? ((CollectionModelAbstract)dataTableModelHolder).delegate()
-                : dataTableModelHolder;
+    public CollectionContentsSortableDataProvider(final IModel<DataTableInteractive> dataTableModel) {
+        this.dataTableModel = dataTableModel;
     }
 
     public boolean isDecoratedWithDataTablesNet() {
@@ -69,7 +66,7 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
-        return DataRowWkt.chain(dataTableModelHolder, dataRow);
+        return DataRowWkt.chain(dataTableModel, dataRow);
     }
 
     @Override
@@ -87,7 +84,7 @@ extends SortableDataProvider<DataRow, String> {
     // -- HELPER
 
     private DataTableInteractive dataTableModelInternal() {
-        return dataTableModelHolder.getObject();
+        return dataTableModel.getObject();
     }
 
     private DataTableInteractive applyColumnSortTo(final DataTableInteractive dataTableInteractive) {

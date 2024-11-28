@@ -28,7 +28,6 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.models.CollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.CollectionModelAbstract;
 import org.apache.causeway.viewer.wicket.model.models.CollectionModelHidden;
 import org.apache.causeway.viewer.wicket.model.models.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
@@ -91,7 +90,7 @@ implements CollectionCountProvider {
     private void addUnderlyingViews() {
         final CollectionModel visibleCollModel = getModel();
         final CollectionModel hiddenCollModel = CollectionModelHidden
-                .forCollectionModel((CollectionModelAbstract) visibleCollModel);
+                .forCollectionModel(visibleCollModel);
 
         final Can<ComponentFactoryKey> componentFactories = selectorHelper.getComponentFactories();
 
@@ -145,30 +144,23 @@ implements CollectionCountProvider {
         super.onEvent(event);
 
         final CausewaySelectorEvent selectorEvent = CausewayEnvelopeEvent.openLetter(event, CausewaySelectorEvent.class);
-        if(selectorEvent == null) {
-            return;
-        }
+        if(selectorEvent == null) return;
+
         final CollectionPresentationSelectorPanel selectorDropdownPanel = CollectionPresentationSelectorProvider.getCollectionSelectorProvider(this);
-        if(selectorDropdownPanel == null) {
-            // not expected, because this event shouldn't be called.
-            // but no harm in simply returning...
-            return;
-        }
+        // not expected, because this event shouldn't be called.
+        // but no harm in simply returning...
+        if(selectorDropdownPanel == null) return;
 
         String selectedView = selectorEvent.hintFor(selectorDropdownPanel, UIHINT_VIEW);
-        if (selectedView == null) {
-            return;
-        }
+        if (selectedView == null) return;
 
         int underlyingViewNum = selectorHelper.lookup(selectedView);
 
-        final CollectionModel dummyModel = CollectionModelHidden
-                .forCollectionModel((CollectionModelAbstract) getModel());
+        final CollectionModel dummyModel = CollectionModelHidden.forCollectionModel(getModel());
         for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             final Component component = underlyingViews[i];
-            if(component == null) {
-                continue;
-            }
+            if(component == null) continue;
+
             final boolean isSelected = i == underlyingViewNum;
             setVisible(component, isSelected);
             component.setDefaultModel(isSelected? getModel(): dummyModel);

@@ -37,10 +37,10 @@ import lombok.NonNull;
  *
  * @implSpec
  * <pre>
- * CollectionModel --chained-to--> CollectionInteractionWkt (delegate)
+ * CollectionModel --chained-to--> DataTableInteractive (delegate)
  * </pre>
  */
-public sealed abstract class CollectionModelAbstract
+sealed abstract class CollectionModelAbstract
 extends ChainingModel<DataTableInteractive>
 implements CollectionModel
 permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalone {

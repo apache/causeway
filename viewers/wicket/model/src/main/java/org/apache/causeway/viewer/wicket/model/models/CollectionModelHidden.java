@@ -26,8 +26,8 @@ extends CollectionModelAbstract {
     private static final long serialVersionUID = 1L;
 
     public static CollectionModelHidden forCollectionModel(
-            final @NonNull CollectionModelAbstract collectionModel) {
-        return new CollectionModelHidden(collectionModel);
+            final @NonNull CollectionModel collectionModel) {
+        return new CollectionModelHidden((CollectionModelAbstract) collectionModel);
     }
 
     protected CollectionModelHidden(
