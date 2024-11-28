@@ -24,7 +24,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
 /**
- * Passed through the {@link ActionModelImpl} or {@link UiAttributeWkt}, allowing
+ * Passed through the {@link ActionModel} or {@link UiAttributeWkt}, allowing
  * two different Wicket UI components (eg owning <code>ActionPanel</code> and
  * <code>ActionParametersFormPanel</code> to interact.
  */

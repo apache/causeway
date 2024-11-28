@@ -49,9 +49,8 @@ module org.apache.causeway.viewer.wicket.model {
     requires org.slf4j;
     requires spring.context;
     requires spring.core;
-    //as of 9.11.0 only works when used as automatic named modules ...
     requires transitive org.apache.wicket.core;
-    requires org.apache.wicket.request;
+    requires transitive org.apache.wicket.request;
     requires org.apache.wicket.util;
     requires org.apache.causeway.security.api;
 }
