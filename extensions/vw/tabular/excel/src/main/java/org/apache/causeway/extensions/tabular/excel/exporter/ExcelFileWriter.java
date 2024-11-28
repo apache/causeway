@@ -113,7 +113,7 @@ public record ExcelFileWriter(@Nullable Options options) {
         private final Sheet sheet;
         private int rowNum;
         public Row newRow() {
-            return sheet.createRow((short) rowNum++);
+            return sheet.createRow(rowNum++);
         }
     }
 
