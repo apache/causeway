@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.wicket.model.models.binding.BooleanBinding;
  * Boolean {@link IModel} to bind to the associated {@link DataTableInteractive}'s
  * {@link DataRow} model to handle check-box selection.
  */
-public class DataRowToggleWkt
+public final class DataRowToggleWkt
 extends BooleanBinding<DataRow> {
 
     private static final long serialVersionUID = 1L;

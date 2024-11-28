@@ -35,21 +35,19 @@ extends CollectionModelAbstract {
             final @NonNull PackedManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel) {
 
-        var action = actionModel.getAction();
-
         return new CollectionModelStandalone(
-                DataTableModelWkt.forActionModel(
+                DataTableHolderFactory.forActionModel(
                         BookmarkedObjectWkt
                             .ofAdapter(actionModel.getParentObject()),
-                        action,
+                        actionModel.getAction(),
                         collectionAsAdapter));
     }
 
     // -- CONSTRUCTOR
 
     private CollectionModelStandalone(
-            final @NonNull DataTableModelWkt delegate) {
-        super(delegate, Variant.STANDALONE);
+            final @NonNull DataTableHolderFactory factory) {
+        super(factory, Variant.STANDALONE);
     }
 
 }

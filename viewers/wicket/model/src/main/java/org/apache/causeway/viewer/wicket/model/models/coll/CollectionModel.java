@@ -41,7 +41,7 @@ extends
     IModel<DataTableInteractive>,
     HasCommonContext,
     LinksProvider
-permits CollectionModelAbstract {
+permits CollectionModelAbstract, CollectionModelEmpty {
 
     // -- VARIANTS
 
@@ -71,6 +71,12 @@ permits CollectionModelAbstract {
                 ? RenderingHint.PARENTED_TITLE_COLUMN
                 : RenderingHint.STANDALONE_TITLE_COLUMN;
         }
+    }
+
+    // -- EMPTY
+
+    public static CollectionModel empty() {
+        return new CollectionModelEmpty();
     }
 
     // -- IDENTITY

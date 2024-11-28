@@ -28,7 +28,6 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewaySelectorEvent;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelHidden;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
@@ -89,8 +88,7 @@ implements CollectionCountProvider {
 
     private void addUnderlyingViews() {
         final CollectionModel visibleCollModel = getModel();
-        final CollectionModel hiddenCollModel = CollectionModelHidden
-                .forCollectionModel(visibleCollModel);
+        final CollectionModel hiddenCollModel = CollectionModel.empty();
 
         final Can<ComponentFactoryKey> componentFactories = selectorHelper.getComponentFactories();
 
@@ -156,14 +154,16 @@ implements CollectionCountProvider {
 
         int underlyingViewNum = selectorHelper.lookup(selectedView);
 
-        final CollectionModel dummyModel = CollectionModelHidden.forCollectionModel(getModel());
+        final CollectionModel emptyModel = CollectionModel.empty();
         for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             final Component component = underlyingViews[i];
             if(component == null) continue;
 
             final boolean isSelected = i == underlyingViewNum;
             setVisible(component, isSelected);
-            component.setDefaultModel(isSelected? getModel(): dummyModel);
+            component.setDefaultModel(isSelected
+                ? getModel()
+                : emptyModel);
         }
 
         this.selectedComponent = underlyingViews[underlyingViewNum];

@@ -50,11 +50,8 @@ implements
                         .getTypeOfSpecification()
                         .getCollectionElseFail(layoutData.getId()); // collection's member-id
 
-        var dataTableModel = DataTableModelWkt
-                .forCollection(objectModel.bookmarkedObjectModel(), coll);
-
         return new CollectionModelParented(
-                dataTableModel,
+                DataTableHolderFactory.forCollection(objectModel.bookmarkedObjectModel(), coll),
                 objectModel,
                 layoutData);
     }
@@ -62,10 +59,10 @@ implements
     // -- CONSTRUCTOR
 
     protected CollectionModelParented(
-            final @NonNull DataTableModelWkt delegate,
+            final @NonNull DataTableHolderFactory factory,
             final @NonNull UiObjectWkt parentObjectModel,  //TODO maybe instead use the delegate (?)
             final @NonNull CollectionLayoutData layoutData) {
-        super(delegate, Variant.PARENTED);
+        super(factory, Variant.PARENTED);
         this.objectModel = parentObjectModel;
         this.layoutData = layoutData;
     }

@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.model.models.coll;
 import java.util.List;
 
 import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
@@ -34,13 +35,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
-import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
-import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
-import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -54,9 +51,40 @@ import lombok.NonNull;
 sealed abstract class CollectionModelAbstract
 extends ChainingModel<DataTableInteractive>
 implements CollectionModel
-permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalone {
+permits CollectionModelParented, CollectionModelStandalone {
 
     private static final long serialVersionUID = 1L;
+
+    // -- FACTORIES
+    record DataTableHolderFactory(
+        BookmarkedObjectWkt bookmarkedObject,
+        DataTableInteractive tableInteractive) {
+
+        static DataTableHolderFactory forActionModel(
+            final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
+            final @NonNull ObjectAction actMetaModel,
+            final @NonNull ManagedObject actionResult) {
+
+            var tableInteractive = DataTableInteractive.forAction(
+                ManagedAction.of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED),
+                actionResult);
+            return new DataTableHolderFactory(bookmarkedObjectModel, tableInteractive);
+        }
+
+        static @NonNull DataTableHolderFactory forCollection(
+            final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
+            final @NonNull OneToManyAssociation collMetaModel) {
+
+            var tableInteractive = DataTableInteractive.forCollection(
+                ManagedCollection.of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
+            return new DataTableHolderFactory(bookmarkedObjectModel, tableInteractive);
+        }
+
+        DataTableHolder build() {
+            return new DataTableHolder(bookmarkedObject, tableInteractive);
+        }
+
+    }
 
     /**
      * Bound to a BookmarkedObjectWkt, with the {@link DataTableInteractive}
@@ -65,69 +93,29 @@ permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalon
      * @implSpec the state of the DataTableModel is held transient,
      * that means it does not survive a serialization/de-serialization cycle;
      * it is recreated on load
-     *
-     * @see HasBookmarkedOwnerAbstract
      */
-    static class DataTableModelWkt
-    extends HasBookmarkedOwnerAbstract<DataTableInteractive>
-    implements
-        HasUiParentObject<UiObject> {
-
-        // -- FACTORIES
-
-        public static DataTableModelWkt forActionModel(
-                final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
-                final @NonNull ObjectAction actMetaModel,
-                final @NonNull ManagedObject actionResult) {
-
-            var managedAction = ManagedAction
-                    .of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED);
-            var tableInteractive = DataTableInteractive.forAction(
-                    managedAction,
-                    actionResult);
-            return new DataTableModelWkt(
-                    bookmarkedObjectModel, actMetaModel.getFeatureIdentifier(), tableInteractive);
-        }
-
-        public static @NonNull DataTableModelWkt forCollection(
-                final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
-                final @NonNull OneToManyAssociation collMetaModel) {
-
-            var tableInteractive = DataTableInteractive.forCollection(
-                    ManagedCollection
-                    .of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
-            return new DataTableModelWkt(
-                    bookmarkedObjectModel, collMetaModel.getFeatureIdentifier(), tableInteractive);
-        }
+    private static final class DataTableHolder
+    extends LoadableDetachableModel<DataTableInteractive> {
 
         // -- CONSTRUCTION
 
         private static final long serialVersionUID = 1L;
 
-        @Getter private final Identifier featureIdentifier;
+        private final BookmarkedObjectWkt bookmarkedObject;
         private final DataTableMemento tableMemento;
 
-        private DataTableModelWkt(
+        private DataTableHolder(
                 final BookmarkedObjectWkt bookmarkedObject,
-                final Identifier featureIdentifier,
                 final DataTableInteractive tableInteractive) {
-            super(bookmarkedObject);
-            this.featureIdentifier = featureIdentifier;
+            this.bookmarkedObject = bookmarkedObject;
             this.tableMemento = tableInteractive.createMemento();
             setObject(tableInteractive); // memoize
             tableMemento.setupBindings(tableInteractive);
         }
 
-        // --
-
-        @Override
-        public UiObject getParentUiModel() {
-            return ()->super.getBookmarkedOwner();
-        }
-
         @Override
         protected DataTableInteractive load() {
-            var tableInteractive = tableMemento.getDataTableModel(getBookmarkedOwner());
+            var tableInteractive = tableMemento.getDataTableModel(bookmarkedObject.asManagedObject());
             tableMemento.setupBindings(tableInteractive);
             return tableInteractive;
         }
@@ -137,20 +125,27 @@ permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalon
     private final @NonNull Variant variant;
 
     protected CollectionModelAbstract(
-            final DataTableModelWkt dataTableModelWkt,
+            final DataTableHolderFactory dataTableHolderFactory,
             final @NonNull Variant variant) {
-        super(dataTableModelWkt);
+        super(dataTableHolderFactory.build());
         this.variant = variant;
     }
 
+    //only used by CollectionModelHidden
+    @Deprecated
+    protected CollectionModelAbstract(
+        final CollectionModelAbstract collectionModel) {
+        super(collectionModel.delegate());
+        this.variant = collectionModel.getVariant();
+    }
 
     @Override
     public final boolean isTableDataLoaded() {
         return delegate().isAttached();
     }
 
-    public final DataTableModelWkt delegate() {
-        return (DataTableModelWkt) super.getTarget();
+    public final DataTableHolder delegate() {
+        return (DataTableHolder) super.getTarget();
     }
 
     @Override
@@ -176,7 +171,7 @@ permits CollectionModelHidden, CollectionModelParented, CollectionModelStandalon
 
     @Override
     public final ManagedObject getParentObject() {
-        return delegate().getBookmarkedOwner();
+        return delegate().bookmarkedObject.asManagedObject();
     }
 
     /* XXX[CAUSEWAY-3798] do not override (as it was for the hidden table)

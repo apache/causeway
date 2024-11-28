@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
 
-public class DataRowWkt
+public final class DataRowWkt
 extends ChainingModel<DataRow> {
 
     private static final long serialVersionUID = 1L;
