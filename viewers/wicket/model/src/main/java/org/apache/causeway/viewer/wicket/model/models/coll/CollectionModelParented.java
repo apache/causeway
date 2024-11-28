@@ -20,11 +20,15 @@ package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import org.apache.wicket.Component;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -49,9 +53,13 @@ implements
         var coll = objectModel
                         .getTypeOfSpecification()
                         .getCollectionElseFail(layoutData.getId()); // collection's member-id
+        var bookmarkedObject = objectModel.bookmarkedObjectModel();
+        var tableInteractive = DataTableInteractive.forCollection(
+            ManagedCollection.of(bookmarkedObject.getObject(), coll, Where.NOT_SPECIFIED));
 
         return new CollectionModelParented(
-                DataTableHolderFactory.forCollection(objectModel.bookmarkedObjectModel(), coll),
+                bookmarkedObject,
+                tableInteractive,
                 objectModel,
                 layoutData);
     }
@@ -59,10 +67,11 @@ implements
     // -- CONSTRUCTOR
 
     protected CollectionModelParented(
-            final @NonNull DataTableHolderFactory factory,
+            final BookmarkedObjectWkt bookmarkedObject,
+            final DataTableInteractive tableInteractive,
             final @NonNull UiObjectWkt parentObjectModel,  //TODO maybe instead use the delegate (?)
             final @NonNull CollectionLayoutData layoutData) {
-        super(factory, Variant.PARENTED);
+        super(bookmarkedObject, tableInteractive, Variant.PARENTED);
         this.objectModel = parentObjectModel;
         this.layoutData = layoutData;
     }

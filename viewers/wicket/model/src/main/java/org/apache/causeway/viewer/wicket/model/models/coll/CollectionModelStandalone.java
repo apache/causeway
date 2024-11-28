@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.coll;
 
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
+import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 
@@ -35,19 +38,20 @@ extends CollectionModelAbstract {
             final @NonNull PackedManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel) {
 
-        return new CollectionModelStandalone(
-                DataTableHolderFactory.forActionModel(
-                        BookmarkedObjectWkt
-                            .ofAdapter(actionModel.getParentObject()),
-                        actionModel.getAction(),
-                        collectionAsAdapter));
+        var bookmarkedObject = BookmarkedObjectWkt.ofAdapter(actionModel.getParentObject());
+        var tableInteractive = DataTableInteractive.forAction(
+            ManagedAction.of(bookmarkedObject.getObject(), actionModel.getAction(), Where.NOT_SPECIFIED),
+            collectionAsAdapter);
+
+        return new CollectionModelStandalone(bookmarkedObject, tableInteractive);
     }
 
     // -- CONSTRUCTOR
 
     private CollectionModelStandalone(
-            final @NonNull DataTableHolderFactory factory) {
-        super(factory, Variant.STANDALONE);
+            final BookmarkedObjectWkt bookmarkedObject,
+            final DataTableInteractive tableInteractive) {
+        super(bookmarkedObject, tableInteractive, Variant.STANDALONE);
     }
 
 }

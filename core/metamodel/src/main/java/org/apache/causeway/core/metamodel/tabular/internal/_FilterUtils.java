@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
 import org.apache.causeway.applib.services.filter.CollectionFilterService.Tokens;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -50,7 +52,9 @@ class _FilterUtils {
         }
     }
 
-    Optional<FilterHandler> createFilterHandler(final @NonNull ObjectSpecification elementType) {
+    Optional<FilterHandler> createFilterHandler(final @Nullable ObjectSpecification elementType) {
+        if(elementType==null) return Optional.empty();
+
         var mmc = elementType.getMetaModelContext();
         var collectionFilterServiceOpt = mmc.getServiceRegistry().select(CollectionFilterService.class).stream()
                 .filter(service->service.handles(elementType.getCorrespondingClass()))

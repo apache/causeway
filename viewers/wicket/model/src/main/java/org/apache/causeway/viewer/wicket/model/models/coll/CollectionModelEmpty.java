@@ -54,11 +54,16 @@ implements CollectionModel {
         return Can.empty();
     }
 
+    @Override
+    public DataTableInteractive getDataTableModel() {
+        return getObject();
+    }
+
     // -- NOT IMPLEMENTED
 
     @Override
     public DataTableInteractive getObject() {
-        throw _Exceptions.notImplemented();
+        return null;
     }
 
     @Override
@@ -68,11 +73,6 @@ implements CollectionModel {
 
     @Override
     public Variant getVariant() {
-        throw _Exceptions.notImplemented();
-    }
-
-    @Override
-    public DataTableInteractive getDataTableModel() {
         throw _Exceptions.notImplemented();
     }
 

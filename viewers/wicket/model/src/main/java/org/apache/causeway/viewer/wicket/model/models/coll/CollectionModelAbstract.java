@@ -20,19 +20,13 @@ package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import java.util.List;
 
-import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
@@ -43,114 +37,47 @@ import lombok.NonNull;
 /**
  * Represents a collection (a member) of a domain object.
  *
- * @implSpec
- * <pre>
- * CollectionModel --chained-to--> DataTableInteractive (delegate)
- * </pre>
+ * Bound to a {@link BookmarkedObjectWkt} and {@link DataTableInteractive}
+ * representing either a <i>Collection</i> or an <i>Action</i>'s result.
+ *
+ * @implSpec {@link DataTableInteractive} is not serializable,
+ *      hence is held transient,
+ *      that means it does not survive a serialization/de-serialization cycle;
+ *      it is recreated on {@link LoadableDetachableModel#load}
  */
 sealed abstract class CollectionModelAbstract
-extends ChainingModel<DataTableInteractive>
+extends LoadableDetachableModel<DataTableInteractive>
 implements CollectionModel
 permits CollectionModelParented, CollectionModelStandalone {
 
     private static final long serialVersionUID = 1L;
 
-    // -- FACTORIES
-    record DataTableHolderFactory(
-        BookmarkedObjectWkt bookmarkedObject,
-        DataTableInteractive tableInteractive) {
-
-        static DataTableHolderFactory forActionModel(
-            final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
-            final @NonNull ObjectAction actMetaModel,
-            final @NonNull ManagedObject actionResult) {
-
-            var tableInteractive = DataTableInteractive.forAction(
-                ManagedAction.of(bookmarkedObjectModel.getObject(), actMetaModel, Where.NOT_SPECIFIED),
-                actionResult);
-            return new DataTableHolderFactory(bookmarkedObjectModel, tableInteractive);
-        }
-
-        static @NonNull DataTableHolderFactory forCollection(
-            final @NonNull BookmarkedObjectWkt bookmarkedObjectModel,
-            final @NonNull OneToManyAssociation collMetaModel) {
-
-            var tableInteractive = DataTableInteractive.forCollection(
-                ManagedCollection.of(bookmarkedObjectModel.getObject(), collMetaModel, Where.NOT_SPECIFIED));
-            return new DataTableHolderFactory(bookmarkedObjectModel, tableInteractive);
-        }
-
-        DataTableHolder build() {
-            return new DataTableHolder(bookmarkedObject, tableInteractive);
-        }
-
-    }
-
-    /**
-     * Bound to a BookmarkedObjectWkt, with the {@link DataTableInteractive}
-     * representing either a <i>Collection</i> or an <i>Action</i>'s result.
-     *
-     * @implSpec the state of the DataTableModel is held transient,
-     * that means it does not survive a serialization/de-serialization cycle;
-     * it is recreated on load
-     */
-    private static final class DataTableHolder
-    extends LoadableDetachableModel<DataTableInteractive> {
-
-        // -- CONSTRUCTION
-
-        private static final long serialVersionUID = 1L;
-
-        private final BookmarkedObjectWkt bookmarkedObject;
-        private final DataTableMemento tableMemento;
-
-        private DataTableHolder(
-                final BookmarkedObjectWkt bookmarkedObject,
-                final DataTableInteractive tableInteractive) {
-            this.bookmarkedObject = bookmarkedObject;
-            this.tableMemento = tableInteractive.createMemento();
-            setObject(tableInteractive); // memoize
-            tableMemento.setupBindings(tableInteractive);
-        }
-
-        @Override
-        protected DataTableInteractive load() {
-            var tableInteractive = tableMemento.getDataTableModel(bookmarkedObject.asManagedObject());
-            tableMemento.setupBindings(tableInteractive);
-            return tableInteractive;
-        }
-
-    }
-
     private final @NonNull Variant variant;
+    private final BookmarkedObjectWkt bookmarkedObject;
+    private final DataTableMemento tableMemento;
 
     protected CollectionModelAbstract(
-            final DataTableHolderFactory dataTableHolderFactory,
+            final BookmarkedObjectWkt bookmarkedObject,
+            final DataTableInteractive tableInteractive,
             final @NonNull Variant variant) {
-        super(dataTableHolderFactory.build());
+
+        this.bookmarkedObject = bookmarkedObject;
+        this.tableMemento = tableInteractive.createMemento();
+        setObject(tableInteractive); // memoize
+        tableMemento.setupBindings(tableInteractive);
         this.variant = variant;
     }
 
-    //only used by CollectionModelHidden
-    @Deprecated
-    protected CollectionModelAbstract(
-        final CollectionModelAbstract collectionModel) {
-        super(collectionModel.delegate());
-        this.variant = collectionModel.getVariant();
+    @Override
+    protected DataTableInteractive load() {
+        var tableInteractive = tableMemento.getDataTableModel(bookmarkedObject.asManagedObject());
+        tableMemento.setupBindings(tableInteractive);
+        return tableInteractive;
     }
 
     @Override
     public final boolean isTableDataLoaded() {
-        return delegate().isAttached();
-    }
-
-    public final DataTableHolder delegate() {
-        return (DataTableHolder) super.getTarget();
-    }
-
-    @Override
-    public final DataTableInteractive getObject() {
-        return delegate().getObject();
+        return this.isAttached();
     }
 
     @Override
@@ -171,7 +98,7 @@ permits CollectionModelParented, CollectionModelStandalone {
 
     @Override
     public final ManagedObject getParentObject() {
-        return delegate().bookmarkedObject.asManagedObject();
+        return bookmarkedObject.asManagedObject();
     }
 
     /* XXX[CAUSEWAY-3798] do not override (as it was for the hidden table)

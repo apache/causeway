@@ -143,20 +143,14 @@ implements DataTableInteractive {
             final Where where,
             final Can<ManagedObject> elements) {
 
-        var elementType = managedMember.getElementType();
-        //var mmc = elementType.getMetaModelContext();
-
         this.managedMember = managedMember;
         this.where = where;
-        this.filterHandler = _FilterUtils.createFilterHandler(elementType);
+        this.filterHandler = _FilterUtils.createFilterHandler(managedMember.getElementType());
 
         this.searchArgumentBindable = _Bindables.forValue("");
         this.columnSortBindable = _Bindables.forValue(null);
 
-        this.dataElementsObservable = _Observables.lazy(()->elements
-                //.map(mmc::injectServicesInto) // I believe is redundant, has major performance impact
-                //.filter(this::ignoreHidden) // I believe is redundant, has major performance impact
-                );
+        this.dataElementsObservable = _Observables.lazy(()->elements);
 
         this.dataRowsObservable = _Observables.lazy(()->
             dataElementsObservable.getValue().stream()
