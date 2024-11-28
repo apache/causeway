@@ -69,9 +69,9 @@ implements HasDynamicallyVisibleContent {
 
     public Col(
             final String id,
-            final UiObjectWkt entityModel, final BSCol bsCol) {
+            final UiObjectWkt objectModel, final BSCol bsCol) {
 
-        super(id, entityModel);
+        super(id, objectModel);
 
         this.bsCol = bsCol;
 
@@ -224,8 +224,8 @@ implements HasDynamicallyVisibleContent {
             WktComponents.permanentlyHide(div, ID_FIELD_SETS);
         }
 
-        final UiObjectWkt entityModel = getModel();
-        var ownerSpec = entityModel.getManagedObject().getSpecification();
+        final UiObjectWkt objectModel = getModel();
+        var ownerSpec = objectModel.getManagedObject().getSpecification();
 
         // collection layout data by collection id (the collection's member-id)
         // preserving order, as order matters
@@ -241,7 +241,7 @@ implements HasDynamicallyVisibleContent {
 
             collectionLayoutById.forEach((id, layout)->{
 
-                var helperModel = Model.of(new CollectionOwnerAndLayout(entityModel, layout));
+                var helperModel = Model.of(new CollectionOwnerAndLayout(objectModel, layout));
 
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(

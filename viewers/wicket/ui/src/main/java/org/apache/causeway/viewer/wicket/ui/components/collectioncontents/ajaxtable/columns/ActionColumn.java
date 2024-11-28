@@ -75,11 +75,11 @@ extends GenericColumnAbstract {
         var dataRow = dataRowWkt.getObject();
         var rowElement = dataRow.rowElement();
 
-        var entityModel = UiObjectWkt.ofAdapter(rowElement);
+        var objectModel = UiObjectWkt.ofAdapter(rowElement);
         var elementType = elementType();
 
         var actionModels = actions().stream()
-            .map(act->ActionModel.forEntityFromActionColumn(act, entityModel,
+            .map(act->ActionModel.forEntityFromActionColumn(act, objectModel,
                     determineColumnActionModifier(act, elementType)))
             .collect(Can.toCan());
 

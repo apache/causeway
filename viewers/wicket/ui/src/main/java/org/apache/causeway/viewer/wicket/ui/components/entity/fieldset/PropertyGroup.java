@@ -178,13 +178,13 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
     }
 
     private Component addPropertyToForm(
-            final UiObjectWkt entityModel,
+            final UiObjectWkt objectModel,
             final OneToOneAssociation property,
             final WebMarkupContainer container,
             final Consumer<ActionModel> onAssociatedAction) {
 
         final UiAttributeWkt attributeModel =
-                entityModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
+                objectModel.getPropertyModel(property, ViewOrEditMode.VIEWING, RenderingHint.REGULAR);
 
         final Component scalarNameAndValueComponent = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, UiComponentType.ATTRIBUTE_NAME_AND_VALUE, attributeModel);
@@ -193,10 +193,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 //            Wkt.cssAppend(scalarNameAndValueComponent, attributeModel.getIdentifier());
 //        }
 
-        var entity = entityModel.getManagedObject();
+        var entity = objectModel.getManagedObject();
 
         ObjectAction.Util.findForAssociation(entity, property)
-        .map(act->ActionModel.forEntity(act, entityModel))
+        .map(act->ActionModel.forEntity(act, objectModel))
         .forEach(onAssociatedAction);
 
         return scalarNameAndValueComponent;

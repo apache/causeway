@@ -54,8 +54,8 @@ extends PanelAbstract<Object, IModel<Object>> {
     private void buildMessageForModel(final StringBuilder buf, final IModel<?> model) {
         buf.append(model.getClass().getSimpleName()).append(" ");
         if(model instanceof UiObjectWkt) {
-            var entityModel = (UiObjectWkt) model;
-            var objectAdapter = entityModel.getObject();
+            var objectModel = (UiObjectWkt) model;
+            var objectAdapter = objectModel.getObject();
             if(objectAdapter != null) {
                 buf.append("??? objectAdapter oid: " + ManagedObjects.bookmark(objectAdapter).orElse(null));
             } else {

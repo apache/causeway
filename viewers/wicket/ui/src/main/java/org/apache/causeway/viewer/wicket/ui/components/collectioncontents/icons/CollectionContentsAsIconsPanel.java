@@ -56,8 +56,8 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
         add(entityInstances);
         for (var adapter : visibleAdapters) {
             final String childId = entityInstances.newChildId();
-            final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(adapter);
-            final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, entityModel);
+            final UiObjectWkt objectModel = UiObjectWkt.ofAdapter(adapter);
+            final EntityHeaderPanel entitySummaryPanel = new EntityHeaderPanel(childId, objectModel);
             entityInstances.add(entitySummaryPanel);
         }
     }

@@ -141,7 +141,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
             final ObjectAction action,
             final CollectionModelParented collectionModel) {
         return forEntity(
-                        collectionModel.getEntityModel(),
+                        collectionModel.getObjectModel(),
                         action.getFeatureIdentifier(),
                         Where.OBJECT_FORMS,
                         ColumnActionModifier.NONE,

@@ -42,8 +42,8 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final String ID_ENTITY_ACTIONS = "entityActions";
 
-    public EntityHeaderPanel(final String id, final UiObjectWkt entityModel) {
-        super(id, entityModel);
+    public EntityHeaderPanel(final String id, final UiObjectWkt objectModel) {
+        super(id, objectModel);
     }
 
     public UiObjectWkt getEntityModel() {

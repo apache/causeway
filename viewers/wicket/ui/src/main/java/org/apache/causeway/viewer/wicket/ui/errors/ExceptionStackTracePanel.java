@@ -125,13 +125,13 @@ extends PanelBase<List<StackTraceDetail>> {
 
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
-        final UiObjectWkt entityModel = breadcrumbModel.getMostRecentlyVisited();
+        final UiObjectWkt objectModel = breadcrumbModel.getMostRecentlyVisited();
 
         final Class<? extends Page> pageClass;
         final PageParameters pageParameters;
-        if (entityModel != null) {
+        if (objectModel != null) {
             pageClass = pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT);
-            pageParameters = Try.call(()->entityModel.getPageParameters())
+            pageParameters = Try.call(()->objectModel.getPageParameters())
                     .getValue()
                     // silently ignore, if we fail to generate a 'continue' button target
                     // (eg. because object was deleted)

@@ -67,9 +67,9 @@ implements HasMetaModelContext {
         var managedObject = objectManager
                 .loadObject(ProtoObject.resolveElseFail(specificationLoader, bookmark));
 
-        final UiObjectWkt entityModel = UiObjectWkt.ofAdapter(managedObject);
+        final UiObjectWkt objectModel = UiObjectWkt.ofAdapter(managedObject);
 
-        var pageParameters = entityModel.getPageParameters();
+        var pageParameters = objectModel.getPageParameters();
         if(pageParameters!=null) {
             throw new RestartResponseException(DomainObjectPage.class, pageParameters);
         }

@@ -77,8 +77,8 @@ implements HasDynamicallyVisibleContent {
     private final CollectionLayoutData layoutData;
     private final WebMarkupContainer div;
 
-    public EntityCollectionPanel(final String id, final UiObjectWkt entityModel, final CollectionLayoutData layoutData) {
-        super(id, entityModel);
+    public EntityCollectionPanel(final String id, final UiObjectWkt objectModel, final CollectionLayoutData layoutData) {
+        super(id, objectModel);
 
         this.layoutData = layoutData;
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);

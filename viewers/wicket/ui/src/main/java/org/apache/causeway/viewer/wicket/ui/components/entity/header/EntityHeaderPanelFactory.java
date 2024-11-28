@@ -37,7 +37,7 @@ public class EntityHeaderPanelFactory extends EntityComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
-        return new EntityHeaderPanel(id, entityModel);
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
+        return new EntityHeaderPanel(id, objectModel);
     }
 }

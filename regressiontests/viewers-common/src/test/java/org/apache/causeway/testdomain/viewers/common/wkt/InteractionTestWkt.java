@@ -121,19 +121,19 @@ class InteractionTestWkt extends InteractionTestAbstract {
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
         var objectSpec = domainObject.getSpecification();
-        var entityModel = UiObjectWkt.ofAdapter(domainObject);
+        var objectModel = UiObjectWkt.ofAdapter(domainObject);
 
-        assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());
-        assertEquals(domainObject.getTitle(), entityModel.getTitle());
+        assertEquals(domainObject.getBookmark().get(), objectModel.getOwnerBookmark());
+        assertEquals(domainObject.getTitle(), objectModel.getTitle());
 
         // owner sharing (should be the same object)
-        assertTrue(domainObject == entityModel.getBookmarkedOwner());
+        assertTrue(domainObject == objectModel.getBookmarkedOwner());
 
         final long propertyCount =
         objectSpec.streamProperties(MixedIn.INCLUDED)
         .filter(prop->{
 
-            final PropertyModel propertyModel = (PropertyModel) entityModel
+            final PropertyModel propertyModel = (PropertyModel) objectModel
                     .getPropertyModel(
                             prop,
                             ViewOrEditMode.VIEWING,

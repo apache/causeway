@@ -37,7 +37,7 @@ public class EntityIconTitleAndCopyLinkPanelFactory extends EntityComponentFacto
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
-        return new EntityIconTitleAndCopyLinkPanel(id, entityModel);
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
+        return new EntityIconTitleAndCopyLinkPanel(id, objectModel);
     }
 }

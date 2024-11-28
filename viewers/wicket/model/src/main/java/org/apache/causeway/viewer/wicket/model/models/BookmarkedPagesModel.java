@@ -78,8 +78,8 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
         rootNodes.remove(rootNode);
     }
 
-    public void remove(final UiObjectWkt entityModel) {
-        var bookmark = entityModel.getOwnerBookmark();
+    public void remove(final UiObjectWkt objectModel) {
+        var bookmark = objectModel.getOwnerBookmark();
         rootNodes.removeIf(node->node.getBookmark().equals(bookmark));
     }
 

@@ -106,9 +106,9 @@ public class DomainObjectPage extends PageAbstract {
 
     private DomainObjectPage(
             final PageParameters pageParameters,
-            final UiObjectWkt entityModel) {
+            final UiObjectWkt objectModel) {
         super(pageParameters, null/*titleString*/, UiComponentType.DOMAIN_OBJECT);
-        this.model = entityModel;
+        this.model = objectModel;
     }
 
     @Override
@@ -195,8 +195,8 @@ public class DomainObjectPage extends PageAbstract {
 
         final RepeatingView listItems = new RepeatingView(ID_WHEREAMI_ITEMS);
 
-        whereAmIModel.streamParentChainReversed().forEach(entityModel->
-            listItems.add(EntityIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), entityModel)));
+        whereAmIModel.streamParentChainReversed().forEach(objectModel->
+            listItems.add(EntityIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), objectModel)));
 
         Wkt.labelAdd(listItems, listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle());
 
@@ -207,8 +207,8 @@ public class DomainObjectPage extends PageAbstract {
 
     @Override
     public void onNewRequestCycle() {
-        var entityModel = (UiObjectWkt) getUiHintContainerIfAny();
-        ManagedObjects.refreshViewmodel(entityModel.getObject(),
+        var objectModel = (UiObjectWkt) getUiHintContainerIfAny();
+        ManagedObjects.refreshViewmodel(objectModel.getObject(),
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
                         .orElseThrow());
@@ -252,14 +252,14 @@ public class DomainObjectPage extends PageAbstract {
 
     // -- HELPER
 
-    private void addBreadcrumbIfShown(final UiObjectWkt entityModel) {
+    private void addBreadcrumbIfShown(final UiObjectWkt objectModel) {
         getBreadcrumbModel()
-        .ifPresent(breadcrumbModel->breadcrumbModel.visited(entityModel));
+        .ifPresent(breadcrumbModel->breadcrumbModel.visited(objectModel));
     }
 
-    private void removeAnyBreadcrumb(final UiObjectWkt entityModel) {
+    private void removeAnyBreadcrumb(final UiObjectWkt objectModel) {
         getBreadcrumbModel()
-        .ifPresent(breadcrumbModel->breadcrumbModel.remove(entityModel));
+        .ifPresent(breadcrumbModel->breadcrumbModel.remove(objectModel));
     }
 
 }

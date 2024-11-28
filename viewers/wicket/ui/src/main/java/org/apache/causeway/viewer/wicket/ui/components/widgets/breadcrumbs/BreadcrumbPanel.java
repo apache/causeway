@@ -58,10 +58,9 @@ extends PanelAbstract<Void, IModel<Void>> {
 
         final BreadcrumbModel breadcrumbModel = _Casts.castTo(BreadcrumbModelProvider.class, getSession())
                 .map(BreadcrumbModelProvider::getBreadcrumbModel)
-                .orElseGet(()->new BreadcrumbModel()); // for testing
+                .orElseGet(BreadcrumbModel::new); // for testing
 
-        final IModel<UiObjectWkt> entityModel = new Model<>();
-        ChoiceProvider<UiObjectWkt> choiceProvider = new ChoiceProvider<UiObjectWkt>() {
+        var choiceProvider = new ChoiceProvider<UiObjectWkt>() {
 
             private static final long serialVersionUID = 1L;
 
@@ -111,7 +110,7 @@ extends PanelAbstract<Void, IModel<Void>> {
 
         };
         final Select2Choice<UiObjectWkt> breadcrumbChoice =
-                new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
+                new Select2Choice<>(ID_BREADCRUMBS, new Model<>(), choiceProvider);
 
         breadcrumbChoice.add(
                 new AjaxFormComponentUpdatingBehavior("change"){

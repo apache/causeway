@@ -40,10 +40,10 @@ public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
     }
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
 
-        var objectAdapter = entityModel.getObject();
-        var objectSpec = entityModel.getTypeOfSpecification();
+        var objectAdapter = objectModel.getObject();
+        var objectSpec = objectModel.getTypeOfSpecification();
 
         return ApplicationAdvice.appliesIf(
                 Facets.bootstrapGrid(objectSpec, objectAdapter)
@@ -52,13 +52,13 @@ public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
 
-        var objectAdapter = entityModel.getObject();
-        var objectSpec = entityModel.getTypeOfSpecification();
+        var objectAdapter = objectModel.getObject();
+        var objectSpec = objectModel.getTypeOfSpecification();
 
         return Facets.bootstrapGrid(objectSpec, objectAdapter)
-                .map(grid->new BSGridPanel(id, entityModel, grid))
+                .map(grid->new BSGridPanel(id, objectModel, grid))
                 .orElseThrow(); // empty case guarded against by appliesTo(...) above
     }
 

@@ -38,8 +38,8 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private final BSGrid bsPage;
 
-    public BSGridPanel(final String id, final UiObjectWkt entityModel, final BSGrid bsGrid) {
-        super(id, entityModel);
+    public BSGridPanel(final String id, final UiObjectWkt objectModel, final BSGrid bsGrid) {
+        super(id, objectModel);
         this.bsPage = bsGrid;
         buildGui();
     }

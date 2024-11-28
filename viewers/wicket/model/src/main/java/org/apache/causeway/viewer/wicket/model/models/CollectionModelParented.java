@@ -38,24 +38,24 @@ implements
 
     // TODO parent object model, maybe should not be exposed
     // maybe could be resolved in the process of decoupling the ActionModel from Wicket
-    @Getter private final @NonNull UiObjectWkt entityModel;
+    @Getter private final @NonNull UiObjectWkt objectModel;
     @Getter private final @NonNull CollectionLayoutData layoutData;
 
     // -- FACTORIES
 
     public static CollectionModelParented forParentObjectModel(
-            final @NonNull UiObjectWkt entityModel, final @NonNull CollectionLayoutData layoutData) {
+            final @NonNull UiObjectWkt objectModel, final @NonNull CollectionLayoutData layoutData) {
 
-        var coll = entityModel
+        var coll = objectModel
                         .getTypeOfSpecification()
                         .getCollectionElseFail(layoutData.getId()); // collection's member-id
 
         var dataTableModel = DataTableModelWkt
-                .forCollection(entityModel.bookmarkedObjectModel(), coll);
+                .forCollection(objectModel.bookmarkedObjectModel(), coll);
 
         return new CollectionModelParented(
                 dataTableModel,
-                entityModel,
+                objectModel,
                 layoutData);
     }
 
@@ -66,7 +66,7 @@ implements
             final @NonNull UiObjectWkt parentObjectModel,  //TODO maybe instead use the delegate (?)
             final @NonNull CollectionLayoutData layoutData) {
         super(delegate, Variant.PARENTED);
-        this.entityModel = parentObjectModel;
+        this.objectModel = parentObjectModel;
         this.layoutData = layoutData;
     }
 
@@ -76,17 +76,17 @@ implements
 
     @Override
     public String getHint(final Component component, final String attributeName) {
-        return getEntityModel().getHint(component, attributeName);
+        return objectModel.getHint(component, attributeName);
     }
 
     @Override
     public void setHint(final Component component, final String attributeName, final String attributeValue) {
-        getEntityModel().setHint(component, attributeName, attributeValue);
+        objectModel.setHint(component, attributeName, attributeValue);
     }
 
     @Override
     public void clearHint(final Component component, final String attributeName) {
-        getEntityModel().clearHint(component, attributeName);
+        objectModel.clearHint(component, attributeName);
     }
 
     @Override
@@ -95,7 +95,7 @@ implements
     }
 
     public Bookmark asHintingBookmark() {
-        return entityModel.getOwnerBookmark();
+        return objectModel.getOwnerBookmark();
     }
 
 }

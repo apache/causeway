@@ -167,13 +167,13 @@ implements AttributeModelChangeListener {
     }
 
     private void setLastFocusHint() {
-        final UiHintContainer entityModel = pageUiHintContainerIfAny();
-        if (entityModel == null) return;
+        final UiHintContainer objectModel = pageUiHintContainerIfAny();
+        if (objectModel == null) return;
 
         var parentContainer = this.parentPanel.getParent();
         if (parentContainer == null) return;
 
-        entityModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
+        objectModel.setHint(getPage(), PageAbstract.UIHINT_FOCUS, parentContainer.getPageRelativePath());
     }
 
     private UiHintContainer pageUiHintContainerIfAny() {

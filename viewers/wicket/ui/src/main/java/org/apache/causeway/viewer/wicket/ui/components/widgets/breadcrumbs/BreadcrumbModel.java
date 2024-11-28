@@ -45,8 +45,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
     public List<UiObjectWkt> getList() {
         List<UiObjectWkt> entityModels = _Lists.newArrayList();
         for (Bookmark bookmark : list) {
-            UiObjectWkt entityModel = toEntityModel(bookmark);
-            entityModels.add(entityModel);
+            UiObjectWkt objectModel = toEntityModel(bookmark);
+            entityModels.add(objectModel);
         }
         return Collections.unmodifiableList(entityModels);
     }
@@ -64,25 +64,25 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
         return mostRecentlyVisitedOidStr != null ? lookup(mostRecentlyVisitedOidStr) : null;
     }
 
-    public void visited(final UiObjectWkt entityModel) {
+    public void visited(final UiObjectWkt objectModel) {
 
         // ignore view models
-        if(entityModel.getTypeOfSpecification().isViewModel()) {
+        if(objectModel.getTypeOfSpecification().isViewModel()) {
             mostRecentlyVisitedOidStr = null;
             return;
         }
 
-        final String oidStr = oidStrFrom(entityModel);
+        final String oidStr = oidStrFrom(objectModel);
         mostRecentlyVisitedOidStr = oidStr;
 
         remove(oidStr);
-        addToStart(oidStr, entityModel);
+        addToStart(oidStr, objectModel);
 
         trimTo(MAX_SIZE);
     }
 
-    private String oidStrFrom(final UiObjectWkt entityModel) {
-        final PageParameters pageParameters = entityModel.getPageParametersWithoutUiHints();
+    private String oidStrFrom(final UiObjectWkt objectModel) {
+        final PageParameters pageParameters = objectModel.getPageParametersWithoutUiHints();
         return oidStrFrom(pageParameters);
     }
 
@@ -100,8 +100,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
         }
     }
 
-    private void addToStart(final String oidStr, final UiObjectWkt entityModel) {
-        Bookmark bookmark = entityModel.getOwnerBookmark();
+    private void addToStart(final String oidStr, final UiObjectWkt objectModel) {
+        Bookmark bookmark = objectModel.getOwnerBookmark();
         bookmarkByOidStr.put(oidStr, bookmark);
         oidStrByBookmark.put(bookmark, oidStr);
         list.add(0, bookmark);
@@ -133,8 +133,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
         // previously list held EntityModels rather than Bookmarks
         // this code is now redundant, I think.
 
-        // for (EntityModel entityModel : list) {
-        //     entityModel.detach();
+        // for (EntityModel objectModel : list) {
+        //     objectModel.detach();
         // }
     }
 
@@ -145,8 +145,8 @@ public class BreadcrumbModel implements HasMetaModelContext, Serializable {
         }
     }
 
-    public void remove(final UiObjectWkt entityModel) {
-        Bookmark bookmark = entityModel.getOwnerBookmark();
+    public void remove(final UiObjectWkt objectModel) {
+        Bookmark bookmark = objectModel.getOwnerBookmark();
         final String oidStr = oidStrByBookmark.get(bookmark);
         if(oidStr != null) {
             remove(oidStr, bookmark);

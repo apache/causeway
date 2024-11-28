@@ -33,8 +33,8 @@ class EntityIconTitleAndCopyLinkPanel extends EntityIconAndTitlePanel {
 
     private static final String ID_COPY_LINK = "copyLink";
 
-    public EntityIconTitleAndCopyLinkPanel(final String id, final UiObjectWkt entityModel) {
-        super(id, entityModel);
+    public EntityIconTitleAndCopyLinkPanel(final String id, final UiObjectWkt objectModel) {
+        super(id, objectModel);
     }
 
     @Override

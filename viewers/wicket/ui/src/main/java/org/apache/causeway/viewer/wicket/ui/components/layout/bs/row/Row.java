@@ -46,10 +46,10 @@ implements HasDynamicallyVisibleContent {
 
     public Row(
             final String id,
-            final UiObjectWkt entityModel,
+            final UiObjectWkt objectModel,
             final BSRow bsRow) {
 
-        super(id, entityModel);
+        super(id, objectModel);
 
         this.bsRow = bsRow;
 

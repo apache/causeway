@@ -52,21 +52,21 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
         if (!(model instanceof UiObjectWkt)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
-        final UiObjectWkt entityModel = (UiObjectWkt) model;
+        final UiObjectWkt objectModel = (UiObjectWkt) model;
         // hit a scenario on a redirect-and-post strategy where the component is rendered not on an
         // DomainObjectPage but instead using a custom home page.
         // The hacky override in entity page (in DomainObjectPage#onBeforeRender)
         // is therefore not called. resulting in a concurrency exception.
         //
         // Therefore, we do the same processing here instead.
-        var adapter = entityModel.getManagedObject();
+        var adapter = objectModel.getManagedObject();
         if (adapter == null) {
             // is ok;
         }
-        var spec = entityModel.getTypeOfSpecification();
+        var spec = objectModel.getTypeOfSpecification();
         if (spec.isSingular()
                 && !spec.isValue()) {
-            return doAppliesTo(entityModel);
+            return doAppliesTo(objectModel);
         }
         return ApplicationAdvice.DOES_NOT_APPLY;
     }
@@ -74,7 +74,7 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
     /**
      * optional hook.
      */
-    protected ApplicationAdvice doAppliesTo(final UiObjectWkt entityModel) {
+    protected ApplicationAdvice doAppliesTo(final UiObjectWkt objectModel) {
         return ApplicationAdvice.APPLIES;
     }
 
