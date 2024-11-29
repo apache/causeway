@@ -35,7 +35,6 @@ public abstract class ObjectComponentFactoryAbstract extends ComponentFactoryAbs
     public ObjectComponentFactoryAbstract(
             final UiComponentType uiComponentType,
             final Class<?> componentClass) {
-
         super(uiComponentType, componentClass);
     }
 
@@ -43,7 +42,6 @@ public abstract class ObjectComponentFactoryAbstract extends ComponentFactoryAbs
             final UiComponentType uiComponentType,
             final String name,
             final Class<?> componentClass) {
-
         super(uiComponentType, name, componentClass);
     }
 

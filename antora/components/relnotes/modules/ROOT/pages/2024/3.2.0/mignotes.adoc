@@ -64,4 +64,4 @@ replace `entityXXX` with `objectXXX`.
 ----
 
 Entries of the `UiComponentType` enum were also renamed. 
-  
+As well as `EntityComponentFactoryAbstract` -> `ObjectComponentFactoryAbstract` 
