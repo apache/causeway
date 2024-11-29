@@ -31,20 +31,37 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactoryWithTypeConstraint;
 ----
 
-== Renaming 'EntityPage' -> 'DomainObjectPage'
+== Renaming 'Entity' -> 'Object' (when inaccurate)
 
-I guess the initial design of _Wicket Viewer_ introduced an `EntityPage`, 
+E.g. I guess the initial design of _Wicket Viewer_ introduced an `EntityPage`, 
 with rendering of _entities_ in mind. But later was used to also render _viewmodels_. 
 Unfortunately the naming is misleading, hence the renaming to `DomainObjectPage`.
 
-There are many places throughout the code base, 
-where the term `entity` was similarly used wrongly. 
-Not documenting all of them here.     
+There are many other places throughout the code base, 
+where the term `entity` was similarly used wrongly 
+(in the sense that an object is either an entity or a viewmodel but cannot be both). 
 
+Not documenting all places here. Just some ...     
+
+[IMPORTANT]
+====
 [source,java]
 .URL changes as configured in CausewayWicketApplication
 ----
 // mountPage("/entity/#{objectOid}", PageType.ENTITY);
 mountPage("/object/#{objectOid}", PageType.DOMAIN_OBJECT);
 ----
+====
+
+CSS classes have also been renamed. If you are customizing those, then as rule of thumb: 
+replace `entityXXX` with `objectXXX`. 
+
+[source,css]
+.CSS changes, single example
+----
+// .entityActions 
+.objectActions
+----
+
+Entries of the `UiComponentType` enum were also renamed. 
   
