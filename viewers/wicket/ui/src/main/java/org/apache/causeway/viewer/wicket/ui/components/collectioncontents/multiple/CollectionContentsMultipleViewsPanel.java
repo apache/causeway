@@ -90,20 +90,20 @@ implements CollectionCountProvider {
         final CollectionModel visibleCollModel = getModel();
         final CollectionModel hiddenCollModel = CollectionModel.empty();
 
-        final Can<ComponentFactoryKey> componentFactories = selectorHelper.getComponentFactories();
+        final Can<ComponentFactoryKey> componentFactoryKeys = selectorHelper.factoryKeys();
 
         final CollectionPresentationSelectorPanel selectorDropdownPanelIfAny =
                 CollectionPresentationSelectorProvider.getCollectionSelectorProvider(this);
         final String selectedCompFactoryName = selectorDropdownPanelIfAny != null
             ? selectorHelper.honourViewHintElseDefault(selectorDropdownPanelIfAny)
-            : componentFactories.getFirstElseFail().id();
+            : componentFactoryKeys.getFirstElseFail().id();
 
         // create all, hide the one not selected
         int i = 0;
         int selectedIdx = 0;
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
 
-        for (ComponentFactoryKey componentFactoryKey : componentFactories) {
+        for (ComponentFactoryKey componentFactoryKey : componentFactoryKeys) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
             final boolean isSelected = selectedCompFactoryName.equals(componentFactoryKey.id());

@@ -137,17 +137,19 @@ permits CollectionModelAbstract, CollectionModelEmpty {
 
     // -- PARENTED SPECIFICS
 
-    @Deprecated // there is no reason to distinguish parented and standalone, I think
-    default Optional<CollectionModelParented> parented() {
-        return this instanceof CollectionModelParented
-            ? Optional.of((CollectionModelParented)this)
-            : Optional.empty();
-    }
-
-    @Deprecated // there is no reason to distinguish parented and standalone, I think
+    /**
+     * Used to create the first part of the collection presentation selection hint,
+     * the second part is the id of the component factory that creates the UI component
+     * used to render the selected presentation.
+     * <p>
+     * Currently not available for standalone collections.
+     * Perhaps it would be possible to add support, by instead of using the hint-store
+     * use a simple page parameter like ?presentation=excel.
+     */
     default Optional<Bookmark> parentedHintingBookmark() {
-        return parented()
-                .map(CollectionModelParented::asHintingBookmark);
+        return this instanceof CollectionModelParented parented
+            ? Optional.ofNullable(parented.asHintingBookmark())
+            : Optional.empty();
     }
 
 }

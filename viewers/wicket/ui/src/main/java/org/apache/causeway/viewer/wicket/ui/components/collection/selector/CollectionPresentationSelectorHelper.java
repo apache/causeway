@@ -43,19 +43,14 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
 
-import lombok.Getter;
-
-public class CollectionPresentationSelectorHelper implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public record CollectionPresentationSelectorHelper(
+        CollectionModel collectionModel,
+        Can<ComponentFactoryKey> factoryKeys,
+        ComponentHintKey componentHintKey
+    )
+implements Serializable {
 
     static final String UIHINT_EVENT_VIEW_KEY = CollectionModelParented.HINT_KEY_SELECTED_ITEM;
-
-    private final CollectionModel collectionModel;
-
-    @Getter
-    private final Can<ComponentFactoryKey> componentFactories;
-    private final ComponentHintKey componentHintKey;
 
     public CollectionPresentationSelectorHelper(
             final CollectionModel collectionModel,
@@ -67,25 +62,11 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final CollectionModel collectionModel,
             final ComponentFactoryRegistry componentFactoryRegistry,
             final ComponentHintKey componentHintKey) {
-        this.collectionModel = collectionModel;
-        this.componentFactories = gatherComponentFactories(componentFactoryRegistry);
-        this.componentHintKey = componentHintKey != null
+        this(collectionModel,
+            gatherComponentFactories(componentFactoryRegistry, collectionModel),
+            componentHintKey != null
                 ? componentHintKey
-                : ComponentHintKey.noop();
-    }
-
-    private Can<ComponentFactoryKey> gatherComponentFactories(
-            final ComponentFactoryRegistry componentFactoryRegistry) {
-
-        return componentFactoryRegistry
-        .streamComponentFactories(ImmutableEnumSet.of(
-                UiComponentType.COLLECTION_CONTENTS,
-                UiComponentType.COLLECTION_CONTENTS_EXPORT),
-                collectionModel)
-        .filter(componentFactory ->
-            componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
-        .map(ComponentFactory::key)
-        .collect(Can.toCan());
+                : ComponentHintKey.noop());
     }
 
     public String honourViewHintElseDefault(final Component component) {
@@ -93,9 +74,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         final UiHintContainer hintContainer = getUiHintContainer(component);
         if (hintContainer != null) {
             String viewStr = hintContainer.getHint(component, UIHINT_EVENT_VIEW_KEY);
-            if (viewStr != null) {
-                return viewStr;
-            }
+            if (viewStr != null) return viewStr;
         }
 
         // ... else default
@@ -105,6 +84,27 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
         }
         return initialFactory;
+    }
+
+    Can<CollectionPresentationChoice> collectionPresentationChoices() {
+        return factoryKeys
+            .map(k->CollectionPresentationChoice.of(k.componentFactory()));
+    }
+
+    CollectionPresentationChoice find(final Can<CollectionPresentationChoice> presentationChoices, final String selected) {
+        CollectionPresentationChoice componentFactory = doFind(presentationChoices, selected);
+        if (componentFactory != null) return componentFactory;
+
+        final String fallback = collectionModel.getVariant().isParented()
+                ? CollectionContentsHiddenPanelFactory.NAME
+                : CollectionContentsAsAjaxTablePanelFactory.NAME;
+        componentFactory = doFind(presentationChoices, fallback);
+        if(componentFactory == null) {
+            throw new IllegalStateException(String.format(
+                    "Could not locate '%s' (as the fallback collection panel)",
+                    fallback));
+        }
+        return componentFactory;
     }
 
     // -- helpers
@@ -119,9 +119,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         // try to load from session, if can
         final Bookmark bookmark = collectionModel.parentedHintingBookmark().orElse(null);
         final String sessionAttribute = componentHintKey.get(bookmark);
-        if(sessionAttribute != null) {
-            return sessionAttribute;
-        }
+        if(sessionAttribute != null) return sessionAttribute;
 
         // else grid layout hint
         final CollectionLayoutData layoutData = toParentedEntityCollectionModel(collectionModel)
@@ -141,7 +139,7 @@ public class CollectionPresentationSelectorHelper implements Serializable {
             final String viewName = Facets.defaultViewName(collectionModel.getMetaModel())
                     .orElseThrow(); // null case guarded by if clause
 
-            for (ComponentFactoryKey componentFactory : componentFactories) {
+            for (ComponentFactoryKey componentFactory : factoryKeys) {
                 final String componentName = componentFactory.id();
                 if (componentName.equalsIgnoreCase(viewName)) {
                     return componentName;
@@ -175,36 +173,16 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         .orElse(false);
     }
 
-    public ComponentFactoryKey find(final String selected) {
-        ComponentFactoryKey componentFactory = doFind(selected);
-        if (componentFactory != null) {
-            return componentFactory;
-        }
-
-        final String fallback = collectionModel.getVariant().isParented()
-                ? CollectionContentsHiddenPanelFactory.NAME
-                : CollectionContentsAsAjaxTablePanelFactory.NAME;
-        componentFactory = doFind(fallback);
-        if(componentFactory == null) {
-            throw new IllegalStateException(String.format(
-                    "Could not locate '%s' (as the fallback collection panel)",
-                    fallback));
-        }
-        return componentFactory;
-    }
-
-    private ComponentFactoryKey doFind(final String selected) {
-        for (ComponentFactoryKey componentFactory : componentFactories) {
-            if(selected.equals(componentFactory.id())) {
-                return componentFactory;
-            }
+    private CollectionPresentationChoice doFind(final Can<CollectionPresentationChoice> presentationChoices, final String selected) {
+        for (CollectionPresentationChoice componentFactory : presentationChoices) {
+            if(selected.equals(componentFactory.id())) return componentFactory;
         }
         return null;
     }
 
     public int lookup(final String view) {
         int i=0;
-        for (ComponentFactoryKey componentFactory : componentFactories) {
+        for (ComponentFactoryKey componentFactory : factoryKeys) {
             if(view.equals(componentFactory.id())) {
                 return i;
             }
@@ -222,5 +200,19 @@ public class CollectionPresentationSelectorHelper implements Serializable {
         }
         return Optional.empty();
     }
+
+    private static Can<ComponentFactoryKey> gatherComponentFactories(
+        final ComponentFactoryRegistry componentFactoryRegistry,
+        final CollectionModel collectionModel) {
+    return componentFactoryRegistry
+        .streamComponentFactories(ImmutableEnumSet.of(
+                UiComponentType.COLLECTION_CONTENTS,
+                UiComponentType.COLLECTION_CONTENTS_EXPORT),
+                collectionModel)
+        .filter(componentFactory ->
+            componentFactory.getClass() != CollectionContentsMultipleViewsPanelFactory.class)
+        .map(ComponentFactory::key)
+        .collect(Can.toCan());
+}
 
 }

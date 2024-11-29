@@ -79,7 +79,7 @@ implements CollectionCountProvider, CollectionPresentationSelectorProvider {
         final CollectionPresentationSelectorHelper selectorHelper =
                 new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry());
 
-        if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
+        if (selectorHelper.factoryKeys().isCardinalityMultiple()) {
             final CollectionPresentationSelectorPanel selectorDropdownPanel =
                     new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN, collectionModel);
 

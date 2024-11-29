@@ -186,7 +186,7 @@ implements HasDynamicallyVisibleContent {
                 new CollectionPresentationSelectorHelper(collectionModel, getComponentFactoryRegistry(),
                         selectedItemHintKey);
 
-        if (selectorHelper.getComponentFactories().isCardinalityMultiple()) {
+        if (selectorHelper.factoryKeys().isCardinalityMultiple()) {
             selectorDropdownPanel = new CollectionPresentationSelectorPanel(ID_SELECTOR_DROPDOWN,
                     collectionModel, selectedItemHintKey);
             div.addOrReplace(selectorDropdownPanel);
