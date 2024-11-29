@@ -44,11 +44,9 @@ implements CollectionContentsAsFactory {
 
     @Override
     public ApplicationAdvice appliesTo(final IModel<?> model) {
-        if (!(model instanceof CollectionModel)) {
-            return ApplicationAdvice.DOES_NOT_APPLY;
-        }
-        final CollectionModel entityCollectionModel = (CollectionModel) model;
-        return appliesIf(entityCollectionModel.getVariant().isParented());
+        return model instanceof CollectionModel collectionModel
+                ? appliesIf(collectionModel.getVariant().isParented())
+                : ApplicationAdvice.DOES_NOT_APPLY;
     }
 
     @Override

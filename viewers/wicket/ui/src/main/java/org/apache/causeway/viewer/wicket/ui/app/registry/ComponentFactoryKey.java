@@ -21,10 +21,10 @@ package org.apache.causeway.viewer.wicket.ui.app.registry;
 import java.io.Serializable;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -45,17 +45,23 @@ public record ComponentFactoryKey(
     int orderOfAppearanceInUiDropdown,
     boolean isPageReloadRequiredOnTableViewActivation,
     String cssClass,
-    _Lazy<ComponentFactory> componentFactoryLazy
+    LoadableDetachableModel<ComponentFactory> componentFactoryLazy
     ) implements Serializable {
 
     public ComponentFactory componentFactory() {
-        return componentFactoryLazy.get();
+        return componentFactoryLazy.getObject();
     }
 
     public ComponentFactoryKey(final @NonNull ComponentFactory componentFactory) {
+        this(componentFactory, componentFactory.getClass());
+    }
+
+    private ComponentFactoryKey(
+        final ComponentFactory componentFactory,
+        final Class<? extends ComponentFactory> factoryClass) {
         this(
             /*factoryClass*/
-            componentFactory.getClass(),
+            factoryClass,
             /*id*/
             componentFactory.getName(),
             /*label*/
@@ -80,11 +86,11 @@ public record ComponentFactoryKey(
                 .orElseGet(()->
                     _Strings.asLowerDashed.apply(componentFactory.getName())),
             /*componentFactoryLazy*/
-            _Lazy.of(()->MetaModelContext.instanceElseFail().getServiceRegistry()
+            LoadableDetachableModel.of(()->MetaModelContext.instanceElseFail().getServiceRegistry()
                 .lookupServiceElseFail(ComponentFactoryRegistry.class)
-                .lookupFactoryElseFail(componentFactory.getClass())));
+                .lookupFactoryElseFail(factoryClass)));
 
-        componentFactoryLazy.set(componentFactory); // memoize
+        componentFactoryLazy.setObject(componentFactory); // memoize
     }
 
 }
