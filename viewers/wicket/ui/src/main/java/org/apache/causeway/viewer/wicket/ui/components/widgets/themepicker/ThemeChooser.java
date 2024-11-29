@@ -31,6 +31,7 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
@@ -90,7 +91,7 @@ extends PanelAbstract<Void, IModel<Void>> {
                 item.add(AttributeModifier.append("class", "active"));
             }
 
-            // use Ajax link because Link's url looks like /ENTITY:3 and this confuses the browser
+            // use Ajax link because Link's url looks like /object:3 and this confuses the browser
             Wkt.add(item,
                     Wkt.link("themeLink", target->{
                         setActiveTheme(themeName);

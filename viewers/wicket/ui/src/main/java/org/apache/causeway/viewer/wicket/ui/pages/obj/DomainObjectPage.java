@@ -47,7 +47,7 @@ import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -196,7 +196,7 @@ public class DomainObjectPage extends PageAbstract {
         final RepeatingView listItems = new RepeatingView(ID_WHEREAMI_ITEMS);
 
         whereAmIModel.streamParentChainReversed().forEach(objectModel->
-            listItems.add(EntityIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), objectModel)));
+            listItems.add(ObjectIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), objectModel)));
 
         Wkt.labelAdd(listItems, listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle());
 

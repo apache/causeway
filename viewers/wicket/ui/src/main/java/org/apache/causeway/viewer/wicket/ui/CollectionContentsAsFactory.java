@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._Strings;
  * An interface for {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory component factories}
  * (e.g. CollectionContentAsXyzFactory which provides specific title and CSS class)
  * for their representation in
- * {@link org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanel}.
+ * {@link org.apache.causeway.viewer.wicket.ui.components.collection.present.multiple.CollectionContentsMultipleViewsPanel}.
  * <p>
  * If the {@link org.apache.causeway.viewer.wicket.ui.ComponentFactory} doesn't implement this interface or the implementation
  * of any of its methods return {@code null} then {@link ComponentFactory#getName()} will be used as title

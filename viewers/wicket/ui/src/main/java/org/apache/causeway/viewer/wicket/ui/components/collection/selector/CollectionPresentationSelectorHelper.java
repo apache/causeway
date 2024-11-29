@@ -39,9 +39,9 @@ import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryKey;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.multiple.CollectionContentsMultipleViewsPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.unresolved.CollectionContentsHiddenPanelFactory;
 
 public record CollectionPresentationSelectorHelper(
         CollectionModel collectionModel,
@@ -111,7 +111,7 @@ implements Serializable {
 
     /**
      * return the index of {@link CollectionContentsHiddenPanelFactory unresolved panel} if present and not eager loading;
-     * else the index of {@link org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
+     * else the index of {@link org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsAsAjaxTablePanelFactory ajax table} if present,
      * otherwise first factory.
      */
     private String determineInitialFactory() {

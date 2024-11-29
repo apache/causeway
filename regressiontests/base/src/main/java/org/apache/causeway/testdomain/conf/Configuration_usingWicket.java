@@ -102,7 +102,7 @@ public class Configuration_usingWicket {
 
         public static final String OPEN_SAMPLE_ACTION = "theme:domainObjectContainer:domainObject:rows:1"
                 + ":rowContents:1"
-                + ":col:entityHeaderPanel:entityActions:additionalLinkList:additionalLinkItem:1"
+                + ":col:objectHeaderPanel:objectActions:additionalLinkList:additionalLinkItem:1"
                 + ":actionLink";
 
         public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
@@ -147,11 +147,11 @@ public class Configuration_usingWicket {
                 + ":scalarNameBeforeValue";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK = FAVORITE_BOOK_SCALAR
-                + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:entityLink"
-                + ":entityIconAndTitle:entityLinkWrapper:entityLink";
+                + ":container-fieldFrame:scalarValueInlinePromptLink:container-scalarValue:objectLink"
+                + ":objectIconAndTitle:objectLinkWrapper:objectLink";
 
         public static final String FAVORITE_BOOK_ENTITY_LINK_TITLE = FAVORITE_BOOK_ENTITY_LINK
-                + ":entityTitle";
+                + ":objectTitle";
 
         @RequiredArgsConstructor
         public static enum SimulatedProperties implements SimulatedProperty {

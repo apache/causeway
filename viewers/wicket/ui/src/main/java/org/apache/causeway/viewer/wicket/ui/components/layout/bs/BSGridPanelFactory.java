@@ -28,12 +28,12 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.causeway.viewer.wicket.ui.components.object.ObjectComponentFactoryAbstract;
 
 /**
  * {@link ComponentFactory} for {@link BSGridPanel}.
  */
-public class BSGridPanelFactory extends EntityComponentFactoryAbstract {
+public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
 
     public BSGridPanelFactory() {
         super(UiComponentType.DOMAIN_OBJECT, BSGridPanel.class);

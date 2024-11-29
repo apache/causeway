@@ -172,7 +172,7 @@ public class AttributeFragmentFactory {
         LABEL("fragment-compact-label"),
         LINK("fragment-compact-link"),
         BADGE("fragment-compact-badge"),
-        ENTITY_LINK("fragment-compact-entityLink"),
+        OBJECT_LINK("fragment-compact-objectLink"),
         CHECKBOX_YES("fragment-compact-checkboxYes"),
         CHECKBOX_NO("fragment-compact-checkboxNo"),
         CHECKBOX_INTERMEDIATE("fragment-compact-checkboxIntermediate"),

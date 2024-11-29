@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.viewer.wicket.model.itemreuse.ReuseIfRowIndexEqualsStrategy;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsSortableDataProvider;
 import org.apache.causeway.viewer.wicket.ui.components.table.head.HeadersToolbar;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.NavigationToolbar;
 import org.apache.causeway.viewer.wicket.ui.components.table.nonav.TotalRecordsToolbar;

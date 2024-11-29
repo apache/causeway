@@ -16,8 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
- 
- /* === whereAmI feature === */
 
 .whereAmI {
     color: #555;
@@ -33,8 +31,6 @@
     font-size: unset;
 }
 
-.breadcrumb .entityUrlSource {
+.breadcrumb .objectUrlSource {
   	white-space: nowrap;
 }
-
-/* -------------------------- */

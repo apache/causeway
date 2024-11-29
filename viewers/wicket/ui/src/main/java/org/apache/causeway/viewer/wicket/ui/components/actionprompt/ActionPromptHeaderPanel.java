@@ -40,7 +40,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
         _Blackhole.consume(model.getObject()); // side-effect: loads the model
 
         getComponentFactoryRegistry()
-        .addOrReplaceComponent(this, UiComponentType.ENTITY_ICON_AND_TITLE, model.getParentUiModel());
+        .addOrReplaceComponent(this, UiComponentType.OBJECT_ICON_AND_TITLE, model.getParentUiModel());
 
         var label = Wkt.labelAdd(this, ID_ACTION_NAME, model::getFriendlyName);
 

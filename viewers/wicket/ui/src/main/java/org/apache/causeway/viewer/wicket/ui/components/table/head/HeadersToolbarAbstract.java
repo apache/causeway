@@ -43,9 +43,9 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ActionColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ActionColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.TitleColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 

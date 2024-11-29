@@ -38,7 +38,7 @@ extends PanelAbstract<ManagedObject, PropertyModel> {
 
         getComponentFactoryRegistry().addOrReplaceComponent(
                 this,
-                UiComponentType.ENTITY_ICON_AND_TITLE,
+                UiComponentType.OBJECT_ICON_AND_TITLE,
                 UiObjectWkt.ofAdapter(targetAdapter));
 
         Wkt.labelAdd(this, ID_PROPERTY_NAME, model::getFriendlyName)

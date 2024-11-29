@@ -58,27 +58,27 @@ public enum UiComponentType {
      */
     DOMAIN_OBJECT,
     /**
-     * Icon and title for a single entity.
+     * Icon and title for a single domain object.
      */
-    ENTITY_ICON_AND_TITLE,
+    OBJECT_ICON_AND_TITLE,
     /**
-     * Icon, title and a copy link for a single entity.
+     * Icon, title and a copy link for a single domain object.
      */
-    ENTITY_ICON_TITLE_AND_COPYLINK,
+    OBJECT_ICON_TITLE_AND_COPYLINK,
     /**
-     * Title, icon and action list for a single entity.
+     * Title, icon and action list for a single domain object.
      */
-    ENTITY_SUMMARY,
+    OBJECT_SUMMARY,
     /**
-     * A single &quot;parented&quot; collection of an entity.
+     * A single &quot;parented&quot; collection of domain objects.
      * <p>
      * Note that the default implementation is actually a wrapper that provides a selector over all available
      * individual representations of the entity by way of {@link #COLLECTION_CONTENTS} component type.  The
      * framework provides a number of implementations of this lower-level component: as a table, as
-     * collapsed/hidden, as a summary.  Any additional representations that are found that can render the
+     * collapsed/hidden, as a summary. Any additional representations that are found that can render the
      * collection (eg map, calendar) are added to the selector.
      */
-    ENTITY_COLLECTION,
+    PARENTED_COLLECTION,
     /**
      * A single standalone value, as might be returned from an action.
      */
@@ -125,11 +125,11 @@ public enum UiComponentType {
      */
     COLLECTION_CONTENTS_EXPORT(Optionality.OPTIONAL),
     /**
-     * A link to an entity.
+     * A link to a domain object.
      */
-    ENTITY_LINK,
+    OBJECT_LINK,
     /**
-     * A collection of entities, from an action, but none returned.
+     * A collection of objects, from an action, but none returned.
      */
     EMPTY_COLLECTION,
     /**

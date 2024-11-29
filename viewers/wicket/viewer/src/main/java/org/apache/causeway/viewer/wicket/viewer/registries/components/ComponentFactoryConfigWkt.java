@@ -63,28 +63,28 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.value.Composit
 import org.apache.causeway.viewer.wicket.ui.components.attributes.value.ValueAttributePanel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.value.ValueFallbackAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.export.CollectionContentsAsExportFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsHiddenPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.export.CollectionContentsAsExportFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.parented.ParentedCollectionPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.multiple.CollectionContentsMultipleViewsPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.summary.CollectionContentsAsSummaryFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.unresolved.CollectionContentsHiddenPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.collection.standalone.StandaloneCollectionPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.object.header.ObjectHeaderPanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconTitleAndCopyLinkPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.standalonecollection.StandaloneCollectionPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.tree.TreePanelFactories;
 import org.apache.causeway.viewer.wicket.ui.components.unknown.UnknownModelPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.value.StandaloneValuePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.objectsimplelink.ObjectLinkSimplePanelFactory;
 
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -173,10 +173,10 @@ public class ComponentFactoryConfigWkt {
         componentFactories.add(new BSGridPanelFactory());
 
         // lower-level
-        componentFactories.add(new EntityIconAndTitlePanelFactory());
-        componentFactories.add(new EntityIconTitleAndCopyLinkPanelFactory());
-        componentFactories.add(new EntityHeaderPanelFactory());
-        componentFactories.add(new EntityCollectionPanelFactory());
+        componentFactories.add(new ObjectIconAndTitlePanelFactory());
+        componentFactories.add(new ObjectIconTitleAndCopyLinkPanelFactory());
+        componentFactories.add(new ObjectHeaderPanelFactory());
+        componentFactories.add(new ParentedCollectionPanelFactory());
     }
 
     protected void addComponentFactoriesForEntityCollectionContents(
@@ -227,7 +227,7 @@ public class ComponentFactoryConfigWkt {
     }
 
     protected void addComponentFactoriesForEntityLink(final ComponentFactoryList componentFactories) {
-        componentFactories.add(new EntityLinkSimplePanelFactory());
+        componentFactories.add(new ObjectLinkSimplePanelFactory());
     }
 
     protected void addComponentFactoriesForVoidReturn(final ComponentFactoryList componentFactories) {

@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragm
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.choices.AttributePanelWithSelect.ChoiceTitleHandler;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanel;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.objectsimplelink.ObjectLinkSimplePanel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
@@ -52,10 +52,10 @@ implements ChoiceTitleHandler {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
-    private static final String ID_ENTITY_TITLE_IF_NULL = "entityTitleIfNull";
+    private static final String ID_OBJECT_TITLE_IF_NULL = "objectTitleIfNull";
 
-    private ChoiceFormComponent entityLink;
-    private EntityLinkSimplePanel entityLinkOutputFormat;
+    private ChoiceFormComponent objectLink;
+    private ObjectLinkSimplePanel objectLinkOutputFormat;
     private final boolean isCompactFormat;
 
     public ObjectChoicesAttributePanel(final String id, final UiAttributeWkt attributeModel) {
@@ -69,29 +69,29 @@ implements ChoiceTitleHandler {
         var attributeModel = attributeModel();
         final String name = attributeModel.getFriendlyName();
 
-        this.entityLinkOutputFormat = (EntityLinkSimplePanel) getComponentFactoryRegistry()
-                .createComponent(UiComponentType.ENTITY_LINK, attributeModel);
+        this.objectLinkOutputFormat = (ObjectLinkSimplePanel) getComponentFactoryRegistry()
+                .createComponent(UiComponentType.OBJECT_LINK, attributeModel);
 
-        entityLinkOutputFormat.setOutputMarkupId(true);
-        entityLinkOutputFormat.setLabel(Model.of(name));
+        objectLinkOutputFormat.setOutputMarkupId(true);
+        objectLinkOutputFormat.setLabel(Model.of(name));
 
-        return CompactFragment.ENTITY_LINK
-                .createFragment(id, this, scalarValueId->entityLinkOutputFormat);
+        return CompactFragment.OBJECT_LINK
+                .createFragment(id, this, scalarValueId->objectLinkOutputFormat);
     }
 
     @Override
     protected FormComponent<ManagedObject> createFormComponent(final String id, final UiAttributeWkt attributeModel) {
 
-        this.entityLink = new ChoiceFormComponent(UiComponentType.ENTITY_LINK.getId(), this);
-        entityLink.setRequired(attributeModel.isRequired());
+        this.objectLink = new ChoiceFormComponent(UiComponentType.OBJECT_LINK.getId(), this);
+        objectLink.setRequired(attributeModel.isRequired());
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE,
                 ChoiceProviderDefault::new);
 
-        entityLink.addOrReplace(select2.asComponent());
-        entityLink.setOutputMarkupId(true);
+        objectLink.addOrReplace(select2.asComponent());
+        objectLink.setOutputMarkupId(true);
 
-        return entityLink;
+        return objectLink;
     }
 
     @Override
@@ -147,9 +147,9 @@ implements ChoiceTitleHandler {
         lookupScalarValueContainer()
         .ifPresent(container->{
             var componentFactory = getComponentFactoryRegistry()
-                    .findComponentFactory(UiComponentType.ENTITY_ICON_AND_TITLE, attributeModel);
+                    .findComponentFactory(UiComponentType.OBJECT_ICON_AND_TITLE, attributeModel);
             var iconAndTitle = componentFactory
-                    .createComponent(UiComponentType.ENTITY_ICON_AND_TITLE.getId(), attributeModel);
+                    .createComponent(UiComponentType.OBJECT_ICON_AND_TITLE.getId(), attributeModel);
             container.addOrReplace(iconAndTitle);
 
             var isInlinePrompt = attributeModel.isInlinePrompt();
@@ -160,29 +160,29 @@ implements ChoiceTitleHandler {
             var adapter = attributeModel.getObject();
             if(adapter != null
                     || isInlinePrompt) {
-                WktComponents.permanentlyHide(container, ID_ENTITY_TITLE_IF_NULL);
+                WktComponents.permanentlyHide(container, ID_OBJECT_TITLE_IF_NULL);
             } else {
-                Wkt.markupAdd(container, ID_ENTITY_TITLE_IF_NULL,
+                Wkt.markupAdd(container, ID_OBJECT_TITLE_IF_NULL,
                         getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
             }
         });
 
         if(!isEditable()) {
-            WktComponents.permanentlyHide(entityLink, ID_AUTO_COMPLETE);
+            WktComponents.permanentlyHide(objectLink, ID_AUTO_COMPLETE);
             return;
         }
 
         if(fieldFrame != null) {
-            WktComponents.permanentlyHide(fieldFrame, ID_ENTITY_TITLE_IF_NULL);
+            WktComponents.permanentlyHide(fieldFrame, ID_OBJECT_TITLE_IF_NULL);
         }
-        WktComponents.permanentlyHide(entityLink, ID_ENTITY_TITLE_IF_NULL);
+        WktComponents.permanentlyHide(objectLink, ID_OBJECT_TITLE_IF_NULL);
 
         if(select2 == null) {
             throw new IllegalStateException("select2 should be created already");
         }
 
         // set mutability
-        select2.setEnabled(entityLink.isEnableAllowed()
+        select2.setEnabled(objectLink.isEnableAllowed()
                 && !getModel().isViewingMode());
 
         /* XXX not sure if required any more
@@ -248,7 +248,7 @@ implements ChoiceTitleHandler {
             pendingValue.setValue(adapter);
         }
 
-        entityLink.setConvertedInput(pendingValue.getValue());
+        objectLink.setConvertedInput(pendingValue.getValue());
     }
 
     // --
@@ -263,8 +263,8 @@ implements ChoiceTitleHandler {
 
     @Override
     public void clearTitleAttribute() {
-        entityLink.setEnabled(true);
-        Wkt.attributeReplace(entityLink, "title", "");
+        objectLink.setEnabled(true);
+        Wkt.attributeReplace(objectLink, "title", "");
     }
 
     @Override
@@ -273,8 +273,8 @@ implements ChoiceTitleHandler {
             clearTitleAttribute();
             return;
         }
-        entityLink.setEnabled(false);
-        Wkt.attributeReplace(entityLink, "title", titleAttribute);
+        objectLink.setEnabled(false);
+        Wkt.attributeReplace(objectLink, "title", titleAttribute);
     }
 
 }

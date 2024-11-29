@@ -173,12 +173,12 @@ footer > .navbar {
 
 /* from ActionPromptHeaderPanel */
 
-.entityIconAndTitlePanel img {
+.objectIconAndTitlePanel img {
     width: 24px;
     height: 24px;
 }
 
-.entityIconAndTitlePanel span.actionName {
+.objectIconAndTitlePanel span.actionName {
     font-size: 20px;
     font-weight: bolder;
 }
@@ -212,7 +212,7 @@ footer > .navbar {
 
 
 /* from CollectionContentsMultipleViewsPanel.css */
-/* AND ALSO duplicated in from EntityLinksSelectorPanel.css */
+/* AND ALSO duplicated in from ObjectLinksSelectorPanel.css */
 
 .linksSelectorPanel .viewLinks {
     float:right;
@@ -304,40 +304,40 @@ span.ViewLinkItem.summary {
 */
 
 
-/* from EntityHeaderPanel.css */
+/* from ObjectHeaderPanel.css */
 
-.entityHeaderPanel {
+.objectHeaderPanel {
     clear:both;
     padding-top:10px;
     display:block;
 }
 
-div.entityHeaderPanel .iconAndTitle{
+div.objectHeaderPanel .iconAndTitle{
     float: left;
     padding:0;
     padding-bottom: 5px;
     width: 100%;
 }
 
-div.entityHeaderPanel .iconAndTitleLabel {
+div.objectHeaderPanel .iconAndTitleLabel {
     float: left;
     margin-bottom: 10px;
     margin-right: 10px;
 }
 
-div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
+div.objectHeaderPanel .objectActions .cssMenuPanel .cssMenuItems:first-child {
     float: left;
     margin-top: 3px;
     margin-left: 20px;
 }
 
-.entityHeaderPanel .entityImage {
+.objectHeaderPanel .objectImage {
     width: 32px;
     height: 32px;
     vertical-align:text-bottom;
 }
 
-.entityHeaderPanel .entityTitle {
+.objectHeaderPanel .objectTitle {
     font-weight:normal;
     text-decoration:none;
     padding-right: 30px;
@@ -411,13 +411,13 @@ span.containedButtonPanel {
 }
 
 
-/* from entityPropertiesPanel */
+/* from objectPropertiesPanel */
 
 
-.entityPropertiesPanel .properties.card-body {
+.objectPropertiesPanel .properties.card-body {
     padding-bottom: 5px;
 }
-.entityPropertiesPanel .collection.card-body {
+.objectPropertiesPanel .collection.card-body {
     padding-bottom: 0px;
 }
 
@@ -451,8 +451,8 @@ div.additionalLinkList {
 .collections ul.additionalLinkList,
 .standaloneCollectionPanel div.additionalLinkList,
 .standaloneCollectionPanel ul.additionalLinkList,
-.entityCollectionsPanel div.additionalLinkList,
-.entityCollectionsPanel ul.additionalLinkList {
+.parentedCollectionPanel div.additionalLinkList,
+.parentedCollectionPanel ul.additionalLinkList {
     padding-bottom: 0px;
 
 }
@@ -699,7 +699,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     margin-bottom: 4px;
 }
 
-.referencePanel .entityLinkSelect2Panel .entityImage {
+.referencePanel .objectLinkSelect2Panel .objectImage {
     width: 20px;
     height: 20px;
 }
@@ -708,7 +708,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     padding-right: 10px;
 }
 
-.referencePanel .form-group.label-left .scalarValueWrapper .entityLinkSelect2Panel{
+.referencePanel .form-group.label-left .scalarValueWrapper .objectLinkSelect2Panel{
     padding-top: 4px;
     padding-bottom: 3px;
 }
@@ -722,11 +722,11 @@ div.referencePanel.scalarNameAndValueComponentType {
     padding-top: 20px;
 }
 
-.entityCollectionsPanel .card-header {
+.parentedCollectionPanel .card-header {
     padding-bottom: 10px;
 }
 .standaloneCollectionPanel .card-header {
-    padding-bottom: 5px; /* different from entityCollectionsPanel because of display-inline ? of additionalLinks */
+    padding-bottom: 5px; /* different from parentedCollectionPanel because of display-inline ? of additionalLinks */
 }
 
 /*
@@ -803,13 +803,6 @@ footer .footer-image {
 #aboutLink {
     padding-right: 30px;
 }
-
-/*
-.entityTabbed > .row > .leftColumn,
-.entityTabbed > .row > .rightColumn {
-    margin-top: 41px;
-}
-*/
 
 .tab-content {
     border-left: 1px solid #ddd;
@@ -904,7 +897,7 @@ footer .footer-image {
     padding: 5px;
 }
 
-.entityHeaderPanel .entityActions ul.additionalLinkList li.additionalLinkItem {
+.objectHeaderPanel .objectActions ul.additionalLinkList li.additionalLinkItem {
     padding-top: 3px;
     /*padding-bottom: 7px;*/
 }
@@ -978,7 +971,7 @@ div.scalarValueInlinePromptLink {
   opacity: 1.0;
 }
 
-.entityUrlSource {
+.objectUrlSource {
 	cursor: pointer;
 	display: inline;
 }
@@ -992,16 +985,16 @@ div.scalarValueInlinePromptLink {
     width: 85%;
 }
 
-.referencePanel .inlinePrompt .entityIconAndTitlePanel .entityImage {
+.referencePanel .inlinePrompt .objectIconAndTitlePanel .objectImage {
     width: 1.3em;
 	height: 1.3em;
 }
 
-.entityTitle {
+.objectTitle {
     text-decoration: none;
     color: var(--link-color);
 }
-.entityTitle:hover {
+.objectTitle:hover {
     text-decoration: underline;
     cursor: pointer;
     color: var(--link-color-hover);
@@ -1062,7 +1055,7 @@ h4.iconAndTitle a {
     display: inline-block;
     text-decoration: none;
 }
-h4.iconAndTitle a span.entityTitle:focus {
+h4.iconAndTitle a span.objectTitle:focus {
     outline: none;
 }
 
@@ -1157,7 +1150,7 @@ ul.navbar-wrap {
 
 /* DATATABLES.NET */
 
-div.entityCollection div.dataTables_wrapper {
+div.objectCollection div.dataTables_wrapper {
     margin-top: 15px;
 }
 
@@ -1202,7 +1195,7 @@ strong.wkt-component-with-tooltip  {
 
 .ui-helper-hidden-accessible { display:none; }
 
-span.entityIconAndTitlePanel > a {
+span.objectIconAndTitlePanel > a {
     text-decoration: none;
 }
 

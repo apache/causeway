@@ -45,8 +45,8 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.tableoption.PagesizeChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoice;
 import org.apache.causeway.viewer.wicket.model.tableoption.SelectOperationChoiceKey;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsSortableDataProvider;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.CollectionContentsSortableDataProvider;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
 
 public abstract class DataTableWithPagesAndFilter<T, S> extends DataTable<T, S> {

@@ -120,7 +120,7 @@
     margin-left:0;
 }
 
-/******** overrides for grouped actions and entity actions ***************/
+/******** overrides for grouped actions and object actions ***************/
 .groupedActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
     display: none;
 }
@@ -171,11 +171,11 @@
     text-decoration: none;
 }
 
-.entityActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
+.objectActions .cssMenuPanel li.cssMenuItemPanel>p.top-parent {
     display: none;
 }
 
-.entityActions .cssMenuPanel .menuh ul {
+.objectActions .cssMenuPanel .menuh ul {
     position: relative;
     display: block;
     float: right;
@@ -183,7 +183,7 @@
     padding: 0;
 }
 
-.entityActions .cssMenuPanel .menuh ul ul {
+.objectActions .cssMenuPanel .menuh ul ul {
     position: relative;
     display: block;
     float: right;
@@ -191,29 +191,29 @@
     padding: 0;
 }
 
-.entityActions .cssMenuPanel .menuh li {
+.objectActions .cssMenuPanel .menuh li {
     float:left;
     display:block;
     margin-left:10px;
 }
 
-.entityActions .cssMenuPanel .menuh li p {
+.objectActions .cssMenuPanel .menuh li p {
     float:left;
     display:block;
     margin-left:0;
 }
 
-.entityActions .cssMenuPanel .menuh a,
-.entityActions .cssMenuPanel .menuh p {
+.objectActions .cssMenuPanel .menuh a,
+.objectActions .cssMenuPanel .menuh p {
     display: inline-block;
     /*border: none;*/
 }
 
-.entityActions .cssMenuPanel .menuh a,
-.entityActions .cssMenuPanel .menuh a:link,
-.entityActions .cssMenuPanel .menuh a:visited,
-.entityActions .cssMenuPanel .menuh a:active,
-.entityActions .cssMenuPanel .menuh p {
+.objectActions .cssMenuPanel .menuh a,
+.objectActions .cssMenuPanel .menuh a:link,
+.objectActions .cssMenuPanel .menuh a:visited,
+.objectActions .cssMenuPanel .menuh a:active,
+.objectActions .cssMenuPanel .menuh p {
     display: block;
     float: left;
     height: 30px;
@@ -232,11 +232,6 @@
     padding:0;
     list-style:none;
 }
-
-.entityCollectionsPanel .card-header .additionalLinkList {
-    /*margin-right: 10px;*/
-}
-
 
 .float-right .additionalLinkListDropDown {
     margin-left: 0px;
@@ -262,15 +257,12 @@
     margin-left: -20px;
 }
 
-.entityPropertiesPanel .additionalLinkList li {
+.objectPropertiesPanel .additionalLinkList li {
     margin-right:0px;
 }
-.entityPropertiesPanel .properties .card-header .additionalLinkList {
+.objectPropertiesPanel .properties .card-header .additionalLinkList {
     margin-right: -5px;
 }
-
-
-
 
 
 /**

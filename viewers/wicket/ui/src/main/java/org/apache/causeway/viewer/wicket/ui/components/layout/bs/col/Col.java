@@ -43,10 +43,10 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory.CollectionOwnerAndLayout;
-import org.apache.causeway.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
+import org.apache.causeway.viewer.wicket.ui.components.collection.parented.ParentedCollectionPanelFactory.CollectionOwnerAndLayout;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.row.Row;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.tabs.TabGroupPanel;
+import org.apache.causeway.viewer.wicket.ui.components.object.fieldset.PropertyGroup;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -59,7 +59,7 @@ implements HasDynamicallyVisibleContent {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_COL = "col";
-    private static final String ID_ENTITY_HEADER_PANEL = "entityHeaderPanel";
+    private static final String ID_OBJECT_HEADER_PANEL = "objectHeaderPanel";
     private static final String ID_ROWS = "rows";
     private static final String ID_TAB_GROUPS = "tabGroups";
     private static final String ID_FIELD_SETS = "fieldSets";
@@ -98,20 +98,20 @@ implements HasDynamicallyVisibleContent {
         final String actionIdToUse;
         final String actionIdToHide;
         if(domainObject != null) {
-            final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer(ID_ENTITY_HEADER_PANEL);
+            final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer(ID_OBJECT_HEADER_PANEL);
             div.add(entityHeaderPanel);
             final ComponentFactory componentFactory =
-                    getComponentFactoryRegistry().findComponentFactory(UiComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getModel());
+                    getComponentFactoryRegistry().findComponentFactory(UiComponentType.OBJECT_ICON_TITLE_AND_COPYLINK, getModel());
             final Component component = componentFactory.createComponent(getModel());
             entityHeaderPanel.addOrReplace(component);
 
             actionOwner = entityHeaderPanel;
-            actionIdToUse = "entityActions";
+            actionIdToUse = "objectActions";
             actionIdToHide = "actions";
 
             visible = true;
         } else {
-            WktComponents.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
+            WktComponents.permanentlyHide(div, ID_OBJECT_HEADER_PANEL);
             actionOwner = div;
             actionIdToUse = "actions";
             actionIdToHide = null;
@@ -245,7 +245,7 @@ implements HasDynamicallyVisibleContent {
 
                 final ComponentFactory componentFactory =
                         getComponentFactoryRegistry().findComponentFactory(
-                                UiComponentType.ENTITY_COLLECTION, helperModel);
+                                UiComponentType.PARENTED_COLLECTION, helperModel);
 
                 final Component collectionPanel = componentFactory.createComponent(collectionRv.newChildId(), helperModel);
                 collectionRv.add(collectionPanel);

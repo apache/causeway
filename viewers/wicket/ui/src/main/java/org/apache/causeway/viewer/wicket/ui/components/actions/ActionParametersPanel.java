@@ -71,7 +71,7 @@ extends PanelAbstract<ManagedObject, ActionModel> {
         addOrReplace(header);
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PARAMETERS, actionModel);
-        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE,
+        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.OBJECT_ICON_AND_TITLE,
                 actionModel.getParentUiModel());
 
         Wkt.labelAdd(header, ID_ACTION_NAME, ()->getActionModel().getFriendlyName());

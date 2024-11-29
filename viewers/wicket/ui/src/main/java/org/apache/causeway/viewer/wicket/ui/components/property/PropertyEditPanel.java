@@ -77,7 +77,7 @@ extends PanelAbstract<ManagedObject, PropertyModel> {
         WebMarkupContainer header = addHeader();
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, UiComponentType.PROPERTY_EDIT_FORM, propertyModel());
-        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.ENTITY_ICON_AND_TITLE, propertyModel.getParentUiModel());
+        getComponentFactoryRegistry().addOrReplaceComponent(header, UiComponentType.OBJECT_ICON_AND_TITLE, propertyModel.getParentUiModel());
 
         Wkt.labelAdd(header, ID_PROPERTY_NAME, propertyModel()::getFriendlyName)
             .setEscapeModelStrings(true);
