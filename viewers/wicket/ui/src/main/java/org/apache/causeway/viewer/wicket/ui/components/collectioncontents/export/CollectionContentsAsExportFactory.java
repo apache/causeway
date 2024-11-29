@@ -122,8 +122,7 @@ implements CollectionContentsAsFactory {
         }
 
         private TabularExporter exporter() {
-            return ((CollectionContentsAsExportFactory) key.resolve(model::getServiceRegistry))
-                    .tabularExporter;
+            return ((CollectionContentsAsExportFactory) key.componentFactory()).tabularExporter;
         }
 
     }

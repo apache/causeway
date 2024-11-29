@@ -103,11 +103,11 @@ implements CollectionCountProvider {
         int selectedIdx = 0;
         underlyingViews = new Component[MAX_NUM_UNDERLYING_VIEWS];
 
-        for (ComponentFactoryKey componentFactory : componentFactories) {
+        for (ComponentFactoryKey componentFactoryKey : componentFactories) {
             final String underlyingId = underlyingIdPrefix + "-" + i;
 
-            final boolean isSelected = selectedCompFactoryName.equals(componentFactory.id());
-            final Component underlyingView = componentFactory.resolve(this::getServiceRegistry)
+            final boolean isSelected = selectedCompFactoryName.equals(componentFactoryKey.id());
+            final Component underlyingView = componentFactoryKey.componentFactory()
                     .createComponent(underlyingId, isSelected ? visibleCollModel : hiddenCollModel);
             if(isSelected) {
                 selectedIdx = i;

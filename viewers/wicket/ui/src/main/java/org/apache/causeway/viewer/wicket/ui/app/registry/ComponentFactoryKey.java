@@ -19,79 +19,72 @@
 package org.apache.causeway.viewer.wicket.ui.app.registry;
 
 import java.io.Serializable;
-import java.util.function.Supplier;
 
 import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 
 /**
  * Serializable key into the {@link ServiceRegistry} to lookup {@link ComponentFactory}s,
  * in order for the latter not having to be {@link Serializable}.
  */
-public final class ComponentFactoryKey implements Serializable {
-    private static final long serialVersionUID = 1L;
+public record ComponentFactoryKey(
+    Class<? extends ComponentFactory> factoryClass,
+    String id,
+    String label,
+    UiComponentType componentType,
+    int orderOfAppearanceInUiDropdown,
+    boolean isPageReloadRequiredOnTableViewActivation,
+    String cssClass,
+    _Lazy<ComponentFactory> componentFactoryLazy
+    ) implements Serializable {
 
-    @Getter @Accessors(fluent=true)
-    private final Class<? extends ComponentFactory> factoryClass;
-    @Getter @Accessors(fluent=true)
-    private final String id;
-    @Getter @Accessors(fluent=true)
-    private final String label;
-    @Getter @Accessors(fluent=true)
-    private final UiComponentType componentType;
-    @Getter @Accessors(fluent=true)
-    private int orderOfAppearanceInUiDropdown;
-    @Getter @Accessors(fluent=true)
-    private boolean isPageReloadRequiredOnTableViewActivation;
-    @Getter @Accessors(fluent=true)
-    private String cssClass;
-
-    // access only through resolve(...)
-    private transient ComponentFactory componentFactory;
+    public ComponentFactory componentFactory() {
+        return componentFactoryLazy.get();
+    }
 
     public ComponentFactoryKey(final @NonNull ComponentFactory componentFactory) {
-        this.factoryClass = componentFactory.getClass();
-        this.componentFactory = componentFactory;
-        this.id = componentFactory.getName();
-        this.label = _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
+        this(
+            /*factoryClass*/
+            componentFactory.getClass(),
+            /*id*/
+            componentFactory.getName(),
+            /*label*/
+            _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
                 .map(CollectionContentsAsFactory::getTitleLabel)
                 .map(IModel::getObject)
-                .orElseGet(()->componentFactory.getName());
-        this.componentType = componentFactory.getComponentType();
-        this.orderOfAppearanceInUiDropdown =
-                componentFactory instanceof CollectionContentsAsFactory
-                    ? ((CollectionContentsAsFactory) componentFactory).orderOfAppearanceInUiDropdown()
-                    : Integer.MAX_VALUE;
-        this.isPageReloadRequiredOnTableViewActivation =
-                componentFactory instanceof CollectionContentsAsFactory
-                    ? ((CollectionContentsAsFactory) componentFactory).isPageReloadRequiredOnTableViewActivation()
-                    : false;
-
-        this.cssClass = _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
+                .orElseGet(()->componentFactory.getName()),
+            /*componentType*/
+            componentFactory.getComponentType(),
+            /*orderOfAppearanceInUiDropdown*/
+            componentFactory instanceof CollectionContentsAsFactory collectionContentsAsFactory
+                ? collectionContentsAsFactory.orderOfAppearanceInUiDropdown()
+                : Integer.MAX_VALUE,
+            /*isPageReloadRequiredOnTableViewActivation*/
+            componentFactory instanceof CollectionContentsAsFactory collectionContentsAsFactory
+                ? collectionContentsAsFactory.isPageReloadRequiredOnTableViewActivation()
+                : false,
+            /*cssClass*/
+            _Casts.castTo(CollectionContentsAsFactory.class, componentFactory)
                 .map(CollectionContentsAsFactory::getCssClass)
                 .map(IModel::getObject)
                 .orElseGet(()->
-                    _Strings.asLowerDashed.apply(componentFactory.getName()));
-    }
+                    _Strings.asLowerDashed.apply(componentFactory.getName())),
+            /*componentFactoryLazy*/
+            _Lazy.of(()->MetaModelContext.instanceElseFail().getServiceRegistry()
+                .lookupServiceElseFail(ComponentFactoryRegistry.class)
+                .lookupFactoryElseFail(componentFactory.getClass())));
 
-    public ComponentFactory resolve(final @NonNull Supplier<ServiceRegistry> serviceRegistrySupplier) {
-        return componentFactory != null
-                ? componentFactory
-                : (this.componentFactory = componentFactoryRegistry(serviceRegistrySupplier).lookupFactoryElseFail(factoryClass));
-    }
-    
-    ComponentFactoryRegistry componentFactoryRegistry(final @NonNull Supplier<ServiceRegistry> serviceRegistrySupplier) {
-        return serviceRegistrySupplier.get().lookupServiceElseFail(ComponentFactoryRegistry.class);
+        componentFactoryLazy.set(componentFactory); // memoize
     }
 
 }

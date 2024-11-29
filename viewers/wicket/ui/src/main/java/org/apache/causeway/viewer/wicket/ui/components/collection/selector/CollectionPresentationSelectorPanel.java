@@ -156,13 +156,13 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
             }
 
             var linkEntry = (LinkEntry) menuable;
-            final ComponentFactoryKey componentFactory = linkEntry.getComponentFactoryKey();
+            var componentFactoryKey = linkEntry.getComponentFactoryKey();
 
             // add direct download link instead of a panel
-            if(componentFactory.componentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
+            if(componentFactoryKey.componentType() == UiComponentType.COLLECTION_CONTENTS_EXPORT) {
 
                 final DownloadLink downloadLink = (DownloadLink)
-                        componentFactory.resolve(this::getServiceRegistry).createComponent(ID_VIEW_LINK, getModel());
+                        componentFactoryKey.componentFactory().createComponent(ID_VIEW_LINK, getModel());
                 WktComponents.permanentlyHide(downloadLink, ID_VIEW_ITEM_CHECKMARK);
 
                 item.addOrReplace(downloadLink);
@@ -175,12 +175,12 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
             // on click: make the clicked item the new selected item
             var link = Wkt.linkAdd(item, ID_VIEW_LINK, target->{
                 final CollectionPresentationSelectorPanel linksSelectorPanel = CollectionPresentationSelectorPanel.this;
-                linksSelectorPanel.setViewHintAndBroadcast(componentFactory.id(), target);
+                linksSelectorPanel.setViewHintAndBroadcast(componentFactoryKey.id(), target);
 
-                linksSelectorPanel.selectedComponentFactory = componentFactory;
+                linksSelectorPanel.selectedComponentFactory = componentFactoryKey;
 
                 CollectionPresentationSelectorPanel.this.getModel().parentedHintingBookmark()
-                    .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactory.id()));
+                    .ifPresent(bookmark->componentHintKey.set(bookmark, componentFactoryKey.id()));
 
                 /* [CAUSEWAY-3415] do a full page reload when required,
                  * to properly trigger all client side java-script, that decorates HTML (datatable.net, vega, ...) */

@@ -60,6 +60,6 @@ extends ValueAttributePanel<T> {
     }
 
     protected final MarkupAttributePanelFactories.ParentedAbstract<?> markupComponentFactory() {
-        return (MarkupAttributePanelFactories.ParentedAbstract<?>) markupComponentFactoryKey.resolve(this::getServiceRegistry);
+        return (MarkupAttributePanelFactories.ParentedAbstract<?>) markupComponentFactoryKey.componentFactory();
     }
 }
