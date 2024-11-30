@@ -84,11 +84,11 @@ public class Context {
                 : ActionScope.ANY;
     }
 
-    public List<ObjectSpecification> objectSpecifications() {
+    public List<? extends ObjectSpecification> objectSpecifications() {
         return objectSpecifications(spec -> true);
     }
 
-    public List<ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
+    public List<? extends ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
         var includeEntities = causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
         return specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional

@@ -61,7 +61,7 @@ class _ValidateUtil{
 
     // -- HELPER
 
-    private void runValidator(final MetaModelValidator validator, final Can<ObjectSpecification> snapshot) {
+    private void runValidator(final MetaModelValidator validator, final Can<? extends ObjectSpecification> snapshot) {
 
         var actionValidator = _Casts.castTo(MetaModelValidator.ActionValidator.class, validator);
         var parameterValidator = _Casts.castTo(MetaModelValidator.ParameterValidator.class, validator);

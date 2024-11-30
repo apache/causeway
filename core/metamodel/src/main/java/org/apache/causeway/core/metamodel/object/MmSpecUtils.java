@@ -86,7 +86,7 @@ public final class MmSpecUtils {
     /**
      * Introduced for JUnit testing.
      */
-    public String specificationsBySortAsYaml(final @NonNull Can<ObjectSpecification> specs) {
+    public String specificationsBySortAsYaml(final @NonNull Can<? extends ObjectSpecification> specs) {
 
         // collect all ObjectSpecifications into a list-multi-map, where BeanSort is the key
         var specsBySort = _Multimaps.<String, LogicalType>newListMultimap(LinkedHashMap<String, List<LogicalType>>::new, ArrayList::new);

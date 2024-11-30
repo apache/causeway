@@ -77,8 +77,9 @@ import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacets
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
@@ -134,7 +135,7 @@ implements
 
     private FacetProcessor facetProcessor;
 
-    private final Map<Class<?>, ObjectSpecification> cache = new ConcurrentHashMap<>();
+    private final Map<Class<?>, ObjectSpecificationMutable> cache = new ConcurrentHashMap<>();
     private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
     /**
@@ -223,13 +224,13 @@ implements
     }
 
     record SpecCollector(
-            List<ObjectSpecification> knownSpecs,
-            Map<Class<?>, ObjectSpecification> valueSpecs,
-            List<ObjectSpecification> domainServiceSpecs,
-            List<ObjectSpecification> mixinSpecs,
-            List<ObjectSpecification> entitySpecs,
-            List<ObjectSpecification> viewmodelSpecs,
-            List<ObjectSpecification> otherSpecs) {
+            List<ObjectSpecificationMutable> knownSpecs,
+            Map<Class<?>, ObjectSpecificationMutable> valueSpecs,
+            List<ObjectSpecificationMutable> domainServiceSpecs,
+            List<ObjectSpecificationMutable> mixinSpecs,
+            List<ObjectSpecificationMutable> entitySpecs,
+            List<ObjectSpecificationMutable> viewmodelSpecs,
+            List<ObjectSpecificationMutable> otherSpecs) {
 
         SpecCollector() {
             this(new ArrayList<>(),
@@ -238,7 +239,7 @@ implements
                     new ArrayList<>(), new ArrayList<>());
         }
 
-        public void collect(@Nullable final ObjectSpecification spec) {
+        public void collect(@Nullable final ObjectSpecificationMutable spec) {
             if(spec==null) return; // might be vetoed
             knownSpecs.add(spec);
             switch (spec.getBeanSort()) {
@@ -441,7 +442,7 @@ implements
     // -- LOOKUP
 
     @Override
-    public Can<ObjectSpecification> snapshotSpecifications() {
+    public Can<ObjectSpecificationMutable> snapshotSpecifications() {
         return Can.ofCollection(cache.values());
     }
 
@@ -563,7 +564,7 @@ implements
     }
 
     @Nullable
-    private ObjectSpecification primeSpecification(
+    private ObjectSpecificationMutable primeSpecification(
             final @NonNull CausewayBeanMetaData typeMeta) {
         return loadSpecificationNullable(
                 typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionState.NOT_INTROSPECTED);
@@ -571,7 +572,7 @@ implements
     }
 
     @Nullable
-    private ObjectSpecification loadSpecificationNullable(
+    private ObjectSpecificationMutable loadSpecificationNullable(
             final @Nullable Class<?> type,
             final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
             final @NonNull IntrospectionState upTo) {
@@ -614,7 +615,7 @@ implements
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
      */
-    private ObjectSpecification createSpecification(final CausewayBeanMetaData typeMeta) {
+    private ObjectSpecificationMutable createSpecification(final CausewayBeanMetaData typeMeta) {
         var objectSpec = new ObjectSpecificationDefault(
                         typeMeta,
                         metaModelContext,
@@ -625,7 +626,7 @@ implements
     }
 
     private void introspectSequential(
-            final Can<ObjectSpecification> specs,
+            final Can<ObjectSpecificationMutable> specs,
             final IntrospectionState upTo) {
         for (var spec : specs) {
             spec.introspectUpTo(upTo);
@@ -633,7 +634,7 @@ implements
     }
 
     private void introspectParallel(
-            final Can<ObjectSpecification> specs,
+            final Can<ObjectSpecificationMutable> specs,
             final IntrospectionState upTo) {
         specs.parallelStream()
         .forEach(spec -> {
@@ -648,7 +649,7 @@ implements
 
     private void introspectAndLog(
             final String info,
-            final Iterable<ObjectSpecification> specs,
+            final Iterable<ObjectSpecificationMutable> specs,
             final IntrospectionState upTo) {
         var stopWatch = _Timing.now();
         introspect(Can.ofIterable(specs), upTo);
@@ -657,7 +658,7 @@ implements
     }
 
     private void introspect(
-            final Can<ObjectSpecification> specs,
+            final Can<ObjectSpecificationMutable> specs,
             final IntrospectionState upTo) {
         if(parallel) {
             introspectParallel(specs, upTo);

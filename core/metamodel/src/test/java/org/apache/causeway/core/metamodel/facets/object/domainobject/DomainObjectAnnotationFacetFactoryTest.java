@@ -60,7 +60,7 @@ import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.Ent
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
 class DomainObjectAnnotationFacetFactoryTest

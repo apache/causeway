@@ -40,7 +40,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.extensions.titlecache.applib.event.Cached;

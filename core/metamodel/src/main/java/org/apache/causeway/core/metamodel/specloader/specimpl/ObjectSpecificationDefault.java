@@ -102,8 +102,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
@@ -119,8 +119,8 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ObjectSpecificationDefault
-implements ObjectSpecification {
+public final class ObjectSpecificationDefault
+implements ObjectSpecificationMutable {
 
     // -- CONSTRUCTION
 

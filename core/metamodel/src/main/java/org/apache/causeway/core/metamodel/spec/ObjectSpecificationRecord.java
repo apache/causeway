@@ -18,30 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.spec;
 
-public enum IntrospectionState implements Comparable<IntrospectionState> {
-    /**
-     * At this stage, {@link LogicalTypeFacet} only.
-     */
-    NOT_INTROSPECTED,
+import org.apache.causeway.applib.id.HasLogicalType;
+import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
-    /**
-     * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_INTROSPECTED}
-     */
-    TYPE_BEING_INTROSPECTED,
-
-    /**
-     * Type has been introspected (but not its members).
-     */
-    TYPE_INTROSPECTED,
-
-    /**
-     * Interim stage, to avoid infinite loops while on way to being {@link #FULLY_INTROSPECTED}
-     */
-    MEMBERS_BEING_INTROSPECTED,
-
-    /**
-     * Fully introspected... class and also its members.
-     */
-    FULLY_INTROSPECTED
+//TODO[causeway-core-metamodel-CAUSEWAY-3834] WIP
+public record ObjectSpecificationRecord(
+        LogicalType logicalType, 
+        FeatureType featureType, 
+        FacetHolder facetHolder) 
+implements
+    HasLogicalType,
+    Specification
+    //ObjectMemberContainer,
+    //ObjectSpecification 
+{
+    @Override public LogicalType getLogicalType() { return logicalType; }
+    @Override public FeatureType getFeatureType() { return featureType; }
+    @Override public FacetHolder getFacetHolder() { return facetHolder; }
 
 }

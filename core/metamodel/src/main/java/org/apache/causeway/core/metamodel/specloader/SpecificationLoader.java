@@ -33,16 +33,13 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
-
-import static org.apache.causeway.core.metamodel.spec.IntrospectionState.FULLY_INTROSPECTED;
-import static org.apache.causeway.core.metamodel.spec.IntrospectionState.TYPE_INTROSPECTED;
 
 import lombok.NonNull;
 
@@ -98,7 +95,7 @@ public interface SpecificationLoader {
      *
      * @return snapshot of all the (currently) loaded specifications, a defensive-copy
      */
-    Can<ObjectSpecification> snapshotSpecifications();
+    Can<? extends ObjectSpecification> snapshotSpecifications();
 
     /**
      * Similar to {@link #snapshotSpecifications()}, but also handles concurrent additions that occur
@@ -172,7 +169,7 @@ public interface SpecificationLoader {
     default Optional<ObjectSpecification> specForLogicalTypeName(
             final @Nullable String logicalTypeName) {
         return Optional.ofNullable(
-                loadSpecification(logicalTypeName, FULLY_INTROSPECTED));
+                loadSpecification(logicalTypeName, IntrospectionState.FULLY_INTROSPECTED));
     }
 
     default Optional<ObjectSpecification> specForLogicalType(
@@ -185,7 +182,7 @@ public interface SpecificationLoader {
     default Optional<ObjectSpecification> specForType(
             final @Nullable Class<?> domainType) {
         return Optional.ofNullable(
-                loadSpecification(domainType, FULLY_INTROSPECTED));
+                loadSpecification(domainType, IntrospectionState.FULLY_INTROSPECTED));
     }
 
     default Optional<ObjectSpecification> specForBookmark(
@@ -233,7 +230,7 @@ public interface SpecificationLoader {
 
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, TYPE_INTROSPECTED);
+        return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
 
     // -- FEATURE RECOVERY

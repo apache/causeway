@@ -80,14 +80,13 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
- * Represents an entity or value (cf {@link java.lang.Class}) within the
- * metamodel.
- *
+ * Represents any domain object, abstract type, bean or value, 
+ * and uniquely corresponds to a {@link java.lang.Class}).
  * <p>
- * As specifications are cyclic (specifically a class will reference its
+ * As specifications are potentially cyclic (specifically a class will reference its
  * subclasses, which in turn reference their superclass) they need be created
  * first, and then later work out its internals. Hence we create
- * {@link ObjectSpecification}s as we need them, and then introspect them later.
+ * {@link ObjectSpecification}(s) as we need them, then introspect them later.
  */
 public interface ObjectSpecification
 extends
@@ -559,12 +558,6 @@ extends
 
         return _Streams.concat(self, actions, actionParameters, properties, collections);
     }
-
-    /**
-     * Introspecting up to the level required.
-     * @since 2.0
-     */
-    void introspectUpTo(IntrospectionState upTo);
 
     /**
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,

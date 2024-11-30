@@ -36,7 +36,7 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;

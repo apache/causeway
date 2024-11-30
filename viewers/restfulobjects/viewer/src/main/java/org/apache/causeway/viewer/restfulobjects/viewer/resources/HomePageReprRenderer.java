@@ -205,7 +205,7 @@ extends ReprRendererAbstract<Void> {
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToDomainTypes(final Can<ObjectSpecification> specifications) {
+    private void addLinkToDomainTypes(final Can<? extends ObjectSpecification> specifications) {
 
         final JsonRepresentation link =
                 LinkBuilder.newBuilder(

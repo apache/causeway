@@ -67,7 +67,7 @@ record LogicalTypeResolver(
      * Acts as an identity operator with side-effects.
      * @param spec - type's ObjectSpecification
      */
-    ObjectSpecification register(final @NonNull ObjectSpecification spec) {
+    <T extends ObjectSpecification> T register(final @NonNull T spec) {
 
         var logicalTypeName = spec.getLogicalTypeName();
 

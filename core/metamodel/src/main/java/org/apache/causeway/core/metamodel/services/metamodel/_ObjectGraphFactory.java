@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 @lombok.Value
 class _ObjectGraphFactory implements ObjectGraph.Factory {
 
-    private final Collection<ObjectSpecification> objectSpecifications;
+    private final Collection<? extends ObjectSpecification> objectSpecifications;
     private final ObjectGraph objectGraph = new ObjectGraph();
     private final ListMultimap<String, LogicalType> logicalTypesByNamespace = _Multimaps.newListMultimap();
     private final Map<LogicalType, ObjectGraph.Object> objectByLogicalType = new HashMap<>();
