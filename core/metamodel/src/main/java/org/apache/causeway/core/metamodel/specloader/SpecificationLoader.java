@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -103,7 +104,7 @@ public interface SpecificationLoader {
 
     void reloadSpecification(Class<?> domainType);
 
-    boolean hasEntity(String logicalTypeName);
+    Optional<BeanSort> lookupBeanSort(final @Nullable LogicalType logicalType);
 
     /**
      * @param domainTypes

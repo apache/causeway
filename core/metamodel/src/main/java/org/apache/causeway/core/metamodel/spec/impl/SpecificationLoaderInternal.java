@@ -26,6 +26,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
@@ -139,8 +140,11 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     }
     
     @Override
-    default boolean hasEntity(String logicalTypeName) {
-        var spec = loadSpecification(logicalTypeName, IntrospectionState.NOT_INTROSPECTED);
-        return spec != null && spec.isEntity();
+    default Optional<BeanSort> lookupBeanSort(final @Nullable LogicalType logicalType) {
+        if(logicalType==null) return Optional.empty();
+        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionState.NOT_INTROSPECTED);
+        return spec != null 
+                ? Optional.of(spec.getBeanSort())
+                : Optional.empty();
     }
 }

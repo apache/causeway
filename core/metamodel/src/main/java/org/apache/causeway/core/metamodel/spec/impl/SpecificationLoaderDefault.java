@@ -470,28 +470,23 @@ implements
     @Override
     public Optional<LogicalType> lookupLogicalType(final @NonNull String logicalTypeName) {
         var logicalType = logicalTypeResolver.lookup(logicalTypeName);
-        if(logicalType.isPresent()) {
-            return logicalType;
-        }
+        if(logicalType.isPresent()) return logicalType;
 
         //XXX[2533] if the logicalTypeName is not available and instead a fqcn was passed in, that should also be supported
 
         // falling back assuming the logicalTypeName equals the fqn of the corresponding class
         // which might not always be true,
-
-        var cls = ClassUtil.forNameElseNull(logicalTypeName);
-        if(cls!=null) {
-
+        
 //TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...
-//            log.warn("Lookup for ObjectType '{}' failed, but found a matching fully qualified "
-//                    + "class name to use instead. This warning is an indicator, that {} is not "
-//                    + "discovered by Spring during bootstrapping of this application.",
-//                    logicalType.getName(),
-//                    cls.getName());
-            return Optional.of(LogicalType.fqcn(cls));
-        }
-
-        return Optional.empty();
+//      log.warn("Lookup for ObjectType '{}' failed, but found a matching fully qualified "
+//              + "class name to use instead. This warning is an indicator, that {} is not "
+//              + "discovered by Spring during bootstrapping of this application.",
+//              logicalType.getName(),
+//              cls.getName());
+        var cls = ClassUtil.forNameElseNull(logicalTypeName);
+        return cls!=null 
+            ? Optional.of(LogicalType.fqcn(cls))
+            : Optional.empty();
     }
 
     // -- VALIDATION STUFF
