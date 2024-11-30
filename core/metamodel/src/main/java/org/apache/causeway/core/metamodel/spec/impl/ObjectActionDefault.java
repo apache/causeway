@@ -70,7 +70,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class ObjectActionDefault
+ class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction, HasSpecificationLoaderInternal {
     private static final long serialVersionUID = 1L;
@@ -97,19 +97,6 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     @Override
     public String asciiId() {
         return getMetaModelContext().getAsciiIdentifierService().asciiIdFor(getId());
-    }
-
-    /**
-     * JUnit Support
-     */
-    public static class forTesting {
-        public static ObjectActionDefault forMethod(
-                final FacetedMethod facetedMethod) {
-            return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false, true);
-        }
-        public static ObjectAction forMixinMain(final FacetedMethod facetedMethod) {
-            return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true, true);
-        }
     }
 
     // -- CONSTRUCTION

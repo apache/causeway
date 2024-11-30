@@ -53,7 +53,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class ObjectActionParameterAbstract
+abstract class ObjectActionParameterAbstract
 implements
     ObjectActionParameter,
     HasSpecificationLoaderInternal {

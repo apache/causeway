@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.OneToOneAssociationMixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.NonNull;
 
@@ -65,7 +65,7 @@ implements
 
     /**
      * Inspect {@link Property#domainEvent()} if present, else use the default event type.
-     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
+     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociation}.
      */
     public static PropertyDomainEventFacet create(
             final @NonNull Optional<Property> propertyIfAny,
@@ -105,7 +105,7 @@ implements
     private final TranslationContext translationContext;
 
     /**
-     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociationMixedIn}.
+     * @param getterFacet - will be empty if this is for a mixed-in property {@link OneToOneAssociation}.
      */
     protected PropertyDomainEventFacet(
             final @NonNull Class<? extends PropertyDomainEvent<?, ?>> eventType,

@@ -35,12 +35,13 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionDefault;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 
 class ObjectActionLayoutXmlDefaultTest
 extends MetaModelTestAbstract {
 
-    private ObjectActionDefault action;
+    private ObjectAction action;
 
     private FacetedMethod mockFacetedMethod;
 
@@ -55,7 +56,7 @@ extends MetaModelTestAbstract {
         when(mockFacetedMethod.getTranslationService())
         .thenReturn(new TranslationService_forTesting());
 
-        action = ObjectActionDefault.forTesting.forMethod(mockFacetedMethod);
+        action = _JUnitSupport.actionForMethod(mockFacetedMethod);
     }
 
     @Test

@@ -33,10 +33,11 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class ObjectAssociationAbstract
+abstract class ObjectAssociationAbstract
 extends ObjectMemberAbstract
 implements ObjectAssociation {
-
+    private static final long serialVersionUID = 1L;
+    
     private final ObjectSpecification elementType;
 
     protected ObjectAssociationAbstract(

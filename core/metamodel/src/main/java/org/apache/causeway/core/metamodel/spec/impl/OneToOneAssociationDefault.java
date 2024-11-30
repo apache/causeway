@@ -58,7 +58,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
 
-public class OneToOneAssociationDefault
+class OneToOneAssociationDefault
 extends ObjectAssociationAbstract
 implements OneToOneAssociation, Serializable {
     private static final long serialVersionUID = 1L;

@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
@@ -43,26 +42,10 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 
-public class OneToManyAssociationMixedIn
+class OneToManyAssociationMixedIn
 extends OneToManyAssociationDefault
 implements MixedInMember {
     private static final long serialVersionUID = 1L;
-
-    // -- FACTORIES
-
-    /**
-     * JUnit Support
-     */
-    public static class forTesting {
-        public static OneToManyAssociationMixedIn forMixinMain(
-                final ObjectSpecification mixeeSpec,
-                final ObjectSpecification mixinSpec,
-                final String mixinMethodName,
-                final FacetedMethod facetedMethod) {
-            final ObjectActionDefault mixinAction = (ObjectActionDefault) ObjectActionDefault.forTesting.forMixinMain(facetedMethod);
-            return new OneToManyAssociationMixedIn(mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
-        }
-    }
 
     // -- CONSTRUCTION
 

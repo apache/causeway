@@ -18,19 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-class OneToOneActionParameterDefault
-extends ObjectActionParameterAbstract
-implements OneToOneActionParameter {
-
-    public OneToOneActionParameterDefault(
-            final ObjectSpecification paramElementType,
-            final int index,
-            final ObjectActionDefault actionImpl) {
-        super(FeatureType.ACTION_PARAMETER_SINGULAR, index, paramElementType, actionImpl);
-    }
-
+@Configuration
+@Import({
+    SpecificationLoaderDefault.class,
+})
+public class CausewayModuleCoreMetamodelDefaultImplementation {
+    
+    
 }

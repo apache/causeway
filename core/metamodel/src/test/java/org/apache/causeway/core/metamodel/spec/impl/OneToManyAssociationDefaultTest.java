@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.objects;
+package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.List;
 
@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.impl.OneToManyAssociationDefault;
 
 class OneToManyAssociationDefaultTest
 extends MetaModelTestAbstract {

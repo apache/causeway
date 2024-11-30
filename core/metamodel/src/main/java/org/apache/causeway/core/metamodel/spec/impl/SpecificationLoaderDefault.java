@@ -111,7 +111,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @Log4j2
-public class SpecificationLoaderDefault
+class SpecificationLoaderDefault
 implements
     SpecificationLoaderInternal,
     ActionSemanticsResolver {
@@ -188,7 +188,7 @@ implements
     }
 
     /** JUnit Test Support */
-    public static SpecificationLoaderDefault getInstance(
+    static SpecificationLoaderDefault instanceForTesting(
             final CausewayConfiguration causewayConfiguration,
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceRegistry serviceRegistry,

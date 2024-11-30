@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionDefault;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;

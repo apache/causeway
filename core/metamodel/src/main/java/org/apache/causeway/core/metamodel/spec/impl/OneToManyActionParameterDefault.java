@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 
-public class OneToManyActionParameterDefault
+class OneToManyActionParameterDefault
 extends ObjectActionParameterAbstract
 implements OneToManyActionParameter {
 

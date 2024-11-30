@@ -94,7 +94,7 @@ import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.SpecificationLoaderDefault;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
@@ -382,7 +382,7 @@ extends MetaModelContext {
             var causewayBeanTypeRegistry = requireNonNull(getCausewayBeanTypeRegistry());
             var classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
 
-            specificationLoader = SpecificationLoaderDefault.getInstance(
+            specificationLoader = _JUnitSupport.specLoader(
                     configuration,
                     environment,
                     serviceRegistry,

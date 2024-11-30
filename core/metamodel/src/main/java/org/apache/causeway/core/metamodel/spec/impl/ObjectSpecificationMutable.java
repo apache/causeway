@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public interface ObjectSpecificationMutable extends ObjectSpecification {
+interface ObjectSpecificationMutable extends ObjectSpecification {
     
     public enum IntrospectionState implements Comparable<IntrospectionState> {
         /**

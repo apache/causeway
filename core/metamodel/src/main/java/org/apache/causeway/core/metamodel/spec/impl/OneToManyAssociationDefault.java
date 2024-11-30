@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 
-public class OneToManyAssociationDefault
+class OneToManyAssociationDefault
 extends ObjectAssociationAbstract
 implements OneToManyAssociation {
     private static final long serialVersionUID = 1L;

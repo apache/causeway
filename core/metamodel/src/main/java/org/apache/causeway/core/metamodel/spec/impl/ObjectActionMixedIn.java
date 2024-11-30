@@ -31,7 +31,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -50,22 +49,6 @@ public class ObjectActionMixedIn
 extends ObjectActionDefault
 implements MixedInMember {
     private static final long serialVersionUID = 1L;
-
-    // -- FACTORIES
-
-    /**
-     * JUnit Support
-     */
-    public static class forTesting {
-        public static ObjectActionMixedIn forMixinMain(
-                final ObjectSpecification mixeeSpec,
-                final ObjectSpecification mixinSpec,
-                final String mixinMethodName,
-                final FacetedMethod facetedMethod) {
-            final ObjectActionDefault mixinAction = (ObjectActionDefault) ObjectActionDefault.forTesting.forMixinMain(facetedMethod);
-            return new ObjectActionMixedIn(mixinSpec, mixinMethodName, mixinAction, mixeeSpec);
-        }
-    }
 
     // -- CONSTRUCTION
 
