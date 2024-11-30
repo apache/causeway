@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectActionDefault;
 
 class ObjectActionLayoutXmlDefaultTest
 extends MetaModelTestAbstract {

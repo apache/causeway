@@ -68,8 +68,8 @@ import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefau
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
+import org.apache.causeway.core.metamodel.spec.impl.SpecificationLoaderDefault;
 import org.apache.causeway.core.metamodel.specloader.ProgrammingModelServiceDefault;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigIntegerValueSemantics;

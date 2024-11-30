@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.commons;
 import java.util.function.Predicate;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 
 /**
  * Base for visiting the meta-model.

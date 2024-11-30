@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.NonNull;

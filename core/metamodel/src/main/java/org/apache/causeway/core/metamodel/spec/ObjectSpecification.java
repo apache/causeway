@@ -73,8 +73,8 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberContainer;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberContainer;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;

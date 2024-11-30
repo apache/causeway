@@ -36,7 +36,6 @@ import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
@@ -79,8 +78,7 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenEnabling_shouldSetTheDefault() {
 
-        var holderSpec = specificationLoader.loadSpecification(CustomerEna.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerEna.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should not fail
@@ -104,8 +102,7 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenDisabling_shouldSetTheDefault() {
 
-        var holderSpec = specificationLoader.loadSpecification(CustomerDis.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerDis.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
@@ -136,8 +133,7 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenEnabling_shouldBeOverridable() {
 
-        var holderSpec = specificationLoader.loadSpecification(CustomerEnaDis.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerEnaDis.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should fail
@@ -167,8 +163,7 @@ class DomainModelTest_forEditing extends CausewayIntegrationTestAbstract {
     @Test
     void classLevelAnnotation_whenDisabling_shouldBeOverridable() {
 
-        var holderSpec = specificationLoader.loadSpecification(CustomerDisEna.class,
-                IntrospectionState.FULLY_INTROSPECTED);
+        var holderSpec = specificationLoader.specForTypeElseFail(CustomerDisEna.class);
         holderSpec.getAssociationElseFail("name");
 
         //then ... should not fail

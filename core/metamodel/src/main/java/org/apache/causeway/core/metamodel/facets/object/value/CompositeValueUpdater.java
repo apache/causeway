@@ -29,25 +29,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class CompositeValueUpdater {
 
-    static interface X {
-        Identifier getFeatureIdentifier();
-        ObjectSpecification getReturnType();
-        ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-                final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException;
-        ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-                final InteractionInitiatedBy interactionInitiatedBy);
-    }
-
-    @Delegate(excludes=X.class)
     private final ObjectActionMixedIn delegate;
 
     public abstract ObjectSpecification getReturnType();

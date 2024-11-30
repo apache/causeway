@@ -47,9 +47,9 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.spec.impl.OneToManyAssociationMixedIn;
+import org.apache.causeway.core.metamodel.spec.impl.OneToOneAssociationMixedIn;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 

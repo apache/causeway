@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;

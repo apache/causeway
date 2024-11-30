@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
+import org.apache.causeway.core.metamodel.spec.impl.OneToManyAssociationDefault;
 
 class OneToManyAssociationDefaultTest
 extends MetaModelTestAbstract {

@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacet
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;

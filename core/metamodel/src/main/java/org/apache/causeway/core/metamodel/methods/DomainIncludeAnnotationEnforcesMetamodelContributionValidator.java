@@ -44,8 +44,8 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberAbstract;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 

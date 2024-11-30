@@ -40,7 +40,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.extensions.titlecache.applib.event.Cached;
@@ -194,9 +193,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
             if (!(ev instanceof Cached)) {
                 return false;
             }
-            var objectSpecification =
-                    specificationLoader.loadSpecification(ltn, IntrospectionState.NOT_INTROSPECTED);
-            return objectSpecification != null && objectSpecification.isEntity();
+            return specificationLoader.hasEntity(ltn);
         });
     }
 }
