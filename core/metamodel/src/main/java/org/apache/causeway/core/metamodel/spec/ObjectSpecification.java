@@ -82,7 +82,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
- * Represents any domain object, abstract type, bean or value, 
+ * Represents any domain object, abstract type, bean or value,
  * and uniquely corresponds to a {@link java.lang.Class}).
  * <p>
  * As specifications are potentially cyclic (specifically a class will reference its
@@ -105,7 +105,7 @@ extends
 
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
                 Comparator.comparing(ObjectSpecification::getBeanSort)
-                    .thenComparing(ObjectSpecification::getLogicalType);
+                    .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
                 Comparator.comparing(ObjectSpecification::getFullIdentifier);

@@ -117,7 +117,7 @@ implements ValueFacet<T> {
 
     @Override
     public final LogicalType getLogicalType() {
-        return getFacetHolder().getFeatureIdentifier().getLogicalType();
+        return getFacetHolder().getFeatureIdentifier().logicalType();
     }
 
     @Override

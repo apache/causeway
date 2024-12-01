@@ -241,7 +241,7 @@ implements
 
         var propertyInteractionModel = new PropertyInteractionWkt(
                 bookmarkedObjectModel,
-                propIdentifier.getMemberLogicalName(),
+                propIdentifier.memberLogicalName(),
                 renderingHint.asWhere());
 
         final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()

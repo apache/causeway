@@ -125,14 +125,14 @@ public interface EntityFacet extends Facet {
                         MmSpecUtils.quicklyResolveObjectSpecification(
                                 getEntitySpecification(),
                                 pojo.getClass())
-                        .getLogicalType(),
+                        .logicalType(),
                         id));
     }
 
     default Bookmark bookmarkForElseFail(final @Nullable Object pojo) {
         return bookmarkFor(pojo)
                 .orElseThrow(()->_Exceptions.noSuchElement("entity has no OID: %s",
-                        getEntitySpecification().getLogicalType()));
+                        getEntitySpecification().logicalType()));
     }
 
     /**

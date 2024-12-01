@@ -67,7 +67,7 @@ implements
         }
         var objVisibilityContext = new ObjectVisibilityContext(
                 ic.getHead(),
-                Identifier.classIdentifier(navigatedType.getLogicalType()),
+                Identifier.classIdentifier(navigatedType.logicalType()),
                 ic.getInitiatedBy(),
                 ic.getWhere(),
                 ic.getRenderPolicy());
@@ -78,7 +78,7 @@ implements
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("navigatedType", navigatedType.getLogicalTypeName());
+        visitor.accept("navigatedType", navigatedType.logicalTypeName());
         visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
     }
 

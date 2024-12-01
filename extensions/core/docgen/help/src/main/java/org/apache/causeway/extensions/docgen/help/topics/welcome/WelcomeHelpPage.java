@@ -132,13 +132,13 @@ public class WelcomeHelpPage implements HelpPage {
                                             if (actionElementType.getCorrespondingClass() == void.class) {
                                                 html.append("<i></i>"); //WARNING : NOTHING
                                             } else if (actionReturnType.isPlural()) {
-                                                domainObjects.put(actionElementType.getLogicalTypeName(), actionElementType);
+                                                domainObjects.put(actionElementType.logicalTypeName(), actionElementType);
                                                 html.append(String.format(" <i> %s: <a href='#%s'>%s</a>\n</i>"
-                                                        , translationService.translate(TranslationContext.empty(), "See"), actionElementType.getLogicalTypeName(), actionElementType.getSingularName()));
+                                                        , translationService.translate(TranslationContext.empty(), "See"), actionElementType.logicalTypeName(), actionElementType.getSingularName()));
                                             } else {
-                                                domainObjects.put(actionReturnType.getLogicalTypeName(), actionReturnType);
+                                                domainObjects.put(actionReturnType.logicalTypeName(), actionReturnType);
                                                 html.append(String.format(" <i> %s: <a href='#%s'>%s</a>\n</i>"
-                                                        , translationService.translate(TranslationContext.empty(), "See"), actionElementType.getLogicalTypeName(), actionElementType.getSingularName()));
+                                                        , translationService.translate(TranslationContext.empty(), "See"), actionElementType.logicalTypeName(), actionElementType.getSingularName()));
                                             }
                                             html.append("</li>");
                                         });
@@ -156,7 +156,7 @@ public class WelcomeHelpPage implements HelpPage {
         for (ObjectSpecification objectSpec : domainObjects.values()) {
             if (objectSpec != null) {
                 html.append(String.format("<li id='%s'><h3>%s</h3></li>\n",
-                        objectSpec.getLogicalTypeName(), objectSpec.getSingularName()));
+                        objectSpec.logicalTypeName(), objectSpec.getSingularName()));
                 html.append(objectSpec.getDescription());
                 html.append(".");
                 html.append(String.format("%s\n", documentationForObjectType(objectSpec)));
@@ -243,10 +243,10 @@ public class WelcomeHelpPage implements HelpPage {
                                                 html.append(String.format("<li><b>%s</b>: %s.",
                                                         member.getCanonicalFriendlyName(),
                                                         describedAs));
-                                                if (member.getElementType().getLogicalType().correspondingClass()
+                                                if (member.getElementType().logicalType().correspondingClass()
                                                         .isAnnotationPresent(DomainObject.class)) {
                                                     html.append(String.format(" <i> See: <a href='#%s'>%s</a></i>",
-                                                            member.getElementType().getLogicalTypeName(),
+                                                            member.getElementType().logicalTypeName(),
                                                             member.getElementType().getSingularName()));
                                                 } else {
                                                     //none

@@ -39,12 +39,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContaine
 
 //TODO[causeway-core-metamodel-CAUSEWAY-3834] WIP
 public record ObjectSpecificationRecord(
-        LogicalType logicalType, 
-        FeatureType featureType, 
+        LogicalType logicalType,
+        FeatureType featureType,
         FacetHolder facetHolder,
         Hierarchical hierarchical,
         ObjectActionContainer actionContainer,
-        ObjectAssociationContainer associationContainer) 
+        ObjectAssociationContainer associationContainer)
 implements
     HasLogicalType,
     HasFacetHolder,
@@ -52,30 +52,29 @@ implements
     ObjectActionContainer,
     ObjectAssociationContainer,
     Hierarchical
-    //ObjectSpecification 
+    //ObjectSpecification
 {
-    
+
     // -- SPECIFICATION
-    
-    @Override public LogicalType getLogicalType() { return logicalType; }
+
     @Override public FeatureType getFeatureType() { return featureType; }
     @Override public FacetHolder getFacetHolder() { return facetHolder; }
-    
+
     // -- HIERARCHICAL
-    
+
     @Override public boolean hasSubclasses() {
         return hierarchical.hasSubclasses();
     }
     @Override public Can<ObjectSpecification> interfaces() {
         return hierarchical.interfaces();
     }
-    @Override public boolean isOfType(ObjectSpecification other) {
+    @Override public boolean isOfType(final ObjectSpecification other) {
         return hierarchical.isOfType(other);
     }
-    @Override public boolean isOfTypeResolvePrimitive(ObjectSpecification other) {
+    @Override public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
         return hierarchical.isOfTypeResolvePrimitive(other);
     }
-    @Override public Can<ObjectSpecification> subclasses(Depth depth) {
+    @Override public Can<ObjectSpecification> subclasses(final Depth depth) {
         return hierarchical.subclasses(depth);
     }
     @Override public ObjectSpecification superclass() {
@@ -83,41 +82,41 @@ implements
     }
 
     // -- ACTION CONTAINER
-    
-    @Override public Optional<ObjectAction> getAction(String id, ImmutableEnumSet<ActionScope> actionScopes, MixedIn mixedIn) {
+
+    @Override public Optional<ObjectAction> getAction(final String id, final ImmutableEnumSet<ActionScope> actionScopes, final MixedIn mixedIn) {
         return actionContainer.getAction(id, actionScopes, mixedIn);
     }
-    @Override public Optional<ObjectAction> getDeclaredAction(String id, ImmutableEnumSet<ActionScope> actionScopes, MixedIn mixedIn) {
+    @Override public Optional<ObjectAction> getDeclaredAction(final String id, final ImmutableEnumSet<ActionScope> actionScopes, final MixedIn mixedIn) {
         return actionContainer.getDeclaredAction(id, actionScopes, mixedIn);
     }
-    @Override public Stream<ObjectAction> streamActions(ImmutableEnumSet<ActionScope> actionTypes, MixedIn mixedIn, Consumer<ObjectAction> onActionOverloaded) {
+    @Override public Stream<ObjectAction> streamActions(final ImmutableEnumSet<ActionScope> actionTypes, final MixedIn mixedIn, final Consumer<ObjectAction> onActionOverloaded) {
         return actionContainer.streamActions(actionTypes, mixedIn, onActionOverloaded);
     }
-    @Override public Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn) {
+    @Override public Stream<ObjectAction> streamRuntimeActions(final MixedIn mixedIn) {
         return actionContainer.streamRuntimeActions(mixedIn);
     }
-    @Override public Stream<ObjectAction> streamActionsForColumnRendering(Identifier memberIdentifier) {
+    @Override public Stream<ObjectAction> streamActionsForColumnRendering(final Identifier memberIdentifier) {
         return actionContainer.streamActionsForColumnRendering(memberIdentifier);
     }
-    @Override public Stream<ObjectAction> streamDeclaredActions(ImmutableEnumSet<ActionScope> actionTypes, MixedIn mixedIn) {
+    @Override public Stream<ObjectAction> streamDeclaredActions(final ImmutableEnumSet<ActionScope> actionTypes, final MixedIn mixedIn) {
         return actionContainer.streamDeclaredActions(actionTypes, mixedIn);
     }
-    
+
     // -- ASSOCIATION CONTAINER
-    
-    @Override public Optional<ObjectAssociation> getAssociation(String id, MixedIn mixedIn) {
+
+    @Override public Optional<ObjectAssociation> getAssociation(final String id, final MixedIn mixedIn) {
         return associationContainer.getAssociation(id, mixedIn);
     }
-    @Override public Optional<ObjectAssociation> getDeclaredAssociation(String id, MixedIn mixedIn) {
+    @Override public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
         return associationContainer.getDeclaredAssociation(id, mixedIn);
     }
-    @Override public Stream<ObjectAssociation> streamAssociations(MixedIn mixedIn) {
+    @Override public Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
         return associationContainer.streamAssociations(mixedIn);
     }
-    @Override public Stream<ObjectAssociation> streamAssociationsForColumnRendering(Identifier memberIdentifier, ManagedObject parentObject) {
+    @Override public Stream<ObjectAssociation> streamAssociationsForColumnRendering(final Identifier memberIdentifier, final ManagedObject parentObject) {
         return associationContainer.streamAssociationsForColumnRendering(memberIdentifier, parentObject);
     }
-    @Override public Stream<ObjectAssociation> streamDeclaredAssociations(MixedIn mixedIn) {
+    @Override public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
         return associationContainer.streamDeclaredAssociations(mixedIn);
     }
 

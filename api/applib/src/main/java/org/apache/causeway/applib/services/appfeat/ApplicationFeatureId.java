@@ -81,12 +81,12 @@ implements
 
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
 
-        var logicalTypeName = identifier.getLogicalTypeName();
+        var logicalTypeName = identifier.logicalTypeName();
 
-        if(identifier.getType().isClass()) {
+        if(identifier.type().isClass()) {
             return newType(logicalTypeName);
         }
-        return newMember(logicalTypeName, identifier.getMemberLogicalName());
+        return newMember(logicalTypeName, identifier.memberLogicalName());
     }
 
     public static ApplicationFeatureId newFeature(
@@ -158,7 +158,7 @@ implements
         return featureId;
     }
 
-    public static ApplicationFeatureId newMember(String fullyQualifiedLogicalName) {
+    public static ApplicationFeatureId newMember(final String fullyQualifiedLogicalName) {
         var featureId = new ApplicationFeatureId(ApplicationFeatureSort.MEMBER);
         var i = fullyQualifiedLogicalName.lastIndexOf("#");
         if(i == -1) {

@@ -184,7 +184,7 @@ implements MixedInMember {
         return Identifier.collectionIdentifier(
                 LogicalType.eager(
                         mixeeSpec.getCorrespondingClass(),
-                        mixeeSpec.getLogicalTypeName()),
+                        mixeeSpec.logicalTypeName()),
                 _MixedInMemberNamingStrategy.mixinMemberId(mixinAction));
     }
 

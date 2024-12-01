@@ -54,7 +54,7 @@ public interface UiProperty extends UiAttribute {
 
     @Override
     default String getIdentifier() {
-        return getMetaModel().getFeatureIdentifier().getMemberLogicalName();
+        return getMetaModel().getFeatureIdentifier().memberLogicalName();
     }
 
     @Override

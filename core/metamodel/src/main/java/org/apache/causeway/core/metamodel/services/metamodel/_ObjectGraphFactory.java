@@ -65,7 +65,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
 
         var addFieldsLater = _Refs.booleanRef(false);
 
-        var obj = objectByLogicalType.computeIfAbsent(objSpec.getLogicalType(), logicalType->{
+        var obj = objectByLogicalType.computeIfAbsent(objSpec.logicalType(), logicalType->{
             logicalTypesByNamespace.putElement(logicalType.getNamespace(), logicalType);
             var newObjId = "o" + objectByLogicalType.size();
             var newObj = object(newObjId, objSpec);
@@ -83,8 +83,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                         || elementType.isAbstract()) {
                     var referencedObj = registerObject(elementType);
 
-                    var thisType = objSpec.getLogicalType();
-                    var refType = elementType.getLogicalType();
+                    var thisType = objSpec.logicalType();
+                    var refType = elementType.logicalType();
 
                     var thisNs = thisType.getNamespace();
                     var refNs = refType.getNamespace();
@@ -130,8 +130,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
 
     private static ObjectGraph.Object object(final String id, final ObjectSpecification objSpec) {
         var obj =  new ObjectGraph.Object(id,
-                objSpec.getLogicalType().getNamespace(),
-                objSpec.getLogicalType().getLogicalTypeSimpleName(),
+                objSpec.logicalType().getNamespace(),
+                objSpec.logicalType().getLogicalTypeSimpleName(),
                 objSpec.isAbstract()
                     ? Optional.of("abstract")
                     : Optional.empty(),
@@ -206,7 +206,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
     }
 
     private static String objectShortName(final ObjectSpecification objSpec) {
-        var simpleName = objSpec.getLogicalType().getLogicalTypeSimpleName();
+        var simpleName = objSpec.logicalType().getLogicalTypeSimpleName();
         return simpleName;
     }
 

@@ -84,7 +84,7 @@ implements HasUiProperty {
     public String toStringOf() {
         var featureId = uiProperty.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +
-                featureId.getLogicalTypeName() + "#" + featureId.getMemberLogicalName();
+                featureId.logicalTypeName() + "#" + featureId.memberLogicalName();
 
     }
 

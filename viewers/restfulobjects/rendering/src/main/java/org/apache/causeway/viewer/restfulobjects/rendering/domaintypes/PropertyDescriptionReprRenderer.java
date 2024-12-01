@@ -36,7 +36,7 @@ extends AbstractTypeMemberReprRenderer<OneToOneAssociation> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final OneToOneAssociation property) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final String propertyId = property.getId();
         final String url = "domain-types/" + domainType + "/properties/" + propertyId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.PROPERTY_DESCRIPTION, url);

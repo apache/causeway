@@ -57,7 +57,7 @@ extends MetaModelValidatorAbstract {
 
         _Blackhole.consume( // not strictly required, just to mark this as call with side-effects
                 spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED, oa->{
-                    overloadedNames.add(oa.getFeatureIdentifier().getMemberLogicalName());
+                    overloadedNames.add(oa.getFeatureIdentifier().memberLogicalName());
                 })
                 .count() // consumes the stream
                 );

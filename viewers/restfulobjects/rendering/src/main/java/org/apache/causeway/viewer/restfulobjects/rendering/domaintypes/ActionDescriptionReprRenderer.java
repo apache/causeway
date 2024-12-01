@@ -38,7 +38,7 @@ extends AbstractTypeMemberReprRenderer<ObjectAction> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final ObjectAction objectAction) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final String actionId = objectAction.getId();
         final String url = "domain-types/" + domainType + "/actions/" + actionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.ACTION_DESCRIPTION, url);

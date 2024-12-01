@@ -92,7 +92,7 @@ public class Context {
         var includeEntities = causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
         return specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
-                .distinct((a, b) -> a.getLogicalTypeName().equals(b.getLogicalTypeName()))
+                .distinct((a, b) -> a.logicalTypeName().equals(b.logicalTypeName()))
                 .filter(x ->
                            x.isViewModel()
                         || (includeEntities && x.isEntity())
@@ -100,7 +100,7 @@ public class Context {
                         || x.getBeanSort().isManagedBeanContributing()
                 )
                 .filter(predicate)
-                .sorted(Comparator.comparing(HasLogicalType::getLogicalTypeName))
+                .sorted(Comparator.comparing(HasLogicalType::logicalTypeName))
                 .toList();
     }
 
@@ -119,7 +119,7 @@ public class Context {
                 .values(entitiesOrViewModels.stream()
                         .map(objectSpec -> newEnumValueDefinition()
                                 .name(TypeNames.objectTypeFieldNameFor(objectSpec))
-                                .description(objectSpec.getLogicalTypeName())
+                                .description(objectSpec.logicalTypeName())
                                 .value(objectSpec)
                                 .build()).collect(Collectors.toList())
                 )

@@ -32,6 +32,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class Select2MultiChoiceExt
 extends Select2MultiChoice<ObjectMemento>
@@ -48,7 +49,7 @@ implements HasLogicalType {
         return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), attributeModel, choiceProvider);
     }
 
-    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) private final LogicalType logicalType;
 
     Select2MultiChoiceExt(
             final String id,
@@ -57,7 +58,7 @@ implements HasLogicalType {
             final ChoiceProviderAbstract choiceProvider) {
 
         super(id, model, choiceProvider);
-        logicalType = attributeModel.getElementType().getLogicalType();
+        logicalType = attributeModel.getElementType().logicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");
@@ -67,11 +68,11 @@ implements HasLogicalType {
     }
 
     public ObjectMemento getPackedModelObject() {
-        return ObjectMemento.packed(this.getLogicalType(), this.getModelObject());
+        return ObjectMemento.packed(this.logicalType(), this.getModelObject());
     }
 
     public ObjectMemento getPackedConvertedInput() {
-        return ObjectMemento.packed(this.getLogicalType(), this.getConvertedInput());
+        return ObjectMemento.packed(this.logicalType(), this.getConvertedInput());
     }
 
     // -- bug in wicket 8.8.0 -------------------------------------------

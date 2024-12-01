@@ -69,7 +69,7 @@ record LogicalTypeResolver(
      */
     <T extends ObjectSpecification> T register(final @NonNull T spec) {
 
-        var logicalTypeName = spec.getLogicalTypeName();
+        var logicalTypeName = spec.logicalTypeName();
 
         if(logicalTypeByName.containsKey(logicalTypeName)) {
             return spec;
@@ -114,10 +114,10 @@ record LogicalTypeResolver(
             final ObjectSpecification spec) {
 
         final LogicalType previousMapping =
-                logicalTypeByName.put(logicalTypeName, spec.getLogicalType());
+                logicalTypeByName.put(logicalTypeName, spec.logicalType());
 
         if(previousMapping!=null
-                && !spec.getLogicalType().equals(previousMapping)) {
+                && !spec.logicalType().equals(previousMapping)) {
             var msg = String.format("Overriding existing mapping\n"
                     + "%s -> %s,\n"
                     + "with\n "

@@ -83,7 +83,7 @@ implements
     @Override
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
-        var logicalType = attributeModel().getElementType().getLogicalType();
+        var logicalType = attributeModel().getElementType().logicalType();
         var packedMemento = ObjectMemento.packed(logicalType, unpackedMemento);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }

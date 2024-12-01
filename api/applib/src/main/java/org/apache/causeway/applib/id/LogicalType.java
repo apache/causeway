@@ -23,8 +23,6 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-import jakarta.inject.Named;
-
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
@@ -48,7 +46,21 @@ import lombok.NonNull;
  */
 public record LogicalType(
         /**
-         * the application context unique type name
+         * logical-type-name (unique amongst non-abstract classes within the application context).
+         * <p>
+         * This will typically be the value of the {@link Named#value()} annotation attribute.
+         * If none has been specified then will default to the fully qualified class name (with
+         * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime
+         * bytecode enhancement.
+         *
+         * <p>
+         * The {@link ObjectSpecification} can be retrieved using
+         * {@link SpecificationLoader#specForLogicalTypeName(String)}} passing the logical-type-name as argument.
+         *
+         * @see ClassSubstitutorRegistry
+         * @see ObjectTypeFacet
+         * @see ObjectSpecification
+         * @see SpecificationLoader
          */
         @org.springframework.lang.NonNull String logicalName,
         /**
@@ -96,45 +108,13 @@ implements
         this.correspondingClass = requireNonNull(correspondingClass);
         this.logicalName = requireNonEmpty(logicalName);
     }
-    
-    /**
-     * @deprecated use {@link #correspondingClass()}
-     */
-    @Deprecated
-    public Class<?> getCorrespondingClass() {
-        return correspondingClass();
-    }
-    
+
     /**
      * Canonical name of the corresponding class.
      */
-    public String getClassName() {
+    public String className() {
         return _Strings.nonEmpty(correspondingClass().getCanonicalName())
                 .orElse("inner");
-    }
-
-    /**
-     * Returns the logical-type-name (unique amongst non-abstract classes).
-     * <p>
-     * This will typically be the value of the {@link Named#value()} annotation attribute.
-     * If none has been specified then will default to the fully qualified class name (with
-     * {@link ClassSubstitutorRegistry class name substituted} if necessary to allow for runtime
-     * bytecode enhancement.
-     *
-     * <p>
-     * The {@link ObjectSpecification} can be retrieved using
-     * {@link SpecificationLoader#specForLogicalTypeName(String)}} passing the logical-type-name as argument.
-     *
-     * @see ClassSubstitutorRegistry
-     * @see ObjectTypeFacet
-     * @see ObjectSpecification
-     * @see SpecificationLoader
-     * @deprecated use {@link #logicalName()}
-     */
-    @SuppressWarnings("javadoc")
-    @Deprecated
-    public String getLogicalTypeName() {
-        return logicalName;
     }
 
     /**
@@ -143,7 +123,7 @@ implements
      * Returns the <i>logical simple name</i> part.
      * @implNote the result is not memoized, to keep it simple
      */
-    public String getLogicalTypeSimpleName() {
+    public String logicalSimpleName() {
         final int lastDot = logicalName.lastIndexOf('.');
         return lastDot >= 0
             ? logicalName.substring(lastDot + 1)
@@ -156,7 +136,7 @@ implements
      * Returns the <i>namespace</i> part.
      * @implNote the result is not memoized, to keep it simple
      */
-    public String getNamespace() {
+    public String namespace() {
         final int lastDot = logicalName.lastIndexOf('.');
         return lastDot >= 0
             ? logicalName.substring(0, lastDot)
@@ -171,7 +151,7 @@ implements
      * @param root
      * @param delimiter
      */
-    public String getLogicalTypeNameFormatted(
+    public String logicalNameFormatted(
             final @NonNull String root,
             final @NonNull String delimiter) {
         final int lastDot = logicalName.lastIndexOf('.');
@@ -188,19 +168,14 @@ implements
 
     @Override
     public boolean equals(final @Nullable Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof LogicalType) {
-            return isEqualTo((LogicalType) obj);
-        }
-        return false;
+        if (this == obj) return true;
+        return obj instanceof LogicalType other
+            ? isEqualTo(other)
+            :false;
     }
 
     public boolean isEqualTo(final @Nullable LogicalType other) {
-        if(other==null) {
-            return false;
-        }
+        if(other==null) return false;
         return Objects.equals(this.correspondingClass, other.correspondingClass);
     }
 
@@ -225,6 +200,42 @@ implements
                     correspondingClass.getName());
         }
         return logicalName;
+    }
+
+    // -- DEPRECATIONS
+
+    /**
+     * @deprecated use {@link #correspondingClass()}
+     */
+    @Deprecated public Class<?> getCorrespondingClass() { return correspondingClass(); }
+
+    /**
+     * @deprecated use {@link #logicalName()}
+     */
+    @Deprecated public String getLogicalTypeName() { return logicalName(); }
+
+    /**
+     * @deprecated use {@link #className()}
+     */
+    @Deprecated public String getClassName() { return className(); }
+
+    /**
+     * @deprecated use {@link #logicalSimpleName()}
+     */
+    @Deprecated public String getLogicalTypeSimpleName() { return logicalSimpleName(); }
+
+    /**
+     * @deprecated use {@link #namespace()}
+     */
+    @Deprecated public String getNamespace() { return namespace(); }
+
+    /**
+     * @deprecated use {@link #logicalNameFormatted(String, String)}
+     */
+    @Deprecated public String getLogicalTypeNameFormatted(
+            final @NonNull String root,
+            final @NonNull String delimiter) {
+        return logicalNameFormatted(root, delimiter);
     }
 
 }

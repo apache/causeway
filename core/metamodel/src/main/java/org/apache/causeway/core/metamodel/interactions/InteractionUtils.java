@@ -159,8 +159,8 @@ public final class InteractionUtils {
             final @Nullable String reason, final @NonNull Identifier identifier) {
         if("".equals(reason)) {
             var msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
-                .addVariable("className", identifier.getClassName())
-                .addVariable("memberName", identifier.getMemberLogicalName())
+                .addVariable("className", identifier.className())
+                .addVariable("memberName", identifier.memberLogicalName())
                 .buildMessage();
             log.error(msg);
             return msg;

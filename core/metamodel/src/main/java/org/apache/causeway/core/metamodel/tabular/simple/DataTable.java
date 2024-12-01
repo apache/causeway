@@ -160,7 +160,7 @@ public record DataTable(
      * Unique within application scope, can act as an id.
      */
     public String getLogicalName() {
-        return elementType().getLogicalTypeName();
+        return elementType().logicalTypeName();
     }
 
     /**

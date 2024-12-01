@@ -258,7 +258,7 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(final String prefix) {
-        final String ownerId = getDeclaringType().getLogicalTypeName().replace(".", "-");
+        final String ownerId = getDeclaringType().logicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
 

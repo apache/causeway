@@ -48,9 +48,9 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * Collects a new ValidationFailure with given origin and message.
      */
     public static void raise(
-            @NonNull SpecificationLoader specLoader,
-            @NonNull Identifier deficiencyOrigin,
-            @NonNull String deficiencyMessage) {
+            @NonNull final SpecificationLoader specLoader,
+            @NonNull final Identifier deficiencyOrigin,
+            @NonNull final String deficiencyMessage) {
 
         specLoader.addValidationFailure(ValidationFailure.of(deficiencyOrigin, deficiencyMessage));
     }
@@ -59,8 +59,8 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message.
      */
     public static void raise(
-            @NonNull FacetHolder facetHolder,
-            @NonNull String deficiencyMessage) {
+            @NonNull final FacetHolder facetHolder,
+            @NonNull final String deficiencyMessage) {
         raise(facetHolder.getSpecificationLoader(), facetHolder.getFeatureIdentifier(), deficiencyMessage);
     }
 
@@ -69,21 +69,21 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * (assembled from format and args).
      */
     public static void raiseFormatted(
-            @NonNull FacetHolder facetHolder,
-            @NonNull String messageFormat,
+            @NonNull final FacetHolder facetHolder,
+            @NonNull final String messageFormat,
             final Object ...args) {
         raise(facetHolder, String.format(messageFormat, args));
     }
 
     private static final Comparator<ValidationFailure> comparator = Comparator
-            .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
-            .<String>thenComparing(failure->failure.getOrigin().getMemberLogicalName(), nullsFirst(naturalOrder()))
+            .<ValidationFailure, String>comparing(failure->failure.getOrigin().className(), nullsFirst(naturalOrder()))
+            .<String>thenComparing(failure->failure.getOrigin().memberLogicalName(), nullsFirst(naturalOrder()))
             .thenComparing(ValidationFailure::getMessage);
 
     // -- CONTRACT
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ValidationFailure that = (ValidationFailure) o;
@@ -96,7 +96,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
     }
 
     @Override
-    public int compareTo(ValidationFailure o) {
+    public int compareTo(final ValidationFailure o) {
 
         if(equals(o)) {
             return 0; // for consistency with equals

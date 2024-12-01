@@ -121,8 +121,8 @@ public class IdentifierUtil {
 
     private String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
-        final String logicalTypeName = onType.getLogicalTypeName();
-        final String localId = objectMember.getFeatureIdentifier().getMemberLogicalName();
+        final String logicalTypeName = onType.logicalTypeName();
+        final String localId = objectMember.getFeatureIdentifier().memberLogicalName();
         return logicalTypeName + "#" + localId;
     }
 

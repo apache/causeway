@@ -53,7 +53,7 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
         var permissionSet = me.getPermissionSet();
 
         final boolean granted = specificationLoader.specForType(elementType)
-            .map(ObjectSpecification::getLogicalTypeName)
+            .map(ObjectSpecification::logicalTypeName)
             .map(logicalTypeName->{
                 //XXX lombok var issue with lambda
                 var featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);

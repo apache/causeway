@@ -44,9 +44,9 @@ abstract class CompositeValueUpdater {
         var id = mixedInAction.getFeatureIdentifier();
         return Identifier
                 .actionIdentifier(
-                        id.getLogicalType(),
-                        id.getMemberLogicalName(),
-                        id.getMemberParameterClassNames());
+                        id.logicalType(),
+                        id.memberLogicalName(),
+                        id.memberParameterClassNames());
     }
 
     public ManagedObject execute(
@@ -54,7 +54,7 @@ abstract class CompositeValueUpdater {
             final InteractionInitiatedBy interactionInitiatedBy) {
         return map(simpleExecute(head, parameters));
     }
-    
+
     // -- HELPER
 
     private ManagedObject simpleExecute(
@@ -66,7 +66,7 @@ abstract class CompositeValueUpdater {
         var method = methodFacade.asMethodForIntrospection();
 
         var resultPojo = CanonicalInvoker
-                .invokeWithConvertedArgs(method.method(), targetPojo, 
+                .invokeWithConvertedArgs(method.method(), targetPojo,
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 
         return ManagedObject.value(mixedInAction.getReturnType(), resultPojo);

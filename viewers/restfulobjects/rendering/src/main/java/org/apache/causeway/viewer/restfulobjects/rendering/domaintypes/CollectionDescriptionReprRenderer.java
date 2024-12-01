@@ -35,7 +35,7 @@ extends AbstractTypeMemberReprRenderer<OneToManyAssociation> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final OneToManyAssociation collection) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final String collectionId = collection.getId();
         final String url = "domain-types/" + domainType + "/collections/" + collectionId;
         return LinkBuilder.newBuilder(resourceContext, rel.getName(), RepresentationType.COLLECTION_DESCRIPTION, url);

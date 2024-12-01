@@ -93,7 +93,7 @@ public class RichAction
         buildObjectTypeAndField(objectAction.asciiId(), objectAction.getCanonicalDescription().orElse(objectAction.getCanonicalFriendlyName()));
     }
 
-    private boolean isInvokeAllowed(ObjectAction objectAction) {
+    private boolean isInvokeAllowed(final ObjectAction objectAction) {
         var apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
         switch (apiVariant) {
             case QUERY_ONLY:
@@ -107,6 +107,7 @@ public class RichAction
         }
     }
 
+    @Override
     public Can<ManagedObject> argumentManagedObjectsFor(
             final Environment dataFetchingEnvironment,
             final ObjectAction objectAction,
@@ -214,7 +215,7 @@ public class RichAction
             if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
                 throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
-                    refValue, targetPojoSpec.getLogicalTypeName(), elementType.getLogicalTypeName()));
+                    refValue, targetPojoSpec.logicalTypeName(), elementType.logicalTypeName()));
             }
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
@@ -228,9 +229,9 @@ public class RichAction
                 if (objectSpecArg == null) {
                     throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
-                            elementType.getLogicalTypeName()));
+                            elementType.logicalTypeName()));
                 }
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
+                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
             }
@@ -242,6 +243,7 @@ public class RichAction
         throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
     }
 
+    @Override
     public void addGqlArguments(
             final ObjectAction objectAction,
             final GraphQLFieldDefinition.Builder builder,

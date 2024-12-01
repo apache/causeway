@@ -167,7 +167,7 @@ implements MixedInMember {
         return Identifier.propertyIdentifier(
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
-                            mixeeSpec.getLogicalTypeName()),
+                            mixeeSpec.logicalTypeName()),
                     _MixedInMemberNamingStrategy.mixinMemberId(mixinAction));
     }
 

@@ -246,7 +246,7 @@ implements HasMetaModelContext {
                 _MethodFacades.regular(annotatedMethod));
 
         var id = facetedMethod.getFeatureIdentifier();
-        assertNotNull(id.getClassName());
+        assertNotNull(id.className());
 
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.ACTION,
@@ -341,7 +341,7 @@ implements HasMetaModelContext {
         var facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), mixinClass, annotatedMethod);
 
         var id = facetedMethod.getFeatureIdentifier();
-        assertNotNull(id.getClassName());
+        assertNotNull(id.className());
 
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.PROPERTY,
@@ -402,7 +402,7 @@ implements HasMetaModelContext {
         var facetedMethod = FacetedMethod.createForCollection(getMetaModelContext(), mixinClass, annotatedMethod);
 
         var id = facetedMethod.getFeatureIdentifier();
-        assertNotNull(id.getClassName());
+        assertNotNull(id.className());
 
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.COLLECTION,

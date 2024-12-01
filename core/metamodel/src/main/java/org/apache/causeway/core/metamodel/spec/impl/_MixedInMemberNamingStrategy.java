@@ -55,7 +55,7 @@ class _MixedInMemberNamingStrategy {
     // -- HELPER
 
     private String mixinClassSimpleName(final ObjectActionDefault mixinActionAsRegular) {
-        return mixinActionAsRegular.getFeatureIdentifier().getLogicalType().correspondingClass().getSimpleName();
+        return mixinActionAsRegular.getFeatureIdentifier().logicalType().correspondingClass().getSimpleName();
     }
 
     private String lastWord(final String mixinClassSimpleName) {

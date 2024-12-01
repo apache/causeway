@@ -476,7 +476,7 @@ implements
 
         // falling back assuming the logicalTypeName equals the fqn of the corresponding class
         // which might not always be true,
-        
+
 //TODO yet it seems we rely on this kind of fallback from several code paths, so lets not emit any warnings yet ...
 //      log.warn("Lookup for ObjectType '{}' failed, but found a matching fully qualified "
 //              + "class name to use instead. This warning is an indicator, that {} is not "
@@ -484,7 +484,7 @@ implements
 //              logicalType.getName(),
 //              cls.getName());
         var cls = ClassUtil.forNameElseNull(logicalTypeName);
-        return cls!=null 
+        return cls!=null
             ? Optional.of(LogicalType.fqcn(cls))
             : Optional.empty();
     }
@@ -523,11 +523,11 @@ implements
 
     @Override
     public Optional<SemanticsOf> getActionSemanticsOf(final Identifier identifier) {
-        if(!identifier.getType().isAction()) {
+        if(!identifier.type().isAction()) {
             return Optional.empty();
         }
-        return specForLogicalType(identifier.getLogicalType())
-            .flatMap(objSpec->objSpec.getAction(identifier.getMemberLogicalName()))
+        return specForLogicalType(identifier.logicalType())
+            .flatMap(objSpec->objSpec.getAction(identifier.memberLogicalName()))
             .map(ObjectAction::getSemantics);
     }
 

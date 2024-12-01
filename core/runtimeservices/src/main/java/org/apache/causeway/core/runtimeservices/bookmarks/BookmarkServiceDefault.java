@@ -78,7 +78,7 @@ public class BookmarkServiceDefault implements BookmarkService {
     }
 
     @Override
-    public List<Bookmark> bookmarksFor(Object domainObject) {
+    public List<Bookmark> bookmarksFor(final Object domainObject) {
         return bookmarkFor(domainObject)
                 .map(bookmark -> {
                     Can<LogicalType> logicalTypes = metaModelService.logicalTypeAndAliasesFor(bookmark.getLogicalTypeName());
@@ -123,7 +123,7 @@ public class BookmarkServiceDefault implements BookmarkService {
             return Optional.empty();
         }
         return specificationLoader.specForType(cls)
-                .map(ObjectSpecification::getLogicalType)
+                .map(ObjectSpecification::logicalType)
                 .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
 

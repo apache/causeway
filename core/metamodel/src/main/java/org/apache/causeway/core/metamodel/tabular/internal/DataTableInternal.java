@@ -360,11 +360,11 @@ implements DataTableInteractive {
     @Override
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
         var featureId = managedMember.getIdentifier();
-        if(!featureId.getType().isPropertyOrCollection()) {
+        if(!featureId.type().isPropertyOrCollection()) {
             return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
                     + "(while searching for an associated action %s)]",
                     featureId,
-                    featureId.getType(),
+                    featureId.type(),
                     actionId));
         }
         return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
@@ -443,9 +443,9 @@ implements DataTableInteractive {
                 throw _Exceptions.illegalArgument("cannot recreate from memento for deleted object");
             }
 
-            var memberId = featureId.getMemberLogicalName();
+            var memberId = featureId.memberLogicalName();
 
-            final ManagedMember managedMember = featureId.getType().isPropertyOrCollection()
+            final ManagedMember managedMember = featureId.type().isPropertyOrCollection()
                     ? CollectionInteraction.start(owner, memberId, where)
                         .getManagedCollection().orElseThrow()
                     : ActionInteraction.start(owner, memberId, where)

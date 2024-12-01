@@ -142,7 +142,7 @@ extends MetaModelValidatorAbstract {
             ValidationFailure.raiseFormatted(spec,
                     MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
                         .builder()
-                        .addVariable("type", spec.getFeatureIdentifier().getClassName())
+                        .addVariable("type", spec.getFeatureIdentifier().className())
                         .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod.method()))
                         .buildMessage()
 

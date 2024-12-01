@@ -94,11 +94,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final CollectionModel associatedWithCollectionIfAny) {
 
         var onwerSpec = parentEntityModel.getBookmarkedOwner().getSpecification();
-        var objectAction = onwerSpec.getAction(actionIdentifier.getMemberLogicalName());
+        var objectAction = onwerSpec.getAction(actionIdentifier.memberLogicalName());
 
         return new ActionInteractionWkt(
                 parentEntityModel.bookmarkedObjectModel(),
-                actionIdentifier.getMemberLogicalName(),
+                actionIdentifier.memberLogicalName(),
                 where,
                 objectAction,
                 associatedWithPropertyIfAny,

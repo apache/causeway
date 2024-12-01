@@ -175,18 +175,18 @@ public interface SpecificationLoader {
         if(featureIdentifier==null) {
             return Optional.empty();
         }
-        var typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
+        var typeSpec = specForLogicalType(featureIdentifier.logicalType()).orElse(null);
         if(typeSpec==null) {
             return Optional.empty();
         }
-        var member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
+        var member = typeSpec.getMember(featureIdentifier.memberLogicalName()).orElse(null);
         if(member==null) {
             return Optional.empty();
         }
 
-        final int paramIndex = featureIdentifier.getParameterIndex();
+        final int paramIndex = featureIdentifier.parameterIndex();
 
-        return featureIdentifier.getParameterIndex()<0
+        return featureIdentifier.parameterIndex()<0
                 ? Optional.of(member)
                 : Optional.of(((ObjectAction)member).getParameters().getElseFail(paramIndex));
     }
@@ -199,10 +199,10 @@ public interface SpecificationLoader {
     }
 
     boolean isMetamodelFullyIntrospected();
-    
+
     // -- CAUTION! (use only during meta-model initialization)
 
-    //TODO[causeway-core-metamodel-CAUSEWAY-3834] remove from this interface 
+    //TODO[causeway-core-metamodel-CAUSEWAY-3834] remove from this interface
     @Nullable ObjectSpecification loadSpecification(@Nullable Class<?> domainType);
-    
+
 }

@@ -118,7 +118,7 @@ implements MethodPrefixBasedFacetFactory {
                                     spec,
                                     String.format(
                                             messageFormat,
-                                            spec.getFeatureIdentifier().getClassName(),
+                                            spec.getFeatureIdentifier().className(),
                                             actionId,
                                             prefix,
                                             explanation));

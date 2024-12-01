@@ -45,14 +45,14 @@ class IdentifierTests {
         var domainClass = SomeDomainClass.class;
         final String domainClassFullyQualifiedName = domainClass.getCanonicalName();
         identifier = Identifier.classIdentifier(LogicalType.fqcn(domainClass));
-        assertThat(identifier.getClassName(), is(domainClassFullyQualifiedName));
+        assertThat(identifier.className(), is(domainClassFullyQualifiedName));
     }
 
     @Test
     void memberParameterNames() {
         var domainClass = SomeDomainClass.class;
         identifier = Identifier.actionIdentifier(LogicalType.fqcn(domainClass), "placeOrder", int.class, String.class);
-        assertThat(identifier.getMemberParameterClassNames(), is(Can.of("int", "java.lang.String")));
+        assertThat(identifier.memberParameterClassNames(), is(Can.of("int", "java.lang.String")));
     }
 
     @Test

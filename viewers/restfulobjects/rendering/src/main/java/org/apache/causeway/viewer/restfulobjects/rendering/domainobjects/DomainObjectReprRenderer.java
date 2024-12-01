@@ -187,7 +187,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
             // serviceId or instance Id
             if (isService) {
-                representation.mapPutString("serviceId", objectAdapter.getSpecification().getLogicalTypeName());
+                representation.mapPutString("serviceId", objectAdapter.getSpecification().logicalTypeName());
             } else {
                 oidIfAny.ifPresent(oid->{
                     Optional.ofNullable(oid.getLogicalTypeName())
@@ -405,7 +405,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final String domainType = objectAdapter.getSpecification().getLogicalTypeName();
+        final String domainType = objectAdapter.getSpecification().logicalTypeName();
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }

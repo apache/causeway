@@ -133,7 +133,7 @@ public final class MmEntityUtils {
                     EntityState.ATTACHED,
                     entityState,
                     ()-> String.format("entity %s is required to be attached (not detached)",
-                            managedObject.getSpecification().getLogicalTypeName()));
+                            managedObject.getSpecification().logicalTypeName()));
         }
         return managedObject;
     }

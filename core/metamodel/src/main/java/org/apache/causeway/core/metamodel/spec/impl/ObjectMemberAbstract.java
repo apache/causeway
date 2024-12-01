@@ -91,7 +91,7 @@ implements
 
     @Override
     public final String getId() {
-        return getFeatureIdentifier().getMemberLogicalName();
+        return getFeatureIdentifier().memberLogicalName();
     }
 
     // -- INTERACTION HEAD
@@ -346,7 +346,7 @@ implements
         private Object readResolve() {
             return MetaModelContext.instanceElseFail()
                 .getSpecificationLoader()
-                .specForLogicalTypeElseFail(identifier.getLogicalType())
+                .specForLogicalTypeElseFail(identifier.logicalType())
                 .getMemberElseFail(
                         identifier.getMemberNameAndParameterClassNamesIdentityString());
         }

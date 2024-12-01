@@ -62,7 +62,7 @@ public class AuthorizorShiro implements Authorizor {
         return isPermitted(authentication.getUser().getName(), identifier, "w");
     }
 
-    private boolean isPermitted(String userName, Identifier identifier, String qualifier) {
+    private boolean isPermitted(final String userName, final Identifier identifier, final String qualifier) {
 
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
@@ -82,9 +82,9 @@ public class AuthorizorShiro implements Authorizor {
         }
     }
 
-    private String asPermissionsString(Identifier identifier) {
-        var logicalTypeName = identifier.getLogicalType().getLogicalTypeNameFormatted(":", ":");
-        return logicalTypeName + ":" + identifier.getMemberLogicalName();
+    private String asPermissionsString(final Identifier identifier) {
+        var logicalTypeName = identifier.logicalType().getLogicalTypeNameFormatted(":", ":");
+        return logicalTypeName + ":" + identifier.memberLogicalName();
     }
 
     // -- DEPS

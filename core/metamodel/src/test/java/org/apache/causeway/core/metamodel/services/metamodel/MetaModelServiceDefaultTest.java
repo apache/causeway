@@ -73,7 +73,7 @@ public class MetaModelServiceDefaultTest {
 
         mockSpec = Mockito.mock(ObjectSpecification.class);
         Mockito.when(mockSpec.getFullIdentifier()).thenReturn("mocked");
-        Mockito.when(mockSpec.getLogicalTypeName()).thenReturn("logicalType");
+        Mockito.when(mockSpec.logicalTypeName()).thenReturn("logicalType");
         Mockito.when(mockSpec.subclasses(Hierarchical.Depth.DIRECT)).thenReturn(Can.empty());
         Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 

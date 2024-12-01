@@ -59,7 +59,7 @@ class _OrphanedSupportingMethodValidator {
         .forEach(orphanedMethod->{
 
             var methodIdentifier = Identifier
-                    .methodIdentifier(spec.getFeatureIdentifier().getLogicalType(), orphanedMethod);
+                    .methodIdentifier(spec.getFeatureIdentifier().logicalType(), orphanedMethod);
 
             ValidationFailure.raise(
                     spec,

@@ -452,8 +452,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
                     log.info("Executing: {}#{} {} {}",
-                        getFeatureIdentifier().getLogicalTypeName(),
-                        getFeatureIdentifier().getMemberLogicalName(),
+                        getFeatureIdentifier().logicalTypeName(),
+                        getFeatureIdentifier().memberLogicalName(),
                         UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                         argsFor(getParameters(), argumentAdapters));
                 });

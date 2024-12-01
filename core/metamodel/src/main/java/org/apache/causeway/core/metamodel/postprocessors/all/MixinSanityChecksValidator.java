@@ -115,7 +115,7 @@ implements
         var mixinFacet = ((ObjectSpecificationDefault)objSpec).mixinFacet().orElseThrow();
 
         var expectedMethodName = mixinFacet.getMainMethodName();
-        var actualMethodName = memberIdentifier.getMemberLogicalName();
+        var actualMethodName = memberIdentifier.memberLogicalName();
 
         if(!expectedMethodName.equals(actualMethodName)) {
             ValidationFailure.raiseFormatted(objSpec,

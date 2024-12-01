@@ -193,8 +193,8 @@ implements MenuBarsService {
 
                 var serviceActionIdentifier = objectAction.getFeatureIdentifier();
 
-                var actionId = serviceActionIdentifier.getLogicalTypeName()
-                        + "#" + serviceActionIdentifier.getMemberLogicalName();
+                var actionId = serviceActionIdentifier.logicalTypeName()
+                        + "#" + serviceActionIdentifier.memberLogicalName();
 
                 var layoutData = serviceActionLayoutDataByActionId.get(actionId);
 
@@ -344,7 +344,7 @@ implements MenuBarsService {
 
                 var objectAction = serviceAndAction.getObjectAction();
                 //var service = serviceAndAction.getServiceAdapter();
-                var logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
+                var logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().logicalTypeName();
                 var actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
                 var named = objectAction

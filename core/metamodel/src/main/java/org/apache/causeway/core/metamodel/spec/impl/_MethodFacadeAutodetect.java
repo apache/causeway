@@ -55,7 +55,7 @@ class _MethodFacadeAutodetect {
             ValidationFailure.raiseFormatted(inspectedTypeSpec,
                     MessageTemplate.PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION
                         .builder()
-                        .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().getClassName())
+                        .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().className())
                         .addVariable("member", method.name())
                         .buildMessage());
         }
@@ -67,7 +67,7 @@ class _MethodFacadeAutodetect {
             ValidationFailure.raiseFormatted(inspectedTypeSpec,
                     MessageTemplate.PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS
                         .builder()
-                        .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().getClassName())
+                        .addVariable("type", inspectedTypeSpec.getFeatureIdentifier().className())
                         .addVariable("member", method.name())
                         .addVariable("patType", patType.getName())
                         .buildMessage());

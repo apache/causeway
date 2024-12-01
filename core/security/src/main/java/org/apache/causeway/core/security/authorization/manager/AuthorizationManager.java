@@ -122,7 +122,7 @@ public class AuthorizationManager {
             return true;
         }
         // no-op if is visibility context check at object-level
-        if (identifier.getMemberLogicalName().equals("")) {
+        if (identifier.memberLogicalName().equals("")) {
             return true;
         }
         if(containsSudoSuperuserRole(authentication)) {
@@ -145,7 +145,7 @@ public class AuthorizationManager {
     }
 
     private boolean isPerspectiveMember(final Identifier identifier) {
-        return (identifier.getClassName().equals(""));
+        return (identifier.className().equals(""));
     }
 
     private boolean isActionWithSafeSemantics(final Identifier identifier) {
