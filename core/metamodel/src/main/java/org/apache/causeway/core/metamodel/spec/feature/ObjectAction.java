@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -81,7 +80,7 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Whether this {@link ObjectAction} instance represents a mixin main method,
-     * usually of type {@link ObjectActionDefault}, peered by an {@link ObjectActionMixedIn}.
+     * usually of type {@code ObjectActionDefault}, peered by an {@code ObjectActionMixedIn}.
      * <p>
      * Such instances are used for populating the meta-model.
      */

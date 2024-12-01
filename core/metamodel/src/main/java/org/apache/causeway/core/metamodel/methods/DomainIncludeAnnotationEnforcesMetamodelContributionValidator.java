@@ -41,10 +41,10 @@ import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberAbstract;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -77,78 +77,78 @@ extends MetaModelValidatorAbstract {
         var supportMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
 
         spec
-        .streamAnyActions(MixedIn.EXCLUDED)
-        .map(ObjectMemberAbstract.class::cast)
-        .map(ObjectMemberAbstract::getFacetedMethod)
-        .map(FacetedMethod::getMethod)
-        .map(MethodFacade::asMethodForIntrospection)
-        .forEach(memberMethods::add);
+            .streamAnyActions(MixedIn.EXCLUDED)
+            .map(HasFacetedMethod.class::cast)
+            .map(HasFacetedMethod::getFacetedMethod)
+            .map(FacetedMethod::getMethod)
+            .map(MethodFacade::asMethodForIntrospection)
+            .forEach(memberMethods::add);
 
         spec
-        .streamAssociations(MixedIn.EXCLUDED)
-        .map(ObjectMemberAbstract.class::cast)
-        .map(ObjectMemberAbstract::getFacetedMethod)
-        .map(FacetedMethod::getMethod)
-        .map(MethodFacade::asMethodForIntrospection)
-        .forEach(memberMethods::add);
+            .streamAssociations(MixedIn.EXCLUDED)
+            .map(HasFacetedMethod.class::cast)
+            .map(HasFacetedMethod::getFacetedMethod)
+            .map(FacetedMethod::getMethod)
+            .map(MethodFacade::asMethodForIntrospection)
+            .forEach(memberMethods::add);
 
         spec
-        .streamFacetHolders()
-        .flatMap(FacetHolder::streamFacetRankings)
-        .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType()))
-        .flatMap(Optional::stream)
-        .filter(ImperativeFacet.class::isInstance)
-        .map(ImperativeFacet.class::cast)
-        .map(ImperativeFacet::getMethods)
-        .flatMap(Can::stream)
-        .map(MethodFacade::asMethodForIntrospection)
-        .forEach(supportMethods::add);
+            .streamFacetHolders()
+            .flatMap(FacetHolder::streamFacetRankings)
+            .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType()))
+            .flatMap(Optional::stream)
+            .filter(ImperativeFacet.class::isInstance)
+            .map(ImperativeFacet.class::cast)
+            .map(ImperativeFacet::getMethods)
+            .flatMap(Can::stream)
+            .map(MethodFacade::asMethodForIntrospection)
+            .forEach(supportMethods::add);
 
         var methodsIntendedToBeIncludedButNotPickedUp = _Sets.<ResolvedMethod>newHashSet();
 
         classCache
-        // methods intended to be included with the meta-model but missing
-        .streamDeclaredMethodsHaving(
-                type,
-                "domain-include",
-                method->
-                    _Annotations.synthesize(method.method(), Domain.Include.class).isPresent())
-        // filter away those that are recognized
-        .filter(Predicate.not(memberMethods::contains))
-        .filter(Predicate.not(supportMethods::contains))
-        //[CAUSEWAY-3571] perhaps no longer required, because we only collect resolvable methods ...
-        // special lookup for generic type bounds
-//        .filter(method->{
-//            if(_Reflect.hasGenericBounds(method)) {
-//                if(memberMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
-//                    return false; // found
-//                }
-//                if(supportMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
-//                    return false; // found
-//                }
-//            }
-//            return true; // pass-through
-//        })
-        .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
+            // methods intended to be included with the meta-model but missing
+            .streamDeclaredMethodsHaving(
+                    type,
+                    "domain-include",
+                    method->
+                        _Annotations.synthesize(method.method(), Domain.Include.class).isPresent())
+            // filter away those that are recognized
+            .filter(Predicate.not(memberMethods::contains))
+            .filter(Predicate.not(supportMethods::contains))
+            //[CAUSEWAY-3571] perhaps no longer required, because we only collect resolvable methods ...
+            // special lookup for generic type bounds
+    //        .filter(method->{
+    //            if(_Reflect.hasGenericBounds(method)) {
+    //                if(memberMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
+    //                    return false; // found
+    //                }
+    //                if(supportMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
+    //                    return false; // found
+    //                }
+    //            }
+    //            return true; // pass-through
+    //        })
+            .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
 
         // find reasons about why these are not recognized
         methodsIntendedToBeIncludedButNotPickedUp.stream()
-        .forEach(notPickedUpMethod->{
-            var unmetContraints =
-                    unmetContraints((ObjectSpecificationDefault) spec, notPickedUpMethod)
-                    .stream()
-                    .collect(Collectors.joining("; "));
+            .forEach(notPickedUpMethod->{
+                var unmetContraints =
+                        unmetContraints((ObjectSpecificationDefault) spec, notPickedUpMethod)
+                        .stream()
+                        .collect(Collectors.joining("; "));
 
-            ValidationFailure.raiseFormatted(spec,
-                    MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
-                        .builder()
-                        .addVariable("type", spec.getFeatureIdentifier().className())
-                        .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod.method()))
-                        .buildMessage()
+                ValidationFailure.raiseFormatted(spec,
+                        MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
+                            .builder()
+                            .addVariable("type", spec.getFeatureIdentifier().className())
+                            .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod.method()))
+                            .buildMessage()
 
-                    + " Unmet constraint(s): %s",
-                    unmetContraints);
-        });
+                        + " Unmet constraint(s): %s",
+                        unmetContraints);
+            });
 
         _OrphanedSupportingMethodValidator.validate((ObjectSpecificationDefault)spec,
                 supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp);

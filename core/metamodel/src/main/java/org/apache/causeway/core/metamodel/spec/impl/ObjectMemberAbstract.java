@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -63,15 +64,17 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 import lombok.Getter;
 import lombok.NonNull;
 
-public abstract class ObjectMemberAbstract
+abstract class ObjectMemberAbstract
 implements
     ObjectMember,
-    HasMetaModelContext, Serializable {
+    HasFacetedMethod,
+    HasMetaModelContext,
+    Serializable {
     private static final long serialVersionUID = 1L;
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Identifier featureIdentifier;
     @Getter(onMethod_ = {@Override}) private final @NonNull FeatureType featureType;
-    @Getter private final @NonNull FacetedMethod facetedMethod;
+    @Getter(onMethod_ = {@Override}) private final @NonNull FacetedMethod facetedMethod;
 
     // -- CONSTRUCTOR
 

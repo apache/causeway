@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -65,9 +64,7 @@ implements MethodPrefixBasedFacetFactory {
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
-        if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
-            return;
-        }
+        if(orphanValidation == OrphanValidation.DONT_VALIDATE) return;
 
         programmingModel
         .addValidator(new MetaModelValidatorAbstract(getMetaModelContext(),
@@ -88,11 +85,8 @@ implements MethodPrefixBasedFacetFactory {
 
                 // ensure accepted actions do not have any of the reserved prefixes
                 spec.streamDeclaredActions(MixedIn.EXCLUDED)
+                .filter(objectAction -> !objectAction.isExplicitlyAnnotated()) // explicit annot. is always allowed, check next
                 .forEach(objectAction -> {
-
-                    if(((ObjectMemberAbstract)objectAction).isExplicitlyAnnotated()) {
-                        return; // thats always allowed, check next
-                    }
 
                     var actionId = objectAction.getId();
 
