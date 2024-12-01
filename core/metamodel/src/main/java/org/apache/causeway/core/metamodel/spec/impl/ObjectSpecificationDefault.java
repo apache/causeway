@@ -119,7 +119,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public final class ObjectSpecificationDefault
-implements ObjectSpecificationMutable, HasSpecificationLoaderInternal {
+implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLoaderInternal {
 
     // -- CONSTRUCTION
 

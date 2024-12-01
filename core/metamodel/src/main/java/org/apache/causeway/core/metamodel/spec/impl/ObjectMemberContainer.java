@@ -36,14 +36,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContaine
 /**
  * Responsibility: member lookup and streaming with support for inheritance,
  * based on access to declared members, super-classes and interfaces.
- * <p>
- * TODO performance: add memoization
- * <p>
- * TODO future extensions should also search the interfaces,
- * but avoid doing redundant work when walking the type-hierarchy;
- * (current elegant recursive solution will then need some tweaks to be efficient)
  */
-public interface ObjectMemberContainer
+interface ObjectMemberContainer
 extends
     HasFacetHolder,
     ObjectActionContainer,

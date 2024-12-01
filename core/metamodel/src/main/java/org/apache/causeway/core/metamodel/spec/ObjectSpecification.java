@@ -46,6 +46,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -72,9 +73,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberContainer;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -91,8 +93,11 @@ import lombok.experimental.UtilityClass;
 public interface ObjectSpecification
 extends
     Specification,
-    ObjectMemberContainer,
     HasLogicalType,
+    HasFacetHolder,
+    Hierarchical,
+    ObjectActionContainer,
+    ObjectAssociationContainer,
     Comparable<ObjectSpecification> {
 
     @UtilityClass

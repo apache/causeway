@@ -25,15 +25,15 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
-public class CompositeValueUpdaterForParameter
+class CompositeValueUpdaterForParameter
 extends CompositeValueUpdater {
 
     public static ObjectAction createProxy(
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex,
-            final ObjectActionMixedIn delegate) {
+            final ObjectActionMixedIn mixedInAction) {
         return _Delegate.createProxy(ObjectAction.class,
-                new CompositeValueUpdaterForParameter(parameterNegotiationModel, paramIndex, delegate));
+                new CompositeValueUpdaterForParameter(parameterNegotiationModel, paramIndex, mixedInAction));
     }
 
     private final ParameterNegotiationModel parameterNegotiationModel;
@@ -42,8 +42,8 @@ extends CompositeValueUpdater {
     protected CompositeValueUpdaterForParameter(
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex,
-            final ObjectActionMixedIn delegate) {
-        super(delegate);
+            final ObjectActionMixedIn mixedInAction) {
+        super(mixedInAction);
         this.parameterNegotiationModel = parameterNegotiationModel;
         this.paramIndex = paramIndex;
     }

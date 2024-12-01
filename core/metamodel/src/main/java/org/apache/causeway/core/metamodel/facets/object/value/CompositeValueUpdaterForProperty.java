@@ -25,22 +25,22 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
-public class CompositeValueUpdaterForProperty
+class CompositeValueUpdaterForProperty
 extends CompositeValueUpdater {
 
     public static ObjectAction createProxy(
             final ManagedProperty managedProperty,
-            final ObjectActionMixedIn delegate) {
+            final ObjectActionMixedIn mixedInAction) {
         return _Delegate.createProxy(ObjectAction.class,
-                new CompositeValueUpdaterForProperty(managedProperty, delegate));
+                new CompositeValueUpdaterForProperty(managedProperty, mixedInAction));
     }
 
     private final ManagedProperty managedProperty;
 
     protected CompositeValueUpdaterForProperty(
             final ManagedProperty managedProperty,
-            final ObjectActionMixedIn delegate) {
-        super(delegate);
+            final ObjectActionMixedIn mixedInAction) {
+        super(mixedInAction);
         this.managedProperty = managedProperty;
     }
 

@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
@@ -28,22 +27,21 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class CompositeValueUpdater {
+abstract class CompositeValueUpdater {
 
-    private final ObjectActionMixedIn delegate;
+    private final ObjectActionMixedIn mixedInAction;
 
     public abstract ObjectSpecification getReturnType();
     protected abstract ManagedObject map(final ManagedObject valueType);
 
     public Identifier getFeatureIdentifier() {
-        var id = delegate.getFeatureIdentifier();
+        var id = mixedInAction.getFeatureIdentifier();
         return Identifier
                 .actionIdentifier(
                         id.getLogicalType(),
@@ -51,32 +49,27 @@ public abstract class CompositeValueUpdater {
                         id.getMemberParameterClassNames());
     }
 
-    public ManagedObject executeWithRuleChecking(
-            final InteractionHead head, final Can<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy, final Where where)
-                    throws AuthorizationException {
-        return map(simpleExecute(head, parameters));
-    }
-
     public ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return map(simpleExecute(head, parameters));
     }
+    
+    // -- HELPER
 
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
         final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
 
-        var methodFacade = delegate.getFacetedMethod().getMethod();
+        var methodFacade = mixedInAction.getFacetedMethod().getMethod();
         var method = methodFacade.asMethodForIntrospection();
 
         var resultPojo = CanonicalInvoker
                 .invokeWithConvertedArgs(method.method(), targetPojo, 
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 
-        return ManagedObject.value(delegate.getReturnType(), resultPojo);
+        return ManagedObject.value(mixedInAction.getReturnType(), resultPojo);
     }
 
 }

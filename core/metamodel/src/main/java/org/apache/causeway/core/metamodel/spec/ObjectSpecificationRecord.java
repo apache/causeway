@@ -29,13 +29,13 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectMemberContainer;
 
 //TODO[causeway-core-metamodel-CAUSEWAY-3834] WIP
 public record ObjectSpecificationRecord(
@@ -47,8 +47,11 @@ public record ObjectSpecificationRecord(
         ObjectAssociationContainer associationContainer) 
 implements
     HasLogicalType,
+    HasFacetHolder,
     Specification,
-    ObjectMemberContainer
+    ObjectActionContainer,
+    ObjectAssociationContainer,
+    Hierarchical
     //ObjectSpecification 
 {
     
