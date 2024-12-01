@@ -37,9 +37,7 @@ import static org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitF
 import static org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter.excludingNone;
 
 /**
- *
  * @since 2.0
- *
  */
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelInitFilterDefault")
@@ -56,29 +54,29 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
 
         this.filterOnMarker = isIgnoreDeprecated
                 ? excluding(EnumSet.of(ProgrammingModel.Marker.DEPRECATED))
-                        : excludingNone();
+                : excludingNone();
     }
 
     @Override
     public boolean acceptFactoryType(
-            Class<? extends FacetFactory> factoryType,
-            ProgrammingModel.Marker[] markersIfAny) {
+            final Class<? extends FacetFactory> factoryType,
+            final ProgrammingModel.Marker[] markersIfAny) {
 
         return filterOnMarker.test(markersIfAny);
     }
 
     @Override
     public boolean acceptValidator(
-            Class<? extends MetaModelValidator> validatorType,
-            ProgrammingModel.Marker[] markersIfAny) {
+            final Class<? extends MetaModelValidator> validatorType,
+            final ProgrammingModel.Marker[] markersIfAny) {
 
         return filterOnMarker.test(markersIfAny);
     }
 
     @Override
     public boolean acceptPostProcessor(
-            Class<? extends MetaModelPostProcessor> postProcessorType,
-            ProgrammingModel.Marker[] markersIfAny) {
+            final Class<? extends MetaModelPostProcessor> postProcessorType,
+            final ProgrammingModel.Marker[] markersIfAny) {
 
         return filterOnMarker.test(markersIfAny);
     }

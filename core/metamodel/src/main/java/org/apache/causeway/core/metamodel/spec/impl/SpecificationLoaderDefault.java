@@ -72,8 +72,6 @@ import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelService;
-import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -98,7 +96,7 @@ import lombok.extern.log4j.Log4j2;
  * <ul>
  * <li>The most important plug-in point is {@link ProgrammingModel} that
  * specifies the set of {@link Facet} that make up programming model. If not
- * specified then defaults to {@link ProgrammingModelFacetsJava11} (which should
+ * specified then defaults to {@link ProgrammingModelDefault} (which should
  * be used as a starting point for your own customizations).
  * <li>The only mandatory plug-in point is {@link ClassSubstitutor}, which
  * allows the class to be loaded to be substituted if required. This is used in
@@ -147,26 +145,6 @@ implements
 
     @Inject
     public SpecificationLoaderDefault(
-            final ProgrammingModelService programmingModelService,
-            final CausewayConfiguration causewayConfiguration,
-            final CausewaySystemEnvironment causewaySystemEnvironment,
-            final ServiceRegistry serviceRegistry,
-            final CausewayBeanTypeClassifier causewayBeanTypeClassifier,
-            final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
-            final Provider<ValueSemanticsResolver> valueTypeRegistry,
-            final ClassSubstitutorRegistry classSubstitutorRegistry) {
-        this(
-                programmingModelService.getProgrammingModel(),
-                causewayConfiguration,
-                causewaySystemEnvironment,
-                serviceRegistry,
-                causewayBeanTypeClassifier,
-                causewayBeanTypeRegistry,
-                valueTypeRegistry,
-                classSubstitutorRegistry);
-    }
-
-    SpecificationLoaderDefault(
             final ProgrammingModel programmingModel,
             final CausewayConfiguration causewayConfiguration,
             final CausewaySystemEnvironment causewaySystemEnvironment,

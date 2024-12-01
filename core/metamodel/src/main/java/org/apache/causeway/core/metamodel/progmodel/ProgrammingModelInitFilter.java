@@ -26,16 +26,30 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
 
 /**
- *
  * @since 2.0
- *
  */
 public interface ProgrammingModelInitFilter {
+
+    public static ProgrammingModelInitFilter noop() {
+        return new ProgrammingModelInitFilter() {
+            @Override public boolean acceptValidator(final Class<? extends MetaModelValidator> validatorType, final Marker[] markersIfAny) {
+                return true;
+            }
+            @Override public boolean acceptPostProcessor(final Class<? extends MetaModelPostProcessor> postProcessorType,
+                    final Marker[] markersIfAny) {
+                return true;
+            }
+            @Override public boolean acceptFactoryType(final Class<? extends FacetFactory> factoryType, final Marker[] markersIfAny) {
+                return true;
+            }
+        };
+    }
 
     boolean acceptFactoryType(
             Class<? extends FacetFactory> factoryType,
@@ -55,17 +69,15 @@ public interface ProgrammingModelInitFilter {
         return _Predicates.alwaysTrue();
     }
 
-    public static Predicate<ProgrammingModel.Marker[]> excluding(@Nullable EnumSet<ProgrammingModel.Marker> excludingMarkers) {
-        if(excludingMarkers==null) {
-            return excludingNone();
-        }
+    public static Predicate<ProgrammingModel.Marker[]> excluding(@Nullable final EnumSet<ProgrammingModel.Marker> excludingMarkers) {
+        if(excludingMarkers==null)  return excludingNone();
+
         return markersOnFactory -> {
-            if(isEmpty(markersOnFactory)) {
-                return true; // accept
-            }
+            if(isEmpty(markersOnFactory)) return true; // accept
+
             for(var markerOnFactory : markersOnFactory) {
                 if(excludingMarkers.contains(markerOnFactory)) {
-                    return true; // don't  accept
+                    return true; // don't accept //TODO what?
                 }
             }
             return true; // accept

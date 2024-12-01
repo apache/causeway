@@ -14,9 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.causeway.core.metamodel.progmodels.dflt;
-
-import org.apache.causeway.commons.collections.Can;
+package org.apache.causeway.core.metamodel.spec.impl;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
@@ -99,16 +97,11 @@ import org.apache.causeway.core.metamodel.postprocessors.param.TypicalLengthFrom
 import org.apache.causeway.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.services.title.TitlesAndTranslationsValidator;
-import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelDefaultImplementation;
 
-public final class ProgrammingModelFacetsJava11
+final class ProgrammingModelDefault
 extends ProgrammingModelAbstract {
 
-    public ProgrammingModelFacetsJava11(final MetaModelContext mmc) {
-        this(mmc, Can.empty());
-    }
-
-    public ProgrammingModelFacetsJava11(final MetaModelContext mmc, final Can<MetaModelRefiner> refiners) {
+    ProgrammingModelDefault(final MetaModelContext mmc, final Iterable<MetaModelRefiner> refiners) {
         super(mmc);
 
         // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
@@ -125,8 +118,9 @@ extends ProgrammingModelAbstract {
         }
     }
 
-    private void addFacetFactories() {
+    // -- HELPER
 
+    private void addFacetFactories() {
         var mmc = getMetaModelContext();
 
         // must be first, so any Facets created can be replaced by other
@@ -246,7 +240,6 @@ extends ProgrammingModelAbstract {
     }
 
     private void addPostProcessors() {
-
         var mmc = getMetaModelContext();
 
         // must run before Object nouns are used
@@ -270,13 +263,10 @@ extends ProgrammingModelAbstract {
     }
 
     private void addValidators() {
-
         var mmc = getMetaModelContext();
 
         addValidator(ValidationOrder.A1_BUILTIN, new SanityChecksValidator(mmc));
-
-        CausewayModuleCoreMetamodelDefaultImplementation.validators()
-            .forEach(v->addValidator(ValidationOrder.A1_BUILTIN, v));
+        addValidator(ValidationOrder.A1_BUILTIN, new ValidatorDomainIncludeAnnotationEnforcesMetamodelContribution(mmc));
 
         // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(ValidationOrder.A1_BUILTIN, new TitlesAndTranslationsValidator(mmc));

@@ -16,65 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.specloader;
+package org.apache.causeway.core.metamodel.spec.impl;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter;
-import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelService;
-import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 
 import lombok.extern.log4j.Log4j2;
 
-@Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelServiceDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
+@Configuration
+@Import({
+    SpecificationLoaderDefault.class,
+})
 @Log4j2
-public class ProgrammingModelServiceDefault
-implements ProgrammingModelService {
+public class CausewayModuleCoreMetamodelConfigurationDefault {
 
-    @Override
-    public ProgrammingModel getProgrammingModel() {
-        return programmingModel.get();
-    }
+    @Bean(name=CausewayModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelDefault")
+    @Qualifier("Default")
+    public ProgrammingModel programmingModel(
+            final MetaModelContext mmc,
+            /**
+             * plugin FacetFactories, Validators and PostProcessors to the programming model
+             */
+            final List<MetaModelRefiner> metaModelRefiners,
+            final ProgrammingModelInitFilter programmingModelInitFilter) {
 
-    // -- HELPER
-
-    @Inject private ProgrammingModelInitFilter programmingModelInitFilter;
-    @Inject private MetaModelContext metaModelContext;
-
-    private _Lazy<ProgrammingModel> programmingModel =
-            _Lazy.threadSafe(this::createProgrammingModel);
-
-    private ProgrammingModel createProgrammingModel() {
-
-        // from all plugins out there, add their contributed FacetFactories, Validators
-        // and PostProcessors to the programming model
-        var metaModelRefiners = metaModelContext.getServiceRegistry().select(MetaModelRefiner.class);
-        
         log.info("About to create the ProgrammingModel w/ {} refiners.", metaModelRefiners.size());
-        
-        var programmingModel = new ProgrammingModelFacetsJava11(metaModelContext, metaModelRefiners);
+        var programmingModel = new ProgrammingModelDefault(mmc, metaModelRefiners);
 
         // finalize the programming model (make it immutable)
         programmingModel.init(programmingModelInitFilter);
 
         if(log.isInfoEnabled()) {
-
             var refinerCount = metaModelRefiners.size();
-
             var facetFactoryCount = programmingModel.streamFactories().count();
             var validatorCount = programmingModel.streamValidators().count();
             var postProcessorCount = programmingModel.streamPostProcessors().count();
@@ -82,13 +65,10 @@ implements ProgrammingModelService {
             log.info("Collected after asking {} refiners, and passing filter '{}':",
                     refinerCount,
                     programmingModelInitFilter.getClass());
-
             log.info(" - {} facet-factories", facetFactoryCount);
             log.info(" - {} validators", validatorCount);
             log.info(" - {} post-processors", postProcessorCount);
-
         }
-
         return programmingModel;
     }
 
