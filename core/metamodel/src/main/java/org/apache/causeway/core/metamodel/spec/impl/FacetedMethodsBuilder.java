@@ -52,6 +52,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -470,9 +471,8 @@ implements
     private boolean isMixinMain(final ResolvedMethod method) {
         var mixinFacet = inspectedTypeSpec.lookupNonFallbackFacet(MixinFacet.class)
                 .orElse(null);
-        if(mixinFacet==null) {
-            return false;
-        }
+        if(mixinFacet==null) return false;
+
         if(inspectedTypeSpec.isLessThan(IntrospectionState.FULLY_INTROSPECTED)) {
             // members are not introspected yet, so make a guess
             return mixinFacet.isCandidateForMain(method);
@@ -480,7 +480,8 @@ implements
 
         return inspectedTypeSpec
                 .lookupMixedInAction(inspectedTypeSpec)
-                .map(ObjectActionMixedIn::getFacetedMethod)
+                .map(HasFacetedMethod.class::cast)
+                .map(HasFacetedMethod::getFacetedMethod)
                 .map(FacetedMethod::getMethod)
                 .map(MethodFacade::asMethodForIntrospection)
                 .map(method::equals)

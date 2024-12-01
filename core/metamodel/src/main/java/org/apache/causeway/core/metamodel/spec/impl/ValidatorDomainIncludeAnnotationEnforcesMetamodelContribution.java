@@ -16,17 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.methods;
+package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -36,6 +37,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -45,21 +47,21 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+
+import lombok.NonNull;
 
 /**
  * @since 2.0
  * @see org.apache.causeway.applib.annotation.Domain.Include
  */
-public class DomainIncludeAnnotationEnforcesMetamodelContributionValidator
+class ValidatorDomainIncludeAnnotationEnforcesMetamodelContribution
 extends MetaModelValidatorAbstract {
 
     private final _ClassCache classCache;
 
-    @Inject
-    public DomainIncludeAnnotationEnforcesMetamodelContributionValidator(final MetaModelContext mmc) {
+    ValidatorDomainIncludeAnnotationEnforcesMetamodelContribution(final MetaModelContext mmc) {
         super(mmc, spec->((spec instanceof ObjectSpecificationDefault)
             && !spec.isAbstract()
             && !spec.getBeanSort().isManagedBeanNotContributing()
@@ -116,19 +118,6 @@ extends MetaModelValidatorAbstract {
             // filter away those that are recognized
             .filter(Predicate.not(memberMethods::contains))
             .filter(Predicate.not(supportMethods::contains))
-            //[CAUSEWAY-3571] perhaps no longer required, because we only collect resolvable methods ...
-            // special lookup for generic type bounds
-    //        .filter(method->{
-    //            if(_Reflect.hasGenericBounds(method)) {
-    //                if(memberMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
-    //                    return false; // found
-    //                }
-    //                if(supportMethods.stream().anyMatch(m->_Reflect.methodsWeaklySame(m, method))) {
-    //                    return false; // found
-    //                }
-    //            }
-    //            return true; // pass-through
-    //        })
             .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
 
         // find reasons about why these are not recognized
@@ -150,9 +139,8 @@ extends MetaModelValidatorAbstract {
                         unmetContraints);
             });
 
-        _OrphanedSupportingMethodValidator.validate((ObjectSpecificationDefault)spec,
-                supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp);
-
+        validateOrphanedSupportingMethod(
+                spec, supportMethods, memberMethods, methodsIntendedToBeIncludedButNotPickedUp);
     }
 
     // -- HELPER - VALIDATION LOGIC
@@ -187,7 +175,47 @@ extends MetaModelValidatorAbstract {
         unmetContraints.add("conflicting domain-include semantics, orphaned support method, "
                 + "misspelled prefix or unsupported method signature");
         return unmetContraints;
+    }
 
+    private static void validateOrphanedSupportingMethod(
+            final @NonNull ObjectSpecification spec,
+            final @NonNull Set<ResolvedMethod> supportMethods,
+            final @NonNull Set<ResolvedMethod> memberMethods,
+            final @NonNull Set<ResolvedMethod> alreadyReported) {
+
+        if(spec.isAbstract()
+                || spec.getBeanSort().isManagedBeanNotContributing()
+                || spec.isValue()
+                || spec.getIntrospectionPolicy()
+                    .getSupportMethodAnnotationPolicy()
+                    .isSupportMethodAnnotationsRequired()) {
+            return; // ignore
+        }
+
+        var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
+            ? specDefault.getPotentialOrphans()
+            : Collections.<ResolvedMethod>emptySet();
+        if(potentialOrphans.isEmpty()) return; // nothing to do
+
+        // find reasons why these are not recognized
+        potentialOrphans.stream()
+            .filter(Predicate.not(alreadyReported::contains))
+            .filter(Predicate.not(memberMethods::contains))
+            .filter(Predicate.not(supportMethods::contains))
+            .forEach(orphanedMethod->{
+
+                var methodIdentifier = Identifier
+                        .methodIdentifier(spec.getFeatureIdentifier().logicalType(), orphanedMethod);
+
+                ValidationFailure.raise(
+                        spec,
+                        ProgrammingModelConstants.MessageTemplate.ORPHANED_METHOD
+                            .builder()
+                            .addVariablesFor(methodIdentifier)
+                            .buildMessage());
+            });
+
+        potentialOrphans.clear(); // no longer needed
     }
 
 }

@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.HasLogicalType;
@@ -73,10 +74,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -114,6 +115,8 @@ extends
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
             s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
+
+    IntrospectionPolicy getIntrospectionPolicy();
 
     /**
      * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}.
@@ -157,7 +160,7 @@ extends
     /**
      * @since 2.0
      */
-    public default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
+    default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
         return Stream.concat(
                 streamAnyActions(MixedIn.INCLUDED),
                 streamAssociations(MixedIn.INCLUDED))
@@ -170,12 +173,14 @@ extends
     /**
      * @since 2.0
      */
-    public default Optional<ObjectActionMixedIn> lookupMixedInAction(final ObjectSpecification mixinSpec) {
+    @SuppressWarnings("unchecked")
+    default <T extends ObjectAction & MixedInMember> Optional<T> lookupMixedInAction(final ObjectSpecification mixinSpec) {
         return
                 streamAnyActions(MixedIn.INCLUDED)
-                .filter(ObjectActionMixedIn.class::isInstance)
-                .map(ObjectActionMixedIn.class::cast)
+                .filter(MixedInMember.class::isInstance)
+                .map(MixedInMember.class::cast)
                 .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
+                .map(member->(T)member)
                 .findAny();
     }
 
@@ -587,9 +592,7 @@ extends
     default public void assertPojoCompatible(final @Nullable Object pojo) {
 
         // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo==null) {
-            return;
-        }
+        if(pojo==null) return;
 
         if(!isPojoCompatible(pojo)) {
             var expectedType = getCorrespondingClass();
@@ -612,10 +615,7 @@ extends
     }
 
     default public boolean isPojoCompatible(final Object pojo) {
-
-        if(pojo==null) {
-            return true;
-        }
+        if(pojo==null)  return true;
 
         var expectedType = getCorrespondingClass();
         var actualType = pojo.getClass();

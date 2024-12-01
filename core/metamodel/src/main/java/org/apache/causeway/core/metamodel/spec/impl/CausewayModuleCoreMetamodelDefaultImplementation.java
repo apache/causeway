@@ -21,11 +21,21 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
+
 @Configuration
 @Import({
     SpecificationLoaderDefault.class,
 })
 public class CausewayModuleCoreMetamodelDefaultImplementation {
-    
-    
+
+    public static Can<MetaModelValidator> validators() {
+        var mmc = MetaModelContext.instanceElseFail();
+        return Can.of(
+                new ValidatorDomainIncludeAnnotationEnforcesMetamodelContribution(mmc)
+                );
+    }
+
 }

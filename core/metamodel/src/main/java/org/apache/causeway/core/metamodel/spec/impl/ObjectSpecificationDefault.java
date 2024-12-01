@@ -131,7 +131,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
 
-    @Getter
+    @Getter(onMethod_={@Override})
     private final IntrospectionPolicy introspectionPolicy;
 
     public ObjectSpecificationDefault(
@@ -144,7 +144,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         this.correspondingClass = typeMeta.getCorrespondingClass();
         this.logicalType = typeMeta.logicalType();
         this.fullName = correspondingClass.getName();
-        this.shortName = typeMeta.logicalType().getLogicalTypeSimpleName();
+        this.shortName = typeMeta.logicalType().logicalSimpleName();
         this.beanSort = typeMeta.beanSort();
 
         this.facetHolder = FacetHolder.simple(
@@ -164,14 +164,11 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         facetProcessor.processObjectType(typeMeta.getCorrespondingClass(), this);
 
         // naturally supports attribute inheritance from the type's hierarchy
-        final IntrospectionPolicy introspectionPolicy =
-                this.lookupFacet(IntrospectionPolicyFacet.class)
+        this.introspectionPolicy = this.lookupFacet(IntrospectionPolicyFacet.class)
                 .map(introspectionPolicyFacet->
                         introspectionPolicyFacet
                         .getIntrospectionPolicy(mmc.getConfiguration()))
                 .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
-
-        this.introspectionPolicy = introspectionPolicy;
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);

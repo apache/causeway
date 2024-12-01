@@ -84,7 +84,6 @@ import org.apache.causeway.core.metamodel.facets.properties.update.PropertySette
 import org.apache.causeway.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
 import org.apache.causeway.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.value.semantics.ValueSemanticsAnnotationFacetFactory;
-import org.apache.causeway.core.metamodel.methods.DomainIncludeAnnotationEnforcesMetamodelContributionValidator;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.DescribedAsFromTypePostProcessor;
 import org.apache.causeway.core.metamodel.postprocessors.all.MixinSanityChecksValidator;
@@ -100,6 +99,7 @@ import org.apache.causeway.core.metamodel.postprocessors.param.TypicalLengthFrom
 import org.apache.causeway.core.metamodel.postprocessors.properties.DisabledFromImmutablePostProcessor;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.services.title.TitlesAndTranslationsValidator;
+import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelDefaultImplementation;
 
 public final class ProgrammingModelFacetsJava11
 extends ProgrammingModelAbstract {
@@ -107,8 +107,8 @@ extends ProgrammingModelAbstract {
     public ProgrammingModelFacetsJava11(final MetaModelContext mmc) {
         this(mmc, Can.empty());
     }
-    
-    public ProgrammingModelFacetsJava11(final MetaModelContext mmc, Can<MetaModelRefiner> refiners) {
+
+    public ProgrammingModelFacetsJava11(final MetaModelContext mmc, final Can<MetaModelRefiner> refiners) {
         super(mmc);
 
         // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
@@ -119,7 +119,7 @@ extends ProgrammingModelAbstract {
         addPostProcessors();
 
         addValidators();
-        
+
         for (var metaModelRefiner : refiners) {
             metaModelRefiner.refineProgrammingModel(this);
         }
@@ -274,7 +274,10 @@ extends ProgrammingModelAbstract {
         var mmc = getMetaModelContext();
 
         addValidator(ValidationOrder.A1_BUILTIN, new SanityChecksValidator(mmc));
-        addValidator(ValidationOrder.A1_BUILTIN, new DomainIncludeAnnotationEnforcesMetamodelContributionValidator(mmc));
+
+        CausewayModuleCoreMetamodelDefaultImplementation.validators()
+            .forEach(v->addValidator(ValidationOrder.A1_BUILTIN, v));
+
         // should this instead be a post processor, alongside TranslationPostProcessor ?
         addValidator(ValidationOrder.A1_BUILTIN, new TitlesAndTranslationsValidator(mmc));
         addValidator(ValidationOrder.A1_BUILTIN, new ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator(mmc));
