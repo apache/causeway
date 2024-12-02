@@ -510,7 +510,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     private ObjectSpecification superclassSpec;
 
-    private ValueFacet valueFacet;
+    private ValueFacet<?> valueFacet;
     private EntityFacet entityFacet;
     private ViewModelFacet viewmodelFacet;
     private MixinFacet mixinFacet;
@@ -712,7 +712,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public final Optional<ValueFacet> valueFacet() {
+    public final Optional<ValueFacet<?>> valueFacet() {
         if(valueFacet == null
                 && getBeanSort().isValue()) {
             invalidateCachedFacets();

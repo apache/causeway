@@ -42,14 +42,14 @@ public class MmValueUtils {
     public Optional<ValueSemanticsProvider.Context> createValueSemanticsContext(
             final @Nullable ObjectFeature feature,
             final @Nullable ObjectSpecification elementType) {
-        return valueFacet(elementType)
+        return valueFacet(elementType, Object.class)
                 .map(valueFacet->valueFacet.createValueSemanticsContext(feature));
     }
 
     public Optional<ValueSemanticsProvider.Context> createValueSemanticsContext(
             final @Nullable ObjectFeature feature,
             final @Nullable ManagedObject valueObject) {
-        return valueFacet(valueObject)
+        return valueFacet(valueObject, Object.class)
                 .map(valueFacet->valueFacet.createValueSemanticsContext(feature));
     }
 
@@ -59,9 +59,7 @@ public class MmValueUtils {
             final @Nullable ObjectFeature feature,
             final @Nullable ManagedObject adapter) {
 
-        if(!ManagedObjects.isSpecified(adapter)) {
-            return "";
-        }
+        if(!ManagedObjects.isSpecified(adapter)) return "";
 
         var spec = adapter.getSpecification();
         var valueFacet = spec.valueFacet().orElse(null);
@@ -80,13 +78,11 @@ public class MmValueUtils {
 
     // -- TEMPORAL SUPPORT
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Optional<TemporalSupport> temporalSupport(
+    public Optional<TemporalSupport<?>> temporalSupport(
             final @Nullable ObjectFeature objectFeature,
             final @Nullable ObjectSpecification elementType) {
-        return valueFacet(elementType)
-                .flatMap(valueFacet->(Optional<TemporalSupport>)valueFacet
-                        .selectTemporalSupportForFeature(objectFeature));
+        return valueFacet(elementType, Object.class)
+                .flatMap(valueFacet->selectTemporalSupportForFeature(valueFacet, objectFeature));
     }
 
     public TemporalSupport<?> temporalSupportElseFail(
@@ -97,34 +93,35 @@ public class MmValueUtils {
                         elementType));
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Optional<TemporalDecomposition> temporalDecomposition(
             final @Nullable ObjectFeature objectFeature,
             final @Nullable ManagedObject valueObject) {
-        return valueFacet(valueObject)
+        return valueFacet(valueObject, Object.class)
                 .filter(valueFacet->!ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject))
-                .flatMap(valueFacet->(Optional<TemporalSupport>)valueFacet.selectTemporalSupportForFeature(objectFeature))
-                .flatMap((final TemporalSupport temporalDecomposer)->{
-                    var pojo = MmUnwrapUtils.single(valueObject);
-                    return temporalDecomposer.decomposeTemporal(pojo);
-                });
+                .flatMap(valueFacet->selectTemporalSupportForFeature(valueFacet, objectFeature))
+                .flatMap(temporalDecomposer->
+                    temporalDecomposer.decomposeTemporal(MmUnwrapUtils.single(valueObject)));
     }
 
     // -- HELPER
 
-    @SuppressWarnings({ "rawtypes" })
-    private Optional<ValueFacet> valueFacet(final @Nullable ObjectSpecification elementType) {
+    @SuppressWarnings("unchecked")
+    private <T> Optional<ValueFacet<T>> valueFacet(final @Nullable ObjectSpecification elementType, final Class<T> valueClass) {
         return elementType!=null
-                ? elementType.valueFacet()
+                ? elementType.valueFacet().map((final ValueFacet<?> v)->(ValueFacet<T>)v)
                 : Optional.empty();
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    private Optional<ValueFacet> valueFacet(final @Nullable ManagedObject valueObject) {
-        if(!ManagedObjects.isSpecified(valueObject)) {
-            return Optional.empty();
-        }
-        return valueFacet(valueObject.getSpecification());
+    private <T> Optional<ValueFacet<T>> valueFacet(final @Nullable ManagedObject valueObject, final Class<T> valueClass) {
+        return ManagedObjects.isSpecified(valueObject)
+            ? valueFacet(valueObject.getSpecification(), valueClass)
+            : Optional.empty();
+    }
+
+    private <T> Optional<TemporalSupport<T>> selectTemporalSupportForFeature(
+            final ValueFacet<T> valueFacet,
+            final ObjectFeature objectFeature) {
+        return valueFacet.selectTemporalSupportForFeature(objectFeature);
     }
 
 }

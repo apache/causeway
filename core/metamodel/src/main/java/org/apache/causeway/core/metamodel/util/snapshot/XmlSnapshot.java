@@ -41,6 +41,7 @@ import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.causeway.applib.snapshot.SnapshottableWithInclusions;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -707,9 +708,8 @@ public class XmlSnapshot implements Snapshot {
                     causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());
 
                     // value as JSON
-                    @SuppressWarnings("unchecked")
                     var valueStr = fieldSpec.valueFacetElseFail()
-                            .enstring(Format.JSON, value.getPojo());
+                            .enstring(Format.JSON, _Casts.uncheckedCast(value.getPojo()));
 
                     if (_Strings.isNotEmpty(valueStr)) {
                         xmlValueElement.appendChild(getXmlDocument().createTextNode(valueStr));
