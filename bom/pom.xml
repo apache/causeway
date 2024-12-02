@@ -158,7 +158,7 @@ identified
         <jquery-ui.version>1.14.0</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
         <jsr305.version>3.0.2</jsr305.version>
-        <jsoup.version>1.18.1</jsoup.version>
+        <jsoup.version>1.18.3</jsoup.version>
         <junit-jupiter.version>5.11.3</junit-jupiter.version> <!-- overrides
         spring -->
         <junit-platform.version>1.11.3</junit-platform.version>
