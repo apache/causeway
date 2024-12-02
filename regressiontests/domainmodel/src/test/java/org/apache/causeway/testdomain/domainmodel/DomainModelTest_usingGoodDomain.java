@@ -174,7 +174,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // guard against left overs from shared context
         var validationFailures = validateDomainModel.getFailures().stream()
-                .filter(f->!f.getOrigin().getClassName().contains("bad"))
+                .filter(f->!f.getOrigin().className().contains("bad"))
                 .collect(Collectors.toSet());
 
         if(!validationFailures.isEmpty()) {
@@ -1028,7 +1028,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var viewmodelFacet = elementType.getFacet(ViewModelFacet.class);
 
         assertEquals(BeanSort.VIEW_MODEL, elementType.getBeanSort());
-        assertEquals(classUnderTest.getName(), elementType.getFeatureIdentifier().getLogicalTypeName());
+        assertEquals(classUnderTest.getName(), elementType.getFeatureIdentifier().logicalTypeName());
         assertTrue(ViewModelFacetForJavaRecord.class.isInstance(viewmodelFacet),
                 ()->"Record is expected to have a ViewModelFacetForJavaRecord");
 

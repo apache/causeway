@@ -65,7 +65,7 @@ public record ActionResultModel(
 
             _Assert.assertTrue(resultSpec.isSingular());
 
-            if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
+            if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.logicalTypeName())) {
                 return new ActionResultModel(ActionResultResponseType.SIGN_IN, resultAdapter);
             }
 

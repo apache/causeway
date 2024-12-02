@@ -66,7 +66,7 @@ public class ScenarioStep
 
         context.objectSpecifications().forEach(objectSpec -> {
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
-                context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                context.serviceRegistry.lookupBeanById(objectSpec.logicalTypeName())
                         .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
             }
         });
@@ -74,6 +74,7 @@ public class ScenarioStep
         buildObjectType();
     }
 
+    @Override
     protected void addDataFetchersForChildren() {
         domainServices.forEach(domainService -> {
             boolean actionsAdded = domainService.hasActions();
@@ -86,7 +87,7 @@ public class ScenarioStep
     }
 
     @Override
-    protected DataFetchingEnvironment fetchData(DataFetchingEnvironment environment) {
+    protected DataFetchingEnvironment fetchData(final DataFetchingEnvironment environment) {
         return environment;
     }
 

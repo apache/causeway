@@ -80,7 +80,7 @@ implements HiddenTypeFacet {
         }
 
         return String.format("All members (actions, properties and collections) are hidden for logical-type %s",
-                spec.getLogicalTypeName());
+                spec.logicalTypeName());
 
     }
 

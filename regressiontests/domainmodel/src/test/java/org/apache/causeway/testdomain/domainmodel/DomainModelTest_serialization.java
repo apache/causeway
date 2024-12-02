@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.testdomain.domainmodel;
 
+import java.io.Serializable;
+
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
@@ -30,12 +32,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 import org.apache.causeway.testdomain.model.good.ProperMemberSupport;
@@ -65,15 +61,15 @@ class DomainModelTest_serialization extends CausewayIntegrationTestAbstract {
     @Test
     void objectActionDefault_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        var act = (ObjectActionDefault) holderSpec.getActionElseFail("hideMe");
-        assertEquals(ObjectActionDefault.class, act.getClass());
+        var act = (Serializable) holderSpec.getActionElseFail("hideMe");
+        assertEquals("ObjectActionDefault", act.getClass().getSimpleName());
         _SerializationTester.assertEqualsOnRoundtrip(act);
     }
     @Test
     void objectActionMixedIn_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        var act = (ObjectActionMixedIn) holderSpec.getActionElseFail("action1");
-        assertEquals(ObjectActionMixedIn.class, act.getClass());
+        var act = (Serializable) holderSpec.getActionElseFail("action1");
+        assertEquals("ObjectActionMixedIn", act.getClass().getSimpleName());
         _SerializationTester.assertEqualsOnRoundtrip(act);
     }
 
@@ -82,15 +78,15 @@ class DomainModelTest_serialization extends CausewayIntegrationTestAbstract {
     @Test
     void oneToOneAssociationDefault_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        var prop = (OneToOneAssociationDefault) holderSpec.getPropertyElseFail("myProp");
-        assertEquals(OneToOneAssociationDefault.class, prop.getClass());
+        var prop = (Serializable) holderSpec.getPropertyElseFail("myProp");
+        assertEquals("OneToOneAssociationDefault", prop.getClass().getSimpleName());
         _SerializationTester.assertEqualsOnRoundtrip(prop);
     }
     @Test
     void oneToOneAssociationMixedIn_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        var prop = (OneToOneAssociationMixedIn) holderSpec.getPropertyElseFail("property1");
-        assertEquals(OneToOneAssociationMixedIn.class, prop.getClass());
+        var prop = (Serializable) holderSpec.getPropertyElseFail("property1");
+        assertEquals("OneToOneAssociationMixedIn", prop.getClass().getSimpleName());
         _SerializationTester.assertEqualsOnRoundtrip(prop);
     }
 
@@ -99,15 +95,15 @@ class DomainModelTest_serialization extends CausewayIntegrationTestAbstract {
     @Test
     void oneToManyAssociationDefault_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        var coll = (OneToManyAssociationDefault) holderSpec.getCollectionElseFail("myColl");
-        assertEquals(OneToManyAssociationDefault.class, coll.getClass());
+        var coll = (Serializable) holderSpec.getCollectionElseFail("myColl");
+        assertEquals("OneToManyAssociationDefault", coll.getClass().getSimpleName());
         _SerializationTester.assertEqualsOnRoundtrip(coll);
     }
     @Test
     void oneToManyAssociationMixedIn_shouldBe_Serializable() {
         var holderSpec = specificationLoader.specForTypeElseFail(ProperMemberSupport.class);
-        var coll = (OneToManyAssociationMixedIn) holderSpec.getCollectionElseFail("collection1");
-        assertEquals(OneToManyAssociationMixedIn.class, coll.getClass());
+        var coll = (Serializable) holderSpec.getCollectionElseFail("collection1");
+        assertEquals("OneToManyAssociationMixedIn", coll.getClass().getSimpleName());
         _SerializationTester.assertEqualsOnRoundtrip(coll);
     }
 

@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 
 // keep public for JABX
 public class MetaModelServiceDefaultTest {
@@ -73,11 +73,11 @@ public class MetaModelServiceDefaultTest {
 
         mockSpec = Mockito.mock(ObjectSpecification.class);
         Mockito.when(mockSpec.getFullIdentifier()).thenReturn("mocked");
-        Mockito.when(mockSpec.getLogicalTypeName()).thenReturn("logicalType");
+        Mockito.when(mockSpec.logicalTypeName()).thenReturn("logicalType");
         Mockito.when(mockSpec.subclasses(Hierarchical.Depth.DIRECT)).thenReturn(Can.empty());
         Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 
-        action = ObjectActionDefault.forTesting.forMethod(mockFacetedMethod);
+        action = _JUnitSupport.actionForMethod(mockFacetedMethod);
 
         mockMetaModelService = Mockito.mock(MetaModelServiceDefault.class);
         Mockito.when(mockMetaModelService.getDomainModel())

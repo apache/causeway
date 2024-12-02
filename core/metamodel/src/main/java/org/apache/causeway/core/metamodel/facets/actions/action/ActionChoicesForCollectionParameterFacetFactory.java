@@ -32,9 +32,9 @@ import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterCh
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 /**
@@ -60,17 +60,13 @@ implements MetaModelRefiner {
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
 
         var shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isActionCollectionParameterChoices();
-        if(!shouldCheck) {
-            return;
-        }
+        if(!shouldCheck) return;
 
         programmingModel.addValidatorSkipAbstract(objectSpec->{
             objectSpec.streamAnyActions(MixedIn.INCLUDED)
             .forEach(objectAction->{
-                if(objectAction instanceof ObjectActionMixedIn) {
-                    // we'll report only the mixin
-                    return;
-                }
+                // we'll report only the mixin //TODO[causeway-core-metamodel-CAUSEWAY-3834] What?
+                if(objectAction instanceof MixedInMember) return;
 
                 int paramNum = 0;
                 for (ObjectActionParameter parameter : objectAction.getParameters()) {

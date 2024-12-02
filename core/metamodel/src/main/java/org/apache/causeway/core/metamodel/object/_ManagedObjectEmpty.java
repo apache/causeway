@@ -40,7 +40,7 @@ implements Bookmarkable.NoBookmark {
 
     @Override
     public String getTitle() {
-        return "empty " + getSpecification().getLogicalTypeName();
+        return "empty " + getSpecification().logicalTypeName();
     }
 
 }

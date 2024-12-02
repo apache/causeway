@@ -65,7 +65,7 @@ public abstract class CommonTopLevelQueryAbstract
         context.objectSpecifications().forEach(objectSpec -> {
             switch (objectSpec.getBeanSort()) {
                 case MANAGED_BEAN_CONTRIBUTING: // @DomainService
-                    context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                    context.serviceRegistry.lookupBeanById(objectSpec.logicalTypeName())
                             .ifPresent(servicePojo ->
                                     domainServices.add(
                                             addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
@@ -85,10 +85,11 @@ public abstract class CommonTopLevelQueryAbstract
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment environment) {
+    protected Object fetchData(final DataFetchingEnvironment environment) {
         return environment;
     }
 
+    @Override
     public void addDataFetchers() {
         addDataFetchersForChildren();
     }

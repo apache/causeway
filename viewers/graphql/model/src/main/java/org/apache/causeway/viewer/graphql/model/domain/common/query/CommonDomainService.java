@@ -54,7 +54,7 @@ public class CommonDomainService
 
     private final List<Element> actions = new ArrayList<>();
 
-    public static String typeNameFor(SchemaStrategy schemaStrategy, ObjectSpecification objectSpecification) {
+    public static String typeNameFor(final SchemaStrategy schemaStrategy, final ObjectSpecification objectSpecification) {
         return TypeNames.objectTypeNameFor(objectSpecification, schemaStrategy.getSchemaType());
     }
 
@@ -105,13 +105,13 @@ public class CommonDomainService
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment environment) {
+    protected Object fetchData(final DataFetchingEnvironment environment) {
         return getServicePojo();
     }
 
     @Override
     public String toString() {
-        return objectSpecification.getLogicalTypeName();
+        return objectSpecification.logicalTypeName();
     }
 
 }

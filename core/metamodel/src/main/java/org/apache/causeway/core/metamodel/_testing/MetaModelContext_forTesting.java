@@ -79,8 +79,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
-import org.apache.causeway.core.metamodel.progmodels.dflt.ProgrammingModelFacetsJava11;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorForCollections;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
@@ -94,8 +94,9 @@ import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
@@ -166,7 +167,8 @@ extends MetaModelContext {
 
     @Builder.Default
     private BiFunction<MetaModelContext, Can<MetaModelRefiner>, ProgrammingModel> programmingModelFactory =
-        (mmc, refiners)->new ProgrammingModelFacetsJava11(mmc, refiners);
+        (mmc, refiners)->new CausewayModuleCoreMetamodelConfigurationDefault()
+            .programmingModel(mmc, refiners.toList(), ProgrammingModelInitFilter.noop());
 
     private InteractionService interactionService;
 
@@ -382,7 +384,7 @@ extends MetaModelContext {
             var causewayBeanTypeRegistry = requireNonNull(getCausewayBeanTypeRegistry());
             var classSubstitutorRegistry = requireNonNull(getClassSubstitutorRegistry());
 
-            specificationLoader = SpecificationLoaderDefault.getInstance(
+            specificationLoader = _JUnitSupport.specLoader(
                     configuration,
                     environment,
                     serviceRegistry,
@@ -526,7 +528,7 @@ extends MetaModelContext {
     private void registerAsService(final ServiceInstance serviceInstance) {
         var spec = serviceInstance.getSpecification();
         discoveredServices.add(_SingletonBeanProvider.forTestingLazy(
-                spec.getLogicalTypeName(),
+                spec.logicalTypeName(),
                 (Class)spec.getCorrespondingClass(),
                 serviceInstance::getPojo));
     }
@@ -551,7 +553,7 @@ extends MetaModelContext {
         services.stream()
         .map(service->ManagedObject.service(service.specification, service.pojo))
         .forEach(serviceAdapter->
-            map.put(serviceAdapter.getSpecification().getLogicalTypeName(), serviceAdapter));
+            map.put(serviceAdapter.getSpecification().logicalTypeName(), serviceAdapter));
         return map;
     }
 

@@ -220,7 +220,7 @@ public class DomainEventHelper {
             return uncheckedCast(event);
         }
 
-        log.error("Unable to locate constructor of ActionDomainEvent subclass.\n* event's class name : {}\n* source's class name: {}\n* identifier         : {}\n", type.getName(), source.getClass().getName(), identifier.getMemberLogicalName());
+        log.error("Unable to locate constructor of ActionDomainEvent subclass.\n* event's class name : {}\n* source's class name: {}\n* identifier         : {}\n", type.getName(), source.getClass().getName(), identifier.memberLogicalName());
 
         return null;
     }

@@ -32,7 +32,7 @@ public class WhereContexts {
      * that is, the feature is either a plural member or a plural action result.
      */
     public Where collectionVariant(final Identifier featureId) {
-        var whereContext = featureId.getType().isAction()
+        var whereContext = featureId.type().isAction()
                     ? Where.STANDALONE_TABLES
                     : Where.PARENTED_TABLES;
         return whereContext;

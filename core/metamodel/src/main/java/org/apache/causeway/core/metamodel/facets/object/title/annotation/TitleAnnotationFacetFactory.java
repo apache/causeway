@@ -88,7 +88,7 @@ implements MetaModelRefiner {
                         objectSpec,
                         "%s: conflict for determining a strategy for retrieval of title for class, "
                         + "conflicting title facets %s",
-                        objectSpec.getFeatureIdentifier().getClassName(),
+                        objectSpec.getFeatureIdentifier().className(),
                         conflictingFeatures.toString());
             }
 

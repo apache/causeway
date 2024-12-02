@@ -39,8 +39,8 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.spec.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.extensions.titlecache.applib.event.Cached;
@@ -191,12 +191,13 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
     private Boolean isCached(
             final String logicalTypeName, final CausewayModuleApplib.TitleUiEvent<?> ev) {
         return isCachedByLogicalTypeName.computeIfAbsent(logicalTypeName, ltn -> {
-            if (!(ev instanceof Cached)) {
-                return false;
-            }
-            var objectSpecification =
-                    specificationLoader.loadSpecification(ltn, IntrospectionState.NOT_INTROSPECTED);
-            return objectSpecification != null && objectSpecification.isEntity();
+            if (!(ev instanceof Cached)) return false;
+            
+            return specificationLoader
+                .lookupLogicalType(logicalTypeName)
+                .flatMap(specificationLoader::lookupBeanSort)
+                .map(BeanSort::isEntity)
+                .orElse(false);
         });
     }
 }

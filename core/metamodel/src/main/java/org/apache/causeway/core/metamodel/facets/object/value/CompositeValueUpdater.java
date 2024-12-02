@@ -19,54 +19,35 @@
 package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class CompositeValueUpdater {
+abstract class CompositeValueUpdater {
 
-    static interface X {
-        Identifier getFeatureIdentifier();
-        ObjectSpecification getReturnType();
-        ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-                final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException;
-        ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-                final InteractionInitiatedBy interactionInitiatedBy);
-    }
-
-    @Delegate(excludes=X.class)
-    private final ObjectActionMixedIn delegate;
+    private final MixedInAction mixedInAction;
 
     public abstract ObjectSpecification getReturnType();
     protected abstract ManagedObject map(final ManagedObject valueType);
 
     public Identifier getFeatureIdentifier() {
-        var id = delegate.getFeatureIdentifier();
+        var id = mixedInAction.getFeatureIdentifier();
         return Identifier
                 .actionIdentifier(
-                        id.getLogicalType(),
-                        id.getMemberLogicalName(),
-                        id.getMemberParameterClassNames());
-    }
-
-    public ManagedObject executeWithRuleChecking(
-            final InteractionHead head, final Can<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy, final Where where)
-                    throws AuthorizationException {
-        return map(simpleExecute(head, parameters));
+                        id.logicalType(),
+                        id.memberLogicalName(),
+                        id.memberParameterClassNames());
     }
 
     public ManagedObject execute(
@@ -75,19 +56,24 @@ public abstract class CompositeValueUpdater {
         return map(simpleExecute(head, parameters));
     }
 
+    // -- HELPER
+
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
+
+        var methodFacade = mixedInAction instanceof HasFacetedMethod facetedMethodHolder
+            ? facetedMethodHolder.getFacetedMethod().getMethod()
+            : null;
+        if(methodFacade==null) return ManagedObject.empty(mixedInAction.getReturnType()); // unsupported MixedInAction
+
+        var method = methodFacade.asMethodForIntrospection();
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
         final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
-
-        var methodFacade = delegate.getFacetedMethod().getMethod();
-        var method = methodFacade.asMethodForIntrospection();
-
         var resultPojo = CanonicalInvoker
-                .invokeWithConvertedArgs(method.method(), targetPojo, 
+                .invokeWithConvertedArgs(method.method(), targetPojo,
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 
-        return ManagedObject.value(delegate.getReturnType(), resultPojo);
+        return ManagedObject.value(mixedInAction.getReturnType(), resultPojo);
     }
 
 }

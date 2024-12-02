@@ -23,9 +23,9 @@ import java.util.function.Predicate;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -57,7 +57,7 @@ implements MetaModelPostProcessor {
      */
     protected static FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
         // TODO: hacky, need to copy facet onto underlying peer, not to the action/association itself.
-        var objectMemberImpl = (ObjectMemberAbstract) objectMember;
+        var objectMemberImpl = (HasFacetedMethod) objectMember;
         return objectMemberImpl.getFacetedMethod();
     }
 

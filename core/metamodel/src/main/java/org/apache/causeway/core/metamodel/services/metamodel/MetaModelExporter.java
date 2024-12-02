@@ -198,7 +198,7 @@ class MetaModelExporter {
             return true; // export all
         }
 
-        var logicalTypeName = specification.getLogicalTypeName();
+        var logicalTypeName = specification.logicalTypeName();
         for (var prefix : namespacePrefixes) {
             if(logicalTypeName.startsWith(prefix)) {
                 return true;

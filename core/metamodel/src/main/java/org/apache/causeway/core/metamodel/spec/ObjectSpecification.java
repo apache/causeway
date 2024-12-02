@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
+import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.HasLogicalType;
@@ -46,6 +47,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
@@ -71,29 +73,32 @@ import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectMemberContainer;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
- * Represents an entity or value (cf {@link java.lang.Class}) within the
- * metamodel.
- *
+ * Represents any domain object, abstract type, bean or value,
+ * and uniquely corresponds to a {@link java.lang.Class}).
  * <p>
- * As specifications are cyclic (specifically a class will reference its
+ * As specifications are potentially cyclic (specifically a class will reference its
  * subclasses, which in turn reference their superclass) they need be created
  * first, and then later work out its internals. Hence we create
- * {@link ObjectSpecification}s as we need them, and then introspect them later.
+ * {@link ObjectSpecification}(s) as we need them, then introspect them later.
  */
 public interface ObjectSpecification
 extends
     Specification,
-    ObjectMemberContainer,
     HasLogicalType,
+    HasFacetHolder,
+    Hierarchical,
+    ObjectActionContainer,
+    ObjectAssociationContainer,
     Comparable<ObjectSpecification> {
 
     @UtilityClass
@@ -101,7 +106,7 @@ extends
 
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
                 Comparator.comparing(ObjectSpecification::getBeanSort)
-                    .thenComparing(ObjectSpecification::getLogicalType);
+                    .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
                 Comparator.comparing(ObjectSpecification::getFullIdentifier);
@@ -110,6 +115,8 @@ extends
                 (final ObjectSpecification s1, final ObjectSpecification s2) ->
             s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
+
+    IntrospectionPolicy getIntrospectionPolicy();
 
     /**
      * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}.
@@ -153,7 +160,7 @@ extends
     /**
      * @since 2.0
      */
-    public default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
+    default Optional<MixedInMember> lookupMixedInMember(final ObjectSpecification mixinSpec) {
         return Stream.concat(
                 streamAnyActions(MixedIn.INCLUDED),
                 streamAssociations(MixedIn.INCLUDED))
@@ -166,13 +173,12 @@ extends
     /**
      * @since 2.0
      */
-    public default Optional<ObjectActionMixedIn> lookupMixedInAction(final ObjectSpecification mixinSpec) {
-        return
-                streamAnyActions(MixedIn.INCLUDED)
-                .filter(ObjectActionMixedIn.class::isInstance)
-                .map(ObjectActionMixedIn.class::cast)
-                .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
-                .findAny();
+    default Optional<MixedInAction> lookupMixedInAction(final ObjectSpecification mixinSpec) {
+        return streamAnyActions(MixedIn.INCLUDED)
+            .filter(MixedInAction.class::isInstance)
+            .map(MixedInAction.class::cast)
+            .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
+            .findAny();
     }
 
     /**
@@ -561,12 +567,6 @@ extends
     }
 
     /**
-     * Introspecting up to the level required.
-     * @since 2.0
-     */
-    void introspectUpTo(IntrospectionState upTo);
-
-    /**
      * @return whether the corresponding type can be mapped onto a REFERENCE (schema) or an Oid,
      * that is the type is 'identifiable' (aka 'referencable' or 'bookmarkable')
      * @since 2.0
@@ -589,9 +589,7 @@ extends
     default public void assertPojoCompatible(final @Nullable Object pojo) {
 
         // can do this check only when the pojo is not null, otherwise is always considered valid
-        if(pojo==null) {
-            return;
-        }
+        if(pojo==null) return;
 
         if(!isPojoCompatible(pojo)) {
             var expectedType = getCorrespondingClass();
@@ -614,10 +612,7 @@ extends
     }
 
     default public boolean isPojoCompatible(final Object pojo) {
-
-        if(pojo==null) {
-            return true;
-        }
+        if(pojo==null)  return true;
 
         var expectedType = getCorrespondingClass();
         var actualType = pojo.getClass();
@@ -682,10 +677,8 @@ extends
     // -- VALUE SEMANTICS SUPPORT
 
     /** introduced for lookup optimization / allow memoization */
-    @SuppressWarnings("rawtypes")
-    Optional<ValueFacet> valueFacet();
-    @SuppressWarnings("rawtypes")
-    default ValueFacet valueFacetElseFail() {
+    Optional<ValueFacet<?>> valueFacet();
+    default ValueFacet<?> valueFacetElseFail() {
         return valueFacet().orElseThrow(()->
             _Exceptions.unrecoverable("Value type %s must have a ValueFacet", toString()));
     }

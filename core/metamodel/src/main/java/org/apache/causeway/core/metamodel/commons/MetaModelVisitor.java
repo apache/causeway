@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.commons;
 import java.util.function.Predicate;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectSpecificationDefault;
 
 /**
  * Base for visiting the meta-model.
  */
+@FunctionalInterface
 public interface MetaModelVisitor {
 
     /** whether this validator should run at all; eg. could be disabled via configuration */
@@ -63,12 +63,10 @@ public interface MetaModelVisitor {
     public final static Predicate<ObjectSpecification> MIXINS =
             spec->spec.isMixin();
 
-    /** types pass this filter, if either not {@link ObjectSpecificationDefault} or member-annotation is not required */
+    /** types pass this filter, if member-annotation is not required */
     public final static Predicate<ObjectSpecification> SKIP_WHEN_MEMBER_ANNOT_REQUIRED =
-            spec->(!(spec instanceof ObjectSpecificationDefault)
-                    || !((ObjectSpecificationDefault)spec)
+            spec->!spec
                     .getIntrospectionPolicy()
                     .getMemberAnnotationPolicy()
-                    .isMemberAnnotationsRequired());
-
+                    .isMemberAnnotationsRequired();
 }

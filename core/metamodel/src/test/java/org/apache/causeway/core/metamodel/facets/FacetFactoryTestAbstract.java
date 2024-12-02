@@ -47,9 +47,10 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContex
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
-import org.apache.causeway.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
@@ -169,7 +170,7 @@ implements HasMetaModelContext {
                 ProcessMethodContext processMethodContext,
                 ObjectSpecification mixeeSpec,
                 FacetedMethod facetedMethod,
-                ObjectActionMixedIn mixedInAct);
+                ObjectAction mixedInAct);
     }
     @FunctionalInterface
     protected static interface MixedInPropertyScenarioConsumer {
@@ -177,7 +178,7 @@ implements HasMetaModelContext {
                 ProcessMethodContext processMethodContext,
                 ObjectSpecification mixeeSpec,
                 FacetedMethod facetedMethod,
-                OneToOneAssociationMixedIn mixedInProp);
+                OneToOneAssociation mixedInProp);
     }
     @FunctionalInterface
     protected static interface MixedInCollectionScenarioConsumer {
@@ -185,7 +186,7 @@ implements HasMetaModelContext {
                 ProcessMethodContext processMethodContext,
                 ObjectSpecification mixeeSpec,
                 FacetedMethod facetedMethod,
-                OneToManyAssociationMixedIn mixedInColl);
+                OneToManyAssociation mixedInColl);
     }
 
     @FunctionalInterface
@@ -245,7 +246,7 @@ implements HasMetaModelContext {
                 _MethodFacades.regular(annotatedMethod));
 
         var id = facetedMethod.getFeatureIdentifier();
-        assertNotNull(id.getClassName());
+        assertNotNull(id.className());
 
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.ACTION,
@@ -254,8 +255,8 @@ implements HasMetaModelContext {
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
         final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
-        final ObjectActionMixedIn mixedInAct =
-                ObjectActionMixedIn.forTesting.forMixinMain(mixeeSpec, mixinSpec, "act", facetedMethod);
+        final ObjectAction mixedInAct =
+                _JUnitSupport.mixedInActionforMixinMain(mixeeSpec, mixinSpec, "act", facetedMethod);
 
         consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInAct);
     }
@@ -340,7 +341,7 @@ implements HasMetaModelContext {
         var facetedMethod = FacetedMethod.createForProperty(getMetaModelContext(), mixinClass, annotatedMethod);
 
         var id = facetedMethod.getFeatureIdentifier();
-        assertNotNull(id.getClassName());
+        assertNotNull(id.className());
 
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.PROPERTY,
@@ -349,8 +350,8 @@ implements HasMetaModelContext {
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
         final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
-        final OneToOneAssociationMixedIn mixedInProp =
-                OneToOneAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinSpec, "prop", facetedMethod);
+        final OneToOneAssociation mixedInProp =
+                _JUnitSupport.mixedInProp(mixeeSpec, mixinSpec, "prop", facetedMethod);
 
         consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInProp);
     }
@@ -401,7 +402,7 @@ implements HasMetaModelContext {
         var facetedMethod = FacetedMethod.createForCollection(getMetaModelContext(), mixinClass, annotatedMethod);
 
         var id = facetedMethod.getFeatureIdentifier();
-        assertNotNull(id.getClassName());
+        assertNotNull(id.className());
 
         var processMethodContext = new ProcessMethodContext(
                 mixinClass, IntrospectionPolicy.ENCAPSULATION_ENABLED, FeatureType.COLLECTION,
@@ -410,8 +411,8 @@ implements HasMetaModelContext {
 
         final ObjectSpecification mixeeSpec = getSpecificationLoader().loadSpecification(declaringClass);
         final ObjectSpecification mixinSpec = getSpecificationLoader().loadSpecification(mixinClass);
-        final OneToManyAssociationMixedIn mixedInColl =
-                OneToManyAssociationMixedIn.forTesting.forMixinMain(mixeeSpec, mixinSpec, "coll", facetedMethod);
+        final OneToManyAssociation mixedInColl =
+                _JUnitSupport.mixedInColl(mixeeSpec, mixinSpec, "coll", facetedMethod);
 
         consumer.accept(processMethodContext, mixeeSpec, facetedMethod, mixedInColl);
     }

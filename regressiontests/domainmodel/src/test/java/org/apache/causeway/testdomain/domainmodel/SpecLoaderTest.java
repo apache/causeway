@@ -70,12 +70,12 @@ class SpecLoaderTest {
         var spec1 = specificationLoader.loadSpecification(type);
         assertNotNull(spec1);
 
-        var logicalType = spec1.getLogicalType();
+        var logicalType = spec1.logicalType();
 
         var spec2 = specificationLoader.specForLogicalType(logicalType).orElse(null);
         assertNotNull(spec2);
 
-        assertEquals(spec1.getLogicalType(), spec2.getLogicalType());
+        assertEquals(spec1.logicalType(), spec2.logicalType());
     }
 
 }

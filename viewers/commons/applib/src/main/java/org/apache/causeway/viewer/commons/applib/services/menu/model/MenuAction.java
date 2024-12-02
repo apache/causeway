@@ -49,7 +49,7 @@ public record MenuAction (
     public Optional<ManagedAction> managedAction(){
         var mmc = MetaModelContext.instanceElseFail();
         var service = mmc.getObjectManager().debookmark(serviceBookmark);
-        return ManagedAction.lookupAction(service, actionId.getMemberLogicalName(), Where.NOT_SPECIFIED);
+        return ManagedAction.lookupAction(service, actionId.memberLogicalName(), Where.NOT_SPECIFIED);
     }
 
 }

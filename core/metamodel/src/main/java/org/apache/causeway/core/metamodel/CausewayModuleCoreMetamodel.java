@@ -68,8 +68,7 @@ import org.apache.causeway.core.metamodel.services.registry.ServiceRegistryDefau
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceDefault;
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
-import org.apache.causeway.core.metamodel.specloader.ProgrammingModelServiceDefault;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoaderDefault;
+import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigIntegerValueSemantics;
@@ -124,6 +123,7 @@ import lombok.NonNull;
         // @Configuration's
         MetaModelContextFactory.class,
         CausewayModuleCoreMetamodelMixins.class,
+        CausewayModuleCoreMetamodelConfigurationDefault.class,
 
         // @Component's
         ProgrammingModelInitFilterDefault.class,
@@ -190,10 +190,8 @@ import lombok.NonNull;
         LayoutServiceDefault.class,
         MetamodelEventService.class,
         MetaModelServiceDefault.class,
-        ProgrammingModelServiceDefault.class,
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
-        SpecificationLoaderDefault.class,
         TableColumnOrderServiceDefault.class,
         TableColumnOrderServiceUsingTxtFile.class,
         TitleServiceDefault.class,

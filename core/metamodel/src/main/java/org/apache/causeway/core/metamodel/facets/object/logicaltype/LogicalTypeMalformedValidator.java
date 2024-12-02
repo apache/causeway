@@ -44,7 +44,7 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        var logicalType = spec.getLogicalType();
+        var logicalType = spec.logicalType();
         var logicalTypeName = logicalType.logicalName();
 
         var nameParts = _Strings.splitThenStream(logicalTypeName, ".")

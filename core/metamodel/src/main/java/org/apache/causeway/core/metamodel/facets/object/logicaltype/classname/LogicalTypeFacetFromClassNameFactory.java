@@ -71,7 +71,7 @@ implements
         programmingModel.addValidatorSkipManagedBeans(objectSpec-> {
             if(skip(objectSpec)) return;
 
-            var logicalType = objectSpec.getLogicalType();
+            var logicalType = objectSpec.logicalType();
 
             if(logicalType.getClassName().equals(logicalType.logicalName())
                     && !_ClassCache.getInstance().isNamed(objectSpec.getCorrespondingClass())) {

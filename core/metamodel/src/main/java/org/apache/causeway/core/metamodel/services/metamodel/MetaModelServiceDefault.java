@@ -82,7 +82,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String logicalTypeName) {
         return specificationLoader.specForLogicalTypeName(logicalTypeName)
-                .map(ObjectSpecification::getLogicalType);
+                .map(ObjectSpecification::logicalType);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public Optional<LogicalType> lookupLogicalTypeByClass(final @Nullable Class<?> domainType) {
         return specificationLoader.specForType(domainType)
-                .map(ObjectSpecification::getLogicalType);
+                .map(ObjectSpecification::logicalType);
     }
 
     @Override
@@ -265,7 +265,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         var objectSpecs = specificationLoader
                 .snapshotSpecifications()
                 .stream()
-                .filter(spec->filter.test(spec.getBeanSort(), spec.getLogicalType()))
+                .filter(spec->filter.test(spec.getBeanSort(), spec.logicalType()))
                 .collect(Collectors.toList());
         return ObjectGraph
                 .create(new _ObjectGraphFactory(objectSpecs));

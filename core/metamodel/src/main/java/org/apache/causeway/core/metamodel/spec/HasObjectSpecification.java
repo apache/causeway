@@ -39,11 +39,11 @@ public interface HasObjectSpecification {
     }
 
     default LogicalType getLogicalType() {
-        return getSpecification().getLogicalType();
+        return getSpecification().logicalType();
     }
 
     default String getLogicalTypeName() {
-        return getSpecification().getLogicalTypeName();
+        return getSpecification().logicalTypeName();
     }
 
     /**

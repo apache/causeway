@@ -141,7 +141,7 @@ public class RichMutationForAction extends Element {
                 var objectSpecArg = (ObjectSpecification)argumentValue.get("logicalTypeName");
                 Optional<Bookmark> bookmarkIfAny;
                 if (objectSpecArg != null) {
-                    bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
+                    bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
                 } else {
                     Class<?> paramClass = objectSpec.getCorrespondingClass();
                     bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
@@ -154,7 +154,7 @@ public class RichMutationForAction extends Element {
                 var refValue = (String)argumentValue.get("ref");
                 if (refValue != null) {
                     String key = ObjectFeatureUtils.keyFor(refValue);
-                    BookmarkedPojo value = ((Environment) environment).getGraphQlContext().get(key);
+                    BookmarkedPojo value = environment.getGraphQlContext().get(key);
                     result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
                 } else {
                     throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");

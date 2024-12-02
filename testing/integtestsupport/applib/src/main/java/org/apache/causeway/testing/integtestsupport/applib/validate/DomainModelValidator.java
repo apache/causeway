@@ -171,8 +171,8 @@ public class DomainModelValidator {
             final @NonNull String messageSnippet) {
 
         var logicalType = specificationLoader.specForTypeElseFail(domainType)
-            .getLogicalType();
-        final Predicate<Identifier> filterByLogicalType = id->id.getLogicalType().equals(logicalType);
+            .logicalType();
+        final Predicate<Identifier> filterByLogicalType = id->id.logicalType().equals(logicalType);
 
         boolean matchFound = streamFailures(filterByLogicalType)
                 .anyMatch(failure->

@@ -205,7 +205,7 @@ implements CollectionCountProvider {
     private SingularColumn createSingularColumn(
             final OneToOneAssociation property) {
         var collectionModel = getModel();
-        final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
+        final String parentTypeName = property.getDeclaringType().logicalTypeName();
         final Optional<String> sortability = property.getElementType().isComparableOrOrdered()
                 ? Optional.of(property.getId())
                 : Optional.empty();
@@ -223,7 +223,7 @@ implements CollectionCountProvider {
     private PluralColumn createPluralColumn(
             final OneToManyAssociation collection) {
         var collectionModel = getModel();
-        final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
+        final String parentTypeName = collection.getDeclaringType().logicalTypeName();
 
         return new PluralColumn(
                 collectionModel.getElementType(),

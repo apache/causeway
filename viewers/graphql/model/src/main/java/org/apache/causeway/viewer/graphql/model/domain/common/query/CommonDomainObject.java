@@ -196,7 +196,7 @@ public class CommonDomainObject
 
     @Override
     public String toString() {
-        return objectSpecification.getLogicalTypeName();
+        return objectSpecification.logicalTypeName();
     }
 
 }

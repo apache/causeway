@@ -142,7 +142,7 @@ public final class ManagedObjects {
 
     public Optional<String> getDomainType(final ManagedObject managedObject) {
         return spec(managedObject)
-                .map(ObjectSpecification::getLogicalTypeName);
+                .map(ObjectSpecification::logicalTypeName);
     }
 
     // -- INSTANCE-OF CHECKS
@@ -233,7 +233,7 @@ public final class ManagedObjects {
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseGet(()->isSpecified(managedObject)
-                        ? managedObject.getSpecification().getLogicalTypeName() + separator + "?"
+                        ? managedObject.getSpecification().logicalTypeName() + separator + "?"
                         : "?" + separator + "?");
     }
 
@@ -298,7 +298,7 @@ public final class ManagedObjects {
         var bPojo = MmUnwrapUtils.single(b);
         return Objects.equals(aPojo, bPojo);
     }
-    
+
     // -- DEFAULTS UTILITIES
 
     public ManagedObject nullToEmpty(

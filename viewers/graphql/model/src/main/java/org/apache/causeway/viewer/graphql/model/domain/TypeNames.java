@@ -36,13 +36,13 @@ public final class TypeNames {
 
     public String objectTypeFieldNameFor(
             final ObjectSpecification objectSpecification) {
-        return sanitized(objectSpecification.getLogicalTypeName());
+        return sanitized(objectSpecification.logicalTypeName());
     }
 
     public String objectTypeNameFor(
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
-        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.getLogicalTypeName());
+        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.logicalTypeName());
     }
 
     public String metaTypeNameFor(
@@ -128,20 +128,20 @@ public final class TypeNames {
     }
 
     // -- HELPER
-    
+
     String sanitized(final String name) {
         var result = name.replace('.', '_').replace("#", "__").replace("()", "");
         result = hyphenedToCamelCase(result);
-        return result;    
+        return result;
     }
 
     /**
      * Converts e.g. {@code a-b} to {@code aB}.
-     * Which allows namespaces that contain a hyphen like 
+     * Which allows namespaces that contain a hyphen like
      * {@code university.calc.calculator-hyphenated} to be referenced from QraphQL via
-     * {@code university.calc.calculatorHyphenated} say. 
+     * {@code university.calc.calculatorHyphenated} say.
      */
-    private String hyphenedToCamelCase(String string) {
+    private String hyphenedToCamelCase(final String string) {
       final int hyphenStart = string.indexOf("-");
       return hyphenStart > 0
         ? string.substring(0,hyphenStart) + Arrays.stream(string.substring(hyphenStart + 1).split("-"))

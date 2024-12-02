@@ -573,7 +573,7 @@ implements
                     // This must be guaranteed by MM validation.
                     // - see also LogicalTypeResolver.register(...)
 
-                    specsByLogicalTypeName.putElement(objSpec.getLogicalTypeName(), objSpec);
+                    specsByLogicalTypeName.putElement(objSpec.logicalTypeName(), objSpec);
 
                     // also adding aliases to the multi-map
                     objSpec.getAliases()
@@ -596,7 +596,7 @@ implements
                                     ValidationFailure.raiseFormatted(spec,
                                         ProgrammingModelConstants.MessageTemplate.PROXIED_SERVICE_BEAN_NOT_ALLOWED_TO_CONTRIBUTE
                                             .builder()
-                                            .addVariable("logicalTypeName", spec.getLogicalTypeName())
+                                            .addVariable("logicalTypeName", spec.logicalTypeName())
                                             .addVariable("csv", asCsv(proxies.toList()))
                                             .buildMessage());
                                 });
@@ -609,7 +609,7 @@ implements
                                     ValidationFailure.raiseFormatted(spec,
                                         ProgrammingModelConstants.MessageTemplate.NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS
                                             .builder()
-                                            .addVariable("logicalTypeName", spec.getLogicalTypeName())
+                                            .addVariable("logicalTypeName", spec.logicalTypeName())
                                             .addVariable("csv", asCsv(collidingSpecs))
                                             .buildMessage());
                                 });
@@ -635,7 +635,7 @@ implements
                     if (getConfiguration().getCore().getMetaModel().getValidator().isAllowLogicalTypeNameAsAlias()) {
                         return objectSpecification.getAliases()
                                 .map(LogicalType::logicalName).stream()
-                                .noneMatch(name -> objectSpecification.getLogicalTypeName().equals(name));
+                                .noneMatch(name -> objectSpecification.logicalTypeName().equals(name));
                     }
                     return true;
                 }

@@ -45,7 +45,7 @@ record ObjectLoaderFactory() {
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
                 var spec = objectLoadRequest.getObjectSpecification();
-                var logicalType = spec.getLogicalType();
+                var logicalType = spec.logicalType();
                 var servicePojo = spec.getServiceRegistry()
                     .lookupRegisteredBeanById(logicalType)
                     .flatMap(_SingletonBeanProvider::lookupInstance)

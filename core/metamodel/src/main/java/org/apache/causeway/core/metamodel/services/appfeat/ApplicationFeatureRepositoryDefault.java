@@ -162,7 +162,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
             return;
         }
 
-        var logicalType = spec.getLogicalType();
+        var logicalType = spec.logicalType();
         var logicalTypeName = logicalType.logicalName();
         var typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 

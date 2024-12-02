@@ -121,7 +121,7 @@ extends MetaModelValidatorAbstract {
 
                     } catch (Exception e) {
 
-                        var deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
+                        var deficiencyOrigin = Identifier.classIdentifier(objSpec.logicalType());
                         var facetHolder = objSpec;
 
                         ValidationFailure.raise(
@@ -157,7 +157,7 @@ extends MetaModelValidatorAbstract {
             } catch (Exception e) {
 
                 var spec = specificationLoader.specForTypeElseFail(MessageRegistry.class);
-                var deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
+                var deficiencyOrigin = Identifier.classIdentifier(spec.logicalType());
 
                 ValidationFailure.raise(
                         spec.getSpecificationLoader(),

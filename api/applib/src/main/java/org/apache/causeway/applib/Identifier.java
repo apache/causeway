@@ -32,7 +32,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -45,14 +44,20 @@ import lombok.NonNull;
  * @since 1.x revised for 2.0 {@index}
  * @see LogicalType
  */
-public class Identifier
+public record Identifier(
+        LogicalType logicalType,
+        String memberLogicalName,
+        Can<String> memberParameterClassNames,
+        Type type,
+        /**
+         * Optional. Used for <i>Action Parameters</i>, otherwise {@code -1}.
+         */
+        int parameterIndex)
 implements
     Comparable<Identifier>,
     HasLogicalType,
     HasTranslationContext,
     Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * What type of feature this identifies.
@@ -128,38 +133,33 @@ implements
         return new Identifier(typeIdentifier, actionName, parameterClassNames, Type.ACTION);
     }
 
-    // -- INSTANCE FIELDS
-
-    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
-
-    @Getter private final String className;
-
-    @Getter private final String memberLogicalName;
-
-    /**
-     * Optional. Used for <i>Action Parameters</i>, otherwise {@code -1}.
-     */
-    @Getter private final int parameterIndex;
-
-    @Getter private final Can<String> memberParameterClassNames;
-
-    @Getter private final Type type;
+    // --
 
     /**
      * Fully qualified Identity String. (class-name + member-logical-name + param-class-names)
      */
-    @Getter private final String fullIdentityString;
+    public String getFullIdentityString() {
+        return _Strings.isEmpty(memberLogicalName)
+            ? className()
+            : className() + "#" + getMemberNameAndParameterClassNamesIdentityString();
+    }
 
     /**
      * Member Identity String (class omitted), including parameters if any.
      */
-    @Getter private final String memberNameAndParameterClassNamesIdentityString;
+    public String getMemberNameAndParameterClassNamesIdentityString() { return memberLogicalName + (type.isAction()
+            ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")"
+            : ""); }
 
     /**
      * Context to be used for i18n translation.
      * @see TranslationService
      */
-    @Getter(onMethod_ = {@Override}) private final TranslationContext translationContext;
+    @Override
+    public TranslationContext getTranslationContext() {
+        return TranslationContext.named(
+            className() + "#" + memberLogicalName + (type.isAction() ? "()" : ""));
+    }
 
     // -- CONSTRUCTION
 
@@ -169,33 +169,6 @@ implements
             final Can<String> memberParameterClassNames,
             final Type type) {
         this(logicalType, memberLogicalName, memberParameterClassNames, type, -1);
-    }
-
-    private Identifier(
-            final LogicalType logicalType,
-            final String memberLogicalName,
-            final Can<String> memberParameterClassNames,
-            final Type type,
-            final int parameterIndex) {
-
-        this.logicalType = logicalType;
-        this.className = logicalType.getClassName();
-        this.memberLogicalName = memberLogicalName;
-        this.memberParameterClassNames = memberParameterClassNames;
-        this.type = type;
-        this.parameterIndex = parameterIndex;
-
-        this.memberNameAndParameterClassNamesIdentityString =
-                memberLogicalName + (type.isAction()
-                        ? "(" + memberParameterClassNames.stream().collect(Collectors.joining(",")) + ")"
-                        : "");
-
-        this.translationContext = TranslationContext.named(
-                className + "#" + memberLogicalName + (type.isAction() ? "()" : ""));
-
-        this.fullIdentityString = _Strings.isEmpty(memberLogicalName)
-                ? className
-                : className + "#" + memberNameAndParameterClassNamesIdentityString;
     }
 
     // -- WITHERS
@@ -208,15 +181,15 @@ implements
     // -- LOGICAL ID
 
     public String getLogicalIdentityString(final @NonNull String delimiter) {
-        return getLogicalTypeName()
+        return logicalTypeName()
                 + delimiter
-                + memberNameAndParameterClassNamesIdentityString;
+                + getMemberNameAndParameterClassNamesIdentityString();
     }
 
     // -- NATURAL NAMES
 
     public String getClassNaturalName() {
-        var className = getClassName();
+        var className = className();
         var isolatedName = className.substring(className.lastIndexOf('.') + 1);
         return naturalName(isolatedName);
     }
@@ -248,7 +221,7 @@ implements
     }
 
     public boolean isEqualTo(final Identifier other) {
-        return Objects.equals(this.className, other.className)
+        return Objects.equals(this.className(), other.className())
                 && Objects.equals(this.memberLogicalName, other.memberLogicalName)
                 && this.memberParameterClassNames.equals(other.memberParameterClassNames)
                 && this.parameterIndex == other.parameterIndex;
@@ -256,14 +229,14 @@ implements
 
     @Override
     public int hashCode() {
-        return fullIdentityString.hashCode();
+        return getFullIdentityString().hashCode();
     }
 
     @Override
     public String toString() {
         return parameterIndex>=0
-                ? String.format("%s[%d]", fullIdentityString, parameterIndex)
-                : fullIdentityString;
+                ? String.format("%s[%d]", getFullIdentityString(), parameterIndex)
+                : getFullIdentityString();
     }
 
     // -- HELPER
@@ -325,5 +298,12 @@ implements
     private static Can<String> naturalNames(final Can<String> names) {
         return names.map(Identifier::naturalName);
     }
+
+    // -- DEPRECATIONS
+
+    @Deprecated public String getMemberLogicalName() { return memberLogicalName; }
+    @Deprecated public int getParameterIndex() { return parameterIndex; }
+    @Deprecated public Can<String> getMemberParameterClassNames() { return memberParameterClassNames; }
+    @Deprecated public Type getType() { return type; }
 
 }

@@ -107,12 +107,12 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getLogicalTypeName() {
-        return spec.getLogicalTypeName();
+        return spec.logicalTypeName();
     }
 
     @Override
     public String getNamespace() {
-        return spec.getLogicalType().getNamespace();
+        return spec.logicalType().getNamespace();
     }
 
     @XmlElement @Override
@@ -296,6 +296,7 @@ public class DomainMemberDefault implements DomainMember {
                     .thenUse("memberName", DomainMember::getMemberName)
             ;
 
+    @Override
     public String toString() {
         return contract.toString(this);
     }

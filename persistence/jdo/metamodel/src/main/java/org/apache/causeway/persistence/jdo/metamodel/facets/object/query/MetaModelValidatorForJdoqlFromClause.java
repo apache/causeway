@@ -58,7 +58,7 @@ extends MetaModelValidatorForJdoqlAbstract {
         if(!fromSpecResult.getValue().isPresent()) {
             ValidationFailure.raise(
                     objectSpec.getSpecificationLoader(),
-                    Identifier.classIdentifier(objectSpec.getLogicalType()),
+                    Identifier.classIdentifier(objectSpec.logicalType()),
                     String.format(
                             "%s: error in JDOQL query, "
                             + "logical type name after '%s' clause could not be loaded (JDOQL : %s)",
@@ -77,7 +77,7 @@ extends MetaModelValidatorForJdoqlAbstract {
 
         ValidationFailure.raise(
                 objectSpec.getSpecificationLoader(),
-                Identifier.classIdentifier(objectSpec.getLogicalType()),
+                Identifier.classIdentifier(objectSpec.logicalType()),
                 String.format(
                         "%s: error in JDOQL query, type name after '%s' "
                         + "clause should be same as class name on which annotated, "

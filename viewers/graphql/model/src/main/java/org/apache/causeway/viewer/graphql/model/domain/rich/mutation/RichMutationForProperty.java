@@ -95,7 +95,7 @@ public class RichMutationForProperty extends Element {
             var objectSpecArg = (ObjectSpecification) argumentValue1.get("logicalTypeName");
             Optional<Bookmark> bookmarkIfAny;
             if (objectSpecArg != null) {
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
+                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
                 Class<?> paramClass = objectSpec.getCorrespondingClass();
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
