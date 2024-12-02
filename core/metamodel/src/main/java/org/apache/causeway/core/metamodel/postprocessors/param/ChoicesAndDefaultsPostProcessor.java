@@ -21,10 +21,12 @@ package org.apache.causeway.core.metamodel.postprocessors.param;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.MetaModelVisitor;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -53,7 +55,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
  * {@link ActionParameterDefaultsFacet} and {@link ActionParameterChoicesFacet},
  * as well as
  * {@link PropertyDefaultFacet} and {@link PropertyChoicesFacet}.
- *
  */
 public class ChoicesAndDefaultsPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -118,6 +119,7 @@ extends MetaModelPostProcessorAbstract {
 
         if(MetaModelVisitor.SKIP_ABSTRACT.test(objectSpecification)) {
             checkParamHasChoicesOrAutoCompleteWhenRequired(param);
+            checkActionParameterHasSupporedCollectionTypeWhenPlural(objectSpecification, objectAction, param);
         }
 
     }
@@ -246,6 +248,44 @@ extends MetaModelPostProcessorAbstract {
                             .buildMessage());
             }
         }
+    }
+
+    private static void checkActionParameterHasSupporedCollectionTypeWhenPlural(
+            final ObjectSpecification objectSpec,
+            final ObjectAction objectAction,
+            final ObjectActionParameter param) {
+
+        if(param.isSingular()) return;
+
+        param.lookupFacet(TypeOfFacet.class)
+        .ifPresentOrElse(typeOfFacet->{
+
+            // Violation if there are action parameter types that are assignable
+            // from java.util.Collection but are not of
+            // exact type List, Set, SortedSet or Collection.
+            if(!typeOfFacet.value().isSupportedForActionParameter()) {
+
+                ValidationFailure.raiseFormatted(param,
+                        ProgrammingModelConstants.MessageTemplate.PARAMETER_HAS_UNSUPPORTED_COLLECTION_TYPE.builder()
+                            .addVariable("type", objectSpec.getFullIdentifier())
+                            .addVariable("action", objectAction.getId())
+                            .addVariable("paramIndex", param.getParameterIndex())
+                            .buildMessage());
+            }
+
+        },()->{
+
+            var messageFormat = "framework bug: plural action parameter found,"
+                    + " that has no TypeOfFacet"
+                    + "Class: %s action: %s parameter %d";
+
+            throw _Exceptions.unrecoverable(
+                            messageFormat,
+                            objectSpec.getFullIdentifier(),
+                            objectAction.getId(),
+                            param.getParameterIndex());
+
+        });
     }
 
 }

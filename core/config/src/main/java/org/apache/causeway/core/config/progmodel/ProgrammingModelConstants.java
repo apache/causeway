@@ -509,6 +509,10 @@ public final class ProgrammingModelConstants {
                 + "yet ${type} has action ${memberId}, which did return such an object of type ${returnTypeSpec}."),
         PARAMETER_HAS_NO_CHOICES_NOR_AUTOCOMPLETE("${paramId} has no choices nor autoComplete, "
                 + "yet represents a domain-object or is a plural."),
+        PARAMETER_HAS_UNSUPPORTED_COLLECTION_TYPE("Collection action parameter found that is not exactly one "
+                + "of the following supported types: "
+                + "List, Set, SortedSet, Collection, Can or Array.  "
+                + "Class: ${type} action: ${action} parameter ${paramIndex}"),
         PARAMETER_TUPLE_INVALID_USE_OF_ANNOTATION("${type}#${member}: "
                 + "Can use @ParameterTuple only on parameter of a single arg action."),
         PARAMETER_TUPLE_TYPE_WITH_AMBIGUOUS_CONSTRUCTORS("${type}#${member}: "
@@ -554,7 +558,7 @@ public final class ProgrammingModelConstants {
              * Populates 'type' and 'member' keys (for template variable resolution).
              */
             public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
-                addVariable("type", featureIdentifier.logicalType().getClassName());
+                addVariable("type", featureIdentifier.logicalType().className());
                 addVariable("member", featureIdentifier.memberLogicalName());
                 return this;
             }

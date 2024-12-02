@@ -15,11 +15,11 @@
  * specific language governing permissions and limitations
  * under the License. */
 package org.apache.causeway.core.metamodel.spec.impl;
+
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionAnnotationShouldEnforceConcreteTypeToBeIncludedWithMetamodelValidator;
-import org.apache.causeway.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.action.ActionOverloadingValidator;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.derived.ContributingFacetFromMixinFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
@@ -233,8 +233,6 @@ extends ProgrammingModelAbstract {
 
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(FacetProcessingOrder.Z1_FINALLY, new DisabledFacetOnPropertyInferredFactory(mmc));
-
-        addFactory(FacetProcessingOrder.Z1_FINALLY, new ActionChoicesForCollectionParameterFacetFactory(mmc));
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ViewModelSemanticCheckingFacetFactory(mmc));
     }
