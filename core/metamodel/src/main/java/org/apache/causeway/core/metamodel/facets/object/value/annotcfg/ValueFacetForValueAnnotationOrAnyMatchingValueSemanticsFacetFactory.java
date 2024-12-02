@@ -45,7 +45,6 @@ import org.apache.causeway.core.metamodel.facets.object.value.TypicalLengthFacet
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
@@ -123,7 +122,6 @@ extends FacetFactoryAbstract {
         return Optional.of(valueFacet);
     }
 
-    // JUnit support
     public static <T> ValueFacet<T> installValueFacet(
             final Class<T> valueClass,
             final Can<ValueSemanticsProvider<T>> valueSemanticsProviders,
@@ -139,8 +137,6 @@ extends FacetFactoryAbstract {
         FacetUtil.addFacetIfPresent(TypicalLengthFacetFromValueFacet.create(valueFacet, valueSpec));
         FacetUtil.addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec));
         FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
-
-        ((ObjectSpecificationDefault)valueSpec).invalidateCachedFacets(); // optimization stuff
 
         _Assert.assertTrue(valueSpec.valueFacet().isPresent());
         _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());

@@ -118,7 +118,7 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class ObjectSpecificationDefault
+final class ObjectSpecificationDefault
 implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLoaderInternal {
 
     // -- CONSTRUCTION
@@ -697,13 +697,13 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         }
     }
 
-    public void invalidateCachedFacets() {
-        valueFacet = getFacet(ValueFacet.class);
-        titleFacet = lookupNonFallbackFacet(TitleFacet.class).orElse(null);
-        iconFacet = getFacet(IconFacet.class);
-        navigableParentFacet = getFacet(NavigableParentFacet.class);
-        cssClassFacet = getFacet(CssClassFacet.class);
-        aliasedFacet = getFacet(AliasedFacet.class);
+    void invalidateCachedFacets() {
+        this.valueFacet = getFacet(ValueFacet.class);
+        this.titleFacet = lookupNonFallbackFacet(TitleFacet.class).orElse(null);
+        this.iconFacet = getFacet(IconFacet.class);
+        this.navigableParentFacet = getFacet(NavigableParentFacet.class);
+        this.cssClassFacet = getFacet(CssClassFacet.class);
+        this.aliasedFacet = getFacet(AliasedFacet.class);
     }
 
     protected void postProcess() {
@@ -713,6 +713,10 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public final Optional<ValueFacet> valueFacet() {
+        if(valueFacet == null
+                && getBeanSort().isValue()) {
+            invalidateCachedFacets();
+        }
         return Optional.ofNullable(valueFacet);
     }
 

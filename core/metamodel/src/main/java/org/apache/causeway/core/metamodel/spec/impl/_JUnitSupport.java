@@ -35,7 +35,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class _JUnitSupport {
-    
+
     public SpecificationLoader specLoader(
             final CausewayConfiguration causewayConfiguration,
             final CausewaySystemEnvironment causewaySystemEnvironment,
@@ -46,8 +46,8 @@ public class _JUnitSupport {
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         return SpecificationLoaderDefault
-                .instanceForTesting(causewayConfiguration, causewaySystemEnvironment, serviceRegistry, 
-                        programmingModel, causewayBeanTypeClassifier, causewayBeanTypeRegistry, 
+                .instanceForTesting(causewayConfiguration, causewaySystemEnvironment, serviceRegistry,
+                        programmingModel, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
                         classSubstitutorRegistry);
     }
 
@@ -59,7 +59,7 @@ public class _JUnitSupport {
         final ObjectActionDefault mixinAction = (ObjectActionDefault) actionForMixinMain(facetedMethod);
         return new OneToOneAssociationMixedIn(mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
     }
-    
+
     public OneToManyAssociation mixedInColl(
             final ObjectSpecification mixeeSpec,
             final ObjectSpecification mixinSpec,
@@ -68,7 +68,7 @@ public class _JUnitSupport {
         final ObjectActionDefault mixinAction = (ObjectActionDefault) actionForMixinMain(facetedMethod);
         return new OneToManyAssociationMixedIn(mixeeSpec, mixinAction, mixinSpec, mixinMethodName);
     }
-    
+
     public ObjectAction actionForMethod(
             final FacetedMethod facetedMethod) {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false, true);
@@ -76,7 +76,7 @@ public class _JUnitSupport {
     public ObjectAction actionForMixinMain(final FacetedMethod facetedMethod) {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true, true);
     }
-    public static ObjectActionMixedIn mixedInActionforMixinMain(
+    public ObjectActionMixedIn mixedInActionforMixinMain(
             final ObjectSpecification mixeeSpec,
             final ObjectSpecification mixinSpec,
             final String mixinMethodName,
@@ -84,5 +84,5 @@ public class _JUnitSupport {
         final ObjectActionDefault mixinAction = (ObjectActionDefault) actionForMixinMain(facetedMethod);
         return new ObjectActionMixedIn(mixinSpec, mixinMethodName, mixinAction, mixeeSpec);
     }
-   
+
 }

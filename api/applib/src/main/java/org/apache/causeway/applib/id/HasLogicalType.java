@@ -42,7 +42,7 @@ public interface HasLogicalType {
      * @deprecated use #logicalType()
      */
     @Deprecated
-    default LogicalType getlogicalType() { return logicalType(); }
+    default LogicalType getLogicalType() { return logicalType(); }
 
     /**
      * @deprecated use #logicalName()
