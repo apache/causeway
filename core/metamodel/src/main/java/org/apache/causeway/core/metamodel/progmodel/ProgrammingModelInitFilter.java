@@ -74,11 +74,8 @@ public interface ProgrammingModelInitFilter {
 
         return markersOnFactory -> {
             if(isEmpty(markersOnFactory)) return true; // accept
-
             for(var markerOnFactory : markersOnFactory) {
-                if(excludingMarkers.contains(markerOnFactory)) {
-                    return true; // don't accept //TODO[causeway-core-metamodel-CAUSEWAY-3834] What?
-                }
+                if(excludingMarkers.contains(markerOnFactory)) return false; // don't accept
             }
             return true; // accept
         };
