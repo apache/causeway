@@ -22,15 +22,15 @@ import org.apache.causeway.commons.internal.delegate._Delegate;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 class CompositeValueUpdaterForProperty
 extends CompositeValueUpdater {
 
     public static ObjectAction createProxy(
             final ManagedProperty managedProperty,
-            final ObjectActionMixedIn mixedInAction) {
+            final MixedInAction mixedInAction) {
         return _Delegate.createProxy(ObjectAction.class,
                 new CompositeValueUpdaterForProperty(managedProperty, mixedInAction));
     }
@@ -39,7 +39,7 @@ extends CompositeValueUpdater {
 
     protected CompositeValueUpdaterForProperty(
             final ManagedProperty managedProperty,
-            final ObjectActionMixedIn mixedInAction) {
+            final MixedInAction mixedInAction) {
         super(mixedInAction);
         this.managedProperty = managedProperty;
     }

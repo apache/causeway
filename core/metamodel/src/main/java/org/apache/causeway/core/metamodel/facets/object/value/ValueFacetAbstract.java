@@ -49,12 +49,12 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -289,23 +289,21 @@ implements ValueFacet<T> {
     public Optional<ObjectAction> selectCompositeValueMixinForParameter(
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex) {
-        if(!isCompositeValueType()) {
-            return Optional.empty();
-        }
+        if(!isCompositeValueType()) return Optional.empty();
+
         //feed the action's invocation result back into the parameter negotiation model of the parent edit dialog
         return resolveCompositeValueMixinForFeature(parameterNegotiationModel.getParamMetamodel(paramIndex))
                 .map(m->CompositeValueUpdaterForParameter
-                        .createProxy(parameterNegotiationModel, paramIndex, (ObjectActionMixedIn) m));
+                        .createProxy(parameterNegotiationModel, paramIndex, (MixedInAction)m));
     }
 
     @Override
     public Optional<ObjectAction> selectCompositeValueMixinForProperty(final ManagedProperty managedProperty) {
-        if(!isCompositeValueType()) {
-            return Optional.empty();
-        }
+        if(!isCompositeValueType()) return Optional.empty();
+
         //feed the action's invocation result back into the attributeModel's proposed value, then submit
         return resolveCompositeValueMixinForFeature(managedProperty.getProperty())
-                .map(m->CompositeValueUpdaterForProperty.createProxy(managedProperty, (ObjectActionMixedIn) m));
+                .map(m->CompositeValueUpdaterForProperty.createProxy(managedProperty, (MixedInAction)m));
     }
 
     // -- UTILITY

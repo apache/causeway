@@ -50,6 +50,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.object.entity;
     exports org.apache.causeway.core.metamodel.facets.object.grid;
     exports org.apache.causeway.core.metamodel.facets.object.icon;
+    exports org.apache.causeway.core.metamodel.facets.object.immutable;
     exports org.apache.causeway.core.metamodel.facets.object.mixin;
     exports org.apache.causeway.core.metamodel.facets.object.objectvalidprops;
     exports org.apache.causeway.core.metamodel.facets.object.publish.entitychange;

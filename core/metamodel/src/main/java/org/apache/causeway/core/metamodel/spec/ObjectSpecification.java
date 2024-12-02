@@ -73,8 +73,8 @@ import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -173,15 +173,12 @@ extends
     /**
      * @since 2.0
      */
-    @SuppressWarnings("unchecked")
-    default <T extends ObjectAction & MixedInMember> Optional<T> lookupMixedInAction(final ObjectSpecification mixinSpec) {
-        return
-                streamAnyActions(MixedIn.INCLUDED)
-                .filter(MixedInMember.class::isInstance)
-                .map(MixedInMember.class::cast)
-                .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
-                .map(member->(T)member)
-                .findAny();
+    default Optional<MixedInAction> lookupMixedInAction(final ObjectSpecification mixinSpec) {
+        return streamAnyActions(MixedIn.INCLUDED)
+            .filter(MixedInAction.class::isInstance)
+            .map(MixedInAction.class::cast)
+            .filter(member->member.getMixinType().getFeatureIdentifier().equals(mixinSpec.getFeatureIdentifier()))
+            .findAny();
     }
 
     /**

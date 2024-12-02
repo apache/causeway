@@ -23,11 +23,12 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectActionMixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 abstract class CompositeValueUpdater {
 
-    private final ObjectActionMixedIn mixedInAction;
+    private final MixedInAction mixedInAction;
 
     public abstract ObjectSpecification getReturnType();
     protected abstract ManagedObject map(final ManagedObject valueType);
@@ -59,12 +60,15 @@ abstract class CompositeValueUpdater {
 
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
+
+        var methodFacade = mixedInAction instanceof HasFacetedMethod facetedMethodHolder
+            ? facetedMethodHolder.getFacetedMethod().getMethod()
+            : null;
+        if(methodFacade==null) return ManagedObject.empty(mixedInAction.getReturnType()); // unsupported MixedInAction
+
+        var method = methodFacade.asMethodForIntrospection();
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
         final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
-
-        var methodFacade = mixedInAction.getFacetedMethod().getMethod();
-        var method = methodFacade.asMethodForIntrospection();
-
         var resultPojo = CanonicalInvoker
                 .invokeWithConvertedArgs(method.method(), targetPojo,
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
