@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.commons.internal.codec;
 
-import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -103,8 +103,8 @@ public class _DocumentFactories {
         var dbf = _DocumentFactories.documentBuilderFactory();
         dbf.setNamespaceAware(true);
         var documentBuilder = dbf.newDocumentBuilder();
-        try(var bis = new ByteArrayInputStream(xml.getBytes("utf-8"))) {
-            var doc = documentBuilder.parse(new InputSource(bis));
+        try(var reader = new StringReader(xml)) {
+            var doc = documentBuilder.parse(new InputSource(reader));
             return doc;
         }
     }
