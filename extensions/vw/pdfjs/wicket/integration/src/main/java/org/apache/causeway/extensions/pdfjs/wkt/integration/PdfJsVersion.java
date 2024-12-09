@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public enum PdfJsVersion {
     V2_X("v2x3x", "pdfjs-dist/2.16.105", JavaScriptReferenceType.TEXT_JAVASCRIPT),
     V3_X("v2x3x", "pdfjs-dist/3.11.174", JavaScriptReferenceType.TEXT_JAVASCRIPT),
-    V4_X("v4", "pdfjs-dist/4.6.82", JavaScriptReferenceType.MODULE)
+    V4_X("v4", "pdfjs-dist/4.9.155", JavaScriptReferenceType.MODULE)
     ;
     @Getter private final String integrationScriptSuffix;
     @Getter private final String webjarPath;
