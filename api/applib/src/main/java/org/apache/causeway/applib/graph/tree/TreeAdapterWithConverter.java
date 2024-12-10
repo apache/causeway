@@ -26,14 +26,10 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.IndexedFunction;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-public abstract class TreeAdapterWithConverter<U, T>
+public record TreeAdapterWithConverter<U, T>(
+        TreeAdapter<U> underlyingAdapter,
+        TreeConverter<U, T> converter)
 implements TreeAdapter<T>{
-
-    protected abstract TreeAdapter<U> underlyingAdapter();
-    protected abstract TreeConverter<U, T> converter();
 
     @Override
     public final int childCountOf(final @Nullable T t) {
