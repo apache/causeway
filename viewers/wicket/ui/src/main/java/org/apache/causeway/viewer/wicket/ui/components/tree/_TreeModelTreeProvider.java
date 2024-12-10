@@ -25,21 +25,22 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
  * Wicket's {@link ITreeProvider} implemented for Causeway
  */
-class _TreeModelTreeProvider implements ITreeProvider<_TreeNodeMemento> {
+class _TreeModelTreeProvider implements ITreeProvider<TreeNodeMemento> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * tree's root
      */
-    private final _TreeNodeMemento primaryValue;
+    private final TreeNodeMemento primaryValue;
     private final _TreeModelTreeAdapter treeAdapter;
 
-    _TreeModelTreeProvider(final _TreeNodeMemento primaryValue, final _TreeModelTreeAdapter treeAdapter) {
+    _TreeModelTreeProvider(final TreeNodeMemento primaryValue, final _TreeModelTreeAdapter treeAdapter) {
         this.primaryValue = primaryValue;
         this.treeAdapter = treeAdapter;
     }
@@ -49,22 +50,22 @@ class _TreeModelTreeProvider implements ITreeProvider<_TreeNodeMemento> {
     }
 
     @Override
-    public Iterator<? extends _TreeNodeMemento> getRoots() {
+    public Iterator<TreeNodeMemento> getRoots() {
         return _Lists.singleton(primaryValue).iterator();
     }
 
     @Override
-    public boolean hasChildren(final _TreeNodeMemento node) {
+    public boolean hasChildren(final TreeNodeMemento node) {
         return treeAdapter.childCountOf(node)>0;
     }
 
     @Override
-    public Iterator<? extends _TreeNodeMemento> getChildren(final _TreeNodeMemento node) {
+    public Iterator<? extends TreeNodeMemento> getChildren(final TreeNodeMemento node) {
         return treeAdapter.childrenOf(node).iterator();
     }
 
     @Override
-    public IModel<_TreeNodeMemento> model(final _TreeNodeMemento treeModel) {
+    public IModel<TreeNodeMemento> model(final TreeNodeMemento treeModel) {
         return Model.of(treeModel);
     }
 

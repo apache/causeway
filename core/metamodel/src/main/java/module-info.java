@@ -83,6 +83,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.interactions.managed;
     exports org.apache.causeway.core.metamodel.tabular;
     exports org.apache.causeway.core.metamodel.tabular.simple;
+    exports org.apache.causeway.core.metamodel.tree;
 
     exports org.apache.causeway.core.metamodel.methods;
 

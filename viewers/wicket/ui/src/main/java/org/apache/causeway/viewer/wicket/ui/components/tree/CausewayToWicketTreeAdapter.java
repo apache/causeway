@@ -35,7 +35,9 @@ import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -73,7 +75,7 @@ class CausewayToWicketTreeAdapter {
     /**
      * Wicket's Tree Component implemented for Causeway
      */
-    private static class DomainObjectTree extends NestedTree<_TreeNodeMemento>
+    private static class DomainObjectTree extends NestedTree<TreeNodeMemento>
     implements HasMetaModelContext {
 
         private static final long serialVersionUID = 1L;
@@ -99,7 +101,7 @@ class CausewayToWicketTreeAdapter {
 
         private DomainObjectTree(
                 final String id,
-                final ITreeProvider<_TreeNodeMemento> provider,
+                final ITreeProvider<TreeNodeMemento> provider,
                 final _TreeExpansionModel collapseExpandState) {
             super(id, provider, collapseExpandState);
         }
@@ -108,11 +110,11 @@ class CausewayToWicketTreeAdapter {
          * To use a custom component for the representation of a node's content we override this method.
          */
         @Override
-        protected Component newContentComponent(final String id, final IModel<_TreeNodeMemento> node) {
-            final _TreeNodeMemento treeModel = node.getObject();
+        protected Component newContentComponent(final String id, final IModel<TreeNodeMemento> node) {
+            final TreeNodeMemento treeModel = node.getObject();
             final Component entityIconAndTitle = ObjectIconAndTitlePanelFactory.entityIconAndTitlePanel(
-                    id, treeModel.asObjectAdapterModel());
-            if(treeExpansionModel().isSelected(treeModel.getTreePath())) {
+                    id, UiObjectWkt.ofBookmark(treeModel.bookmark()));
+            if(treeExpansionModel().isSelected(treeModel.treePath())) {
                 Wkt.cssAppend(entityIconAndTitle, "tree-node-selected");
             }
             return entityIconAndTitle;
@@ -122,20 +124,20 @@ class CausewayToWicketTreeAdapter {
          * To hardcode Node's <pre>AjaxFallbackLink.isEnabledInHierarchy()->true</pre> we override this method.
          */
         @Override
-        public Component newNodeComponent(final String id, final IModel<_TreeNodeMemento> model) {
+        public Component newNodeComponent(final String id, final IModel<TreeNodeMemento> model) {
 
-            final Node<_TreeNodeMemento> node =  new Node<_TreeNodeMemento>(id, this, model) {
+            final Node<TreeNodeMemento> node =  new Node<TreeNodeMemento>(id, this, model) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected Component createContent(final String id, final IModel<_TreeNodeMemento> model) {
+                protected Component createContent(final String id, final IModel<TreeNodeMemento> model) {
                     return DomainObjectTree.this.newContentComponent(id, model);
                 }
 
                 @Override
                 protected MarkupContainer createJunctionComponent(final String id) {
 
-                    final Node<_TreeNodeMemento> node = this;
+                    final Node<TreeNodeMemento> node = this;
                     final Runnable toggleExpandCollapse = (Runnable & Serializable) this::toggle;
 
                     return new AjaxFallbackLink<Void>(id) {
@@ -170,8 +172,8 @@ class CausewayToWicketTreeAdapter {
          * we override this method.
          */
         @Override
-        public State getState(final _TreeNodeMemento t) {
-            return treeExpansionModel().contains(t.getTreePath()) ? State.EXPANDED : State.COLLAPSED;
+        public State getState(final TreeNodeMemento t) {
+            return treeExpansionModel().contains(t.treePath()) ? State.EXPANDED : State.COLLAPSED;
         }
 
         /**
@@ -179,7 +181,7 @@ class CausewayToWicketTreeAdapter {
          * we override this method.
          */
         @Override
-        public void expand(final _TreeNodeMemento t) {
+        public void expand(final TreeNodeMemento t) {
             treeExpansionModel().onExpand(t);
             super.expand(t);
         }
@@ -189,7 +191,7 @@ class CausewayToWicketTreeAdapter {
          * we override this method.
          */
         @Override
-        public void collapse(final _TreeNodeMemento t) {
+        public void collapse(final TreeNodeMemento t) {
             treeExpansionModel().onCollapse(t);
             super.collapse(t);
         }

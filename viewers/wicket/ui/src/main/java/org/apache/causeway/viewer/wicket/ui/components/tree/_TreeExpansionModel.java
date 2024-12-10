@@ -25,11 +25,12 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.graph.tree.TreeState;
+import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
  * Wicket's model for collapse/expand state
  */
-class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
+class _TreeExpansionModel implements IModel<Set<TreeNodeMemento>> {
     private static final long serialVersionUID = 648152234030889164L;
 
     public static _TreeExpansionModel of(
@@ -38,12 +39,12 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
     }
 
     private final TreeState treeState;
-    private final Set<_TreeNodeMemento> expandedNodes;
+    private final Set<TreeNodeMemento> expandedNodes;
     private _TreeExpansionModel(
             final TreeState treeState) {
         this.treeState = treeState;
         this.expandedNodes = treeState.getExpandedNodePaths().stream()
-                .map(tPath->new _TreeNodeMemento(tPath))
+                .map(TreeNodeMemento::new)
                 .collect(Collectors.toSet());
     }
 
@@ -51,16 +52,16 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
      * Happens on user interaction via UI.
      * @param t
      */
-    public void onExpand(final _TreeNodeMemento t) {
-        treeState.getExpandedNodePaths().add(t.getTreePath());
+    public void onExpand(final TreeNodeMemento t) {
+        treeState.getExpandedNodePaths().add(t.treePath());
     }
 
     /**
      * Happens on user interaction via UI.
      * @param t
      */
-    public void onCollapse(final _TreeNodeMemento t) {
-        treeState.getExpandedNodePaths().remove(t.getTreePath());
+    public void onCollapse(final TreeNodeMemento t) {
+        treeState.getExpandedNodePaths().remove(t.treePath());
     }
 
     public boolean contains(final TreePath treePath) {
@@ -72,7 +73,7 @@ class _TreeExpansionModel implements IModel<Set<_TreeNodeMemento>> {
     }
 
     @Override
-    public Set<_TreeNodeMemento> getObject() {
+    public Set<TreeNodeMemento> getObject() {
         return expandedNodes;
     }
 

@@ -30,6 +30,7 @@ import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
  *  {@link TreeAdapter} for _TreeModel nodes.
@@ -37,8 +38,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 @SuppressWarnings({"rawtypes", "unchecked"})
 class _TreeModelTreeAdapter
 implements
-    TreeAdapter<_TreeNodeMemento>,
-    TreeConverter<Object, _TreeNodeMemento>,
+    TreeAdapter<TreeNodeMemento>,
+    TreeConverter<Object, TreeNodeMemento>,
     HasMetaModelContext,
     Serializable {
 
@@ -48,7 +49,7 @@ implements
 
     /** non serializable delegate */
     private transient TreeAdapter delegate;
-    private transient TreeAdapterWithConverter<Object, _TreeNodeMemento> delegate2;
+    private transient TreeAdapterWithConverter<Object, TreeNodeMemento> delegate2;
 
     _TreeModelTreeAdapter(
             final TreeAdapter delegate) {
@@ -59,13 +60,13 @@ implements
     // -- TREE CONVERTER
 
     @Override
-    public _TreeNodeMemento fromUnderlyingNode(
-            final Object pojoNode, final _TreeNodeMemento parentNode, final int siblingIndex) {
-        return mementify(pojoNode, parentNode.getTreePath().append(siblingIndex));
+    public TreeNodeMemento fromUnderlyingNode(
+            final Object pojoNode, final TreeNodeMemento parentNode, final int siblingIndex) {
+        return mementify(pojoNode, parentNode.treePath().append(siblingIndex));
     }
 
     @Override
-    public @Nullable Object toUnderlyingNode(final _TreeNodeMemento node) {
+    public @Nullable Object toUnderlyingNode(final TreeNodeMemento node) {
         return node!=null
                 ? node.getPojo()
                 : null;
@@ -73,7 +74,7 @@ implements
 
     // -- TREE ADAPTER WITH CONVERTER
 
-    protected TreeConverter<Object, _TreeNodeMemento> converter() {
+    protected TreeConverter<Object, TreeNodeMemento> converter() {
         return this;
     }
 
@@ -91,8 +92,8 @@ implements
 
     // -- HELPER
 
-    _TreeNodeMemento mementify(final Object pojo, final TreePath treePath) {
-        return new _TreeNodeMemento(
+    TreeNodeMemento mementify(final Object pojo, final TreePath treePath) {
+        return new TreeNodeMemento(
                 treePath,
                 ManagedObject.adaptSingular(getSpecificationLoader(), pojo)
                     .getBookmark()
@@ -100,7 +101,7 @@ implements
     }
 
     @Override
-    public Stream<_TreeNodeMemento> childrenOf(final _TreeNodeMemento value) {
+    public Stream<TreeNodeMemento> childrenOf(final TreeNodeMemento value) {
         if(delegate2==null) {
             this.delegate2 = new TreeAdapterWithConverter<>(underlyingAdapter(), this);
         }

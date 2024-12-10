@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.tree;
+package org.apache.causeway.core.metamodel.tree;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,33 +26,30 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
-import lombok.Getter;
 import lombok.NonNull;
 
 /**
  * Memento for a pair of {@link Bookmark} and {@link TreePath}.
  */
-class _TreeNodeMemento implements Serializable {
-    private static final long serialVersionUID = 1L;
+public record TreeNodeMemento(
+    /**
+     * If null, then only memoizes the treePath.
+     * @see #isTreePathMemento
+     */
+    Bookmark bookmark,
+    TreePath treePath,
+    int hashCodePrecalc) implements Serializable {
 
-    @Getter private final Bookmark bookmark;
-    @Getter private final TreePath treePath;
-    private final int hashCode;
-
-    public _TreeNodeMemento(final @NonNull TreePath treePath) {
-        this.bookmark = null;
-        this.treePath = treePath;
-        this.hashCode = Objects.hash(0, treePath.hashCode());
+    public TreeNodeMemento(final @NonNull TreePath treePath) {
+        this(null, treePath, Objects.hash(0, treePath.hashCode()));
     }
 
-    public _TreeNodeMemento(final @NonNull TreePath treePath, final @NonNull Bookmark bookmark) {
-        this.bookmark = bookmark;
-        this.treePath = treePath;
-        this.hashCode = Objects.hash(bookmark.hashCode(), treePath.hashCode());
+    public TreeNodeMemento(final @NonNull TreePath treePath, final @NonNull Bookmark bookmark) {
+        this(bookmark, treePath, Objects.hash(bookmark.hashCode(), treePath.hashCode()));
     }
 
     public boolean isTreePathMemento() {
@@ -60,27 +57,25 @@ class _TreeNodeMemento implements Serializable {
     }
 
     public @Nullable Object getPojo() {
-        return MmUnwrapUtils.single(asObjectAdapterModel().getObject());
+        return MmUnwrapUtils.single(asManagedObject());
     }
 
-    public ObjectAdapterModel asObjectAdapterModel() {
+    public ManagedObject asManagedObject() {
         _Assert.assertFalse(isTreePathMemento());
-        return UiObjectWkt.ofBookmark(getBookmark());
+        return MetaModelContext.instanceElseFail().getObjectManager().loadObjectElseFail(bookmark);
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (obj instanceof _TreeNodeMemento) {
-            final _TreeNodeMemento other = (_TreeNodeMemento) obj;
-            return treePath.equals(other.treePath)
-                    && bookmark.equals(other.bookmark);
-        }
-        return false;
+        return obj instanceof TreeNodeMemento other
+            ? Objects.equals(this.treePath, other.treePath)
+                    && Objects.equals(this.bookmark, other.bookmark)
+            : false;
     }
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return hashCodePrecalc;
     }
 
 }
