@@ -41,7 +41,7 @@ record TreeExpansionModel(
 
     private TreeExpansionModel(
             final TreeState treeState) {
-        this(treeState, treeState.getExpandedNodePaths().stream()
+        this(treeState, treeState.expandedNodePaths().stream()
                 .map(TreeNodeMemento::new)
                 .collect(Collectors.toSet()));
     }
@@ -51,7 +51,7 @@ record TreeExpansionModel(
      * @param t
      */
     public void onExpand(final TreeNodeMemento t) {
-        treeState.getExpandedNodePaths().add(t.treePath());
+        treeState.expandedNodePaths().add(t.treePath());
     }
 
     /**
@@ -59,15 +59,15 @@ record TreeExpansionModel(
      * @param t
      */
     public void onCollapse(final TreeNodeMemento t) {
-        treeState.getExpandedNodePaths().remove(t.treePath());
+        treeState.expandedNodePaths().remove(t.treePath());
     }
 
     public boolean contains(final TreePath treePath) {
-        return treeState.getExpandedNodePaths().contains(treePath);
+        return treeState.expandedNodePaths().contains(treePath);
     }
 
     public boolean isSelected(final TreePath treePath){
-        return treeState.getSelectedNodePaths().contains(treePath);
+        return treeState.selectedNodePaths().contains(treePath);
     }
 
     @Override

@@ -22,8 +22,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.FrameFragment;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 
 /**
  * Renders a non-editable tree.
@@ -59,7 +59,7 @@ extends AttributePanel {
     private MarkupContainer createTreeComponent(final String id) {
         var container = getScalarFrameContainer();
         var attributeModel = attributeModel();
-        var tree = CausewayToWicketTreeAdapter.adapt(id, attributeModel);
+        var tree = DomainObjectTree.createComponent(id, attributeModel);
         container.add(tree);
         // adds the tree-theme behavior to the tree's parent
         container.add(getTreeThemeProvider().treeThemeFor(attributeModel));

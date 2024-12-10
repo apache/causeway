@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.IndexedFunction;
 
-public record TreeAdapterWithConverter<U, T>(
+record TreeAdapterWithConverter<U, T>(
         TreeAdapter<U> underlyingAdapter,
         TreeConverter<U, T> converter)
 implements TreeAdapter<T>{

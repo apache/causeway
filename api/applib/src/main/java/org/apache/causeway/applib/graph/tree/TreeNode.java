@@ -55,21 +55,21 @@ public class TreeNode<T> implements Vertex<T> {
 
     @Getter private final TreeNode<T> rootNode;
     @Getter private final TreeAdapter<T> treeAdapter;
-    
+
     private final TreePath treePath;
     private final T value;
     private final TreeState sharedState;
 
     public static <T> TreeNode<T> root(
-            final T value, 
-            final TreeAdapter<T> treeAdapter, 
+            final T value,
+            final TreeAdapter<T> treeAdapter,
             final TreeState sharedState) {
         return new TreeNode<T>(value, treeAdapter, sharedState);
     }
-    
+
     public static <T> TreeNode<T> root(
-            final T value, 
-            final Class<? extends TreeAdapter<T>> treeAdapterClass, 
+            final T value,
+            final Class<? extends TreeAdapter<T>> treeAdapterClass,
             final TreeState sharedState,
             final FactoryService factoryService
             ) {
@@ -80,8 +80,8 @@ public class TreeNode<T> implements Vertex<T> {
     protected TreeNode(
             final @NonNull TreeNode<T> rootNode,
             final @NonNull TreePath treePath,
-            final @NonNull T value, 
-            final @NonNull TreeAdapter<T> treeAdapter, 
+            final @NonNull T value,
+            final @NonNull TreeAdapter<T> treeAdapter,
             final @NonNull TreeState sharedState) {
         this.rootNode = rootNode;
         this.treePath = treePath;
@@ -92,8 +92,8 @@ public class TreeNode<T> implements Vertex<T> {
 
     // root-node constructor
     private TreeNode(
-            final @NonNull T value, 
-            final @NonNull TreeAdapter<T> treeAdapter, 
+            final @NonNull T value,
+            final @NonNull TreeAdapter<T> treeAdapter,
             final @NonNull TreeState sharedState) {
         this.rootNode = this;
         this.treePath = TreePath.root();
@@ -101,11 +101,11 @@ public class TreeNode<T> implements Vertex<T> {
         this.treeAdapter = treeAdapter;
         this.sharedState = sharedState;
     }
-    
+
     public T getRootValue() {
         return getRootNode().getValue();
     }
-    
+
     @Override
     public T getValue() {
         return value;
@@ -116,7 +116,7 @@ public class TreeNode<T> implements Vertex<T> {
     @Override
     public int getIncomingCount() {
         return getPositionAsPath().isRoot()
-                ? 0 
+                ? 0
                 : 1;
     }
     @Override
@@ -141,15 +141,15 @@ public class TreeNode<T> implements Vertex<T> {
     /**
      * Resolves given path relative to the root of this tree.
      */
-    public Optional<TreeNode<T>> resolve(TreePath absolutePath) {
-        /* 
+    public Optional<TreeNode<T>> resolve(final TreePath absolutePath) {
+        /*
          * Optimize if absolutePath starts with this.treePath:
-         * 
-         * If current path is 
-         *   /p0/p1/p2/p3 
+         *
+         * If current path is
+         *   /p0/p1/p2/p3
          * and we want to resolve
          *   /p0/p1/p2/p3/p4/p5
-         * then instead of starting from root, we can start from here, resolving sub-node 
+         * then instead of starting from root, we can start from here, resolving sub-node
          *   /p3/p4/p5
          * observe: the relative path /p3 would point to the sub-node itself
          */
@@ -157,7 +157,7 @@ public class TreeNode<T> implements Vertex<T> {
                 ? resolveRelative(absolutePath.subPath(treePath.size() - 1))
                 : rootNode.resolveRelative(absolutePath);
     }
-    
+
     /**
      * Resolves given path relative to this node.
      * <p>
@@ -165,24 +165,24 @@ public class TreeNode<T> implements Vertex<T> {
      * starting from root, '/0/2' will return the 3rd child of root;<br>
      * starting from sub-node '/0/2', '/2/9' will resolve the 10th child ('/0/2/9') of this sub-node;<br>
      */
-    private Optional<TreeNode<T>> resolveRelative(TreePath relativePath) {
-        
+    private Optional<TreeNode<T>> resolveRelative(final TreePath relativePath) {
+
         if(Objects.equals(this.treePath, relativePath)) {
             return Optional.of(this);
         }
-        
+
         final int childIndex = relativePath.childIndex().orElse(-1);
         if(childIndex<0) return Optional.empty();
         final Optional<TreeNode<T>> childNode = streamChildren().skip(childIndex).findFirst();
         if(!childNode.isPresent()) return Optional.empty();
-        
+
         return relativePath.size()>2
                 ? childNode.get().resolveRelative(relativePath.subPath(1))
                 : childNode;
     }
-    
+
     // -- PARENT
-    
+
     public Optional<TreeNode<T>> lookupParent() {
         return Optional.ofNullable(treePath.getParentIfAny())
                 .flatMap(this::resolve);
@@ -225,7 +225,7 @@ public class TreeNode<T> implements Vertex<T> {
     }
 
     public boolean isExpanded(final TreePath treePath) {
-        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        final Set<TreePath> expandedPaths = getTreeState().expandedNodePaths();
         return expandedPaths.contains(treePath);
     }
 
@@ -235,7 +235,7 @@ public class TreeNode<T> implements Vertex<T> {
      */
     @Programmatic
     public void expand(final TreePath ... treePaths) {
-        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        final Set<TreePath> expandedPaths = getTreeState().expandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::add);
     }
 
@@ -244,7 +244,7 @@ public class TreeNode<T> implements Vertex<T> {
      */
     @Programmatic
     public void expand() {
-        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        final Set<TreePath> expandedPaths = getTreeState().expandedNodePaths();
         streamHierarchyUp()
             .map(TreeNode::getPositionAsPath)
             .forEach(expandedPaths::add);
@@ -256,7 +256,7 @@ public class TreeNode<T> implements Vertex<T> {
      */
     @Programmatic
     public void collapse(final TreePath ... treePaths) {
-        final Set<TreePath> expandedPaths = getTreeState().getExpandedNodePaths();
+        final Set<TreePath> expandedPaths = getTreeState().expandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
     }
 
@@ -264,11 +264,11 @@ public class TreeNode<T> implements Vertex<T> {
 
     /**
      * Clears all selection markers.
-     * @see #select(TreePath...)  
+     * @see #select(TreePath...)
      */
     @Programmatic
     public void clearSelection() {
-        getTreeState().getSelectedNodePaths().clear();
+        getTreeState().selectedNodePaths().clear();
     }
 
     /**
@@ -277,25 +277,25 @@ public class TreeNode<T> implements Vertex<T> {
      */
     @Programmatic
     public boolean isSelected(final TreePath treePath) {
-        final Set<TreePath> selectedPaths = getTreeState().getSelectedNodePaths();
+        final Set<TreePath> selectedPaths = getTreeState().selectedNodePaths();
         return selectedPaths.contains(treePath);
     }
 
     /**
      * Select nodes by their corresponding {@link TreePath}, that is, activate their selection marker.
      * <p>
-     * With the <i>Wicket Viewer</i> corresponds to expressing CSS class {@code tree-node-selected} 
+     * With the <i>Wicket Viewer</i> corresponds to expressing CSS class {@code tree-node-selected}
      * on the rendered tree node, which has default bg-color {@code lightgrey}. Color can be customized
      * by setting CSS var {@code--tree-node-selected-bg-color}
      * <pre>
      * .tree-theme-bootstrap .tree-node-selected {
      *     background-color: var(--tree-node-selected-bg-color, lightgrey);
      * }
-     * </pre>  
+     * </pre>
      */
     @Programmatic
     public void select(final TreePath ... treePaths) {
-        final Set<TreePath> selectedPaths = getTreeState().getSelectedNodePaths();
+        final Set<TreePath> selectedPaths = getTreeState().selectedNodePaths();
         _NullSafe.stream(treePaths).forEach(selectedPaths::add);
     }
 
@@ -305,16 +305,16 @@ public class TreeNode<T> implements Vertex<T> {
      * Creates the root node of a tree structure as inferred from given treeAdapter.
      */
     public static <T> TreeNode<T> root(
-            final @NonNull T rootNode, 
+            final @NonNull T rootNode,
             final @NonNull TreeAdapter<T> treeAdapter) {
         return TreeNode.root(rootNode, treeAdapter, TreeState.rootCollapsed());
     }
-    
+
     /**
      * Creates the root node of a tree structure as inferred from given treeAdapter.
      */
     public static <T> TreeNode<T> root(
-            final @NonNull T rootNode, 
+            final @NonNull T rootNode,
             final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass,
             final @NonNull FactoryService factoryService) {
         return root(rootNode, factoryService.getOrCreate(treeAdapterClass));

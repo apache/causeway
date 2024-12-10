@@ -28,8 +28,8 @@ import org.apache.wicket.model.Model;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
-import org.apache.causeway.applib.graph.tree.TreeAdapterWithConverter;
 import org.apache.causeway.applib.graph.tree.TreeConverter;
+import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.tree.TreeAdapterRecord;
 import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 /**
  * Wicket's {@link ITreeProvider} implemented for Causeway.
  */
-record CausewayTreeProvider(
+record TreeProvider(
     /** tree's single root */
     TreeNodeMemento primaryValue,
     TreeAdapterRecord<Object> treeAdapterRecord)
@@ -47,8 +47,10 @@ implements
 
     private static final long serialVersionUID = 1L;
 
-    CausewayTreeProvider(final TreeNodeMemento primaryValue, final TreeAdapter<?> treeAdapter) {
-        this(primaryValue,_Casts.<TreeAdapterRecord<Object>>uncheckedCast(new TreeAdapterRecord<>(treeAdapter)));
+    TreeProvider(final TreeNode<?> rootNode) {
+        this(
+            TreeNodeMemento.mementify(rootNode.getValue(), rootNode.getPositionAsPath()),
+            _Casts.uncheckedCast(new TreeAdapterRecord<>(rootNode.getTreeAdapter())));
     }
 
     @Override
@@ -62,13 +64,12 @@ implements
 
     @Override
     public boolean hasChildren(final TreeNodeMemento node) {
-        return new TreeAdapterWithConverter<Object, TreeNodeMemento>(treeAdapterRecord.treeAdapter(), this)
-            .childCountOf(node)>0;
+        return treeAdapter().childCountOf(node)>0;
     }
 
     @Override
     public Iterator<? extends TreeNodeMemento> getChildren(final TreeNodeMemento node) {
-        var children = new TreeAdapterWithConverter<Object, TreeNodeMemento>(treeAdapterRecord.treeAdapter(), this)
+        var children = treeAdapter()
             .childrenOf(node)
             .toList();
         return children.iterator();
@@ -93,6 +94,12 @@ implements
         return node!=null
                 ? node.getPojo()
                 : null;
+    }
+
+    // -- HELPER
+
+    private TreeAdapter<TreeNodeMemento> treeAdapter() {
+        return treeAdapterRecord.treeAdapter().convert(this);
     }
 
 }

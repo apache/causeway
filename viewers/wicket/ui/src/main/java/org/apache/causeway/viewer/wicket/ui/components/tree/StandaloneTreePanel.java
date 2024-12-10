@@ -34,7 +34,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
     public StandaloneTreePanel(final String id, final ValueModel valueModel) {
         super(id, valueModel);
 
-        final Component tree = CausewayToWicketTreeAdapter.adapt(ID_TREE, valueModel);
+        final Component tree = DomainObjectTree.createComponent(ID_TREE, valueModel);
         final Behavior treeTheme = super.getTreeThemeProvider().treeThemeFor(valueModel);
 
         add(tree.add(treeTheme));
