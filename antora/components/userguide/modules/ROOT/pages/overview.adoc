@@ -97,7 +97,7 @@ Enabling and ensuring modularity is a xref:background-context-and-theory.adoc#mo
 Modularity is the only way to ensure that a complex application domain does not over time degenerate into the infamous "big ball of mud", software that is difficult, dangerous and expensive to change.
 
 xref:modules.adoc[Modules] chunk up the overall application into smaller pieces, usually a pacakge and subpackages.
-The smaller pieces can be either "horizontal" tiers (presentation / domain / persistence) or "vertial" functional slices (eg customer vs orders vs products vs invoice etc).
+The smaller pieces can be either "horizontal" tiers (presentation / domain / persistence) or "vertical" functional slices (eg customer vs orders vs products vs invoice etc).
 
 Because the framework takes care in large part of the presentation and persistence tiers, modules in an Apache Causeway application are oriented around vertical slices, and determining the dependencies between those modules.
 These modules will form a directed acyclic graph (DAG)
