@@ -25,24 +25,30 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.applib.graph.tree.TreeAdapter;
+import org.apache.causeway.applib.graph.tree.TreeAdapterWithConverter;
+import org.apache.causeway.applib.graph.tree.TreeConverter;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.tree.TreeAdapterRecord;
 import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
- * Wicket's {@link ITreeProvider} implemented for Causeway
+ * Wicket's {@link ITreeProvider} implemented for Causeway.
  */
-class _TreeModelTreeProvider implements ITreeProvider<TreeNodeMemento> {
+record CausewayTreeProvider(
+    /** tree's single root */
+    TreeNodeMemento primaryValue,
+    TreeAdapterRecord<Object> treeAdapterRecord)
+implements
+    ITreeProvider<TreeNodeMemento>,
+    TreeConverter<Object, TreeNodeMemento> {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * tree's root
-     */
-    private final TreeNodeMemento primaryValue;
-    private final _TreeModelTreeAdapter treeAdapter;
-
-    _TreeModelTreeProvider(final TreeNodeMemento primaryValue, final _TreeModelTreeAdapter treeAdapter) {
-        this.primaryValue = primaryValue;
-        this.treeAdapter = treeAdapter;
+    CausewayTreeProvider(final TreeNodeMemento primaryValue, final TreeAdapter<?> treeAdapter) {
+        this(primaryValue,_Casts.<TreeAdapterRecord<Object>>uncheckedCast(new TreeAdapterRecord<>(treeAdapter)));
     }
 
     @Override
@@ -56,17 +62,37 @@ class _TreeModelTreeProvider implements ITreeProvider<TreeNodeMemento> {
 
     @Override
     public boolean hasChildren(final TreeNodeMemento node) {
-        return treeAdapter.childCountOf(node)>0;
+        return new TreeAdapterWithConverter<Object, TreeNodeMemento>(treeAdapterRecord.treeAdapter(), this)
+            .childCountOf(node)>0;
     }
 
     @Override
     public Iterator<? extends TreeNodeMemento> getChildren(final TreeNodeMemento node) {
-        return treeAdapter.childrenOf(node).iterator();
+        var children = new TreeAdapterWithConverter<Object, TreeNodeMemento>(treeAdapterRecord.treeAdapter(), this)
+            .childrenOf(node)
+            .toList();
+        return children.iterator();
     }
 
     @Override
     public IModel<TreeNodeMemento> model(final TreeNodeMemento treeModel) {
         return Model.of(treeModel);
+    }
+
+    // -- TREE CONVERTER
+
+    @Override
+    public TreeNodeMemento fromUnderlyingNode(
+            final Object pojoNode, final TreeNodeMemento parentNode, final int siblingIndex) {
+        return TreeNodeMemento.mementify(pojoNode, parentNode.treePath().append(siblingIndex));
+    }
+
+    @Override
+    @Nullable
+    public Object toUnderlyingNode(final TreeNodeMemento node) {
+        return node!=null
+                ? node.getPojo()
+                : null;
     }
 
 }

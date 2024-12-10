@@ -46,6 +46,14 @@ public record TreeNodeMemento(
     TreePath treePath,
     int hashCodePrecalc) implements Serializable {
 
+    public static TreeNodeMemento mementify(final Object pojo, final TreePath treePath) {
+        return new TreeNodeMemento(
+            treePath,
+            ManagedObject.adaptSingular(MetaModelContext.instanceElseFail().getSpecificationLoader(), pojo)
+                .getBookmark()
+                .orElseThrow());
+    }
+
     public TreeNodeMemento(final @NonNull TreePath treePath) {
         this(null, treePath, Objects.hash(0, treePath.hashCode()));
     }

@@ -30,22 +30,20 @@ import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 /**
  * Wicket's model for collapse/expand state
  */
-class _TreeExpansionModel implements IModel<Set<TreeNodeMemento>> {
-    private static final long serialVersionUID = 648152234030889164L;
+record TreeExpansionModel(
+    TreeState treeState,
+    Set<TreeNodeMemento> expandedNodes) implements IModel<Set<TreeNodeMemento>> {
 
-    public static _TreeExpansionModel of(
+    public static TreeExpansionModel of(
             final TreeState treeState) {
-        return new _TreeExpansionModel(treeState);
+        return new TreeExpansionModel(treeState);
     }
 
-    private final TreeState treeState;
-    private final Set<TreeNodeMemento> expandedNodes;
-    private _TreeExpansionModel(
+    private TreeExpansionModel(
             final TreeState treeState) {
-        this.treeState = treeState;
-        this.expandedNodes = treeState.getExpandedNodePaths().stream()
+        this(treeState, treeState.getExpandedNodePaths().stream()
                 .map(TreeNodeMemento::new)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet()));
     }
 
     /**

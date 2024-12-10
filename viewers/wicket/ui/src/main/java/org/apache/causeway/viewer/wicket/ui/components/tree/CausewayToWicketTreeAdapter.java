@@ -84,15 +84,14 @@ class CausewayToWicketTreeAdapter {
                 final String id, final ManagedObject treeNodeObject) {
 
             var treeNode = (TreeNode<?>) treeNodeObject.getPojo();
-            var wrappingTreeAdapter = new _TreeModelTreeAdapter(treeNode.getTreeAdapter());
 
-            var treeModelTreeProvider = new _TreeModelTreeProvider(
-                    wrappingTreeAdapter.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),
-                    wrappingTreeAdapter);
+            var treeModelTreeProvider = new CausewayTreeProvider(
+                    TreeNodeMemento.mementify(treeNode.getValue(), treeNode.getPositionAsPath()),
+                    treeNode.getTreeAdapter());
 
             var treeState = treeNode.getTreeState();
 
-            var treeExpansionModel = _TreeExpansionModel.of(treeState);
+            var treeExpansionModel = TreeExpansionModel.of(treeState);
 
             return new DomainObjectTree(id,
                     treeModelTreeProvider,
@@ -102,7 +101,7 @@ class CausewayToWicketTreeAdapter {
         private DomainObjectTree(
                 final String id,
                 final ITreeProvider<TreeNodeMemento> provider,
-                final _TreeExpansionModel collapseExpandState) {
+                final TreeExpansionModel collapseExpandState) {
             super(id, provider, collapseExpandState);
         }
 
@@ -196,8 +195,8 @@ class CausewayToWicketTreeAdapter {
             super.collapse(t);
         }
 
-        private _TreeExpansionModel treeExpansionModel() {
-            return (_TreeExpansionModel) getModel();
+        private TreeExpansionModel treeExpansionModel() {
+            return (TreeExpansionModel) getModel();
         }
 
     }
