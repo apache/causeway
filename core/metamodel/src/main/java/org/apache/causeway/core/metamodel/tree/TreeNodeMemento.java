@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -35,6 +36,7 @@ import lombok.NonNull;
 /**
  * Memento for a pair of {@link Bookmark} and {@link TreePath}.
  */
+@Programmatic
 public record TreeNodeMemento(
     /**
      * If null, then only memoizes the treePath.

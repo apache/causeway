@@ -19,12 +19,12 @@
 package org.apache.causeway.viewer.wicket.ui.components.tree;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
@@ -51,7 +51,7 @@ class _TreeModelTreeProvider implements ITreeProvider<TreeNodeMemento> {
 
     @Override
     public Iterator<TreeNodeMemento> getRoots() {
-        return _Lists.singleton(primaryValue).iterator();
+        return List.of(primaryValue).iterator();
     }
 
     @Override

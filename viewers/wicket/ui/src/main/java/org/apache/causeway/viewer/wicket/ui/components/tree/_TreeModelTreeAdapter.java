@@ -27,34 +27,32 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreeAdapterWithConverter;
 import org.apache.causeway.applib.graph.tree.TreeConverter;
 import org.apache.causeway.applib.graph.tree.TreePath;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.tree.TreeAdapterRecord;
 import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
  *  {@link TreeAdapter} for _TreeModel nodes.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-class _TreeModelTreeAdapter
+record _TreeModelTreeAdapter(
+    TreeAdapterRecord<Object> treeAdapterRecord)
 implements
     TreeAdapter<TreeNodeMemento>,
     TreeConverter<Object, TreeNodeMemento>,
     HasMetaModelContext,
     Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    private final Class<? extends TreeAdapter> delegateClass;
-
-    /** non serializable delegate */
-    private transient TreeAdapter delegate;
-    private transient TreeAdapterWithConverter<Object, TreeNodeMemento> delegate2;
-
     _TreeModelTreeAdapter(
             final TreeAdapter delegate) {
-        this.delegate = delegate;
-        this.delegateClass = delegate.getClass();
+        this(new TreeAdapterRecord(delegate));
+    }
+
+    @Override
+    public Stream<TreeNodeMemento> childrenOf(final TreeNodeMemento value) {
+        return new TreeAdapterWithConverter<>(underlyingAdapter(), this)
+            .childrenOf(value);
     }
 
     // -- TREE CONVERTER
@@ -79,15 +77,7 @@ implements
     }
 
     protected TreeAdapter<Object> underlyingAdapter() {
-        if(delegate!=null) {
-            return delegate;
-        }
-        try {
-            return getFactoryService().getOrCreate(delegateClass);
-        } catch (Exception e) {
-            throw _Exceptions.unrecoverable(e, "failed to instantiate tree adapter of type %s",
-                    delegateClass.getName());
-        }
+        return treeAdapterRecord.treeAdapter();
     }
 
     // -- HELPER
@@ -98,14 +88,6 @@ implements
                 ManagedObject.adaptSingular(getSpecificationLoader(), pojo)
                     .getBookmark()
                     .orElseThrow());
-    }
-
-    @Override
-    public Stream<TreeNodeMemento> childrenOf(final TreeNodeMemento value) {
-        if(delegate2==null) {
-            this.delegate2 = new TreeAdapterWithConverter<>(underlyingAdapter(), this);
-        }
-        return delegate2.childrenOf(value);
     }
 
 }

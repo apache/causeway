@@ -359,8 +359,9 @@ public record DataTable(
         }
 
         private Object readResolve() {
-            var objectManager = MetaModelContext.instanceElseFail().getObjectManager();
-            var elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(elementTypeClass);
+            var mmc = MetaModelContext.instanceElseFail();
+            var objectManager = mmc.getObjectManager();
+            var elementType = mmc.specForTypeElseFail(elementTypeClass);
             var rowElements = rowElementBookmarks.map(objectManager::loadObjectElseFail);
             var dataTable = new DataTable(elementType,
                 tableFriendlyName,
