@@ -19,6 +19,9 @@
 package org.apache.causeway.commons.handler;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
@@ -27,7 +30,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
- * Building blocks for the <em>Chain of Responsibility</em> design pattern.
+ * Implements the <em>Chain of Responsibility</em> design pattern.
  * <p>
  * <em>Chain of Responsibility</em> allows passing requests along the chain of handlers,
  * until one of them handles the request.
@@ -73,16 +76,37 @@ public record ChainOfResponsibility<X, R>(
 
     /**
      * The {@code request} is passed along the chain of handlers, until one of them handles the request.
-     * @param request
-     * @return response of the first handler that handled the request wrapped in an Optional,
-     * or an empty Optional, if no handler handled the request
+     * <p>
+     * Strict variant of {@link #handle(Object)}.
+     * @return response of the first handler that handled the request (returning {@code null} is NOT allowed),
+     * or throws {@link NoSuchElementException}, if no handler handled the request
+     * @throws NoSuchElementException
+     * @see #handle(Object)
      */
-    public R handle(final X request) {
+    public R handleElseFail(final X request) {
         for(var handler : handlers) {
             if(!handler.isHandling(request)) continue;
-            return handler.handle(request);
+            return Objects.requireNonNull(handler.handle(request), ()->
+                "a handler returend null for request %s".formatted(request));
         }
         throw _Exceptions.noSuchElement("no handler found for request %s", request);
+    }
+
+    /**
+     * The {@code request} is passed along the chain of handlers, until one of them handles the request.
+     * <p>
+     * Permissive variant of {@link #handleElseFail(Object)}.
+     * @return response of the first handler that handled the request (returning {@code null} is allowed)
+     * wrapped in an Optional,
+     * or an empty Optional, if no handler handled the request
+     * @see #handleElseFail(Object)
+     */
+    public Optional<R> handle(final X request) {
+        for(var handler : handlers) {
+            if(!handler.isHandling(request)) continue;
+            return Optional.ofNullable(handler.handle(request));
+        }
+        return Optional.empty();
     }
 
 }

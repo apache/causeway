@@ -80,9 +80,9 @@ class ChainOfResponsibilityTest {
         var chainOfResponsibility = new ChainOfResponsibility<>("test",
                 Arrays.asList(aToUpperCase, bToUpperCase, finallyNoop));
 
-        assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
-        assertEquals("BSTRING", chainOfResponsibility.handle("bString")); // handled by second handler
-        assertEquals("cString", chainOfResponsibility.handle("cString")); // handled by third handler
+        assertEquals("ASTRING", chainOfResponsibility.handleElseFail("aString")); // handled by first handler
+        assertEquals("BSTRING", chainOfResponsibility.handleElseFail("bString")); // handled by second handler
+        assertEquals("cString", chainOfResponsibility.handleElseFail("cString")); // handled by third handler
 
     }
 
@@ -110,8 +110,8 @@ class ChainOfResponsibilityTest {
 
         var chainOfResponsibility = new ChainOfResponsibility<>("test", Can.of(aToUpperCase));
 
-        assertEquals("ASTRING", chainOfResponsibility.handle("aString")); // handled by first handler
-        assertThrows(NoSuchElementException.class, ()->chainOfResponsibility.handle("xxx")); // not handled
+        assertEquals("ASTRING", chainOfResponsibility.handleElseFail("aString")); // handled by first handler
+        assertThrows(NoSuchElementException.class, ()->chainOfResponsibility.handleElseFail("xxx")); // not handled
     }
 
     @Test
@@ -134,7 +134,7 @@ class ChainOfResponsibilityTest {
         var chainOfResponsibility = new ChainOfResponsibility<>("test",
                 Arrays.asList(throwingHandler));
 
-        assertThrows(RuntimeException.class, ()->chainOfResponsibility.handle("throw"));
+        assertThrows(RuntimeException.class, ()->chainOfResponsibility.handleElseFail("throw"));
     }
 
 }

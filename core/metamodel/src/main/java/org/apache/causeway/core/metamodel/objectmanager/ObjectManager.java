@@ -92,7 +92,7 @@ public record ObjectManager(
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public ManagedObject createObject(final ObjectSpecification objectCreateRequest) {
-        return objectCreator().handle(objectCreateRequest);
+        return objectCreator().handleElseFail(objectCreateRequest);
     }
 
     /**
@@ -101,7 +101,7 @@ public record ObjectManager(
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public ManagedObject loadObject(final ProtoObject objectLoadRequest) {
-        return objectLoader().handle(objectLoadRequest);
+        return objectLoader().handleElseFail(objectLoadRequest);
     }
 
     /**
@@ -159,13 +159,12 @@ public record ObjectManager(
      * Resolves injection-points for the result. (Handles service injection.)
      */
     public Can<ManagedObject> queryObjects(final BulkLoadRequest objectQuery) {
-        return objectBulkLoader().handle(objectQuery);
+        return objectBulkLoader().handleElseFail(objectQuery);
     }
 
     public Optional<ObjectSpecification> specForPojo(final @Nullable Object pojo) {
-        if(pojo==null) {
-            return Optional.empty();
-        }
+        if(pojo==null) return Optional.empty();
+
         return specForType(pojo.getClass());
     }
 
@@ -252,7 +251,7 @@ public record ObjectManager(
                     ? ManagedObject.unspecified()
                     : null;
         }
-        return objectDementifier().handle(new MementoRecreateRequest(spec, memento));
+        return objectDementifier().handleElseFail(new MementoRecreateRequest(spec, memento));
     }
 
     @Override
