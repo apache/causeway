@@ -26,6 +26,12 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.IndexedFunction;
 
+/**
+ * Acts as a TreeAdapter facade by wrapping an underlying {@link TreeAdapter}
+ * and translating the node type back and forth using a {@link TreeConverter}.
+ * @param <U> underlying tree node generic type
+ * @param <T> tree node generic type of this facade
+ */
 record TreeAdapterWithConverter<U, T>(
         TreeAdapter<U> underlyingAdapter,
         TreeConverter<U, T> converter)

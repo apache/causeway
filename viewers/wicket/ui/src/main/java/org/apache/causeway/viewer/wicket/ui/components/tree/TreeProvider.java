@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.tree.TreeAdapterRecord;
 import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
 
 /**
- * Wicket's {@link ITreeProvider} implemented for Causeway.
+ * Wicket's {@link ITreeProvider} implemented for a tree of {@link TreeNodeMemento}.
  */
 record TreeProvider(
     /** tree's single root */
@@ -101,5 +101,4 @@ implements
     private TreeAdapter<TreeNodeMemento> treeAdapter() {
         return treeAdapterRecord.treeAdapter().convert(this);
     }
-
 }

@@ -18,9 +18,21 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
+/**
+ * @param <U> underlying tree generic type
+ * @param <T> converted tree generic type
+ */
 public interface TreeConverter<U, T> {
-    
-    public T fromUnderlyingNode(U value, T parentNode, int siblingIndex);
-    public U toUnderlyingNode(T value);
-    
+
+    /**
+     * Creates a converted node value from the (underlying) node value, also providing context,
+     * that is, passing in the resulting node's parent-node and the resulting node's sibling index.
+     */
+    T fromUnderlyingNode(U value, T parentNode, int siblingIndex);
+
+    /**
+     * Recovers the original (underlying) node value from given converted node value.
+     */
+    U toUnderlyingNode(T value);
+
 }

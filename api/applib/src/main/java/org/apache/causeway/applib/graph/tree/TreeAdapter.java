@@ -85,6 +85,7 @@ public interface TreeAdapter<T> {
                 : childNode;
     }
 
+    /** converts this {@code TreeAdapter<T>} to an equivalent {@code TreeAdapter<R>} */
     default <R> TreeAdapter<R> convert(final TreeConverter<T, R> converter) {
         return new TreeAdapterWithConverter<T, R>(this, converter);
     }

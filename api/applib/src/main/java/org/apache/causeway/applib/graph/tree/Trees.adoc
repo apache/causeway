@@ -11,6 +11,20 @@ Their purpose is rather to document diagrams and design decisions close to the r
 And also for code authors to quickly get an overview or refresher on the topic.  
 ****
 
+== TreeAdapter 
+
+A `TreeAdapter` provides the parent/child relationship information between pojos to derive a tree-structure. 
+
+[NOTE]
+====
+The model deliberately does *not* reflect a doubly linked tree, that is, 
+we don't directly provide a link from a node to its parent node. 
+(To define a tree, parent references are not strictly required.) 
+
+For tree data structures in general, referencing parents would introduce circular references, 
+which don't play well with immutable data structures or serialization.
+==== 
+
 [plantuml,fig-TreeModel-1,svg]
 .Tree Model
 ----
@@ -20,6 +34,7 @@ interface TreeAdapter<T> {
     childCountOf(T): int
     childrenOf(T): Stream<T>
     resolveRelative(T, TreePath): Optional<T>
+    convert(TreeConverter<T, R>): TreeAdapter<R>
 }
 
 interface TreeConverter<U, T> {
@@ -27,19 +42,67 @@ interface TreeConverter<U, T> {
     toUnderlyingNode(T value): U
 }
 
-class TreeAdapterWithConverter<U, T> << (R,#FF7700) record >>{
+class TreeAdapterWithConverter<U, T> << (R,#FF7700) internal >>{
     underlyingAdapter(): TreeAdapter<U>
     converter(): TreeConverter<U, T>
 }
 
-TreeAdapterWithConverter -|> TreeAdapter
+TreeAdapter <|- TreeAdapterWithConverter: facade
+TreeAdapter ..> TreeConverter: uses for conversion
 
 @enduml
 ----
 
-== TreeAdapter 
+The internal `TreeAdapterWithConverter` acts as a `TreeAdapter` facade by wrapping an underlying `TreeAdapter` 
+and translating the node type back and forth using a `TreeConverter`.
 
-provides the parent/child relationship information between pojos to derive a tree-structure. 
-It is deliberately *not* modeled as a doubly linked tree, that is, 
-we don't directly provide a link from a node to its parent node, as this would introduce circular references, 
-which don't play well with immutable data structures or serialization. 
+== TreeProvider (Wicket Viewer)
+
+`TreeAdapterRecord` is Wicket's `ITreeProvider` implemented for a tree of `TreeNodeMemento`(s).
+
+[plantuml,fig-TreeModel-2,svg]
+.Tree Provider (Wicket Viewer)
+----
+@startuml
+
+class TreeNodeMemento << (R,#FF7700) serializable >>{
+    bookmark: Bookmark
+    treePath: TreePath
+}
+
+class TreeAdapterRecord<T> << (R,#FF7700) serializable>>{
+    treeAdapter: TreeAdapter
+}
+
+class TreeProvider << (R,#FF7700) serializable>>{
+}
+
+TreeProvider --> TreeNodeMemento: primaryValue
+TreeProvider --> TreeAdapterRecord: treeAdapterRecord
+
+@enduml
+----
+
+Only constraint for the tree node values is that those need to be _bookmarkable_. 
+The `TreeProvider` is then simply made of 2 parts:
+
+ . the root node (in its serializable form)
+ . the TreeAdapter (wrapped in a serializable container)
+ 
+The fact that `TreeProvider` also implements `TreeConverter` is just an implementation detail.
+
+[source,java]
+----
+record TreeProvider(
+    /** tree's single root */
+    TreeNodeMemento primaryValue,
+    TreeAdapterRecord<Object> treeAdapterRecord)
+implements
+    ITreeProvider<TreeNodeMemento>,
+    TreeConverter<Object, TreeNodeMemento> {
+    //..
+}
+----
+ 
+ 
+ 
