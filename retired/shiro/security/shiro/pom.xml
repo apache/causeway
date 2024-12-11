@@ -80,6 +80,8 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
+            <classifier>jakarta</classifier>
+            <version>2.0.2</version>
             <exclusions>
             	<exclusion>
             		<groupId>org.slf4j</groupId>
@@ -91,6 +93,8 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
+            <classifier>jakarta</classifier>
+            <version>2.0.2</version>
         </dependency>
 
         <!-- TESTING -->
