@@ -29,7 +29,6 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -37,9 +36,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.attrib.UiAttribute;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
-import org.apache.causeway.viewer.commons.model.scalar.UiAttribute;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
@@ -156,19 +155,6 @@ implements HasRenderingHints, UiAttribute, FormExecutorContext {
 
     public final boolean isEmpty() {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(proposedValue().getValue().getValue());
-    }
-
-    public final boolean isScalarTypeAnyOf(final Can<Class<?>> requiredClasses) {
-        final String fullName = getElementType().getFullIdentifier();
-        return requiredClasses.stream()
-                .map(Class::getName)
-                .anyMatch(fullName::equals);
-    }
-
-    public final boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
-        final Class<?> scalarType = getElementType().getCorrespondingClass();
-        return _NullSafe.streamNullable(requiredClass)
-                .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 
     public abstract ManagedValue proposedValue();

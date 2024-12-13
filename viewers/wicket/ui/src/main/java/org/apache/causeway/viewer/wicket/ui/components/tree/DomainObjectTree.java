@@ -14,11 +14,10 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.tree.TreeNodeMemento;
-import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
@@ -33,28 +32,18 @@ implements HasMetaModelContext {
 
     // -- FACTORIES
 
-    /**
-     * @param valueModel - holder of {@link TreeNode}
-     */
-    static MarkupContainer createComponent(final String id, final ValueModel valueModel) {
-        return valueModel==null
-                || ManagedObjects.isNullOrUnspecifiedOrEmpty(valueModel.getObject())
-            ? emptyTreeComponent(id)
-            : new DomainObjectTree(id, (TreeNode<?>)valueModel.getObject().getPojo());
-    }
-
-    /**
-     * @param attributeModel - holder of {@link TreeNode}
-     */
-    static MarkupContainer createComponent(final String id, final UiAttributeWkt attributeModel) {
-        return attributeModel==null
-                || ManagedObjects.isNullOrUnspecifiedOrEmpty(attributeModel.getObject())
-            ? emptyTreeComponent(id)
-            : new DomainObjectTree(id, (TreeNode<?>)attributeModel.getObject().getPojo());
-    }
-
-    private static MarkupContainer emptyTreeComponent(final String id) {
+    static MarkupContainer emptyTreeComponent(final String id) {
         return new WebMarkupContainer(id);
+    }
+
+    /**
+     * @param rootModel - ManagedObject representing a {@link TreeNode}
+     */
+    static MarkupContainer createComponent(final String id, final IModel<ManagedObject> rootModel) {
+        return rootModel==null
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(rootModel.getObject())
+            ? emptyTreeComponent(id)
+            : new DomainObjectTree(id, (TreeNode<?>)rootModel.getObject().getPojo());
     }
 
     // -- CONSTRUCTION
@@ -116,10 +105,8 @@ implements HasMetaModelContext {
                     public boolean isEnabledInHierarchy() {
                         return true; // hardcoded -> true
                     }
-
                 };
             }
-
         };
 
         node.setOutputMarkupId(true);

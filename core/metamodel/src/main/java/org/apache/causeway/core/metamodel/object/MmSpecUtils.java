@@ -102,7 +102,7 @@ public final class MmSpecUtils {
             .forEach((key, list)->{
                 sb.append(String.format("  %s:\n", key));
                 list.forEach(logicalType->{
-                    sb.append(String.format("  - %s(%s)\n", logicalType.logicalName(), logicalType.getClassName()));
+                    sb.append(String.format("  - %s(%s)\n", logicalType.logicalName(), logicalType.className()));
                 });
             });
 

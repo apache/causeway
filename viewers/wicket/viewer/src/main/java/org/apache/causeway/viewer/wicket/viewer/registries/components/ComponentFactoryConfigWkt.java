@@ -362,13 +362,13 @@ public class ComponentFactoryConfigWkt {
             final ValueSemanticsResolver valueSemanticsResolver) {
 
         // collect those registered up to this point, so we don't override with generic ones at steps below
-        var registeredScalarTypes =
+        var registeredElementTypes =
                 componentFactories.stream(AttributeComponentFactoryWithTypeConstraint.class)
-                .flatMap(f->f.getScalarTypes().stream())
+                .flatMap(f->f.elementTypes().stream())
                 .collect(Collectors.toSet());
 
         valueSemanticsResolver.streamClassesWithValueSemantics()
-            .filter(_Predicates.not(registeredScalarTypes::contains))
+            .filter(_Predicates.not(registeredElementTypes::contains))
             .flatMap(valueSemanticsResolver::streamValueSemantics)
             //.peek(valueSemantics->System.err.printf("%s -> %s%n", valueSemantics, valueSemantics.getCorrespondingClass().getName()))
             .map(valueSemantics->createForValueSemantics((ValueSemanticsProvider)valueSemantics))

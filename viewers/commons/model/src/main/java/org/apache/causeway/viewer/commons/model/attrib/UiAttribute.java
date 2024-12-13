@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.model.scalar;
+package org.apache.causeway.viewer.commons.model.attrib;
 
 import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
@@ -96,6 +97,19 @@ public interface UiAttribute extends UiModel, HasMetaModelContext {
 
     default ObjectSpecification getElementType() {
         return getMetaModel().getElementType();
+    }
+
+    default boolean isElementTypeAnyOf(final Can<Class<?>> requiredClasses) {
+        final String fullName = getElementType().getFullIdentifier();
+        return requiredClasses.stream()
+                .map(Class::getName)
+                .anyMatch(fullName::equals);
+    }
+
+    default boolean isElementTypeSubtypeOf(final Class<?> requiredClass) {
+        final Class<?> elementType = getElementType().getCorrespondingClass();
+        return _NullSafe.streamNullable(requiredClass)
+                .anyMatch(x -> x.isAssignableFrom(elementType));
     }
 
     ManagedObject getDefault();

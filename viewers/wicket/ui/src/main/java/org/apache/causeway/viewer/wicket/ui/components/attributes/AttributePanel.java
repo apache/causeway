@@ -51,10 +51,10 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFace
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.attrib.UiAttribute;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
-import org.apache.causeway.viewer.commons.model.scalar.UiAttribute;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;

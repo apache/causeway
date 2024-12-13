@@ -83,6 +83,13 @@ public final class ManagedObjects {
                 && adapter!=ManagedObject.unspecified();
     }
 
+    /** Optionally the corresponding class, based on whether is specified. */
+    public Optional<Class<?>> correspondingClass(final @Nullable ManagedObject adapter) {
+        return isSpecified(adapter)
+                ? Optional.ofNullable(adapter.getCorrespondingClass()) // null is not expected here, but just in case
+                : Optional.empty();
+    }
+
     /**
      * Optionally given adapter, based on whether it is specified
      * (even if empty, that is, representing null.)

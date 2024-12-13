@@ -19,40 +19,42 @@
 package org.apache.causeway.viewer.wicket.ui.components.attributes;
 
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.commons.model.attrib.UiAttribute;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public abstract class AttributeComponentFactoryWithTypeConstraint
 extends AttributeComponentFactory {
 
     /**
-     * Provides discrimination based on {@link UiAttributeWkt#isScalarTypeAnyOf(Can)}.
+     * Provides discrimination based on {@link UiAttribute#isElementTypeAnyOf(Can)}.
      * <p>
      * If empty, no type constraints are applied.
      */
-    @Getter
-    private final Can<Class<?>> scalarTypes;
+    @Getter @Accessors(fluent=true)
+    private final Can<Class<?>> elementTypes;
 
     protected AttributeComponentFactoryWithTypeConstraint(
             final Class<?> componentClass,
-            final Class<?> scalarType) {
-        this(componentClass, Can.ofSingleton(scalarType));
+            final Class<?> elementType) {
+        this(componentClass, Can.ofSingleton(elementType));
     }
 
     protected AttributeComponentFactoryWithTypeConstraint(
             final Class<?> componentClass,
-            final Can<Class<?>> scalarTypes) {
+            final Can<Class<?>> elementTypes) {
         super(componentClass);
-        this.scalarTypes = scalarTypes;
+        this.elementTypes = elementTypes;
     }
 
     @Override
     protected final ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
 
         // discriminates based on given scalarTypes, if any
-        if(scalarTypes.isNotEmpty()
-                && !attributeModel.isScalarTypeAnyOf(scalarTypes)) {
+        if(elementTypes.isNotEmpty()
+                && !attributeModel.isElementTypeAnyOf(elementTypes)) {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
 

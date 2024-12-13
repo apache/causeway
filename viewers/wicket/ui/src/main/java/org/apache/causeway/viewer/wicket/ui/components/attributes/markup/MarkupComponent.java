@@ -32,7 +32,7 @@ import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 

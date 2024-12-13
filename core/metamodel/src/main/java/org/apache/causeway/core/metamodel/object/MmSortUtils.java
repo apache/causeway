@@ -66,7 +66,7 @@ public class MmSortUtils {
                 || aPojo instanceof Comparable)
             && (bPojo==null
                     || bPojo instanceof Comparable)) {
-            return _Objects.compareNullsFirst((Comparable)aPojo, (Comparable)bPojo);
+            return _Objects.compareNullsFirst((Comparable<?>)aPojo, (Comparable<?>)bPojo);
         }
         final int hashCompare = Integer.compare(Objects.hashCode(aPojo), Objects.hashCode(bPojo));
         if(hashCompare!=0) {

@@ -29,8 +29,8 @@ import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.viewer.commons.model.UiModel;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 
 public interface UiActionForm
 extends

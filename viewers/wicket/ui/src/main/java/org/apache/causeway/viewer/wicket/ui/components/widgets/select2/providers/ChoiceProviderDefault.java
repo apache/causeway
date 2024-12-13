@@ -23,7 +23,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 public class ChoiceProviderDefault

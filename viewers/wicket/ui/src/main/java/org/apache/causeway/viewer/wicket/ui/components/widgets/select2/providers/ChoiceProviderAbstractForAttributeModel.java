@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2.provider
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.commons.model.scalar.UiAttribute;
+import org.apache.causeway.viewer.commons.model.attrib.UiAttribute;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 import lombok.Getter;

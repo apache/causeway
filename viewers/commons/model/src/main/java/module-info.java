@@ -26,7 +26,7 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model.object;
     exports org.apache.causeway.viewer.commons.model.action;
     exports org.apache.causeway.viewer.commons.model.decorators;
-    exports org.apache.causeway.viewer.commons.model.scalar;
+    exports org.apache.causeway.viewer.commons.model.attrib;
     exports org.apache.causeway.viewer.commons.model.hints;
 
     requires static lombok;

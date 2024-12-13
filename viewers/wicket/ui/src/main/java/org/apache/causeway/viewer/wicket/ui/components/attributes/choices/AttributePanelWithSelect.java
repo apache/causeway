@@ -28,8 +28,8 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.components.UiString;
-import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanelWithFormField;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.Select2;
