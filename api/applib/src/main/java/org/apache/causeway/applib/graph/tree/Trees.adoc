@@ -13,8 +13,12 @@ And also for code authors to quickly get an overview or refresher on the topic.
 
 == TreeAdapter 
 
-A `TreeAdapter` provides the parent/child relationship information between pojos to derive a tree-structure. 
+A `TreeAdapter` provides the parent/child relationship information between pojos to derive a tree-structure.
 
+Given a 'root node value object' and a corresponding `TreeAdapter` 
+we can infer a model of `TreeNode`(s). Each `TreeNode` holds a reference to the root-node, 
+the shared `TreeState` and the location within the tree as `TreePath`.
+ 
 [NOTE]
 ====
 The model deliberately does *not* reflect a doubly linked tree, that is, 
@@ -43,12 +47,28 @@ interface TreeConverter<U, T> {
 }
 
 class TreeAdapterWithConverter<U, T> << (R,#FF7700) internal >>{
-    underlyingAdapter(): TreeAdapter<U>
-    converter(): TreeConverter<U, T>
 }
 
-TreeAdapter <|- TreeAdapterWithConverter: facade
-TreeAdapter ..> TreeConverter: uses for conversion
+class TreeNode<T> << (R,#FF7700) >> {
+    value: T
+}
+
+class TreePath << (R,#FF7700) >> {
+    canonicalPath: int[]
+}
+
+class TreeState << (R,#FF7700) >> {
+}
+
+TreeAdapter <|- TreeAdapterWithConverter: acts as facade
+TreeAdapterWithConverter --> TreeConverter: converter
+TreeAdapterWithConverter -> TreeAdapter: underlyingAdapter
+TreeNode --> TreeAdapter: treeAdapter
+TreeNode -> TreeNode: \nrootNode
+TreeNode -> TreePath: treePath
+TreePath <- TreeState: expandedNodePaths (Set)
+TreePath <- TreeState: selectedNodePaths (Set)
+TreeNode -> TreeState: \ntreeState
 
 @enduml
 ----
@@ -56,7 +76,7 @@ TreeAdapter ..> TreeConverter: uses for conversion
 The internal `TreeAdapterWithConverter` acts as a `TreeAdapter` facade by wrapping an underlying `TreeAdapter` 
 and translating the node type back and forth using a `TreeConverter`.
 
-A `TreeNode<T>` has value semantic, while the wrapped type `T` can be an entity, viewmodel or value type
+A `TreeNode<T>` has value semantics, while the wrapped type `T` can be an entity, viewmodel or value type
 (which are all bookmarkable and hence resolve to a new page rendered when clicked in the UI). 
 
 [cols='1a,1a',options="header"]
@@ -68,6 +88,10 @@ A `TreeNode<T>` has value semantic, while the wrapped type `T` can be an entity,
 |T            |ENTITY, VIEWMODEL or VALUE   
 |===
 
+== Built-in TreeAdapter based on Reflection (WIP)
+
+A built-in `TreeAdapter` is provided, that establishes 'parent to child' relationships 
+based on the `@CollectionLayout(navigableSubtree="..")` annotation. 
 
 == TreeProvider (Wicket Viewer)
 

@@ -36,7 +36,12 @@ import java.lang.annotation.Target;
  * @see org.apache.causeway.applib.annotation.ParameterLayout
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({
+    ElementType.METHOD,
+    ElementType.FIELD,
+    ElementType.RECORD_COMPONENT,
+    ElementType.TYPE,
+    ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation

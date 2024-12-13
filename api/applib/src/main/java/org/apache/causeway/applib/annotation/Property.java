@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.applib.annotation;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -41,6 +38,9 @@ import org.apache.causeway.applib.spec.Specification;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Collects together all the domain semantics for the property of a domain
  * object.
@@ -56,9 +56,9 @@ import org.apache.causeway.applib.value.Clob;
 @Target({
         ElementType.METHOD,
         ElementType.FIELD,
+        ElementType.RECORD_COMPONENT,
         ElementType.TYPE,
-        ElementType.ANNOTATION_TYPE
-})
+        ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "prop") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation

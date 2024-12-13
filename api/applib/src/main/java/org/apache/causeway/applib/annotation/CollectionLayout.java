@@ -39,9 +39,9 @@ import java.util.Comparator;
 @Target({
         ElementType.METHOD,
         ElementType.FIELD,
+        ElementType.RECORD_COMPONENT,
         ElementType.TYPE,
-        ElementType.ANNOTATION_TYPE
-})
+        ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @DomainObject(nature=Nature.MIXIN, mixinMethod = "coll") // meta annotation, only applies at class level
 @Domain.Include // meta annotation, in support of meta-model validation
@@ -109,6 +109,15 @@ public @interface CollectionLayout {
      */
     String named()
             default "";
+
+    /**
+     * When set, identifies logical children, that are navigable via the UI.
+     * <p>
+     * The order of appearance of this tree branch in the UI relative to other branches of the same tree node,
+     * is given in <i>Dewey-decimal</i> notation.
+     */
+    String navigableSubtree()
+        default "";
 
     /**
      * The page size for instances of this class when rendered within

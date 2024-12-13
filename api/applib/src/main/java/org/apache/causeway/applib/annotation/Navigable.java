@@ -27,6 +27,9 @@ package org.apache.causeway.applib.annotation;
 public enum Navigable {
     NOT_SPECIFIED,
     IGNORE,
+    /**
+     * When used via {@link PropertyLayout}, identifies a logical parent, that is navigable via the UI.
+     */
     PARENT;
 
     public boolean isParent() { return this == PARENT; }

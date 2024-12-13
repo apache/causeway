@@ -68,6 +68,25 @@ implements Vertex<T> {
 
     // -- FACTORIES
 
+    /**
+     * Creates the root node of a tree structure as inferred from given treeAdapter.
+     */
+    public static <T> TreeNode<T> root(
+            final @NonNull T rootNode,
+            final @NonNull TreeAdapter<T> treeAdapter) {
+        return TreeNode.root(rootNode, treeAdapter, TreeState.rootCollapsed());
+    }
+
+    /**
+     * Creates the root node of a tree structure as inferred from given treeAdapter.
+     */
+    public static <T> TreeNode<T> root(
+            final @NonNull T rootNode,
+            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass,
+            final @NonNull FactoryService factoryService) {
+        return root(rootNode, factoryService.getOrCreate(treeAdapterClass));
+    }
+
     public static <T> TreeNode<T> root(
             final T value,
             final Class<? extends TreeAdapter<T>> treeAdapterClass,
@@ -271,27 +290,6 @@ implements Vertex<T> {
         _NullSafe.stream(treePaths).forEach(selectedPaths::add);
     }
 
-    // -- CONSTRUCTION
-
-    /**
-     * Creates the root node of a tree structure as inferred from given treeAdapter.
-     */
-    public static <T> TreeNode<T> root(
-            final @NonNull T rootNode,
-            final @NonNull TreeAdapter<T> treeAdapter) {
-        return TreeNode.root(rootNode, treeAdapter, TreeState.rootCollapsed());
-    }
-
-    /**
-     * Creates the root node of a tree structure as inferred from given treeAdapter.
-     */
-    public static <T> TreeNode<T> root(
-            final @NonNull T rootNode,
-            final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass,
-            final @NonNull FactoryService factoryService) {
-        return root(rootNode, factoryService.getOrCreate(treeAdapterClass));
-    }
-
     // -- PARENT NODE ITERATION
 
     public Iterator<TreeNode<T>> iteratorHierarchyUp(){
@@ -333,7 +331,7 @@ implements Vertex<T> {
     // -- HELPER
 
     private TreeNode<T> toTreeNode(final TreePath treePath, final T value){
-        return new TreeNode<>(rootNode, treePath, value, treeAdapter, treeState);
+        return new TreeNode<>(rootNode(), treePath, value, treeAdapter, treeState);
     }
 
 }

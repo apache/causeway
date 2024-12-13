@@ -163,7 +163,7 @@ public interface FacetFactory {
     // process class
     // //////////////////////////////////////
 
-    public static class ProcessClassContext
+    public static final class ProcessClassContext
     extends AbstractProcessWithClsContext<FacetHolder>
     implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
 
@@ -217,7 +217,7 @@ public interface FacetFactory {
     // process method
     // //////////////////////////////////////
 
-    public static class ProcessMethodContext
+    public static final class ProcessMethodContext
     extends AbstractProcessWithMethodContext<FacetedMethod>
     implements ProcessContextWithMetadataProperties<FacetedMethod> {
 
@@ -364,7 +364,7 @@ public interface FacetFactory {
 
     // -- PROCESS PARAM
 
-    public static class ProcessParameterContext
+    public static final class ProcessParameterContext
     extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
 
         @Getter private final int paramNum;
