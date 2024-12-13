@@ -22,7 +22,7 @@ import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIc
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 /**
- * Wicket's Tree Component implemented for Causeway,
+ * Wicket's tree component implemented for bookmarkable nodes,
  * where the tree is modeled by a root {@link TreeNode} (and its child-nodes recursively).
  */
 class DomainObjectTree extends NestedTree<TreeNodeMemento>
@@ -51,7 +51,7 @@ implements HasMetaModelContext {
     private DomainObjectTree(
             final String id,
             final TreeNode<?> treeNode) {
-        super(id, new TreeProvider(treeNode), TreeExpansionModel.of(treeNode.getTreeState()));
+        super(id, new TreeProvider(treeNode), TreeExpansionModel.of(treeNode.treeState()));
     }
 
     /**

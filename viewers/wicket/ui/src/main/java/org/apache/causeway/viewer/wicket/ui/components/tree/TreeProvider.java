@@ -49,8 +49,8 @@ implements
 
     TreeProvider(final TreeNode<?> rootNode) {
         this(
-            TreeNodeMemento.mementify(rootNode.getValue(), rootNode.getPositionAsPath()),
-            _Casts.uncheckedCast(new TreeAdapterRecord<>(rootNode.getTreeAdapter())));
+            TreeNodeMemento.mementify(rootNode.value(), rootNode.treePath()),
+            _Casts.uncheckedCast(new TreeAdapterRecord<>(rootNode.treeAdapter())));
     }
 
     @Override

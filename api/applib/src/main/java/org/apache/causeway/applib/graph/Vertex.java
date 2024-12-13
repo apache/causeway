@@ -29,11 +29,24 @@ import java.util.stream.Stream;
  */
 public interface Vertex<T> {
 
-    public T getValue();
-
-    int getIncomingCount();
-    int getOutgoingCount();
+    T value();
+    int incomingCount();
+    int outgoingCount();
 
     Stream<Edge<T>> streamIncoming();
     Stream<Edge<T>> streamOutgoing();
+
+    // -- DEPRECATIONS
+
+    /** @deprecated use {@link #value()} */
+    @Deprecated
+    default T getValue() { return value();}
+
+    /** @deprecated use {@link #incomingCount()} */
+    @Deprecated
+    default int getIncomingCount() { return incomingCount(); }
+
+    /** @deprecated use {@link #outgoingCount()} */
+    @Deprecated
+    default int getOutgoingCount() { return outgoingCount(); }
 }

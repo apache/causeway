@@ -56,6 +56,19 @@ TreeAdapter ..> TreeConverter: uses for conversion
 The internal `TreeAdapterWithConverter` acts as a `TreeAdapter` facade by wrapping an underlying `TreeAdapter` 
 and translating the node type back and forth using a `TreeConverter`.
 
+A `TreeNode<T>` has value semantic, while the wrapped type `T` can be an entity, viewmodel or value type
+(which are all bookmarkable and hence resolve to a new page rendered when clicked in the UI). 
+
+[cols='1a,1a',options="header"]
+.Tree model constituent semantics
+|===
+|Type |Bean Sort   
+//-------------
+|TreeNode<T>  |VALUE   
+|T            |ENTITY, VIEWMODEL or VALUE   
+|===
+
+
 == TreeProvider (Wicket Viewer)
 
 `TreeAdapterRecord` is Wicket's `ITreeProvider` implemented for a tree of `TreeNodeMemento`(s).

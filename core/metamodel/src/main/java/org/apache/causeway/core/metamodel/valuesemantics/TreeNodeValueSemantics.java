@@ -79,10 +79,10 @@ implements
 
     private String toEncodedString(final TreeNode<?> treeNode) {
         final Memento memento = newMemento();
-        memento.put("rootValue", treeNode.getRootValue());
-        memento.put("adapterClass", treeNode.getTreeAdapter().getClass());
-        memento.put("treeState", treeNode.getTreeState());
-        memento.put("treePath", treeNode.getPositionAsPath());
+        memento.put("rootValue", treeNode.rootValue());
+        memento.put("adapterClass", treeNode.treeAdapter().getClass());
+        memento.put("treeState", treeNode.treeState());
+        memento.put("treePath", treeNode.treePath());
         return memento.asString();
     }
 

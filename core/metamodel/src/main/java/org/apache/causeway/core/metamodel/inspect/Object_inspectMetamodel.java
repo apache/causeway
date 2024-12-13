@@ -63,7 +63,7 @@ import lombok.RequiredArgsConstructor;
 public class Object_inspectMetamodel {
 
     @Inject FactoryService factoryService;
-    
+
     private final Object domainObject; // mixee
 
     public static class ActionDomainEvent
@@ -100,14 +100,14 @@ public class Object_inspectMetamodel {
             .orElseThrow(_Exceptions::noSuchElement);
 
         var root = MMNodeFactory.type(domainClassDto, null);
-        
+
         var tree = TreeNode.root(root, factoryService.getOrCreate(MMTreeAdapter.class));
 
         // Initialize view-model nodes of the entire tree,
         // because as it stands, all the type information gets cleared,
         // after the jaxb model got de-serialized.
         tree.streamDepthFirst()
-        .map(TreeNode::getValue)
+        .map(TreeNode::value)
         .forEach(MMNode::title);
 
         tree.expand(TreePath.of(0)); // expand the root node
