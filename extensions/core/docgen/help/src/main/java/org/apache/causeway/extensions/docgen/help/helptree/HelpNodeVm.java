@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.docgen.help.helptree;
 
-import java.util.Optional;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -59,7 +57,7 @@ public class HelpNodeVm implements ViewModel {
     public static HelpNodeVm forRootTopic(final HelpTopic rootTopic) {
         return new HelpNodeVm(rootTopic, rootTopic);
     }
-    
+
     @Inject FactoryService factoryService;
 
     @Getter @Programmatic
@@ -112,7 +110,7 @@ public class HelpNodeVm implements ViewModel {
     @Property
     @PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE, fieldSetId = "detail", sequence = "1")
     public HelpNodeVm getParent() {
-        return Optional.ofNullable(helpNode.getPath().getParentIfAny())
+        return helpNode.getPath().parent()
                 .map(parentPath->new HelpNodeVm(rootTopic, parentPath.toString()))
                 .orElse(null);
     }

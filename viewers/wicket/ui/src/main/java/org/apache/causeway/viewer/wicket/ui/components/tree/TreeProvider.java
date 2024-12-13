@@ -45,8 +45,6 @@ implements
     ITreeProvider<TreeNodeMemento>,
     TreeConverter<Object, TreeNodeMemento> {
 
-    private static final long serialVersionUID = 1L;
-
     TreeProvider(final TreeNode<?> rootNode) {
         this(
             TreeNodeMemento.mementify(rootNode.value(), rootNode.treePath()),

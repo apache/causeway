@@ -56,7 +56,7 @@ public record TreeNode<T>(
      * @implNote records cannot self reference
      */
     @Nullable TreeNode<T> rootNode,
-    /** position with the tree (as path)*/
+    /** position within the tree (as path) */
     @NonNull TreePath treePath,
     @NonNull T value,
     @NonNull TreeAdapter<T> treeAdapter,
@@ -166,7 +166,7 @@ implements Vertex<T> {
     // -- PARENT
 
     public Optional<TreeNode<T>> lookupParent() {
-        return Optional.ofNullable(treePath.getParentIfAny())
+        return treePath.parent()
                 .flatMap(this::resolve);
     }
 
