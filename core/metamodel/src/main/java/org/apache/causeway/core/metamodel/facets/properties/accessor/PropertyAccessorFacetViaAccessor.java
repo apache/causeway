@@ -62,18 +62,14 @@ implements ImperativeFacet {
         var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object referencedObject = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
 
-        if(referencedObject == null) {
-            return null;
-        }
+        if(referencedObject == null) return null;
 
         boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
         if(filterForVisibility) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
             final boolean visible = MmVisibilityUtils
                     .isVisible(referencedAdapter, interactionInitiatedBy);
-            if (!visible) {
-                return null;
-            }
+            if (!visible) return null;
         }
         return referencedObject;
     }

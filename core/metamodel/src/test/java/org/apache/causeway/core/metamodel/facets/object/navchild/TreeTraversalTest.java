@@ -47,7 +47,10 @@ extends FacetFactoryTestAbstract {
         var specLoader = mmc.getSpecificationLoader();
         var specA = specLoader.loadSpecification(_TreeSample.A.class);
         var assocAB = specA.getAssociationElseFail("childrenB");
-
+        //TODO[causeway-core-metamodel-CAUSEWAY-2297] we are seeing a PropertyAccessorFacetViaAccessor here,
+        // while it should be CollectionAccessorFacetViaAccessor
+        //TODO[causeway-core-metamodel-CAUSEWAY-2297] we are expecting to see a NavigableSubtreeFacet here,
+        // but we don't
         System.err.printf("assocA %s%n", assocAB.streamFacets().collect(Can.toCan()).join("\n"));
     }
 
