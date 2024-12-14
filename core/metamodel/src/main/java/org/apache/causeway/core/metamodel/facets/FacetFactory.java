@@ -230,13 +230,7 @@ public interface FacetFactory {
         @Getter private final boolean mixinMain;
 
         /**
-         * @param cls
-         * @param featureType
-         * @param method
-         * @param methodRemover
-         * @param facetedMethod
-         * @param isMixinMain
-         *       - Whether we are currently processing a mixin type AND this context's method can be identified
+         * @param isMixinMain whether we are currently processing a mixin type AND this context's method can be identified
          *         as the main method of the processed mixin class. (since 2.0)
          */
         public ProcessMethodContext(

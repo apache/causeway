@@ -25,7 +25,6 @@ import jakarta.inject.Inject;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
-import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
@@ -43,10 +42,6 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        attachAccessorFacetForAccessorMethod(processMethodContext);
-    }
-
-    private void attachAccessorFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
         var accessorMethod = processMethodContext.getMethod().asMethodElseFail(); // no-arg method, should have a regular facade
         processMethodContext.removeMethod(accessorMethod);
 
@@ -54,51 +49,18 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         var typeSpec = getSpecificationLoader().loadSpecification(cls);
         var facetHolder = processMethodContext.getFacetHolder();
 
-        addFacet(
-                new CollectionAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, facetHolder));
-    }
-
-    // ///////////////////////////////////////////////////////////////
-    // PropertyOrCollectionIdentifyingFacetFactory impl.
-    // ///////////////////////////////////////////////////////////////
-
-    @Override
-    public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
-        return AccessorSemantics.GET.isPrefixOf(method.name());
+        addFacet(new CollectionAccessorFacetViaAccessor(typeSpec, accessorMethod, facetHolder));
     }
 
     @Override
-    public boolean isCollectionAccessor(final ResolvedMethod method) {
-        if (!isPropertyOrCollectionGetterCandidate(method)) {
-            return false;
-        }
-        final Class<?> methodReturnType = method.returnType();
-        return isNonScalar(methodReturnType);
-    }
-
-    /**
-     * The method way well represent a reference property, but this facet
-     * factory does not have any opinion on the matter.
-     */
-    @Override
-    public boolean isPropertyAccessor(final ResolvedMethod method) {
-        return false;
+    public boolean isAssociationAccessor(final ResolvedMethod method) {
+        return AccessorSemantics.isCollectionAccessor(method);
     }
 
     @Override
-    public void findAndRemoveCollectionAccessors(
-            final MethodRemover methodRemover,
-            final List<ResolvedMethod> methodListToAppendTo) {
-        methodRemover.removeMethods(
-                MethodUtil.Predicates.supportedNonScalarMethodReturnType(),
-                methodListToAppendTo::add);
-    }
-
-    @Override
-    public void findAndRemovePropertyAccessors(
+    public void findAndRemoveAccessors(
             final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
-        // does nothing
+        methodRemover.removeMethods(AccessorSemantics::hasSupportedNonScalarMethodReturnType, methodListToAppendTo::add);
     }
 
 }

@@ -53,6 +53,7 @@ import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.Iterator
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.classname.LogicalTypeFacetFromClassNameFactory;
+import org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeFacetPostProcessor;
 import org.apache.causeway.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
@@ -252,6 +253,8 @@ extends ProgrammingModelAbstract {
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DisabledFromImmutablePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeDomainEventsForMixinPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ProjectionFacetsPostProcessor(mmc));
+        
+        addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigableSubtreeFacetPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigationFacetFromHiddenTypePostProcessor(mmc));
 
         // must be after all named facets and description facets have been installed

@@ -29,7 +29,6 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.graph.Edge;
 import org.apache.causeway.applib.graph.SimpleEdge;
 import org.apache.causeway.applib.graph.Vertex;
@@ -40,7 +39,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import lombok.NonNull;
 
 /**
- * Fundamental building block of Tree structures.
+ * Fundamental building block for tree structures.
  * <p>
  * Wraps a node value and holds references to related nodes.
  *
@@ -72,34 +71,34 @@ implements Vertex<T> {
      * Creates the root node of a tree structure as inferred from given treeAdapter.
      */
     public static <T> TreeNode<T> root(
-            final @NonNull T rootNode,
+            final @NonNull T rootValue,
             final @NonNull TreeAdapter<T> treeAdapter) {
-        return TreeNode.root(rootNode, treeAdapter, TreeState.rootCollapsed());
+        return TreeNode.root(rootValue, treeAdapter, TreeState.rootCollapsed());
     }
 
     /**
      * Creates the root node of a tree structure as inferred from given treeAdapter.
      */
     public static <T> TreeNode<T> root(
-            final @NonNull T rootNode,
+            final @NonNull T rootValue,
             final @NonNull Class<? extends TreeAdapter<T>> treeAdapterClass,
             final @NonNull FactoryService factoryService) {
-        return root(rootNode, factoryService.getOrCreate(treeAdapterClass));
+        return root(rootValue, factoryService.getOrCreate(treeAdapterClass));
     }
 
     public static <T> TreeNode<T> root(
-            final T value,
+            final T rootValue,
             final Class<? extends TreeAdapter<T>> treeAdapterClass,
             final TreeState sharedState,
             final FactoryService factoryService) {
-        return root(value, factoryService.getOrCreate(treeAdapterClass));
+        return root(rootValue, factoryService.getOrCreate(treeAdapterClass));
     }
 
     public static <T> TreeNode<T> root(
-            final T value,
+            final T rootValue,
             final TreeAdapter<T> treeAdapter,
             final TreeState sharedState) {
-        return new TreeNode<T>(null, TreePath.root(), value, treeAdapter, sharedState);
+        return new TreeNode<T>(null, TreePath.root(), rootValue, treeAdapter, sharedState);
     }
 
     // --
@@ -224,7 +223,6 @@ implements Vertex<T> {
      * Adds {@code treePaths} to the set of expanded nodes, as held by this tree's shared state object.
      * @param treePaths
      */
-    @Programmatic
     public void expand(final TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = treeState().expandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::add);
@@ -233,7 +231,6 @@ implements Vertex<T> {
     /**
      * Expands this node and all its parents.
      */
-    @Programmatic
     public void expand() {
         final Set<TreePath> expandedPaths = treeState().expandedNodePaths();
         streamHierarchyUp()
@@ -245,7 +242,6 @@ implements Vertex<T> {
      * Removes {@code treePaths} from the set of expanded nodes, as held by this tree's shared state object.
      * @param treePaths
      */
-    @Programmatic
     public void collapse(final TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = treeState().expandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
@@ -257,7 +253,6 @@ implements Vertex<T> {
      * Clears all selection markers.
      * @see #select(TreePath...)
      */
-    @Programmatic
     public void clearSelection() {
         treeState().selectedNodePaths().clear();
     }
@@ -266,7 +261,6 @@ implements Vertex<T> {
      * Whether node that corresponds to given {@link TreePath} has a selection marker.
      * @see #select(TreePath...)
      */
-    @Programmatic
     public boolean isSelected(final TreePath treePath) {
         final Set<TreePath> selectedPaths = treeState().selectedNodePaths();
         return selectedPaths.contains(treePath);
@@ -284,7 +278,6 @@ implements Vertex<T> {
      * }
      * </pre>
      */
-    @Programmatic
     public void select(final TreePath ... treePaths) {
         final Set<TreePath> selectedPaths = treeState().selectedNodePaths();
         _NullSafe.stream(treePaths).forEach(selectedPaths::add);

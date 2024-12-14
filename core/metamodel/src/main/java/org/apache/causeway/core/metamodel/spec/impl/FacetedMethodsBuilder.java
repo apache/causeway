@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +46,6 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
-import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -214,7 +214,7 @@ implements
 
     private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(
             final Consumer<FacetedMethod> onNewAssociationPeer) {
-        var collectionAccessors = _Lists.<ResolvedMethod>newArrayList();
+        var collectionAccessors = new ArrayList<ResolvedMethod>();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
         createCollectionFacetedMethodsFromAccessors(
                 getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
@@ -225,11 +225,11 @@ implements
      * this will pick up the remaining reference properties.
      */
     private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final Consumer<FacetedMethod> onNewField) {
-        var propertyAccessors = _Lists.<ResolvedMethod>newArrayList();
+        var propertyAccessors = new ArrayList<ResolvedMethod>();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
-        methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), propertyAccessors::add);
-        methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), propertyAccessors::add);
+        methodRemover.removeMethods(AccessorSemantics::isNonBooleanGetter, propertyAccessors::add);
+        methodRemover.removeMethods(AccessorSemantics::isBooleanGetter, propertyAccessors::add);
         methodRemover.removeMethods(AccessorSemantics::isRecordComponentAccessor, propertyAccessors::add);
 
         createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
@@ -372,10 +372,7 @@ implements
             final ResolvedMethod actionMethod) {
 
         var actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
-
-        if (!isAllParamTypesValid(actionMethodFacade)) {
-            return null;
-        }
+        if (!isAllParamTypesValid(actionMethodFacade)) return null;
 
         final FacetedMethod action = FacetedMethod
                 .createForAction(getMetaModelContext(), introspectedClass, actionMethodFacade);

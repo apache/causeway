@@ -24,7 +24,6 @@ import java.util.function.Predicate;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 import lombok.experimental.UtilityClass;
@@ -62,8 +61,8 @@ public class MethodUtil {
 
     public static boolean isScalar(final ResolvedMethod method) {
         return isNotVoid(method)
-                    && CollectionSemantics.valueOf(method.returnType())
-                        .isEmpty();
+                && CollectionSemantics.valueOf(method.returnType())
+                    .isEmpty();
     }
 
     @UtilityClass
@@ -78,14 +77,8 @@ public class MethodUtil {
                 final Can<Class<?>> matchingParamTypes) {
             return method -> {
                 // check params (if required)
-
-                if(matchingParamTypes.isEmpty()) {
-                    return true;
-                }
-
-                if(method.paramCount()<(paramIndexOffset+matchingParamTypes.size())) {
-                    return false;
-                }
+                if(matchingParamTypes.isEmpty()) return true;
+                if(method.paramCount()<(paramIndexOffset+matchingParamTypes.size())) return false;
 
                 final Class<?>[] parameterTypes = method.paramTypes();
 
@@ -93,13 +86,9 @@ public class MethodUtil {
                     var left = parameterTypes[paramIndexOffset + c];
                     var right = matchingParamTypes.getElseFail(paramIndexOffset);
 
-                    if(!Objects.equals(left, right)) {
-                        return false;
-                    }
+                    if(!Objects.equals(left, right)) return false;
                 }
-
                 return true;
-
             };
         }
 
@@ -110,87 +99,45 @@ public class MethodUtil {
                 final String methodName,
                 final Class<?> returnType,
                 final Class<?>[] paramTypes) {
-
             return method -> {
-
-                if (!isPublic(method)) {
-                    return false;
-                }
-
-                if (isStatic(method)) {
-                    return false;
-                }
-
+                if (!isPublic(method)) return false;
+                if (isStatic(method)) return false;
                 // check for name
-                if (!method.name().equals(methodName)) {
-                    return false;
-                }
-
+                if (!method.name().equals(methodName)) return false;
                 // check for return type
-                if (returnType != null && returnType != method.returnType()) {
-                    return false;
-                }
-
+                if (returnType != null && returnType != method.returnType()) return false;
                 // check params (if required)
                 if (paramTypes != null) {
                     final Class<?>[] parameterTypes = method.paramTypes();
-                    if (paramTypes.length != parameterTypes.length) {
-                        return false;
-                    }
+                    if (paramTypes.length != parameterTypes.length) return false;
 
                     for (int c = 0; c < paramTypes.length; c++) {
-                        if ((paramTypes[c] != null) && (paramTypes[c] != parameterTypes[c])) {
+                        if ((paramTypes[c] != null)
+                            && (paramTypes[c] != parameterTypes[c])) {
                             return false;
                         }
                     }
                 }
-
                 return true;
             };
-
         }
 
         /**
          * @return whether the method under test matches the given constraints
          */
         public static Predicate<ResolvedMethod> prefixed(
-                final String prefix, final Class<?> returnType, final CanBeVoid canBeVoid, final int paramCount) {
-
+                final String prefix,
+                final Class<?> returnType,
+                final CanBeVoid canBeVoid,
+                final int paramCount) {
             return method -> {
-                if (MethodUtil.isStatic(method)) {
-                    return false;
-                }
-                if(!method.name().startsWith(prefix)) {
-                    return false;
-                }
-                if(method.paramCount() != paramCount) {
-                    return false;
-                }
-                var type = method.returnType();
-                if(!ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, type)) {
-                    return false;
-                }
-
+                if(MethodUtil.isStatic(method)) return false;
+                if(!method.name().startsWith(prefix)) return false;
+                if(method.paramCount() != paramCount) return false;
+                if(!ClassExtensions.isCompatibleAsReturnType(returnType, canBeVoid, method.returnType())) return false;
                 return true;
             };
-
         }
-
-        public static Predicate<ResolvedMethod> booleanGetter() {
-            return AccessorSemantics::isBooleanGetter;
-        }
-
-        public static Predicate<ResolvedMethod> nonBooleanGetter(final Class<?> returnType) {
-            return method->AccessorSemantics.isNonBooleanGetter(method, returnType);
-        }
-
-        public static Predicate<ResolvedMethod> supportedNonScalarMethodReturnType() {
-            return method->
-                AccessorSemantics.isNonBooleanGetter(method, Iterable.class)
-                && CollectionSemantics.valueOf(method.returnType())
-                    .isPresent();
-        }
-
     }
 
 }

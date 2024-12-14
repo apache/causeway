@@ -23,61 +23,62 @@ import java.util.List;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * A {@link FacetFactory} implementation that is able to identify a property or
  * collection.
- *
  * <p>
  * For example, a <i>getter</i> method is most commonly used to represent either
  * a property (value or reference) or a collection, with the return type
  * indicating which.
- *
  * <p>
  * Used by the Java 8 Reflector's <tt>ProgrammingModel</tt> to determine which
  * facet factories to ask whether a {@link Method} represents a property or a
  * collection.
- *
  */
 public interface PropertyOrCollectionIdentifyingFacetFactory extends FacetFactory {
 
-    /**
-     * Whether (this facet is able to determine that) the supplied
-     * {@link Method} possibly represents the accessor of either a
-     * {@link OneToOneAssociation reference property}
-     * or a {@link OneToManyAssociation collection}.
-     *
-     * <p>
-     * For example, if a method name has a prefix of <tt>get</tt> or
-     * alternatively has a prefix of <tt>is</tt> and returns a <tt>boolean</tt>,
-     * then it would be a candidate.
-     */
-    public boolean isPropertyOrCollectionGetterCandidate(ResolvedMethod method);
+//    /**
+//     * Whether (this facet is able to determine that) the supplied
+//     * {@link Method} possibly represents the accessor of either a
+//     * {@link OneToOneAssociation reference property}
+//     * or a {@link OneToManyAssociation collection}.
+//     * <p>
+//     * For example, if a method name has a prefix of <tt>get</tt> or
+//     * alternatively has a prefix of <tt>is</tt> and returns a <tt>boolean</tt>,
+//     * then it would be a candidate.
+//     */
+//    boolean isPropertyOrCollectionGetterCandidate(ResolvedMethod method);
 
-    /**
-     * Whether (this facet is able to determine that) the supplied
-     * {@link Method} represents <i>either</i> a
-     * {@link OneToOneAssociation reference property}.
-     */
-    public boolean isPropertyAccessor(ResolvedMethod method);
+    boolean supportsProperties();
+    boolean supportsCollections();
 
-    /**
-     * Whether (this facet is able to determine that) the supplied
-     * {@link Method} represents a {@link OneToManyAssociation collection}.
-     */
-    public boolean isCollectionAccessor(ResolvedMethod method);
+    boolean isAssociationAccessor(ResolvedMethod method);
+    void findAndRemoveAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
 
-    /**
-     * Use the provided {@link MethodRemover} to remove all reference property
-     * accessors, and append them to the supplied methodList.
-     */
-    public void findAndRemovePropertyAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
 
-    /**
-     * Use the provided {@link MethodRemover} to remove all collection
-     * accessors, and append them to the supplied methodList.
-     */
-    public void findAndRemoveCollectionAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
+//    /**
+//     * Whether (this facet is able to determine that) the supplied
+//     * {@link Method} represents a
+//     * {@link OneToOneAssociation reference property}.
+//     */
+//    boolean isPropertyAccessor(ResolvedMethod method);
+//
+//    /**
+//     * Whether (this facet is able to determine that) the supplied
+//     * {@link Method} represents a {@link OneToManyAssociation collection}.
+//     */
+//    boolean isCollectionAccessor(ResolvedMethod method);
+//
+//    /**
+//     * Use the provided {@link MethodRemover} to remove all reference property
+//     * accessors, and append them to the supplied methodList.
+//     */
+//    void findAndRemovePropertyAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
+//
+//    /**
+//     * Use the provided {@link MethodRemover} to remove all collection
+//     * accessors, and append them to the supplied methodList.
+//     */
+//    void findAndRemoveCollectionAccessors(MethodRemover methodRemover, List<ResolvedMethod> methodListToAppendTo);
 }

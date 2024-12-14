@@ -20,12 +20,15 @@ package org.apache.causeway.core.metamodel.facets.collections.layout;
 
 import jakarta.inject.Inject;
 
+import org.springframework.util.StringUtils;
+
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetForCollectionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromCollectionLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeSequenceFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 public class CollectionLayoutFacetFactory
@@ -47,42 +50,48 @@ extends FacetFactoryAbstract {
                         .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), CollectionLayout.class));
 
         addFacetIfPresent(
-                CssClassFacetForCollectionLayoutAnnotation
+            CssClassFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacet(
-                DefaultViewFacetForCollectionLayoutAnnotation
+            DefaultViewFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder)
                 .orElseGet(()->DefaultViewFacetAsConfigured.create(facetHolder)));
 
         addFacetIfPresent(
-                MemberDescribedFacetForCollectionLayoutAnnotation
+            MemberDescribedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                HiddenFacetForCollectionLayoutAnnotation
+            HiddenFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                LayoutOrderFacetFromCollectionLayoutAnnotation
+            LayoutOrderFacetFromCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                MemberNamedFacetForCollectionLayoutAnnotation
+            MemberNamedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                TableDecoratorFacetForCollectionLayoutAnnotation
-                        .create(collectionLayoutIfAny, facetHolder));
-
-        addFacetIfPresent(
-                PagedFacetForCollectionLayoutAnnotation
+            TableDecoratorFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
         addFacetIfPresent(
-                SortedByFacetForCollectionLayoutAnnotation
+            PagedFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
 
+        addFacetIfPresent(
+            SortedByFacetForCollectionLayoutAnnotation
+                .create(collectionLayoutIfAny, facetHolder));
+        
+        addFacetIfPresent(
+            collectionLayoutIfAny
+                .map(CollectionLayout::navigableSubtree)
+                .filter(StringUtils::hasLength)
+                .flatMap(sequence->NavigableSubtreeSequenceFacet.create(
+                    processMethodContext.getCls(), processMethodContext.getMethod().asMethod(), sequence, facetHolder)));
     }
 
 }

@@ -50,7 +50,37 @@ public enum AccessorSemantics {
                 : false;
     }
 
-    // -- UTILITY
+    // -- HIGH LEVEL PREDICATES
+
+    public static boolean isPropertyAccessor(final ResolvedMethod method) {
+        return isPropertyAccessorCandidate(method)
+            ? !hasCollectionSemantics(method.returnType())
+            : false;
+    }
+
+    public static boolean isCollectionAccessor(final ResolvedMethod method) {
+        return isCollectionAccessorCandidate(method)
+            ? hasCollectionSemantics(method.returnType())
+            : false;
+    }
+
+    public static boolean hasSupportedNonScalarMethodReturnType(final ResolvedMethod method) {
+        return isNonBooleanGetter(method, Iterable.class)
+            && CollectionSemantics.valueOf(method.returnType()).isPresent();
+    }
+
+    // -- LOW LEVEL PREDICATES
+
+    public static boolean isPropertyAccessorCandidate(final ResolvedMethod method) {
+        return isRecordComponentAccessor(method)
+            || isGetter(method);
+    }
+
+    public static boolean isCollectionAccessorCandidate(final ResolvedMethod method) {
+        return isRecordComponentAccessor(method)
+            || isNonBooleanGetter(method);
+    }
+
 
     public static boolean isCandidateGetterName(final @Nullable String name) {
         return GET.isPrefixOf(name)
@@ -65,11 +95,9 @@ public enum AccessorSemantics {
                 || method.returnType() == Boolean.class);
     }
 
-    public static boolean isNonBooleanGetter(final ResolvedMethod method, final Predicate<Class<?>> typeFilter) {
-        return GET.isPrefixOf(method.name())
-                && method.isNoArg()
-                && !method.isStatic()
-                && typeFilter.test(method.returnType());
+    public static boolean isGetter(final ResolvedMethod method) {
+        return isBooleanGetter(method)
+                || isNonBooleanGetter(method);
     }
 
     public static boolean isNonBooleanGetter(final ResolvedMethod method, final Class<?> expectedType) {
@@ -77,9 +105,15 @@ public enum AccessorSemantics {
             expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
     }
 
-    public static boolean isGetter(final ResolvedMethod method) {
-        return isBooleanGetter(method)
-                || isNonBooleanGetter(method, type->type != void.class);
+    public static boolean isNonBooleanGetter(final ResolvedMethod method) {
+        return isNonBooleanGetter(method, type->type != void.class);
+    }
+
+    private static boolean isNonBooleanGetter(final ResolvedMethod method, final Predicate<Class<?>> typeFilter) {
+        return GET.isPrefixOf(method.name())
+                && method.isNoArg()
+                && !method.isStatic()
+                && typeFilter.test(method.returnType());
     }
 
     /**
@@ -89,17 +123,21 @@ public enum AccessorSemantics {
         var recordClass = method.implementationClass();
         if(!recordClass.isRecord()) return false;
         for(var recordComponent : recordClass.getRecordComponents()) {
-            if(method.name().equals(recordComponent.getName())) {
-                return true;
-            }
+            if(method.name().equals(recordComponent.getName())) return true;
         }
         return false;
     }
 
     public static String associationIdentifierFor(final ResolvedMethod method) {
-        final String id = AccessorSemantics.isRecordComponentAccessor(method)
+        return AccessorSemantics.isRecordComponentAccessor(method)
                 ? method.name()
                 : Introspector.decapitalize(_Strings.baseName(method.name()));
-        return id;
+    }
+
+    // -- HELPER
+
+    private static boolean hasCollectionSemantics(final Class<?> cls) {
+        return CollectionSemantics.valueOf(cls)
+                .isPresent();
     }
 }

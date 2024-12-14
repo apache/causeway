@@ -87,12 +87,12 @@ implements MetaModelRefiner {
         final ResolvedMethod method;
 
         // find method that provides the parent ...
-        if(parentEvaluator instanceof Evaluators.MethodEvaluator) {
+        if(parentEvaluator instanceof Evaluators.MethodEvaluator methodEvaluator) {
             // we have a 'parent' annotated method
-            method = ((Evaluators.MethodEvaluator) parentEvaluator).getMethod();
-        } else if(parentEvaluator instanceof Evaluators.FieldEvaluator) {
+            method = methodEvaluator.getMethod();
+        } else if(parentEvaluator instanceof Evaluators.FieldEvaluator fieldEvaluator) {
             // we have a 'parent' annotated field (useful if one uses lombok's @Getter on a field)
-            method = ((Evaluators.FieldEvaluator) parentEvaluator).getCorrespondingGetter().orElse(null);
+            method = fieldEvaluator.getCorrespondingGetter().orElse(null);
             if(method==null)
                 return; // code should not be reached, since case should be handled by meta-data validation
 

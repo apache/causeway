@@ -165,13 +165,10 @@ implements HasMetaModelContext, AutoCloseable{
     public void findAssociationCandidateGetters(
             final Stream<ResolvedMethod> methodStream,
             final Consumer<ResolvedMethod> onCandidate) {
-
         var factories = propertyOrCollectionIdentifyingFactories.get();
-
-        methodStream
-        .forEach(method->{
+        methodStream.forEach(method->{
             for (var facetFactory : factories) {
-                if (facetFactory.isPropertyOrCollectionGetterCandidate(method)) {
+                if (facetFactory.isAssociationAccessor(method)) {
                     onCandidate.accept(method);
                 }
             }
@@ -179,36 +176,36 @@ implements HasMetaModelContext, AutoCloseable{
     }
 
     /**
-     * Use the provided {@link MethodRemover} to have all known
+     * Use the provided {@link MethodRemover} to call all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all
-     * property accessors, and append them to the supplied methodList.
-     *
+     * property accessors and append them to the supplied methodList.
      * <p>
-     * Intended to be called after {@link #findAndRemovePropertyAccessors(MethodRemover, java.util.List)} once only reference properties remain.
+     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveAccessors(MethodRemover, List)
      */
     public void findAndRemovePropertyAccessors(
             final MethodRemover methodRemover,
             final List<ResolvedMethod> methodListToAppendTo) {
 
         for (var facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
-            facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
+            if(!facetFactory.supportsProperties()) continue;
+            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo);
         }
     }
 
     /**
-     * Use the provided {@link MethodRemover} to have all known
+     * Use the provided {@link MethodRemover} to call all known
      * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all
-     * property accessors, and append them to the supplied methodList.
+     * collection accessors and append them to the supplied methodList.
      *
-     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveCollectionAccessors(MethodRemover,
-     *      List)
+     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveAccessors(MethodRemover, List)
      */
     public void findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover,
             final List<ResolvedMethod> methodListToAppendTo) {
 
         for (var facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
-            facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
+            if(!facetFactory.supportsCollections()) continue;
+            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo);
         }
     }
 
@@ -344,7 +341,6 @@ implements HasMetaModelContext, AutoCloseable{
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
 
         for (FacetFactory facetFactory : factoryListByFeatureType.get().getOrElseEmpty(featureType)) {
-
             facetFactory.process(processMethodContext);
         }
     }

@@ -94,7 +94,10 @@ class _Utils {
 
     Optional<ResolvedMethod> findGetter(final Class<?> declaringClass, final String propertyName) {
         return _Utils.findMethodExact(declaringClass, "get" + _Strings.capitalize(propertyName))
-                .or(()->_Utils.findMethodExact(declaringClass, "is" + _Strings.capitalize(propertyName)));
+                .or(()->_Utils.findMethodExact(declaringClass, "is" + _Strings.capitalize(propertyName)))
+                .or(()->declaringClass.isRecord()
+                    ? _Utils.findMethodExact(declaringClass, propertyName)
+                    : Optional.empty());
     }
 
     ResolvedMethod findGetterOrFail(final Class<?> declaringClass, final String propertyName) {

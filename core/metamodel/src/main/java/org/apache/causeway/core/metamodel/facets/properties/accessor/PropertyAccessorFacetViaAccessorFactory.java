@@ -25,14 +25,10 @@ import jakarta.inject.Inject;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
-import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory
 extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -46,57 +42,26 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        attachPropertyAccessFacetForAccessorMethod(processMethodContext);
-    }
-
-    private void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
         var accessorMethod = processMethodContext.getMethod().asMethodElseFail();
         processMethodContext.removeMethod(accessorMethod);
 
-        final Class<?> cls = processMethodContext.getCls();
-        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
+        var cls = processMethodContext.getCls();
+        var typeSpec = getSpecificationLoader().loadSpecification(cls);
+        var facetHolder = processMethodContext.getFacetHolder();
 
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(
-                new PropertyAccessorFacetViaAccessor(typeSpec, accessorMethod, property));
-    }
-
-    // ///////////////////////////////////////////////////////
-    // PropertyOrCollectionIdentifying
-    // ///////////////////////////////////////////////////////
-
-    @Override
-    public boolean isPropertyOrCollectionGetterCandidate(final ResolvedMethod method) {
-        return AccessorSemantics.isGetter(method)
-                || AccessorSemantics.isRecordComponentAccessor(method);
-    }
-
-    /**
-     * The method way well represent a collection, but this facet factory does
-     * not have any opinion on the matter.
-     */
-    @Override
-    public boolean isCollectionAccessor(final ResolvedMethod method) {
-        return false;
+        addFacet(new PropertyAccessorFacetViaAccessor(typeSpec, accessorMethod, facetHolder));
     }
 
     @Override
-    public boolean isPropertyAccessor(final ResolvedMethod method) {
-        if (!isPropertyOrCollectionGetterCandidate(method)) {
-            return false;
-        }
-        return isNonScalar(method.returnType());
+    public boolean isAssociationAccessor(final ResolvedMethod method) {
+        return AccessorSemantics.isPropertyAccessor(method);
     }
 
     @Override
-    public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
-        methodRemover.removeMethods(MethodUtil.Predicates.booleanGetter(), methodListToAppendTo::add);
-        methodRemover.removeMethods(MethodUtil.Predicates.nonBooleanGetter(Object.class), methodListToAppendTo::add);
-    }
-
-    @Override
-    public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
-        // does nothing
+    public void findAndRemoveAccessors(
+        final MethodRemover methodRemover, final List<ResolvedMethod> methodListToAppendTo) {
+        methodRemover.removeMethods(AccessorSemantics::isBooleanGetter, methodListToAppendTo::add);
+        methodRemover.removeMethods(AccessorSemantics::isNonBooleanGetter, methodListToAppendTo::add);
     }
 
 }

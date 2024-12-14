@@ -45,6 +45,6 @@ public interface ObjectTypeFacetFactory extends FacetFactory {
         }
     }
 
-    void process(ProcessObjectTypeContext processClassContext);
+    void process(ProcessObjectTypeContext processObjectTypeContext);
 
 }
