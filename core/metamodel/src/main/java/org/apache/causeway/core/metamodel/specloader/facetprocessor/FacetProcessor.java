@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.specloader.facetprocessor;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
-import org.apache.causeway.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
+import org.apache.causeway.core.metamodel.facets.AccessorFacetFactory;
 import org.apache.causeway.core.metamodel.methods.MethodFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -102,14 +103,22 @@ implements HasMetaModelContext, AutoCloseable{
             _Lazy.threadSafe(this::init_methodFilteringFactories);
 
     /**
-     * All registered {@link FacetFactory factories} that implement
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}.
-     *
+     * {@link FacetFactory factories} that implement {@link AccessorFacetFactory}
+     * and support properties.
      * <p>
      * Used within {@link #recognizes(Method)}.
      */
-    private final _Lazy<List<PropertyOrCollectionIdentifyingFacetFactory>> propertyOrCollectionIdentifyingFactories =
-            _Lazy.threadSafe(this::init_propertyOrCollectionIdentifyingFactories);
+    private final _Lazy<List<AccessorFacetFactory>> propertyAccessorFactories =
+        _Lazy.threadSafe(this::init_propertyIdentifyingFactories);
+
+    /**
+     * {@link FacetFactory factories} that implement {@link AccessorFacetFactory}
+     * and support collections.
+     * <p>
+     * Used within {@link #recognizes(Method)}.
+     */
+    private final _Lazy<List<AccessorFacetFactory>> collectionAccessorFactories =
+        _Lazy.threadSafe(this::init_collectionIdentifyingFactories);
 
     /**
      * ObjectFeatureType => List<FacetFactory>
@@ -157,19 +166,25 @@ implements HasMetaModelContext, AutoCloseable{
     /**
      * Appends to the supplied {@link Set} all of the {@link Method}s that may
      * represent a property or collection.
-     *
      * <p>
      * Delegates to all known
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}s.
+     * {@link AccessorFacetFactory}s.
      */
     public void findAssociationCandidateGetters(
             final Stream<ResolvedMethod> methodStream,
             final Consumer<ResolvedMethod> onCandidate) {
-        var factories = propertyOrCollectionIdentifyingFactories.get();
+
         methodStream.forEach(method->{
-            for (var facetFactory : factories) {
+            for (var facetFactory : propertyAccessorFactories.get()) {
                 if (facetFactory.isAssociationAccessor(method)) {
                     onCandidate.accept(method);
+                    return; // first wins
+                }
+            }
+            for (var facetFactory : collectionAccessorFactories.get()) {
+                if (facetFactory.isAssociationAccessor(method)) {
+                    onCandidate.accept(method);
+                    return; // first wins
                 }
             }
         });
@@ -177,42 +192,37 @@ implements HasMetaModelContext, AutoCloseable{
 
     /**
      * Use the provided {@link MethodRemover} to call all known
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all
+     * {@link AccessorFacetFactory}s to remove all
      * property accessors and append them to the supplied methodList.
      * <p>
-     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveAccessors(MethodRemover, List)
+     * @see AccessorFacetFactory#findAndRemoveAccessors(MethodRemover, Consumer)
      */
     public void findAndRemovePropertyAccessors(
             final MethodRemover methodRemover,
             final List<ResolvedMethod> methodListToAppendTo) {
-
-        for (var facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
-            if(!facetFactory.supportsProperties()) continue;
-            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo);
+        for (var facetFactory : propertyAccessorFactories.get()) {
+            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo::add);
         }
     }
 
     /**
      * Use the provided {@link MethodRemover} to call all known
-     * {@link PropertyOrCollectionIdentifyingFacetFactory}s to remove all
+     * {@link AccessorFacetFactory}s to remove all
      * collection accessors and append them to the supplied methodList.
      *
-     * @see PropertyOrCollectionIdentifyingFacetFactory#findAndRemoveAccessors(MethodRemover, List)
+     * @see AccessorFacetFactory#findAndRemoveAccessors(MethodRemover, Consumer)
      */
     public void findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover,
             final List<ResolvedMethod> methodListToAppendTo) {
-
-        for (var facetFactory : propertyOrCollectionIdentifyingFactories.get()) {
-            if(!facetFactory.supportsCollections()) continue;
-            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo);
+        for (var facetFactory : collectionAccessorFactories.get()) {
+            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo::add);
         }
     }
 
     /**
      * Whether this {@link Method method} is recognized by any of the
      * {@link FacetFactory}s.
-     *
      * <p>
      * Typically this is when method has a specific prefix, such as
      * <tt>validate</tt> or <tt>hide</tt>. Specifically, it checks:
@@ -221,7 +231,6 @@ implements HasMetaModelContext, AutoCloseable{
      * {@link MethodPrefixBasedFacetFactory}</li>
      * <li>the method against any {@link MethodFilteringFacetFactory}</li>
      * </ul>
-     *
      * <p>
      * The design of {@link MethodPrefixBasedFacetFactory} (whereby this facet
      * factory set does the work) is a slight performance optimization for when
@@ -230,17 +239,11 @@ implements HasMetaModelContext, AutoCloseable{
     public boolean recognizes(final ResolvedMethod method) {
         var methodName = method.name();
         for (var prefix : methodPrefixes.get()) {
-            if (methodName.startsWith(prefix)) {
-                return true;
-            }
+            if (methodName.startsWith(prefix)) return true;
         }
-
         for (var factory : methodFilteringFactories.get()) {
-            if (factory.recognizes(method)) {
-                return true;
-            }
+            if (factory.recognizes(method)) return true;
         }
-
         return false;
     }
 
@@ -272,7 +275,6 @@ implements HasMetaModelContext, AutoCloseable{
     /**
      * Attaches all facets applicable to the provided {@link FeatureType#OBJECT
      * object}) to the supplied {@link FacetHolder}.
-     *
      * <p>
      * Delegates to {@link FacetFactory#process(FacetFactory.ProcessClassContext)} for each
      * appropriate factory.
@@ -303,7 +305,6 @@ implements HasMetaModelContext, AutoCloseable{
     /**
      * Attaches all facets applicable to the provided {@link FeatureType type of
      * feature} to the supplied {@link FacetHolder}.
-     *
      * <p>
      * Delegates to {@link FacetFactory#process(FacetFactory.ProcessMethodContext)} for each
      * appropriate factory.
@@ -352,7 +353,6 @@ implements HasMetaModelContext, AutoCloseable{
     /**
      * Attaches all facets applicable to the provided parameter to the supplied
      * {@link FacetHolder}.
-     *
      * <p>
      * Delegates to {@link FacetFactory#processParams(ProcessParameterContext)}
      * for each appropriate factory.
@@ -389,7 +389,8 @@ implements HasMetaModelContext, AutoCloseable{
         factoryListByFeatureType.clear();
         methodPrefixes.clear();
         methodFilteringFactories.clear();
-        propertyOrCollectionIdentifyingFactories.clear();
+        propertyAccessorFactories.clear();
+        collectionAccessorFactories.clear();
     }
 
     // -- INITIALIZERS
@@ -415,7 +416,7 @@ implements HasMetaModelContext, AutoCloseable{
     }
 
     private List<MethodFilteringFacetFactory> init_methodFilteringFactories() {
-        var methodFilteringFactories = _Lists.<MethodFilteringFacetFactory>newArrayList();
+        var methodFilteringFactories = new ArrayList<MethodFilteringFacetFactory>();
         for (var factory : factories) {
             if (factory instanceof MethodFilteringFacetFactory) {
                 var methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
@@ -425,12 +426,22 @@ implements HasMetaModelContext, AutoCloseable{
         return methodFilteringFactories;
     }
 
-    private List<PropertyOrCollectionIdentifyingFacetFactory> init_propertyOrCollectionIdentifyingFactories() {
-        var propertyOrCollectionIdentifyingFactories = _Lists.<PropertyOrCollectionIdentifyingFacetFactory>newArrayList();
+    private List<AccessorFacetFactory> init_propertyIdentifyingFactories() {
+        var propertyOrCollectionIdentifyingFactories = new ArrayList<AccessorFacetFactory>();
         for (var factory : factories) {
-            if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
-                var identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
-                propertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
+            if (factory instanceof AccessorFacetFactory accessorFacetFactory) {
+                if(!accessorFacetFactory.supportsProperties()) continue;
+                propertyOrCollectionIdentifyingFactories.add(accessorFacetFactory);
+            }
+        }
+        return propertyOrCollectionIdentifyingFactories;
+    }
+    private List<AccessorFacetFactory> init_collectionIdentifyingFactories() {
+        var propertyOrCollectionIdentifyingFactories = new ArrayList<AccessorFacetFactory>();
+        for (var factory : factories) {
+            if (factory instanceof AccessorFacetFactory accessorFacetFactory) {
+                if(!accessorFacetFactory.supportsCollections()) continue;
+                propertyOrCollectionIdentifyingFactories.add(accessorFacetFactory);
             }
         }
         return propertyOrCollectionIdentifyingFactories;

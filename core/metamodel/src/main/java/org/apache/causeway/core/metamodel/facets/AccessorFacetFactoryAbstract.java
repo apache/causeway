@@ -20,19 +20,21 @@ package org.apache.causeway.core.metamodel.facets;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
+public abstract class AccessorFacetFactoryAbstract
 extends MethodPrefixBasedFacetFactoryAbstract
-implements PropertyOrCollectionIdentifyingFacetFactory {
+implements AccessorFacetFactory {
 
-    protected PropertyOrCollectionIdentifyingFacetFactoryAbstract(
+    protected AccessorFacetFactoryAbstract(
             final MetaModelContext mmc,
             final ImmutableEnumSet<FeatureType> featureTypes,
             final Can<String> prefixes) {
-
         super(mmc, featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
 
@@ -45,5 +47,21 @@ implements PropertyOrCollectionIdentifyingFacetFactory {
     public final boolean supportsCollections() {
         return super.getFeatureTypes().contains(FeatureType.COLLECTION);
     }
+
+    @Override
+    public final void process(final ProcessMethodContext processMethodContext) {
+        var accessorMethod = processMethodContext.getMethod().asMethodElseFail();
+        processMethodContext.removeMethod(accessorMethod);
+
+        var cls = processMethodContext.getCls();
+        var typeSpec = getSpecificationLoader().loadSpecification(cls);
+        var facetHolder = processMethodContext.getFacetHolder();
+
+
+        addFacet(createFacet(typeSpec, accessorMethod, facetHolder));
+    }
+
+    protected abstract PropertyOrCollectionAccessorFacet createFacet(
+        ObjectSpecification typeSpec, ResolvedMethod accessorMethod, FacetedMethod facetHolder);
 
 }
