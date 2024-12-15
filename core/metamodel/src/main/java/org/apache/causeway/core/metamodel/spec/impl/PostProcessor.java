@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.specloader.postprocessor;
+package org.apache.causeway.core.metamodel.spec.impl;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-public record PostProcessor(
+record PostProcessor(
         ProgrammingModel programmingModel,
         Can<MetaModelPostProcessor> enabledPostProcessors) {
 

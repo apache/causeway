@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
-import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 
 public interface Facet
 extends

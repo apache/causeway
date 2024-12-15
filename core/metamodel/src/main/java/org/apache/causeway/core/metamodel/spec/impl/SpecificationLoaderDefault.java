@@ -78,8 +78,6 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionState;
-import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
@@ -182,8 +180,7 @@ implements
                 classSubstitutorRegistry);
 
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
-        instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
-        instance.facetProcessor.init();
+        instance.facetProcessor = new FacetProcessor(programmingModel);
         instance.postProcessor = enablePostprocessors
                 ? new PostProcessor(programmingModel)
                 : new PostProcessor(programmingModel, Can.empty()); // explicitly use empty post processor list
@@ -199,7 +196,7 @@ implements
             log.debug("initialising {}", this);
         }
         this.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
-        this.facetProcessor = new FacetProcessor(programmingModel, metaModelContext);
+        this.facetProcessor = new FacetProcessor(programmingModel);
     }
 
     record SpecCollector(
@@ -244,7 +241,7 @@ implements
         var stopWatch = _Timing.now();
 
         // initialize subcomponents, only after @PostConstruct has globally completed
-        facetProcessor.init();
+        this.facetProcessor = new FacetProcessor(programmingModel);
         this.postProcessor = new PostProcessor(programmingModel);
 
         var specs = new SpecCollector();
@@ -338,7 +335,7 @@ implements
     public void shutdown() {
         log.debug("shutting down {}", this);
         disposeMetaModel();
-        facetProcessor.close();
+        facetProcessor = null;
         postProcessor = null;
         facetProcessor = null;
     }

@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
-import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 
 /**
  * Simply installs a {@link MandatoryFacetDefault} onto all properties and
@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcess
  *
  * <p>
  * The idea is that this {@link FacetFactory} is included early on in the
- * {@link FacetProcessor}, but other {@link MandatoryFacet} implementations
+ * {@link ProgrammingModel}, but other {@link MandatoryFacet} implementations
  * which don't require mandatory semantics will potentially replace these where
  * the property or parameter is annotated or otherwise indicated as being
  * optional.

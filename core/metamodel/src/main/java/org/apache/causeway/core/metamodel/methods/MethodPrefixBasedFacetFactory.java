@@ -19,17 +19,12 @@
 package org.apache.causeway.core.metamodel.methods;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
-import org.apache.causeway.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**
  * Indicates that the {@link FacetFactory} works by recognizing methods with a
  * certain prefix (or prefixes).
- *
- * <p>
- * Used by {@link FacetProcessor#recognizes(ResolvedMethod)}.
  */
 public interface MethodPrefixBasedFacetFactory extends FacetFactory, MetaModelRefiner {
 

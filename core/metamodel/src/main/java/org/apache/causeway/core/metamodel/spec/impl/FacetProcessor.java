@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.specloader.facetprocessor;
+package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -29,9 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
@@ -56,111 +54,83 @@ import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-public class FacetProcessor
-implements HasMetaModelContext, AutoCloseable{
+record FacetProcessor(
+        ProgrammingModel programmingModel,
+        /**
+         * {@link FacetFactory Facet factories}, in order as provided by the ProgrammingModel.
+         */
+        Can<FacetFactory> factories,
+        /**
+         * Class<FacetFactory> => FacetFactory
+         */
+        Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType,
+        /**
+         * <pre>ObjectFeatureType => List of FacetFactory</pre>
+         * <p>
+         * The lists remain in the same order as the order in
+         * {@link #factories}.
+         */
+        ListMultimap<FeatureType, FacetFactory> factoriesByFeatureType,
+        /**
+         * All method prefixes to check in {@link #recognizes(Method)}.
+         * <p>
+         * Derived from factories that implement
+         * {@link MethodPrefixBasedFacetFactory}.
+         */
+        Set<String> methodPrefixes,
+        /**
+         * All registered {@link FacetFactory factories} that implement
+         * {@link MethodFilteringFacetFactory}.
+         */
+        List<MethodFilteringFacetFactory> methodFilteringFactories,
+        /**
+         * {@link FacetFactory factories} that implement {@link AccessorFacetFactory}
+         * and support properties.
+         */
+        List<AccessorFacetFactory> propertyAccessorFactories,
+        /**
+         * {@link FacetFactory factories} that implement {@link AccessorFacetFactory}
+         * and support collections.
+         */
+        List<AccessorFacetFactory> collectionAccessorFactories,
+        List<ObjectTypeFacetFactory> objectSpecIfFacetFactoryList
+        )
+implements HasMetaModelContext {
 
-    private final @NonNull ProgrammingModel programmingModel;
+    public FacetProcessor(
+            @NonNull final ProgrammingModel programmingModel) {
+        this(programmingModel, programmingModel.streamFactories()
+                .map(programmingModel.getMetaModelContext().getServiceInjector()::injectServicesInto)
+                .collect(Can.toCan()));
+    }
 
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull MetaModelContext metaModelContext;
+    private FacetProcessor(
+            final ProgrammingModel programmingModel,
+            final Can<FacetFactory> factories) {
+        this(programmingModel, factories, factories.toMap(FacetFactory::getClass), factoriesByFeatureType(factories));
+    }
 
-    /**
-     * Class<FacetFactory> => FacetFactory
-     */
-    private final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType = _Maps.newHashMap();
-
-    /**
-     * {@link FacetFactory Facet factories}, in order they were
-     * {@link #registerFactory(FacetFactory) registered}.
-     */
-    private final List<FacetFactory> factories = _Lists.newArrayList();
-
-    /**
-     * All method prefixes to check in {@link #recognizes(Method)}.
-     *
-     * <p>
-     * Derived from factories that implement
-     * {@link MethodPrefixBasedFacetFactory}.
-     *
-     */
-    private final _Lazy<Set<String>> methodPrefixes =
-            _Lazy.threadSafe(this::init_methodPrefixes);
-
-    /**
-     * All registered {@link FacetFactory factories} that implement
-     * {@link MethodFilteringFacetFactory}.
-     *
-     * <p>
-     * Used within {@link #recognizes(Method)}.
-     *
-     */
-    private final _Lazy<List<MethodFilteringFacetFactory>> methodFilteringFactories =
-            _Lazy.threadSafe(this::init_methodFilteringFactories);
-
-    /**
-     * {@link FacetFactory factories} that implement {@link AccessorFacetFactory}
-     * and support properties.
-     * <p>
-     * Used within {@link #recognizes(Method)}.
-     */
-    private final _Lazy<List<AccessorFacetFactory>> propertyAccessorFactories =
-        _Lazy.threadSafe(this::init_propertyIdentifyingFactories);
-
-    /**
-     * {@link FacetFactory factories} that implement {@link AccessorFacetFactory}
-     * and support collections.
-     * <p>
-     * Used within {@link #recognizes(Method)}.
-     */
-    private final _Lazy<List<AccessorFacetFactory>> collectionAccessorFactories =
-        _Lazy.threadSafe(this::init_collectionIdentifyingFactories);
-
-    /**
-     * ObjectFeatureType => List<FacetFactory>
-     *
-     * <p>
-     * Lazily initialized, then cached. The lists remain in the same order that
-     * the factories were {@link #registerFactory(FacetFactory) registered}.
-     */
-    private final _Lazy<ListMultimap<FeatureType, FacetFactory>> factoryListByFeatureType =
-            _Lazy.threadSafe(this::init_factoriesByFeatureType);
-
-    // -- LIFECYCLE
-
-    public void init() {
-        cleanUp();
-        programmingModel.streamFactories()
-        .forEach(this::registerFactory);
+    private FacetProcessor(
+            final ProgrammingModel programmingModel,
+            final Can<FacetFactory> factories,
+            final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType,
+            final ListMultimap<FeatureType, FacetFactory> factoriesByFeatureType) {
+        this(programmingModel,
+                factories,
+                factoryByFactoryType,
+                factoriesByFeatureType,
+                methodPrefixes(factories),
+                methodFilteringFactories(factories),
+                propertyAccessorFactories(factories),
+                collectionAccessorFactories(factories),
+                objectSpecIfFacetFactoryList(factoriesByFeatureType, factories));
     }
 
     @Override
-    public void close() {
-        cleanUp();
-    }
-
-    private void cleanUp() {
-        clearCaches();
-        factories.clear();
-        factoryByFactoryType.clear();
-    }
-
-    private void registerFactory(final FacetFactory factory) {
-        factoryByFactoryType.put(factory.getClass(), factory);
-        factories.add(factory);
-        injectDependenciesInto(factory);
-    }
-
-    /**
-     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt>
-     * processing.
-     */
-    public void injectDependenciesInto(final FacetFactory factory) {
-        metaModelContext.getServiceInjector().injectServicesInto(factory);
+    public MetaModelContext getMetaModelContext() {
+        return programmingModel.getMetaModelContext();
     }
 
     /**
@@ -175,13 +145,13 @@ implements HasMetaModelContext, AutoCloseable{
             final Consumer<ResolvedMethod> onCandidate) {
 
         methodStream.forEach(method->{
-            for (var facetFactory : propertyAccessorFactories.get()) {
+            for (var facetFactory : propertyAccessorFactories) {
                 if (facetFactory.isAssociationAccessor(method)) {
                     onCandidate.accept(method);
                     return; // first wins
                 }
             }
-            for (var facetFactory : collectionAccessorFactories.get()) {
+            for (var facetFactory : collectionAccessorFactories) {
                 if (facetFactory.isAssociationAccessor(method)) {
                     onCandidate.accept(method);
                     return; // first wins
@@ -198,7 +168,7 @@ implements HasMetaModelContext, AutoCloseable{
     public List<ResolvedMethod> findAndRemovePropertyAccessors(
             final MethodRemover methodRemover) {
         var propertyAccessors = new ArrayList<ResolvedMethod>();
-        for (var facetFactory : propertyAccessorFactories.get()) {
+        for (var facetFactory : propertyAccessorFactories) {
             methodRemover.removeMethods(facetFactory::isAssociationAccessor, propertyAccessors::add);
         }
         return propertyAccessors;
@@ -212,7 +182,7 @@ implements HasMetaModelContext, AutoCloseable{
     public List<ResolvedMethod> findAndRemoveCollectionAccessors(
             final MethodRemover methodRemover) {
         var collectionAccessors = new ArrayList<ResolvedMethod>();
-        for (var facetFactory : collectionAccessorFactories.get()) {
+        for (var facetFactory : collectionAccessorFactories) {
             methodRemover.removeMethods(facetFactory::isAssociationAccessor, collectionAccessors::add);
         }
         return collectionAccessors;
@@ -236,38 +206,19 @@ implements HasMetaModelContext, AutoCloseable{
      */
     public boolean recognizes(final ResolvedMethod method) {
         var methodName = method.name();
-        for (var prefix : methodPrefixes.get()) {
+        for (var prefix : methodPrefixes) {
             if (methodName.startsWith(prefix)) return true;
         }
-        for (var factory : methodFilteringFactories.get()) {
+        for (var factory : methodFilteringFactories) {
             if (factory.recognizes(method)) return true;
         }
         return false;
     }
 
     public void processObjectType(final Class<?> cls, final FacetHolder facetHolder) {
-        var factoryList = getObjectSpecIfFacetFactoryList();
-        for (var facetFactory : factoryList) {
+        for (var facetFactory : objectSpecIfFacetFactoryList()) {
             facetFactory.process(new ProcessObjectTypeContext(cls, facetHolder));
         }
-    }
-
-    private List<ObjectTypeFacetFactory> objectSpecIfFacetFactoryList = null;
-
-    private List<ObjectTypeFacetFactory> getObjectSpecIfFacetFactoryList() {
-        if(objectSpecIfFacetFactoryList == null) {
-            var facetFactories = _Lists.<ObjectTypeFacetFactory>newArrayList();
-
-            factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
-            .forEach(facetFactory->{
-                if (facetFactory instanceof ObjectTypeFacetFactory) {
-                    facetFactories.add((ObjectTypeFacetFactory) facetFactory);
-                }
-            });
-
-            objectSpecIfFacetFactoryList = Collections.unmodifiableList(facetFactories);
-        }
-        return objectSpecIfFacetFactoryList;
     }
 
     /**
@@ -289,15 +240,14 @@ implements HasMetaModelContext, AutoCloseable{
             final IntrospectionPolicy introspectionPolicy,
             final MethodRemover methodRemover,
             final FacetHolder facetHolder) {
-
         var ctx = new ProcessClassContext(
                 cls,
                 introspectionPolicy,
                 removerElseNoopRemover(methodRemover),
                 facetHolder);
 
-        factoryListByFeatureType.get().getOrElseEmpty(FeatureType.OBJECT)
-        .forEach(facetFactory->facetFactory.process(ctx));
+        factoriesByFeatureType.getOrElseEmpty(FeatureType.OBJECT)
+            .forEach(facetFactory->facetFactory.process(ctx));
     }
 
     /**
@@ -339,7 +289,7 @@ implements HasMetaModelContext, AutoCloseable{
                         method,
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
 
-        for (FacetFactory facetFactory : factoryListByFeatureType.get().getOrElseEmpty(featureType)) {
+        for (FacetFactory facetFactory : factoriesByFeatureType.getOrElseEmpty(featureType)) {
             facetFactory.process(processMethodContext);
         }
     }
@@ -374,26 +324,16 @@ implements HasMetaModelContext, AutoCloseable{
                 new ProcessParameterContext(introspectedClass, introspectionPolicy,
                         method, methodRemover, facetedMethodParameter);
 
-        var factoryCache = factoryListByFeatureType.get();
-
         FeatureType.PARAMETERS_ONLY.stream()
-        .map(factoryCache::getOrElseEmpty)
-        .flatMap(List::stream)
-        .collect(Collectors.toSet())
-        .forEach(facetFactory->facetFactory.processParams(processParameterContext));
-    }
-
-    private void clearCaches() {
-        factoryListByFeatureType.clear();
-        methodPrefixes.clear();
-        methodFilteringFactories.clear();
-        propertyAccessorFactories.clear();
-        collectionAccessorFactories.clear();
+            .map(factoriesByFeatureType::getOrElseEmpty)
+            .flatMap(List::stream)
+            .collect(Collectors.toSet())
+            .forEach(facetFactory->facetFactory.processParams(processParameterContext));
     }
 
     // -- INITIALIZERS
 
-    private ListMultimap<FeatureType, FacetFactory> init_factoriesByFeatureType() {
+    private static ListMultimap<FeatureType, FacetFactory> factoriesByFeatureType(final Iterable<FacetFactory> factories) {
         var factoryListByFeatureType = _Multimaps.<FeatureType, FacetFactory>newListMultimap();
         for (var factory : factories) {
             factory.getFeatureTypes().forEach(featureType->
@@ -402,29 +342,27 @@ implements HasMetaModelContext, AutoCloseable{
         return factoryListByFeatureType;
     }
 
-    private Set<String> init_methodPrefixes() {
+    private static Set<String> methodPrefixes(final Iterable<FacetFactory> factories) {
         var cachedMethodPrefixes = _Sets.<String>newHashSet();
         for (var facetFactory : factories) {
-            if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
-                var methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
+            if (facetFactory instanceof MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory) {
                 methodPrefixBasedFacetFactory.getPrefixes().forEach(cachedMethodPrefixes::add);
             }
         }
         return cachedMethodPrefixes;
     }
 
-    private List<MethodFilteringFacetFactory> init_methodFilteringFactories() {
+    private static List<MethodFilteringFacetFactory> methodFilteringFactories(final Iterable<FacetFactory> factories) {
         var methodFilteringFactories = new ArrayList<MethodFilteringFacetFactory>();
         for (var factory : factories) {
-            if (factory instanceof MethodFilteringFacetFactory) {
-                var methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
+            if (factory instanceof MethodFilteringFacetFactory methodFilteringFacetFactory) {
                 methodFilteringFactories.add(methodFilteringFacetFactory);
             }
         }
         return methodFilteringFactories;
     }
 
-    private List<AccessorFacetFactory> init_propertyIdentifyingFactories() {
+    private static List<AccessorFacetFactory> propertyAccessorFactories(final Iterable<FacetFactory> factories) {
         var propertyOrCollectionIdentifyingFactories = new ArrayList<AccessorFacetFactory>();
         for (var factory : factories) {
             if (factory instanceof AccessorFacetFactory accessorFacetFactory) {
@@ -434,7 +372,7 @@ implements HasMetaModelContext, AutoCloseable{
         }
         return propertyOrCollectionIdentifyingFactories;
     }
-    private List<AccessorFacetFactory> init_collectionIdentifyingFactories() {
+    private static List<AccessorFacetFactory> collectionAccessorFactories(final Iterable<FacetFactory> factories) {
         var propertyOrCollectionIdentifyingFactories = new ArrayList<AccessorFacetFactory>();
         for (var factory : factories) {
             if (factory instanceof AccessorFacetFactory accessorFacetFactory) {
@@ -443,6 +381,19 @@ implements HasMetaModelContext, AutoCloseable{
             }
         }
         return propertyOrCollectionIdentifyingFactories;
+    }
+
+    private static List<ObjectTypeFacetFactory> objectSpecIfFacetFactoryList(
+            final ListMultimap<FeatureType, FacetFactory> factoryListByFeatureType,
+            final Iterable<FacetFactory> factories) {
+            var facetFactories = new ArrayList<ObjectTypeFacetFactory>();
+            factoryListByFeatureType.getOrElseEmpty(FeatureType.OBJECT)
+            .forEach(facetFactory->{
+                if (facetFactory instanceof ObjectTypeFacetFactory objectTypeFacetFactory) {
+                    facetFactories.add(objectTypeFacetFactory);
+                }
+            });
+            return Collections.unmodifiableList(facetFactories);
     }
 
     // -- HELPER

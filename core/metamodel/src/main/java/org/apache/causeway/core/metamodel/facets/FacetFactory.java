@@ -63,7 +63,7 @@ import lombok.RequiredArgsConstructor;
  * <p>
  *     To process a mixin member in the context of it actually being a mixin
  *     member (for example, authorization or translations), instead use the
- *     {@link org.apache.causeway.core.metamodel.specloader.postprocessor.PostProcessor} interface.
+ *     {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor} interface.
  * </p>
  */
 public interface FacetFactory {
