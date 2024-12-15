@@ -21,15 +21,16 @@ package org.apache.causeway.core.metamodel.facets.object.navchild;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 
-//TODO[causeway-core-metamodel-CAUSEWAY-2297] WIP
 class TreeTraversalTest
 extends FacetFactoryTestAbstract {
 
@@ -38,22 +39,27 @@ extends FacetFactoryTestAbstract {
 
     @BeforeEach
     void setUp() {
-        mmc = MetaModelContext_forTesting.buildDefault();
+        mmc = MetaModelContext_forTesting.builder()
+                .enablePostprocessors(true)
+                .build();
         treeAdapter = new ObjectTreeAdapter(mmc.getSpecificationLoader());
     }
 
-    //@Test
+    @Test
     void preconditions() {
         var specLoader = mmc.getSpecificationLoader();
         var specA = specLoader.loadSpecification(_TreeSample.A.class);
+
+        // first: members must have the NavigableSubtreeSequenceFacet
         var assocAB = specA.getAssociationElseFail("childrenB");
-        //TODO[causeway-core-metamodel-CAUSEWAY-2297] we are seeing a PropertyAccessorFacetViaAccessor here,
-        // while it should be CollectionAccessorFacetViaAccessor
-        //TODO[causeway-core-metamodel-CAUSEWAY-2297] we are expecting to see a NavigableSubtreeFacet here,
-        // but we don't
-        System.err.printf("assocA %s%n", assocAB.streamFacets().collect(Can.toCan()).join("\n"));
+        assertTrue(assocAB.isCollection());
+        assertTrue(assocAB.containsFacet(NavigableSubtreeSequenceFacet.class));
+
+        // second: post-processor should generate NavigableSubtreeFacet
+        assertTrue(specA.containsFacet(NavigableSubtreeFacet.class));
     }
 
+    //TODO[causeway-core-metamodel-CAUSEWAY-2297] make test work
     //@Test
     void depthFirstTraversal() {
         // instantiate a tree, that we later traverse
@@ -72,6 +78,7 @@ extends FacetFactoryTestAbstract {
                 nodeNames);
     }
 
+    //TODO[causeway-core-metamodel-CAUSEWAY-2297] make test work
     //@Test
     void leafToRootTraversal() {
         // instantiate a tree and pick an arbitrary leaf value,

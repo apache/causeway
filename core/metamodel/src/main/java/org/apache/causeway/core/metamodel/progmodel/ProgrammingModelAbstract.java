@@ -40,8 +40,8 @@ import lombok.Value;
 
 public abstract class ProgrammingModelAbstract
 implements
-        ProgrammingModel,
-        HasMetaModelContext {
+    ProgrammingModel,
+    HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
@@ -59,16 +59,12 @@ implements
      * @param filter - the final programming model will only contain factories accepted by this filter
      */
     public void init(final ProgrammingModelInitFilter filter) {
-
-        //assertNotInitialized();
         if(isInitialized()) return;
 
         // for all registered facet-factories that also implement MetaModelRefiner
         for (var facetFactory : snapshotFactories(filter, metaModelContext)) {
-
-            if(facetFactory instanceof MetaModelRefiner) {
-                var metaModelValidatorRefiner = (MetaModelRefiner) facetFactory;
-                metaModelValidatorRefiner.refineProgrammingModel(this);
+            if(facetFactory instanceof MetaModelRefiner metaModelRefiner) {
+                metaModelRefiner.refineProgrammingModel(this);
             }
         }
 
@@ -78,7 +74,6 @@ implements
                 Collections.unmodifiableList(snapshotValidators(filter, metaModelContext));
         this.unmodifiablePostProcessors =
                 Collections.unmodifiableList(snapshotPostProcessors(filter, metaModelContext));
-
     }
 
     // -- SETUP
@@ -159,9 +154,7 @@ implements
         var factories = _Lists.<FacetFactory>newArrayList();
         for(var order : FacetProcessingOrder.values()) {
             var factoryEntrySet = factoryEntriesByOrder.get(order);
-            if(factoryEntrySet==null) {
-                continue;
-            }
+            if(factoryEntrySet==null)  continue;
             for(var factoryEntry : factoryEntrySet) {
                 if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
                     factories.add(factoryEntry.getInstance());
@@ -181,9 +174,8 @@ implements
         var validators = _Lists.<MetaModelValidator>newArrayList();
         for(var order : ValidationOrder.values()) {
             var validatorEntrySet = validatorEntriesByOrder.get(order);
-            if(validatorEntrySet==null) {
-                continue;
-            }
+            if(validatorEntrySet==null) continue;
+
             for(var validatorEntry : validatorEntrySet) {
                 if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
                     validators.add(validatorEntry.getInstance());
@@ -203,9 +195,8 @@ implements
         var postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
         for(var order : PostProcessingOrder.values()) {
             var postProcessorEntrySet = postProcessorEntriesByOrder.get(order);
-            if(postProcessorEntrySet==null) {
-                continue;
-            }
+            if(postProcessorEntrySet==null) continue;
+
             for(var postProcessorEntry : postProcessorEntrySet) {
                 if(filter.acceptPostProcessor(
                         postProcessorEntry.getInstance().getClass(),

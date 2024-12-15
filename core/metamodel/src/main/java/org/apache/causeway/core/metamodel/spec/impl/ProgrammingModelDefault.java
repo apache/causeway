@@ -105,11 +105,11 @@ extends ProgrammingModelAbstract {
     ProgrammingModelDefault(final MetaModelContext mmc, final Iterable<MetaModelRefiner> refiners) {
         super(mmc);
 
-        // act on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
+        // acts on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
         addFacetFactories();
 
-        // only during the post processors will the mixin members been resolved
-        // and are available on the ObjectSpecification.
+        // only during post processing will the mixed-in members be resolved
+        // and made available to the ObjectSpecification
         addPostProcessors();
 
         addValidators();
@@ -253,7 +253,7 @@ extends ProgrammingModelAbstract {
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new DisabledFromImmutablePostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new SynthesizeDomainEventsForMixinPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new ProjectionFacetsPostProcessor(mmc));
-        
+
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigableSubtreeFacetPostProcessor(mmc));
         addPostProcessor(PostProcessingOrder.A1_BUILTIN, new NavigationFacetFromHiddenTypePostProcessor(mmc));
 

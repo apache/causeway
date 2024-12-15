@@ -156,6 +156,14 @@ extends MetaModelContext {
                 new ClassSubstitutorDefault()
                 ));
 
+    /**
+     * Whether to enable all post-processors, that are registered with the {@link ProgrammingModel}.
+     * <p>
+     * default: false
+     */
+    @Builder.Default
+    private boolean enablePostprocessors = false;
+
     private ObjectManager objectManager;
 
     private WrapperFactory wrapperFactory;
@@ -389,6 +397,7 @@ extends MetaModelContext {
                     environment,
                     serviceRegistry,
                     programmingModel,
+                    enablePostprocessors,
                     causewayBeanTypeClassifier,
                     causewayBeanTypeRegistry,
                     classSubstitutorRegistry);

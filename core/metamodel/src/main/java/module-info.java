@@ -131,6 +131,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.object.tabledec to org.apache.causeway.viewer.wicket.ui;
     exports org.apache.causeway.core.metamodel.facets.object.layout;
     exports org.apache.causeway.core.metamodel.facets.all.hide;
+    exports org.apache.causeway.core.metamodel.postprocessors;
     exports org.apache.causeway.core.metamodel.services.grid.spi;
     exports org.apache.causeway.core.metamodel.specloader.validator;
     exports org.apache.causeway.core.metamodel.util;

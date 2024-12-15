@@ -122,7 +122,7 @@ implements
     private final ClassSubstitutorRegistry classSubstitutorRegistry;
     private final Provider<ValueSemanticsResolver> valueSemanticsResolver;
     private final ProgrammingModel programmingModel;
-    private final PostProcessor postProcessor;
+    private PostProcessor postProcessor;
 
     @Inject
     public List<PreloadableTypes> preloadableTypes = Collections.emptyList();
@@ -154,7 +154,6 @@ implements
             final Provider<ValueSemanticsResolver> valueSemanticsRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
         this.programmingModel = programmingModel;
-        this.postProcessor = new PostProcessor(programmingModel);
         this.causewayConfiguration = causewayConfiguration;
         this.causewaySystemEnvironment = causewaySystemEnvironment;
         this.serviceRegistry = serviceRegistry;
@@ -171,6 +170,7 @@ implements
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
+            final boolean enablePostprocessors,
             final CausewayBeanTypeClassifier causewayBeanTypeClassifier,
             final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
@@ -184,6 +184,9 @@ implements
         instance.metaModelContext = serviceRegistry.lookupServiceElseFail(MetaModelContext.class);
         instance.facetProcessor = new FacetProcessor(programmingModel, instance.metaModelContext);
         instance.facetProcessor.init();
+        instance.postProcessor = enablePostprocessors
+                ? new PostProcessor(programmingModel)
+                : new PostProcessor(programmingModel, Can.empty()); // explicitly use empty post processor list
 
         return instance;
     }
@@ -242,7 +245,7 @@ implements
 
         // initialize subcomponents, only after @PostConstruct has globally completed
         facetProcessor.init();
-        postProcessor.init();
+        this.postProcessor = new PostProcessor(programmingModel);
 
         var specs = new SpecCollector();
 
@@ -336,7 +339,7 @@ implements
         log.debug("shutting down {}", this);
         disposeMetaModel();
         facetProcessor.close();
-        postProcessor.close();
+        postProcessor = null;
         facetProcessor = null;
     }
 

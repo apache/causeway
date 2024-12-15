@@ -115,6 +115,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -135,11 +136,11 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private final IntrospectionPolicy introspectionPolicy;
 
     public ObjectSpecificationDefault(
-            final CausewayBeanMetaData typeMeta,
-            final MetaModelContext mmc,
-            final FacetProcessor facetProcessor,
-            final PostProcessor postProcessor,
-            final ClassSubstitutorRegistry classSubstitutorRegistry) {
+            @NonNull final CausewayBeanMetaData typeMeta,
+            @NonNull final MetaModelContext mmc,
+            @NonNull final FacetProcessor facetProcessor,
+            @NonNull final PostProcessor postProcessor,
+            @NonNull final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         this.correspondingClass = typeMeta.getCorrespondingClass();
         this.logicalType = typeMeta.logicalType();
@@ -238,7 +239,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         updateInterfaces(interfaceSpecList);
     }
 
-    protected void introspectMembers() {
+    private void introspectMembers() {
 
         // yet this logic does not skip UNKNONW
         if(this.getBeanSort().isCollection()
@@ -254,7 +255,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         replaceAssociations(createAssociations());
         replaceActions(createActions());
 
-        postProcess();
+        postProcessor.postProcess(this);
+        invalidateCachedFacets();
     }
 
     private void addNamedFacetIfRequired() {
@@ -704,11 +706,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         this.navigableParentFacet = getFacet(NavigableParentFacet.class);
         this.cssClassFacet = getFacet(CssClassFacet.class);
         this.aliasedFacet = getFacet(AliasedFacet.class);
-    }
-
-    protected void postProcess() {
-        postProcessor.postProcess(this);
-        invalidateCachedFacets();
     }
 
     @Override

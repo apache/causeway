@@ -41,13 +41,14 @@ public class _JUnitSupport {
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final ServiceRegistry serviceRegistry,
             final ProgrammingModel programmingModel,
+            final boolean enablePostprocessors,
             final CausewayBeanTypeClassifier causewayBeanTypeClassifier,
             final CausewayBeanTypeRegistry causewayBeanTypeRegistry,
             final ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         return SpecificationLoaderDefault
                 .instanceForTesting(causewayConfiguration, causewaySystemEnvironment, serviceRegistry,
-                        programmingModel, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
+                        programmingModel, enablePostprocessors, causewayBeanTypeClassifier, causewayBeanTypeRegistry,
                         classSubstitutorRegistry);
     }
 
@@ -73,9 +74,11 @@ public class _JUnitSupport {
             final FacetedMethod facetedMethod) {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, false, true);
     }
+
     public ObjectAction actionForMixinMain(final FacetedMethod facetedMethod) {
         return new ObjectActionDefault(facetedMethod.getFeatureIdentifier(), facetedMethod, true, true);
     }
+
     public ObjectActionMixedIn mixedInActionforMixinMain(
             final ObjectSpecification mixeeSpec,
             final ObjectSpecification mixinSpec,

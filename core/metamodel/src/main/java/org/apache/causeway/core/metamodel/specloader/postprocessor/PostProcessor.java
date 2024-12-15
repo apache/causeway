@@ -24,32 +24,21 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-import lombok.RequiredArgsConstructor;
+public record PostProcessor(
+        ProgrammingModel programmingModel,
+        Can<MetaModelPostProcessor> enabledPostProcessors) {
 
-@RequiredArgsConstructor
-public class PostProcessor implements AutoCloseable {
-
-    private final ProgrammingModel programmingModel;
-    private Can<MetaModelPostProcessor> enabledPostProcessors = Can.empty(); // populated at #init
-
-    public void init() {
-        enabledPostProcessors = programmingModel.streamPostProcessors()
+    public PostProcessor(final ProgrammingModel programmingModel) {
+        this(programmingModel, programmingModel.streamPostProcessors()
                 .filter(MetaModelPostProcessor::isEnabled)
-                .collect(Can.toCan());
-    }
-
-    @Override
-    public void close() {
-        enabledPostProcessors = Can.empty();
+                .collect(Can.toCan()));
     }
 
     public void postProcess(final ObjectSpecification objectSpecification) {
 
         for (var postProcessor : enabledPostProcessors) {
 
-            if(!postProcessor.getFilter().test(objectSpecification)) {
-                continue;
-            }
+            if(!postProcessor.getFilter().test(objectSpecification)) continue;
 
             postProcessor.postProcessObject(objectSpecification);
 
