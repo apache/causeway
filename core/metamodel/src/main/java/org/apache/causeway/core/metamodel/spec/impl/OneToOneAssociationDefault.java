@@ -155,7 +155,7 @@ implements OneToOneAssociation, Serializable {
 
         var propertyOrCollectionAccessorFacet = getFacet(PropertyOrCollectionAccessorFacet.class);
         var referencedPojo =
-                propertyOrCollectionAccessorFacet.getProperty(ownerAdapter, interactionInitiatedBy);
+                propertyOrCollectionAccessorFacet.getAssociationValueAsPojo(ownerAdapter, interactionInitiatedBy);
 
         if (referencedPojo == null) {
             // TODO: perhaps this should instead return ManagedObject.empty(getSpecification()) ?

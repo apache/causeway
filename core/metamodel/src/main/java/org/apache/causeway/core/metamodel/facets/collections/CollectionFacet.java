@@ -103,26 +103,23 @@ public interface CollectionFacet extends Facet {
     // -- UTILS
 
     public static Optional<CollectionFacet> lookup(@Nullable final ManagedObject container) {
-        if(container==null) {
-            return Optional.empty();
-        }
-        return container.getSpecification().lookupFacet(CollectionFacet.class);
+        return container!=null
+            ? container.getSpecification().lookupFacet(CollectionFacet.class)
+            : Optional.empty();
     }
 
     public static int elementCount(@Nullable final ManagedObject container) {
-        if(container instanceof PackedManagedObject) {
-            return ((PackedManagedObject)container).unpack().size();
-        }
-        return lookup(container)
+        return container instanceof PackedManagedObject packedManagedObject
+            ? packedManagedObject.unpack().size()
+            : lookup(container)
                 .map(collectionFacet->collectionFacet.size(container))
                 .orElse(0);
     }
 
     public static Stream<ManagedObject> streamAdapters(@Nullable final ManagedObject container) {
-        if(container instanceof PackedManagedObject) {
-            return ((PackedManagedObject)container).unpack().stream();
-        }
-        return lookup(container)
+        return container instanceof PackedManagedObject packedManagedObject
+            ? packedManagedObject.unpack().stream()
+            : lookup(container)
                 .map(collectionFacet->collectionFacet.stream(container))
                 .orElse(Stream.empty());
     }

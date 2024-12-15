@@ -19,10 +19,10 @@
 package org.apache.causeway.commons.semantics;
 
 import java.beans.Introspector;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -37,6 +37,12 @@ public enum AccessorSemantics {
     IS("is"),
     SET("set");
     private final String prefix;
+
+    public static String associationIdentifierFor(final ResolvedMethod method) {
+        return AccessorSemantics.isRecordComponentAccessor(method)
+                ? method.name()
+                : Introspector.decapitalize(_Strings.baseName(method.name()));
+    }
 
     public String prefix(final @Nullable String input) {
         return input!=null
@@ -53,34 +59,29 @@ public enum AccessorSemantics {
     // -- HIGH LEVEL PREDICATES
 
     public static boolean isPropertyAccessor(final ResolvedMethod method) {
-        return isPropertyAccessorCandidate(method)
+        return isRecordComponentAccessor(method)
+                || isGetter(method)
             ? !hasCollectionSemantics(method.returnType())
             : false;
     }
 
     public static boolean isCollectionAccessor(final ResolvedMethod method) {
-        return isCollectionAccessorCandidate(method)
+        return isRecordComponentAccessor(method)
+                || isNonBooleanGetter(method)
             ? hasCollectionSemantics(method.returnType())
             : false;
     }
 
-    public static boolean hasSupportedNonScalarMethodReturnType(final ResolvedMethod method) {
-        return isNonBooleanGetter(method, Iterable.class)
-            && CollectionSemantics.valueOf(method.returnType()).isPresent();
-    }
-
     // -- LOW LEVEL PREDICATES
 
-    public static boolean isPropertyAccessorCandidate(final ResolvedMethod method) {
-        return isRecordComponentAccessor(method)
-            || isGetter(method);
+    public static boolean isRecordComponentAccessor(final ResolvedMethod method) {
+        var recordClass = method.implementationClass();
+        if(!recordClass.isRecord()) return false;
+        for(var recordComponent : recordClass.getRecordComponents()) {
+            if(method.name().equals(recordComponent.getName())) return true;
+        }
+        return false;
     }
-
-    public static boolean isCollectionAccessorCandidate(final ResolvedMethod method) {
-        return isRecordComponentAccessor(method)
-            || isNonBooleanGetter(method);
-    }
-
 
     public static boolean isCandidateGetterName(final @Nullable String name) {
         return GET.isPrefixOf(name)
@@ -100,14 +101,19 @@ public enum AccessorSemantics {
                 || isNonBooleanGetter(method);
     }
 
-    public static boolean isNonBooleanGetter(final ResolvedMethod method, final Class<?> expectedType) {
-        return isNonBooleanGetter(method, type->
-            expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
-    }
-
     public static boolean isNonBooleanGetter(final ResolvedMethod method) {
         return isNonBooleanGetter(method, type->type != void.class);
     }
+
+//  public static boolean hasIterableMethodReturnType(final ResolvedMethod method) {
+//      return isNonBooleanGetter(method, Iterable.class)
+//          && hasCollectionSemantics(method.returnType());
+//  }
+//
+//  private static boolean isNonBooleanGetter(final ResolvedMethod method, final Class<?> expectedType) {
+//      return isNonBooleanGetter(method, type->
+//          expectedType.isAssignableFrom(ClassUtils.resolvePrimitiveIfNecessary(type)));
+//  }
 
     private static boolean isNonBooleanGetter(final ResolvedMethod method, final Predicate<Class<?>> typeFilter) {
         return GET.isPrefixOf(method.name())
@@ -116,28 +122,10 @@ public enum AccessorSemantics {
                 && typeFilter.test(method.returnType());
     }
 
-    /**
-     * @since 3.0.0
-     */
-    public static boolean isRecordComponentAccessor(final ResolvedMethod method) {
-        var recordClass = method.implementationClass();
-        if(!recordClass.isRecord()) return false;
-        for(var recordComponent : recordClass.getRecordComponents()) {
-            if(method.name().equals(recordComponent.getName())) return true;
-        }
-        return false;
-    }
-
-    public static String associationIdentifierFor(final ResolvedMethod method) {
-        return AccessorSemantics.isRecordComponentAccessor(method)
-                ? method.name()
-                : Introspector.decapitalize(_Strings.baseName(method.name()));
-    }
-
     // -- HELPER
 
+    /** includes {@link Map} which are not directly iterable */
     private static boolean hasCollectionSemantics(final Class<?> cls) {
-        return CollectionSemantics.valueOf(cls)
-                .isPresent();
+        return CollectionSemantics.valueOf(cls).isPresent();
     }
 }

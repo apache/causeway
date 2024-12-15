@@ -103,26 +103,20 @@ implements OneToManyAssociation {
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object collection = accessor.getProperty(ownerAdapter, interactionInitiatedBy);
-        if (collection == null) {
-            return null;
-        }
+        var accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
+        var collection = accessor.getAssociationValueAsPojo(ownerAdapter, interactionInitiatedBy);
+        if (collection == null) return null;
 
-        var objectManager = super.getObjectManager();
-
-        super.getServiceInjector().injectServicesInto(collection);
-
-        return objectManager.adapt(collection, this::getElementType);
+        return getObjectManager().adapt(collection, this::getElementType);
     }
 
     @Override
     public boolean isEmpty(
-            final ManagedObject parentAdapter,
+            final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?
-        final ManagedObject collection = get(parentAdapter, interactionInitiatedBy);
+        final ManagedObject collection = get(ownerAdapter, interactionInitiatedBy);
         return CollectionFacet.elementCount(collection) == 0;
     }
 
@@ -142,7 +136,6 @@ implements OneToManyAssociation {
     public Can<ManagedObject> getChoices(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
         return Can.empty();
     }
 

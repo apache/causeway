@@ -55,27 +55,21 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getProperty(
+    public Object getAssociationValueAsPojo(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object collectionOrArray = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
-        if(collectionOrArray == null) {
-            return null;
-        }
+        if(collectionOrArray == null) return null;
 
-        var collectionAdapter = getObjectManager().adapt(collectionOrArray);
-
-        final boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
-        if(filterForVisibility) {
-
+        if(isConfiguredToFilterForVisibility()) {
+            var collectionAdapter = getObjectManager().adapt(collectionOrArray);
             var autofittedObjectContainer = MmVisibilityUtils
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.returnType());
 
-            if (autofittedObjectContainer != null) {
-                return autofittedObjectContainer;
-            }
+            if (autofittedObjectContainer != null) return autofittedObjectContainer;
+
             // would be null if unable to take a copy (unrecognized return type)
             // fallback to returning the original adapter, without filtering for visibility
         }

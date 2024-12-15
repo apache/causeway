@@ -141,9 +141,8 @@ implements
                         _Casts.uncheckedCast(getEventType()), null,
                         getFacetHolder(), ic.getHead(),
                         null, null);
-        if (event != null && event.isHidden()) {
-            return "Hidden by subscriber";
-        }
+        if (event != null && event.isHidden()) return "Hidden by subscriber";
+
         return null;
     }
 
@@ -173,19 +172,15 @@ implements
 
     @Override
     public String invalidates(final ValidityContext ic) {
+        if(getterFacetIfAny == null) return null;
         if(!isPostable()) return null; // bale out
 
-        if(getterFacetIfAny == null) {
-            return null;
-        }
-
         // if this is a mixin, then this ain't true.
-        if(!(ic instanceof ProposedHolder)) {
-            return null;
-        }
+        if(!(ic instanceof ProposedHolder)) return null;
+
         final ProposedHolder ph = (ProposedHolder) ic;
 
-        final Object oldValue = getterFacetIfAny.getProperty(ic.getTarget(), ic.getInitiatedBy());
+        final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.getTarget(), ic.getInitiatedBy());
         final ManagedObject proposedAdapter = ph.getProposed();
         final Object proposedValue = proposedAdapter != null ? proposedAdapter.getPojo() : null;
 

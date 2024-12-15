@@ -164,7 +164,7 @@ implements
         }
 
         // ... post the executing event
-        var oldValuePojo = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
+        var oldValuePojo = getterFacet.getAssociationValueAsPojo(head.getTarget(), interactionInitiatedBy);
         var newValuePojo = MmUnwrapUtils.single(newValue);
 
         var propertyDomainEvent =
@@ -190,7 +190,7 @@ implements
         executeClearOrSetWithoutEvents(newValueAfterEventPolling);
 
         // reading the actual value from the target object, playing it safe...
-        var actualNewValue = getterFacet.getProperty(head.getTarget(), interactionInitiatedBy);
+        var actualNewValue = getterFacet.getAssociationValueAsPojo(head.getTarget(), interactionInitiatedBy);
         if (!Objects.equals(oldValuePojo, actualNewValue)) {
 
             // ... post the executed event

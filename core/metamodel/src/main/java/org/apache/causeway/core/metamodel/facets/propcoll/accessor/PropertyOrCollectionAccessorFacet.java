@@ -18,35 +18,32 @@
  */
 package org.apache.causeway.core.metamodel.facets.propcoll.accessor;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
- * The mechanism by which the value of the property can be accessed.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to invoking the
- * accessor method for a property OR a collection.
+ * Provides access to an association, typically via a getter.
  */
 public interface PropertyOrCollectionAccessorFacet extends Facet {
 
     /**
-     * Gets the value of this property or collection from this object (as a pojo, not as
-     * an {@link ManagedObject adapter}).
-     *
+     * Returns the (nullable) pojo value of this property or collection from given {@link ManagedObject}.
      * <p>
-     *     The object(s) will be excluded if not visible to the current user.  That is, for a collection they will be
-     *     omitted from that collection, while for a property if the referenced object is invisible then null will be
-     *     returned.
-     * </p>
-     * @param inObject
-     * @param interactionInitiatedBy
+     * If enabled via {@link CausewayConfiguration causeway.core.meta-model.filter-visibility},
+     * object(s) not visible to the current user will be excluded from the result.
+     * <p>
+     * That is, for a property {@code null} will be returned,
+     * while for a collection, objects not visible, will be omitted from that collection.
      */
-    Object getProperty(
-            final ManagedObject inObject,
-            final InteractionInitiatedBy interactionInitiatedBy);
+    @Nullable
+    Object getAssociationValueAsPojo(
+            ManagedObject inObject,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     ObjectSpecification getDeclaringType();
 }

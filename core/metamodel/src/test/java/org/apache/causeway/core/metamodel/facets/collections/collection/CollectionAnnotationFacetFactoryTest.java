@@ -94,7 +94,7 @@ extends FacetFactoryTestAbstract {
             var mockOnType = Mockito.mock(ObjectSpecification.class);
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
-                public Object getProperty(
+                public Object getAssociationValueAsPojo(
                         final ManagedObject inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
@@ -116,7 +116,6 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
-            @SuppressWarnings("unused")
             class Customer {
                 @Getter @Setter private List<Order> orders;
             }
@@ -139,7 +138,6 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
                 @Collection(domainEvent = OrdersShowingDomainEvent.class)
@@ -165,7 +163,6 @@ extends FacetFactoryTestAbstract {
             class Order {
             }
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent.class)
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
                 @Collection
@@ -191,7 +188,6 @@ extends FacetFactoryTestAbstract {
             class Order {
             }
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent1.class)
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {}
                 class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {}
@@ -218,7 +214,6 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
                 @Getter @Setter private List<Order> orders;
@@ -251,7 +246,6 @@ extends FacetFactoryTestAbstract {
 
             class Order {
             }
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
                 @Getter @Setter private List<Order> orders;
@@ -285,7 +279,6 @@ extends FacetFactoryTestAbstract {
             class Order {
             }
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent.class)
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent extends CollectionDomainEvent<Customer, String> {}
                 @Getter @Setter private List<Order> orders;
@@ -319,7 +312,6 @@ extends FacetFactoryTestAbstract {
             class Order {
             }
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent1.class)
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {}
                 class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {}
@@ -354,7 +346,6 @@ extends FacetFactoryTestAbstract {
             class Order {
             }
             @DomainObject(collectionDomainEvent = Customer.OrdersShowingDomainEvent1.class)
-            @SuppressWarnings("unused")
             class Customer {
                 class OrdersShowingDomainEvent1 extends CollectionDomainEvent<Customer, String> {}
                 class OrdersShowingDomainEvent2 extends CollectionDomainEvent<Customer, String> {}

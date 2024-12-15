@@ -52,4 +52,9 @@ implements PropertyOrCollectionAccessorFacet {
         super.visitAttributes(visitor);
         visitor.accept("declaringType", declaringType);
     }
+
+    protected final boolean isConfiguredToFilterForVisibility() {
+        return getConfiguration().getCore().getMetaModel().isFilterVisibility();
+    }
+
 }

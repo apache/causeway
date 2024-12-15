@@ -42,6 +42,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
+import org.apache.causeway.core.metamodel.facets.AccessorFacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -50,7 +51,6 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory;
 import org.apache.causeway.core.metamodel.facets.ObjectTypeFacetFactory.ProcessObjectTypeContext;
-import org.apache.causeway.core.metamodel.facets.AccessorFacetFactory;
 import org.apache.causeway.core.metamodel.methods.MethodFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
@@ -194,30 +194,28 @@ implements HasMetaModelContext, AutoCloseable{
      * Use the provided {@link MethodRemover} to call all known
      * {@link AccessorFacetFactory}s to remove all
      * property accessors and append them to the supplied methodList.
-     * <p>
-     * @see AccessorFacetFactory#findAndRemoveAccessors(MethodRemover, Consumer)
      */
-    public void findAndRemovePropertyAccessors(
-            final MethodRemover methodRemover,
-            final List<ResolvedMethod> methodListToAppendTo) {
+    public List<ResolvedMethod> findAndRemovePropertyAccessors(
+            final MethodRemover methodRemover) {
+        var propertyAccessors = new ArrayList<ResolvedMethod>();
         for (var facetFactory : propertyAccessorFactories.get()) {
-            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo::add);
+            methodRemover.removeMethods(facetFactory::isAssociationAccessor, propertyAccessors::add);
         }
+        return propertyAccessors;
     }
 
     /**
      * Use the provided {@link MethodRemover} to call all known
      * {@link AccessorFacetFactory}s to remove all
      * collection accessors and append them to the supplied methodList.
-     *
-     * @see AccessorFacetFactory#findAndRemoveAccessors(MethodRemover, Consumer)
      */
-    public void findAndRemoveCollectionAccessors(
-            final MethodRemover methodRemover,
-            final List<ResolvedMethod> methodListToAppendTo) {
+    public List<ResolvedMethod> findAndRemoveCollectionAccessors(
+            final MethodRemover methodRemover) {
+        var collectionAccessors = new ArrayList<ResolvedMethod>();
         for (var facetFactory : collectionAccessorFactories.get()) {
-            facetFactory.findAndRemoveAccessors(methodRemover, methodListToAppendTo::add);
+            methodRemover.removeMethods(facetFactory::isAssociationAccessor, collectionAccessors::add);
         }
+        return collectionAccessors;
     }
 
     /**

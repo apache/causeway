@@ -45,10 +45,8 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.commons.ToString;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -92,9 +90,7 @@ implements
 
         @Override
         public void removeMethod(final ResolvedMethod method) {
-            if(method==null) {
-                return;
-            }
+            if(method==null) return;
             methodsRemaining.remove(method);
         }
 
@@ -193,52 +189,32 @@ implements
         var associationCandidateMethods = new HashSet<ResolvedMethod>();
 
         getFacetProcessor()
-        .findAssociationCandidateGetters(
-                    methodRemover.streamRemaining(),
-                    associationCandidateMethods::add);
+            .findAssociationCandidateGetters(
+                methodRemover.streamRemaining(),
+                associationCandidateMethods::add);
 
         // Ensure all return types are known
-
         TypeExtractor.streamMethodReturn(associationCandidateMethods)
-        .filter(typeToLoad->typeToLoad!=introspectedClass)
-        .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
+            .filter(typeToLoad->typeToLoad!=introspectedClass)
+            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
 
         // now create FacetedMethods for collections and for properties
-        var associationFacetedMethods = _Lists.<FacetedMethod>newArrayList();
+        var associationFacetedMethods = new ArrayList<FacetedMethod>();
 
-        findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods::add);
-        findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods::add);
+        var collectionAccessors = getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover);
+        createCollectionFacetedMethodsFromAccessors(collectionAccessors, associationFacetedMethods::add);
+
+        var propertyAccessors = getFacetProcessor().findAndRemovePropertyAccessors(methodRemover);
+        createPropertyFacetedMethodsFromAccessors(propertyAccessors, associationFacetedMethods::add);
 
         return Collections.unmodifiableList(associationFacetedMethods);
     }
 
-    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(
-            final Consumer<FacetedMethod> onNewAssociationPeer) {
-        var collectionAccessors = new ArrayList<ResolvedMethod>();
-        getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
-        createCollectionFacetedMethodsFromAccessors(
-                getMetaModelContext(), collectionAccessors, onNewAssociationPeer);
-    }
-
-    /**
-     * Since the value properties and collections have already been processed,
-     * this will pick up the remaining reference properties.
-     */
-    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final Consumer<FacetedMethod> onNewField) {
-        var propertyAccessors = new ArrayList<ResolvedMethod>();
-        getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
-
-        methodRemover.removeMethods(AccessorSemantics::isNonBooleanGetter, propertyAccessors::add);
-        methodRemover.removeMethods(AccessorSemantics::isBooleanGetter, propertyAccessors::add);
-        methodRemover.removeMethods(AccessorSemantics::isRecordComponentAccessor, propertyAccessors::add);
-
-        createPropertyFacetedMethodsFromAccessors(propertyAccessors, onNewField);
-    }
-
     private void createCollectionFacetedMethodsFromAccessors(
-            final MetaModelContext mmc,
             final List<ResolvedMethod> accessorMethods,
             final Consumer<FacetedMethod> onNewFacetMethod) {
+
+        var mmc = getMetaModelContext();
 
         for (final ResolvedMethod accessorMethod : accessorMethods) {
             if (log.isDebugEnabled()) {
@@ -265,9 +241,7 @@ implements
                     .orElse(Object.class);
 
             // skip if class substitutor says so.
-            if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) {
-                continue;
-            }
+            if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) continue;
 
             onNewFacetMethod.accept(facetedMethod.withType(elementType));
         }
@@ -283,9 +257,7 @@ implements
             final Class<?> returnType = accessorMethod.returnType();
 
             // skip if class strategy says so.
-            if (classSubstitutorRegistry.getSubstitution(returnType).isNeverIntrospect()) {
-                continue;
-            }
+            if (classSubstitutorRegistry.getSubstitution(returnType).isNeverIntrospect()) continue;
 
             // create a 1:1 association peer
             var facetedMethod = FacetedMethod
@@ -332,8 +304,7 @@ implements
         return actionFacetedMethods;
     }
 
-    private void collectActionFacetedMethods(
-            final Consumer<FacetedMethod> onActionFacetedMethod) {
+    private void collectActionFacetedMethods(final Consumer<FacetedMethod> onActionFacetedMethod) {
 
         if (log.isDebugEnabled()) {
             log.debug("  looking for action methods");
@@ -352,15 +323,10 @@ implements
 
     }
 
-    private FacetedMethod findActionFacetedMethod(
-            final ResolvedMethod actionMethod) {
-
-        if (!representsAction(actionMethod)) {
-            return null;
-        }
+    private FacetedMethod findActionFacetedMethod(final ResolvedMethod actionMethod) {
+        if (!representsAction(actionMethod)) return null;
 
         // build action
-
         return Optional.of(actionMethod)
             .map(this::createActionFacetedMethod)
             .filter(_NullSafe::isPresent)
@@ -368,8 +334,7 @@ implements
     }
 
     @Nullable
-    private FacetedMethod createActionFacetedMethod(
-            final ResolvedMethod actionMethod) {
+    private FacetedMethod createActionFacetedMethod(final ResolvedMethod actionMethod) {
 
         var actionMethodFacade = _MethodFacadeAutodetect.autodetect(actionMethod, inspectedTypeSpec);
         if (!isAllParamTypesValid(actionMethodFacade)) return null;

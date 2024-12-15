@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.util.function.Consumer;
-
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -50,11 +47,5 @@ public interface AccessorFacetFactory extends FacetFactory {
      * {@link ResolvedMethod} represents an accessor to an {@link ObjectAssociation}.
      */
     boolean isAssociationAccessor(ResolvedMethod method);
-
-    /**
-     * Uses the provided {@link MethodRemover} to remove all matching accessors
-     * and calls back the supplied consumer.
-     */
-    void findAndRemoveAccessors(MethodRemover methodRemover, Consumer<ResolvedMethod> onMatchingAccessor);
 
 }

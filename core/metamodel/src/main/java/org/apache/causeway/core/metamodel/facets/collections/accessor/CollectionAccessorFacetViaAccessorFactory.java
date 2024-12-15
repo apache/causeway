@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
-import java.util.function.Consumer;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
@@ -27,7 +25,6 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.facets.AccessorFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -46,12 +43,6 @@ extends AccessorFacetFactoryAbstract {
     @Override
     public boolean isAssociationAccessor(final ResolvedMethod method) {
         return AccessorSemantics.isCollectionAccessor(method);
-    }
-
-    @Override
-    public void findAndRemoveAccessors(
-            final MethodRemover methodRemover, final Consumer<ResolvedMethod> onMatchingAccessor) {
-        methodRemover.removeMethods(AccessorSemantics::hasSupportedNonScalarMethodReturnType, onMatchingAccessor);
     }
 
     @Override

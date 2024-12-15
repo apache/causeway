@@ -152,7 +152,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             var mockOnType = Mockito.mock(ObjectSpecification.class);
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder) {
                 @Override
-                public Object getProperty(
+                public Object getAssociationValueAsPojo(
                         final ManagedObject inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;

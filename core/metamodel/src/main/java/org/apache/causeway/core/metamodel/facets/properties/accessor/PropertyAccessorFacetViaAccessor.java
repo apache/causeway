@@ -56,16 +56,14 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Object getProperty(
+    public Object getAssociationValueAsPojo(
             final ManagedObject owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Object referencedObject = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
-
         if(referencedObject == null) return null;
 
-        boolean filterForVisibility = getConfiguration().getCore().getMetaModel().isFilterVisibility();
-        if(filterForVisibility) {
+        if(isConfiguredToFilterForVisibility()) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
             final boolean visible = MmVisibilityUtils
                     .isVisible(referencedAdapter, interactionInitiatedBy);
