@@ -22,11 +22,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-public record ObjectTreeAdapter(SpecificationLoader specLoader) 
-implements 
+public record ObjectTreeAdapter(SpecificationLoader specLoader)
+implements
     TreeAdapter<Object> {
 
     @Override
@@ -46,8 +45,7 @@ implements
 
     private <T> Optional<NavigableSubtreeFacet> treeNodeFacet(final T node) {
         return specLoader().loadSpecification(node.getClass())
-                .lookupFacet(NavigableSubtreeFacet.class)
-                .map(treeNodeFacet->_Casts.<NavigableSubtreeFacet>uncheckedCast(treeNodeFacet));
+                .lookupFacet(NavigableSubtreeFacet.class);
     }
 
 }

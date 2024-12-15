@@ -24,18 +24,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.object.navchild._TreeSample.A;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 class TreeTraversalTest
 extends FacetFactoryTestAbstract {
 
-    MetaModelContext mmc;
-    ObjectTreeAdapter treeAdapter;
+    private MetaModelContext mmc;
+    private ObjectTreeAdapter treeAdapter;
+    private A a;
+    private TreeNode<Object> tree;
 
     @BeforeEach
     void setUp() {
@@ -43,12 +50,25 @@ extends FacetFactoryTestAbstract {
                 .enablePostprocessors(true)
                 .build();
         treeAdapter = new ObjectTreeAdapter(mmc.getSpecificationLoader());
+        // sample tree, that we then traverse
+        a = _TreeSample.sampleA();
+        tree = TreeNode.root(a, treeAdapter);
+
+        //TODO[causeway-core-metamodel-CAUSEWAY-2297] ObjectSpecification#streamAssociations seems to have the side effect
+        // of initializing the various members with the NavigableSubtreeSequenceFacet,
+        // which otherwise does not happen (is this test specific? if so then good, but we should fix that)
+        var specs = Can.of(_TreeSample.A.class, _TreeSample.B.class, _TreeSample.C.class, _TreeSample.D.class)
+            .map(mmc.getSpecificationLoader()::specForType)
+            .map(opt->opt.orElse(null));
+        specs.forEach(spec->spec.streamAssociations(MixedIn.EXCLUDED).forEach(assoc->{}));
     }
 
     @Test
     void preconditions() {
         var specLoader = mmc.getSpecificationLoader();
         var specA = specLoader.loadSpecification(_TreeSample.A.class);
+        // including this one to test presence of NavigableSubtreeFacet w/o the side-effect of calling the getAssociation method
+        var specB = specLoader.loadSpecification(_TreeSample.B.class);
 
         // first: members must have the NavigableSubtreeSequenceFacet
         var assocAB = specA.getAssociationElseFail("childrenB");
@@ -57,37 +77,55 @@ extends FacetFactoryTestAbstract {
 
         // second: post-processor should generate NavigableSubtreeFacet
         assertTrue(specA.containsFacet(NavigableSubtreeFacet.class));
+        assertTrue(specB.containsFacet(NavigableSubtreeFacet.class));
+
+        // tree sanity checks
+        assertEquals(a, tree.value());
+        assertNotNull(tree.rootNode());
+        assertEquals(tree, tree.rootNode());
+        assertTrue(tree.isRoot());
+        assertFalse(tree.isLeaf());
+
+        // node a is expected to have 2 children
+        var navigableSubtreeFacet = specA.getFacet(NavigableSubtreeFacet.class);
+        assertEquals(2, navigableSubtreeFacet.childCountOf(a));
+        assertEquals(2, navigableSubtreeFacet.childrenOf(a).toList().size());
+        assertEquals(2, treeAdapter.childCountOf(a));
+        assertEquals(2, treeAdapter.childrenOf(a).toList().size());
+        assertEquals(2, tree.childCount());
+        assertEquals(2, tree.streamChildren().toList().size());
+
+        var firstChildOfA = treeAdapter.childrenOf(a).findFirst().orElseThrow();
+
+        // first child node of a is expected to have 3 children
+        assertEquals(3, treeAdapter.childCountOf(firstChildOfA));
+        assertEquals(3, treeAdapter.childrenOf(firstChildOfA).toList().size());
+
+        //TODO[causeway-core-metamodel-CAUSEWAY-2297] add map support -> expected 17
+        // count all nodes
+        assertEquals(9, Can.ofIterable(tree::iteratorDepthFirst).size());
+        assertEquals(9, Can.ofIterable(tree::iteratorBreadthFirst).size());
     }
 
-    //TODO[causeway-core-metamodel-CAUSEWAY-2297] make test work
-    //@Test
+    @Test
     void depthFirstTraversal() {
-        // instantiate a tree, that we later traverse
-        var a = _TreeSample.sampleA();
-
-        // traverse the tree
-        var tree = TreeNode.root(a, treeAdapter);
-
         var nodeNames = tree.streamDepthFirst()
             .map(TreeNode::value)
             .map(_TreeSample::nameOf)
             .collect(Collectors.joining(", "));
 
         assertEquals(
-                "a, b1, d1, d2, d3, b2, d1, d2, d3, c1, d1, d2, d3, c2, d1, d2, d3",
+                "a, b1, d1, d2, d3, b2, d1, d2, d3",
+                //TODO[causeway-core-metamodel-CAUSEWAY-2297] add map support
+                //"a, b1, d1, d2, d3, b2, d1, d2, d3, c1, d1, d2, d3, c2, d1, d2, d3",
                 nodeNames);
     }
 
-    //TODO[causeway-core-metamodel-CAUSEWAY-2297] make test work
-    //@Test
+    @Test
     void leafToRootTraversal() {
-        // instantiate a tree and pick an arbitrary leaf value,
-        // from which we later traverse up to the root
-        var a = _TreeSample.sampleA();
+        // pick an arbitrary leaf value,
+        // from which we then traverse up to the root
         var d = a.childrenB().getFirstElseFail().childrenD().getLastElseFail();
-
-        // traverse the tree
-        var tree = TreeNode.root(a, treeAdapter);
 
         // find d's node
         var leafNode = tree.streamDepthFirst()

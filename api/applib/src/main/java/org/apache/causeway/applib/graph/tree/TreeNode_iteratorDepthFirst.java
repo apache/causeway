@@ -24,11 +24,11 @@ import java.util.Stack;
 
 class TreeNode_iteratorDepthFirst<T> implements Iterator<TreeNode<T>> {
 
-    private Stack<TreeNode<T>> stack = new Stack<>();
+    private final Stack<TreeNode<T>> stack = new Stack<>();
     private TreeNode<T> next;
 
-    TreeNode_iteratorDepthFirst(TreeNode<T> treeNode) {
-        next = treeNode;
+    TreeNode_iteratorDepthFirst(final TreeNode<T> treeNode) {
+        this.next = treeNode;
     }
 
     @Override
@@ -41,26 +41,25 @@ class TreeNode_iteratorDepthFirst<T> implements Iterator<TreeNode<T>> {
         if(next==null) {
             throw new NoSuchElementException("Iterator has run out of elements.");
         }
-        final TreeNode<T> result = next;
-        next = fetchNext(next);
+        var result = next;
+        this.next = fetchNext(next);
         return result;
     }
 
     // -- HELPER
 
-    private TreeNode<T> fetchNext(TreeNode<T> current) {
+    private TreeNode<T> fetchNext(final TreeNode<T> current) {
         if(!current.isLeaf()) {
             pushChildrenToStackInReverseOrder(current);
         }
         return stack.isEmpty() ? null : stack.pop();
     }
 
-    private Stack<TreeNode<T>> fifo = new Stack<>(); // declared as field only to reduce heap pollution
+    private final Stack<TreeNode<T>> fifo = new Stack<>(); // declared as field only to reduce heap pollution
 
-    private void pushChildrenToStackInReverseOrder(TreeNode<T> node) {
-
+    private void pushChildrenToStackInReverseOrder(final TreeNode<T> node) {
         node.streamChildren()
-        .forEach(fifo::push);
+            .forEach(fifo::push);
 
         while(!fifo.isEmpty()) {
             stack.push(fifo.pop());

@@ -101,6 +101,26 @@ implements Vertex<T> {
         return new TreeNode<T>(null, TreePath.root(), rootValue, treeAdapter, sharedState);
     }
 
+    // -- CONTRACT
+
+    @Override
+    public final String toString() {
+        return "TreeNode[%s, value=%s]".formatted(treePath, value);
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return obj instanceof TreeNode other
+            ? Objects.equals(this.treePath, other.treePath)
+                    && Objects.equals(this.value, other.value)
+            : false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(treePath);
+    }
+
     // --
 
     public TreeNode<T> rootNode() {

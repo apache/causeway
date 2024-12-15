@@ -82,24 +82,24 @@ extends
 
         return actionStream
 
-        // as of contributing super-classes same actions might appear more than once (overriding)
-        .filter(action->{
-            if(action.isMixedIn()) {
-                return true; // do not filter mixedIn actions based on signature
-            }
-            var isUnique = actionSignatures
-                    .add(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString());
-            return isUnique;
-        })
+            // as of contributing super-classes same actions might appear more than once (overriding)
+            .filter(action->{
+                if(action.isMixedIn()) {
+                    return true; // do not filter mixedIn actions based on signature
+                }
+                var isUnique = actionSignatures
+                        .add(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString());
+                return isUnique;
+            })
 
-        // ensure we don't emit duplicates
-        .filter(action->{
-            var isUnique = actionIds.add(action.getId());
-            if(!isUnique) {
-                onActionOverloaded.accept(action);
-            }
-            return isUnique;
-        });
+            // ensure we don't emit duplicates
+            .filter(action->{
+                var isUnique = actionIds.add(action.getId());
+                if(!isUnique) {
+                    onActionOverloaded.accept(action);
+                }
+                return isUnique;
+            });
     }
 
     // -- ASSOCIATIONS
@@ -109,9 +109,7 @@ extends
 
         var declaredAssociation = getDeclaredAssociation(id, mixedIn); // no inheritance considered
 
-        if(declaredAssociation.isPresent()) {
-            return declaredAssociation;
-        }
+        if(declaredAssociation.isPresent()) return declaredAssociation;
 
         return isTypeHierarchyRoot()
                ? Optional.empty() // stop searching
@@ -121,17 +119,15 @@ extends
     @Override
     default Stream<ObjectAssociation> streamAssociations(final MixedIn mixedIn) {
 
-        if(isTypeHierarchyRoot()) {
-            return streamDeclaredAssociations(mixedIn); // stop going deeper
-        }
+        if(isTypeHierarchyRoot()) return streamDeclaredAssociations(mixedIn); // stop going deeper
 
         var ids = _Sets.<String>newHashSet();
 
         return Stream.concat(
                 streamDeclaredAssociations(mixedIn),
                 superclass().streamAssociations(mixedIn)
-        )
-        .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
+            )
+            .filter(association->ids.add(association.getId())); // ensure we don't emit duplicates
     }
 
 }
