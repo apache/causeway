@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.collection.present.multiple;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 
 import org.apache.causeway.commons.collections.Can;
@@ -152,6 +151,7 @@ implements CollectionCountProvider {
         String selectedView = selectorEvent.hintFor(selectorDropdownPanel, UIHINT_VIEW);
         if (selectedView == null) return;
 
+        var ajaxTarget = selectorEvent.getTarget();
         int underlyingViewNum = selectorHelper.lookup(selectedView);
 
         for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
@@ -160,16 +160,24 @@ implements CollectionCountProvider {
 
             final boolean isSelected = i == underlyingViewNum;
             setVisible(component, isSelected);
+
             component.setDefaultModel(isSelected
                 ? getModel()
                 : CollectionModel.empty());
+
+            if(isSelected
+                    && ajaxTarget != null
+                    && component.getOutputMarkupId()) {
+                // triggers re-rendering of the underlying table component (if it supports AJAX updates)
+                ajaxTarget.add(component);
+            }
+
         }
 
         this.selectedComponent = underlyingViews[underlyingViewNum];
 
-        final AjaxRequestTarget target = selectorEvent.getTarget();
-        if(target != null) {
-            target.add(this, selectorDropdownPanel);
+        if(ajaxTarget != null) {
+            ajaxTarget.add(this, selectorDropdownPanel);
         }
     }
 

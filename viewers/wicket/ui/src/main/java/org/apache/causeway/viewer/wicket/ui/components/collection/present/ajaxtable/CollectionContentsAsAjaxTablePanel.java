@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxt
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -78,10 +79,12 @@ implements CollectionCountProvider {
         return getModel().getDataTableModel().getFilteredElementCount();
     }
 
+    // supports partial page updates (AJAX)
     @Override
-    protected void onInitialize() {
-        super.onInitialize();
+    protected void onConfigure() {
+        super.onConfigure();
         buildGui();
+        Wkt.ajaxEnable(this);
     }
 
     @Override
@@ -92,7 +95,6 @@ implements CollectionCountProvider {
 
     @Override
     protected void onModelChanged() {
-        //buildGui();
     }
 
     // -- HELPER
@@ -113,7 +115,8 @@ implements CollectionCountProvider {
             return;
         }
 
-        var elementType = collectionModel.getElementType();
+        var elementType = Objects.requireNonNull(collectionModel.getElementType(),
+                ()->"invalid: CollectionModel without element type");
 
         var columns = new ArrayList<GenericColumn>();
         // first create property columns, so we know how many columns there are
