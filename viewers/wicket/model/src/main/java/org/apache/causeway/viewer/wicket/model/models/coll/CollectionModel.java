@@ -128,6 +128,13 @@ permits CollectionModelAbstract, CollectionModelEmpty {
         return getDataTableModel().getTableDecoratorIfAny();
     }
 
+    /**
+     * Whether the hidden table view is to be rendered. Corresponds to the {@link CollectionModelEmpty}.
+     */
+    default boolean isHidden() {
+        return "hidden".equals(getName());
+    }
+
     // -- INITIALIZATION STATE
 
     /**

@@ -154,7 +154,6 @@ implements CollectionCountProvider {
 
         int underlyingViewNum = selectorHelper.lookup(selectedView);
 
-        final CollectionModel emptyModel = CollectionModel.empty();
         for(int i=0; i<MAX_NUM_UNDERLYING_VIEWS; i++) {
             final Component component = underlyingViews[i];
             if(component == null) continue;
@@ -163,7 +162,7 @@ implements CollectionCountProvider {
             setVisible(component, isSelected);
             component.setDefaultModel(isSelected
                 ? getModel()
-                : emptyModel);
+                : CollectionModel.empty());
         }
 
         this.selectedComponent = underlyingViews[underlyingViewNum];

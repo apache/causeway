@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -36,22 +36,23 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
-import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel.Variant;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ActionColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ColumnAbbreviationOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.GenericColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.PluralColumn;
+import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.PluralColumn.RenderOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.SingularColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.ToggleboxColumn;
-import org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxtable.columns.PluralColumn.RenderOptions;
 import org.apache.causeway.viewer.wicket.ui.components.table.CausewayAjaxDataTable;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.filter.FilterToolbar;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
 /**
  * {@link PanelAbstract Panel} that represents a {@link CollectionModel
@@ -105,12 +106,16 @@ implements CollectionCountProvider {
     }
 
     private void buildGui() {
-
-        final List<GenericColumn> columns = _Lists.newArrayList();
-
         var collectionModel = collectionModel();
+        if(collectionModel.isHidden()) {
+            WktComponents.permanentlyHide(this, ID_TABLE);
+            WktComponents.permanentlyHide(this, ID_TABLE_FILTER_BAR);
+            return;
+        }
+
         var elementType = collectionModel.getElementType();
 
+        var columns = new ArrayList<GenericColumn>();
         // first create property columns, so we know how many columns there are
         addPropertyColumnsIfRequired(columns);
         // prepend title column, which may have distinct rendering hints,
@@ -186,9 +191,7 @@ implements CollectionCountProvider {
 
         var collectionModel = getModel();
         var elementType = collectionModel.getElementType();
-        if(elementType == null) {
-            return;
-        }
+        if(elementType == null) return;
 
         final ManagedObject parentObject = collectionModel.getParentObject();
         var memberIdentifier = collectionModel.getIdentifier();
