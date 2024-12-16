@@ -178,6 +178,10 @@ public enum CollectionSemantics {
 
     protected abstract Object asContainerType(
             final Class<?> elementType, final @NonNull List<?> nonScalar);
+
+    public int genericTypeArgumentIndex() {
+        return isMap() ? 1 : 0;
+    }
 }
 
 //TODO perhaps needs an update to reflect Java 7->11 Language changes

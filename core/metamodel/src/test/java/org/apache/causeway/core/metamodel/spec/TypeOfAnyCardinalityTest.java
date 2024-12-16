@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.spec;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -120,6 +121,22 @@ class TypeOfAnyCardinalityTest {
         assertTypeDetected(E.class, F.class, G.class,
                 CharSequence.class, CharSequence.class, String.class,
                 Set.class, Set.class, SortedSet.class);
+    }
+
+    // -- SCENARIO: MAP
+
+    static class M {
+        public Map<Integer, String> someStrings() {
+            return Map.of(1, "a");
+        }
+    }
+
+    @Test
+    void mapAsCollection() {
+        var method = _GenericResolver.testing.resolveMethod(M.class, "someStrings");
+        assertNotNull(method);
+        var elementType = _GenericResolver.forMethodReturn(method).elementType();
+        assertEquals(String.class, elementType);
     }
 
     // -- HELPER

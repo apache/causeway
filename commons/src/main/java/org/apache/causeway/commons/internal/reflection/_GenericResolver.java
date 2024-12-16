@@ -168,7 +168,7 @@ public class _GenericResolver {
                     .anyMatch(this::isReturnTypeATypeOf);
         }
         Class<?> resolveFirstGenericTypeArgumentOnParameter(int paramIndex);
-        Class<?> resolveFirstGenericTypeArgumentOnMethodReturn();
+        Class<?> resolveGenericTypeArgumentOnMethodReturn(int argumentIndex);
         /**
          * Is NOT compliant with the weak-sameness relation
          * {@link ResolvedMethod#methodsWeaklySame(ResolvedMethod, ResolvedMethod)}.
@@ -278,7 +278,7 @@ public class _GenericResolver {
         return CollectionSemantics.valueOf(methodReturn)
             .map(collectionSemantics->
                 ResolvedType.plural(
-                        resolvedMethod.resolveFirstGenericTypeArgumentOnMethodReturn(),
+                        resolvedMethod.resolveGenericTypeArgumentOnMethodReturn(collectionSemantics.genericTypeArgumentIndex()),
                         methodReturn,
                         collectionSemantics)
             )
@@ -351,13 +351,13 @@ public class _GenericResolver {
             return isResolved ? Optional.of(this) : Optional.empty();
         }
         @Override
-        public Class<?> resolveFirstGenericTypeArgumentOnMethodReturn() {
-            return genericTypeArg(ResolvableType.forMethodReturnType(method, implementationClass))
+        public Class<?> resolveGenericTypeArgumentOnMethodReturn(final int argumentIndex) {
+            return genericTypeArg(ResolvableType.forMethodReturnType(method, implementationClass), argumentIndex)
                     .toClass();
         }
         @Override
         public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
-            return genericTypeArg(ResolvableType.forMethodParameter(method, paramIndex, implementationClass))
+            return genericTypeArg(ResolvableType.forMethodParameter(method, paramIndex, implementationClass), 0)
                     .toClass();
         }
         @Override
@@ -383,6 +383,7 @@ public class _GenericResolver {
             if(!_Reflect.hasGenericReturn(method)) return true; // skip check
             return !returnType.equals(Object.class);
         }
+
 //        private Try<SimpleResolvedMethod> adopt(final @NonNull ClassLoader classLoader) {
 //            return Try.call(()->{
 //                var ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);
@@ -413,7 +414,7 @@ public class _GenericResolver {
         }
         @Override
         public Class<?> resolveFirstGenericTypeArgumentOnParameter(final int paramIndex) {
-            return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementationClass))
+            return genericTypeArg(ResolvableType.forConstructorParameter(constructor, paramIndex, implementationClass), 0)
                     .toClass();
         }
         @Override
@@ -485,10 +486,10 @@ public class _GenericResolver {
                         m, a.method(), b.method()));
     }
 
-    private ResolvableType genericTypeArg(final ResolvableType pluralType){
+    private ResolvableType genericTypeArg(final ResolvableType pluralType, final int genericTypeArgumentIndex){
         var genericTypeArg = pluralType.isArray()
                 ? pluralType.getComponentType()
-                : pluralType.getGeneric(0);
+                : pluralType.getGeneric(genericTypeArgumentIndex);
         return genericTypeArg;
     }
 

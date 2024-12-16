@@ -79,6 +79,7 @@ extends FacetFactoryTestAbstract {
         var assocAC = specA.getAssociationElseFail("childrenC");
         assertTrue(assocAC.isCollection());
         assertTrue(assocAC.containsFacet(NavigableSubtreeSequenceFacet.class));
+        assertEquals(_TreeSample.C.class, assocAC.getElementType().getCorrespondingClass());
 
         // second: post-processor should generate NavigableSubtreeFacet
         assertTrue(specA.containsFacet(NavigableSubtreeFacet.class));
