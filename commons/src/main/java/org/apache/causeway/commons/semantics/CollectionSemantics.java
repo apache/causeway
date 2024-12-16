@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -107,27 +108,24 @@ public enum CollectionSemantics {
         }
     },
     /**
-     * not supported, however holds a usable {@link InvocationHandlingPolicy}
+     * Supported as collection provider, but not as collection receiver.
      */
     MAP(Map.class, MethodSets.MAP){
         @Override public Object asContainerType(
                 final Class<?> elementType, final @NonNull List<?> plural) {
-            throw new UnsupportedOperationException("Map is not a collection");
+            throw new UnsupportedOperationException("A Map cannot be reconstructed from a Collection");
         }
-    }
-    ;
+    };
 
     public static interface InvocationHandlingPolicy {
         /**
-         * Methods which will trigger CollectionMethodEvent(s)
-         * on invocation.
+         * Whether on invocation given method will trigger a CollectionMethodEvent.
          */
-        List<Method> getIntercepted();
+        boolean intercepts(Method method);
         /**
-         * Methods which will cause an {@link UnsupportedOperationException}
-         * on invocation.
+         * Whether on invocation given method will cause an {@link UnsupportedOperationException}.
          */
-        List<Method> getVetoed();
+        boolean vetoes(Method method);
     }
 
     public boolean isArray() {return this == ARRAY;}
@@ -141,6 +139,14 @@ public enum CollectionSemantics {
     public boolean isMap() {return this == MAP;}
     //
     public boolean isSetAny() {return isSet() || isSortedSet(); }
+
+    @Nullable
+    public static Object toIterable(@Nullable final Object pojo) {
+        return pojo instanceof Map map
+                ? map.values()
+                : pojo;
+    }
+
     @Getter private final Class<?> containerType;
     @Getter private final InvocationHandlingPolicy invocationHandlingPolicy;
 
@@ -155,7 +161,6 @@ public enum CollectionSemantics {
                 ? Optional.of(CollectionSemantics.ARRAY)
                 : all.stream()
                     .filter(collType->collType.getContainerType().isAssignableFrom(type))
-                    .filter(t->!t.isMap()) // not supported
                     .findFirst();
     }
 
@@ -176,82 +181,99 @@ public enum CollectionSemantics {
 }
 
 //TODO perhaps needs an update to reflect Java 7->11 Language changes
-@RequiredArgsConstructor
 enum MethodSets implements InvocationHandlingPolicy {
-  EMPTY(List.of(), List.of()),
-  COLLECTION(
-          // intercepted ...
-          List.of(
-                  getMethod(Collection.class, "contains", Object.class),
-                  getMethod(Collection.class, "size"),
-                  getMethod(Collection.class, "isEmpty")
-          ),
-          // vetoed ...
-          List.of(
-                  getMethod(Collection.class, "add", Object.class),
-                  getMethod(Collection.class, "remove", Object.class),
-                  getMethod(Collection.class, "addAll", Collection.class),
-                  getMethod(Collection.class, "removeAll", Collection.class),
-                  getMethod(Collection.class, "retainAll", Collection.class),
-                  getMethod(Collection.class, "clear")
-          )),
-  LIST(
-          // intercepted ...
-          _Lists.concat(
-                  COLLECTION.intercepted,
-                  List.of(
-                          getMethod(List.class, "get", int.class)
-                  )
-          ),
-          // vetoed ...
-          _Lists.concat(
-                  COLLECTION.vetoed,
-                  List.of(
-                  )
-          )),
-  CAN(
-          // intercepted ...
-          _Lists.concat(
-                  COLLECTION.intercepted,
-                  List.of(
-                          getMethod(Can.class, "get", int.class),
-                          getMethod(Can.class, "getElseFail", int.class),
-                          getMethod(Can.class, "getFirst"),
-                          getMethod(Can.class, "getFirstElseFail"),
-                          getMethod(Can.class, "getLast"),
-                          getMethod(Can.class, "getLastElseFail")
-                  )
-          ),
-          // vetoed ...
-          _Lists.concat(
-                  COLLECTION.vetoed,
-                  List.of(
-                  )
-          )),
-  MAP(
-          // intercepted ...
-          List.of(
-                  getMethod(Map.class, "containsKey", Object.class),
-                  getMethod(Map.class, "containsValue", Object.class),
-                  getMethod(Map.class, "size"),
-                  getMethod(Map.class, "isEmpty")
-          ),
-          // vetoed ...
-          List.of(
-                  getMethod(Map.class, "put", Object.class, Object.class),
-                  getMethod(Map.class, "remove", Object.class),
-                  getMethod(Map.class, "putAll", Map.class),
-                  getMethod(Map.class, "clear")
-          ))
-  ;
-  @Getter private final List<Method> intercepted;
-  @Getter private final List<Method> vetoed;
-  // -- HELPER
-  @SneakyThrows
-  private static Method getMethod(
-          final Class<?> cls,
-          final String methodName,
-          final Class<?>... parameterClass) {
-      return cls.getMethod(methodName, parameterClass);
-  }
+    EMPTY(List.of(), List.of()),
+    COLLECTION(
+            // intercepted ...
+            List.of(
+                    getMethod(Collection.class, "contains", Object.class),
+                    getMethod(Collection.class, "size"),
+                    getMethod(Collection.class, "isEmpty")
+                    ),
+            // vetoed ...
+            List.of(
+                    getMethod(Collection.class, "add", Object.class),
+                    getMethod(Collection.class, "remove", Object.class),
+                    getMethod(Collection.class, "addAll", Collection.class),
+                    getMethod(Collection.class, "removeAll", Collection.class),
+                    getMethod(Collection.class, "retainAll", Collection.class),
+                    getMethod(Collection.class, "clear")
+                    )),
+    LIST(
+            // intercepted ...
+            _Lists.concat(
+                    COLLECTION.intercepted.values(),
+                    List.of(
+                            getMethod(List.class, "get", int.class)
+                            )
+                    ),
+            // vetoed ...
+            _Lists.concat(
+                    COLLECTION.vetoed.values(),
+                    List.of(
+                            )
+                    )),
+    CAN(
+            // intercepted ...
+            _Lists.concat(
+                    COLLECTION.intercepted.values(),
+                    List.of(
+                            getMethod(Can.class, "get", int.class),
+                            getMethod(Can.class, "getElseFail", int.class),
+                            getMethod(Can.class, "getFirst"),
+                            getMethod(Can.class, "getFirstElseFail"),
+                            getMethod(Can.class, "getLast"),
+                            getMethod(Can.class, "getLastElseFail")
+                            )
+                    ),
+            // vetoed ...
+            _Lists.concat(
+                    COLLECTION.vetoed.values(),
+                    List.of()
+                    )),
+    MAP(
+            // intercepted ...
+            List.of(
+                    getMethod(Map.class, "containsKey", Object.class),
+                    getMethod(Map.class, "containsValue", Object.class),
+                    getMethod(Map.class, "size"),
+                    getMethod(Map.class, "isEmpty")
+                    ),
+            // vetoed ...
+            List.of(
+                    getMethod(Map.class, "put", Object.class, Object.class),
+                    getMethod(Map.class, "remove", Object.class),
+                    getMethod(Map.class, "putAll", Map.class),
+                    getMethod(Map.class, "clear")
+                    ))
+    ;
+
+    private MethodSets(final List<Method> intercepted, final List<Method> vetoed) {
+        intercepted.forEach(method->this.intercepted.put(method.getName(), method));
+        vetoed.forEach(method->this.vetoed.put(method.getName(), method));
+    }
+
+    private final Map<String, Method> intercepted = new HashMap<>();
+    private final Map<String, Method> vetoed = new HashMap<>();
+    // -- HELPER
+    @SneakyThrows
+    private static Method getMethod(
+            final Class<?> cls,
+            final String methodName,
+            final Class<?>... parameterClass) {
+        return cls.getMethod(methodName, parameterClass);
+    }
+
+    @Override
+    public boolean intercepts(@Nullable final Method method) {
+        return method!=null
+                ? intercepted.containsKey(method.getName())
+                : false;
+    }
+    @Override
+    public boolean vetoes(@Nullable final Method method) {
+        return method!=null
+                ? vetoed.containsKey(method.getName())
+                : false;
+    }
 }

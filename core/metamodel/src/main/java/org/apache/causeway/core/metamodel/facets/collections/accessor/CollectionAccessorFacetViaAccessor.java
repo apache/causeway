@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
@@ -60,11 +61,12 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        final Object collectionOrArray = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
-        if(collectionOrArray == null) return null;
+        final Object pojo = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
+        var iterableOrArray = CollectionSemantics.toIterable(pojo);
+        if(iterableOrArray == null) return null;
 
         if(isConfiguredToFilterForVisibility()) {
-            var collectionAdapter = getObjectManager().adapt(collectionOrArray);
+            var collectionAdapter = getObjectManager().adapt(iterableOrArray);
             var autofittedObjectContainer = MmVisibilityUtils
                     .visiblePojosAutofit(collectionAdapter, interactionInitiatedBy, method.returnType());
 
@@ -75,7 +77,7 @@ implements ImperativeFacet {
         }
 
         // either no filtering, or was unable to filter (unable to take copy due to unrecognized type)
-        return collectionOrArray;
+        return iterableOrArray;
     }
 
     @Override

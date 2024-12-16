@@ -202,6 +202,18 @@ public @interface PropertyLayout {
             default Navigable.NOT_SPECIFIED;
 
     /**
+     * When set, identifies a logical child, that is navigable via the UI.
+     * <p>
+     * The order of appearance of this tree branch in the UI relative to other branches of the same tree node,
+     * is given in <i>Dewey-decimal</i> notation.
+     *
+     * @see CollectionLayout#navigableSubtree()
+     */
+    String navigableSubtree()
+        default "";
+
+
+    /**
      * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */
     PromptStyle promptStyle()

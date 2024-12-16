@@ -115,6 +115,8 @@ public @interface CollectionLayout {
      * <p>
      * The order of appearance of this tree branch in the UI relative to other branches of the same tree node,
      * is given in <i>Dewey-decimal</i> notation.
+     *
+     * @see PropertyLayout#navigableSubtree()
      */
     String navigableSubtree()
         default "";

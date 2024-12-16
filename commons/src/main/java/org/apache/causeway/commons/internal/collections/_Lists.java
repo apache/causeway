@@ -103,7 +103,7 @@ public final class _Lists {
      * Returns an unmodifiable list containing all elements from given lists
      * list1 and list2.
      */
-    public <T> List<T> concat(final @Nullable List<T> list1, final @Nullable List<T> list2) {
+    public <T> List<T> concat(final @Nullable Collection<T> list1, final @Nullable Collection<T> list2) {
         var isEmpty1 = _NullSafe.isEmpty(list1);
         var isEmpty2 = _NullSafe.isEmpty(list2);
 

@@ -75,6 +75,11 @@ extends FacetFactoryTestAbstract {
         assertTrue(assocAB.isCollection());
         assertTrue(assocAB.containsFacet(NavigableSubtreeSequenceFacet.class));
 
+        // java map support
+        var assocAC = specA.getAssociationElseFail("childrenC");
+        assertTrue(assocAC.isCollection());
+        assertTrue(assocAC.containsFacet(NavigableSubtreeSequenceFacet.class));
+
         // second: post-processor should generate NavigableSubtreeFacet
         assertTrue(specA.containsFacet(NavigableSubtreeFacet.class));
         assertTrue(specB.containsFacet(NavigableSubtreeFacet.class));
@@ -86,14 +91,14 @@ extends FacetFactoryTestAbstract {
         assertTrue(tree.isRoot());
         assertFalse(tree.isLeaf());
 
-        // node a is expected to have 2 children
+        // node a is expected to have 4 children
         var navigableSubtreeFacet = specA.getFacet(NavigableSubtreeFacet.class);
-        assertEquals(2, navigableSubtreeFacet.childCountOf(a));
-        assertEquals(2, navigableSubtreeFacet.childrenOf(a).toList().size());
-        assertEquals(2, treeAdapter.childCountOf(a));
-        assertEquals(2, treeAdapter.childrenOf(a).toList().size());
-        assertEquals(2, tree.childCount());
-        assertEquals(2, tree.streamChildren().toList().size());
+        assertEquals(4, navigableSubtreeFacet.childCountOf(a));
+        assertEquals(4, navigableSubtreeFacet.childrenOf(a).toList().size());
+        assertEquals(4, treeAdapter.childCountOf(a));
+        assertEquals(4, treeAdapter.childrenOf(a).toList().size());
+        assertEquals(4, tree.childCount());
+        assertEquals(4, tree.streamChildren().toList().size());
 
         var firstChildOfA = treeAdapter.childrenOf(a).findFirst().orElseThrow();
 
@@ -101,10 +106,10 @@ extends FacetFactoryTestAbstract {
         assertEquals(3, treeAdapter.childCountOf(firstChildOfA));
         assertEquals(3, treeAdapter.childrenOf(firstChildOfA).toList().size());
 
-        //TODO[causeway-core-metamodel-CAUSEWAY-2297] add map support -> expected 17
+        //TODO[causeway-core-metamodel-CAUSEWAY-2297] add property support
         // count all nodes
-        assertEquals(9, Can.ofIterable(tree::iteratorDepthFirst).size());
-        assertEquals(9, Can.ofIterable(tree::iteratorBreadthFirst).size());
+        assertEquals(17, Can.ofIterable(tree::iteratorDepthFirst).size());
+        assertEquals(17, Can.ofIterable(tree::iteratorBreadthFirst).size());
     }
 
     @Test
@@ -115,9 +120,7 @@ extends FacetFactoryTestAbstract {
             .collect(Collectors.joining(", "));
 
         assertEquals(
-                "a, b1, d1, d2, d3, b2, d1, d2, d3",
-                //TODO[causeway-core-metamodel-CAUSEWAY-2297] add map support
-                //"a, b1, d1, d2, d3, b2, d1, d2, d3, c1, d1, d2, d3, c2, d1, d2, d3",
+                "a, b1, d1, d2, d3, b2, d1, d2, d3, c1, d1, d2, d3, c2, d1, d2, d3",
                 nodeNames);
     }
 

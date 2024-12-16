@@ -69,7 +69,7 @@ extends DelegatingInvocationHandlerDefault<P> {
 
         var policy = collectionSemantics.getInvocationHandlingPolicy();
 
-        if (policy.getIntercepted().contains(method)) {
+        if (policy.intercepts(method)) {
 
             resolveIfRequired(domainObject);
 
@@ -85,7 +85,7 @@ extends DelegatingInvocationHandlerDefault<P> {
             return returnValueObj;
         }
 
-        if (policy.getVetoed().contains(method)) {
+        if (policy.vetoes(method)) {
             throw new UnsupportedOperationException(
                     String.format("Method '%s' may not be called directly.", method.getName()));
         }
