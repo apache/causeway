@@ -21,17 +21,16 @@ package org.apache.causeway.core.metamodel.facets.object.navchild;
 import java.lang.invoke.MethodHandle;
 import java.util.function.BiConsumer;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 record NavigableSubtreeSequenceFacetRecord(
     String sequence,
-    MethodHandle methodHandle, 
-    FacetHolder facetHolder) 
+    MethodHandle methodHandle,
+    String origin,
+    FacetHolder facetHolder)
 implements NavigableSubtreeSequenceFacet {
-    
+
     @Override
     public Class<? extends Facet> facetType() {
         return NavigableSubtreeSequenceFacet.class;
@@ -41,7 +40,7 @@ implements NavigableSubtreeSequenceFacet {
     public Precedence getPrecedence() {
         return Precedence.DEFAULT;
     }
-    
+
     @Override
     public FacetHolder getFacetHolder() {
         return facetHolder;
@@ -49,7 +48,8 @@ implements NavigableSubtreeSequenceFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
+        visitor.accept("facet", "NavigableSubtreeSequenceFacet");
+        visitor.accept("origin", origin);
         visitor.accept("precedence", getPrecedence().name());
         visitor.accept("sequence", sequence);
         visitor.accept("methodHandle", methodHandle);

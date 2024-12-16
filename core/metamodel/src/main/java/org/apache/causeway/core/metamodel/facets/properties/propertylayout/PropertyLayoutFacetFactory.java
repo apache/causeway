@@ -20,12 +20,15 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import jakarta.inject.Inject;
 
+import org.springframework.util.StringUtils;
+
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromPropertyLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromPropertyLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.navchild.NavigableSubtreeSequenceFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
 public class PropertyLayoutFacetFactory
@@ -88,6 +91,12 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(UnchangingFacetForPropertyLayoutAnnotation
                 .create(propertyLayoutIfAny, facetHolder));
 
+        addFacetIfPresent(
+                propertyLayoutIfAny
+                    .map(PropertyLayout::navigableSubtree)
+                    .filter(StringUtils::hasLength)
+                    .flatMap(sequence->NavigableSubtreeSequenceFacet.create("PropertyLayout annotation",
+                        processMethodContext.getCls(), processMethodContext.getMethod().asMethod(), sequence, facetHolder)));
     }
 
 }

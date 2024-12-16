@@ -103,14 +103,13 @@ extends FacetFactoryTestAbstract {
 
         var firstChildOfA = treeAdapter.childrenOf(a).findFirst().orElseThrow();
 
-        // first child node of a is expected to have 3 children
-        assertEquals(3, treeAdapter.childCountOf(firstChildOfA));
-        assertEquals(3, treeAdapter.childrenOf(firstChildOfA).toList().size());
+        // first child node of a is expected to have 4 children
+        assertEquals(4, treeAdapter.childCountOf(firstChildOfA));
+        assertEquals(4, treeAdapter.childrenOf(firstChildOfA).toList().size());
 
-        //TODO[causeway-core-metamodel-CAUSEWAY-2297] add property support
         // count all nodes
-        assertEquals(17, Can.ofIterable(tree::iteratorDepthFirst).size());
-        assertEquals(17, Can.ofIterable(tree::iteratorBreadthFirst).size());
+        assertEquals(25, Can.ofIterable(tree::iteratorDepthFirst).size());
+        assertEquals(25, Can.ofIterable(tree::iteratorBreadthFirst).size());
     }
 
     @Test
@@ -121,7 +120,7 @@ extends FacetFactoryTestAbstract {
             .collect(Collectors.joining(", "));
 
         assertEquals(
-                "a, b1, d1, d2, d3, b2, d1, d2, d3, c1, d1, d2, d3, c2, d1, d2, d3",
+                "a, b1, c1, d1, d2, d3, d1, d2, d3, b2, c2, d1, d2, d3, d1, d2, d3, c1, d1, d2, d3, c2, d1, d2, d3",
                 nodeNames);
     }
 

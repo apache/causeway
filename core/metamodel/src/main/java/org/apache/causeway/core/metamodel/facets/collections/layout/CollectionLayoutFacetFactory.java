@@ -85,12 +85,12 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(
             SortedByFacetForCollectionLayoutAnnotation
                 .create(collectionLayoutIfAny, facetHolder));
-        
+
         addFacetIfPresent(
             collectionLayoutIfAny
                 .map(CollectionLayout::navigableSubtree)
                 .filter(StringUtils::hasLength)
-                .flatMap(sequence->NavigableSubtreeSequenceFacet.create(
+                .flatMap(sequence->NavigableSubtreeSequenceFacet.create("CollectionLayout annotation",
                     processMethodContext.getCls(), processMethodContext.getMethod().asMethod(), sequence, facetHolder)));
     }
 

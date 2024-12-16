@@ -32,21 +32,25 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
  *
  * @since 3.2
  */
-public sealed interface NavigableSubtreeSequenceFacet 
-extends Facet 
+public sealed interface NavigableSubtreeSequenceFacet
+extends Facet
 permits NavigableSubtreeSequenceFacetRecord {
 
     String sequence();
     MethodHandle methodHandle();
-    
+
     // -- FACTORY
-    
+
     static Optional<NavigableSubtreeSequenceFacet> create(
-        final Class<?> cls, 
+        /**
+         * Informal text, describing the origin of this facet.
+         */
+        final String origin,
+        final Class<?> cls,
         final Optional<ResolvedMethod> resolvedMethod,
         final String sequence,
         final FacetHolder facetHolder) {
-        
+
         return resolvedMethod
             .map(ResolvedMethod::method)
             .flatMap(method->Try.call(()->MethodHandles
@@ -54,7 +58,7 @@ permits NavigableSubtreeSequenceFacetRecord {
                     .unreflect(method))
                 .ifFailure(e->e.printStackTrace())
                 .getValue()
-                .map(mh->new NavigableSubtreeSequenceFacetRecord(sequence, mh, facetHolder)));
+                .map(mh->new NavigableSubtreeSequenceFacetRecord(sequence, mh, origin, facetHolder)));
     }
 
 }

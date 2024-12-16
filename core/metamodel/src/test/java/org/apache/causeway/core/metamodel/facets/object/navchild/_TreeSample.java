@@ -24,6 +24,7 @@ import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.commons.collections.Can;
 
 import lombok.Getter;
@@ -41,7 +42,8 @@ class _TreeSample {
         @CollectionLayout(navigableSubtree = "2") Map<String, C> childrenC) implements SampleNode {
     }
     record B(String name,
-        @CollectionLayout(navigableSubtree = "1") Can<D> childrenD) implements SampleNode {
+        @PropertyLayout(navigableSubtree = "1") C childC,
+        @CollectionLayout(navigableSubtree = "2") Can<D> childrenD) implements SampleNode {
     }
     record C(String name,
         @CollectionLayout(navigableSubtree = "1") Can<D> childrenD) implements SampleNode {
@@ -52,7 +54,7 @@ class _TreeSample {
     A sampleA() {
         var ds = Can.of(new D("d1"), new D("d2"), new D("d3"));
         var cs = Can.of(new C("c1", ds), new C("c2", ds));
-        var bs = Can.of(new B("b1", ds), new B("b2", ds));
+        var bs = Can.of(new B("b1", cs.getElseFail(0), ds), new B("b2", cs.getElseFail(1), ds));
         var a = new A("a", bs, cs.toMap(C::name));
         return a;
     }
