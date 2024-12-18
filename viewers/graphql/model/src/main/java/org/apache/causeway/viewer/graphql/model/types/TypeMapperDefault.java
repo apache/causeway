@@ -93,18 +93,11 @@ public class TypeMapperDefault implements TypeMapper {
             final SchemaType schemaType) {
         ObjectSpecification otoaObjectSpec = oneToOneFeature.getElementType();
 
-        switch (otoaObjectSpec.getBeanSort()) {
-
-            case VIEW_MODEL:
-                return typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
-
-            case ENTITY:
-                return typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
-
-            case VALUE:
-                return scalarTypePossiblyOptional(oneToOneFeature, otoaObjectSpec);
-        }
-        return null;
+        return switch (otoaObjectSpec.getBeanSort()) {
+            case VIEW_MODEL, ENTITY -> typeRefPossiblyOptional(oneToOneFeature, schemaType, otoaObjectSpec);
+            case VALUE-> scalarTypePossiblyOptional(oneToOneFeature, otoaObjectSpec);
+            default -> null;
+        };
     }
 
     private static GraphQLOutputType typeRefPossiblyOptional(OneToOneFeature oneToOneFeature, SchemaType schemaType, ObjectSpecification otoaObjectSpec) {
@@ -127,24 +120,12 @@ public class TypeMapperDefault implements TypeMapper {
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType){
 
-        switch (objectSpecification.getBeanSort()){
-            case ABSTRACT:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
-            case ENTITY:
-                return typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
-
-            case VALUE:
-                return outputTypeFor(objectSpecification.getCorrespondingClass());
-
-            case COLLECTION:
-                // should be noop
-                return null;
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
+        return switch (objectSpecification.getBeanSort()){
+            case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.objectTypeNameFor(objectSpecification, schemaType));
+            case VALUE -> outputTypeFor(objectSpecification.getCorrespondingClass());
+            case COLLECTION -> null; // should be noop
+            default -> Scalars.GraphQLString; // for now
+        };
     }
 
     @Override
@@ -159,14 +140,13 @@ public class TypeMapperDefault implements TypeMapper {
     @Nullable public GraphQLList listTypeFor(
             final ObjectSpecification elementType,
             final SchemaType schemaType) {
-        switch (elementType.getBeanSort()) {
-            case VIEW_MODEL:
-            case ENTITY:
-                return GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, schemaType)));
-            case VALUE:
-                return GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
-        }
-        return null;
+        return switch (elementType.getBeanSort()) {
+            case VIEW_MODEL, ENTITY ->
+                GraphQLList.list(typeRef(TypeNames.objectTypeNameFor(elementType, schemaType)));
+            case VALUE -> 
+                GraphQLList.list(outputTypeFor(elementType.getCorrespondingClass()));
+            default -> null;    
+        };
     }
 
     @Override
@@ -174,6 +154,7 @@ public class TypeMapperDefault implements TypeMapper {
             final OneToOneFeature oneToOneFeature,
             final InputContext inputContext,
             final SchemaType schemaType) {
+        
         return oneToOneFeature.isOptional() || inputContext.isOptionalAlwaysAllowed()
                 ? inputTypeFor_(oneToOneFeature, schemaType)
                 : nonNull(inputTypeFor_(oneToOneFeature, schemaType));
@@ -183,22 +164,20 @@ public class TypeMapperDefault implements TypeMapper {
             final OneToOneFeature oneToOneFeature,
             final SchemaType schemaType){
         var elementObjectSpec = oneToOneFeature.getElementType();
-        switch (elementObjectSpec.getBeanSort()) {
-            case ABSTRACT:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
-            case ENTITY:
-                return typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
-
-            case VALUE:
-                return inputTypeFor(elementObjectSpec.getCorrespondingClass());
-
-            case COLLECTION:
-                throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
-            default:
-                // for now
-                return Scalars.GraphQLString;
+        
+        {   // guard introduced to intercept interfaces, which otherwise seem to break schema creation
+            // due to missing type reference for given name
+            var elementClass = elementObjectSpec.getCorrespondingClass();
+            if(elementClass.isInterface()) return inputTypeFor(elementClass);
         }
+        
+        return switch (elementObjectSpec.getBeanSort()) {
+            case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementObjectSpec, schemaType));
+            case VALUE -> inputTypeFor(elementObjectSpec.getCorrespondingClass());
+            case COLLECTION ->
+                throw new IllegalArgumentException(String.format("OneToOneFeature '%s' is not expected to have a beanSort of COLLECTION", oneToOneFeature.getFeatureIdentifier().toString()));
+            default -> Scalars.GraphQLString; // for now
+        };
     }
 
     @Override
@@ -213,23 +192,13 @@ public class TypeMapperDefault implements TypeMapper {
     public GraphQLInputType inputTypeFor(
             final ObjectSpecification elementType,
             final SchemaType schemaType){
-        switch (elementType.getBeanSort()) {
-            case ABSTRACT:
-            case VIEW_MODEL:
-                return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
-            case ENTITY:
-                return typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
-
-            case VALUE:
-                return inputTypeFor(elementType.getCorrespondingClass());
-
-            case COLLECTION:
+        return switch (elementType.getBeanSort()) {
+            case ABSTRACT, VIEW_MODEL, ENTITY -> typeRef(TypeNames.inputTypeNameFor(elementType, schemaType));
+            case VALUE -> inputTypeFor(elementType.getCorrespondingClass());
+            case COLLECTION -> 
                 throw new IllegalArgumentException(String.format("ObjectSpec '%s' is not expected to have a beanSort of COLLECTION", elementType.getFullIdentifier()));
-
-            default:
-                // for now
-                return Scalars.GraphQLString;
-        }
+            default -> Scalars.GraphQLString; // for now
+        };
     }
 
 }

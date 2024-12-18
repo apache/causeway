@@ -21,18 +21,29 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
-import org.apache.causeway.commons.internal.base._NullSafe;
 
 public class MMTreeAdapter implements TreeAdapter<MMNode> {
 
     @Override
     public int childCountOf(final MMNode node) {
-        return _NullSafe.size(node.getChildNodes());
+        return (int)childrenOf(node).count();
     }
 
     @Override
     public Stream<MMNode> childrenOf(final MMNode node) {
-        return _NullSafe.stream(node.getChildNodes());
+        return Stream.concat(
+            streamAnnotationNodes(node),
+            node.streamChildNodes());
+    }
+
+    // -- HELPER
+
+    private Stream<MMNode> streamAnnotationNodes(final MMNode node) {
+        return Stream.empty();
+//TODO[causeway-core-metamodel-CAUSEWAY-3838] reinstate
+//      return MMNodeFactory.streamAnnotations(node.metamodelElement())
+//              .filter(MMNodeFactory.nameOf("@title").negate())
+//              .map(a->MMNodeFactory.annotation(a, node));
     }
 
 }

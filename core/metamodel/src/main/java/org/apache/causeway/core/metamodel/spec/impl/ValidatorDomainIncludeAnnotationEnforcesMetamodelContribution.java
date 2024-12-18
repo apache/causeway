@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,11 +32,12 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
@@ -106,9 +108,7 @@ extends MetaModelValidatorAbstract {
             .map(MethodFacade::asMethodForIntrospection)
             .forEach(supportMethods::add);
 
-        var methodsIntendedToBeIncludedButNotPickedUp = _Sets.<ResolvedMethod>newHashSet();
-
-        classCache
+        var methodsIntendedToBeIncludedButNotPickedUp = classCache
             // methods intended to be included with the meta-model but missing
             .streamDeclaredMethodsHaving(
                     type,
@@ -118,13 +118,17 @@ extends MetaModelValidatorAbstract {
             // filter away those that are recognized
             .filter(Predicate.not(memberMethods::contains))
             .filter(Predicate.not(supportMethods::contains))
-            .forEach(methodsIntendedToBeIncludedButNotPickedUp::add);
+            // filter away classic getters, that shadow record components
+            .filter(spec.getCorrespondingClass().isRecord()
+                ? Predicate.not(AccessorSemantics::isGetter)
+                : _Predicates.alwaysTrue())
+            .collect(Collectors.toCollection(HashSet::new));
 
         // find reasons about why these are not recognized
         methodsIntendedToBeIncludedButNotPickedUp.stream()
             .forEach(notPickedUpMethod->{
-                var unmetContraints =
-                        unmetContraints((ObjectSpecificationDefault) spec, notPickedUpMethod)
+                var unmetConstraints =
+                    unmetConstraints((ObjectSpecificationDefault) spec, notPickedUpMethod)
                         .stream()
                         .collect(Collectors.joining("; "));
 
@@ -133,10 +137,8 @@ extends MetaModelValidatorAbstract {
                             .builder()
                             .addVariable("type", spec.getFeatureIdentifier().className())
                             .addVariable("member", _Reflect.methodToShortString(notPickedUpMethod.method()))
-                            .buildMessage()
-
-                        + " Unmet constraint(s): %s",
-                        unmetContraints);
+                            .addVariable("unmetConstraints", unmetConstraints)
+                            .buildMessage());
             });
 
         validateOrphanedSupportingMethod(
@@ -145,7 +147,7 @@ extends MetaModelValidatorAbstract {
 
     // -- HELPER - VALIDATION LOGIC
 
-    private List<String> unmetContraints(
+    private List<String> unmetConstraints(
             final ObjectSpecificationDefault spec,
             final ResolvedMethod method) {
 

@@ -21,69 +21,52 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
-import org.apache.causeway.schema.metamodel.v2.Param;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Named(ParameterNode.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleApplib.NAMESPACE + ".ParameterNode")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class ParameterNode extends MMNode {
+@RequiredArgsConstructor
+public final class ParameterNode implements MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ParameterNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Param parameter;
+    @Programmatic
+    private final ObjectActionParameter parameter;
 
     @Override
-    public String createTitle() {
-        var title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->
-                    String.format("%s: %s", parameter.getId(), ""+parameter.getType()));
-        return title;
+    public String title() {
+        return MMNodeFactory.lookupTitleAnnotation(parameter)
+            .map(Annotation::getValue)
+            .orElseGet(()->
+                String.format("%s: %s", parameter.getId(), parameter.getElementType().logicalTypeName()));
     }
 
     @Override
-    protected String iconSuffix() {
+    public String iconName() {
         return "";
-    }
-
-    @Override
-    protected MetamodelElement metamodelElement() {
-        return parameter;
     }
 
     // -- TREE NODE STUFF
 
-    @Getter @Setter @XmlTransient
+    @Getter @Setter
     private ActionNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
         return Stream.of(
-                MMNodeFactory.facetGroup(parameter.getFacets(), this));
+                MMNodeFactory.facetGroup(parameter.streamFacets(), this));
     }
 
 }

@@ -22,7 +22,10 @@ import java.util.NoSuchElementException;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
+import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 import lombok.NonNull;
@@ -161,5 +164,13 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T create(@NonNull Class<T> domainClass);
+    
+    /**
+     * In support of built-in tree semantics, as inferred from 
+     * {@link PropertyLayout#navigableSubtree()} or 
+     * {@link CollectionLayout#navigableSubtree()} annotations.
+     * @since 3.2
+     */
+    <T> TreeNode<T> treeNode(T root);
 
 }

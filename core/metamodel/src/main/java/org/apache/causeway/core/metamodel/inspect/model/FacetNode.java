@@ -18,63 +18,47 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Facet;
-import org.apache.causeway.schema.metamodel.v2.FacetAttr;
-import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Named(FacetNode.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleApplib.NAMESPACE + ".node.FacetNode")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class FacetNode extends MMNode {
+@RequiredArgsConstructor
+public final class FacetNode implements MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.FacetNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Facet facet;
+    @Programmatic
+    private final Facet facet;
 
     @Override
-    public String createTitle() {
-        var title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->
-                String.format("%s: %s", simpleName(facet.getId()), facet.getFqcn()));
-        return title;
+    public String title() {
+        return MMNodeFactory.lookupTitleAnnotation(facet)
+            .map(Annotation::getValue)
+            .orElseGet(()->
+                String.format("%s: %s", MMNodeFactory.simpleName(
+                    facet.facetType().getSimpleName()),
+                    facet.getClass().getName()));
     }
 
     @Override
-    protected String iconSuffix() {
+    public String iconName() {
         return "";
-    }
-
-    @Override
-    protected MetamodelElement metamodelElement() {
-        return facet;
     }
 
     @Getter @Setter
@@ -82,17 +66,15 @@ public class FacetNode extends MMNode {
 
     // -- TREE NODE STUFF
 
-    @Getter @Setter @XmlTransient
+    @Getter @Setter
     private MMNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        return streamFacetAttributes()
-                    .map(facetAttr->MMNodeFactory.facetAttr(facetAttr, this));
-    }
-
-    private Stream<FacetAttr> streamFacetAttributes() {
-        return _NullSafe.stream(facet.getAttr());
+        var attrs = new ArrayList<MMNode>();
+        facet.visitAttributes((name, value)->attrs.add(
+            MMNodeFactory.facetAttr(name, ""+value, this)));
+        return attrs.stream();
     }
 
 }

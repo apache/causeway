@@ -46,8 +46,13 @@ public class ExecutionGraphQlServiceForCauseway implements ExecutionGraphQlServi
     @Override
     public Mono<ExecutionGraphQlResponse> execute(final ExecutionGraphQlRequest request) {
         if(delegate == null) {
-            delegate = new DefaultExecutionGraphQlService(graphQlSource);
-            delegate.addDataLoaderRegistrar(batchLoaderRegistry);
+            try {
+                delegate = new DefaultExecutionGraphQlService(graphQlSource);
+                delegate.addDataLoaderRegistrar(batchLoaderRegistry);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
         }
         return delegate.execute(request);
     }

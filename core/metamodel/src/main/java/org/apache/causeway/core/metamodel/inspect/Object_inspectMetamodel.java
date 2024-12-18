@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.inspect;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
@@ -31,16 +28,11 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.graph.tree.TreePath;
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.LayoutConstants;
-import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.services.metamodel.Config;
-import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.inspect.model.MMNode;
 import org.apache.causeway.core.metamodel.inspect.model.MMNodeFactory;
 import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -62,7 +54,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
-    @Inject FactoryService factoryService;
+    @Inject private MessageService messageService;
+    @Inject private SpecificationLoader specLoader;
 
     private final Object domainObject; // mixee
 
@@ -71,50 +64,17 @@ public class Object_inspectMetamodel {
 
     @MemberSupport public Object act() {
 
-        final Optional<LogicalType> logicalTypeIfAny = metaModelService
-                .lookupLogicalTypeByClass(domainObject.getClass());
-        if(!logicalTypeIfAny.isPresent()) {
+        var objSpec = specLoader.specForType(domainObject.getClass())
+            .orElse(null);
+        if(objSpec==null) {
             messageService.warnUser("Unknown class, unable to export");
             return null;
         }
-        final String namespace = logicalTypeIfAny.get().logicalName();
 
-        var config = Config.builder()
-                .ignoreFallbackFacets(true)
-                .ignoreAbstractClasses(true)
-                .ignoreInterfaces(true)
-                .ignoreBuiltInValueTypes(true)
-                .includeTitleAnnotations(true)
-                .includeShadowedFacets(true)
-                .build()
-                .withNamespacePrefix(namespace);
+        var root = MMNodeFactory.type(objSpec);
 
-        var metamodelDto = metaModelService.exportMetaModel(config);
-
-        var className = domainObject.getClass().getName();
-
-        var domainClassDto = metamodelDto.getDomainClassDto()
-            .stream()
-            .filter(classDto->Objects.equals(classDto.getId(), className))
-            .findFirst()
-            .orElseThrow(_Exceptions::noSuchElement);
-
-        var root = MMNodeFactory.type(domainClassDto, null);
-
-        var tree = TreeNode.root(root, factoryService.getOrCreate(MMTreeAdapter.class));
-
-        // Initialize view-model nodes of the entire tree,
-        // because as it stands, all the type information gets cleared,
-        // after the jaxb model got de-serialized.
-        tree.streamDepthFirst()
-        .map(TreeNode::value)
-        .forEach(MMNode::title);
-
-        tree.expand(TreePath.of(0)); // expand the root node
-        return tree;
+        return TreeNode.root(root, new MMTreeAdapter())
+            .expand(TreePath.root()); // expand the root node
     }
-
-    @Inject private MetaModelService metaModelService;
-    @Inject private MessageService messageService;
 
 }

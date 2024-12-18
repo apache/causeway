@@ -457,10 +457,10 @@ class DomainModelTest_usingBadDomain {
     private String unsatisfiedDomainIncludeSemantics(
             final String className,
             final String memberName) {
-        return MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS
-                .builder()
+        return MessageTemplate.UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS.builder()
                 .addVariable("type", className)
                 .addVariable("member", memberName)
+                .addVariable("unmetConstraints", "")
                 .buildMessage();
     }
 

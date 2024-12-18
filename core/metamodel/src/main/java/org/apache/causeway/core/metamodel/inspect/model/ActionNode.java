@@ -21,69 +21,55 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.schema.metamodel.v2.Action;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Member;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 
-@Named(ActionNode.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleApplib.NAMESPACE + ".node.ActionNode")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class ActionNode extends MemberNode {
-
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.ActionNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Action action;
-
-    @Override
-    public String createTitle() {
-        var title = lookupTitleAnnotation().map(Annotation::getValue)
-                .orElseGet(()->
-                    String.format("%s(...): %s%s",
-                            action.getId(),
-                            ""+action.getReturnType(),
-                            titleSuffix()));
-        return title;
-    }
+@RequiredArgsConstructor
+public final class ActionNode extends MemberNode {
 
     @Programmatic
+    private final ObjectAction action;
+
+    @Override
+    public String title() {
+        return MMNodeFactory.lookupTitleAnnotation(action)
+            .map(Annotation::getValue)
+            .orElseGet(()->
+                String.format("%s(...): %s%s",
+                        action.getId(),
+                        ""+action.getReturnType(),
+                        titleSuffix()));
+    }
+
     @Override
     public Stream<MMNode> streamChildNodes() {
 
         return Stream.<MMNode>concat(
 
-                super.streamChildNodes(),
+            super.streamChildNodes(),
 
-                action.getParams().getParam().stream()
-                    .map(param->MMNodeFactory.param(param, this))
+            action.streamParameters()
+                .map(param->MMNodeFactory.param(param, this))
 
-                );
+            );
     }
 
     @Override
-    protected Member member() {
+    protected ObjectMember member() {
         return action;
     }
 

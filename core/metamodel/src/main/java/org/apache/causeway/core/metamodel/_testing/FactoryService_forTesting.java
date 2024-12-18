@@ -20,9 +20,12 @@ package org.apache.causeway.core.metamodel._testing;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.object.navchild.ObjectTreeAdapter;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +34,6 @@ import lombok.SneakyThrows;
 @RequiredArgsConstructor
 class FactoryService_forTesting implements FactoryService {
 
-    @SuppressWarnings("unused")
     private final MetaModelContext metaModelContext;
 
     @SneakyThrows
@@ -76,6 +78,11 @@ class FactoryService_forTesting implements FactoryService {
     @Override
     public <T> T create(final Class<T> domainClass) {
         return domainClass.getDeclaredConstructor().newInstance();
+    }
+
+    @Override
+    public <T> TreeNode<T> treeNode(T root) {
+        return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(metaModelContext.getSpecificationLoader())));
     }
 
 }

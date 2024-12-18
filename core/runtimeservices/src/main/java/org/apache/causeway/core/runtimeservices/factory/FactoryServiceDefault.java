@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -37,6 +38,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.causeway.core.metamodel.facets.object.navchild.ObjectTreeAdapter;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -179,6 +181,11 @@ public class FactoryServiceDefault implements FactoryService {
             final @NonNull ObjectSpecification spec) {
         var domainObject = spec.createObject();
         return _Casts.uncheckedCast(domainObject.getPojo());
+    }
+
+    @Override
+    public <T> TreeNode<T> treeNode(T root) {
+        return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(specificationLoader)));
     }
 
 }

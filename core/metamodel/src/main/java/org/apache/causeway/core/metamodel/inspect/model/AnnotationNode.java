@@ -21,59 +21,42 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Named(AnnotationNode.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleApplib.NAMESPACE + ".AnnotationNode")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class AnnotationNode extends MMNode {
+@RequiredArgsConstructor
+public final class AnnotationNode implements MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".AnnotationNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Annotation annotation;
+    @Programmatic
+    private final Annotation annotation;
 
     @Override
-    public String createTitle() {
+    public String title() {
         return String.format("%s: %s", annotation.getName(), annotation.getValue());
     }
 
     @Override
-    protected String iconSuffix() {
+    public String iconName() {
         return "";
-    }
-
-    @Override
-    protected MetamodelElement metamodelElement() {
-        return null;
     }
 
     // -- TREE NODE STUFF
 
-    @Getter @Setter @XmlTransient
+    @Getter @Setter
     private MMNode parentNode;
 
     @Override

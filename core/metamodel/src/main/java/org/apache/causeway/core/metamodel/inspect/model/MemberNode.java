@@ -20,20 +20,19 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlTransient;
-
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.schema.metamodel.v2.Member;
-import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-public abstract class MemberNode extends MMNode {
+public abstract sealed class MemberNode
+implements MMNode
+permits
+    ActionNode,
+    CollectionNode,
+    PropertyNode {
 
     // -- MIXIN STUFF
 
@@ -41,7 +40,7 @@ public abstract class MemberNode extends MMNode {
     private boolean mixedIn;
 
     @Override
-    protected final String iconSuffix() {
+    public final String iconName() {
         return isMixedIn() ? "mixedin" : "";
     }
 
@@ -49,14 +48,8 @@ public abstract class MemberNode extends MMNode {
         return isMixedIn() ? " (mixed in)" : "";
     }
 
-    @Override
-    protected MetamodelElement metamodelElement() {
-        return member();
-    }
-
     // -- TREE NODE STUFF
 
-    @XmlTransient
     @Getter @Setter @Accessors(makeFinal = true)
     private TypeNode parentNode;
 
@@ -64,10 +57,11 @@ public abstract class MemberNode extends MMNode {
     @Override
     public Stream<MMNode> streamChildNodes() {
         return Stream.of(
-                MMNodeFactory.facetGroup(member().getFacets(), this));
+                MMNodeFactory.facetGroup(member().streamFacets(), this));
     }
 
-    protected abstract Member member();
+    @Programmatic
+    protected abstract ObjectMember member();
 
 }
 

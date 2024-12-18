@@ -18,82 +18,131 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import org.apache.causeway.schema.metamodel.v2.Action;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Collection;
-import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
-import org.apache.causeway.schema.metamodel.v2.Facet;
-import org.apache.causeway.schema.metamodel.v2.FacetAttr;
-import org.apache.causeway.schema.metamodel.v2.FacetHolder.Facets;
-import org.apache.causeway.schema.metamodel.v2.Param;
-import org.apache.causeway.schema.metamodel.v2.Property;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.springframework.lang.Nullable;
+
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.Specification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.schema.metamodel.v2.Annotation;
+import org.apache.causeway.schema.metamodel.v2.FacetAttr;
+
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class MMNodeFactory {
 
-    public static MMNode annotation(final Annotation annotation, final MMNode parentNode) {
-        var node = new AnnotationNode();
-        node.setAnnotation(annotation);
+    public MMNode annotation(final Annotation annotation, final MMNode parentNode) {
+        var node = new AnnotationNode(annotation);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode type(final DomainClassDto domainClassDto, final MMNode parentNode) {
-        var node = new TypeNode();
-        node.setDomainClassDto(domainClassDto);
+    public TypeNode type(final ObjectSpecification objSpec) {
+        //TODO[causeway-core-metamodel-CAUSEWAY-3838] title
+//        var title= MMNodeFactory.lookupTitleAnnotation(objSpec)
+//                .map(Annotation::getValue)
+//                    .orElseGet(objSpec::getId);
+        return new TypeNode(objSpec.logicalTypeName(), "TODO");
+    }
+
+    MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
+        var node = new FacetNode(facet);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
-        var node = new FacetNode();
-        node.setFacet(facet);
+    MMNode facetAttr(final String name, final String value, final FacetNode parentNode) {
+        var facetAttr = new FacetAttr();
+        facetAttr.setName(name);
+        facetAttr.setValue(value);
+        var node = new FacetAttrNode(facetAttr);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facetAttr(final FacetAttr facetAttr, final FacetNode parentNode) {
-        var node = new FacetAttrNode();
-        node.setFacetAttr(facetAttr);
-        node.setParentNode(parentNode);
-        return node;
-    }
-
-    public static MMNode action(final Action action, final TypeNode parentNode) {
-        var node = new ActionNode();
-        node.setAction(action);
+    MMNode action(final ObjectAction action, final TypeNode parentNode) {
+        var node = new ActionNode(action);
         node.setParentNode(parentNode);
         node.setMixedIn(action.isMixedIn());
         return node;
     }
 
-    public static MMNode property(final Property property, final TypeNode parentNode) {
-        var node = new PropertyNode();
-        node.setProperty(property);
+    MMNode property(final OneToOneAssociation prop, final TypeNode parentNode) {
+        var node = new PropertyNode(prop);
         node.setParentNode(parentNode);
-        node.setMixedIn(property.isMixedIn());
+        node.setMixedIn(prop.isMixedIn());
         return node;
     }
 
-    public static MMNode collection(final Collection collection, final TypeNode parentNode) {
-        var node = new CollectionNode();
-        node.setCollection(collection);
+    MMNode collection(final OneToManyAssociation coll, final TypeNode parentNode) {
+        var node = new CollectionNode(coll);
         node.setParentNode(parentNode);
-        node.setMixedIn(collection.isMixedIn());
+        node.setMixedIn(coll.isMixedIn());
         return node;
     }
 
-    public static MMNode param(final Param param, final ActionNode parentNode) {
-        var node = new ParameterNode();
-        node.setParameter(param);
+    MMNode param(final ObjectActionParameter param, final ActionNode parentNode) {
+        var node = new ParameterNode(param);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public static MMNode facetGroup(final Facets facets, final MMNode parentNode) {
-        var node = new FacetGroupNode();
-        node.setFacets(facets);
+    MMNode facetGroup(final Stream<Facet> stream, final MMNode parentNode) {
+        var node = new FacetGroupNode(Can.ofStream(stream));
         node.setParentNode(parentNode);
         return node;
     }
+
+    //--
+
+    String simpleName(final String name) {
+        return _Strings.splitThenStream(""+name, ".")
+            .reduce((first, second) -> second) // get the last
+            .orElse("null");
+    }
+
+    Optional<Annotation> lookupTitleAnnotation(final Facet facet) {
+        // TODO Auto-generated method stub
+        return Optional.empty();
+    }
+
+    Optional<Annotation> lookupTitleAnnotation(@Nullable final Specification metamodelElement) {
+        return lookupAnnotationByName(metamodelElement, "@title");
+    }
+
+    Optional<Annotation> lookupAnnotationByName(
+        @Nullable final Specification metamodelElement, final String annotationName) {
+        return streamAnnotations(metamodelElement)
+            .filter(nameOf(annotationName))
+            .findFirst();
+    }
+
+    Stream<Annotation> streamAnnotations(@Nullable final Specification metamodelElement) {
+        //TODO[causeway-core-metamodel-CAUSEWAY-3838] annotations
+        return Stream.empty();
+
+//        return Optional.ofNullable(metamodelElement)
+//            .map(MetamodelElement::getAnnotations)
+//            .map(FacetHolder.Annotations::getAsList)
+//            .<Stream<Annotation>>map(List::stream)
+//            .orElseGet(Stream::empty);
+    }
+
+    static Predicate<Annotation> nameOf(final String annotationName) {
+        return annot->Objects.equals(annotationName, annot.getName());
+    }
+
+
 
 }

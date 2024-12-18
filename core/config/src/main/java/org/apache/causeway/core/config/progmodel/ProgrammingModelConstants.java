@@ -440,7 +440,8 @@ public final class ProgrammingModelConstants {
                 + "without enforcing annotations"),
         UNSATISFIED_DOMAIN_INCLUDE_SEMANTICS("${type}#${member}: "
                 + "has synthesized (effective) annotation @Domain.Include, "
-                + "is assumed to represent or support a property, collection or action."),
+                + "is assumed to represent or support a property, collection or action. "
+                + "Unmet constraint(s): ${unmetConstraints}"),
         VIEWMODEL_CONFLICTING_SERIALIZATION_STRATEGIES(
                 "${type}: has multiple incompatible annotations/interfaces indicating that "
                 + "it is a recreatable object of some sort (${facetA} and ${facetB})"),

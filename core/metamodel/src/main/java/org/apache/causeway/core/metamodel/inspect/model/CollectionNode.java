@@ -19,54 +19,42 @@
 package org.apache.causeway.core.metamodel.inspect.model;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.Collection;
-import org.apache.causeway.schema.metamodel.v2.Member;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 
-@Named(CollectionNode.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleApplib.NAMESPACE + ".node.CollectionNode")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class CollectionNode extends MemberNode {
+@RequiredArgsConstructor
+public final class CollectionNode extends MemberNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".node.CollectionNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Collection collection;
+    @Programmatic
+    private final OneToManyAssociation collection;
 
     @Override
-    public String createTitle() {
-        var title = lookupTitleAnnotation().map(Annotation::getValue)
+    public String title() {
+        return MMNodeFactory.lookupTitleAnnotation(collection)
+            .map(Annotation::getValue)
                 .orElseGet(()->
             String.format("%s: %s%s",
                     collection.getId(),
-                    ""+collection.getType(),
+                    collection.getElementType().logicalTypeName(),
                     titleSuffix()));
-        return title;
     }
 
     @Override
-    protected Member member() {
+    protected ObjectMember member() {
         return collection;
     }
 

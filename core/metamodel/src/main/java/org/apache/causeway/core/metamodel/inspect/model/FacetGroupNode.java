@@ -21,66 +21,49 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Property;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.schema.metamodel.v2.FacetHolder.Facets;
-import org.apache.causeway.schema.metamodel.v2.MetamodelElement;
+import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Named(FacetGroupNode.LOGICAL_TYPE_NAME)
+@Named(CausewayModuleApplib.NAMESPACE + ".FacetGroupNode")
 @DomainObject(
         nature=Nature.VIEW_MODEL,
         introspection = Introspection.ANNOTATION_REQUIRED
 )
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@ToString
-public class FacetGroupNode extends MMNode {
+@RequiredArgsConstructor
+public final class FacetGroupNode implements MMNode {
 
-    public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".FacetGroupNode";
-
-    @Property
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    @Getter @Setter private Facets facets;
+    @Programmatic
+    private final Can<Facet> facets;
 
     @Override
-    public String createTitle() {
+    public String title() {
         return "Facets";
     }
 
     @Override
-    protected String iconSuffix() {
+    public String iconName() {
         return "";
-    }
-
-    @Override
-    protected MetamodelElement metamodelElement() {
-        return null;
     }
 
     // -- TREE NODE STUFF
 
-    @Getter @Setter @XmlTransient
+    @Getter @Setter
     private MMNode parentNode;
 
     @Override
     public Stream<MMNode> streamChildNodes() {
 
-        return _NullSafe.stream(facets.getFacet())
+        return facets.stream()
                 .map(facet->MMNodeFactory.facet(facet, this))
                 .sorted((a, b)->a.title().compareToIgnoreCase(b.title()));
     }

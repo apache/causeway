@@ -66,7 +66,7 @@ public record TreeNode<T>(
 implements Vertex<T> {
 
     // -- FACTORIES
-
+    
     /**
      * Creates the root node of a tree structure as inferred from given treeAdapter.
      */
@@ -243,28 +243,31 @@ implements Vertex<T> {
      * Adds {@code treePaths} to the set of expanded nodes, as held by this tree's shared state object.
      * @param treePaths
      */
-    public void expand(final TreePath ... treePaths) {
+    public TreeNode<T> expand(final TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = treeState().expandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::add);
+        return this;
     }
 
     /**
      * Expands this node and all its parents.
      */
-    public void expand() {
+    public TreeNode<T> expand() {
         final Set<TreePath> expandedPaths = treeState().expandedNodePaths();
         streamHierarchyUp()
             .map(TreeNode::treePath)
             .forEach(expandedPaths::add);
+        return this;
     }
 
     /**
      * Removes {@code treePaths} from the set of expanded nodes, as held by this tree's shared state object.
      * @param treePaths
      */
-    public void collapse(final TreePath ... treePaths) {
+    public TreeNode<T> collapse(final TreePath ... treePaths) {
         final Set<TreePath> expandedPaths = treeState().expandedNodePaths();
         _NullSafe.stream(treePaths).forEach(expandedPaths::remove);
+        return this;
     }
 
     // -- SELECTION
@@ -273,8 +276,9 @@ implements Vertex<T> {
      * Clears all selection markers.
      * @see #select(TreePath...)
      */
-    public void clearSelection() {
+    public TreeNode<T> clearSelection() {
         treeState().selectedNodePaths().clear();
+        return this;
     }
 
     /**
@@ -298,9 +302,10 @@ implements Vertex<T> {
      * }
      * </pre>
      */
-    public void select(final TreePath ... treePaths) {
+    public TreeNode<T> select(final TreePath ... treePaths) {
         final Set<TreePath> selectedPaths = treeState().selectedNodePaths();
         _NullSafe.stream(treePaths).forEach(selectedPaths::add);
+        return this;
     }
 
     // -- PARENT NODE ITERATION
