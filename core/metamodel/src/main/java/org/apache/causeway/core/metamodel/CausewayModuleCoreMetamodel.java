@@ -36,16 +36,7 @@ import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
-import org.apache.causeway.core.metamodel.inspect.model.ActionNode;
-import org.apache.causeway.core.metamodel.inspect.model.CollectionNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetAttrNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetGroupNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetNode;
-import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
-import org.apache.causeway.core.metamodel.inspect.model.MemberNode;
-import org.apache.causeway.core.metamodel.inspect.model.ParameterNode;
-import org.apache.causeway.core.metamodel.inspect.model.PropertyNode;
-import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
+import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectView;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilterDefault;
 import org.apache.causeway.core.metamodel.services.appfeat.ApplicationFeatureRepositoryDefault;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorDefault;
@@ -237,16 +228,8 @@ public class CausewayModuleCoreMetamodel {
     @Bean
     public PreloadableTypes metamodelViewTypes() {
         return ()->Stream.of(
-                MMTreeAdapter.class,
-                MemberNode.class,
-                ActionNode.class,
-                CollectionNode.class,
-                FacetAttrNode.class,
-                FacetGroupNode.class,
-                FacetNode.class,
-                ParameterNode.class,
-                PropertyNode.class,
-                TypeNode.class);
+                MetamodelInspectView.class
+                );
     }
 
 }

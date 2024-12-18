@@ -21,27 +21,23 @@ package org.apache.causeway.core.metamodel.inspect;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.core.metamodel.inspect.model.ActionNode;
-import org.apache.causeway.core.metamodel.inspect.model.CollectionNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetAttrNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetGroupNode;
-import org.apache.causeway.core.metamodel.inspect.model.FacetNode;
-import org.apache.causeway.core.metamodel.inspect.model.ParameterNode;
-import org.apache.causeway.core.metamodel.inspect.model.PropertyNode;
-import org.apache.causeway.core.metamodel.inspect.model.TypeNode;
+import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectView;
 
 @Configuration
 @Import({
         Object_inspectMetamodel.class,
 
-        ActionNode.class,
-        CollectionNode.class,
-        FacetAttrNode.class,
-        FacetGroupNode.class,
-        FacetNode.class,
-        ParameterNode.class,
-        PropertyNode.class,
-        TypeNode.class,
+        MetamodelInspectView.class,
+        
+//        ActionNode.class,
+//        CollectionNode.class,
+//        FacetAttrNode.class,
+//        FacetGroupNode.class,
+//        FacetNode.class,
+//        ParameterNode.class,
+//        PropertyNode.class,
+//        TypeNode.class,
+        
 })
 public class CausewayModuleCoreMetamodelMixins {
 

@@ -60,10 +60,10 @@ class _MemberIdClashReporting {
         // prime member-ids from regular members, without flagging (honor method override)
         regularMembers.forEach(memberIdCollector::collect);
 
-        mixedInMembers.forEach(objectMember->
-            memberIdCollector.collect(objectMember)
+        mixedInMembers.forEach(mixedInMember->
+            memberIdCollector.collect(mixedInMember)
             .ifPresent(previous->
-                ValidationFailureUtils.raiseMemberIdClash(declaringType, previous, objectMember)));
+                ValidationFailureUtils.raiseMemberIdClash(declaringType, previous, mixedInMember)));
     }
 
     // -- HELPER

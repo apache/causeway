@@ -27,7 +27,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public abstract sealed class MemberNode
+abstract sealed class MemberNode
 implements MMNode
 permits
     ActionNode,

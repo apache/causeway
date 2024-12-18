@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 
-public class MMTreeAdapter implements TreeAdapter<MMNode> {
+class MMTreeAdapter implements TreeAdapter<MMNode> {
 
     @Override
     public int childCountOf(final MMNode node) {

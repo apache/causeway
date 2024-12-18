@@ -20,12 +20,6 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.schema.metamodel.v2.FacetAttr;
 
@@ -33,13 +27,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Named(CausewayModuleApplib.NAMESPACE + ".node.FacetAttrNode")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED
-)
 @RequiredArgsConstructor
-public final class FacetAttrNode implements MMNode {
+final class FacetAttrNode implements MMNode {
 
     @Programmatic
     private final FacetAttr facetAttr;

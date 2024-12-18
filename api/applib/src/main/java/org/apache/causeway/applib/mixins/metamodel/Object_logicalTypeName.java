@@ -52,7 +52,8 @@ import lombok.RequiredArgsConstructor;
         domainEvent = Object_logicalTypeName.PropertyDomainEvent.class  // if this does not work, reopen CAUSEWAY-2235
 )
 @PropertyLayout(
-        describedAs = "The logical name of this domain class (as used in persistence, URLs etc).  Intended to be stable/unchanging across time",
+        describedAs = "The logical name of this domain class (as used in persistence, URLs etc). "
+            + "Intended to be stable/unchanging across time",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         hidden = Where.ALL_TABLES,
         sequence = "400.1"

@@ -40,20 +40,16 @@ import org.apache.causeway.schema.metamodel.v2.FacetAttr;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MMNodeFactory {
+class MMNodeFactory {
 
-    public MMNode annotation(final Annotation annotation, final MMNode parentNode) {
+    MMNode annotation(final Annotation annotation, final MMNode parentNode) {
         var node = new AnnotationNode(annotation);
         node.setParentNode(parentNode);
         return node;
     }
 
-    public TypeNode type(final ObjectSpecification objSpec) {
-        //TODO[causeway-core-metamodel-CAUSEWAY-3838] title
-//        var title= MMNodeFactory.lookupTitleAnnotation(objSpec)
-//                .map(Annotation::getValue)
-//                    .orElseGet(objSpec::getId);
-        return new TypeNode(objSpec.logicalTypeName(), "TODO");
+    TypeNode type(final ObjectSpecification objSpec) {
+        return new TypeNode(objSpec.logicalTypeName());
     }
 
     MMNode facet(final Facet facet, final FacetGroupNode parentNode) {

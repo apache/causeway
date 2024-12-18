@@ -20,9 +20,7 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.annotation.ObjectSupport;
-
-sealed interface MMNode
+sealed interface MMNode 
 permits
     AnnotationNode,
     MemberNode,
@@ -36,10 +34,7 @@ permits
 
     Stream<MMNode> streamChildNodes();
 
-    @ObjectSupport
     String title();
-
-    @ObjectSupport
     String iconName();
-
+    
 }

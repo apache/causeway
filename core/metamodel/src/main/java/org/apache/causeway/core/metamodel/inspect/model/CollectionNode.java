@@ -18,12 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -31,13 +25,8 @@ import org.apache.causeway.schema.metamodel.v2.Annotation;
 
 import lombok.RequiredArgsConstructor;
 
-@Named(CausewayModuleApplib.NAMESPACE + ".node.CollectionNode")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED
-)
 @RequiredArgsConstructor
-public final class CollectionNode extends MemberNode {
+final class CollectionNode extends MemberNode {
 
     @Programmatic
     private final OneToManyAssociation collection;

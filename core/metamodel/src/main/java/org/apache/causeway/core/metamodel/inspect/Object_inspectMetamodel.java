@@ -26,12 +26,9 @@ import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.graph.tree.TreeNode;
-import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.core.metamodel.inspect.model.MMNodeFactory;
-import org.apache.causeway.core.metamodel.inspect.model.MMTreeAdapter;
+import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectView;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.RequiredArgsConstructor;
@@ -50,7 +47,6 @@ import lombok.RequiredArgsConstructor;
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.2.1"
 )
-//mixin's don't need a logicalTypeName
 @RequiredArgsConstructor
 public class Object_inspectMetamodel {
 
@@ -71,10 +67,7 @@ public class Object_inspectMetamodel {
             return null;
         }
 
-        var root = MMNodeFactory.type(objSpec);
-
-        return TreeNode.root(root, new MMTreeAdapter())
-            .expand(TreePath.root()); // expand the root node
+        return MetamodelInspectView.root(objSpec);
     }
 
 }

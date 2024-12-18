@@ -21,32 +21,20 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import java.io.Serializable;
 import java.util.stream.Stream;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-@Named(CausewayModuleApplib.NAMESPACE + ".TypeNode")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED)
-public record TypeNode(
-    @PropertyLayout(hidden = Where.EVERYWHERE)
-    String logicalTypeName,
-
-    @ObjectSupport
-    String title)
+record TypeNode(
+    String logicalName)
 implements MMNode, Serializable {
 
+    @Override
+    public String title() {
+        return logicalName;
+    }
+    
     @Override
     public String iconName() {
         return "";
@@ -56,7 +44,7 @@ implements MMNode, Serializable {
     public Stream<MMNode> streamChildNodes() {
         var spec = MetaModelContext.instance()
             .map(MetaModelContext::getSpecificationLoader)
-            .flatMap(specLoader->specLoader.specForLogicalTypeName(logicalTypeName))
+            .flatMap(specLoader->specLoader.specForLogicalTypeName(logicalName))
             .orElse(null);
         if(spec==null) return Stream.empty();
 

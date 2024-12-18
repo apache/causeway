@@ -17,16 +17,8 @@
  *  under the License.
  */
 package org.apache.causeway.core.metamodel.inspect.model;
-
 import java.util.stream.Stream;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.annotation.Introspection;
-import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
@@ -34,15 +26,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Named(CausewayModuleApplib.NAMESPACE + ".FacetGroupNode")
-@DomainObject(
-        nature=Nature.VIEW_MODEL,
-        introspection = Introspection.ANNOTATION_REQUIRED
-)
 @RequiredArgsConstructor
-public final class FacetGroupNode implements MMNode {
-
-    @Programmatic
+final class FacetGroupNode implements MMNode {
+    
     private final Can<Facet> facets;
 
     @Override
