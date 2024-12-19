@@ -27,7 +27,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -61,18 +60,22 @@ public class IdStringifierLookupService {
     private final Can<IdStringifier<?>> idStringifiers;
     private final Map<Class<?>, IdStringifier<?>> stringifierByClass = new ConcurrentHashMap<>();
 
-    @Inject
     public IdStringifierLookupService(
-            final List<IdStringifier<?>> idStringifiers,
-            final Optional<IdStringifier<Serializable>> idStringifierForSerializableIfAny) {
+            final List<IdStringifier<?>> idStringifiers) {
+
+        final Optional<IdStringifier<?>> idStringifierForSerializableIfAny = idStringifiers.stream()
+            .filter(ids->ids.getCorrespondingClass().equals(Serializable.class))
+            .findFirst();
+
         // IdStringifierForSerializable is enforced to go last, so any custom IdStringifier(s)
         // that do not explicitly specify an @Order/@Precedence go earlier
         idStringifierForSerializableIfAny
-        .ifPresent(idStringifierForSerializable->{
-            idStringifiers.removeIf(idStringifier->idStringifierForSerializable.getClass()
-                    .equals(idStringifier.getClass()));
-            idStringifiers.add(idStringifierForSerializable); // put last
-        });
+            .ifPresent(idStringifierForSerializable->{
+                idStringifiers.removeIf(idStringifier->idStringifierForSerializable.getClass()
+                        .equals(idStringifier.getClass()));
+                idStringifiers.add(idStringifierForSerializable); // put last
+            });
+
         this.idStringifiers = Can.ofCollection(idStringifiers);
     }
 
