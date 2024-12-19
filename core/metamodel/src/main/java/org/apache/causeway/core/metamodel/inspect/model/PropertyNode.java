@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,15 +30,17 @@ final class PropertyNode extends MemberNode {
 
     @Override
     public String title() {
-        return MMNodeFactory.lookupTitleAnnotation(property)
-            .map(Annotation::getValue)
-            .orElseGet(()->
-                String.format("%s: %s%s",
-                    property.getId(),
-                    property.getElementType().logicalTypeName(),
-                    titleSuffix()));
+        return property.getId();
     }
 
+    @Override
+    public void putDetails(Details details) {
+        details.put("Id", property.getId());
+        details.put("Friendly Name", property.getCanonicalFriendlyName());
+        details.put("Mixed In", "" + isMixedIn());
+        details.put("Element Type", property.getElementType().logicalTypeName());
+    }
+    
     @Override
     protected ObjectMember member() {
         return property;

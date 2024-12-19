@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,25 +32,28 @@ final class ActionNode extends MemberNode {
 
     @Override
     public String title() {
-        return MMNodeFactory.lookupTitleAnnotation(action)
-            .map(Annotation::getValue)
-            .orElseGet(()->
-                String.format("%s(...): %s%s",
-                        action.getId(),
-                        ""+action.getReturnType(),
-                        titleSuffix()));
+        return switch(action.getParameterCount()) {
+            case 0 -> "%s()".formatted(action.getId());
+            case 1 -> "%s(1 arg)".formatted(action.getId());
+            default -> "%s(%d args)".formatted(action.getId(), action.getParameterCount());
+        };
+    }
+    
+    @Override
+    public void putDetails(Details details) {
+        details.put("Id", action.getId());
+        details.put("Friendly Name", action.getCanonicalFriendlyName());
+        details.put("Mixed In", "" + isMixedIn());
+        details.put("Return Element Type", action.getReturnType().logicalTypeName());
     }
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-
         return Stream.<MMNode>concat(
-
-            super.streamChildNodes(),
-
-            action.streamParameters()
-                .map(param->MMNodeFactory.param(param, this))
-
+                super.streamChildNodes(),
+    
+                action.streamParameters()
+                    .map(param->MMNodeFactory.param(param, this))
             );
     }
 
@@ -59,6 +61,7 @@ final class ActionNode extends MemberNode {
     protected ObjectMember member() {
         return action;
     }
+    
 
 }
 

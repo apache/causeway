@@ -18,23 +18,71 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.causeway.applib.value.Markup;
 
 sealed interface MMNode 
 permits
-    AnnotationNode,
     MemberNode,
-
-    FacetAttrNode,
     FacetGroupNode,
     FacetNode,
     ParameterNode,
-
     TypeNode {
 
     Stream<MMNode> streamChildNodes();
 
     String title();
     String iconName();
+    
+    void putDetails(Details details);
+    
+    /**
+     * The detail part of the master/detail view.
+     */
+    default Markup details() {
+        var details = new Details();
+        putDetails(details);
+        return details.toMarkup();
+    }
+    
+    record Details(Map<String, String> map) {
+        Details() {
+            this(new LinkedHashMap<>());
+        }
+        
+        Details put(String key, String value) {
+            map.put(key, value);
+            return this;
+        }
+        
+        Markup toMarkup() {
+            var tableTemplate = 
+            """
+            <table class="table table-striped">
+              <tbody>
+                %s
+              </tbody>
+            </table>
+            """;
+            
+            var rowTemplate = 
+            """
+                <tr>
+                  <th scope="row">%s</th>
+                  <td>%s</td>
+                </tr>
+            """;
+            
+            var rows = map.entrySet().stream()
+                .map(entry->rowTemplate.formatted(entry.getKey(), entry.getValue()))
+                .collect(Collectors.joining("\n"));
+            
+            return Markup.valueOf(tableTemplate.formatted(rows));
+        }
+    }
     
 }

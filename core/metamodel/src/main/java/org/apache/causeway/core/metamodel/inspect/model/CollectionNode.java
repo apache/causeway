@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,15 +32,17 @@ final class CollectionNode extends MemberNode {
 
     @Override
     public String title() {
-        return MMNodeFactory.lookupTitleAnnotation(collection)
-            .map(Annotation::getValue)
-                .orElseGet(()->
-            String.format("%s: %s%s",
-                    collection.getId(),
-                    collection.getElementType().logicalTypeName(),
-                    titleSuffix()));
+        return collection.getId();
     }
 
+    @Override
+    public void putDetails(Details details) {
+        details.put("Id", collection.getId());
+        details.put("Friendly Name", collection.getCanonicalFriendlyName());
+        details.put("Mixed In", "" + isMixedIn());
+        details.put("Element Type", collection.getElementType().logicalTypeName());
+    }
+    
     @Override
     protected ObjectMember member() {
         return collection;

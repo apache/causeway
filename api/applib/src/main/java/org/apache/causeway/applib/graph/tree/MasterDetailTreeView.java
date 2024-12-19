@@ -34,7 +34,7 @@ import lombok.experimental.Accessors;
 
 /**
  * Base class for a master/detail viewmodel, with a tree property acting as the master,
- * whereas the details need to be provided be the subclass.
+ * whereas the details need to be provided by the subclass.
  * <p>
  * No layout is provided, which requires for the implementing viewmodel subclass to provide its own.
  *

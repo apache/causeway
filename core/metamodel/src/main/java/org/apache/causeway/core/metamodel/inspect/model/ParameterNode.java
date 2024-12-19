@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -36,15 +35,19 @@ final class ParameterNode implements MMNode {
 
     @Override
     public String title() {
-        return MMNodeFactory.lookupTitleAnnotation(parameter)
-            .map(Annotation::getValue)
-            .orElseGet(()->
-                String.format("%s: %s", parameter.getId(), parameter.getElementType().logicalTypeName()));
+        return parameter.getId();
     }
 
     @Override
     public String iconName() {
         return "";
+    }
+    
+    @Override
+    public void putDetails(Details details) {
+        details.put("Parameter Index", "" + parameter.getParameterIndex());
+        details.put("Friendly Name", parameter.getCanonicalFriendlyName());
+        details.put("Element Type", parameter.getElementType().logicalTypeName());
     }
 
     // -- TREE NODE STUFF

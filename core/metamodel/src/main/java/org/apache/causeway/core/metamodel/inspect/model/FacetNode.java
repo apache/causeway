@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,17 +35,19 @@ final class FacetNode implements MMNode {
 
     @Override
     public String title() {
-        return MMNodeFactory.lookupTitleAnnotation(facet)
-            .map(Annotation::getValue)
-            .orElseGet(()->
-                String.format("%s: %s", MMNodeFactory.simpleName(
-                    facet.facetType().getSimpleName()),
-                    facet.getClass().getName()));
+        return facet.facetType().getSimpleName(); 
     }
 
     @Override
     public String iconName() {
         return "";
+    }
+    
+    @Override
+    public void putDetails(Details details) {
+        details.put("Facet Type", facet.facetType().getSimpleName());
+        details.put("Facet Class", facet.getClass().getName());
+        facet.visitAttributes((name, value)->details.put("[" + name + "]", "" + value));
     }
 
     @Getter @Setter
@@ -60,10 +60,7 @@ final class FacetNode implements MMNode {
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-        var attrs = new ArrayList<MMNode>();
-        facet.visitAttributes((name, value)->attrs.add(
-            MMNodeFactory.facetAttr(name, ""+value, this)));
-        return attrs.stream();
+        return Stream.empty();
     }
 
 }

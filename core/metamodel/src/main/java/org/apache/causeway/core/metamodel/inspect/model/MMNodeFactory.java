@@ -18,35 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.inspect.model;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.Specification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.schema.metamodel.v2.Annotation;
-import org.apache.causeway.schema.metamodel.v2.FacetAttr;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class MMNodeFactory {
-
-    MMNode annotation(final Annotation annotation, final MMNode parentNode) {
-        var node = new AnnotationNode(annotation);
-        node.setParentNode(parentNode);
-        return node;
-    }
 
     TypeNode type(final ObjectSpecification objSpec) {
         return new TypeNode(objSpec.logicalTypeName());
@@ -54,15 +40,6 @@ class MMNodeFactory {
 
     MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
         var node = new FacetNode(facet);
-        node.setParentNode(parentNode);
-        return node;
-    }
-
-    MMNode facetAttr(final String name, final String value, final FacetNode parentNode) {
-        var facetAttr = new FacetAttr();
-        facetAttr.setName(name);
-        facetAttr.setValue(value);
-        var node = new FacetAttrNode(facetAttr);
         node.setParentNode(parentNode);
         return node;
     }
@@ -107,38 +84,5 @@ class MMNodeFactory {
             .reduce((first, second) -> second) // get the last
             .orElse("null");
     }
-
-    Optional<Annotation> lookupTitleAnnotation(final Facet facet) {
-        // TODO Auto-generated method stub
-        return Optional.empty();
-    }
-
-    Optional<Annotation> lookupTitleAnnotation(@Nullable final Specification metamodelElement) {
-        return lookupAnnotationByName(metamodelElement, "@title");
-    }
-
-    Optional<Annotation> lookupAnnotationByName(
-        @Nullable final Specification metamodelElement, final String annotationName) {
-        return streamAnnotations(metamodelElement)
-            .filter(nameOf(annotationName))
-            .findFirst();
-    }
-
-    Stream<Annotation> streamAnnotations(@Nullable final Specification metamodelElement) {
-        //TODO[causeway-core-metamodel-CAUSEWAY-3838] annotations
-        return Stream.empty();
-
-//        return Optional.ofNullable(metamodelElement)
-//            .map(MetamodelElement::getAnnotations)
-//            .map(FacetHolder.Annotations::getAsList)
-//            .<Stream<Annotation>>map(List::stream)
-//            .orElseGet(Stream::empty);
-    }
-
-    static Predicate<Annotation> nameOf(final String annotationName) {
-        return annot->Objects.equals(annotationName, annot.getName());
-    }
-
-
 
 }

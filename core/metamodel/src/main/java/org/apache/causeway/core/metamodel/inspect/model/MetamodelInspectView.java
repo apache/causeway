@@ -24,11 +24,15 @@ import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Introspection;
+import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.MasterDetailTreeView;
 import org.apache.causeway.applib.graph.tree.TreePath;
+import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -39,10 +43,14 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
     introspection = Introspection.ENCAPSULATION_ENABLED)
 public class MetamodelInspectView extends MasterDetailTreeView<MMNode, MetamodelInspectView> {
 
+    // -- FACTORY
+    
     public static MetamodelInspectView root(final ObjectSpecification spec) {
         return new MetamodelInspectView(new TypeNode(spec.logicalTypeName()), TreePath.root());
     }
 
+    // -- CONSTRUCTION
+    
     private final Memento memento;
 
     public MetamodelInspectView(final String mementoString) {
@@ -58,6 +66,8 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
         super(MMNode.class, rootNode, activeTreePath);
         this.memento = new Memento(rootNode.logicalName(), activeTreePath);
     }
+    
+    // -- UI
 
     @ObjectSupport
     public String title() {
@@ -71,7 +81,15 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
                 .map(suffix-> "-" + suffix)
                 .orElse("");
     }
+    
+    @Property(editingDisabledReason = "readonly by design")
+    @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "detail", sequence = "1")
+    public Markup getDetails() {
+        return activeNode().details();
+    }
 
+    // -- IMPLEMENTATION DETAILS
+    
     @Override
     public String viewModelMemento() {
         return memento.stringify();
@@ -90,6 +108,8 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
         return new MMTreeAdapter();
     }
 
+    // -- HELPER
+    
     private record Memento (
         String logicalName,
         TreePath treePath) {

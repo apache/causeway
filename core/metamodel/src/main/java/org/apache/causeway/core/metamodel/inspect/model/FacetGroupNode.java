@@ -40,6 +40,13 @@ final class FacetGroupNode implements MMNode {
     public String iconName() {
         return "";
     }
+    
+    @Override
+    public void putDetails(Details details) {
+        facets.stream()
+            .sorted(FacetGroupNode::facetCompare)
+            .forEach(facet->details.put(facet.facetType().getSimpleName(), facet.getClass().getName()));
+    }
 
     // -- TREE NODE STUFF
 
@@ -48,10 +55,18 @@ final class FacetGroupNode implements MMNode {
 
     @Override
     public Stream<MMNode> streamChildNodes() {
-
         return facets.stream()
-                .map(facet->MMNodeFactory.facet(facet, this))
-                .sorted((a, b)->a.title().compareToIgnoreCase(b.title()));
+            .sorted(FacetGroupNode::facetCompare)
+            .map(facet->MMNodeFactory.facet(facet, this));
+    }
+    
+    // -- HELPER
+    
+    private static int facetCompare(Facet a, Facet b) {
+        int c = a.facetType().getSimpleName().compareToIgnoreCase(b.facetType().getSimpleName());
+        return c==0 
+            ? a.getClass().getName().compareToIgnoreCase(b.getClass().getName())
+            : c;
     }
 
 }
