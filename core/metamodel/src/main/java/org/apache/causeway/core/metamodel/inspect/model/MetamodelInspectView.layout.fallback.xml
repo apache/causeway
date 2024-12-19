@@ -20,8 +20,8 @@
             <bs:row>
                 <bs:col span="12">
                     <cpt:fieldSet name="Index" id="tree">
-                        <cpt:action id="clearHints" position="PANEL" />
-                        <cpt:action id="rebuildMetamodel" position="PANEL"/>
+                        <cpt:action id="clearHints" position="PANEL_DROPDOWN" />
+                        <cpt:action id="rebuildMetamodel" position="PANEL_DROPDOWN"/>
                         <cpt:action id="downloadLayout"  position="PANEL_DROPDOWN"/>
                         <cpt:action id="inspectMetamodel"  position="PANEL_DROPDOWN"/>
                         <cpt:action id="downloadMetamodelXml"  position="PANEL_DROPDOWN"/>

@@ -27,6 +27,7 @@ import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
+import org.apache.causeway.applib.graph.tree.MasterDetailTreeView;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -36,7 +37,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
     nature=Nature.VIEW_MODEL,
     editing = Editing.DISABLED,
     introspection = Introspection.ENCAPSULATION_ENABLED)
-public class MetamodelInspectView extends TreeNodeVm<MMNode, MetamodelInspectView> {
+public class MetamodelInspectView extends MasterDetailTreeView<MMNode, MetamodelInspectView> {
 
     public static MetamodelInspectView root(final ObjectSpecification spec) {
         return new MetamodelInspectView(new TypeNode(spec.logicalTypeName()), TreePath.root());
@@ -60,13 +61,13 @@ public class MetamodelInspectView extends TreeNodeVm<MMNode, MetamodelInspectVie
 
     @ObjectSupport
     public String title() {
-        return activeNode.title();
+        return activeNode().title();
     }
 
     @ObjectSupport
     public String iconName() {
-        return activeNode.getClass().getSimpleName()
-            + _Strings.nonEmpty(activeNode.iconName())
+        return activeNode().getClass().getSimpleName()
+            + _Strings.nonEmpty(activeNode().iconName())
                 .map(suffix-> "-" + suffix)
                 .orElse("");
     }
@@ -77,15 +78,15 @@ public class MetamodelInspectView extends TreeNodeVm<MMNode, MetamodelInspectVie
     }
 
     @Override
-    protected MetamodelInspectView getViewModel(final MMNode node, final MetamodelInspectView parentNode, final int siblingIndex) {
-        return new MetamodelInspectView((TypeNode)rootNode,
+    protected MetamodelInspectView viewModel(final MMNode node, final MetamodelInspectView parentNode, final int siblingIndex) {
+        return new MetamodelInspectView((TypeNode)rootNode(),
             parentNode!=null
-                ? parentNode.activeTreePath.append(siblingIndex)
+                ? parentNode.activeTreePath().append(siblingIndex)
                 : TreePath.root());
     }
 
     @Override
-    protected TreeAdapter<MMNode> getTreeAdapter() {
+    protected TreeAdapter<MMNode> treeAdapter() {
         return new MMTreeAdapter();
     }
 
@@ -102,13 +103,13 @@ public class MetamodelInspectView extends TreeNodeVm<MMNode, MetamodelInspectVie
         }
 
         static Memento parse(final String stringified) {
-            return _Strings.splitThenApplyRequireNonEmpty(stringified, "'",
+            return _Strings.splitThenApplyRequireNonEmpty(stringified, ":",
                 (lhs, rhs)->new Memento(lhs, TreePath.parse(rhs, ".")))
                 .orElseGet(Memento::empty);
         }
 
         String stringify() {
-            return logicalName + "'" + treePath.stringify(".");
+            return logicalName + ":" + treePath.stringify(".");
         }
     }
 
