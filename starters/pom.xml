@@ -33,7 +33,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version>
+		<version>3.4.1</version>
 		<relativePath />
 	</parent>
 
@@ -48,7 +48,7 @@
 
 		<maven.compiler.release>17</maven.compiler.release>
 
-		<spring-boot.version>3.4.0</spring-boot.version>
+		<spring-boot.version>3.4.1</spring-boot.version>
 		<approvaltests.version>24.12.0</approvaltests.version>
 
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
