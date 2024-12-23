@@ -100,7 +100,7 @@ identified
         org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>24.12.0</approvaltests.version>
 
-        <assertj-guava.version>3.26.3</assertj-guava.version>
+        <assertj-guava.version>3.27.0</assertj-guava.version>
 
         <commons-email.version>1.6.0</commons-email.version>
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
