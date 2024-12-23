@@ -124,7 +124,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <graphql-java.version>19.2</graphql-java.version>
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
-        <guava.version>33.3.1-jre</guava.version>
+        <guava.version>33.4.0-jre</guava.version>
 
         <htmlparser.version>2.1</htmlparser.version>
 
