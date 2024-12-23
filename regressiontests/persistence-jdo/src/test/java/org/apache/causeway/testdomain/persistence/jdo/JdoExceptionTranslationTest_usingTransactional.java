@@ -24,7 +24,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -83,7 +82,7 @@ extends RegressionTestAbstract {
         lock.install();
     }
 
-    @Disabled("fails on surefire since Spring Boot 3.4.1")
+    //@Disabled("fails on surefire since Spring Boot 3.4.1")
     @Test @Order(1)
     void booksUniqueByIsbn_whenViolated_shouldThrowTranslatedException() {
 

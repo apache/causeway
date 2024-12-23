@@ -16,13 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.config.beans.aoppatch;
+package org.apache.causeway.core.config.beans;
 
-import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 
-@FunctionalInterface
-public interface TransactionInterceptorFactory {
+import lombok.experimental.UtilityClass;
 
-    TransactionInterceptor createTransactionInterceptor();
+@UtilityClass
+class TransactionInterceptorPatcher {
+
+    /**
+     * In support of custom DataNucleus exception translation.
+     */
+    void setDefaultTransactionInterceptorToFallback(final BeanDefinitionRegistry registry) {
+        if(!registry.containsBeanDefinition("transactionInterceptor")) return;
+        registry.getBeanDefinition("transactionInterceptor").setFallback(true);
+    }
 
 }

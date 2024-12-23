@@ -19,7 +19,6 @@
 module org.apache.causeway.core.config {
     exports org.apache.causeway.core.config;
     exports org.apache.causeway.core.config.applib;
-    exports org.apache.causeway.core.config.beans.aoppatch;
     exports org.apache.causeway.core.config.beans;
     exports org.apache.causeway.core.config.converters;
     exports org.apache.causeway.core.config.datasources;

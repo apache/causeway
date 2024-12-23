@@ -31,7 +31,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -41,7 +40,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.ContextType;
-import org.apache.causeway.core.config.beans.aoppatch.AopPatch;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -58,9 +56,6 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration(proxyBeanMethods = false)
 @Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanFactoryPostProcessor")
-@Import({
-    AopPatch.class
-})
 @Log4j2
 public class CausewayBeanFactoryPostProcessor
 implements
@@ -85,6 +80,8 @@ implements
 
         var registry = (BeanDefinitionRegistry) beanFactory;
         var beanDefNames = registry.getBeanDefinitionNames();
+
+        TransactionInterceptorPatcher.setDefaultTransactionInterceptorToFallback(registry);
 
         var componentCollector = new CausewayComponentCollector(registry, causewayBeanTypeClassifier);
 

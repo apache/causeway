@@ -30,12 +30,16 @@ import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Role;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -43,7 +47,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
-import org.apache.causeway.core.config.beans.aoppatch.TransactionInterceptorFactory;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyclePublisher;
 import org.apache.causeway.persistence.jdo.datanucleus.changetracking.JdoLifecycleListener;
@@ -201,13 +204,15 @@ public class CausewayModulePersistenceJdoDatanucleus {
     }
 
     /**
-     * AOP PATCH
-     * @implNote works only with patch package 'org.apache.causeway.core.config.beans.aoppatch'
+     * Works in combination with org.apache.causeway.core.config.beans.TransactionInterceptorPatcher.
+     * Replaces the Spring provided {@link TransactionInterceptor}, with an overwritten variant.
      */
-    @Bean @Primary
-    @SuppressWarnings("serial")
-    public TransactionInterceptorFactory getTransactionInterceptorFactory() {
-        return ()->new TransactionInterceptor() {
+    @Bean(name = "transactionInterceptorDN")
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    public TransactionInterceptor transactionInterceptor(final TransactionAttributeSource transactionAttributeSource) {
+        return new TransactionInterceptor((TransactionManager)null, transactionAttributeSource) {
+            private static final long serialVersionUID = 1L;
+
             @Override @SneakyThrows
             protected void completeTransactionAfterThrowing(final TransactionInfo txInfo, final Throwable ex) {
                 super.completeTransactionAfterThrowing(txInfo, ex);
@@ -216,22 +221,13 @@ public class CausewayModulePersistenceJdoDatanucleus {
                     var txManager = txInfo.getTransactionManager();
                     if(txManager instanceof JdoTransactionManager) {
                         var jdoDialect = ((JdoTransactionManager)txManager).getJdoDialect();
-                        if(jdoDialect instanceof PersistenceExceptionTranslator) {
-                            var translatedEx = ((PersistenceExceptionTranslator)jdoDialect)
-                                    .translateExceptionIfPossible((RuntimeException)ex);
-
-                            if(translatedEx!=null) {
-                                throw translatedEx;
-                            }
-
+                        if(jdoDialect instanceof PersistenceExceptionTranslator pet) {
+                            var translatedEx = pet.translateExceptionIfPossible((RuntimeException)ex);
+                            if(translatedEx!=null) throw translatedEx;
                         }
-
-                        if(ex instanceof JDOException) {
-                            var translatedEx = jdoDialect.translateException((JDOException)ex);
-
-                            if(translatedEx!=null) {
-                                throw translatedEx;
-                            }
+                        if(ex instanceof JDOException jdoException) {
+                            var translatedEx = jdoDialect.translateException(jdoException);
+                            if(translatedEx!=null) throw translatedEx;
                         }
                     }
                 }
