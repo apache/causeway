@@ -91,7 +91,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
         <asm.version>9.7.1</asm.version> <!-- keep in sync with org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>24.12.0</approvaltests.version>
 
-        <assertj-guava.version>3.26.3</assertj-guava.version>
+        <assertj-guava.version>3.27.0</assertj-guava.version>
 
         <camel.version>3.14.9</camel.version>
 
