@@ -2248,13 +2248,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 			</snapshots>
 		</repository>
 		<repository>
-			<id>Apache Repository</id>
-			<url>https://repository.apache.org/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
 			<!-- required for RestEasy -->
 			<id>JBoss Public Release</id>
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
