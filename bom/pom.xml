@@ -124,7 +124,7 @@ identified
         <docx4j.version>11.3.2</docx4j.version>
 
         <easymock.version>5.5.0</easymock.version>
-        <eclipselink.version>4.0.4</eclipselink.version>
+        <eclipselink.version>4.0.5</eclipselink.version>
         <error_prone_annotations.version>2.36.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
