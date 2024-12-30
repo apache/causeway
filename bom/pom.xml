@@ -169,7 +169,7 @@ identified
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync:
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
-        <ognl.version>3.4.3</ognl.version>
+        <ognl.version>3.4.4</ognl.version>
 
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.3.0</poi.version>
