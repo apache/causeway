@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
         <artifactId>causeway-regressiontests-cmdexecauditsess</artifactId>
-        <version>3.2.0</version>
+        <version>3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
