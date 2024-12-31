@@ -560,25 +560,31 @@ git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
 
 == Update starter projects
 
-As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain eight (!) branches:
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain
+// eight (!)
+four
+branches:
 
-* `v2-jpa`; `v2-jdo`; `v3-jpa`; `v3-jdo`
+// * `v3-jpa`; `v3-jdo`; `v4-jpa`; `v4-jdo`
+* `v3-jpa`; `v3-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-* `v2-jpa-SNAPSHOT`; `v2-jdo-SNAPSHOT`; `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`
+// * `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`; `v4-jpa-SNAPSHOT`; `v4-jdo-SNAPSHOT`
+* `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `v2-jpa` to `v2-jpa-SNAPSHOT` and similarly moves `v2-jdo` up to `v2-jdo-SNAPSHOT`, and then repeat the process for v3.
-The non-SNAPSHOT builds should always reference the most recently release of v2 or v3.
+The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT` and similarly moves `vN-jdo` up to `vN-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+This is done for all current `vN` branches.
+The non-SNAPSHOT builds should always reference the most recently release.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo` (where `$CAUSEWAYBRANCH` is "release-2.0.0-RC1", or "release-3.0.0-RC1" etc).
+In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
-IMPORTANT: The `v{2,3}-{jpa,jdo}` branches should always work against the most recent release, whereas the `v{2,3}-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
+IMPORTANT: The `vN-{jpa,jdo}` branches should always work against the most recent release, whereas the `vN-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
 
 
 == Update the reference app
