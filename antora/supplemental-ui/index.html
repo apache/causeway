@@ -608,7 +608,7 @@
           <div class="row">
             <div class="col-lg-12 text-left text-lg-left">
               <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Prereqs: v3.x: Java 17 and Maven 3.6+; v2.x: Java 11<br/>
+                Prereqs: v3.x: Java 17 and Maven 3.6+<br/>
                 We recommend you try out using Linux, MacOS or WSL2 <br/>
                 (to <a href="https://github.com/spring-projects/spring-boot/issues/17766">avoid exceeding</a> Windows' limits due to classpath length).
               </p>
@@ -628,7 +628,7 @@ docker run -p 8080:8080 apache/causeway-app-helloworld:latest</pre>
                     Build from source (JPA or JDO) using:
                 <pre id="helloworld-jpa-text">
 APP=causeway-app-helloworld
-VARIANT="3-jpa"   # or: "3-jdo" ; "2-jpa" ; "2-jdo"
+VARIANT="3-jpa"   # or: "3-jdo"
 curl https://codeload.github.com/apache/$APP/zip/v$VARIANT | jar xv
 cd $APP-$VARIANT
 
@@ -649,7 +649,7 @@ docker run -p 8080:8080 apache/causeway-app-simpleapp:latest</pre>
                     Build from source (JPA or JDO) using:
               <pre id="simpleapp-jpa-text">
 APP=causeway-app-simpleapp
-VARIANT="3-jpa"   # or: "3-jdo" ; "2-jpa" ; "2-jdo"
+VARIANT="3-jpa"   # or: "3-jdo"
 curl https://codeload.github.com/apache/$APP/zip/v$VARIANT | jar xv
 cd $APP-$VARIANT
 
