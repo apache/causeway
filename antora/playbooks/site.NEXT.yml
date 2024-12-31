@@ -302,6 +302,8 @@ asciidoc:
     kroki-default-options: interactive # only available for SVG
     kroki-fetch-diagram: true
     kroki-server-url: https://kroki.io # (default)
+    page-causewaycurrmajorversion: "v3"
+    page-causewaynextmajorversion: "v4"
     page-causewaysnapshotversion: "3.0.0-SNAPSHOT"
     page-causewaypreviousversion: "3.2.0"
     page-causewayreleaseversion: "3.3.0"
