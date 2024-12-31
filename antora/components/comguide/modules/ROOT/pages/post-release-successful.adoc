@@ -429,11 +429,9 @@ content:
 ----
 asciidoc:
   attributes:
-    page-causewaypreviousversion: "..."    #<.>
-    page-causewayreleaseversion: "..."     #<.>
+    page-causewayreleaseversion: "..."    #<.>
 ----
-<.> needs to be (the current) `{page-causewayreleaseversion}`
-<.> needs to be set to the _next_ likely release version
+<.> needs to be the next likely `{page-causewayreleaseversion}`
 
 * commit the changes
 +
