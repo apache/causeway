@@ -6,12 +6,10 @@
 To page describes how to update the website _between_ releases.
 
 As part of the release process we xref:post-release-successful.adoc#generate-website[generate] and publish the website.
-<<<<<<< HEAD
-An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayrelv3}`).
+
+An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayreleaseversion}`).
 This branch can then be used for documentation updates.
-=======
-An (intentional) side-effect of this process is to create a branch for the release (that is, `{page-causewayprevv2}` or `{page-causewayprevv3}).
->>>>>>> refs/remotes/origin/master
+
 
 If we need to make a change:
 
@@ -20,49 +18,9 @@ If we need to make a change:
 
 Then publish as per the main release process:
 
-<<<<<<< HEAD
-In the regular `causeway` repo:
-
-* Check out the branch:
-+
-[source,bash,subs="attributes+"]
-----
-git checkout {page-causewayrelv3}
-----
-
-* make documentation updates, and commit changes
-
-* make sure the tooling is built:
-+
-[source,bash,subs="attributes+"]
-----
-#TODO this is outdated info
-mvn -D module-tooling -D skip.essential install -DskipTests
-----
-
-* generate the website:
-+
-[source,bash,subs="attributes+"]
-----
-sh preview.sh
-----
-+
-[NOTE]
-====
-This now runs updates the config properties automatically (unless suppressed by a flag)
-
-[source,bash,subs="attributes+"]
-----
-mvn clean install -pl core/config
-----
-====
-
-This updated website is written to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].
-=======
 * xref:comguide:ROOT:post-release-successful.adoc#generate-the-site[generate the site]
 * xref:comguide:ROOT:post-release-successful.adoc#publish-website[publish the site].
 * xref:comguide:ROOT:post-release-successful.adoc#update-the-algolia-search-index[update the algolia search index]
->>>>>>> refs/remotes/origin/master
 
 
 Prereqs (software and doc tooling) are summarised in xref:comguide:ROOT:release-process-prereqs.adoc[].

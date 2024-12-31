@@ -25,7 +25,7 @@ In addition, add an entry for the BOM of all the testing support libraries:
 	        <artifactId>causeway-testing</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv3}</version>
+            <version>{page-causewaypreviousversion}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
