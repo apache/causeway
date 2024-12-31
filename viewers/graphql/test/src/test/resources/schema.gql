@@ -31,25 +31,14 @@ directive @specifiedBy(
   ) on SCALAR
 
 type Mutation {
-  causeway_applib_PropertyNode__mixedIn(_target: rich__causeway_applib_PropertyNode__gqlv_input, mixedIn: Boolean!): rich__causeway_applib_PropertyNode
-  causeway_applib_node_ActionNode__mixedIn(_target: rich__causeway_applib_node_ActionNode__gqlv_input, mixedIn: Boolean!): rich__causeway_applib_node_ActionNode
-  causeway_applib_node_CollectionNode__mixedIn(_target: rich__causeway_applib_node_CollectionNode__gqlv_input, mixedIn: Boolean!): rich__causeway_applib_node_CollectionNode
-  causeway_applib_node_FacetNode__shadowed(_target: rich__causeway_applib_node_FacetNode__gqlv_input, shadowed: Boolean!): rich__causeway_applib_node_FacetNode
   causeway_conf_ConfigurationProperty__key(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, key: String!): rich__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationProperty__value(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, value: String!): rich__causeway_conf_ConfigurationProperty
-  causeway_schema_metamodel_v2_DomainClassDto__actions(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, actions: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__annotations(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, annotations: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__collections(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, collections: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__facets(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, facets: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__id(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, id: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__majorVersion(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, majorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__minorVersion(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, minorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__properties(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, properties: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  causeway_schema_metamodel_v2_DomainClassDto__service(_target: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input, service: Boolean!): rich__causeway_schema_metamodel_v2_DomainClassDto
   causeway_testing_fixtures_FixtureResult__fixtureScriptClassName(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, fixtureScriptClassName: String): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__key(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__object(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): rich__causeway_testing_fixtures_FixtureResult
-  org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input, mixedIn: Boolean!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_core_metamodel_inspect_model_MMNode__details(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
+  org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input, details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): String
+  org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName(_target: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input, friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu__actionWithDisabledParam(firstParam: String!, secondParam: String!, thirdParameter: String!): String
   university_admin_AdminMenu__actionWithHiddenParam(firstParam: String!, secondParam: String!): String
@@ -77,17 +66,10 @@ type Mutation {
 type RICHSchema {
   Scenario(name: String): Scenario
   causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
-  causeway_applib_FacetGroupNode(object: rich__causeway_applib_FacetGroupNode__gqlv_input): rich__causeway_applib_FacetGroupNode
-  causeway_applib_ParameterNode(object: rich__causeway_applib_ParameterNode__gqlv_input): rich__causeway_applib_ParameterNode
-  causeway_applib_PropertyNode(object: rich__causeway_applib_PropertyNode__gqlv_input): rich__causeway_applib_PropertyNode
+  causeway_applib_MetamodelInspectView(object: rich__causeway_applib_MetamodelInspectView__gqlv_input): rich__causeway_applib_MetamodelInspectView
   causeway_applib_RoleMemento(object: rich__causeway_applib_RoleMemento__gqlv_input): rich__causeway_applib_RoleMemento
-  causeway_applib_TypeNode(object: rich__causeway_applib_TypeNode__gqlv_input): rich__causeway_applib_TypeNode
   causeway_applib_UserMemento(object: rich__causeway_applib_UserMemento__gqlv_input): rich__causeway_applib_UserMemento
   causeway_applib_UserMenu: rich__causeway_applib_UserMenu
-  causeway_applib_node_ActionNode(object: rich__causeway_applib_node_ActionNode__gqlv_input): rich__causeway_applib_node_ActionNode
-  causeway_applib_node_CollectionNode(object: rich__causeway_applib_node_CollectionNode__gqlv_input): rich__causeway_applib_node_CollectionNode
-  causeway_applib_node_FacetAttrNode(object: rich__causeway_applib_node_FacetAttrNode__gqlv_input): rich__causeway_applib_node_FacetAttrNode
-  causeway_applib_node_FacetNode(object: rich__causeway_applib_node_FacetNode__gqlv_input): rich__causeway_applib_node_FacetNode
   causeway_conf_ConfigurationMenu: rich__causeway_conf_ConfigurationMenu
   causeway_conf_ConfigurationProperty(object: rich__causeway_conf_ConfigurationProperty__gqlv_input): rich__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationViewmodel(object: rich__causeway_conf_ConfigurationViewmodel__gqlv_input): rich__causeway_conf_ConfigurationViewmodel
@@ -98,22 +80,19 @@ type RICHSchema {
   causeway_feat_ApplicationTypeCollection(object: rich__causeway_feat_ApplicationTypeCollection__gqlv_input): rich__causeway_feat_ApplicationTypeCollection
   causeway_feat_ApplicationTypeMember(object: rich__causeway_feat_ApplicationTypeMember__gqlv_input): rich__causeway_feat_ApplicationTypeMember
   causeway_feat_ApplicationTypeProperty(object: rich__causeway_feat_ApplicationTypeProperty__gqlv_input): rich__causeway_feat_ApplicationTypeProperty
-  causeway_schema_metamodel_v2_DomainClassDto(object: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): rich__causeway_schema_metamodel_v2_DomainClassDto
   causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
   java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
-  java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
-  java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
+  org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
-  org_springframework_data_web_config_SpringDataWebSettings(object: rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input): rich__org_springframework_data_web_config_SpringDataWebSettings
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
@@ -130,17 +109,10 @@ type RICHSchema {
 
 type SIMPLESchema {
   causeway_applib_DomainObjectList(object: simple__causeway_applib_DomainObjectList__gqlv_input): simple__causeway_applib_DomainObjectList
-  causeway_applib_FacetGroupNode(object: simple__causeway_applib_FacetGroupNode__gqlv_input): simple__causeway_applib_FacetGroupNode
-  causeway_applib_ParameterNode(object: simple__causeway_applib_ParameterNode__gqlv_input): simple__causeway_applib_ParameterNode
-  causeway_applib_PropertyNode(object: simple__causeway_applib_PropertyNode__gqlv_input): simple__causeway_applib_PropertyNode
+  causeway_applib_MetamodelInspectView(object: simple__causeway_applib_MetamodelInspectView__gqlv_input): simple__causeway_applib_MetamodelInspectView
   causeway_applib_RoleMemento(object: simple__causeway_applib_RoleMemento__gqlv_input): simple__causeway_applib_RoleMemento
-  causeway_applib_TypeNode(object: simple__causeway_applib_TypeNode__gqlv_input): simple__causeway_applib_TypeNode
   causeway_applib_UserMemento(object: simple__causeway_applib_UserMemento__gqlv_input): simple__causeway_applib_UserMemento
   causeway_applib_UserMenu: simple__causeway_applib_UserMenu
-  causeway_applib_node_ActionNode(object: simple__causeway_applib_node_ActionNode__gqlv_input): simple__causeway_applib_node_ActionNode
-  causeway_applib_node_CollectionNode(object: simple__causeway_applib_node_CollectionNode__gqlv_input): simple__causeway_applib_node_CollectionNode
-  causeway_applib_node_FacetAttrNode(object: simple__causeway_applib_node_FacetAttrNode__gqlv_input): simple__causeway_applib_node_FacetAttrNode
-  causeway_applib_node_FacetNode(object: simple__causeway_applib_node_FacetNode__gqlv_input): simple__causeway_applib_node_FacetNode
   causeway_conf_ConfigurationMenu: simple__causeway_conf_ConfigurationMenu
   causeway_conf_ConfigurationProperty(object: simple__causeway_conf_ConfigurationProperty__gqlv_input): simple__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationViewmodel(object: simple__causeway_conf_ConfigurationViewmodel__gqlv_input): simple__causeway_conf_ConfigurationViewmodel
@@ -151,22 +123,19 @@ type SIMPLESchema {
   causeway_feat_ApplicationTypeCollection(object: simple__causeway_feat_ApplicationTypeCollection__gqlv_input): simple__causeway_feat_ApplicationTypeCollection
   causeway_feat_ApplicationTypeMember(object: simple__causeway_feat_ApplicationTypeMember__gqlv_input): simple__causeway_feat_ApplicationTypeMember
   causeway_feat_ApplicationTypeProperty(object: simple__causeway_feat_ApplicationTypeProperty__gqlv_input): simple__causeway_feat_ApplicationTypeProperty
-  causeway_schema_metamodel_v2_DomainClassDto(object: simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): simple__causeway_schema_metamodel_v2_DomainClassDto
   causeway_security_LoginRedirect(object: simple__causeway_security_LoginRedirect__gqlv_input): simple__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: simple__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: simple__causeway_testing_fixtures_FixtureResult__gqlv_input): simple__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: simple__java_lang_Record__gqlv_input): simple__java_lang_Record
   java_lang_Runnable(object: simple__java_lang_Runnable__gqlv_input): simple__java_lang_Runnable
-  java_util_Map(object: simple__java_util_Map__gqlv_input): simple__java_util_Map
-  java_util_SortedMap(object: simple__java_util_SortedMap__gqlv_input): simple__java_util_SortedMap
   java_util_concurrent_Callable(object: simple__java_util_concurrent_Callable__gqlv_input): simple__java_util_concurrent_Callable
   java_util_function_Consumer(object: simple__java_util_function_Consumer__gqlv_input): simple__java_util_function_Consumer
   java_util_function_Function(object: simple__java_util_function_Function__gqlv_input): simple__java_util_function_Function
   java_util_stream_Stream(object: simple__java_util_stream_Stream__gqlv_input): simple__java_util_stream_Stream
+  org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
-  org_springframework_data_web_config_SpringDataWebSettings(object: simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input): simple__org_springframework_data_web_config_SpringDataWebSettings
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
   university_calc_I18nCalculator: simple__university_calc_I18nCalculator
@@ -193,17 +162,10 @@ type Scenario {
 
 type ScenarioStep {
   causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
-  causeway_applib_FacetGroupNode(object: rich__causeway_applib_FacetGroupNode__gqlv_input): rich__causeway_applib_FacetGroupNode
-  causeway_applib_ParameterNode(object: rich__causeway_applib_ParameterNode__gqlv_input): rich__causeway_applib_ParameterNode
-  causeway_applib_PropertyNode(object: rich__causeway_applib_PropertyNode__gqlv_input): rich__causeway_applib_PropertyNode
+  causeway_applib_MetamodelInspectView(object: rich__causeway_applib_MetamodelInspectView__gqlv_input): rich__causeway_applib_MetamodelInspectView
   causeway_applib_RoleMemento(object: rich__causeway_applib_RoleMemento__gqlv_input): rich__causeway_applib_RoleMemento
-  causeway_applib_TypeNode(object: rich__causeway_applib_TypeNode__gqlv_input): rich__causeway_applib_TypeNode
   causeway_applib_UserMemento(object: rich__causeway_applib_UserMemento__gqlv_input): rich__causeway_applib_UserMemento
   causeway_applib_UserMenu: rich__causeway_applib_UserMenu
-  causeway_applib_node_ActionNode(object: rich__causeway_applib_node_ActionNode__gqlv_input): rich__causeway_applib_node_ActionNode
-  causeway_applib_node_CollectionNode(object: rich__causeway_applib_node_CollectionNode__gqlv_input): rich__causeway_applib_node_CollectionNode
-  causeway_applib_node_FacetAttrNode(object: rich__causeway_applib_node_FacetAttrNode__gqlv_input): rich__causeway_applib_node_FacetAttrNode
-  causeway_applib_node_FacetNode(object: rich__causeway_applib_node_FacetNode__gqlv_input): rich__causeway_applib_node_FacetNode
   causeway_conf_ConfigurationMenu: rich__causeway_conf_ConfigurationMenu
   causeway_conf_ConfigurationProperty(object: rich__causeway_conf_ConfigurationProperty__gqlv_input): rich__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationViewmodel(object: rich__causeway_conf_ConfigurationViewmodel__gqlv_input): rich__causeway_conf_ConfigurationViewmodel
@@ -214,22 +176,19 @@ type ScenarioStep {
   causeway_feat_ApplicationTypeCollection(object: rich__causeway_feat_ApplicationTypeCollection__gqlv_input): rich__causeway_feat_ApplicationTypeCollection
   causeway_feat_ApplicationTypeMember(object: rich__causeway_feat_ApplicationTypeMember__gqlv_input): rich__causeway_feat_ApplicationTypeMember
   causeway_feat_ApplicationTypeProperty(object: rich__causeway_feat_ApplicationTypeProperty__gqlv_input): rich__causeway_feat_ApplicationTypeProperty
-  causeway_schema_metamodel_v2_DomainClassDto(object: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): rich__causeway_schema_metamodel_v2_DomainClassDto
   causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
   java_lang_Record(object: rich__java_lang_Record__gqlv_input): rich__java_lang_Record
   java_lang_Runnable(object: rich__java_lang_Runnable__gqlv_input): rich__java_lang_Runnable
-  java_util_Map(object: rich__java_util_Map__gqlv_input): rich__java_util_Map
-  java_util_SortedMap(object: rich__java_util_SortedMap__gqlv_input): rich__java_util_SortedMap
   java_util_concurrent_Callable(object: rich__java_util_concurrent_Callable__gqlv_input): rich__java_util_concurrent_Callable
   java_util_function_Consumer(object: rich__java_util_function_Consumer__gqlv_input): rich__java_util_function_Consumer
   java_util_function_Function(object: rich__java_util_function_Function__gqlv_input): rich__java_util_function_Function
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
+  org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MemberNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
+  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
-  org_springframework_data_web_config_SpringDataWebSettings(object: rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input): rich__org_springframework_data_web_config_SpringDataWebSettings
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
   university_calc_I18nCalculator: rich__university_calc_I18nCalculator
@@ -328,33 +287,25 @@ type rich__causeway_applib_DomainObjectList__title__gqlv_property {
   validate(title: String): String
 }
 
-type rich__causeway_applib_FacetGroupNode {
+type rich__causeway_applib_MetamodelInspectView {
   "Object metadata"
-  _meta: rich__causeway_applib_FacetGroupNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_FacetGroupNode__childNodes__gqlv_collection
-  "Facets"
-  facets: rich__causeway_applib_FacetGroupNode__facets__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_FacetGroupNode__parentNode__gqlv_property
+  _meta: rich__causeway_applib_MetamodelInspectView__gqlv_meta
+  "Details"
+  details: rich__causeway_applib_MetamodelInspectView__details__gqlv_property
+  "Tree"
+  tree: rich__causeway_applib_MetamodelInspectView__tree__gqlv_property
 }
 
-type rich__causeway_applib_FacetGroupNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_FacetGroupNode__facets__gqlv_property {
+type rich__causeway_applib_MetamodelInspectView__details__gqlv_property {
   datatype: String
   disabled: String
   get: String!
   hidden: Boolean
-  set(facets: String!): rich__causeway_applib_FacetGroupNode
-  validate(facets: String): String
+  set(details: String!): rich__causeway_applib_MetamodelInspectView
+  validate(details: String): String
 }
 
-type rich__causeway_applib_FacetGroupNode__gqlv_meta {
+type rich__causeway_applib_MetamodelInspectView__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -365,115 +316,13 @@ type rich__causeway_applib_FacetGroupNode__gqlv_meta {
   title: String!
 }
 
-type rich__causeway_applib_FacetGroupNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_FacetGroupNode
-  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
-}
-
-type rich__causeway_applib_ParameterNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_ParameterNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_ParameterNode__childNodes__gqlv_collection
-  "Parameter"
-  parameter: rich__causeway_applib_ParameterNode__parameter__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_ParameterNode__parentNode__gqlv_property
-}
-
-type rich__causeway_applib_ParameterNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_ParameterNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_ParameterNode__parameter__gqlv_property {
+type rich__causeway_applib_MetamodelInspectView__tree__gqlv_property {
   datatype: String
   disabled: String
   get: String!
   hidden: Boolean
-  set(parameter: String!): rich__causeway_applib_ParameterNode
-  validate(parameter: String): String
-}
-
-type rich__causeway_applib_ParameterNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_applib_node_ActionNode!
-  hidden: Boolean
-  set(parentNode: rich__causeway_applib_node_ActionNode__gqlv_input!): rich__causeway_applib_ParameterNode
-  validate(parentNode: rich__causeway_applib_node_ActionNode__gqlv_input): String
-}
-
-type rich__causeway_applib_PropertyNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_PropertyNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_PropertyNode__childNodes__gqlv_collection
-  "Mixed In"
-  mixedIn: rich__causeway_applib_PropertyNode__mixedIn__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_PropertyNode__parentNode__gqlv_property
-  "Property"
-  property: rich__causeway_applib_PropertyNode__property__gqlv_property
-}
-
-type rich__causeway_applib_PropertyNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_PropertyNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_PropertyNode__mixedIn__gqlv_property {
-  datatype: String
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
-  set(mixedIn: Boolean!): rich__causeway_applib_PropertyNode
-  validate(mixedIn: Boolean): String
-}
-
-type rich__causeway_applib_PropertyNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_applib_TypeNode!
-  hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_PropertyNode
-  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
-}
-
-type rich__causeway_applib_PropertyNode__property__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(property: String!): rich__causeway_applib_PropertyNode
-  validate(property: String): String
+  set(tree: String!): rich__causeway_applib_MetamodelInspectView
+  validate(tree: String): String
 }
 
 type rich__causeway_applib_RoleMemento {
@@ -512,51 +361,6 @@ type rich__causeway_applib_RoleMemento__name__gqlv_property {
   hidden: Boolean
   set(name: String!): rich__causeway_applib_RoleMemento
   validate(name: String): String
-}
-
-type rich__causeway_applib_TypeNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_TypeNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_TypeNode__childNodes__gqlv_collection
-  "Domain Class Dto"
-  domainClassDto: rich__causeway_applib_TypeNode__domainClassDto__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_TypeNode__parentNode__gqlv_property
-}
-
-type rich__causeway_applib_TypeNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_TypeNode__domainClassDto__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_schema_metamodel_v2_DomainClassDto!
-  hidden: Boolean
-  set(domainClassDto: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input!): rich__causeway_applib_TypeNode
-  validate(domainClassDto: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input): String
-}
-
-type rich__causeway_applib_TypeNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_TypeNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_TypeNode
-  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
 }
 
 type rich__causeway_applib_UserMemento {
@@ -711,222 +515,6 @@ type rich__causeway_applib_UserMenu__me__gqlv_action {
 type rich__causeway_applib_UserMenu__me__gqlv_action_invoke {
   results: rich__causeway_applib_UserMemento
   target: String
-}
-
-type rich__causeway_applib_node_ActionNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_node_ActionNode__gqlv_meta
-  "Action"
-  action: rich__causeway_applib_node_ActionNode__action__gqlv_property
-  "Child Nodes"
-  childNodes: rich__causeway_applib_node_ActionNode__childNodes__gqlv_collection
-  "Mixed In"
-  mixedIn: rich__causeway_applib_node_ActionNode__mixedIn__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_node_ActionNode__parentNode__gqlv_property
-}
-
-type rich__causeway_applib_node_ActionNode__action__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(action: String!): rich__causeway_applib_node_ActionNode
-  validate(action: String): String
-}
-
-type rich__causeway_applib_node_ActionNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_node_ActionNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_node_ActionNode__mixedIn__gqlv_property {
-  datatype: String
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
-  set(mixedIn: Boolean!): rich__causeway_applib_node_ActionNode
-  validate(mixedIn: Boolean): String
-}
-
-type rich__causeway_applib_node_ActionNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_applib_TypeNode!
-  hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_node_ActionNode
-  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
-}
-
-type rich__causeway_applib_node_CollectionNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_node_CollectionNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_node_CollectionNode__childNodes__gqlv_collection
-  "Collection"
-  collection: rich__causeway_applib_node_CollectionNode__collection__gqlv_property
-  "Mixed In"
-  mixedIn: rich__causeway_applib_node_CollectionNode__mixedIn__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_node_CollectionNode__parentNode__gqlv_property
-}
-
-type rich__causeway_applib_node_CollectionNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_node_CollectionNode__collection__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(collection: String!): rich__causeway_applib_node_CollectionNode
-  validate(collection: String): String
-}
-
-type rich__causeway_applib_node_CollectionNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_node_CollectionNode__mixedIn__gqlv_property {
-  datatype: String
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
-  set(mixedIn: Boolean!): rich__causeway_applib_node_CollectionNode
-  validate(mixedIn: Boolean): String
-}
-
-type rich__causeway_applib_node_CollectionNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_applib_TypeNode!
-  hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__causeway_applib_node_CollectionNode
-  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
-}
-
-type rich__causeway_applib_node_FacetAttrNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_node_FacetAttrNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection
-  "Facet Attr"
-  facetAttr: rich__causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_node_FacetAttrNode__parentNode__gqlv_property
-}
-
-type rich__causeway_applib_node_FacetAttrNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_node_FacetAttrNode__facetAttr__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(facetAttr: String!): rich__causeway_applib_node_FacetAttrNode
-  validate(facetAttr: String): String
-}
-
-type rich__causeway_applib_node_FacetAttrNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_node_FacetAttrNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_applib_node_FacetNode!
-  hidden: Boolean
-  set(parentNode: rich__causeway_applib_node_FacetNode__gqlv_input!): rich__causeway_applib_node_FacetAttrNode
-  validate(parentNode: rich__causeway_applib_node_FacetNode__gqlv_input): String
-}
-
-type rich__causeway_applib_node_FacetNode {
-  "Object metadata"
-  _meta: rich__causeway_applib_node_FacetNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__causeway_applib_node_FacetNode__childNodes__gqlv_collection
-  "Facet"
-  facet: rich__causeway_applib_node_FacetNode__facet__gqlv_property
-  "Parent Node"
-  parentNode: rich__causeway_applib_node_FacetNode__parentNode__gqlv_property
-  "Shadowed"
-  shadowed: rich__causeway_applib_node_FacetNode__shadowed__gqlv_property
-}
-
-type rich__causeway_applib_node_FacetNode__childNodes__gqlv_collection {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-}
-
-type rich__causeway_applib_node_FacetNode__facet__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(facet: String!): rich__causeway_applib_node_FacetNode
-  validate(facet: String): String
-}
-
-type rich__causeway_applib_node_FacetNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_node_FacetNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__causeway_applib_node_FacetNode
-  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
-}
-
-type rich__causeway_applib_node_FacetNode__shadowed__gqlv_property {
-  datatype: String
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
-  set(shadowed: Boolean!): rich__causeway_applib_node_FacetNode
-  validate(shadowed: Boolean): String
 }
 
 type rich__causeway_conf_ConfigurationMenu {
@@ -1564,121 +1152,6 @@ type rich__causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
   validate(typeSimpleName: String): String
 }
 
-type rich__causeway_schema_metamodel_v2_DomainClassDto {
-  "Object metadata"
-  _meta: rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
-  "Actions"
-  actions: rich__causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property
-  "Annotations"
-  annotations: rich__causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property
-  "Collections"
-  collections: rich__causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property
-  "Facets"
-  facets: rich__causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property
-  "Id"
-  id: rich__causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property
-  "Major Version"
-  majorVersion: rich__causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property
-  "Minor Version"
-  minorVersion: rich__causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property
-  "Properties"
-  properties: rich__causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property
-  "Service"
-  service: rich__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__actions__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(actions: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(actions: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__annotations__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(annotations: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(annotations: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__collections__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(collections: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(collections: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__facets__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(facets: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(facets: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__id__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(id: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(id: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__majorVersion__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String
-  hidden: Boolean
-  set(majorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(majorVersion: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__minorVersion__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String
-  hidden: Boolean
-  set(minorVersion: String): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(minorVersion: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__properties__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(properties: String!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(properties: String): String
-}
-
-type rich__causeway_schema_metamodel_v2_DomainClassDto__service__gqlv_property {
-  datatype: String
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
-  set(service: Boolean!): rich__causeway_schema_metamodel_v2_DomainClassDto
-  validate(service: Boolean): String
-}
-
 type rich__causeway_security_LoginRedirect {
   "Object metadata"
   _meta: rich__causeway_security_LoginRedirect__gqlv_meta
@@ -1803,38 +1276,6 @@ type rich__java_lang_Runnable__gqlv_meta {
   title: String!
 }
 
-type rich__java_util_Map {
-  "Object metadata"
-  _meta: rich__java_util_Map__gqlv_meta
-}
-
-type rich__java_util_Map__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__java_util_SortedMap {
-  "Object metadata"
-  _meta: rich__java_util_SortedMap__gqlv_meta
-}
-
-type rich__java_util_SortedMap__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type rich__java_util_concurrent_Callable {
   "Object metadata"
   _meta: rich__java_util_concurrent_Callable__gqlv_meta
@@ -1899,19 +1340,79 @@ type rich__java_util_stream_Stream__gqlv_meta {
   title: String!
 }
 
+type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView {
+  "Object metadata"
+  _meta: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta
+  "Tree"
+  tree: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__tree__gqlv_property
+}
+
+type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__tree__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(tree: String!): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
+  validate(tree: String): String
+}
+
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode {
   "Object metadata"
   _meta: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection
-  "Parent Node"
-  parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property
+  "Details"
+  details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__details__gqlv_action
+  "Put Details"
+  putDetails: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action
+  "Stream Child Nodes"
+  streamChildNodes: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes__gqlv_action
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__childNodes__gqlv_collection {
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details {
+  "Object metadata"
+  _meta: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta
+  "Map"
+  map: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__map__gqlv_collection
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__map__gqlv_collection {
   datatype: String
   disabled: String
+  get: [String]
   hidden: Boolean
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__details__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__details__gqlv_action_invoke
+  validate: String
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__details__gqlv_action_invoke {
+  results: String
+  target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
 }
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
@@ -1925,58 +1426,48 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
   title: String!
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__parentNode__gqlv_property {
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__details__gqlv_action_parameter {
   datatype: String
+  disabled(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action {
   disabled: String
   hidden: Boolean
-  set(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  validate(parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
+  invokeNonIdempotent(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_params
+  validate(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): String
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode {
-  "Object metadata"
-  _meta: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
-  "Child Nodes"
-  childNodes: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection
-  "Mixed In"
-  mixedIn: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property
-  "Parent Node"
-  parentNode: rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_args {
+  details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__childNodes__gqlv_collection {
-  datatype: String
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_args
+  results: String
+  target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_params {
+  "Details"
+  details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__details__gqlv_action_parameter
+}
+
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes__gqlv_action {
   disabled: String
   hidden: Boolean
+  invokeNonIdempotent: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes__gqlv_action_invoke
+  validate: String
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__mixedIn__gqlv_property {
-  datatype: String
-  disabled: String
-  get: Boolean!
-  hidden: Boolean
-  set(mixedIn: Boolean!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
-  validate(mixedIn: Boolean): String
-}
-
-type rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__parentNode__gqlv_property {
-  datatype: String
-  disabled: String
-  get: rich__causeway_applib_TypeNode!
-  hidden: Boolean
-  set(parentNode: rich__causeway_applib_TypeNode__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode
-  validate(parentNode: rich__causeway_applib_TypeNode__gqlv_input): String
+type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes__gqlv_action_invoke {
+  results: rich__java_util_stream_Stream
+  target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
 }
 
 type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript {
@@ -2015,22 +1506,6 @@ type rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScr
   hidden: Boolean
   set(qualifiedName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   validate(qualifiedName: String): String
-}
-
-type rich__org_springframework_data_web_config_SpringDataWebSettings {
-  "Object metadata"
-  _meta: rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta
-}
-
-type rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
 }
 
 type rich__university_admin_AdminMenu {
@@ -5429,50 +4904,14 @@ type simple__causeway_applib_DomainObjectList__gqlv_meta {
   title: String!
 }
 
-type simple__causeway_applib_FacetGroupNode {
+type simple__causeway_applib_MetamodelInspectView {
   "Object metadata"
-  _meta: simple__causeway_applib_FacetGroupNode__gqlv_meta
-  facets: String!
+  _meta: simple__causeway_applib_MetamodelInspectView__gqlv_meta
+  details: String!
+  tree: String!
 }
 
-type simple__causeway_applib_FacetGroupNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__causeway_applib_ParameterNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_ParameterNode__gqlv_meta
-  parameter: String!
-  parentNode: simple__causeway_applib_node_ActionNode!
-}
-
-type simple__causeway_applib_ParameterNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__causeway_applib_PropertyNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_PropertyNode__gqlv_meta
-  mixedIn: Boolean!
-  parentNode: simple__causeway_applib_TypeNode!
-  property: String!
-}
-
-type simple__causeway_applib_PropertyNode__gqlv_meta {
+type simple__causeway_applib_MetamodelInspectView__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -5491,23 +4930,6 @@ type simple__causeway_applib_RoleMemento {
 }
 
 type simple__causeway_applib_RoleMemento__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__causeway_applib_TypeNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_TypeNode__gqlv_meta
-  domainClassDto: simple__causeway_schema_metamodel_v2_DomainClassDto!
-}
-
-type simple__causeway_applib_TypeNode__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -5549,80 +4971,6 @@ type simple__causeway_applib_UserMemento__gqlv_meta {
 type simple__causeway_applib_UserMenu {
   "Returns your user account details"
   me: simple__causeway_applib_UserMemento
-}
-
-type simple__causeway_applib_node_ActionNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_node_ActionNode__gqlv_meta
-  action: String!
-  mixedIn: Boolean!
-  parentNode: simple__causeway_applib_TypeNode!
-}
-
-type simple__causeway_applib_node_ActionNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__causeway_applib_node_CollectionNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_node_CollectionNode__gqlv_meta
-  collection: String!
-  mixedIn: Boolean!
-  parentNode: simple__causeway_applib_TypeNode!
-}
-
-type simple__causeway_applib_node_CollectionNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__causeway_applib_node_FacetAttrNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_node_FacetAttrNode__gqlv_meta
-  facetAttr: String!
-  parentNode: simple__causeway_applib_node_FacetNode!
-}
-
-type simple__causeway_applib_node_FacetAttrNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__causeway_applib_node_FacetNode {
-  "Object metadata"
-  _meta: simple__causeway_applib_node_FacetNode__gqlv_meta
-  facet: String!
-  shadowed: Boolean!
-}
-
-type simple__causeway_applib_node_FacetNode__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
 }
 
 type simple__causeway_conf_ConfigurationMenu {
@@ -5817,31 +5165,6 @@ type simple__causeway_feat_ApplicationType__gqlv_meta {
   title: String!
 }
 
-type simple__causeway_schema_metamodel_v2_DomainClassDto {
-  "Object metadata"
-  _meta: simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta
-  actions: String!
-  annotations: String!
-  collections: String!
-  facets: String!
-  id: String!
-  majorVersion: String
-  minorVersion: String
-  properties: String!
-  service: Boolean!
-}
-
-type simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type simple__causeway_security_LoginRedirect {
   "Object metadata"
   _meta: simple__causeway_security_LoginRedirect__gqlv_meta
@@ -5904,38 +5227,6 @@ type simple__java_lang_Runnable {
 }
 
 type simple__java_lang_Runnable__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__java_util_Map {
-  "Object metadata"
-  _meta: simple__java_util_Map__gqlv_meta
-}
-
-type simple__java_util_Map__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__java_util_SortedMap {
-  "Object metadata"
-  _meta: simple__java_util_SortedMap__gqlv_meta
-}
-
-type simple__java_util_SortedMap__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -6010,12 +5301,13 @@ type simple__java_util_stream_Stream__gqlv_meta {
   title: String!
 }
 
-type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode {
+type simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView {
   "Object metadata"
-  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
+  _meta: simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta
+  tree: String!
 }
 
-type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
+type simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -6026,14 +5318,36 @@ type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta 
   title: String!
 }
 
-type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode {
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode {
   "Object metadata"
-  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta
-  mixedIn: Boolean!
-  parentNode: simple__causeway_applib_TypeNode!
+  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta
+  "Details"
+  details: String
+  "Put Details"
+  putDetails(details: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): String
+  "Stream Child Nodes"
+  streamChildNodes: simple__java_util_stream_Stream
 }
 
-type simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_meta {
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details {
+  "Object metadata"
+  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta
+  "Map"
+  map: [String]
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -6052,22 +5366,6 @@ type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureS
 }
 
 type simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type simple__org_springframework_data_web_config_SpringDataWebSettings {
-  "Object metadata"
-  _meta: simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta
-}
-
-type simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -6349,26 +5647,12 @@ type simple__university_dept_StaffMember__photo__gqlv_member {
 enum logicalTypeNames__gqlv_enum {
   "causeway.applib.DomainObjectList"
   causeway_applib_DomainObjectList
-  "causeway.applib.FacetGroupNode"
-  causeway_applib_FacetGroupNode
-  "causeway.applib.ParameterNode"
-  causeway_applib_ParameterNode
-  "causeway.applib.PropertyNode"
-  causeway_applib_PropertyNode
+  "causeway.applib.MetamodelInspectView"
+  causeway_applib_MetamodelInspectView
   "causeway.applib.RoleMemento"
   causeway_applib_RoleMemento
-  "causeway.applib.TypeNode"
-  causeway_applib_TypeNode
   "causeway.applib.UserMemento"
   causeway_applib_UserMemento
-  "causeway.applib.node.ActionNode"
-  causeway_applib_node_ActionNode
-  "causeway.applib.node.CollectionNode"
-  causeway_applib_node_CollectionNode
-  "causeway.applib.node.FacetAttrNode"
-  causeway_applib_node_FacetAttrNode
-  "causeway.applib.node.FacetNode"
-  causeway_applib_node_FacetNode
   "causeway.conf.ConfigurationProperty"
   causeway_conf_ConfigurationProperty
   "causeway.conf.ConfigurationViewmodel"
@@ -6387,14 +5671,14 @@ enum logicalTypeNames__gqlv_enum {
   causeway_feat_ApplicationTypeMember
   "causeway.feat.ApplicationTypeProperty"
   causeway_feat_ApplicationTypeProperty
-  "causeway.schema.metamodel.v2.DomainClassDto"
-  causeway_schema_metamodel_v2_DomainClassDto
   "causeway.security.LoginRedirect"
   causeway_security_LoginRedirect
   "causeway.testing.fixtures.FixtureResult"
   causeway_testing_fixtures_FixtureResult
-  "org.springframework.data.web.config.SpringDataWebSettings"
-  org_springframework_data_web_config_SpringDataWebSettings
+  "org.apache.causeway.applib.graph.tree.MasterDetailTreeView"
+  org_apache_causeway_applib_graph_tree_MasterDetailTreeView
+  "org.apache.causeway.core.metamodel.inspect.model.MMNode.Details"
+  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   "university.dept.Department"
   university_dept_Department
   "university.dept.DeptHead"
@@ -6465,25 +5749,7 @@ input rich__causeway_applib_DomainObjectList__gqlv_input {
   ref: String
 }
 
-input rich__causeway_applib_FacetGroupNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_ParameterNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_PropertyNode__gqlv_input {
+input rich__causeway_applib_MetamodelInspectView__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6501,52 +5767,7 @@ input rich__causeway_applib_RoleMemento__gqlv_input {
   ref: String
 }
 
-input rich__causeway_applib_TypeNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__causeway_applib_UserMemento__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_node_ActionNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_node_CollectionNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_node_FacetAttrNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_node_FacetNode__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6636,15 +5857,6 @@ input rich__causeway_feat_ApplicationType__gqlv_input {
   ref: String
 }
 
-input rich__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__causeway_security_LoginRedirect__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -6673,24 +5885,6 @@ input rich__java_lang_Record__gqlv_input {
 }
 
 input rich__java_lang_Runnable__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__java_util_Map__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__java_util_SortedMap__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6735,6 +5929,24 @@ input rich__java_util_stream_Stream__gqlv_input {
   ref: String
 }
 
+input rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
 input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -6744,25 +5956,7 @@ input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input 
   ref: String
 }
 
-input rich__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6816,25 +6010,7 @@ input simple__causeway_applib_DomainObjectList__gqlv_input {
   ref: String
 }
 
-input simple__causeway_applib_FacetGroupNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_applib_ParameterNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_applib_PropertyNode__gqlv_input {
+input simple__causeway_applib_MetamodelInspectView__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6852,52 +6028,7 @@ input simple__causeway_applib_RoleMemento__gqlv_input {
   ref: String
 }
 
-input simple__causeway_applib_TypeNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input simple__causeway_applib_UserMemento__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_applib_node_ActionNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_applib_node_CollectionNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_applib_node_FacetAttrNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__causeway_applib_node_FacetNode__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -6987,15 +6118,6 @@ input simple__causeway_feat_ApplicationType__gqlv_input {
   ref: String
 }
 
-input simple__causeway_schema_metamodel_v2_DomainClassDto__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input simple__causeway_security_LoginRedirect__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -7024,24 +6146,6 @@ input simple__java_lang_Record__gqlv_input {
 }
 
 input simple__java_lang_Runnable__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__java_util_Map__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__java_util_SortedMap__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -7086,6 +6190,24 @@ input simple__java_util_stream_Stream__gqlv_input {
   ref: String
 }
 
+input simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
 input simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -7095,25 +6217,7 @@ input simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_inpu
   ref: String
 }
 
-input simple__org_apache_causeway_core_metamodel_inspect_model_MemberNode__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__org_springframework_data_web_config_SpringDataWebSettings__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"

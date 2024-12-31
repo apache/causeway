@@ -182,7 +182,7 @@ For example:
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-causewayrelv3}                             # <.>
+export CAUSEWAYREL={page-causewayreleaseversion}                             # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -197,7 +197,7 @@ env | grep CAUSEWAY | sort
 
 [IMPORTANT]
 ====
-The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayrelv3}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayreleaseversion}`).
 ====
 
 
@@ -495,17 +495,17 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 === Reset `revision` property
 
 At the <<bump-code-to-causewayrel,beginning>> of the release process we bumped the version to the release version, ie `$CAUSEWAYREL`.
-With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
+With the release now deployed we now need to reset the revision back down to the base snapshot, ie `{page-causewaysnapshotversion}`.
 
 Therefore, still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
-mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o -T1C -Dgithub
 
 pushd ../starters
-mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o
 popd
 
@@ -834,7 +834,7 @@ Use the following subject, eg:
 
 [source,subs="attributes+"]
 ----
-[VOTE] Apache Causeway Core release {page-causewayrelv3} RC1
+[VOTE] Apache Causeway Core release {page-causewayreleaseversion} RC1
 ----
 
 And use the following body:
@@ -846,7 +846,7 @@ I've just cut a new release of the Apache Causeway Framework.
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as causeway-{page-causewayrelv3}-RC1;
+In the source code repo the code has been tagged as causeway-{page-causewayreleaseversion}-RC1;
 see https://github.com/apache/causeway/tags
 
 To verify the source code itself, you can use the following commands
@@ -872,7 +872,7 @@ The vote will be open for a minimum of 72 hours.
 
 Remember to update:
 
-* the version number (`{page-causewayrelv3}` or whatever)
+* the version number (`{page-causewayreleaseversion}` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`11xx` or whatever)
 
