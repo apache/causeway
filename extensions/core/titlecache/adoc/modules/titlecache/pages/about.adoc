@@ -19,7 +19,7 @@ The current implementation uses the link:https://github.com/ben-manes/caffeine[C
             <artifactId>causeway-extensions-titlecache</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewaypreviousversion}</version>
+            <version>{page-causewaycurrentversion}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
