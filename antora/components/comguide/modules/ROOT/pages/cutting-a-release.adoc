@@ -538,19 +538,23 @@ The remote tags aren't visible locally but can be seen link:https://github.com/a
 [#update-starter-apps]
 == Update starter apps
 
-For each of the two starter apps, we maintain (currently) eight branches:
+// For each of the two starter apps, we maintain (currently) eight branches:
+For each of the two starter apps, we maintain four branches:
 
-* `v2-jpa` and `v2-jdo` ; and also `v3-jpa` and `v3-jdo`
+// * `v3-jpa` and `v3-jdo` ; and also `v4-jpa` and `v4-jdo`
+* `v3-jpa` and `v3-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-* `v2-jpa-SNAPSHOT` and `v2-jdo-SNAPSHOT` ; and also `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT`
+// * `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT` ; and also `v4-jpa-SNAPSHOT` and `v4-jdo-SNAPSHOT`
+* `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `v{2,3}-jpa` to `v{2,3}-jpa-SNAPSHOT` and similarly moves `v{2,3}-jdo` up to `v{2,3}-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT` and similarly moves `vN-jdo` up to `vN-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 This is done for all current `vN` branches.
+The non-SNAPSHOT builds should always reference the most recently release.
 
 In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
 
@@ -564,7 +568,7 @@ For _helloworld_, we create a release branch for both variants:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT    # or: git checkout v2-jpa-SNAPSHOT
+git checkout v3-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
@@ -601,7 +605,7 @@ git push -u origin $CAUSEWAYBRANCH-jpa
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jdo-SNAPSHOT    # or: git checkout v2-jdo-SNAPSHOT
+git checkout v3-jdo-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
@@ -657,7 +661,7 @@ For _simple app_, the steps are almost the same:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT    # or: git checkout v2-jpa-SNAPSHOT
+git checkout v3-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
@@ -694,7 +698,7 @@ git push -u origin $CAUSEWAYBRANCH-jpa
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jdo-SNAPSHOT    # or: git checkout v2-jdo-SNAPSHOT
+git checkout v3-jdo-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
