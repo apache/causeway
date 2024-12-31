@@ -16,7 +16,7 @@ If your app inherits from the xref:docs:parent-pom:about.adoc[Parent POM], then 
 <parent>
     <groupId>org.apache.causeway.app</groupId>
     <artifactId>causeway-app-starter-parent</artifactId>
-    <version>{page-causewaycurrentversion}</version> <!--.-->
+    <version>{page-causewayreleaseversion}</version> <!--.-->
 </parent>
 ----
 <.> update as required.
