@@ -51,7 +51,7 @@ Convenience method that returns the _Identifier#getClassNaturalName() natural cl
 <.> xref:#getMemberName_[getMemberName()]
 +
 --
-Convenience method that returns the _Identifier#getMemberLogicalName() member name_ of the _#getIdentifier() identifier_ .
+Convenience method that returns the _Identifier#memberLogicalName() member name_ of the _#getIdentifier() identifier_ .
 --
 <.> xref:#getMemberNaturalName_[getMemberNaturalName()]
 +
@@ -61,7 +61,7 @@ As per _#getMemberName()_ , but naturalized.
 <.> xref:#getMemberParameterNames_[getMemberParameterNames()]
 +
 --
-Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
+Convenience method that returns the _Identifier#className() class name_ of the _#getIdentifier() identifier_ .
 --
 <.> xref:#getMemberParameterNaturalNames_[getMemberParameterNaturalNames()]
 +
@@ -121,7 +121,7 @@ Convenience method that returns the _Identifier#getClassNaturalName() natural cl
 [#getMemberName_]
 === getMemberName()
 
-Convenience method that returns the _Identifier#getMemberLogicalName() member name_ of the _#getIdentifier() identifier_ .
+Convenience method that returns the _Identifier#memberLogicalName() member name_ of the _#getIdentifier() identifier_ .
 
 [#getMemberNaturalName_]
 === getMemberNaturalName()
@@ -131,7 +131,7 @@ As per _#getMemberName()_ , but naturalized.
 [#getMemberParameterNames_]
 === getMemberParameterNames()
 
-Convenience method that returns the _Identifier#getClassName() class name_ of the _#getIdentifier() identifier_ .
+Convenience method that returns the _Identifier#className() class name_ of the _#getIdentifier() identifier_ .
 
 [#getMemberParameterNaturalNames_]
 === getMemberParameterNaturalNames()

@@ -16,7 +16,7 @@ include::../section-hooks/causeway.core.runtime-services~pre.adoc[]
 causeway.core.runtime-services. +
 application-features.init
 
-| 
+|  not-specified
 | Whether the ``ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of ``ApplicationFeature`` that describe the metamodel eagerly, or lazily.
 
 
@@ -95,7 +95,7 @@ exception-recognizer.dae.disable
 causeway.core.runtime-services. +
 translation.po.mode
 
-| 
+|  write
 | Specifies the initial mode for obtaining/discovering translations.
 
 There are three modes:

@@ -11,8 +11,20 @@ Tells the framework which method or field to use in order to construct a navigab
 enum Navigable {
   NOT_SPECIFIED
   IGNORE
-  PARENT
+  PARENT     // <.>
   boolean isParent()
 }
 ----
 
+<.> xref:#PARENT[PARENT]
++
+--
+When used via xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] , identifies a logical parent, that is navigable via the UI.
+--
+
+== Members
+
+[#PARENT]
+=== PARENT
+
+When used via xref:refguide:applib:index/annotation/PropertyLayout.adoc[PropertyLayout] , identifies a logical parent, that is navigable via the UI.

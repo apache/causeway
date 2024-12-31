@@ -28,7 +28,7 @@ Only applies if the introspector is configured to perform full introspection up-
 causeway.core.meta-model. +
 introspector.mode
 
-| 
+|  lazy-unless-production
 | Whether all known types should be fully introspected as part of the bootstrapping, or should only be partially introspected initially.
 
 Leaving this as lazy means that there's a chance that metamodel validation errors will not be discovered during bootstrap. That said, metamodel validation is still run incrementally for any classes introspected lazily after initial bootstrapping (unless ``#isValidateIncrementally()`` is disabled.

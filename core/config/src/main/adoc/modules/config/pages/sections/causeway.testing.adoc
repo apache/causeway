@@ -31,7 +31,7 @@ causeway.testing.fixtures. +
 fixture-scripts-specification. +
 multiple-execution-strategy
 
-| 
+|  execute-once-by-class
 | Indicates whether, if a fixture script (or more precisely any other fixture scripts of the same class) is encountered more than once in a graph of dependencies, it should be executed again or skipped.
 
 The default is to fixture scripts are executed only once per class.
@@ -45,7 +45,7 @@ causeway.testing.fixtures. +
 fixture-scripts-specification. +
 non-persisted-objects-strategy
 
-| 
+|  persist
 | Indicates whether objects that are returned as a fixture result should be automatically persisted if required (the default) or not.
 
 

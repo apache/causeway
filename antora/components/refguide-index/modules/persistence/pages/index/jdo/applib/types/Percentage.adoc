@@ -21,9 +21,9 @@ String columnAllowsNull() default "true";
 int columnLength() default Percentage.INTEGER + Percentage.FRACTION;
   @AliasFor(annotation = javax.jdo.annotations.Column.class, attribute = "scale")
 int columnScale() default Percentage.FRACTION;
-  @AliasFor(annotation = javax.validation.constraints.Digits.class, attribute = "integer")
+  @AliasFor(annotation = jakarta.validation.constraints.Digits.class, attribute = "integer")
 int digitsInteger() default Percentage.INTEGER;
-  @AliasFor(annotation = javax.validation.constraints.Digits.class, attribute = "fraction")
+  @AliasFor(annotation = jakarta.validation.constraints.Digits.class, attribute = "fraction")
 int digitsFraction() default Percentage.FRACTION;
 }
 ----

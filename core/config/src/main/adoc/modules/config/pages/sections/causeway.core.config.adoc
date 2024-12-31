@@ -17,7 +17,7 @@ causeway.core.config. +
 configuration-property-visibility- +
 policy
 
-| 
+|  show-only-in-prototype
 | Configuration values might contain sensitive data, hence per default, configuration properties are only visible with the configuration-page when _prototyping_.
 
 Alternatively this policy can be set to either *always* show or *never* show.

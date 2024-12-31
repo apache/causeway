@@ -15,7 +15,7 @@ include::../section-hooks/resteasy~pre.adoc[]
 [[resteasy.jaxrs.app.registration]]
 resteasy.jaxrs.app.registration
 
-| 
+|  beans
 | How the implementation of the JAX-RS application is discovered.
 
 There should be very little reason to change this from its default.

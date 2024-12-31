@@ -155,7 +155,7 @@ patterns-as-map
 causeway.applib.annotation.action. +
 command-publishing
 
-| 
+|  none
 | The default for whether action invocations should be reified as a ``Command``, to be sent to any registered ``CommandSubscriber``s, typically for auditing purposes.
 
 This setting can be overridden on a case-by-case basis using ``Action#commandPublishing()``.
@@ -183,7 +183,7 @@ The algorithm for determining whether (and what type of) an event is actually se
 causeway.applib.annotation.action. +
 execution-publishing
 
-| 
+|  none
 | The default for whether action invocations should be sent through to the ``ExecutionSubscriber`` for publishing.
 
 The service's onExecution method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the action invoked, the action arguments and the returned object (if any).
@@ -196,7 +196,7 @@ This setting can be overridden on a case-by-case basis using ``Action#executionP
 causeway.applib.annotation. +
 collection-layout.default-view
 
-| 
+|  table
 | Defines the initial view to display collections when rendered.
 
 The value of this can be overridden on a case-by-case basis using ``CollectionLayout#defaultView()``. Note that this default configuration property is an enum and so defines only a fixed number of values, whereas the annotation returns a string; this is to allow for flexibility that individual viewers might support their own additional types. For example, the Wicket viewer supports
@@ -370,7 +370,7 @@ The algorithm for determining whether (and what type of) an event is sent depend
 causeway.applib.annotation. +
 domain-object.editing
 
-| 
+|  false
 | The default for whether the properties of domain objects can be edited, or whether instead they can be modified only using actions (or programmatically as a side-effect of actions on other objects).
 
 This setting can be overridden on a case-by-case basis using ``DomainObject#getEditing() DomainObject#getEditing()``
@@ -382,7 +382,7 @@ causeway.applib.annotation. +
 domain-object. +
 entity-change-publishing
 
-| 
+|  none
 | The default for whether _domain entities_ should be audited or not (meaning that any changes are sent through to ``EntityChangesSubscriber``s and sent through to ``EntityPropertyChangeSubscriber``.
 
 This setting can be overridden on a case-by-case basis using ``DomainObject#entityChangePublishing()``
@@ -511,7 +511,7 @@ Note: this applies only to domain entities, not to view models.
 causeway.applib.annotation. +
 parameter-layout.label-position
 
-| 
+|  not-specified
 | Defines the default position for the label for an action parameter.
 
 Can be overridden on a case-by-case basis using ``ParameterLayout#labelPosition()``.
@@ -525,7 +525,7 @@ causeway.applib.annotation. +
 parameter. +
 preceding-parameters-policy
 
-| 
+|  reset
 | Whether parameters should be reset to their default if an earlier parameter changes its value, or whether instead a parameter value, once changed by the end-user, should never be overwritten even if the end-user changes an earlier parameter value.
 
 This setting can be overridden on a case-by-case basis using ``Parameter#precedingParamsPolicy() Parameter#precedingParametersPolicy()``.
@@ -536,7 +536,7 @@ This setting can be overridden on a case-by-case basis using ``Parameter#precedi
 causeway.applib.annotation. +
 property-layout.label-position
 
-| 
+|  not-specified
 | Defines the default position for the label for a domain object property.
 
 Can be overridden on a case-by-case basis using ``ParameterLayout#labelPosition()``.
@@ -561,7 +561,7 @@ default: \{@code AS_PER_SEQUENCE}
 causeway.applib.annotation. +
 property.command-publishing
 
-| 
+|  none
 | The default for whether property edits should be reified as a ``Command``, to be sent to any registered ``CommandSubscriber``s, either for auditing or for replayed against a secondary system, eg for regression testing.
 
 This setting can be overridden on a case-by-case basis using ``Property#commandPublishing()``.
@@ -590,7 +590,7 @@ The algorithm for determining whether (and what type of) an event is actually se
 causeway.applib.annotation. +
 property.execution-publishing
 
-| 
+|  none
 | The default for whether property edits should be sent through to the ``ExecutionSubscriber`` for publishing.
 
 The service's ``ExecutionSubscriber#onExecution(Execution)`` publish} method is called only once per transaction, with ``Execution`` collecting details of the identity of the target object, the property edited, and the new value of the property.
@@ -680,7 +680,7 @@ semantic-checking.enable
 causeway.applib.service. +
 metrics-service.level
 
-| 
+|  counters-only
 | What level of detail the MetricsService should capture.
 
 

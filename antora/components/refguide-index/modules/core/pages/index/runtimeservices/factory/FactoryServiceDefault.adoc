@@ -17,6 +17,7 @@ class FactoryServiceDefault {
   T viewModel(T viewModelPojo)
   T viewModel(Class<T> viewModelClass, Bookmark bookmark)
   T create(Class<T> domainClass)
+  TreeNode<T> treeNode(T root)
 }
 ----
 

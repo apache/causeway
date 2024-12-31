@@ -12,7 +12,7 @@ class CausewayModulePersistenceJdoDatanucleus {
   LocalPersistenceManagerFactoryBean getLocalPersistenceManagerFactoryBean(CausewayConfiguration causewayConfiguration, DataSource dataSource, MetaModelContext metaModelContext, ObjectLifecyclePublisher objectLifecyclePublisher, CausewayBeanTypeRegistry beanTypeRegistry, DatanucleusSettings dnSettings)
   TransactionAwarePersistenceManagerFactoryProxy getTransactionAwarePersistenceManagerFactoryProxy(MetaModelContext metaModelContext, LocalPersistenceManagerFactoryBean localPmfBean, CausewayBeanTypeRegistry beanTypeRegistry, List<JdoEntityDiscoveryListener> jdoEntityDiscoveryListeners, DatanucleusSettings dnSettings)
   JdoTransactionManager getTransactionManager(JdoDialect jdoDialect, LocalPersistenceManagerFactoryBean localPmfBean)
-  TransactionInterceptorFactory getTransactionInterceptorFactory()     // <.>
+  TransactionInterceptor transactionInterceptor(TransactionAttributeSource transactionAttributeSource)     // <.>
 }
 ----
 
@@ -21,10 +21,10 @@ class CausewayModulePersistenceJdoDatanucleus {
 --
 Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _Spring_ .
 --
-<.> xref:#getTransactionInterceptorFactory_[getTransactionInterceptorFactory()]
+<.> xref:#transactionInterceptor_TransactionAttributeSource[transactionInterceptor(TransactionAttributeSource)]
 +
 --
-AOP PATCH
+Works in combination with org.apache.causeway.core.config.beans.TransactionInterceptorPatcher. Replaces the Spring provided _TransactionInterceptor_ , with an overwritten variant.
 --
 
 == Members
@@ -34,7 +34,7 @@ AOP PATCH
 
 Conveniently registers this dialect as a _PersistenceExceptionTranslator_ with _Spring_ .
 
-[#getTransactionInterceptorFactory_]
-=== getTransactionInterceptorFactory()
+[#transactionInterceptor_TransactionAttributeSource]
+=== transactionInterceptor(TransactionAttributeSource)
 
-AOP PATCH
+Works in combination with org.apache.causeway.core.config.beans.TransactionInterceptorPatcher. Replaces the Spring provided _TransactionInterceptor_ , with an overwritten variant.

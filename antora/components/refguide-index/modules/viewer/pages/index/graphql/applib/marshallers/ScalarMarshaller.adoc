@@ -3,7 +3,7 @@
 
 Provides an SPI to allow different scalar datatypes to be marshalled to and from GraphQL scalar types.
 
-The implementations are called following a chain-of-responsibility pattern, first one matching is used. Use _javax.annotation.Priority_ (with _org.apache.causeway.applib.annotation.PriorityPrecedence_ values) to override the framework-provided defaults, earliest wins.
+The implementations are called following a chain-of-responsibility pattern, first one matching is used. Use _jakarta.annotation.Priority_ (with _org.apache.causeway.applib.annotation.PriorityPrecedence_ values) to override the framework-provided defaults, earliest wins.
 
 == API
 

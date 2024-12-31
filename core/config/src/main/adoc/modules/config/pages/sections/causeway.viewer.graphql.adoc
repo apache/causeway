@@ -15,7 +15,7 @@ include::../section-hooks/causeway.viewer.graphql~pre.adoc[]
 [[causeway.viewer.graphql.api-scope]]
 causeway.viewer.graphql.api-scope
 
-| 
+|  all
 | Which domain objects to include the GraphQL schema. By default, all domain objects are exposed (entities and view models).
 
 
@@ -24,7 +24,7 @@ causeway.viewer.graphql.api-scope
 causeway.viewer.graphql. +
 api-variant
 
-| 
+|  query-and-mutations
 | Which variant of API to expose: ``ApiVariant#QUERY_ONLY`` (which suppresses any actions that mutate the state of the system), or as ``ApiVariant#QUERY_AND_MUTATIONS`` (which additionally exposes actions that mutate the system as mutations) or alternatively as ``ApiVariant#QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT``, a query-only schema that relaxes the read-only rule by exposing actions that mutate the system; it is therefore not compliant with the GraphQL spec),
 
 
@@ -96,7 +96,7 @@ target-arg-name
 causeway.viewer.graphql.resources. +
 response-type
 
-| 
+|  forbidden
 | How resources (``Blob`` bytes, ``Clob`` chars, grids and icons) can be downloaded from the resource controller.
 
 By default the download of these resources if ``ResponseType#FORBIDDEN``, but alternatively they can be enabled to download either ``ResponseType#DIRECT``ly or as an ``ResponseType#ATTACHMENT``.
@@ -137,7 +137,7 @@ zoned-date-time-format
 causeway.viewer.graphql. +
 schema-style
 
-| 
+|  rich-and-simple
 | Which ``SchemaStyle`` to expose, "simple" or "rich". By default both are exposed under top-level field names. @see Schema.Rich#getTopLevelFieldName() @see Schema.Simple#getTopLevelFieldName()
 
 

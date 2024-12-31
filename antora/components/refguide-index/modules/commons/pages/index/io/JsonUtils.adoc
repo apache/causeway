@@ -9,6 +9,7 @@ Utilities to convert from and to JSON format.
 .JsonUtils.java
 ----
 class JsonUtils {
+  Optional<Class<?>> getPlatformDefaultJsonProviderForJaxb()     // <.>
   Try<T> tryRead(Class<T> mappedType, String stringUtf8, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<T> tryRead(Class<T> mappedType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
   Try<List<T>> tryReadAsList(Class<T> elementType, DataSource source, JsonUtils.JacksonCustomizer... customizers)     // <.>
@@ -25,6 +26,11 @@ class JsonUtils {
 }
 ----
 
+<.> xref:#getPlatformDefaultJsonProviderForJaxb_[getPlatformDefaultJsonProviderForJaxb()]
++
+--
+Consumers of the framework may choose to use a different provider.
+--
 <.> xref:#tryRead_Class_String_JsonUtils_JacksonCustomizer[tryRead(Class, String, JsonUtils_JacksonCustomizer)]
 +
 --
@@ -92,6 +98,11 @@ add support for writing Can
 --
 
 == Members
+
+[#getPlatformDefaultJsonProviderForJaxb_]
+=== getPlatformDefaultJsonProviderForJaxb()
+
+Consumers of the framework may choose to use a different provider.
 
 [#tryRead_Class_String_JsonUtils_JacksonCustomizer]
 === tryRead(Class, String, JsonUtils_JacksonCustomizer)

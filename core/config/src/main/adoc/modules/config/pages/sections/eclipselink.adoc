@@ -40,7 +40,7 @@ eclipselink.cache.size
 [[eclipselink.cache.type]]
 eclipselink.cache.type
 
-| 
+|  softweak
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDGDIEI[eclipselink.cache.type]
 
 
@@ -179,7 +179,7 @@ eclipselink.exception-handler
 [[eclipselink.flush-clear.cache]]
 eclipselink.flush-clear.cache
 
-| 
+|  dropinvalidate
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CDEJGBEI[eclipselink.flush-clear.cache]
 
 
@@ -187,7 +187,7 @@ eclipselink.flush-clear.cache
 [[eclipselink.id-validation]]
 eclipselink.id-validation
 
-| 
+|  none
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CACEEGCC[eclipselink.id-validation]
 
 
@@ -287,7 +287,7 @@ eclipselink.logging.file
 [[eclipselink.logging.level]]
 eclipselink.logging.level
 
-| 
+|  info
 | @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#CHDGFDDH[eclipselink.logging.level]
 
 

@@ -15,7 +15,7 @@ include::../section-hooks/datanucleus~pre.adoc[]
 [[datanucleus.cache.level2.mode]]
 datanucleus.cache.level2.mode
 
-| 
+|  unspecified
 | The mode of operation of the L2 cache, deciding which entities are cached.
 
 The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE.

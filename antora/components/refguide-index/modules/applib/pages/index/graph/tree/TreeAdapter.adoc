@@ -12,6 +12,7 @@ interface TreeAdapter<T> {
   int childCountOf(T value)     // <.>
   Stream<T> childrenOf(T value)     // <.>
   Optional<T> resolveRelative(T node, TreePath relativePath)     // <.>
+  TreeAdapter<R> convert(TreeConverter<T, R> converter)     // <.>
 }
 ----
 
@@ -21,6 +22,11 @@ interface TreeAdapter<T> {
 +
 --
 Resolves given xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] to its corresponding sub-node relative to given node if possible.
+--
+<.> xref:#convert_TreeConverter[convert(TreeConverter)]
++
+--
+converts this _TreeAdapter_ to an equivalent _TreeAdapter_
 --
 
 == Members
@@ -37,3 +43,8 @@ Resolves given xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] to 
 Resolves given xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] to its corresponding sub-node relative to given node if possible.
 
 E.g. starting from root, '/0' will return the root;starting from root, '/0/2' will return the 3rd child of root;starting from sub-node '/0/2', '/2/9' will resolve the 10th child ('/0/2/9') of this sub-node
+
+[#convert_TreeConverter]
+=== convert(TreeConverter)
+
+converts this _TreeAdapter_ to an equivalent _TreeAdapter_

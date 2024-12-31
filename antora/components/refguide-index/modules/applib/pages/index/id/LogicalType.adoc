@@ -1,4 +1,4 @@
-= LogicalType
+= LogicalType _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
@@ -12,28 +12,28 @@ Meta-model validators will take care, that there is no logical name ambiguity: T
 [source,java]
 .LogicalType.java
 ----
-class LogicalType {
-  LogicalType lazy(Class<?> correspondingClass, Supplier<String> logicalNameProvider)     // <.>
+record LogicalType {
+  LogicalType(String logicalName, Class<?> correspondingClass)
   LogicalType eager(Class<?> correspondingClass, String logicalName)     // <.>
   LogicalType fqcn(Class<?> correspondingClass)     // <.>
-  LogicalType infer(Class<?> correspondingClass)     // <.>
-  String getClassName()     // <.>
-  String getLogicalTypeName()     // <.>
-  String getLogicalTypeSimpleName()     // <.>
-  String getNamespace()     // <.>
-  String getLogicalTypeNameFormatted(String root, String delimiter)     // <.>
+  LogicalType infer(Class<?> correspondingClass)
+  String className()     // <.>
+  String logicalSimpleName()     // <.>
+  String namespace()     // <.>
+  String logicalNameFormatted(String root, String delimiter)     // <.>
   boolean equals(Object obj)
   boolean isEqualTo(LogicalType other)
   int hashCode()
   int compareTo(LogicalType other)
+  Class<?> getCorrespondingClass()     // <.>
+  String getLogicalTypeName()     // <.>
+  String getClassName()     // <.>
+  String getLogicalTypeSimpleName()     // <.>
+  String getNamespace()     // <.>
+  String getLogicalTypeNameFormatted(String root, String delimiter)     // <.>
 }
 ----
 
-<.> xref:#lazy_Class_Supplier[lazy(Class, Supplier)]
-+
---
-Returns a new xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
---
 <.> xref:#eager_Class_String[eager(Class, String)]
 +
 --
@@ -44,43 +44,88 @@ Returns a new TypeIdentifier based on the corresponding class and (ahead of time
 --
 Use the corresponding class's fully qualified name for the _logicalName_ . Most likely used in testing scenarios.
 --
-<.> xref:#infer_Class[infer(Class)]
-+
---
-Infer from annotations.
---
-<.> xref:#getClassName_[getClassName()]
+<.> xref:#className_[className()]
 +
 --
 Canonical name of the corresponding class.
 --
-<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
-+
---
-Returns the logical-type-name (unique amongst non-abstract classes), as per the _LogicalTypeFacet_ .
---
-<.> xref:#getLogicalTypeSimpleName_[getLogicalTypeSimpleName()]
+<.> xref:#logicalSimpleName_[logicalSimpleName()]
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 --
-<.> xref:#getNamespace_[getNamespace()]
+<.> xref:#namespace_[namespace()]
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 --
-<.> xref:#getLogicalTypeNameFormatted_String_String[getLogicalTypeNameFormatted(String, String)]
+<.> xref:#logicalNameFormatted_String_String[logicalNameFormatted(String, String)]
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .
 --
+<.> xref:#getCorrespondingClass_[getCorrespondingClass()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#correspondingClass()_
+====
+--
+<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#logicalName()_
+====
+--
+<.> xref:#getClassName_[getClassName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#className()_
+====
+--
+<.> xref:#getLogicalTypeSimpleName_[getLogicalTypeSimpleName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#logicalSimpleName()_
+====
+--
+<.> xref:#getNamespace_[getNamespace()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#namespace()_
+====
+--
+<.> xref:#getLogicalTypeNameFormatted_String_String[getLogicalTypeNameFormatted(String, String)]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#logicalNameFormatted(String, String)_
+====
+--
 
 == Members
-
-[#lazy_Class_Supplier]
-=== lazy(Class, Supplier)
-
-Returns a new xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] based on the corresponding class and a _logicalNameProvider_ for lazy logical name lookup.
 
 [#eager_Class_String]
 === eager(Class, String)
@@ -92,40 +137,86 @@ Returns a new TypeIdentifier based on the corresponding class and (ahead of time
 
 Use the corresponding class's fully qualified name for the _logicalName_ . Most likely used in testing scenarios.
 
-[#infer_Class]
-=== infer(Class)
-
-Infer from annotations.
-
-[#getClassName_]
-=== getClassName()
+[#className_]
+=== className()
 
 Canonical name of the corresponding class.
 
-[#getLogicalTypeName_]
-=== getLogicalTypeName()
-
-Returns the logical-type-name (unique amongst non-abstract classes), as per the _LogicalTypeFacet_ .
-
-This will typically be the value of the _Named#value()_ annotation attribute. If none has been specified then will default to the fully qualified class name (with _ClassSubstitutorRegistry class name substituted_ if necessary to allow for runtime bytecode enhancement.
-
-The _ObjectSpecification_ can be retrieved using _SpecificationLoader#specForLogicalTypeName(String)_ } passing the logical-type-name as argument.
-
-[#getLogicalTypeSimpleName_]
-=== getLogicalTypeSimpleName()
+[#logicalSimpleName_]
+=== logicalSimpleName()
 
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 
 Returns the _logical simple name_ part.
 
-[#getNamespace_]
-=== getNamespace()
+[#namespace_]
+=== namespace()
 
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ .
 
 Returns the _namespace_ part.
 
+[#logicalNameFormatted_String_String]
+=== logicalNameFormatted(String, String)
+
+The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .
+
+[#getCorrespondingClass_]
+=== getCorrespondingClass()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#correspondingClass()_
+====
+
+[#getLogicalTypeName_]
+=== getLogicalTypeName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#logicalName()_
+====
+
+[#getClassName_]
+=== getClassName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#className()_
+====
+
+[#getLogicalTypeSimpleName_]
+=== getLogicalTypeSimpleName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#logicalSimpleName()_
+====
+
+[#getNamespace_]
+=== getNamespace()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#namespace()_
+====
+
 [#getLogicalTypeNameFormatted_String_String]
 === getLogicalTypeNameFormatted(String, String)
 
-The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#logicalNameFormatted(String, String)_
+====

@@ -1,4 +1,4 @@
-= Identifier
+= Identifier _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Combines xref:refguide:applib:index/id/LogicalType.adoc[LogicalType] and member identification (from properties, collections or actions), to a fully qualified _feature_ identifier.
@@ -10,13 +10,16 @@ For xref:refguide:applib:index/Identifier.adoc[Identifier] (s) of type _Identifi
 [source,java]
 .Identifier.java
 ----
-class Identifier {
+record Identifier {
   Identifier classIdentifier(LogicalType typeIdentifier)
   Identifier propertyIdentifier(LogicalType typeIdentifier, String propertyName)
   Identifier collectionIdentifier(LogicalType typeIdentifier, String collectionName)
   Identifier methodIdentifier(LogicalType typeIdentifier, ResolvedMethod method)     // <.>
   Identifier actionIdentifier(LogicalType typeIdentifier, String actionName, Class<?>... parameterClasses)
   Identifier actionIdentifier(LogicalType typeIdentifier, String actionName, Can<String> parameterClassNames)
+  String getFullIdentityString()     // <.>
+  String getMemberNameAndParameterClassNamesIdentityString()     // <.>
+  TranslationContext getTranslationContext()     // <.>
   Identifier withParameterIndex(int parameterIndex)
   String getLogicalIdentityString(String delimiter)
   String getClassNaturalName()
@@ -27,6 +30,10 @@ class Identifier {
   boolean isEqualTo(Identifier other)
   int hashCode()
   String toString()
+  String getMemberLogicalName()
+  int getParameterIndex()
+  Can<String> getMemberParameterClassNames()
+  Type getType()
 }
 ----
 
@@ -35,6 +42,21 @@ class Identifier {
 --
 for reporting orphaned methods
 --
+<.> xref:#getFullIdentityString_[getFullIdentityString()]
++
+--
+Fully qualified Identity String. (class-name + member-logical-name + param-class-names)
+--
+<.> xref:#getMemberNameAndParameterClassNamesIdentityString_[getMemberNameAndParameterClassNamesIdentityString()]
++
+--
+Member Identity String (class omitted), including parameters if any.
+--
+<.> xref:#getTranslationContext_[getTranslationContext()]
++
+--
+Context to be used for i18n translation.
+--
 
 == Members
 
@@ -42,3 +64,18 @@ for reporting orphaned methods
 === methodIdentifier(LogicalType, ResolvedMethod)
 
 for reporting orphaned methods
+
+[#getFullIdentityString_]
+=== getFullIdentityString()
+
+Fully qualified Identity String. (class-name + member-logical-name + param-class-names)
+
+[#getMemberNameAndParameterClassNamesIdentityString_]
+=== getMemberNameAndParameterClassNamesIdentityString()
+
+Member Identity String (class omitted), including parameters if any.
+
+[#getTranslationContext_]
+=== getTranslationContext()
+
+Context to be used for i18n translation.

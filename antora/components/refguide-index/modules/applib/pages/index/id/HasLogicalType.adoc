@@ -7,14 +7,82 @@
 .HasLogicalType.java
 ----
 interface HasLogicalType {
-  LogicalType getLogicalType()
+  LogicalType logicalType()
+  String logicalTypeName()     // <.>
+  String className()     // <.>
+  LogicalType getLogicalType()     // <.>
   String getLogicalTypeName()     // <.>
+  String getClassName()     // <.>
 }
 ----
 
+<.> xref:#logicalTypeName_[logicalTypeName()]
+<.> xref:#className_[className()]
+<.> xref:#getLogicalType_[getLogicalType()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use #logicalType()
+====
+--
 <.> xref:#getLogicalTypeName_[getLogicalTypeName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use #logicalName()
+====
+--
+<.> xref:#getClassName_[getClassName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use #className()
+====
+--
 
 == Members
 
+[#logicalTypeName_]
+=== logicalTypeName()
+
+[#className_]
+=== className()
+
+[#getLogicalType_]
+=== getLogicalType()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use #logicalType()
+====
+
 [#getLogicalTypeName_]
 === getLogicalTypeName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use #logicalName()
+====
+
+[#getClassName_]
+=== getClassName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use #className()
+====
