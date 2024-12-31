@@ -565,14 +565,14 @@ As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a releas
 four
 branches:
 
-// * `v3-jpa`; `v3-jdo`; `v4-jpa`; `v4-jdo`
-* `v3-jpa`; `v3-jdo`
+// * `{page-causewaycurrmajorversion}-jpa`; `{page-causewaycurrmajorversion}-jdo`; `{page-causewaynextmajorversion}-jpa`; `{page-causewaynextmajorversion}-jdo`
+* `{page-causewaycurrmajorversion}-jpa`; `{page-causewaycurrmajorversion}-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-// * `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`; `v4-jpa-SNAPSHOT`; `v4-jdo-SNAPSHOT`
-* `v3-jpa-SNAPSHOT`; `v3-jdo-SNAPSHOT`
+// * `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`; `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`; `{page-causewaynextmajorversion}-jpa-SNAPSHOT`; `{page-causewaynextmajorversion}-jdo-SNAPSHOT`
+* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`; `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 

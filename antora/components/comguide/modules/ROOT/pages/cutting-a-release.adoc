@@ -541,14 +541,14 @@ The remote tags aren't visible locally but can be seen link:https://github.com/a
 // For each of the two starter apps, we maintain (currently) eight branches:
 For each of the two starter apps, we maintain four branches:
 
-// * `v3-jpa` and `v3-jdo` ; and also `v4-jpa` and `v4-jdo`
-* `v3-jpa` and `v3-jdo`
+// * `{page-causewaycurrmajorversion}-jpa` and `{page-causewaycurrmajorversion}-jdo` ; and also `{page-causewaynextmajorversion}-jpa` and `{page-causewaynextmajorversion}-jdo`
+* `{page-causewaycurrmajorversion}-jpa` and `{page-causewaycurrmajorversion}-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-// * `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT` ; and also `v4-jpa-SNAPSHOT` and `v4-jdo-SNAPSHOT`
-* `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT`
+// * `{page-causewaycurrmajorversion}-jpa-SNAPSHOT` and `{page-causewaycurrmajorversion}-jdo-SNAPSHOT` ; and also `{page-causewaynextmajorversion}-jpa-SNAPSHOT` and `{page-causewaynextmajorversion}-jdo-SNAPSHOT`
+* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT` and `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
@@ -562,13 +562,13 @@ In order that we don't break the starter apps while a release is being voted on,
 
 For _helloworld_, we create a release branch for both variants:
 
-* for `v3-jpa`:
+* for `jpa`:
 +
 ** Checkout the branch, bump versions, and commit:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
@@ -605,7 +605,7 @@ git push -u origin $CAUSEWAYBRANCH-jpa
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jdo-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jdo-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
@@ -627,9 +627,9 @@ mvnd spring-boot:run
 
 ** Make any additional changes that might be required, and re-test.
 +
-This might be easiest to just cherry-pick commits made on the `v3-jpa` branch.
+This might be easiest to just cherry-pick commits made on the `{page-causewaycurrmajorversion}-jpa` branch.
 
-** Merge in the `v3-jpa` branch, discarding any conflicts.
+** Merge in the `{page-causewaycurrmajorversion}-jpa` branch, discarding any conflicts.
 +
 [source,bash,subs="attributes+"]
 ----
@@ -661,7 +661,7 @@ For _simple app_, the steps are almost the same:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
@@ -698,7 +698,7 @@ git push -u origin $CAUSEWAYBRANCH-jpa
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jdo-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jdo-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
