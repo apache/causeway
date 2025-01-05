@@ -17,7 +17,7 @@
 
 name: tutorials
 title: "Tutorials"
-version: latest
+version: 3.2.0
 start_page: ROOT:about.adoc
 nav:
   - modules/ROOT/nav.adoc
@@ -25,5 +25,5 @@ nav:
 
 asciidoc:
   attributes:
-    tag-version: '3.1.0'
+    tag-version: '3.2.0'
     jdk-version: '17'
