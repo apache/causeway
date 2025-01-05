@@ -38,12 +38,6 @@ You will also require the following commands/tools:
 * `gpg` - to verify signatures
 * `unzip` - to unzip the ZIP files
 * JDK 17
-+
-[NOTE]
-====
-v2 is for the most part compatible with Java 11 and almost all of the modules target Java 11.
-The one exception is GraphQL viewer's test modules, which require Java 17.
-====
 
 * Apache Maven (`mvn`) 3.9.6+
 

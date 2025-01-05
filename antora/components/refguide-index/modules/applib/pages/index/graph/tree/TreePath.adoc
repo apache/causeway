@@ -1,4 +1,4 @@
-= TreePath
+= TreePath _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Provides an unambiguous way to address nodes by position within a tree-structure. Examples:
@@ -12,27 +12,32 @@ Provides an unambiguous way to address nodes by position within a tree-structure
 [source,java]
 .TreePath.java
 ----
-class TreePath {
+record TreePath {
   TreePath(int[] canonicalPath)
+  TreePath parse(String treePathStringified, String delimiter)     // <.>
   TreePath of(int... canonicalPath)
   TreePath root()
   int size()     // <.>
   TreePath append(int indexWithinSiblings)     // <.>
   TreePath subPath(int startIndex)     // <.>
-  TreePath getParentIfAny()     // <.>
+  Optional<TreePath> parent()     // <.>
   boolean isRoot()
   boolean startsWith(TreePath other)
   IntStream streamPathElements()
   OptionalInt childIndex()     // <.>
   String stringify(String delimiter)
   Stream<TreePath> streamUpTheHierarchyStartingAtSelf()
-  TreePath parse(String treePathStringified, String delimiter)     // <.>
   boolean equals(Object obj)
   int hashCode()
   String toString()
 }
 ----
 
+<.> xref:#parse_String_String[parse(String, String)]
++
+--
+Parses stringified tree path of format _031_ ..., as returned by _TreePath#stringify(String)_ .
+--
 <.> xref:#size_[size()]
 +
 --
@@ -44,7 +49,7 @@ Number of path-elements.
 --
 Returns a sub-path containing all the path-elements of this path, skipping startIndex number of path elements at the start.
 --
-<.> xref:#getParentIfAny_[getParentIfAny()]
+<.> xref:#parent_[parent()]
 +
 --
 Returns a TreePath instance that represents the parent path of this TreePath, if this is not the root.
@@ -54,13 +59,15 @@ Returns a TreePath instance that represents the parent path of this TreePath, if
 --
 Optionally the 2nd path-element's value, based on presence. It corresponds to the sibling index of the child node this tree-path (either directly references or) includes.
 --
-<.> xref:#parse_String_String[parse(String, String)]
-+
---
-Parses stringified tree path of format _031_ ..., as returned by _TreePath#stringify(String)_ .
---
 
 == Members
+
+[#parse_String_String]
+=== parse(String, String)
+
+Parses stringified tree path of format _031_ ..., as returned by _TreePath#stringify(String)_ .
+
+For null or empty input the root is returned.
 
 [#size_]
 === size()
@@ -75,8 +82,8 @@ Number of path-elements.
 
 Returns a sub-path containing all the path-elements of this path, skipping startIndex number of path elements at the start.
 
-[#getParentIfAny_]
-=== getParentIfAny()
+[#parent_]
+=== parent()
 
 Returns a TreePath instance that represents the parent path of this TreePath, if this is not the root.
 
@@ -84,10 +91,3 @@ Returns a TreePath instance that represents the parent path of this TreePath, if
 === childIndex()
 
 Optionally the 2nd path-element's value, based on presence. It corresponds to the sibling index of the child node this tree-path (either directly references or) includes.
-
-[#parse_String_String]
-=== parse(String, String)
-
-Parses stringified tree path of format _031_ ..., as returned by _TreePath#stringify(String)_ .
-
-For null or empty input the root is returned.

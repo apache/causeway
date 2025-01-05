@@ -5,7 +5,7 @@ Handles content negotiation for accept headers requiring `application/json` or `
 
 In the accept header the profile is also checked dependent on the resource being invoked; either `profile="urn:org.restfulobjects:repr-types/object"` for an object representation, or `profile="profile=urn:org.restfulobjects:repr-types/action-result"` for an action result.
 
-If the accept header specifies `application/xml` then the service additionally verifies that the (mapped) domain object's runtime type is annotated with the JAXB _javax.xml.bind.annotation.XmlRootElement_ annotation so that RestEasy is able to unambiguously serialize it.
+If the accept header specifies `application/xml` then the service additionally verifies that the (mapped) domain object's runtime type is annotated with the JAXB _jakarta.xml.bind.annotation.XmlRootElement_ annotation so that RestEasy is able to unambiguously serialize it.
 
 == API
 

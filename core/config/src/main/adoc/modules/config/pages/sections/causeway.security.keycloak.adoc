@@ -22,7 +22,7 @@ base-url
 For example, if running a keycloak using Docker container, such as:
 
 ....
-         docker run -p 9090:8080 \             -e KEYCLOAK_USER=admin \             -e KEYCLOAK_PASSWORD=admin \             quay.io/keycloak/keycloak:19.0.1     
+ docker run -p 9090:8080 \ -e KEYCLOAK_USER=admin \ -e KEYCLOAK_PASSWORD=admin \ quay.io/keycloak/keycloak:19.0.1 
 ....
 
 , then the URL would be "http://localhost:9090/auth".

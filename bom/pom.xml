@@ -72,7 +72,7 @@ identified
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2024-07-02T12:45:04Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2024-12-31T16:13:49Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -3012,9 +3012,9 @@ identified
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.projectlombok</groupId>
+                        <groupId>io.github.qsy7.org.projectlombok</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>1.18.20.0</version>
+                        <version>1.18.30</version>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
                             <outputDirectory>${delombok.output}</outputDirectory>

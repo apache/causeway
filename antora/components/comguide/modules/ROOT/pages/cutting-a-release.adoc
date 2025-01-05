@@ -182,7 +182,7 @@ For example:
 ----
 export CAUSEWAYJIRA=CAUSEWAY-9999                           # <.>
 export CAUSEWAYTMP=/c/tmp                               # <.>
-export CAUSEWAYREL={page-causewayrelv3}                             # <.>
+export CAUSEWAYREL={page-causewayreleaseversion}                             # <.>
 export CAUSEWAYRC=RC1                                   # <.>
 export CAUSEWAYBRANCH=release-$CAUSEWAYREL-$CAUSEWAYRC
 export CAUSEWAYART=causeway
@@ -197,7 +197,7 @@ env | grep CAUSEWAY | sort
 
 [IMPORTANT]
 ====
-The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayrelv3}`).
+The branch name is intentionally *not* the same as the eventual tag names (eg `causeway-{page-causewayreleaseversion}`).
 ====
 
 
@@ -495,17 +495,17 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 === Reset `revision` property
 
 At the <<bump-code-to-causewayrel,beginning>> of the release process we bumped the version to the release version, ie `$CAUSEWAYREL`.
-With the release now deployed we now need to reset the revision back down to the base snapshot, ie `2.0.0-SNAPSHOT`.
+With the release now deployed we now need to reset the revision back down to the base snapshot, ie `{page-causewaysnapshotversion}`.
 
 Therefore, still in the `bom` directory:
 
 [source,bash,subs="attributes+"]
 ----
-mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o -T1C -Dgithub
 
 pushd ../starters
-mvnd versions:set -DnewVersion=2.0.0-SNAPSHOT
+mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o
 popd
 
@@ -538,19 +538,23 @@ The remote tags aren't visible locally but can be seen link:https://github.com/a
 [#update-starter-apps]
 == Update starter apps
 
-For each of the two starter apps, we maintain (currently) eight branches:
+// For each of the two starter apps, we maintain (currently) eight branches:
+For each of the two starter apps, we maintain four branches:
 
-* `v2-jpa` and `v2-jdo` ; and also `v3-jpa` and `v3-jdo`
+// * `{page-causewaycurrmajorversion}-jpa` and `{page-causewaycurrmajorversion}-jdo` ; and also `{page-causewaynextmajorversion}-jpa` and `{page-causewaynextmajorversion}-jdo`
+* `{page-causewaycurrmajorversion}-jpa` and `{page-causewaycurrmajorversion}-jdo`
 +
 These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
 These are the branches referenced from the home page and getting started pages of the website.
 
-* `v2-jpa-SNAPSHOT` and `v2-jdo-SNAPSHOT` ; and also `v3-jpa-SNAPSHOT` and `v3-jdo-SNAPSHOT`
+// * `{page-causewaycurrmajorversion}-jpa-SNAPSHOT` and `{page-causewaycurrmajorversion}-jdo-SNAPSHOT` ; and also `{page-causewaynextmajorversion}-jpa-SNAPSHOT` and `{page-causewaynextmajorversion}-jdo-SNAPSHOT`
+* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT` and `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`
 +
 These reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `v{2,3}-jpa` to `v{2,3}-jpa-SNAPSHOT` and similarly moves `v{2,3}-jdo` up to `v{2,3}-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
+The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT` and similarly moves `vN-jdo` up to `vN-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 This is done for all current `vN` branches.
+The non-SNAPSHOT builds should always reference the most recently release.
 
 In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
 
@@ -558,13 +562,13 @@ In order that we don't break the starter apps while a release is being voted on,
 
 For _helloworld_, we create a release branch for both variants:
 
-* for `v3-jpa`:
+* for `jpa`:
 +
 ** Checkout the branch, bump versions, and commit:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT    # or: git checkout v2-jpa-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
@@ -601,7 +605,7 @@ git push -u origin $CAUSEWAYBRANCH-jpa
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jdo-SNAPSHOT    # or: git checkout v2-jdo-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jdo-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
@@ -623,9 +627,9 @@ mvnd spring-boot:run
 
 ** Make any additional changes that might be required, and re-test.
 +
-This might be easiest to just cherry-pick commits made on the `v3-jpa` branch.
+This might be easiest to just cherry-pick commits made on the `{page-causewaycurrmajorversion}-jpa` branch.
 
-** Merge in the `v3-jpa` branch, discarding any conflicts.
+** Merge in the `{page-causewaycurrmajorversion}-jpa` branch, discarding any conflicts.
 +
 [source,bash,subs="attributes+"]
 ----
@@ -657,7 +661,7 @@ For _simple app_, the steps are almost the same:
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jpa-SNAPSHOT    # or: git checkout v2-jpa-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jpa-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
@@ -694,7 +698,7 @@ git push -u origin $CAUSEWAYBRANCH-jpa
 +
 [source,bash,subs="attributes+"]
 ----
-git checkout v3-jdo-SNAPSHOT    # or: git checkout v2-jdo-SNAPSHOT
+git checkout {page-causewaycurrmajorversion}-jdo-SNAPSHOT
 git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
@@ -834,7 +838,7 @@ Use the following subject, eg:
 
 [source,subs="attributes+"]
 ----
-[VOTE] Apache Causeway Core release {page-causewayrelv3} RC1
+[VOTE] Apache Causeway Core release {page-causewayreleaseversion} RC1
 ----
 
 And use the following body:
@@ -846,7 +850,7 @@ I've just cut a new release of the Apache Causeway Framework.
 The source code zip artifact has been uploaded to a staging repository on
 https://repository.apache.org, along with its corresponding .asc signature.
 
-In the source code repo the code has been tagged as causeway-{page-causewayrelv3}-RC1;
+In the source code repo the code has been tagged as causeway-{page-causewayreleaseversion}-RC1;
 see https://github.com/apache/causeway/tags
 
 To verify the source code itself, you can use the following commands
@@ -872,7 +876,7 @@ The vote will be open for a minimum of 72 hours.
 
 Remember to update:
 
-* the version number (`{page-causewayrelv3}` or whatever)
+* the version number (`{page-causewayreleaseversion}` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`11xx` or whatever)
 

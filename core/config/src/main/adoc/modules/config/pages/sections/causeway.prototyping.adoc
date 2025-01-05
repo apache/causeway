@@ -40,7 +40,7 @@ Corresponds to Spring Boot's "spring.h2.console.settings.web-allow-others" confi
 causeway.prototyping. +
 if-disabled-policy
 
-| 
+|  disable
 | Whether and how to display any properties, actions and collections whose usability has been vetoed.
 
 By default, such object members are shown as disabled, with the tooltip indicating why. Setting the property to SHOW_AS_DISABLED_WITH_DIAGNOSTICS shows additional detail in the tooltip.
@@ -53,7 +53,7 @@ This config property only applies in prototyping mode.
 causeway.prototyping. +
 if-hidden-policy
 
-| 
+|  hide
 | Whether and how to display any properties, actions and collections whose visibility has been vetoed.
 
 By default, such object members are of course hidden. However, this config property can be used to instead show these objects as disabled, with the tooltip indicating why the object member has been vetoed. Setting the property to SHOW_AS_DISABLED_WITH_DIAGNOSTICS shows additional detail in the tooltip.

@@ -9,11 +9,76 @@ Fundamental building block for graph structures.
 .Vertex.java
 ----
 interface Vertex<T> {
-  T getValue()
-  int getIncomingCount()
-  int getOutgoingCount()
+  T value()
+  int incomingCount()
+  int outgoingCount()
   Stream<Edge<T>> streamIncoming()
   Stream<Edge<T>> streamOutgoing()
+  T getValue()     // <.>
+  int getIncomingCount()     // <.>
+  int getOutgoingCount()     // <.>
 }
 ----
 
+<.> xref:#getValue_[getValue()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#value()_
+====
+--
+<.> xref:#getIncomingCount_[getIncomingCount()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#incomingCount()_
+====
+--
+<.> xref:#getOutgoingCount_[getOutgoingCount()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#outgoingCount()_
+====
+--
+
+== Members
+
+[#getValue_]
+=== getValue()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#value()_
+====
+
+[#getIncomingCount_]
+=== getIncomingCount()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#incomingCount()_
+====
+
+[#getOutgoingCount_]
+=== getOutgoingCount()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#outgoingCount()_
+====

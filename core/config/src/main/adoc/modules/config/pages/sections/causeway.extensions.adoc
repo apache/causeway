@@ -16,7 +16,7 @@ include::../section-hooks/causeway.extensions~pre.adoc[]
 causeway.extensions.audit-trail. +
 persist
 
-| 
+|  enabled
 | Whether the ``EntityPropertyChangeSubscriber`` implementation provided by this extension (which persists property changes to the audit trail) is enabled or not.
 
 One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``EntityPropertyChangeSubscriber`` that is provided by the _audittrail_ extension. Because entity property changes are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
@@ -27,7 +27,7 @@ One reason to use this option is if you wish to provide your own implementation 
 causeway.extensions.command-log. +
 persist
 
-| 
+|  enabled
 | Whether the ``CommandSubscriber`` implementation provided by this extension (which persists commands to the command log) is enabled or not.
 
 One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``CommandSubscriber`` that is provided by the _commandlog_ extension. Because commands are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
@@ -50,7 +50,7 @@ causeway.extensions.command-log. +
 run-background-commands. +
 on-failure-policy
 
-| 
+|  stop-the-line
 | If there is an exception executing one of the commands, what should be done?
 
 
@@ -244,7 +244,7 @@ For more information, check the usage of the ``headers`` init parameter for http
 causeway.extensions.execution-log. +
 persist
 
-| 
+|  enabled
 | Whether the ``ExecutionSubscriber`` implementation provided by this extension (which persists executions to the execution log) is enabled or not.
 
 One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``ExecutionSubscriber`` that is provided by the _executionLog_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
@@ -255,7 +255,7 @@ One reason to use this option is if you wish to provide your own implementation 
 causeway.extensions. +
 execution-outbox.persist
 
-| 
+|  enabled
 | Whether the ``ExecutionSubscriber`` implementation provided by this extension (which persists executions to the outbox) is enabled or not.
 
 One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the outbox implementation of ``ExecutionSubscriber`` that is provided by the _executionOutbox_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the outbox implementation from doing anything using this setting.
@@ -294,7 +294,7 @@ github.repository
 causeway.extensions.secman. +
 delegated-users.auto-create-policy
 
-| 
+|  auto-create-as-locked
 | Whether delegated users should be autocreated as locked (the default) or unlocked.
 
 BE AWARE THAT if any users are auto-created as unlocked, then the set of roles that they are given should be highly restricted !!!
@@ -321,7 +321,7 @@ abstract-role-and-permissions- +
 fixture-script. +
 unknown-feature-id-checking-policy
 
-| 
+|  ignore
 | Whether to check if every featureId passed in exists or not.
 
 
@@ -330,7 +330,7 @@ unknown-feature-id-checking-policy
 causeway.extensions.secman. +
 permissions-evaluation-policy
 
-| 
+|  allow-beats-veto
 | If there are conflicting (allow vs veto) permissions at the same scope, then this policy determines whether to prefer to allow the permission or to veto it.
 
 This is only used an implementation of secman's ``PermissionsEvaluationService`` SPI has not been provided explicitly.
@@ -453,7 +453,7 @@ Eg. seed from a YAML file, that was previously exported by SecMan's ApplicationR
 causeway.extensions.secman. +
 user-menu-me-action-policy
 
-| 
+|  hide
 | Whether the presence of SecMan should result in the automatic suppression of the ``UserMenu``'s ``me#act() me()`` action.
 
 This is normally what is required as SecMan's ``ApplicationUser`` is a more comprehensive representation of the current user. If the default ``me#act() me()`` action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.

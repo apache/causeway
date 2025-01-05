@@ -35,6 +35,8 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.graphql.model</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/model</git-plugin.propertiesDir>
+
+        <lombok.delombok.skip>true</lombok.delombok.skip>
 	</properties>
 
 	<dependencies>
@@ -53,7 +55,7 @@
 			<groupId>org.springframework.graphql</groupId>
 			<artifactId>spring-graphql</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.graphql-java</groupId>
 			<artifactId>graphql-java-extended-scalars</artifactId>

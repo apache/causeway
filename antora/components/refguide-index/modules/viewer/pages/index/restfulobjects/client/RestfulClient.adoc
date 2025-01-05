@@ -6,7 +6,7 @@ Setup the Restful Client with Basic-Auth:Make a Request and then digest the Resp
 For example:
 
 ----
-val clientConfig = RestfulClientConfig.builder();
+var clientConfig = RestfulClientConfig.builder();
     .restfulBaseUrl("http://localhost:8080/helloworld/restful/")
         .authenticationMode(AuthenticationMode.BASIC)
         .basicAuthUser("sven")

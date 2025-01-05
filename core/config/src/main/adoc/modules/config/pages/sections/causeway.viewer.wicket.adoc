@@ -12,6 +12,27 @@ include::../section-hooks/causeway.viewer.wicket~pre.adoc[]
 |Default
 |Description
 |
+[[causeway.viewer.wicket.action-column-enabled]]
+causeway.viewer.wicket. +
+action-column-enabled
+
+|  true
+| Whether actions, that have explicit ``hidden = Where`` semantics to enable them in tables, should be gathered into an action column. That is, collections of domain objects are presented in the UI as tables, where corresponding domain object actions are gathered into an additional (typically trailing) column (labeled 'action-column').
+
+
+|
+[[causeway.viewer.wicket.action-indication-when-bound-to-dialog]]
+causeway.viewer.wicket. +
+action-indication-when-bound-to- +
+dialog
+
+|  true
+| Whether actions, that on click will show a dialog, should be indicated by a trailing ellipsis on the action's label.
+
+Applies to both, action buttons and action menu items.
+
+
+|
 [[causeway.viewer.wicket.ajax-debug-mode]]
 causeway.viewer.wicket. +
 ajax-debug-mode
@@ -174,7 +195,7 @@ By default, depends on the mode (prototyping = enabled, server = disabled). This
 [[causeway.viewer.wicket.dialog-mode]]
 causeway.viewer.wicket.dialog-mode
 
-| 
+|  sidebar
 | Whether the dialog mode rendered when invoking actions on domain objects should be to use the sidebar (the default) or to use a modal dialog.
 
 This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
@@ -185,7 +206,7 @@ This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle(
 causeway.viewer.wicket. +
 dialog-mode-for-menu
 
-| 
+|  modal
 | Whether the dialog mode rendered when invoking actions on domain services (that is, menus) should be to use a modal dialog (the default) or to use the sidebar panel.
 
 This can be overridden on a case-by-case basis using ``ActionLayout#promptStyle()``.
@@ -304,7 +325,7 @@ causeway.viewer.wicket. +
 message-popups.placement. +
 horizontal
 
-| 
+|  right
 | Whether to display popups aligned ot the left or right of the page.
 
 The default is to show them aligned to the right
@@ -315,7 +336,7 @@ The default is to show them aligned to the right
 causeway.viewer.wicket. +
 message-popups.placement.vertical
 
-| 
+|  top
 | Whether to display popups at the top or the bottom of the page.
 
 The default is to show them at the top.
@@ -359,7 +380,7 @@ This behaviour is enabled by default, but can be disabled using this flag.
 causeway.viewer.wicket. +
 prompt-style
 
-| 
+|  inline
 | Whether to use a modal dialog for property edits and for actions associated with properties.
 
 This can be overridden on a case-by-case basis using ``@PropertyLayout#promptStyle`` and ``@ActionLayout#promptStyle``.

@@ -8,11 +8,11 @@
 
 When making updates for simpleapp, to the current snapshot:
 
-. make change to `v2-jpa-SNAPSHOT`
-. forward port from `v2-jpa-SNAPSHOT` to `v3-jpa-SNAPSHOT`
-. merge down from `v2-jpa-SNAPSHOT` to `v2-jdo-SNAPSHOT`
-. forward port from `v2-jdo-SNAPSHOT` to `v3-jdo-SNAPSHOT`
-. merge down from `v3-jpa-SNAPSHOT` to `v3-jdo-SNAPSHOT` (should be a no-op)
+. make change to `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`
+// . forward port from `{page-causewaycurrmajorversion}-jpa-SNAPSHOT` to `{page-causewaynextmajorversion}-jpa-SNAPSHOT`
+. merge down from `{page-causewaycurrmajorversion}-jpa-SNAPSHOT` to `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`
+// . forward port from `{page-causewaycurrmajorversion}-jdo-SNAPSHOT` to `{page-causewaynextmajorversion}-jdo-SNAPSHOT`
+// . merge down from `{page-causewaynextmajorversion}-jpa-SNAPSHOT` to `{page-causewaynextmajorversion}-jdo-SNAPSHOT` (should be a no-op)
 
 [NOTE]
 ====

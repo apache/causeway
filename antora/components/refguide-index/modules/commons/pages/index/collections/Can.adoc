@@ -62,6 +62,8 @@ interface Can<T> {
   Can<Can<T>> partitionInnerBound(int maxInnerSize)     // <.>
   Can<Can<T>> partitionOuterBound(int outerSizeYield)     // <.>
   int indexOf(T element)     // <.>
+  boolean anyMatch(Predicate<? super T> predicate)     // <.>
+  boolean allMatch(Predicate<? super T> predicate)     // <.>
   boolean isEqualTo(Can<?> other)     // <.>
   boolean startsWith(Can<?> other)     // <.>
   boolean endsWith(Can<?> other)     // <.>
@@ -70,19 +72,17 @@ interface Can<T> {
   boolean isCardinalityOne()
   boolean isCardinalityMultiple()
   Collector<T, ?, Can<T>> toCan()
-  Collector<T, ?, M> toMapCollector(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
   List<T> toList()     // <.>
   List<T> toArrayList()     // <.>
   Set<T> toSet()     // <.>
   Set<T> toSet(Consumer<T> onDuplicated)     // <.>
-  C toCollection(Supplier<C> collectionFactory)     // <.>
   T[] toArray(T[] a)     // <.>
   T[] toArray(Class<T> elementType)     // <.>
   Map<K, T> toMap(Function<? super T, ? extends K> keyExtractor)     // <.>
-  Map<K, T> toUnmodifiableMap(Function<? super T, ? extends K> keyExtractor)     // <.>
-  M toMap(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
-  Map<K, T> toUnmodifiableMap(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
+  Map<K, T> toMap(Function<? super T, ? extends K> keyExtractor, BinaryOperator<T> mergeFunction, Supplier<M> mapFactory)     // <.>
   R collect(Collector<? super T, A, R> collector)     // <.>
+  Map<K, Can<T>> groupBy(Function<? super T, ? extends K> classifier)     // <.>
+  Map<K, Can<T>> groupBy(Function<? super T, ? extends K> classifier, Supplier<M> mapFactory)     // <.>
   String join(String delimiter)     // <.>
   String join(Function<? super T, String> toStringFunction, String delimiter)     // <.>
 }
@@ -280,6 +280,16 @@ Tries to split this xref:refguide:commons:index/collections/Can.adoc[Can] into o
 --
 Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element. More formally, returns the lowest index `i` such that `(o==null ? get(i)==null : o.equals(get(i)))` , or -1 if there is no such index.
 --
+<.> xref:#anyMatch_Predicate[anyMatch(Predicate)]
++
+--
+Returns whether any elements of this xref:refguide:commons:index/collections/Can.adoc[Can] match the provided predicate.
+--
+<.> xref:#allMatch_Predicate[allMatch(Predicate)]
++
+--
+Returns whether all elements of this stream match the provided predicate.
+--
 <.> xref:#isEqualTo_Can[isEqualTo(Can)]
 <.> xref:#startsWith_Can[startsWith(Can)]
 +
@@ -291,42 +301,36 @@ Let _n_ be the number of elements in _other_ . Returns whether the first _n_ ele
 --
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 --
-<.> xref:#toMapCollector_Function_BinaryOperator_Supplier[toMapCollector(Function, BinaryOperator, Supplier)]
-+
---
-Return a _Collector_ , that delegates _Map_ creation to _Collectors#toMap(Function, Function, BinaryOperator, Supplier)_ .
---
 <.> xref:#toList_[toList()]
 <.> xref:#toArrayList_[toArrayList()]
 <.> xref:#toSet_[toSet()]
 <.> xref:#toSet_Consumer[toSet(Consumer)]
-<.> xref:#toCollection_Supplier[toCollection(Supplier)]
 <.> xref:#toArray_T[toArray(T)]
 <.> xref:#toArray_Class[toArray(Class)]
 <.> xref:#toMap_Function[toMap(Function)]
 +
 --
-Returns a modifiable (hash) _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
---
-<.> xref:#toUnmodifiableMap_Function[toUnmodifiableMap(Function)]
-+
---
-Variant of _#toMap(Function)_ , that protects the resulting _Map_ from modification.
+Returns a _Map_ with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
 --
 <.> xref:#toMap_Function_BinaryOperator_Supplier[toMap(Function, BinaryOperator, Supplier)]
 +
 --
-Returns a modifiable _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
---
-<.> xref:#toUnmodifiableMap_Function_BinaryOperator_Supplier[toUnmodifiableMap(Function, BinaryOperator, Supplier)]
-+
---
-Variant of _#toMap(Function, BinaryOperator, Supplier)_ , that protects the resulting _Map_ from modification.
+Returns a _Map_ with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
 --
 <.> xref:#collect_Collector[collect(Collector)]
 +
 --
 Semantically equivalent to _#stream()_ . _Stream#collect(Collector) collect(collector)_ .
+--
+<.> xref:#groupBy_Function[groupBy(Function)]
++
+--
+Groups elements of this xref:refguide:commons:index/collections/Can.adoc[Can] into a multi-valued _Map_ , according to given classification function.
+--
+<.> xref:#groupBy_Function_Supplier[groupBy(Function, Supplier)]
++
+--
+Groups elements of this xref:refguide:commons:index/collections/Can.adoc[Can] into a multi-valued _Map_ , according to given classification function.
 --
 <.> xref:#join_String[join(String)]
 +
@@ -580,6 +584,16 @@ An outer cardinality of outerSizeYield is either exactly met or under-represente
 
 Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not contain the element. More formally, returns the lowest index `i` such that `(o==null ? get(i)==null : o.equals(get(i)))` , or -1 if there is no such index.
 
+[#anyMatch_Predicate]
+=== anyMatch(Predicate)
+
+Returns whether any elements of this xref:refguide:commons:index/collections/Can.adoc[Can] match the provided predicate.
+
+[#allMatch_Predicate]
+=== allMatch(Predicate)
+
+Returns whether all elements of this stream match the provided predicate.
+
 [#isEqualTo_Can]
 === isEqualTo(Can)
 
@@ -593,11 +607,6 @@ Let _n_ be the number of elements in _other_ . Returns whether the first _n_ ele
 
 Let _n_ be the number of elements in _other_ . Returns whether the last _n_ elements of this _Can_ are element-wise equal to _other_ .
 
-[#toMapCollector_Function_BinaryOperator_Supplier]
-=== toMapCollector(Function, BinaryOperator, Supplier)
-
-Return a _Collector_ , that delegates _Map_ creation to _Collectors#toMap(Function, Function, BinaryOperator, Supplier)_ .
-
 [#toList_]
 === toList()
 
@@ -610,9 +619,6 @@ Return a _Collector_ , that delegates _Map_ creation to _Collectors#toMap(Functi
 [#toSet_Consumer]
 === toSet(Consumer)
 
-[#toCollection_Supplier]
-=== toCollection(Supplier)
-
 [#toArray_T]
 === toArray(T)
 
@@ -622,24 +628,18 @@ Return a _Collector_ , that delegates _Map_ creation to _Collectors#toMap(Functi
 [#toMap_Function]
 === toMap(Function)
 
-Returns a modifiable (hash) _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+Returns a _Map_ with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+
+The result is protected from modification. (If you instead need a modifiable result, use the _#collect(Collector)_ method.)
 
 On duplicate keys, behavior is unspecified.
-
-[#toUnmodifiableMap_Function]
-=== toUnmodifiableMap(Function)
-
-Variant of _#toMap(Function)_ , that protects the resulting _Map_ from modification.
 
 [#toMap_Function_BinaryOperator_Supplier]
 === toMap(Function, BinaryOperator, Supplier)
 
-Returns a modifiable _Map_ , with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
+Returns a _Map_ with values from this xref:refguide:commons:index/collections/Can.adoc[Can] , and keys as produced by given _keyExtractor_ .
 
-[#toUnmodifiableMap_Function_BinaryOperator_Supplier]
-=== toUnmodifiableMap(Function, BinaryOperator, Supplier)
-
-Variant of _#toMap(Function, BinaryOperator, Supplier)_ , that protects the resulting _Map_ from modification.
+The result is protected from modification. (If you instead need a modifiable result, use the _#collect(Collector)_ method.)
 
 [#collect_Collector]
 === collect(Collector)
@@ -647,6 +647,22 @@ Variant of _#toMap(Function, BinaryOperator, Supplier)_ , that protects the resu
 Semantically equivalent to _#stream()_ . _Stream#collect(Collector) collect(collector)_ .
 
 (Actual implementations might be optimized.)
+
+Whether the result is protected from modification, is up to given _Collector_ .
+
+[#groupBy_Function]
+=== groupBy(Function)
+
+Groups elements of this xref:refguide:commons:index/collections/Can.adoc[Can] into a multi-valued _Map_ , according to given classification function.
+
+The result is protected from modification. (If you instead need a modifiable result, use the _#collect(Collector)_ method.)
+
+[#groupBy_Function_Supplier]
+=== groupBy(Function, Supplier)
+
+Groups elements of this xref:refguide:commons:index/collections/Can.adoc[Can] into a multi-valued _Map_ , according to given classification function.
+
+The result is protected from modification. (If you instead need a modifiable result, use the _#collect(Collector)_ method.)
 
 [#join_String]
 === join(String)

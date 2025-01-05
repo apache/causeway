@@ -30,7 +30,7 @@ Add an entry for the _Execution Log_ module's own BOM:
             <artifactId>causeway-extensions-executionlog</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv3}</version>
+            <version>{page-causewayreleaseversion}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>

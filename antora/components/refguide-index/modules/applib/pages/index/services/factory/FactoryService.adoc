@@ -18,6 +18,7 @@ interface FactoryService {
   T viewModel(Class<T> viewModelClass)     // <.>
   T viewModel(T viewModel)     // <.>
   T create(Class<T> domainClass)     // <.>
+  TreeNode<T> treeNode(T root)     // <.>
 }
 ----
 
@@ -65,6 +66,11 @@ Resolves injection points for and calls post-construct on given view-model insta
 +
 --
 Creates a new instance of the specified class, with injection points resolved, post-construct called and defaults applied.
+--
+<.> xref:#treeNode_T[treeNode(T)]
++
+--
+In support of built-in tree semantics, as inferred from _PropertyLayout#navigableSubtree()_ or _CollectionLayout#navigableSubtree()_ annotations.
 --
 
 == Members
@@ -119,6 +125,11 @@ Resolves injection points for and calls post-construct on given view-model insta
 === create(Class)
 
 Creates a new instance of the specified class, with injection points resolved, post-construct called and defaults applied.
+
+[#treeNode_T]
+=== treeNode(T)
+
+In support of built-in tree semantics, as inferred from _PropertyLayout#navigableSubtree()_ or _CollectionLayout#navigableSubtree()_ annotations.
 
 include::hooks/FactoryService_010-implementation.adoc[]
 

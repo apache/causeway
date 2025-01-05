@@ -23,7 +23,7 @@ In the webapp module of your application, add the following dependency:
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
-        <version>{page-causewayprevv3}</version>
+        <version>{page-causewayreleaseversion}</version>
     </dependency>
 </dependencies>
 ----
@@ -79,7 +79,7 @@ To use the Shiro authorizor, also add in the corresponding dependency:
     <dependency>
         <groupId>org.apache.causeway.security</groupId>
         <artifactId>causeway-security-shiro</artifactId>
-        <version>{page-causewayprevv3}</version>
+        <version>{page-causewayreleaseversion}</version>
     </dependency>
 </dependencies>
 ----
@@ -283,7 +283,7 @@ To use the Secman authorizor, also add in the corresponding dependency:
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-secman-integration</artifactId>
-        <version>{page-causewayprevv3}</version>
+        <version>{page-causewayreleaseversion}</version>
     </dependency>
 </dependencies>
 ----

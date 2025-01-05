@@ -25,7 +25,7 @@ In your application's top level `pom.xml`, add a dependency for this module's ow
             <artifactId>causeway-extensions-tabular</artifactId>
             <scope>import</scope>
             <type>pom</type>
-            <version>{page-causewayprevv3}</version>
+            <version>{page-causewayreleaseversion}</version>
         </dependency>
     </dependencies>
 </dependencyManagement>
