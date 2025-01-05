@@ -25,5 +25,5 @@ nav:
 
 asciidoc:
   attributes:
-    tag-version: '3.1.0'
+    tag-version: '3.2.0'
     jdk-version: '17'
