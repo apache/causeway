@@ -67,10 +67,11 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
 
     private void buildGui() {
 
-        final CollectionModel model = getModel();
+        var collectionModel = getModel();
+        if(collectionModel.isHidden()) return;
 
-        final NotificationPanel feedback = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
-        addOrReplace(feedback);
+        var feedbackPanel = Wkt.ajaxEnable(new NotificationPanel(ID_FEEDBACK));
+        addOrReplace(feedbackPanel);
 
         var config = new CalendarConfig();
         config.getHeaderToolbar().setLeft("prevYear,prev,next,nextYear, today");
@@ -79,7 +80,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
         config.setSelectable(true);
         config.setAllDaySlot(true);
 
-        final Iterable<ManagedObject> entityList = model.getDataTableModel().dataRowsFilteredAndSortedObservable().getValue()
+        final Iterable<ManagedObject> entityList = collectionModel.getDataTableModel().dataRowsFilteredAndSortedObservable().getValue()
                 .map(DataRow::rowElement);
         final Iterable<String> calendarNames = getCalendarNames(entityList);
 
@@ -87,7 +88,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
         for (final String calendarName: calendarNames) {
             final EventSource namedCalendar = new EventSource();
             namedCalendar.setTitle(calendarName);
-            namedCalendar.setEventProvider(newEventProvider(model, calendarName));
+            namedCalendar.setEventProvider(newEventProvider(collectionModel, calendarName));
             namedCalendar.setEditable(true);
             String color = COLORS[i++ % COLORS.length];
             namedCalendar.setBackgroundColor(color);
@@ -95,7 +96,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
             config.addEventSource(namedCalendar);
         }
 
-        final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedback);
+        final FullCalendar calendar = new FullCalendarWithEventHandling(ID_FULL_CALENDAR, config, feedbackPanel);
         addOrReplace(calendar);
         addOrReplace(new EventSourceSelector(ID_SELECTOR, calendar));
     }
