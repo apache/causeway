@@ -202,7 +202,7 @@ identified
         <wicket.version>10.3.0</wicket.version>
         <wicket-bootstrap.version>7.0.5</wicket-bootstrap.version> <!--
         de.agilecoders.wicket:wicket-bootstrap... -->
-        <wicket-webjars.version>4.0.5</wicket-webjars.version> <!--
+        <wicket-webjars.version>4.0.6</wicket-webjars.version> <!--
         de.agilecoders.wicket.webjars:wicket-webjars -->
         <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--
         as served by wicket via webjars -->
