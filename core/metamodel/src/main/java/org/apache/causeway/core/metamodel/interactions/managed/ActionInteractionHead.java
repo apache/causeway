@@ -19,12 +19,10 @@
 package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -77,9 +75,9 @@ implements HasMetaModel<ObjectAction> {
      */
     public Can<ManagedObject> getEmptyParameterValues() {
         return getMetaModel().getParameters().stream()
-        .map(objectActionParameter->
-            ManagedObject.empty(objectActionParameter.getElementType()))
-        .collect(Can.toCan());
+            .map(objectActionParameter->
+                ManagedObject.empty(objectActionParameter.getElementType()))
+            .collect(Can.toCan());
     }
 
     /**
@@ -90,15 +88,12 @@ implements HasMetaModel<ObjectAction> {
      * @param pojoArgList - argument pojos
      */
     public Can<ManagedObject> getPopulatedParameterValues(@Nullable final List<Object> pojoArgList) {
-
         var params = getMetaModel().getParameters();
 
         _Assert.assertEquals(params.size(), _NullSafe.size(pojoArgList));
 
-        if(params.isEmpty()) {
-            return Can.empty();
-        }
-
+        if(params.isEmpty()) return Can.empty();
+        
         return params.zipMap(pojoArgList, (objectActionParameter, argPojo)->
             ManagedObject.adaptParameter(objectActionParameter, argPojo));
     }
@@ -115,59 +110,17 @@ implements HasMetaModel<ObjectAction> {
      */
     public ParameterNegotiationModel defaults(final ManagedAction managedAction) {
 
-        // first pass ... empty values
-        // second pass ... proposed default values
-        // third pass ... verify we have found a fixed point
-        final int maxIterations = 3;
+        // init with empty values
+        var pendingParamModel = ParameterNegotiationModel.of(managedAction, getEmptyParameterValues());
 
-        var fixedPoint = fixedPointSearch(
-                getEmptyParameterValues(),
-                // vector of packed values - where each is either scalar or non-scalar
-                paramVector->iterate(managedAction, paramVector),
-                maxIterations);
-
-        if(fixedPoint.isRight()) {
-            log.warn("Cannot find an initial fixed point for action "
-                    + "parameter defaults on action {}.", getMetaModel());
+        // fill in the parameter defaults with a single sweep through all default providing methods in order, 
+        // updating the pendingParamModel at each iteration
+        for(var param : getMetaModel().getParameters()) {
+            pendingParamModel = pendingParamModel
+                .withParamValue(param.getParameterIndex(), param.getDefault(pendingParamModel));
         }
-
-        return ParameterNegotiationModel.of(managedAction,
-                fixedPoint.fold(
-                left->left,
-                right->right));
-    }
-
-    // -- HELPER
-
-    /**
-     * (defaults) fixed point search iteration step
-     */
-    private Can<ManagedObject> iterate(
-            final @NonNull ManagedAction managedAction,
-            final @NonNull Can<ManagedObject> paramVector) {
-        var pendingParamModel = ParameterNegotiationModel.of(managedAction, paramVector);
-        return getMetaModel().getParameters()
-            .map(param->param.getDefault(pendingParamModel));
-    }
-
-    /**
-     * Returns either a fixed point (left) or the last iteration (right).
-     */
-    private static <T> Either<T, T> fixedPointSearch(
-            final T start,
-            final UnaryOperator<T> f,
-            final int maxIterations) {
-
-        T t1, t0 = start;
-        for(int i=0; i<maxIterations; ++i) {
-            t1 = f.apply(t0);
-            if(t1.equals(t0)) {
-                return Either.left(t1);
-            }
-            t0 = t1;
-        }
-
-        return Either.right(t0);
+        
+        return pendingParamModel;
     }
 
 }

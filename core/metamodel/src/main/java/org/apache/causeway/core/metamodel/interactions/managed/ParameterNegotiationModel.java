@@ -319,6 +319,13 @@ public class ParameterNegotiationModel {
         return PendingParamsSnapshot.create(this);
     }
 
+    /**
+     * Returns a copy, but with a single param value replaced. 
+     */
+    public ParameterNegotiationModel withParamValue(int parameterIndex, @NonNull ManagedObject paramValue) {
+        return ParameterNegotiationModel.of(managedAction, getParamValues().replace(parameterIndex, paramValue));
+    }
+    
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
     private static class ParameterModel extends ManagedParameter {
