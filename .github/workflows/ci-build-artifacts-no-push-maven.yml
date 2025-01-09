@@ -3,12 +3,12 @@ name: Build, Test (JDK 23)
 on:
   push:
     branches:
-      - master
-      - v3
+      - main
+      #- v2
   pull_request:
     branches:
-      - master
-      - v3
+      - main
+      #- v2
 
 jobs:
   # This is a matrix build {'java', 'javascript'},
