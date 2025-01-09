@@ -28,7 +28,7 @@
     <homepage rdf:resource="https://causeway.apache.org" />
     <asfext:pmc rdf:resource="https://causeway.apache.org" />
     <shortdesc>Apache Causeway is a framework for rapidly developing domain-driven apps in Java</shortdesc>
-    <description>Apache Causeway is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically (at runtime) generates a representation of that domain model as a webapp or as a RESTful API. For prototyping or production.</description>
+    <description>Apache Causeway is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically (at runtime) generates a representation of that domain model as a webapp, RESTful or GraphQL API. For prototyping or production.</description>
     <bug-database rdf:resource="https://issues.apache.org/jira/browse/CAUSEWAY" />
     <mailing-list rdf:resource="https://causeway.apache.org/docs/2.0.0-RC1/support/mailing-list.html" />
     <download-page rdf:resource="https://causeway.apache.org/docs/2.0.0-RC1/downloads/how-to" />

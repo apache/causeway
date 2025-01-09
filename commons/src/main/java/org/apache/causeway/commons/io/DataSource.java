@@ -25,6 +25,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -172,6 +174,9 @@ public interface DataSource {
             @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return self.tryReadAll(is->consumingMapper.apply(inputStreamMapper.apply(is)));
             }
+            @Override public String getDescription() {
+                return descriptionForMapped(self);
+            }
         };
     }
 
@@ -222,6 +227,13 @@ public interface DataSource {
             @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 return Try.empty();
             }
+            @Override public String getDescription() {
+                return descriptionForEmpty();
+            }
+            @Override
+            public String toString() {
+                return getDescription();
+            }
         };
     }
 
@@ -268,7 +280,9 @@ public interface DataSource {
         return cls==null
                 || _Strings.isNullOrEmpty(resourcePath)
                 ? empty()
-                : ofInputStreamSupplier(()->cls.getResourceAsStream(resourcePath));
+                : ofInputStreamSupplierInternal(
+                        descriptionForResource(cls, resourcePath),
+                        ()->cls.getResourceAsStream(resourcePath));
     }
 
     /**
@@ -282,7 +296,10 @@ public interface DataSource {
     static DataSource ofSpringResource(final @Nullable Resource springResource) {
         return springResource==null
                 ? empty()
-                : ofInputStreamSupplier(springResource::getInputStream);
+                : ofInputStreamSupplierInternal(
+                        descriptionForResource(springResource),
+                        fileForResource(springResource),
+                        springResource::getInputStream);
     }
 
     /**
@@ -292,7 +309,9 @@ public interface DataSource {
     static DataSource ofFile(final @Nullable File file) {
         return file==null
                 ? empty()
-                : ofInputStreamSupplier(
+                : ofInputStreamSupplierInternal(
+                        descriptionForFile(file),
+                        Optional.of(file),
                     ()->Try.call(()->new FileInputStream(FileUtils.existingFileElseFail(file)))
                         .valueAsNonNullElseFail());
     }
@@ -304,7 +323,9 @@ public interface DataSource {
     static DataSource ofString(final @Nullable String string, final Charset charset) {
         return _Strings.isNullOrEmpty(string)
                 ? empty()
-                : ofInputStreamSupplier(()->new ByteArrayInputStream(string.getBytes(charset)));
+                : ofInputStreamSupplierInternal(
+                        descriptionForString(string),
+                        ()->new ByteArrayInputStream(string.getBytes(charset)));
     }
 
     /**
@@ -322,7 +343,123 @@ public interface DataSource {
     static DataSource ofBytes(final @Nullable byte[] bytes) {
         return _NullSafe.isEmpty(bytes)
                 ? empty()
-                : ofInputStreamSupplier(()->new ByteArrayInputStream(bytes));
+                : ofInputStreamSupplierInternal(
+                        descriptionForBytes(bytes),
+                        ()->new ByteArrayInputStream(bytes));
+    }
+    
+    /**
+     * Optionally returns the underlying {@link File},
+     * based on whether this resource originates from a file.
+     */
+    default Optional<File> getFile() {
+        return Optional.empty();
+    }
+    
+    /**
+     * The given file-consumer is either passed the underlying {@link File}
+     * (if this resource originates from a file), 
+     * or a temporary file.
+     * <p>In the temporary file case, the temporary file is deleted after consumption. 
+     */
+    @SneakyThrows
+    default void consumeAsFile(ThrowingConsumer<File> fileConsumer) {
+        var file = getFile().orElse(null);
+        if(file!=null) {
+            fileConsumer.accept(file);
+            return;
+        }
+        var tempFile = File.createTempFile("causeway", "ds");
+        try {
+            tryReadAndWrite(DataSink.ofFile(tempFile), 4096);
+            fileConsumer.accept(tempFile);
+        } finally {
+            Files.deleteIfExists(tempFile.toPath()); // cleanup
+        }
+    }
+
+    /**
+     * Return a description for this DataSource,
+     * to be used for error output when working with the resource.
+     */
+    default String getDescription() {
+        return "";
+    }
+
+    // -- HELPER
+    
+    // internal factory
+    private static DataSource ofInputStreamSupplierInternal(
+            final @NonNull String description,
+            final @NonNull ThrowingSupplier<InputStream> inputStreamSupplier) {
+        return ofInputStreamSupplierInternal(description, Optional.empty(), inputStreamSupplier);
+    }
+    
+    // internal factory
+    private static DataSource ofInputStreamSupplierInternal(
+            final @NonNull String description,
+            final Optional<File> file,
+            final @NonNull ThrowingSupplier<InputStream> inputStreamSupplier) {
+        return new DataSource() {
+            @Override public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
+                return Try.call(()->{
+                    try(final InputStream is = inputStreamSupplier.get()) {
+                        return consumingMapper.apply(is);
+                    }
+                })
+                // unwrap the inner try
+                .mapSuccessAsNullable(wrappedTry->wrappedTry.valueAsNullableElseFail());
+            }
+            @Override public Optional<File> getFile() {
+                return file;
+            }
+            @Override public String getDescription() {
+                return description;
+            }
+            @Override
+            public String toString() {
+                return description;
+            }
+        };
+    }
+    
+    private static String descriptionForEmpty() {
+        return "Empty-Resource";
+    }
+
+    private static String descriptionForBytes(final byte[] bytes) {
+        if(bytes.length>16) {
+            byte[] sample = new byte[16];
+            System.arraycopy(bytes, 0, sample, 0, sample.length);
+            return String.format("Byte-Resource[%s ...]", _Bytes.hexDump(sample));    
+        }
+        return String.format("Byte-Resource[%s]", _Bytes.hexDump(bytes));
+    }
+
+    private static String descriptionForString(final String string) {
+        return String.format("String-Resource[%s]", _Strings.ellipsifyAtEnd(string, 25, "..."));
+    }
+
+    private static String descriptionForResource(final Resource springResource) {
+        return springResource.getDescription();
+    }
+
+    private static String descriptionForResource(final Class<?> cls, final String resourcePath) {
+        return String.format("Class-Resource[%s, %s]", cls.getName(), resourcePath);
+    }
+    
+    private static String descriptionForMapped(DataSource ds) {
+        return ds.getDescription() + " mapped";
+    }
+    
+    private static String descriptionForFile(File file) {
+        return String.format("File-Resource[%s]", file.getPath());
+    }
+    
+    private static Optional<File> fileForResource(final Resource springResource) {
+        return springResource.isFile()
+                ? Try.call(springResource::getFile).getValue()
+                : Optional.empty();
     }
 
 }

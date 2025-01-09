@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
@@ -50,6 +51,14 @@ public abstract class MetaModelContext implements HasMetaModelContext {
     public static MetaModelContext instanceElseFail() {
         return instance()
                 .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
+    }
+    
+    // -- UTILITY
+    
+    public static  TranslationService translationServiceOrFallback() {
+        return MetaModelContext.instance()
+                .map(MetaModelContext::getTranslationService)
+                .orElseGet(TranslationService::identity);
     }
 
     // -- HELPER

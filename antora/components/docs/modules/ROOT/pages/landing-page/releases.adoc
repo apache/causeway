@@ -11,16 +11,15 @@ These usually include migration notes that explain how to migrate to new feature
 
 If your app inherits from the xref:docs:parent-pom:about.adoc[Parent POM], then the easiest way to update to the next release is often as simple as changing the `<version>` in your application's parent `pom.xml`:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 ----
 <parent>
     <groupId>org.apache.causeway.app</groupId>
     <artifactId>causeway-app-starter-parent</artifactId>
-    <version>2.0.0</version>                            <!--.-->
+    <version>{page-causewayprevv2}</version> <!--.-->
 </parent>
 ----
 <.> update as required.
-
 
 
 == Building from Source

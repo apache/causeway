@@ -20,6 +20,10 @@ package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.Where;
+
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
@@ -34,6 +38,7 @@ import org.apache.causeway.core.metamodel.tabular.DataRow;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 class DataRowInternal
 implements DataRow {
@@ -79,9 +84,18 @@ implements DataRow {
     @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
         final ObjectAssociation assoc = column.getAssociationMetaModel();
+        val interactionInitiatedBy = InteractionInitiatedBy.PASS_THROUGH;
         return assoc.getSpecialization().fold(
-                property->Can.of(property.get(getRowElement())),
-                collection->ManagedObjects.unpack(collection.get(getRowElement())));
+                property-> Can.of(
+                        // similar to ManagedProperty#reassessPropertyValue
+                        property.isVisible(getRowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                                ? property.get(getRowElement(), interactionInitiatedBy)
+                                : ManagedObject.empty(property.getElementType())),
+                collection-> ManagedObjects.unpack(
+                        collection.isVisible(getRowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                                ? collection.get(getRowElement(), interactionInitiatedBy)
+                                : null
+                ));
     }
 
     /**

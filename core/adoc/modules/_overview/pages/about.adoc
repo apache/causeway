@@ -6777,31 +6777,7 @@ Artifact: causeway-regressiontests-base
 Type: jar
 Directory: /regressiontests/base
 ----
-|.Components
-****
-o.a.i.testdomain.jdo.JdoInventoryDao +
-o.a.i.testdomain.jdo.JdoTestFixtures +
-o.a.i.testdomain.jpa.JpaInventoryDao +
-o.a.i.testdomain.jpa.JpaTestFixtures +
-o.a.i.testdomain.jpa.springdata.EmployeeRepository +
-o.a.i.testdomain.model.valuetypes.ValueTypeExampleService +
-o.a.i.testdomain.publishing.PublishingTestFactoryAbstract$CommitListener +
-o.a.i.testdomain.publishing.PublishingTestFactoryJdo +
-o.a.i.testdomain.publishing.PublishingTestFactoryJpa +
-o.a.i.testdomain.publishing.subscriber.CommandSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityChangesSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.EntityPropertyChangeSubscriberForTesting +
-o.a.i.testdomain.publishing.subscriber.ExecutionSubscriberForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJdoForTesting +
-o.a.i.testdomain.util.event.LifecycleEventSubscriberJpaForTesting +
-o.a.i.testdomain.util.interaction.DomainObjectTesterFactory +
-o.a.i.testdomain.util.interaction.InteractionBoundaryProbe +
-o.a.i.testdomain.util.kv.KVStoreForTesting +
-o.a.i.testdomain.util.rest.RestEndpointService +
-o.a.i.testdomain.wrapperfactory.CounterRepository +
-****
-
-.Dependencies
+|.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +

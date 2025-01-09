@@ -59,6 +59,29 @@ extends
 
 
     @Data
+    public static class TemporalDisplayPattern {
+
+        /**
+         * The locale-independent (canonical) pattern used for displaying dates in the UI.
+         *
+         * <p>
+         *     By default, a locale-specific date pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format).
+         * </p>
+         */
+        private String datePattern;
+
+        /**
+         * The locale-independent (canonical) pattern used for displaying date/times in the UI.
+         *
+         * <p>
+         *     By default, a locale-specific date/time pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format) for both the date and time parts.
+         * </p>
+         */
+        private String dateTimePattern;
+    }
+
+
+    @Data
     public static class TemporalEditingPattern {
 
         /**

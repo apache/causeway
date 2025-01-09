@@ -4,19 +4,36 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
+The optional xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI service can be used to reorder columns in a table, either a standalone collection (returned from an action invocation) or for a parented collection (owned by parent domain object).
 
+== Standalone Collections
 
-The optional xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI service can be used to reorder columns in a table, either for a parented collection (owned by parent domain object) or a standalone collection (returned from an action invocation).
+For standalone collections, the file name should be called `<Class>.columnOrder.txt`, and should reside in the same package as the `<Class>`.
+
+For example, suppose that an `Order` entity is returned from various repository queries as a standalone collection.
+The visibility of the entity's properties can be changed using this file:
+
+[source,text]
+.Order.columnOrder.txt
+----
+num
+placedOn
+state
+----
+
+TIP: If this is not present, then the framework will infer an order of the properties from the xref:refguide:applib:index/annotation/PropertyLayout.adoc#sequence[@PropertyLayout#sequence] annotation or by reading from `Order.layout.xml`.
+
 
 == Parented Collections
 
-For example, suppose there is a `Customer` and an `Order`:
+Suppose there is a `Customer` and an `Order`:
 
 [plantuml]
 ....
 hide empty members
 
-Customer "1" *-r-> "0..*" Order : "    orders"
+Customer "1" *-d-> "0..*" Order : "    currentOrders"
+Customer "1" *-d-> "0..*" Order : "    archivedOrders"
 
 class Order {
     num: int
@@ -27,24 +44,65 @@ class Order {
 }
 ....
 
-The order of these properties of `Order`, when rendered in the context of its owning `Customer`, can be controlled using this implementation of `TableColumnOrderService`.
+When the `Order` is rendered as a collection of its owning `Customer`, we may want to fine-tune which of its properties are shown as columns, along with the order of those columns/properties.
+This can be controlled using implementation the xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] SPI.
 
-
-
-Although xref:refguide:applib:index/services/tablecol/TableColumnOrderService.adoc[TableColumnOrderService] is an SPI, the framework also provides an out-of-the-box implementation that uses simple text files to specify the column order.
+While you are free to implement this as you wish, the framework also provides an out-of-the-box implementation that uses simple text files to specify the column order.
 These simple files can be reloaded dynamically during prototyping, so make it easy to change the order of columns (or hide columns completely).
 
-In the parented collections this file's name follows the format  "<ParentedClass>#<collectionId>.columnOrder.txt".
-In the example above it would therefore be called `Customer#orders.columnOrder.txt`, and would look something like:
+In the parented collections this file's name follows the format "<ParentClass>#<collectionId>.columnOrder.txt".
+This should reside in the same package as the `<ParentClass>`.
+
+In the example above the `currentOrders` collection would therefore be called `Customer#currentOrders.columnOrder.txt`, and would look something like:
 
 [source,text]
-.Customer#orders.columnOrder.txt
+.Customer#currentOrders.columnOrder.txt
 ----
 num
 placedOn
 state
 shippedOn
 ----
+
+And similarly, the sequence of the columns shown in the ``archivedOrders``'s table would be controlled using `Customer#archivedOrders.columnOrder.txt`.
+
+[source,text]
+.Customer#archivedOrders.columnOrder.txt
+----
+num
+placedOn
+state
+shippedOn
+----
+
+If you want to use the same properties in all of these collections, then a wildcard syntax is also supported, following the format "<ParentedClass>#_.<ChildClass>.columnOrder.txt".
+
+For example:
+
+[source,text]
+.Customer#_.Order.columnOrder.txt
+----
+num
+placedOn
+state
+shippedOn
+----
+
+could replace the previous two `.columnOrder.txt` files.
+
+As a further fallback, if there are no `.columnOrder.txt` files for the parent class's collection, then the standalone order will be used if present:
+
+[source,text]
+.Order.columnOrder.txt
+----
+num
+placedOn
+state
+shippedOn
+----
+
+
+== Notes
 
 === Commented out and unknown properties
 
@@ -64,22 +122,13 @@ nonsense
 Here the "amount" is commented out and so is excluded because the line is not an exact match.
 The same is true for "nonsense"; it doesn't match any of the original properties of the `Order` class.
 
+=== Class hierarchies
 
-== Standalone Collections
+Be aware that the service does _not_ search up the class hierarchy.
 
-For parented collections, the file name should be called `<Class>.columnOrder.txt`.
+for example, if `Customer` is an abstract class, then you'll instead need to provide `.columnOrder.txt` file for each of its subclasses.
 
-For example, suppose that the `Order` entity is returned from various repository queries as a standalone collection, with a default ordering of properties inferred from the xref:refguide:applib:index/annotation/PropertyLayout.adoc#sequence[@PropertyLayout#sequence] annotation or by reading from `Order.layout.xml`.
 
-This column order can be changed using this file:
-
-[source,text]
-.Order.columnOrder.txt
-----
-num
-placedOn
-state
-----
 
 
 == Customising the Default Implementation

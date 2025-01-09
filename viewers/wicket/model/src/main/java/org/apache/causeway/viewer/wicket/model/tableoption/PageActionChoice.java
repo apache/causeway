@@ -16,21 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.pdfjs.wkt.integration;
+package org.apache.causeway.viewer.wicket.model.tableoption;
 
-import org.apache.wicket.markup.head.JavaScriptReferenceType;
+import java.io.Serializable;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+@lombok.Value
+public class PageActionChoice implements Serializable {
 
-@RequiredArgsConstructor
-public enum PdfJsVersion {
-    V2_X("v2x3x", "pdfjs-dist/2.16.105", JavaScriptReferenceType.TEXT_JAVASCRIPT),
-    V3_X("v2x3x", "pdfjs-dist/3.11.174", JavaScriptReferenceType.TEXT_JAVASCRIPT),
-    V4_X("v4", "pdfjs-dist/4.4.168", JavaScriptReferenceType.MODULE)
-    ;
-    @Getter private final String integrationScriptSuffix;
-    @Getter private final String webjarPath;
-    @Getter private final JavaScriptReferenceType javascriptRefType;
+    private static final long serialVersionUID = 1L;
 
+    final String key;
+    final String title;
+    final String cssClass = ""; // for future use
 }

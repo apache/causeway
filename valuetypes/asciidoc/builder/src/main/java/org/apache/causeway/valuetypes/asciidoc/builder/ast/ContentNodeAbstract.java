@@ -47,44 +47,6 @@ public abstract class ContentNodeAbstract implements ContentNode {
     @Getter @Setter private String reftext;
 
     @Override
-    public String id() {
-        return getId();
-    }
-
-    @Override
-    public String context() {
-        return getContext();
-    }
-
-    @Override
-    public ContentNode parent() {
-        return getParent();
-    }
-
-    @Override
-    public Document document() {
-        return getDocument();
-    }
-
-    @Override
-    @Deprecated
-    public Object getAttr(Object name, Object defaultValue, boolean inherit) {
-        return getAttribute(name, defaultValue, inherit);
-    }
-
-    @Override
-    @Deprecated
-    public Object getAttr(Object name, Object defaultValue) {
-        return getAttribute(name, defaultValue);
-    }
-
-    @Override
-    @Deprecated
-    public Object getAttr(Object name) {
-        return getAttribute(name);
-    }
-
-    @Override
     public Object getAttribute(Object name, Object defaultValue, boolean inherit) {
         return attributes.getOrDefault(name, defaultValue);
     }
@@ -100,18 +62,6 @@ public abstract class ContentNodeAbstract implements ContentNode {
     }
 
     @Override
-    @Deprecated
-    public boolean isAttr(Object name, Object expected, boolean inherit) {
-        return isAttribute(name, expected, inherit);
-    }
-
-    @Override
-    @Deprecated
-    public boolean isAttr(Object name, Object expected) {
-        return isAttribute(name, expected);
-    }
-
-    @Override
     public boolean isAttribute(Object name, Object expected, boolean inherit) {
         return Boolean.TRUE == getAttribute(name, expected, inherit);
     }
@@ -122,18 +72,6 @@ public abstract class ContentNodeAbstract implements ContentNode {
     }
 
     @Override
-    @Deprecated
-    public boolean hasAttr(Object name) {
-        return hasAttribute(name);
-    }
-
-    @Override
-    @Deprecated
-    public boolean hasAttr(Object name, boolean inherited) {
-        return hasAttribute(name, inherited);
-    }
-
-    @Override
     public boolean hasAttribute(Object name) {
         return getAttribute(name)!=null;
     }
@@ -141,12 +79,6 @@ public abstract class ContentNodeAbstract implements ContentNode {
     @Override
     public boolean hasAttribute(Object name, boolean inherited) {
         return getAttribute(name, inherited)!=null;
-    }
-
-    @Override
-    @Deprecated
-    public boolean setAttr(Object name, Object value, boolean overwrite) {
-        return setAttribute(name, value, overwrite);
     }
 
     @Override
@@ -167,12 +99,6 @@ public abstract class ContentNodeAbstract implements ContentNode {
     @Override
     public boolean isRole() {
         return !_Strings.isNullOrEmpty(getRole());
-    }
-
-    @Override
-    @Deprecated
-    public String role() {
-        return getRole();
     }
 
     @Override

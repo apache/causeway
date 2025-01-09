@@ -23,11 +23,16 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -127,8 +132,38 @@ public class ZipUtils {
      * Returns a {@link Stream} of {@link ZipEntryDataSource}, buffered in memory,
      * which allows consumption even after the underlying zipped {@link DataSource} was closed.
      * @implNote Only partly optimized for heap usage, as it just reads all pre-filtered data into memory,
-     *      but doing so, regardless of what is actually consumed later from the returned {@link Stream}.
+     *      doing so, regardless of what is actually consumed later from the returned {@link Stream}.
      */
+    @SneakyThrows
+    public Stream<ZipEntryDataSource> streamZipEntries(
+            final @NonNull DataSource zippedSource,
+            final @NonNull ZipOptions zipOptions) {
+
+        val zipEntryDataSources = _Lists.<ZipEntryDataSource>newArrayList();
+        
+        zippedSource.consumeAsFile(zipFile->{
+            try (FileSystem fs = FileSystems.newFileSystem(zipFile.toPath(), null)) {
+                try (Stream<Path> entries = Files.walk(fs.getPath("/"))) {
+                    final List<Path> filesInZip = entries.filter(Files::isRegularFile).collect(Collectors.toList());
+                    for(Path path : filesInZip) {
+                        var zipEntry = new ZipEntry(path.toString());
+                        if(!zipOptions.zipEntryFilter().test(zipEntry)) continue;
+                        var bytes = Files.readAllBytes(path);
+                        zipEntryDataSources.add(new ZipEntryDataSource(zipEntry, bytes));
+                    }
+                }
+            }
+        });
+        
+        return zipEntryDataSources.stream();
+    }
+
+    /*
+     * Former implementation: did not require a temp file,
+     * but may result in Exception 'Only DEFLATED entries can have EXT descriptor'
+     * @see https://bugs.openjdk.org/browse/JDK-8327690
+     */
+    /*
     public Stream<ZipEntryDataSource> streamZipEntries(
             final @NonNull DataSource zippedSource,
             final @NonNull ZipOptions zipOptions) {
@@ -153,7 +188,8 @@ public class ZipUtils {
         .ifFailureFail();
 
         return zipEntryDataSources.stream();
-    }
+    }*/
+
 
     /**
      * Shortcut for {@code streamZipEntries(zippedSource, ZipOptions.builder().build())}

@@ -19,22 +19,21 @@
 package org.apache.causeway.core.metamodel.facets.value;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 
 class BigDecimalValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
-    private final CausewayConfiguration causewayConfiguration = new CausewayConfiguration(null, null);
     private BigDecimalValueSemantics value;
     private BigDecimal bigDecimal;
 
@@ -74,9 +73,11 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void parseValidStringWithGroupingSeparatorIfConfiguredToAllow() throws Exception {
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getEditing().setUseGroupingSeparator(true);
 
-        value.parseTextRepresentation(null, "123,999.01");
+        BigDecimal bd = value.parseTextRepresentation(null, "123,999.01");
+
+        assertThat(bd).isEqualTo(new BigDecimal("123999.01").setScale(2, RoundingMode.HALF_EVEN));
     }
 
     @Test
@@ -90,10 +91,10 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
         }
 
         // but if we allow it...
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getEditing().setUseGroupingSeparator(true);
 
         BigDecimal bigDecimal = value.parseTextRepresentation(null, "1239,99");
-        Assertions.assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
+        assertThat(bigDecimal).isEqualTo(new BigDecimal(123999));
     }
 
     @Test
@@ -103,7 +104,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void titleOf() {
-        assertEquals("34132.199", value.titlePresentation(null, bigDecimal));
+        assertEquals("34,132.199", value.titlePresentation(null, bigDecimal));
     }
 
     @Test

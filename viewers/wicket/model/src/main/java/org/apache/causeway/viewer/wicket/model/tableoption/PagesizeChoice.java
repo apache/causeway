@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.pagesize;
+package org.apache.causeway.viewer.wicket.model.tableoption;
 
 import java.io.Serializable;
 

@@ -108,12 +108,6 @@ implements CollectionCountProvider {
 
         final List<GenericColumn> columns = _Lists.newArrayList();
 
-        // multi select check boxes
-        final MultiselectToggleProvider multiselectToggleProvider = getMultiselectToggleProvider();
-        final ToggleboxColumn toggleboxColumn = multiselectToggleProvider != null
-            ? multiselectToggleProvider.getToggleboxColumn()
-            : null;
-
         val collectionModel = entityCollectionModel();
 
         // first create property columns, so we know how many columns there are
@@ -126,27 +120,31 @@ implements CollectionCountProvider {
                 getWicketViewerSettings());
 
         // prepend togglebox column (left most), if enabled
-        if(toggleboxColumn != null) {
-            columns.add(0, toggleboxColumn);
-        }
+        getToggleboxColumn()
+            .ifPresent(toggleboxColumn->columns.add(0, toggleboxColumn));
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         val dataTable = new CausewayAjaxDataTable(
-                ID_TABLE, columns, dataProvider, collectionModel.getPageSize(), toggleboxColumn);
+                ID_TABLE, columns, dataProvider, collectionModel.getPageSize());
         addOrReplace(dataTable);
 
         addFilterToolbar(dataTable);
     }
 
-    private MultiselectToggleProvider getMultiselectToggleProvider() {
+    private Optional<ToggleboxColumn> getToggleboxColumn() {
+        return getMultiselectToggleProvider()
+                .map(MultiselectToggleProvider::getToggleboxColumn);
+    }
+
+    private Optional<MultiselectToggleProvider> getMultiselectToggleProvider() {
         Component component = this;
         while(component != null) {
             if(component instanceof MultiselectToggleProvider) {
-                return (MultiselectToggleProvider) component;
+                return Optional.of((MultiselectToggleProvider) component);
             }
             component = component.getParent();
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
@@ -124,6 +125,7 @@ public interface DataTableInteractive extends MultiselectChoices {
     void doProgrammaticToggle(Runnable runnable);
     Set<Integer> getSelectedRowIndexes();
     Observable<Can<DataRow>> getDataRowsSelected();
+    void selectRangeOfRowsByIndex(IntStream range, boolean select);
 
     // -- EXPORTING
 

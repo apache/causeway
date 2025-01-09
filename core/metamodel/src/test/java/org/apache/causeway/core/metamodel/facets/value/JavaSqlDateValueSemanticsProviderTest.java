@@ -48,7 +48,7 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
         date = new Date(0);
 
         ValueSemanticsAbstract<LocalDate> delegate =
-                new LocalDateValueSemantics();
+                new LocalDateValueSemantics(metaModelContext);
 
         setSemantics(value = new JavaSqlDateValueSemantics() {
 

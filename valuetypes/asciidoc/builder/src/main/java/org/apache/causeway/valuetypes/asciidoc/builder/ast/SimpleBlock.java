@@ -34,21 +34,9 @@ public class SimpleBlock extends SimpleStructuralNode implements Block {
     @Getter private final List<String> lines = new ArrayList<>();
 
     @Override
-    @Deprecated
-    public List<String> lines() {
-        return getLines();
-    }
-
-    @Override
     public void setLines(List<String> lines) {
         this.lines.clear();
         this.lines.addAll(lines);
-    }
-
-    @Override
-    @Deprecated
-    public String source() {
-        return getSource();
     }
 
     @Override

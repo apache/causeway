@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -216,6 +216,7 @@ public class RunBackgroundCommandsJob implements Job {
     @Getter
     @RequiredArgsConstructor(staticName = "of")
     static class ThrowableWithDetailsOfAttempt extends RuntimeException {
+        private static final long serialVersionUID = 1L;
         private final Throwable original;
         private final java.sql.Timestamp startedAt;
     }
