@@ -52,18 +52,13 @@ class RoDialog(
         icon = IconManager.find(defaultAction),
         style = ButtonStyle.SUCCESS
     )
-        .onClick {
-            execute()
-        }
 
     private val cancelButton = Button(
         "Cancel",
         "fas fa-times",
         ButtonStyle.OUTLINEINFO
     )
-        .onClick {
-            close()
-        }
+
 
     @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleUpButton = Button(
@@ -71,9 +66,6 @@ class RoDialog(
         "fas fa-plus",
         ButtonStyle.OUTLINEINFO
     )
-        .onClick {
-            (controller as DiagramDialog).scale(Direction.UP)
-        }
 
     @Deprecated("remove once leaflet/svg is fully operational")
     private val scaleDownButton = Button(
@@ -81,9 +73,6 @@ class RoDialog(
         "fas fa-minus",
         ButtonStyle.OUTLINEINFO
     )
-        .onClick {
-            (controller as DiagramDialog).scale(Direction.DOWN)
-        }
 
     var formPanel: FormPanel<String>? = null
 
@@ -94,6 +83,19 @@ class RoDialog(
         closeButton = true
         contentWidth = CssSize(widthPerc, UNIT.perc)
         contentHeight = CssSize(heightPerc, UNIT.perc)
+
+        okButton.onClick {
+            execute()
+        }
+        cancelButton.onClick {
+            close()
+        }
+        scaleUpButton.onClick {
+            (controller as DiagramDialog).scale(Direction.UP)
+        }
+        scaleDownButton.onClick {
+            (controller as DiagramDialog).scale(Direction.DOWN)
+        }
 
         vPanel {
             height = CssSize(heightPerc, UNIT.vh)
@@ -132,7 +134,7 @@ class RoDialog(
     fun open(at: Point = Point(x = 100, y = 100)): Widget {
         ViewManager.openDialog(this, at)
         super.show()
-        okButton.focus()
+//        okButton.focus()
         return this
     }
 

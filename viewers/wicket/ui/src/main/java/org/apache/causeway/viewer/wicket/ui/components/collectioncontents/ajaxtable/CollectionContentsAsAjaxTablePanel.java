@@ -151,7 +151,7 @@ implements CollectionCountProvider {
 
     /**
      * If table quick search is supported, adds a search bar on top of the table component.
-     * @param placeholderText
+     //     * @param placeholderText
      */
     private void addFilterToolbar(
             final CausewayAjaxDataTable dataTableComponent) {

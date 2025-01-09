@@ -17,7 +17,6 @@
 //  under the License.
 //
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     val kotlinVersion: String by System.getProperties()
@@ -47,23 +46,11 @@ val kvisionVersion: String by System.getProperties()
 val webDir = file("src/main/web")
 
 kotlin {
-    js {
+    js(IR) {
         browser {
-            runTask {
+            commonWebpackConfig {
                 outputFileName = "main.bundle.js"
                 sourceMaps = false
-                devServer = KotlinWebpackConfig.DevServer(
-                    open = false,
-                    port = 3000,
-                    proxy = mutableMapOf(
-                        "/kv/*" to "http://localhost:8080",
-                        "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
-                    ),
-                    static = mutableListOf("$buildDir/processedResources/js/main")
-                )
-            }
-            webpackTask {
-                outputFileName = "main.bundle.js"
             }
             testTask {
                 useKarma {
@@ -78,27 +65,27 @@ kotlin {
         implementation(npm("prop-types", "*"))
         implementation("io.kvision:kvision:$kvisionVersion")
         implementation("io.kvision:kvision-bootstrap:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-datetime:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-dialog:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-select:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-spinner:$kvisionVersion")
-        implementation("io.kvision:kvision-bootstrap-typeahead:$kvisionVersion")
+//        implementation("io.kvision:kvision-bootstrap-css:$kvisionVersion")
+//        implementation("io.kvision:kvision-bootstrap-dialog:$kvisionVersion")
+        implementation("io.kvision:kvision-datetime:$kvisionVersion")
+        implementation("io.kvision:kvision-tom-select:$kvisionVersion")
+//        implementation("io.kvision:kvision-bootstrap-spinner:$kvisionVersion")
+//        implementation("io.kvision:kvision-bootstrap-typeahead:$kvisionVersion")
         implementation("io.kvision:kvision-bootstrap-upload:$kvisionVersion")
         implementation("io.kvision:kvision-fontawesome:$kvisionVersion")
         implementation("io.kvision:kvision-i18n:$kvisionVersion")
         implementation("io.kvision:kvision-richtext:$kvisionVersion")
         implementation("io.kvision:kvision-handlebars:$kvisionVersion")
-        implementation("io.kvision:kvision-datacontainer:$kvisionVersion")
+//        implementation("io.kvision:kvision-datacontainer:$kvisionVersion")
         implementation("io.kvision:kvision-chart:$kvisionVersion")
         implementation("io.kvision:kvision-tabulator:$kvisionVersion")
         implementation("io.kvision:kvision-pace:$kvisionVersion")
-        implementation("io.kvision:kvision-toast:$kvisionVersion")
+        implementation("io.kvision:kvision-toastify:$kvisionVersion")
         implementation("io.kvision:kvision-react:$kvisionVersion")
         implementation("io.kvision:kvision-routing-navigo:$kvisionVersion")
         implementation("io.kvision:kvision-state:$kvisionVersion")
         implementation("io.kvision:kvision-rest:$kvisionVersion")
-        implementation("io.kvision:kvision-moment:$kvisionVersion")
+//        implementation("io.kvision:kvision-moment:$kvisionVersion")
         implementation("io.kvision:kvision-maps:$kvisionVersion")
         implementation(npm("xmltojson", "1.3.5", false))
         implementation(npm("flatted", "3.2.2", false))

@@ -36,7 +36,7 @@ import kotlinx.serialization.json.jsonPrimitive
  *  @Item String
  *  @Item Link
  */
-@Serializable
+@Serializable(Value.Companion::class)
 data class Value(
     //IMPROVE: make content immutable (again) and handle property edits e.g. via a wrapper
     @Contextual @SerialName("value") var content: Any? = null,

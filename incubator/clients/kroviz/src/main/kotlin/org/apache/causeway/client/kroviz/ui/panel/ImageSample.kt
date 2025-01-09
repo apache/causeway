@@ -30,9 +30,9 @@ object ImageSample : VPanel() {
     init {
         vPanel(spacing = 10) {
             val button = button("Button")
-            val upload = uploadInput("/") {
-                showUpload = false
-                showCancel = false
+            val upload = uploadInput(false) {
+//                showUpload = false
+//                showCancel = false
             }
             button("Add image to button").onClick {
                 upload.value?.firstOrNull()?.let { upload.getNativeFile(it) }?.slice()?.let { blob ->

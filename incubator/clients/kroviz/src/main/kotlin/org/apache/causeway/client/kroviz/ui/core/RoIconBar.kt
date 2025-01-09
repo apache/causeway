@@ -66,16 +66,16 @@ class RoIconBar : SimplePanel() {
         if (panel.width?.first == 0) show() else hide()
     }
 
-    override fun hide(): Widget {
+    override fun hide() {
         panel.width = CssSize(0, UNIT.px)
         panel.removeAll()
         return super.hide()
     }
 
-    override fun show(): Widget {
+    override fun show() {
         panel.width = CssSize(40, UNIT.px)
         icons.forEach { panel.add(it) }
-        return super.show()
+        super.show()
     }
 
     private fun createDeleteIcon(): Button {

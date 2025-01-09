@@ -109,7 +109,8 @@ class ColBuilder(
         console.log("[CB_buildFieldSetPanel]")
         val fsCpt = FieldSetBuilder().create(fs, tObject, dsp)!!
         val legend = extractLegend(fs)
-        val fsPanel = FieldsetPanel(legend = legend).add(fsCpt)
+        val fsPanel = FieldsetPanel(legend = legend)
+        fsPanel.add(fsCpt)
         val tto = TooltipOptions(title = fs.id)
         fsPanel.enableTooltip(tto)
 //        fsPanel.flexDirection = FlexDirection.ROW

@@ -60,16 +60,18 @@ fun main() {
         module.hot,
         BootstrapModule,
         BootstrapCssModule,
+        TomSelectModule,
         FontAwesomeModule,
-        BootstrapSelectModule,
-        BootstrapDatetimeModule,
-        BootstrapSpinnerModule,
-        BootstrapTypeaheadModule,
+//        BootstrapSelectModule,
+//        BootstrapDatetimeModule,
+//        BootstrapSpinnerModule,
+//        BootstrapTypeaheadModule,
         BootstrapUploadModule,
         RichTextModule,
         ChartModule,
         TabulatorModule,
         CoreModule,
-        panelsCompatibilityMode = true,
+
+//        panelsCompatibilityMode = true,
     )
 }

@@ -54,7 +54,7 @@ object PlantumlPanel : VPanel() {
         width = CssSize(400, UNIT.px)
         textBox.value = sampleCode
         add(textBox)
-        add(okButton)
+//        add(okButton)
     }
 
     init {

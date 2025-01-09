@@ -24,9 +24,9 @@ import io.kvision.core.onEvent
 import io.kvision.form.FormPanel
 import io.kvision.form.check.CheckBox
 import io.kvision.form.formPanel
-import io.kvision.form.range.Range
-import io.kvision.form.select.SimpleSelect
-import io.kvision.form.spinner.Spinner
+import io.kvision.form.number.Range
+import io.kvision.form.select.TomSelect
+import io.kvision.form.number.Spinner
 import io.kvision.form.text.Password
 import io.kvision.form.text.Text
 import io.kvision.form.text.TextArea
@@ -161,14 +161,14 @@ class FormPanelFactory(items: List<FormItem>) : VPanel() {
         return item
     }
 
-    private fun createSelect(fi: FormItem): SimpleSelect {
+    private fun createSelect(fi: FormItem): TomSelect {
         @Suppress("UNCHECKED_CAST")
         val list = fi.content as List<StringPair>
         var preSelectedValue: String? = null
         if (list.isNotEmpty()) {
             preSelectedValue = list.first().first
         }
-        return SimpleSelect(label = fi.label, options = list, value = preSelectedValue)
+        return TomSelect(label = fi.label, options = list, value = preSelectedValue)
     }
 
     private fun createImage(fi: FormItem): VPanel {
