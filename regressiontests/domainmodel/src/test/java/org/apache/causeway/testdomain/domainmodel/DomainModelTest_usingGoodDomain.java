@@ -54,7 +54,6 @@ import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -148,7 +147,6 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private SpecificationLoader specificationLoader;
     @Inject private TitleService titleService;
-    @Inject private CausewayConfiguration causewayConfig;
     @Inject private DomainObjectTesterFactory testerFactory;
 
     void debug() {
@@ -719,7 +717,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
         assertNotNull(introspectionPolicyFacet);
 
-        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
+        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
         assertEquals(
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());
@@ -769,7 +767,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         var introspectionPolicyFacet = objectSpec.getFacet(IntrospectionPolicyFacet.class);
         assertNotNull(introspectionPolicyFacet);
 
-        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy(causewayConfig);
+        var introspectionPolicy = introspectionPolicyFacet.getIntrospectionPolicy();
         assertEquals(
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
                 introspectionPolicy.getEncapsulationPolicy());

@@ -22,8 +22,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 /**
@@ -34,23 +32,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 public interface IntrospectionPolicyFacet extends Facet {
 
     Introspection getIntrospection();
-
-    default IntrospectionPolicy getIntrospectionPolicy(final CausewayConfiguration causewayConfig) {
-        switch(getIntrospection()) {
-        case ENCAPSULATION_ENABLED:
-            return IntrospectionPolicy.ENCAPSULATION_ENABLED;
-        case ANNOTATION_OPTIONAL:
-            return IntrospectionPolicy.ANNOTATION_OPTIONAL;
-        case ANNOTATION_REQUIRED:
-            return IntrospectionPolicy.ANNOTATION_REQUIRED;
-        case AS_CONFIGURED:
-            return causewayConfig.getCore().getMetaModel().getIntrospector().getPolicy();
-        case NOT_SPECIFIED:
-            throw _Exceptions.unexpectedCodeReach(); // there must be no such facet that returns such a case
-        default:
-            throw _Exceptions.unmatchedCase(getIntrospection());
-        }
-
-    }
+    IntrospectionPolicy getIntrospectionPolicy();
 
 }

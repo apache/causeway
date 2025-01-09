@@ -40,7 +40,9 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -193,6 +195,11 @@ extends MetaModelValidatorAbstract {
                     .isSupportMethodAnnotationsRequired()) {
             return; // ignore
         }
+        
+        System.err.printf("validate policy %s: %s%n", 
+            spec.getIntrospectionPolicy(),
+            spec.getFeatureIdentifier()
+            );
 
         var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
             ? specDefault.getPotentialOrphans()
@@ -204,6 +211,7 @@ extends MetaModelValidatorAbstract {
             .filter(Predicate.not(alreadyReported::contains))
             .filter(Predicate.not(memberMethods::contains))
             .filter(Predicate.not(supportMethods::contains))
+            .filter(m->matchesSupportMethodNamingConvention(m.name()))
             .forEach(orphanedMethod->{
 
                 var methodIdentifier = Identifier
@@ -218,6 +226,16 @@ extends MetaModelValidatorAbstract {
             });
 
         potentialOrphans.clear(); // no longer needed
+    }
+
+    private static boolean matchesSupportMethodNamingConvention(String methodName) {
+        for(var objectSupportMethod : ObjectSupportMethod.values()) {
+            if(objectSupportMethod.getMethodNames().anyMatch(name->name.equals(methodName))) return true;
+        }
+        for(var memberSupportPrefix : MemberSupportPrefix.values()) {
+            if(memberSupportPrefix.getMethodNamePrefixes().anyMatch(prefix->methodName.startsWith(prefix))) return true;
+        }
+        return false;
     }
 
 }
