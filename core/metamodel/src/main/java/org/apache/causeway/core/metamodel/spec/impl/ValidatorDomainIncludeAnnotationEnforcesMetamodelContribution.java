@@ -196,11 +196,6 @@ extends MetaModelValidatorAbstract {
             return; // ignore
         }
         
-        System.err.printf("validate policy %s: %s%n", 
-            spec.getIntrospectionPolicy(),
-            spec.getFeatureIdentifier()
-            );
-
         var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
             ? specDefault.getPotentialOrphans()
             : Collections.<ResolvedMethod>emptySet();
