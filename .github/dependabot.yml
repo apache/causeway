@@ -8,42 +8,14 @@ updates:
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
-    target-branch: "master"
+    target-branch: "main"
     directory: "/"
     schedule:
       interval: "weekly"
 
-  # Maintain dependencies for Maven (v2 branch)
-  - package-ecosystem: "maven"
-    target-branch: "master"
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    # Allow up to 50 open pull requests for maven dependencies
-    open-pull-requests-limit: 50
-    # Use custom labels
-    labels:
-      - "dependencies"
-      - "Spring Boot 2.x"
-    ignore:
-      - dependency-name: "org.springframework.boot*"
-        versions: ["3.x"]
-      - dependency-name: "jakarta.el:jakarta.el-api"
-        versions: ["4.x","5.x","6.x"]
-      - dependency-name: "org.apache.wicket*"
-        versions: ["10.x"]
-      - dependency-name: "org.wicketstuff*"
-        versions: ["10.x"]
-      - dependency-name: "org.apache.shiro*"
-        versions: ["2.x"]
-      - dependency-name: "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter"
-        versions: ["1.9.x"]
-      - dependency-name: "de.agilecoders.wicket.webjars:wicket-webjars"
-        versions: ["4.x"]
-    
   # Maintain dependencies for Maven (v3 branch)
   - package-ecosystem: "maven"
-    target-branch: "v3"
+    target-branch: "main"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -53,3 +25,31 @@ updates:
     labels:
       - "dependencies"
       - "Spring Boot 3.x"
+      
+# EOL ... Maintain dependencies for Maven (v2 branch)
+#  - package-ecosystem: "maven"
+#    target-branch: "v2"
+#    directory: "/" # Location of package manifests
+#    schedule:
+#      interval: "weekly"
+#    # Allow up to 50 open pull requests for maven dependencies
+#    open-pull-requests-limit: 50
+#    # Use custom labels
+#    labels:
+#      - "dependencies"
+#      - "Spring Boot 2.x"
+#    ignore:
+#      - dependency-name: "org.springframework.boot*"
+#        versions: ["3.x"]
+#      - dependency-name: "jakarta.el:jakarta.el-api"
+#        versions: ["4.x","5.x","6.x"]
+#      - dependency-name: "org.apache.wicket*"
+#        versions: ["10.x"]
+#      - dependency-name: "org.wicketstuff*"
+#        versions: ["10.x"]
+#      - dependency-name: "org.apache.shiro*"
+#        versions: ["2.x"]
+#      - dependency-name: "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter"
+#        versions: ["1.9.x"]
+#      - dependency-name: "de.agilecoders.wicket.webjars:wicket-webjars"
+#        versions: ["4.x"]
