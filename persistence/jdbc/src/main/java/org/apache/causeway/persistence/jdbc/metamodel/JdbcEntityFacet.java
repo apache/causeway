@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import jakarta.inject.Inject;
 
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.lang.Nullable;
@@ -53,6 +54,7 @@ implements EntityFacet {
     // self managed injections via constructor
     @Inject private RelationalMappingContext mappingContext;
     @Inject private IdStringifierLookupService idStringifierLookupService;
+    @Inject private JdbcAggregateTemplate jdbcAggregateTemplate;
 
     private final Class<?> entityClass;
     private PrimaryKeyType<?> primaryKeyType;
@@ -102,16 +104,12 @@ implements EntityFacet {
 
     @Override
     public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
-
         log.debug("fetchEntity; bookmark={}", bookmark);
-
+        
         var primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
-
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] fetchByBookmark
-        throw _Exceptions.notImplemented();
-//        var entityManager = getEntityManager();
-//        var entityPojo = entityManager.find(entityClass, primaryKey);
-//        return Optional.ofNullable(entityPojo);
+        var entityPojo = jdbcAggregateTemplate.findById(primaryKey, entityClass);
+        
+        return Optional.ofNullable(entityPojo);
     }
 
     private Class<?> getPrimaryKeyType() {
@@ -262,6 +260,5 @@ implements EntityFacet {
         // no-op (spring data jdbc does not have a notion of 'attachment')
         return pojo;
     }
-
 
 }
