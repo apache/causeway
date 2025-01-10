@@ -16,22 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jdbc;
+package org.apache.causeway.persistence.jdbc.metamodel;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
 
-import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-import org.apache.causeway.persistence.jdbc.metamodel.JdbcProgrammingModel;
+import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.Marker;
 
-@Configuration
-@Import({
-    CausewayModuleCoreRuntime.class,
-    CausewayModulePersistenceCommons.class,
-    
-    JdbcProgrammingModel.class
-})
-public class CausewayModulePersistenceJdbc {
-    public static final String NAMESPACE = "causeway.persistence.jdbc";
+@Component
+public class JdbcProgrammingModel implements MetaModelRefiner {
+
+    @Override
+    public void refineProgrammingModel(final ProgrammingModel pm) {
+
+        var step1 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+
+        pm.addFactory(step1, new JdbcEntityFacetFactory(pm.getMetaModelContext()), Marker.JDBC);
+    }
 }

@@ -36,6 +36,7 @@ implements Serializable {
 
     public enum PersistenceStack {
         NONE,
+        JDBC,
         JPA,
         JDO,
         /**
@@ -43,10 +44,11 @@ implements Serializable {
          */
         UNSPECIFIED;
         public boolean isNone() { return this == NONE; }
+        public boolean isJdbc() { return this == JDBC; }
         public boolean isJpa() { return this == JPA; }
         public boolean isJdo() { return this == JDO; }
         public boolean isUnspecified() { return this == UNSPECIFIED; }
-        public boolean isPresent() { return this == JPA || this == JDO; }
+        public boolean isPresent() { return this == JDBC || this == JPA || this == JDO; }
 
         public String titleCase() {
             return _Strings.capitalize(_Strings.lower(name()));
