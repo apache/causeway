@@ -38,6 +38,14 @@ public enum EntityState {
      */
     NOT_PERSISTABLE(false),
     /**
+     * Object with this state is an entity that has no session.
+     */
+    SNAPSHOT(true),
+    /**
+     * Object with this state is an entity that has no session and has no OID yet. On pre-store.
+     */
+    SNAPSHOT_NO_OID(false),
+    /**
      * Object with this state is an entity that is attached to a persistence
      * session, in other words changes to the entity will be flushed back to
      * the database.

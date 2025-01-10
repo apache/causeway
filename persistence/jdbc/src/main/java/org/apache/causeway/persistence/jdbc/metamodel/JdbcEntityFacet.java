@@ -26,13 +26,16 @@ import jakarta.inject.Inject;
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
+import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.lang.Nullable;
 
+import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -85,15 +88,8 @@ implements EntityFacet {
 
     @Override
     public Optional<String> identifierFor(final @Nullable Object pojo) {
-        if (getEntityState(pojo) == EntityState.NOT_PERSISTABLE) return Optional.empty();
-        
-        var idProperty = persistentEntity.getRequiredIdProperty();
-        var propertyAccessor = persistentEntity.getPropertyAccessor(pojo);
-        var primaryKeyIfAny = propertyAccessor.getProperty(idProperty);
-
-        return Optional.ofNullable(primaryKeyIfAny)
-                .map(primaryKey->
-                    primaryKeyType.enstringWithCast(primaryKey));
+        return primaryKey(pojo)
+                .map(primaryKeyType::enstringWithCast);
     }
 
     @Override
@@ -120,66 +116,30 @@ implements EntityFacet {
     public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
         var range = query.getRange();
+        
+        if (query instanceof AllInstancesQuery queryFindAllInstances) {
 
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] fetchByQuery
-//        if (query instanceof AllInstancesQuery) {
-//
-//            var queryFindAllInstances = (AllInstancesQuery<?>) query;
-//            var queryEntityType = queryFindAllInstances.getResultType();
-//
-//            // guard against misuse
-//            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
-//
-//            var entityManager = getEntityManager();
-//
-//            var cb = entityManager.getCriteriaBuilder();
-//            var cr = cb.createQuery(entityClass);
-//
-//            cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
-//
-//            var typedQuery = entityManager
-//                    .createQuery(cr);
-//
-//            if (range.hasOffset()) {
-//                typedQuery.setFirstResult(range.getStartAsInt());
-//            }
-//            if (range.hasLimit()) {
-//                typedQuery.setMaxResults(range.getLimitAsInt());
-//            }
-//
-//            var entitySpec = getEntitySpecification();
-//            return Can.ofStream(
-//                    typedQuery.getResultStream()
-//                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
-//
-//        } else if (query instanceof NamedQuery) {
-//
-//            var applibNamedQuery = (NamedQuery<?>) query;
-//            var queryResultType = applibNamedQuery.getResultType();
-//
-//            var entityManager = getEntityManager();
-//
-//            var namedQuery = entityManager
-//                    .createNamedQuery(applibNamedQuery.getName(), queryResultType);
-//
-//            if (range.hasOffset()) {
-//                namedQuery.setFirstResult(range.getStartAsInt());
-//            }
-//            if (range.hasLimit()) {
-//                namedQuery.setMaxResults(range.getLimitAsInt());
-//            }
-//
-//            applibNamedQuery
-//                    .getParametersByName()
-//                    .forEach((paramName, paramValue) ->
-//                            namedQuery.setParameter(paramName, paramValue));
-//
-//            var entitySpec = getEntitySpecification();
-//            return Can.ofStream(
-//                    namedQuery.getResultStream()
-//                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity)));
-//
-//        }
+            var queryEntityType = queryFindAllInstances.getResultType();
+
+            // guard against misuse
+            _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
+
+            var springQuery = org.springframework.data.relational.core.query.Query.query(Criteria.empty());
+            if (range.hasOffset()) {
+                springQuery = springQuery.offset(range.getStartAsInt());
+            }
+            if (range.hasLimit()) {
+                springQuery = springQuery.limit(range.getLimitAsInt());
+            }
+            
+            var list = jdbcAggregateTemplate.findAll(springQuery, entityClass);
+
+            var entitySpec = getEntitySpecification();
+            return _NullSafe.stream(list)
+                            .map(entity -> ManagedObject.adaptSingular(entitySpec, entity))
+                            .collect(Can.toCan());
+
+        }
 
         throw _Exceptions.unsupportedOperation(
                 "Support for Query of type %s not implemented.", query.getClass());
@@ -194,49 +154,35 @@ implements EntityFacet {
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] persist
-//        var entityManager = getEntityManager();
-//
-//        log.debug("about to persist entity {}", pojo);
-//
-//        entityManager.persist(pojo);
+        log.debug("about to persist entity {}", pojo);
+
+        jdbcAggregateTemplate.save(pojo);
     }
 
     @Override
     public void refresh(final Object pojo) {
-        if (pojo == null) {
-            return; // nothing to do
-        }
-
-        // guard against misuse
-        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
-
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] refresh
-//        var entityManager = getEntityManager();
-//        entityManager.refresh(pojo);
+        if(!isEntityPojo(pojo)) return; // nothing to do
+        
+        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] refresh / probably not implementable
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public void delete(final Object pojo) {
-        if (pojo == null) {
-            return; // nothing to do
-        }
-
-        // guard against misuse
-        _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
-
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] delete
-//        var entityManager = getEntityManager();
-//        entityManager.remove(pojo);
+        if(!isEntityPojo(pojo)) return; // nothing to do
+        jdbcAggregateTemplate.delete(pojo);
     }
 
     @Override
     public EntityState getEntityState(final Object pojo) {
-        if (pojo == null
-                || !entityClass.isAssignableFrom(pojo.getClass())) {
-            return EntityState.NOT_PERSISTABLE;
-        }
-        return _MetadataUtil.entityState(mappingContext, persistentEntity, pojo);
+        if(!isEntityPojo(pojo)) return EntityState.NOT_PERSISTABLE;
+        var primaryKey = primaryKey(pojo);
+        
+        return !primaryKey.isPresent()
+            ? EntityState.SNAPSHOT_NO_OID
+            : jdbcAggregateTemplate.existsById(primaryKey.get(), entityClass)
+                ? EntityState.SNAPSHOT
+                : EntityState.TRANSIENT_OR_REMOVED;
     }
 
     @Override
@@ -257,8 +203,26 @@ implements EntityFacet {
 
     @Override
     public <T> T detach(final T pojo) {
-        // no-op (spring data jdbc does not have a notion of 'attachment')
+        // no-op / Spring Data JDBC has no session management
         return pojo;
+    }
+    
+    // -- HELPER
+    
+    // simple guard
+    private boolean isEntityPojo(final Object pojo) {
+        return pojo != null
+                && entityClass.isAssignableFrom(pojo.getClass());
+    }
+    
+    private Optional<Object> primaryKey(final @Nullable Object pojo) {
+        if(!isEntityPojo(pojo)) return Optional.empty();
+        
+        var idProperty = persistentEntity.getRequiredIdProperty();
+        var propertyAccessor = persistentEntity.getPropertyAccessor(pojo);
+        var primaryKeyIfAny = propertyAccessor.getProperty(idProperty);
+
+        return Optional.ofNullable(primaryKeyIfAny);
     }
 
 }

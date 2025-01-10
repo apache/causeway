@@ -24,7 +24,6 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.mapping.RelationalPersistentProperty;
 
-import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
@@ -75,16 +74,6 @@ class _MetadataUtil {
         final @NonNull String memberId = property.getName();
         final @NonNull String javaType = property.getActualType().getName();
         return new ColumnOrmMetadata(name, memberId, javaType, property);
-    }
-
-    /**
-     * Spring Data JDBC does not have a notion of 'attachment'
-     */
-    EntityState entityState(
-        RelationalMappingContext mappingContext,
-        RelationalPersistentEntity<?> persistentEntity, 
-        Object pojo) {
-        return EntityState.TRANSIENT_OR_REMOVED;
     }
 
 }
