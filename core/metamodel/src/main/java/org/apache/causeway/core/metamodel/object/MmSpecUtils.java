@@ -21,11 +21,13 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -34,7 +36,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -120,21 +121,27 @@ public final class MmSpecUtils {
 
     /**
      * Whether given {@link ObjectSpecification} represents a FixtureScript (from testing.fixtures.applib).
+     * @implNote if testing.fixtures.applib is not available on the class-path, 
+     *      then given spec cannot be a fixture-script 
      */
     public boolean isFixtureScript(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;
-        return getFixtureScriptClass().isAssignableFrom(spec.getCorrespondingClass());
+        return getFixtureScriptClass()
+            .map(fixtureScriptClass->fixtureScriptClass.isAssignableFrom(spec.getCorrespondingClass()))
+            .orElse(false);
     }
 
     // -- HELPER
 
     @Getter(lazy = true, value = AccessLevel.PRIVATE)
-    private final Class<?> fixtureScriptClass = loadFixtureScriptClass();
+    private final Optional<Class<?>> fixtureScriptClass = loadFixtureScriptClass().getValue();
 
-    @SneakyThrows
-    private Class<?> loadFixtureScriptClass() {
-        return _Context.loadClass(
-                "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript");
+    /**
+     * Silently ignores the case when testing.fixtures.applib is not on the class-path.
+     */
+    private Try<Class<?>> loadFixtureScriptClass() {
+        return Try.call(()->_Context.loadClass(
+                "org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript"));
     }
 
 }
