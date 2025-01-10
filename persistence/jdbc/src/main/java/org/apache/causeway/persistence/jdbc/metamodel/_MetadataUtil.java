@@ -24,6 +24,7 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.mapping.RelationalPersistentProperty;
 
+import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
@@ -37,12 +38,7 @@ import lombok.experimental.UtilityClass;
 class _MetadataUtil {
 
     EntityOrmMetadata ormMetadataFor(
-            final @NonNull RelationalMappingContext mappingContext,
-            final @NonNull Class<?> entityClass) {
-
-        final RelationalPersistentEntity<?> typeMetadata = lookupJdbcMetamodel(mappingContext, entityClass)
-                .orElseThrow(()->
-                    _Exceptions.noSuchElement("cannot find JDBC mapping metadata for entity %s", entityClass));
+            final @NonNull RelationalPersistentEntity<?> typeMetadata) {
         
         final @NonNull Optional<String> table = Optional.of(typeMetadata.getTableName().getReference());
         final @NonNull Optional<String> schema = Optional.empty();
@@ -54,6 +50,17 @@ class _MetadataUtil {
                 typeMetadata.getRequiredIdProperty().getActualType(),
                 columns(typeMetadata),
                 typeMetadata);
+    }
+    
+    /**
+     * find the JDBC mapping metadata associated with this (corresponding) entity
+     */
+    RelationalPersistentEntity<?> jdbcEntityMetamodel(
+            final RelationalMappingContext mappingContext,
+            final Class<?> entityClass) {
+        var exactMatch = mappingContext.getPersistentEntity(entityClass);
+        if(exactMatch != null) return exactMatch;
+        throw _Exceptions.noSuchElement("cannot find JDBC mapping metadata for entity %s", entityClass);
     }
 
     // -- HELPER
@@ -71,12 +78,13 @@ class _MetadataUtil {
     }
 
     /**
-     * find the JPA meta-model associated with this (corresponding) entity
+     * Spring Data JDBC does not have a notion of 'attachment'
      */
-    private Optional<RelationalPersistentEntity<?>> lookupJdbcMetamodel(
-            final RelationalMappingContext mappingContext,
-            final Class<?> entityClass) {
-        return Optional.ofNullable(mappingContext.getPersistentEntity(entityClass)); 
+    EntityState entityState(
+        RelationalMappingContext mappingContext,
+        RelationalPersistentEntity<?> persistentEntity, 
+        Object pojo) {
+        return EntityState.TRANSIENT_OR_REMOVED;
     }
 
 }

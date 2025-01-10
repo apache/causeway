@@ -24,6 +24,7 @@ import java.util.Optional;
 import jakarta.inject.Inject;
 
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
+import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.query.Query;
@@ -55,6 +56,10 @@ implements EntityFacet {
 
     private final Class<?> entityClass;
     private PrimaryKeyType<?> primaryKeyType;
+    private RelationalPersistentEntity<?> persistentEntity;
+
+    @Getter
+    private final EntityOrmMetadata ormMetadata;
 
     protected JdbcEntityFacet(
             final FacetHolder holder,
@@ -63,8 +68,10 @@ implements EntityFacet {
         getServiceInjector().injectServicesInto(this);
 
         this.entityClass = entityClass;
+        this.persistentEntity = _MetadataUtil.jdbcEntityMetamodel(mappingContext, entityClass);
+        this.ormMetadata = _MetadataUtil.ormMetadataFor(persistentEntity);
         this.primaryKeyType = idStringifierLookupService
-                .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
+            .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
     }
 
     // -- ENTITY FACET
@@ -76,21 +83,15 @@ implements EntityFacet {
 
     @Override
     public Optional<String> identifierFor(final @Nullable Object pojo) {
-
-        if (!getEntityState(pojo).hasOid()) {
-            return Optional.empty();
-        }
+        if (getEntityState(pojo) == EntityState.NOT_PERSISTABLE) return Optional.empty();
         
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] identifierFor
-        throw _Exceptions.notImplemented();
+        var idProperty = persistentEntity.getRequiredIdProperty();
+        var propertyAccessor = persistentEntity.getPropertyAccessor(pojo);
+        var primaryKeyIfAny = propertyAccessor.getProperty(idProperty);
 
-//        var entityManager = getEntityManager();
-//        var persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
-//        var primaryKeyIfAny = persistenceUnitUtil.getIdentifier(pojo);
-//
-//        return Optional.ofNullable(primaryKeyIfAny)
-//                .map(primaryKey->
-//                    primaryKeyType.enstringWithCast(primaryKey));
+        return Optional.ofNullable(primaryKeyIfAny)
+                .map(primaryKey->
+                    primaryKeyType.enstringWithCast(primaryKey));
     }
 
     @Override
@@ -233,18 +234,11 @@ implements EntityFacet {
 
     @Override
     public EntityState getEntityState(final Object pojo) {
-
         if (pojo == null
                 || !entityClass.isAssignableFrom(pojo.getClass())) {
             return EntityState.NOT_PERSISTABLE;
         }
-
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] getEntityState
-        throw _Exceptions.notImplemented();
-//        var entityManager = getEntityManager();
-//        var persistenceUnitUtil = getPersistenceUnitUtil(entityManager);
-//
-//        return _JpaEntityStateUtil.getEntityState(entityManager, persistenceUnitUtil, entityClass, primaryKeyType, pojo);
+        return _MetadataUtil.entityState(mappingContext, persistentEntity, pojo);
     }
 
     @Override
@@ -265,19 +259,9 @@ implements EntityFacet {
 
     @Override
     public <T> T detach(final T pojo) {
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] detach
-        //getEntityManager().detach(pojo);
+        // no-op (spring data jdbc does not have a notion of 'attachment')
         return pojo;
     }
 
-    // -- JDBC MAPPING MODEL
-
-    // lazily looks up the ORM metadata (needs an EntityManager)
-    @Getter(lazy=true)
-    private final EntityOrmMetadata ormMetadata = loadOrmMetadata();
-            
-    private EntityOrmMetadata loadOrmMetadata() {
-        return _MetadataUtil.ormMetadataFor(mappingContext, entityClass);
-    }
 
 }
