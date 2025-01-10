@@ -16,19 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jdbc;
+module org.apache.causeway.persistence.jdbc {
+    exports org.apache.causeway.persistence.jdbc;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
-import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
-import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-
-@Configuration
-@Import({
-    CausewayModuleCoreRuntime.class,
-    CausewayModulePersistenceCommons.class,
-})
-public class CausewayModulePersistenceJdbc {
-    public static final String NAMESPACE = "causeway.persistence.jdbc";
+    requires spring.context;
+    requires org.apache.causeway.core.runtime;
+    requires org.apache.causeway.persistence.commons;
 }
