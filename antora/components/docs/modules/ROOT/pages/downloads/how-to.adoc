@@ -21,7 +21,16 @@ If you just want to get going quickly, we suggest using our xref:docs:starters:h
 
 If you want to build Apache Causeway from formally released source tarballs, you can download from here:
 
-* https://www.apache.org/dyn/closer.cgi/causeway/causeway-core/causeway-{page-causewayreleaseversion}-source-release.zip[causeway-{page-causewayreleaseversion}] (https://www.apache.org/dist/causeway/causeway-core/causeway-{page-causewayreleaseversion}-source-release.zip.asc[asc], https://www.apache.org/dist/causeway/causeway-core/causeway-{page-causewayreleaseversion}-source-release.zip.md5[md5])
+* 3.x release:
++
+link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip[causeway-bom-{page-causewayreleaseversion}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.sha512[sha512])
+
+:page-causewayreleaseversion2: 2.1.0
+
+* 2.x release (EOL):
++
+link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.zip[causeway-bom-{page-causewayreleaseversion2}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.sha512[sha512])
+
 
 
 
