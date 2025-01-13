@@ -20,6 +20,7 @@ package org.apache.causeway.persistence.jpa.eclipselink.inject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -84,152 +85,128 @@ public class BeanManagerForEntityListeners implements BeanManager {
 
     @Override
     public Object getReference(final Bean<?> bean, final Type beanType, final CreationalContext<?> ctx) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Object getInjectableReference(final InjectionPoint ij, final CreationalContext<?> ctx) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Set<Bean<?>> getBeans(final Type beanType, final Annotation... qualifiers) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Set<Bean<?>> getBeans(final String name) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Bean<?> getPassivationCapableBean(final String id) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <X> Bean<? extends X> resolve(final Set<Bean<? extends X>> beans) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public void validate(final InjectionPoint injectionPoint) {
-        _Exceptions.throwNotImplemented();
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <T> Set<ObserverMethod<? super T>> resolveObserverMethods(final T event, final Annotation... qualifiers) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public List<Decorator<?>> resolveDecorators(final Set<Type> types, final Annotation... qualifiers) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public List<Interceptor<?>> resolveInterceptors(final InterceptionType type, final Annotation... interceptorBindings) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean isScope(final Class<? extends Annotation> annotationType) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean isNormalScope(final Class<? extends Annotation> annotationType) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean isPassivatingScope(final Class<? extends Annotation> annotationType) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean isQualifier(final Class<? extends Annotation> annotationType) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean isInterceptorBinding(final Class<? extends Annotation> annotationType) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean isStereotype(final Class<? extends Annotation> annotationType) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Set<Annotation> getInterceptorBindingDefinition(final Class<? extends Annotation> bindingType) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Set<Annotation> getStereotypeDefinition(final Class<? extends Annotation> stereotype) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean areQualifiersEquivalent(final Annotation qualifier1, final Annotation qualifier2) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public boolean areInterceptorBindingsEquivalent(final Annotation interceptorBinding1,
             final Annotation interceptorBinding2) {
-        _Exceptions.throwNotImplemented();
-        return false;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public int getQualifierHashCode(final Annotation qualifier) {
-        _Exceptions.throwNotImplemented();
-        return 0;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public int getInterceptorBindingHashCode(final Annotation interceptorBinding) {
-        _Exceptions.throwNotImplemented();
-        return 0;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Context getContext(final Class<? extends Annotation> scopeType) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public ELResolver getELResolver() {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public ExpressionFactory wrapExpressionFactory(final ExpressionFactory expressionFactory) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
@@ -239,76 +216,81 @@ public class BeanManagerForEntityListeners implements BeanManager {
 
     @Override
     public <X> ProducerFactory<X> getProducerFactory(final AnnotatedField<? super X> field, final Bean<X> declaringBean) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <X> ProducerFactory<X> getProducerFactory(final AnnotatedMethod<? super X> method, final Bean<X> declaringBean) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <T> BeanAttributes<T> createBeanAttributes(final AnnotatedType<T> type) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public BeanAttributes<?> createBeanAttributes(final AnnotatedMember<?> type) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <T> Bean<T> createBean(final BeanAttributes<T> attributes, final Class<T> beanClass,
             final InjectionTargetFactory<T> injectionTargetFactory) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <T, X> Bean<T> createBean(final BeanAttributes<T> attributes, final Class<X> beanClass,
             final ProducerFactory<X> producerFactory) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public InjectionPoint createInjectionPoint(final AnnotatedField<?> field) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public InjectionPoint createInjectionPoint(final AnnotatedParameter<?> parameter) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <T extends Extension> T getExtension(final Class<T> extensionClass) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public <T> InterceptionFactory<T> createInterceptionFactory(final CreationalContext<T> ctx, final Class<T> clazz) {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Event<Object> getEvent() {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
     }
 
     @Override
     public Instance<Object> createInstance() {
-        _Exceptions.throwNotImplemented();
-        return null;
+        throw _Exceptions.notImplemented();
+    }
+
+    @Override
+    public Collection<Context> getContexts(final Class<? extends Annotation> scopeType) {
+        throw _Exceptions.notImplemented();
+    }
+
+    @Override
+    public boolean isMatchingBean(final Set<Type> beanTypes, final Set<Annotation> beanQualifiers, final Type requiredType,
+            final Set<Annotation> requiredQualifiers) {
+        throw _Exceptions.notImplemented();
+    }
+
+    @Override
+    public boolean isMatchingEvent(final Type specifiedType, final Set<Annotation> specifiedQualifiers, final Type observedEventType,
+            final Set<Annotation> observedEventQualifiers) {
+        throw _Exceptions.notImplemented();
     }
 
 }

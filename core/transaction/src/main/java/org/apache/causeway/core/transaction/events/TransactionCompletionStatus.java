@@ -38,7 +38,6 @@ public enum TransactionCompletionStatus {
 
     /**
      * @param status field from {@link Status}.
-     * @return
      */
     public static TransactionCompletionStatus forStatus(final int status) {
         switch (status) {

@@ -21,6 +21,8 @@ module org.apache.causeway.valuetypes.markdown.applib {
     exports org.apache.causeway.valuetypes.markdown.applib.value;
     exports org.apache.causeway.valuetypes.markdown.applib.jaxb;
 
+    requires static lombok;
+
     requires flexmark;
     requires flexmark.ext.gfm.strikethrough;
     requires flexmark.ext.tables;
@@ -31,7 +33,7 @@ module org.apache.causeway.valuetypes.markdown.applib {
     requires flexmark.util.sequence;
     requires jakarta.inject;
     requires jakarta.xml.bind;
-    requires static lombok;
+
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;

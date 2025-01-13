@@ -23,10 +23,13 @@ module org.apache.causeway.core.transaction {
     exports org.apache.causeway.core.transaction.events;
     exports org.apache.causeway.core.transaction.scope;
 
+    requires static lombok;
+
     requires jakarta.annotation;
     requires java.sql;
     requires jakarta.inject;
-    requires static lombok;
+    requires jakarta.transaction;
+
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
@@ -35,5 +38,4 @@ module org.apache.causeway.core.transaction {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
-    requires jakarta.transaction;
 }

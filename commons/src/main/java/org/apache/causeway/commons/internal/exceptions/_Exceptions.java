@@ -270,6 +270,7 @@ public final class _Exceptions {
      *}</pre>
      *
      */
+    @Deprecated
     public static void throwNotImplemented() {
         dumpStackTrace();
         throw notImplemented();
