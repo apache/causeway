@@ -23,13 +23,13 @@ If you want to build Apache Causeway from formally released source tarballs, you
 
 * 3.x release:
 +
-link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip[causeway-bom-{page-causewayreleaseversion}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.sha512[sha512])
+link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip[causeway-bom-{page-causewayreleaseversion}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip.sha512[sha512])
 
 :page-causewayreleaseversion2: 2.1.0
 
 * 2.x release (EOL):
 +
-link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.zip[causeway-bom-{page-causewayreleaseversion2}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.sha512[sha512])
+link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.zip[causeway-bom-{page-causewayreleaseversion2}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.zip.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion2}-source-release.zip.sha512[sha512])
 
 
 
@@ -37,46 +37,9 @@ link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleasever
 
 === Verifying Releases
 
-It is essential that you verify the integrity of any downloaded files using the PGP or MD5 signatures.
+You can verify your download using link:https://www.apache.org/info/verification.html[these procedures] and using these link:https://downloads.apache.org/causeway/KEYS[KEYS].
+
 For more information on signing artifacts and why we do it, check out the http://www.apache.org/dev/release-signing.html[Release Signing FAQ].
-
-The PGP signatures can be verified using PGP or GPG. First download the http://www.apache.org/dist/causeway/KEYS[KEYS] as well as the asc signature file for the artifact.
-Make sure you get these files from the http://www.apache.org/dist/causeway/[main distribution directory], rather than from a mirror.
-
-Then verify the signatures using a command such as:
-
-[source,bash,subs="attributes+"]
-----
-pgpk -a KEYS
-pgpv causeway-{page-causewayreleaseversion}-source-release.zip.asc causeway-{page-causewayreleaseversion}-source-release.zip
-----
-
-or
-
-[source,bash,subs="attributes+"]
-----
-pgp -ka KEYS
-pgp causeway-{page-causewayreleaseversion}-source-release.zip.asc causeway-{page-causewayreleaseversion}-source-release.zip
-----
-
-or
-
-[source,bash,subs="attributes+"]
-----
-gpg --import KEYS
-gpg -verify causeway-{page-causewayreleaseversion}-source-release.zip.asc causeway-{page-causewayreleaseversion}-source-release.zip
-----
-
-
-
-Alternatively, you can verify the MD5 signature on the files.
-A Unix/Linux program called `md5` or `md5sum` is included in most distributions.
-It is also available as part of http://www.gnu.org/software/textutils/textutils.html[GNU Textutils].
-Windows users can get binary md5 programs from these (and likely other) places:
-
-* http://www.md5summer.org/[http://www.md5summer.org/]
-* http://www.fourmilab.ch/md5/[http://www.fourmilab.ch/md5/]
-* http://www.pc-tools.net/win32/md5sums/[http://www.pc-tools.net/win32/md5sums/]
 
 
 
@@ -108,4 +71,3 @@ The http://projects.apache.org/doap.html[description of a project] RDF file for 
 If you want to track the latest developments, there are also xref:comguide:ROOT:nightly-builds.adoc[nightly builds] and xref:comguide:ROOT:weekly-builds.adoc[weekly builds].
 
 Although these are maintained by the framework’s committers, do be aware that *these are not official ASF releases*.
-
