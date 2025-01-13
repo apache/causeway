@@ -320,15 +320,13 @@ implements EntityFacet {
         log.debug("about to persist entity {}", pojo);
 
         getTransactionalProcessor()
-        .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
-        .ifFailureFail();
+            .runWithinCurrentTransactionElseCreateNew(()->pm.makePersistent(pojo))
+            .ifFailureFail();
     }
 
-    @Override
-    public void refresh(final Object pojo) {
-        if(pojo==null) {
-            return; // nothing to do
-        }
+    @Override @Nullable
+    public <T> T refresh(@Nullable final T pojo) {
+        if(pojo==null) return pojo; // nothing to do
 
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
@@ -338,8 +336,10 @@ implements EntityFacet {
         log.debug("about to refresh entity {}", pojo);
 
         getTransactionalProcessor()
-        .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
-        .ifFailureFail();
+            .runWithinCurrentTransactionElseCreateNew(()->pm.refresh(pojo))
+            .ifFailureFail();
+
+        return pojo;
     }
 
     @Override
@@ -360,8 +360,8 @@ implements EntityFacet {
         log.debug("about to delete entity {}", pojo);
 
         getTransactionalProcessor()
-        .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
-        .ifFailureFail();
+            .runWithinCurrentTransactionElseCreateNew(()->pm.deletePersistent(pojo))
+            .ifFailureFail();
     }
 
     @Override

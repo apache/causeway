@@ -85,7 +85,7 @@ public interface RepositoryService {
     <T> T detachedEntity(@NonNull T entity);
 
     /**
-     * Executes the passed in {@param callable} in bulk mode, meaning that the transaction will not be flushed within.
+     * Executes the passed in {@code callable} in bulk mode, meaning that the transaction will not be flushed within.
      *
      * <p>
      * Used for example by the audit trail extension, as a performance optimization.
@@ -355,7 +355,7 @@ public interface RepositoryService {
 
     /**
      * Find the only instance of the specified type (including subtypes) that
-     * satifies the provided (client-side) predicate.
+     * satisfies the provided (client-side) predicate.
      *
      * <p>
      * This method is useful during exploration/prototyping, but - because the

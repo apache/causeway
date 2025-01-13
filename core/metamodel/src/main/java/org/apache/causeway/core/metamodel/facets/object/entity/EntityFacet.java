@@ -145,7 +145,7 @@ public interface EntityFacet extends Facet {
 
     void persist(Object pojo);
 
-    void refresh(Object pojo);
+    @Nullable <T> T refresh(@Nullable T pojo);
 
     void delete(Object pojo);
 
@@ -159,7 +159,7 @@ public interface EntityFacet extends Facet {
      */
     boolean isProxyEnhancement(Method method);
 
-    <T> T detach(T pojo);
+    @Nullable <T> T detach(@Nullable T pojo);
 
     PersistenceStack getPersistenceStack();
 

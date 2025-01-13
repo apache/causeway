@@ -38,8 +38,9 @@ extends HasMetaModelContext {
     enum Marker {
         DEPRECATED,
         INCUBATING,
-        JDO,
+        JDBC,
         JPA,
+        JDO
     }
 
     /**

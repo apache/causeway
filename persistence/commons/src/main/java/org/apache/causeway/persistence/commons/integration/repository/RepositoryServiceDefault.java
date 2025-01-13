@@ -256,12 +256,11 @@ implements RepositoryService, HasMetaModelContext {
     public <T> T refresh(final T entity) {
         if(entity==null) return null;
 
-        getSpecificationLoader()
-        .specForType(entity.getClass())
-        .flatMap(ObjectSpecification::entityFacet)
-        .ifPresent(entityFacet->entityFacet.refresh(entity));
-
-        return entity;
+        return getSpecificationLoader()
+            .specForType(entity.getClass())
+            .flatMap(ObjectSpecification::entityFacet)
+            .<T>map(entityFacet->entityFacet.refresh(entity))
+            .orElse(entity);
     }
 
     @Override
@@ -269,14 +268,14 @@ implements RepositoryService, HasMetaModelContext {
         if(entity==null) return null;
 
         return getSpecificationLoader()
-        .specForType(entity.getClass())
-        .flatMap(ObjectSpecification::entityFacet)
-        .map(entityFacet->entityFacet.detach(entity))
-        .map(detachedEntity->
-            detachedEntity==entity
-            ? detachedEntity
-            : getServiceInjector().injectServicesInto(detachedEntity))
-        .orElse(entity);
+            .specForType(entity.getClass())
+            .flatMap(ObjectSpecification::entityFacet)
+            .map(entityFacet->entityFacet.detach(entity))
+            .map(detachedEntity->
+                detachedEntity==entity
+                ? detachedEntity
+                : getServiceInjector().injectServicesInto(detachedEntity))
+            .orElse(entity);
     }
 
     @Override
