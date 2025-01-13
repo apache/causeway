@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.springframework.lang.Nullable;
+
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
@@ -81,8 +83,8 @@ class _EntityFacetForTesting implements EntityFacet {
         throw _Exceptions.unsupportedOperation();
     }
 
-    @Override
-    public void refresh(final Object pojo) {
+    @Override @Nullable
+    public <T> T refresh(@Nullable final T pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 
@@ -97,7 +99,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public Object versionOf(Object pojo) {
+    public Object versionOf(final Object pojo) {
         return _Exceptions.unsupportedOperation();
     }
 

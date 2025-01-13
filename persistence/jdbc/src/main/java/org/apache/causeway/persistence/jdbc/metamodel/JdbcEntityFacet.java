@@ -101,10 +101,10 @@ implements EntityFacet {
     @Override
     public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
         log.debug("fetchEntity; bookmark={}", bookmark);
-        
+
         var primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
         var entityPojo = jdbcAggregateTemplate.findById(primaryKey, entityClass);
-        
+
         return Optional.ofNullable(entityPojo);
     }
 
@@ -116,7 +116,7 @@ implements EntityFacet {
     public Can<ManagedObject> fetchByQuery(final Query<?> query) {
 
         var range = query.getRange();
-        
+
         if (query instanceof AllInstancesQuery queryFindAllInstances) {
 
             var queryEntityType = queryFindAllInstances.getResultType();
@@ -131,7 +131,7 @@ implements EntityFacet {
             if (range.hasLimit()) {
                 springQuery = springQuery.limit(range.getLimitAsInt());
             }
-            
+
             var list = jdbcAggregateTemplate.findAll(springQuery, entityClass);
 
             var entitySpec = getEntitySpecification();
@@ -159,12 +159,12 @@ implements EntityFacet {
         jdbcAggregateTemplate.save(pojo);
     }
 
-    @Override
-    public void refresh(final Object pojo) {
-        if(!isEntityPojo(pojo)) return; // nothing to do
-        
-        //TODO[causeway-persistence-jdbc-CAUSEWAY-3849] refresh / probably not implementable
-        throw _Exceptions.notImplemented();
+    @SuppressWarnings("unchecked")
+    @Override @Nullable
+    public <T> T refresh(@Nullable final T pojo) {
+        return primaryKey(pojo)
+            .<T>map(pkPojo->(T)jdbcAggregateTemplate.findById(pkPojo, entityClass))
+            .orElse(pojo);
     }
 
     @Override
@@ -177,7 +177,7 @@ implements EntityFacet {
     public EntityState getEntityState(final Object pojo) {
         if(!isEntityPojo(pojo)) return EntityState.NOT_PERSISTABLE;
         var primaryKey = primaryKey(pojo);
-        
+
         return !primaryKey.isPresent()
             ? EntityState.SNAPSHOT_NO_OID
             : jdbcAggregateTemplate.existsById(primaryKey.get(), entityClass)
@@ -193,6 +193,7 @@ implements EntityFacet {
 //                return ((HasVersion<?>)pojo).getVersion();
 //            }
 //        }
+        log.warn("version support not yet implemented for Spring Data JDBC integration");
         return null;
     }
 
@@ -206,18 +207,18 @@ implements EntityFacet {
         // no-op / Spring Data JDBC has no session management
         return pojo;
     }
-    
+
     // -- HELPER
-    
+
     // simple guard
     private boolean isEntityPojo(final Object pojo) {
         return pojo != null
                 && entityClass.isAssignableFrom(pojo.getClass());
     }
-    
+
     private Optional<Object> primaryKey(final @Nullable Object pojo) {
         if(!isEntityPojo(pojo)) return Optional.empty();
-        
+
         var idProperty = persistentEntity.getRequiredIdProperty();
         var propertyAccessor = persistentEntity.getPropertyAccessor(pojo);
         var primaryKeyIfAny = propertyAccessor.getProperty(idProperty);

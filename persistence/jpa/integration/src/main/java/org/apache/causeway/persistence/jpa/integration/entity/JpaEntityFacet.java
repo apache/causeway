@@ -51,7 +51,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class JpaEntityFacet
+class JpaEntityFacet
         extends FacetAbstract
         implements EntityFacet {
 
@@ -202,17 +202,16 @@ public class JpaEntityFacet
         entityManager.persist(pojo);
     }
 
-    @Override
-    public void refresh(final Object pojo) {
-        if (pojo == null) {
-            return; // nothing to do
-        }
+    @Override @Nullable
+    public <T> T refresh(@Nullable final T pojo) {
+        if (pojo == null) return pojo; // nothing to do
 
         // guard against misuse
         _Assert.assertNullableObjectIsInstanceOf(pojo, entityClass);
 
         var entityManager = getEntityManager();
         entityManager.refresh(pojo);
+        return pojo;
     }
 
     @Override
