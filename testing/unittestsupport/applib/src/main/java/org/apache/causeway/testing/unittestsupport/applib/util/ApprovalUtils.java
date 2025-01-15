@@ -48,8 +48,11 @@ public class ApprovalUtils {
     /**
      * Creates new approval test options with a scrubber, to normalize line ending characters
      * <p>
-     * Usage:
+     * Usage:<br>
      * {@code Approvals.verify(source, ApprovalUtils.ignoreLineEndings());}
+     * <p>
+     * Usage when appending to existing options:<br>
+     * {@code Approvals.verify(source, options.withScrubber(ApprovalUtils.ignoreLineEndings()::scrub));}
      */
     public Options ignoreLineEndings() {
         return new Options().withScrubber(s -> TextUtils.readLines(s).join("\n")); 
