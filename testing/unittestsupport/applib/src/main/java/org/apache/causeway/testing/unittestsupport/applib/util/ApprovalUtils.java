@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.approvaltests.core.Options;
 import org.approvaltests.reporters.GenericDiffReporter;
+
+import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.experimental.UtilityClass;
 
@@ -40,6 +43,16 @@ public class ApprovalUtils {
         final List<String> textFileExtensions = new ArrayList<>(GenericDiffReporter.TEXT_FILE_EXTENSIONS);
         textFileExtensions.add(ext);
         GenericDiffReporter.TEXT_FILE_EXTENSIONS = Collections.unmodifiableList(textFileExtensions);
+    }
+    
+    /**
+     * Creates new approval test options with a scrubber, to normalize line ending characters
+     * <p>
+     * Usage:
+     * {@code Approvals.verify(source, ApprovalUtils.ignoreLineEndings());}
+     */
+    public Options ignoreLineEndings() {
+        return new Options().withScrubber(s -> TextUtils.readLines(s).join("\n")); 
     }
 
 }
