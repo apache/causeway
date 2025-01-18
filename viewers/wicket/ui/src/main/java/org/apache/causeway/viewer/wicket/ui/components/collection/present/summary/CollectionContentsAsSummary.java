@@ -73,15 +73,14 @@ implements CollectionCountProvider {
 
     public CollectionContentsAsSummary(final String id, final CollectionModel model) {
         super(id, model);
-
         buildGui();
     }
 
     private void buildGui() {
+        var collectionModel = getModel();
+        if(collectionModel.isHidden()) return;
 
-        final CollectionModel model = getModel();
-
-        final ObjectSpecification elementSpec = model.getElementType();
+        final ObjectSpecification elementSpec = collectionModel.getElementType();
 
         final NotificationPanel feedback = new NotificationPanel(ID_FEEDBACK);
         feedback.setOutputMarkupId(true);
@@ -102,7 +101,7 @@ implements CollectionCountProvider {
             var propertyColumnName = numberAssociation.getCanonicalFriendlyName();
             Wkt.labelAdd(item, ID_PROPERTY_NAME, propertyColumnName);
 
-            var visibleAdapters = model.getDataTableModel().dataRowsFilteredAndSortedObservable()
+            var visibleAdapters = collectionModel.getDataTableModel().dataRowsFilteredAndSortedObservable()
                     .getValue()
                     .map(DataRow::rowElement)
                     .toList();
