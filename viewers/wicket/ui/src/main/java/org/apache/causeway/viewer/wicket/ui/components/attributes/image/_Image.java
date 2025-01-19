@@ -40,7 +40,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-class _WktImageUtil {
+class _Image {
 
     public Optional<Image> asWicketImage(
             final @NonNull String id,

@@ -24,21 +24,20 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
-public class JavaAwtImagePanelCssResourceReference extends CssResourceReference {
+public class ImagePanelCssResourceReference extends CssResourceReference {
     private static final long serialVersionUID = 1L;
 
     @Getter(lazy = true) @Accessors(fluent = true)
-    private static final JavaAwtImagePanelCssResourceReference instance =
-        new JavaAwtImagePanelCssResourceReference();
+    private static final ImagePanelCssResourceReference instance = new ImagePanelCssResourceReference();
 
     public static CssHeaderItem asHeaderItem() {
-        return CssHeaderItem.forReference(JavaAwtImagePanelCssResourceReference.instance());
+        return CssHeaderItem.forReference(ImagePanelCssResourceReference.instance());
     }
 
     /**
      * Private constructor.
      */
-    private JavaAwtImagePanelCssResourceReference() {
-        super(JavaAwtImagePanelCssResourceReference.class, "JavaAwtImagePanel.css");
+    private ImagePanelCssResourceReference() {
+        super(ImagePanelCssResourceReference.class, "ImagePanel.css");
     }
 }

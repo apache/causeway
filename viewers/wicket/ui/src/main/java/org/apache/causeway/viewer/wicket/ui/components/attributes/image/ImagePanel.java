@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
-class JavaAwtImagePanel
+class ImagePanel
 extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     private static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
     private static final String ID_SCALAR_VALUE = "scalarValue";
     private static final String ID_FEEDBACK = "feedback";
 
-    public JavaAwtImagePanel(final String id, final UiAttributeWkt attributeModel) {
+    public ImagePanel(final String id, final UiAttributeWkt attributeModel) {
         super(id, attributeModel);
         buildGui();
     }
@@ -52,7 +52,7 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
         Wkt.add(this, createScalarNameLabel(ID_SCALAR_NAME));
 
-        var wicketImage = _WktImageUtil.asWicketImage(ID_SCALAR_VALUE, attributeModel())
+        var wicketImage = _Image.asWicketImage(ID_SCALAR_VALUE, attributeModel())
                 .orElse(null);
         if(wicketImage != null) {
             addOrReplace(wicketImage);

@@ -25,16 +25,16 @@ import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
-public class JavaAwtImagePanelFactory
+public class ImagePanelFactory
 extends AttributeComponentFactory {
 
-    public JavaAwtImagePanelFactory() {
-        super(JavaAwtImagePanel.class);
+    public ImagePanelFactory() {
+        super(ImagePanel.class);
     }
 
     @Override
     protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-        return new JavaAwtImagePanel(id, attributeModel);
+        return new ImagePanel(id, attributeModel);
     }
 
     @Override

@@ -68,7 +68,7 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistr
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.causeway.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.image.JavaAwtImagePanelCssResourceReference;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.image.ImagePanelCssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
@@ -243,7 +243,7 @@ implements ActionPromptProvider {
             .contributeThemeSpecificOverrides(getApplication(), response);
 
         response.render(SidebarCssResourceReference.asHeaderItem());
-        response.render(JavaAwtImagePanelCssResourceReference.asHeaderItem());
+        response.render(ImagePanelCssResourceReference.asHeaderItem());
 
         response.render(LiveQueryJsResourceReference.asHeaderItem());
         response.render(CausewayWicketViewerJsResourceReference.asHeaderItem());
