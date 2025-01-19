@@ -28,7 +28,6 @@ import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -41,14 +40,31 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _Image {
+    
+    Optional<Image> asWicketImage(
+        final @NonNull String id,
+        final @NonNull UiAttributeWkt model) {
 
-    public Optional<Image> asWicketImage(
+        final ManagedObject adapter = model.getObject();
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) return Optional.empty();
+
+        var typeSpec = model.getElementType();
+
+        return Facets.valueStreamSemantics(typeSpec, ImageValueSemantics.class)
+            .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))
+            .filter(_NullSafe::isPresent)
+            .map(buffImg->asWicketImage(id, buffImg).orElse(null))
+            .filter(_NullSafe::isPresent)
+            .findFirst();
+    }
+    
+    // -- HELPER
+
+    private Optional<Image> asWicketImage(
             final @NonNull String id,
             final @Nullable BufferedImage buffImg) {
 
-        if(buffImg == null) {
-            return Optional.empty();
-        }
+        if(buffImg == null) return Optional.empty();
 
         var imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
@@ -61,37 +77,15 @@ class _Image {
         return Optional.of(wicketImage);
     }
 
-    // -- SHORTCUTS
-
-    public Optional<Image> asWicketImage(
-            final @NonNull String id,
-            final @Nullable Blob blob) {
-
-        var buffImg = Optional.ofNullable(blob)
-        .flatMap(Blob::asImage)
-        .orElse(null);
-
-        return asWicketImage(id, buffImg);
-    }
-
-    public Optional<Image> asWicketImage(
-            final @NonNull String id,
-            final @NonNull UiAttributeWkt model) {
-
-      final ManagedObject adapter = model.getObject();
-      if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-          return Optional.empty();
-      }
-
-      var typeSpec = model.getElementType();
-
-      return Facets.valueStreamSemantics(typeSpec, ImageValueSemantics.class)
-      .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))
-      .filter(_NullSafe::isPresent)
-      .map(buffImg->asWicketImage(id, buffImg).orElse(null))
-      .filter(_NullSafe::isPresent)
-      .findFirst();
-
-    }
+//    private Optional<Image> asWicketImage(
+//            final @NonNull String id,
+//            final @Nullable Blob blob) {
+//
+//        var buffImg = Optional.ofNullable(blob)
+//            .flatMap(Blob::asImage)
+//            .orElse(null);
+//
+//        return asWicketImage(id, buffImg);
+//    }
 
 }

@@ -23,14 +23,17 @@ import org.apache.wicket.Component;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
-@Deprecated
-class ImagePanelFactory
+/**
+ * {@link ComponentFactory} for {@link ImageAttributePanel}.
+ */
+public class ImageAttributePanelFactory 
 extends AttributeComponentFactory {
 
-    public ImagePanelFactory() {
-        super(ImagePanel.class);
+    public ImageAttributePanelFactory() {
+        super(ImageAttributePanel.class);
     }
 
     @Override
@@ -45,3 +48,4 @@ extends AttributeComponentFactory {
                 && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
     }
 }
+

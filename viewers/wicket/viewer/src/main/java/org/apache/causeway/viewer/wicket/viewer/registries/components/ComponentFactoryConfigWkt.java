@@ -54,7 +54,7 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.blobclob.BlobA
 import org.apache.causeway.viewer.wicket.ui.components.attributes.blobclob.ClobAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.bool.BooleanAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.choices.ChoicesSelect2PanelFactory;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.image.ImagePanelFactory;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.image.ImageAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupAttributePanelFactories;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.passwd.PasswordAttributePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.string.StringAttributePanelFactory;
@@ -209,7 +209,7 @@ public class ComponentFactoryConfigWkt {
 
         componentFactories.add(new StringAttributePanelFactory());
 
-        componentFactories.add(new ImagePanelFactory());
+        componentFactories.add(new ImageAttributePanelFactory());
 
         componentFactories.add(new PasswordAttributePanelFactory());
 
