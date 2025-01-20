@@ -17,8 +17,8 @@
  *  under the License.
  */
 // ISIS-3071 file-input nesting issue
-let scalarFrames = document.querySelectorAll("span.uploadFile");
-scalarFrames.forEach((scalarFrame) => {
+document.querySelectorAll("span.uploadFile")
+.forEach((scalarFrame) => {
 	let fileInputFrames = scalarFrame.querySelectorAll("div.file-input");
 	let isNested = fileInputFrames.length>1;
 	// replace the outermost with the innermost
@@ -40,4 +40,44 @@ scalarFrames.forEach((scalarFrame) => {
 		//innermostPreview.parentNode.replaceChild(outermostPreview, innermostPreview);
 		outermost.parentNode.replaceChild(innermost, outermost);
 	}
+    
+    // remove unused caption-icon and fix css
+    scalarFrame.querySelectorAll('span.file-caption-icon')
+        .forEach((node)=>node.remove());
+    scalarFrame.querySelectorAll('span.hidden-xs')
+            .forEach((node)=>node.remove());
+        
+    scalarFrame.querySelectorAll('div.file-caption')
+        .forEach((node)=>{
+            node.classList.remove('icon-visible');
+            node.classList.remove('input-group-sm');
+        });
+    scalarFrame.querySelectorAll('div.input-group')
+            .forEach((node)=>{
+                node.classList.add('input-group-sm');
+            });
+            
+    // replace bi icons with fa
+    scalarFrame.querySelectorAll('i.bi-folder2-open')
+        .forEach((node)=>{
+            node.classList.remove('bi-folder2-open');
+            node.classList.add('fa-regular');
+            node.classList.add('fa-folder-open');
+        });    
+    scalarFrame.querySelectorAll('i.bi-trash')
+            .forEach((node)=>{
+                node.classList.remove('bi-trash');
+                node.classList.add('fa-regular');
+                node.classList.add('fa-trash-can');
+            });
+    scalarFrame.querySelectorAll('i.bi-slash-circle')
+            .forEach((node)=>{
+                node.classList.remove('bi-slash-circle');
+                node.classList.add('fa-solid');
+                node.classList.add('fa-ban');
+            });
 })
+
+    
+
+    

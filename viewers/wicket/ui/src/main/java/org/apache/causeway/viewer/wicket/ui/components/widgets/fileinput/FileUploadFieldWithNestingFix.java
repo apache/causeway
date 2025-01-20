@@ -20,10 +20,12 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.fileinput;
 
 import java.util.List;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.causeway.viewer.wicket.ui.util.WktHeaderItems;
 
@@ -42,6 +44,9 @@ public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
     private static final HeaderItem headerItem =
                 WktHeaderItems.forScriptReferenceAsOnDomReady(
                         FileUploadFieldWithNestingFix.class, "causeway-file-upload-nesting-fix.nocompress.js");
+    
+    private static final CssResourceReference CSS =
+        new CssResourceReference(FileUploadFieldWithNestingFix.class, "FileUploadFieldWithNestingFix.css");
 
     public FileUploadFieldWithNestingFix(final String id,
             final IModel<List<FileUpload>> model, final FileInputConfig config) {
@@ -52,8 +57,9 @@ public class FileUploadFieldWithNestingFix extends BootstrapFileInputField {
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(headerItem());
+        response.render(CssHeaderItem.forReference(CSS));
     }
-
+    
     @Override
     public boolean isRequired() {
         //FIXME[CAUSEWAY-3203]
