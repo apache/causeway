@@ -45,7 +45,10 @@ extends AttributeComponentFactory {
     protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
         var typeSpec = attributeModel.getElementType();
         return appliesIf(typeSpec != null
-                && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
+                && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class)
+                // if has any choices, use select-2 component instead
+                && !attributeModel.hasChoices()
+                && !attributeModel.hasAutoComplete());
     }
 }
 
