@@ -26,8 +26,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ByteArrayResource;
-import org.apache.wicket.request.resource.IResource;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.viewer.commons.model.components.UiString;
@@ -56,11 +54,6 @@ extends AttributePanelWithFormField<BufferedImage> {
         return FileUploadModels.image(attributeModel());
     }
 
-    protected IResource newResource(final BufferedImage image) {
-        var bytes = _ImageUtils.getImageData(image);
-        return new ByteArrayResource(_ImageUtils.getMimeTypeFromBytes(bytes), _ImageUtils.getImageData(image), "Image");
-    }
-
     // -- INPUT FORMAT
 
     @Override
@@ -83,7 +76,7 @@ extends AttributePanelWithFormField<BufferedImage> {
     @Override
     protected UiString obtainOutputFormat() {
         var caption = pojoOptional()
-                .map(_ImageUtils::getName)
+                .map(buffImg->"Image")
                 .orElseGet(()->
                     getPlaceholderRenderService()
                     .asText(PlaceholderLiteral.NULL_REPRESENTATION));
