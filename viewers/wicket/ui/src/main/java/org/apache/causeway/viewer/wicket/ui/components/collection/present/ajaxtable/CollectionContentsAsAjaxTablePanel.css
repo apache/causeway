@@ -121,8 +121,7 @@
 }
 
 .collectionContentsAsAjaxTablePanel table.contents img {
-    width: 16px;
-    height: 16px;
+    max-height: 5em;
 }
 
 .collectionContentsAsAjaxTablePanel table.contents tbody .togglebox-column {
