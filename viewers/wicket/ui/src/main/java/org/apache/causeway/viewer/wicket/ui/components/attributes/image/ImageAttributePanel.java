@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
@@ -34,11 +33,9 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.FileUploadModels;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanelWithFormField;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 /**
  * Panel for rendering scalars of type {@link BufferedImage}.
@@ -95,18 +92,7 @@ extends AttributePanelWithFormField<BufferedImage> {
 
     @Override
     protected Component createComponentForOutput(final String id) {
-//        return _Image.asWicketImage(id, attributeModel())
-//            .map(Component.class::cast)
-//            .orElseGet(()->Wkt.label(id, "no image"));
-        
-        //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3851] don't handle attribute labels twice (here and in ImagePanel)
         return new ImagePanel(id, attributeModel());
-        
-        //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3851] a download-link is actually useful for images
-//        var link = CompactFragment.LINK
-//                .createFragment(id, this, scalarValueId->
-//                    createDownloadLink(scalarValueId, this::outputFormatAsString));
-//        return link;
     }
 
     // -- HELPER
@@ -117,25 +103,6 @@ extends AttributePanelWithFormField<BufferedImage> {
 
     private Optional<BufferedImage> pojoOptional() {
         return Optional.ofNullable(unwrapped.getObject());
-    }
-
-    private Component createDownloadLink(final String id, final IModel<String> labelModel) {
-        return pojoOptional()
-            .map(this::newResource)
-            .map(resource->(MarkupContainer)Wkt.downloadLinkNoCache(id, resource))
-            .<Component>map(linkContainer->{
-                WktTooltips.addTooltip(linkContainer, translate("Download file"));
-                Wkt.labelAdd(linkContainer, CompactFragment.ID_LINK_LABEL, labelModel);
-                return linkContainer;
-            })
-            .orElseGet(()->{
-                // represent null reference by a simple markup displaying '(none)'
-                var linkContainer = Wkt.container(id);
-                Wkt.markupAdd(linkContainer, CompactFragment.ID_LINK_LABEL,
-                        getPlaceholderRenderService()
-                        .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
-                return linkContainer;
-            });
     }
 
 }

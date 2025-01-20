@@ -69,6 +69,7 @@ import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -900,6 +901,13 @@ public class Wkt {
 
     // -- LINK
 
+    //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3851]
+    public ResourceLink link(final String id, BufferedImage buffImg) {
+        var imageResource = new BufferedDynamicImageResource();
+        imageResource.setImage(buffImg);
+        return new ResourceLink<BufferedImage>(id, imageResource);
+    }
+    
     public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
         return new AjaxLinkNoPropagate(id, onClick);
     }

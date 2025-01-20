@@ -18,9 +18,28 @@
   under the License.
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-    <body>
-        <wicket:panel>
-            <img class="imagePanel" wicket:id="scalarValue"/>
-        </wicket:panel>
-    </body>
+
+<body>
+    <wicket:panel>
+        <div class="imagePanel">
+            <img wicket:id="thumbnail" onmouseenter="enterHandler(event)" onmouseleave="leaveHandler(event)" onclick="clickHandler(event)"/>
+            <a wicket:id="imagelink" class="buttonImageFullSize btn btn-secondary btn-sm" target="_blank"
+                style="display: none">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </div>
+        <script>
+            function enterHandler(event) {
+                event.target.nextElementSibling.style.display = 'block';
+            }
+            function leaveHandler(event) {
+                event.target.nextElementSibling.style.display = 'none';
+            }
+            function clickHandler(event) {
+                event.target.nextElementSibling.click();
+            }
+        </script>
+    </wicket:panel>
+</body>
+
 </html>

@@ -43,7 +43,8 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_VALUE = "scalarValue";
+    private static final String ID_THUMBNAIL = "thumbnail";
+    private static final String ID_IMAGELINK = "imagelink";
     
     private static final CssResourceReference IMAGE_CSS =
         new CssResourceReference(ImagePanel.class, "ImagePanel.css");
@@ -67,9 +68,10 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
     private void buildGui() {
         bufferedImage()
             .ifPresentOrElse(bufferedImage->{
-                addOrReplace(Wkt.imageNonCaching(ID_SCALAR_VALUE, bufferedImage));
+                addOrReplace(Wkt.imageNonCaching(ID_THUMBNAIL, bufferedImage));
+                addOrReplace(Wkt.link(ID_IMAGELINK, bufferedImage));
             }, ()->{
-                WktComponents.permanentlyHide(this, ID_SCALAR_VALUE);
+                WktComponents.permanentlyHide(this, ID_THUMBNAIL, ID_IMAGELINK);
             });
     }
 
