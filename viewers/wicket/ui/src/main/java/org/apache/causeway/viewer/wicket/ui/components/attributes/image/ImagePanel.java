@@ -18,11 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes.image;
 
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.basic.Label;
+import java.awt.image.BufferedImage;
+import java.util.Optional;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
@@ -32,49 +40,47 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 class ImagePanel
 extends PanelAbstract<ManagedObject, UiAttributeWkt> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_SCALAR_NAME = "scalarName";
     private static final String ID_SCALAR_VALUE = "scalarValue";
-    private static final String ID_FEEDBACK = "feedback";
+    
+    private static final CssResourceReference IMAGE_CSS =
+        new CssResourceReference(ImagePanel.class, "ImagePanel.css");
 
     public ImagePanel(final String id, final UiAttributeWkt attributeModel) {
         super(id, attributeModel);
+    }
+    
+    @Override
+    public void renderHead(final IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(IMAGE_CSS));
+    }
+    
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
         buildGui();
     }
 
     private void buildGui() {
-
-        Wkt.add(this, createScalarNameLabel(ID_SCALAR_NAME));
-
-        var wicketImage = _Image.asWicketImage(ID_SCALAR_VALUE, attributeModel())
-                .orElse(null);
-        if(wicketImage != null) {
-            addOrReplace(wicketImage);
-
-            addOrReplace(new NotificationPanel(
-                    ID_FEEDBACK,
-                    wicketImage,
-                    new ComponentFeedbackMessageFilter(wicketImage)));
-
-        } else {
-            WktComponents.permanentlyHide(this, ID_SCALAR_VALUE, ID_FEEDBACK);
-        }
+        
+        //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3851] why is this still needed?
+        Wkt.add(this, createScalarNameLabel("scalarName")); 
+        
+        bufferedImage()
+            .ifPresentOrElse(bufferedImage->{
+                addOrReplace(Wkt.imageNonCaching(ID_SCALAR_VALUE, bufferedImage));
+            }, ()->{
+                WktComponents.permanentlyHide(this, ID_SCALAR_VALUE);
+            });
     }
-
-    @Override
-    public String getVariation() {
-        return Facets.labelAt(attributeModel().getMetaModel())
-                .name();
-    }
-
+    
     /** see also {@link AttributePanel} */
-    protected Label createScalarNameLabel(final String id) {
+    private Label createScalarNameLabel(final String id) {
 
         var attributeModel = attributeModel();
         var scalarNameLabel = Wkt.label(id, attributeModel.getFriendlyName());
@@ -88,8 +94,24 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
         return scalarNameLabel;
     }
 
-    protected final UiAttributeWkt attributeModel() {
+    // -- HELPER
+    
+    private final UiAttributeWkt attributeModel() {
         return getModel();
     }
 
+    private Optional<BufferedImage> bufferedImage() {
+        var model = attributeModel();
+        
+        final ManagedObject adapter = model.getObject();
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) return Optional.empty();
+
+        var typeSpec = model.getElementType();
+
+        return Facets.valueStreamSemantics(typeSpec, ImageValueSemantics.class)
+            .map(imageValueSemantics->imageValueSemantics.getImage(adapter).orElse(null))
+            .filter(_NullSafe::isPresent)
+            .findFirst();
+    }
+    
 }

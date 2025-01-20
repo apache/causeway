@@ -56,7 +56,7 @@ extends AttributePanelWithFormField<BufferedImage> {
     }
 
     protected IModel<List<FileUpload>> fileUploadModel() {
-        return FileUploadModels.blob(attributeModel());
+        return FileUploadModels.image(attributeModel());
     }
 
     protected IResource newResource(final BufferedImage image) {

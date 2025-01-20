@@ -38,7 +38,7 @@ extends AttributeComponentFactory {
 
     @Override
     protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-        return new ImagePanel(id, attributeModel);
+        return new ImageAttributePanel(id, attributeModel);
     }
 
     @Override

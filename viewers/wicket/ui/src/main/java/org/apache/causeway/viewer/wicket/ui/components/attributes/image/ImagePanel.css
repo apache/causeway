@@ -18,7 +18,7 @@
  */
  
  /* give BufferedImage(s) some space */
-.javaAwtImagePanel.image img {
+.imagePanel.img {
   margin: 4px;
   padding: 4px;
   border: 1px solid #00000018;
