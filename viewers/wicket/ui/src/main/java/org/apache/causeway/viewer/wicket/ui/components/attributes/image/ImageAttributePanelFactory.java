@@ -23,24 +23,32 @@ import org.apache.wicket.Component;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.valuesemantics.ImageValueSemantics;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeComponentFactory;
 
-public class ImagePanelFactory
+/**
+ * {@link ComponentFactory} for {@link ImageAttributePanel}.
+ */
+public class ImageAttributePanelFactory 
 extends AttributeComponentFactory {
 
-    public ImagePanelFactory() {
-        super(ImagePanel.class);
+    public ImageAttributePanelFactory() {
+        super(ImageAttributePanel.class);
     }
 
     @Override
     protected Component createComponent(final String id, final UiAttributeWkt attributeModel) {
-        return new ImagePanel(id, attributeModel);
+        return new ImageAttributePanel(id, attributeModel);
     }
 
     @Override
     protected ApplicationAdvice appliesTo(final UiAttributeWkt attributeModel) {
         var typeSpec = attributeModel.getElementType();
         return appliesIf(typeSpec != null
-                && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class));
+                && Facets.valueHasSemantics(typeSpec, ImageValueSemantics.class)
+                // if has any choices, use select-2 component instead
+                && !attributeModel.hasChoices()
+                && !attributeModel.hasAutoComplete());
     }
 }
+

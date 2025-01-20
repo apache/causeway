@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.util;
 
 import static de.agilecoders.wicket.jquery.JQuery.$;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.extensions.markup.html.image.resource.ThumbnailImageResource;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -63,8 +65,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.NonCachingImage;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -805,6 +810,17 @@ public class Wkt {
     }
 
     // -- IMAGE
+    
+    public Image imageNonCaching(final String id, final BufferedImage buffImg) {
+        var imageResource = new BufferedDynamicImageResource();
+        imageResource.setImage(buffImg);
+
+        var thumbnailImageResource = new ThumbnailImageResource(imageResource, 300);
+
+        var wicketImage = new NonCachingImage(id, thumbnailImageResource);
+        wicketImage.setOutputMarkupId(true);
+        return wicketImage;
+    }
 
     public Image imageCachable(final String id, final ResourceReference imageResource) {
         return new Image(id, imageResource) {
@@ -885,6 +901,12 @@ public class Wkt {
 
     // -- LINK
 
+    public ResourceLink<Void> link(final String id, BufferedImage buffImg) {
+        var imageResource = new BufferedDynamicImageResource();
+        imageResource.setImage(buffImg);
+        return new ResourceLink<Void>(id, imageResource);
+    }
+    
     public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
         return new AjaxLinkNoPropagate(id, onClick);
     }

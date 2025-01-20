@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.awt.image.BufferedImage;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
@@ -35,33 +36,19 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class FileUploadModels {
-
+    
     public ScalarConvertingModel<List<FileUpload>, Blob> blob(final @NonNull UiAttributeWkt attributeModel) {
-        return new ScalarConvertingModel<List<FileUpload>, Blob>(attributeModel) {
+        return new FileUploadConvertingModel<Blob>(attributeModel) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected Blob toScalarValue(final @Nullable List<FileUpload> fileUploads) {
-
-                if(fileUploads==null
-                        || fileUploads.isEmpty()) {
-                    return null;
-                }
-
-                final FileUpload fileUpload = fileUploads.get(0);
+            Blob toScalarValue(@NonNull FileUpload fileUpload) {
                 final String contentType = fileUpload.getContentType();
                 final String clientFileName = fileUpload.getClientFileName();
                 final byte[] bytes = fileUpload.getBytes();
                 final Blob blob = new Blob(clientFileName, contentType, bytes);
                 return blob;
-            }
-
-            @Override
-            protected List<FileUpload> fromScalarValue(final Blob blob) {
-                return blob!=null
-                        ? Collections.emptyList() //[CAUSEWAY-3203] just enough so we can distinguish the empty from the present case
-                        : null;
             }
 
         };
@@ -75,20 +62,12 @@ public class FileUploadModels {
         // (NB: can't reference 'charset' in constructor, as javac creates a hidden instance field in the inner class)
         final String charsetName = charset.name();
 
-        return new ScalarConvertingModel<List<FileUpload>, Clob>(attributeModel) {
+        return new FileUploadConvertingModel<Clob>(attributeModel) {
 
             private static final long serialVersionUID = 1L;
 
-            @SneakyThrows
-            @Override
-            protected Clob toScalarValue(final @Nullable List<FileUpload> fileUploads) {
-
-                if(fileUploads==null
-                        || fileUploads.isEmpty()) {
-                    return null;
-                }
-
-                final FileUpload fileUpload = fileUploads.get(0);
+            @Override @SneakyThrows
+            Clob toScalarValue(@NonNull FileUpload fileUpload) {
                 final String contentType = fileUpload.getContentType();
                 final String clientFileName = fileUpload.getClientFileName();
                 final String str = new String(fileUpload.getBytes(), charsetName);
@@ -96,14 +75,55 @@ public class FileUploadModels {
                 return clob;
             }
 
+        };
+    }
+    
+    public ScalarConvertingModel<List<FileUpload>, BufferedImage> image(final @NonNull UiAttributeWkt attributeModel) {
+        return new FileUploadConvertingModel<BufferedImage>(attributeModel) {
+
+            private static final long serialVersionUID = 1L;
+
             @Override
-            protected List<FileUpload> fromScalarValue(final Clob clob) {
-                return clob!=null
-                        ? Collections.emptyList() //[CAUSEWAY-3203] just enough so we can distinguish the empty from the present case
-                        : null;
+            BufferedImage toScalarValue(@NonNull FileUpload fileUpload) {
+                final String contentType = fileUpload.getContentType();
+                final String clientFileName = fileUpload.getClientFileName();
+                final byte[] bytes = fileUpload.getBytes();
+                final Blob blob = new Blob(clientFileName, contentType, bytes);
+                return blob.asImage().orElse(null);
             }
 
         };
+    }
+    
+    // -- HELPER
+    
+    static abstract class FileUploadConvertingModel<T> extends ScalarConvertingModel<List<FileUpload>, T> {
+        private static final long serialVersionUID = 1L;
+        
+        protected FileUploadConvertingModel(@NonNull UiAttributeWkt attributeModel) {
+            super(attributeModel);
+        }
+        
+        abstract T toScalarValue(@NonNull final FileUpload fileUpload);
+        
+        @Override
+        protected final T toScalarValue(final @Nullable List<FileUpload> fileUploads) {
+            if(fileUploads==null
+                || fileUploads.isEmpty()) {
+                return null;
+            }
+            final FileUpload fileUpload = fileUploads.get(0);
+            if(fileUpload==null) return null;
+            return toScalarValue(fileUpload);
+        }
+        
+        @Override
+        protected final List<FileUpload> fromScalarValue(final T t) {
+            return t!=null
+                    ? Collections.emptyList() //[CAUSEWAY-3203] just enough so we can distinguish the empty from the present case
+                    : null;
+        }
+        
     }
 
 }

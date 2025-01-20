@@ -16,10 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
- 
- /* give BufferedImage(s) some space */
-.javaAwtImagePanel.image img {
-  margin: 4px;
-  padding: 4px;
-  border: 1px solid #00000018;
+
+div.imagePanel {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* give BufferedImage(s) some space */
+.imagePanel img {
+    margin: 0.4em;
+    padding: 0.4em;
+    border: 1px solid #00000018;
+}
+
+.imagePanel a.buttonImageFullSize {
+    position: absolute;
+    top: 1.2em;
+    right: 1.2em;
 }
