@@ -25,7 +25,6 @@ div.imagePanel {
 
 /* give BufferedImage(s) some space */
 .imagePanel img {
-    margin: 0.4em;
     padding: 0.4em;
     border: 1px solid #00000018;
 }
