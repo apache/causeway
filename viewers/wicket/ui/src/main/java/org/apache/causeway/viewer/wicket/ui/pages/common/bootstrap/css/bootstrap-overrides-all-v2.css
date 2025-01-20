@@ -624,7 +624,8 @@ div.label-none .scalarValueWrapper {
     padding-right: 14px;
 }
 
-div.label-left .scalarValueWrapper .form-control {
+/* full width; however, exclude form groups */
+div.label-left .scalarValueWrapper .form-control:not(.file-caption-name) {
     width: 100%;
 }
 
