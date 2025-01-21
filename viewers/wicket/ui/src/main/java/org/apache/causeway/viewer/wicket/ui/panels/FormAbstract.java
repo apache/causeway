@@ -18,8 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.ui.panels;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnEventHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -43,6 +47,32 @@ implements
         super(id, model);
     }
 
+    // -- WICKET 10.3.0 BUG
+    
+    // see https://github.com/apache/wicket/pull/1076/files#top
+    @Deprecated // remove once Wicket 10.4.0 is available
+    @Override
+    protected void addDefaultSubmitButtonHandler(IHeaderResponse headerResponse) {
+        final Component component = (Component) super.getDefaultButton();
+        String submitId = component.getMarkupId();
+
+        AppendingStringBuffer script = new AppendingStringBuffer();
+        script.append("if (event.target.tagName.toLowerCase() !== 'input' || event.which != 13) return;");
+        script.append("var b = document.getElementById('" + submitId + "');");
+        script.append("if (window.getComputedStyle(b).visibility === 'hidden') return;");
+        script.append("event.stopPropagation();");
+        script.append("event.preventDefault();");
+        script.append("if (b != null && b.onclick != null && typeof (b.onclick) != 'undefined') {");
+        script.append("var r = Wicket.bind(b.onclick, b)();");
+        script.append("if (r != false) b.click();");
+        script.append("} else {");
+        script.append("b.click();");
+        script.append("}");
+        script.append("return false;");
+
+        headerResponse.render(OnEventHeaderItem.forMarkupId(getMarkupId(), "keypress", script.toString()));
+    }
+    
     // -- DEPENDENCIES
 
     private transient ComponentFactoryRegistry componentFactoryRegistry;
