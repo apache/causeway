@@ -37,6 +37,7 @@
     <modules>
 		<module>applib</module>
         <module>excel</module>
+        <module>pdf</module>
     </modules>
 
 </project>

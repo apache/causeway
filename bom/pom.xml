@@ -164,6 +164,7 @@ identified
 
         <ognl.version>3.4.5</ognl.version>
 
+        <pdfbox.version>3.0.3</pdfbox.version>
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.4.0</poi.version>
 
@@ -1878,6 +1879,12 @@ identified
                         <artifactId>javassist</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox.version}</version>
             </dependency>
 
             <dependency>
