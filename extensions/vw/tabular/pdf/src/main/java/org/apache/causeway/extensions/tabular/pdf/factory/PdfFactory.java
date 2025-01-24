@@ -24,7 +24,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -84,15 +88,29 @@ public class PdfFactory implements AutoCloseable {
     }
     
     @SneakyThrows
-    public void drawDataTable(
-            List<String> headerTexts,
-            List<Float> colWidths, 
+    public void drawHeader(String text) {
+        try (PDPageContentStream contents = new PDPageContentStream(document, page)) {
+            PDFont font = new PDType1Font(FontName.HELVETICA_BOLD);
+            contents.beginText();
+            contents.setFont(font, 12);
+            contents.newLineAtOffset(margin, yStart);
+            contents.showText(text);
+            contents.endText();
+            this.yStart-= 16; //TODO calculate from line height
+        }
+    }
+    
+    @SneakyThrows
+    public void drawTable(
+            List<Float> colWidths,
+            List<String> primaryHeaderTexts,
+            List<String> secondaryHeaderTexts,
             List<List<Object>> rowData) {
         var baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, 
             document, page, true, true);
-        var pdfTable = new PdfTable(baseTable, page, headerTexts, colWidths);
+        var pdfTable = new PdfTable(baseTable, page, colWidths, primaryHeaderTexts, secondaryHeaderTexts);
         pdfTable.appendRows(rowData);
-        yStart = baseTable.draw() - tablesmargin;
+        this.yStart = baseTable.draw() - tablesmargin;
     }
     
     @SneakyThrows
@@ -109,4 +127,5 @@ public class PdfFactory implements AutoCloseable {
         
         return result.get();
     }
+
 }

@@ -119,67 +119,67 @@ public record ExcelFileWriter(@Nullable Options options) {
 
     private void writeSheet(final Workbook wb, final TabularModel.TabularSheet tabularSheet) {
 
-            var sheetName = tabularSheet.sheetName();
+        var sheetName = tabularSheet.sheetName();
 
-            Row row;
+        Row row;
 
-            var cellWriter = new ExcelCellWriter(5);
-            var sheet = wb.createSheet(sheetName);
-            var cellStyleProvider = CellStyleProvider.create(wb, options);
-            var rowFactory = new RowFactory(sheet);
+        var cellWriter = new ExcelCellWriter(5);
+        var sheet = wb.createSheet(sheetName);
+        var cellStyleProvider = CellStyleProvider.create(wb, options);
+        var rowFactory = new RowFactory(sheet);
 
-            var dataColumns = tabularSheet.columns();
+        var dataColumns = tabularSheet.columns();
 
-            // primary header row
-            row = rowFactory.newRow();
-            int i=0;
-            for(var column : dataColumns) {
-                final Cell cell = row.createCell((short) i++);
-                cell.setCellValue(column.columnName());
-                cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
-            }
+        // primary header row
+        row = rowFactory.newRow();
+        int i=0;
+        for(var column : dataColumns) {
+            final Cell cell = row.createCell((short) i++);
+            cell.setCellValue(column.columnName());
+            cell.setCellStyle(cellStyleProvider.primaryHeaderStyle());
+        }
 
-            // secondary header row
+        // secondary header row
+        row = rowFactory.newRow();
+        i=0;
+        var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
+        for(var column : dataColumns) {
+            final Cell cell = row.createCell((short) i++);
+            final String columnDescription = column.columnDescription();
+            cell.setCellValue(columnDescription);
+            maxLinesInRow.accept((int)
+                _Strings.splitThenStream(columnDescription, "\n").count());
+            cell.setCellStyle(cellStyleProvider.secondaryHeaderStyle());
+        }
+        autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
+            wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
+
+        var dataRows = tabularSheet.rows();
+
+        // detail rows
+        for (var dataRow : dataRows) {
             row = rowFactory.newRow();
             i=0;
-            var maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
+            maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
             for(var column : dataColumns) {
                 final Cell cell = row.createCell((short) i++);
-                final String columnDescription = column.columnDescription();
-                cell.setCellValue(columnDescription);
-                maxLinesInRow.accept((int)
-                        _Strings.splitThenStream(columnDescription, "\n").count());
-                cell.setCellStyle(cellStyleProvider.secondaryHeaderStyle());
+                final TabularCell tabularCell = dataRow.getCell(column);
+                final int linesWritten = cellWriter.setCellValue(
+                    column,
+                    tabularCell,
+                    cell,
+                    cellStyleProvider);
+                maxLinesInRow.accept(linesWritten);
             }
-            autoSizeRow(row, maxLinesInRow.getResult().orElse(1),
-                    wb.getFontAt(cellStyleProvider.secondaryHeaderStyle().getFontIndex()));
+            cellStyleProvider.applyCustomStyle(dataRow, row);
+            autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
+        }
 
-            var dataRows = tabularSheet.rows();
+        // column auto-size
+        autoSizeColumns(sheet, dataColumns.size());
 
-            // detail rows
-            for (var dataRow : dataRows) {
-                row = rowFactory.newRow();
-                i=0;
-                maxLinesInRow = _Reduction.of(1, Math::max); // row auto-size calculation
-                for(var column : dataColumns) {
-                    final Cell cell = row.createCell((short) i++);
-                    final TabularCell tabularCell = dataRow.getCell(column);
-                    final int linesWritten = cellWriter.setCellValue(
-                            column,
-                            tabularCell,
-                            cell,
-                            cellStyleProvider);
-                    maxLinesInRow.accept(linesWritten);
-                }
-                cellStyleProvider.applyCustomStyle(dataRow, row);
-                autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
-            }
-
-            // column auto-size
-            autoSizeColumns(sheet, dataColumns.size());
-
-            // freeze panes
-            sheet.createFreezePane(0, 2);
+        // freeze panes
+        sheet.createFreezePane(0, 2);
     }
 
     private void autoSizeRow(final Row row, final int numberOfLines, final @Nullable Font fontHint) {

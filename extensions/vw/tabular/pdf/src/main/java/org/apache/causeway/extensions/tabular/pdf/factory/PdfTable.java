@@ -19,11 +19,8 @@
 package org.apache.causeway.extensions.tabular.pdf.factory;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +29,11 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
+import org.apache.causeway.commons.internal.base._NullSafe;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import be.quodlibet.boxable.BaseTable;
 import be.quodlibet.boxable.Cell;
@@ -41,7 +41,6 @@ import be.quodlibet.boxable.HorizontalAlignment;
 import be.quodlibet.boxable.Row;
 import be.quodlibet.boxable.Table;
 import be.quodlibet.boxable.VerticalAlignment;
-import be.quodlibet.boxable.image.Image;
 import be.quodlibet.boxable.line.LineStyle;
 import be.quodlibet.boxable.utils.FontUtils;
 
@@ -49,18 +48,20 @@ import be.quodlibet.boxable.utils.FontUtils;
 class PdfTable {
     
     @Getter @Setter private Table table;
-    private final List<String> headerTexts;
+    private final List<String> primaryHeaderTexts;
+    private final List<String> secondaryHeaderTexts;
     @Getter @Setter private List<Float> colWidths;
-    @Getter private final Cell headerCellTemplate;
-    private final List<Cell> dataCellTemplateEvenList = new ArrayList<>();
-    private final List<Cell> dataCellTemplateOddList = new ArrayList<>();
-    private final Cell defaultCellTemplate;
-    private boolean copyFirstColumnCellTemplateOddToEven = false;
-    private boolean copyLastColumnCellTemplateOddToEven = false;
+    
+    private final Cell primaryHeaderTemplate;
+    private final Cell secondaryHeaderTemplate;
+    private final Cell evenTemplate;
+    private final Cell oddTemplate;
 
-    PdfTable(Table table, PDPage page, List<String> headerTexts, List<Float> colWidths) throws IOException {
+    @SneakyThrows
+    PdfTable(Table table, PDPage page, List<Float> colWidths, List<String> primaryHeaderTexts, List<String> secondaryHeaderTexts) {
         this.table = table;
-        this.headerTexts = headerTexts;
+        this.primaryHeaderTexts = primaryHeaderTexts;
+        this.secondaryHeaderTexts = secondaryHeaderTexts;
         this.colWidths = (colWidths.size() == 0) ? null : colWidths;
         // Create a dummy pdf document, page and table to create template cells
         PDDocument ddoc = new PDDocument();
@@ -70,41 +71,30 @@ class PdfTable {
         ddoc.addPage(dpage);
         BaseTable dummyTable = new BaseTable(10f, 10f, 10f, table.getWidth(), 10f, ddoc, dpage, false, false);
         Row dr = dummyTable.createRow(0f);
-        headerCellTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
-        if (this.colWidths == null) {
-            dataCellTemplateEvenList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-            dataCellTemplateOddList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-            dataCellTemplateEvenList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-            dataCellTemplateOddList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-            dataCellTemplateEvenList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-            dataCellTemplateOddList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-        } else {
-            for (int i = 0 ; i < this.colWidths.size(); i++) {
-                dataCellTemplateEvenList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-                dataCellTemplateOddList.add(dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE));
-            }
-        }
-        defaultCellTemplate = dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE);
+        this.primaryHeaderTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
+        this.secondaryHeaderTemplate = dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE);
+        this.evenTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
+        this.oddTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
+        
         setDefaultStyles();
         ddoc.close();
     }
 
     @SuppressWarnings("unchecked")
     void appendRows(List<List<Object>> rows) throws IOException {
-        boolean odd = true;
         Map<Integer, Float> colWidths = new HashMap<>();
         int numcols = 0;
         
         { // header
-            List row = this.headerTexts;
             // calculate the width of the columns
             float totalWidth = 0.0f;
             if (this.colWidths == null) {
+                List<String> rowData = this.primaryHeaderTexts;
                 
-                for (int i = 0; i < row.size(); i++) {
-                    String cellValue = (String)row.get(i);
-                    float textWidth = FontUtils.getStringWidth(headerCellTemplate.getFont(), " " + cellValue + " ",
-                            headerCellTemplate.getFontSize());
+                for (int i = 0; i < rowData.size(); i++) {
+                    String cellValue = rowData.get(i);
+                    float textWidth = FontUtils.getStringWidth(primaryHeaderTemplate.getFont(), " " + cellValue + " ",
+                        primaryHeaderTemplate.getFontSize());
                     totalWidth += textWidth;
                     numcols = i;
                 }
@@ -117,11 +107,11 @@ class PdfTable {
                 float sizefactor = table.getWidth() / totalWidth;
                 for (int i = 0; i <= numcols; i++) {
                     String cellValue = "";
-                    if (row.size() >= i) {
-                        cellValue = (String)row.get(i);
+                    if (rowData.size() >= i) {
+                        cellValue = rowData.get(i);
                     }
-                    float textWidth = FontUtils.getStringWidth(headerCellTemplate.getFont(), " " + cellValue + " ",
-                            headerCellTemplate.getFontSize());
+                    float textWidth = FontUtils.getStringWidth(primaryHeaderTemplate.getFont(), " " + cellValue + " ",
+                        primaryHeaderTemplate.getFontSize());
                     float widthPct = textWidth * 100 / table.getWidth();
                     // apply width factor
                     widthPct = widthPct * sizefactor;
@@ -137,51 +127,52 @@ class PdfTable {
                     colWidths.put(i,this.colWidths.get(i) / (totalWidth / 100));
                     numcols = i;
                 }
-
             }
-            updateTemplateList(row.size());
             
-            // Add Header Row
-            Row h = table.createRow(headerCellTemplate.getCellHeight());
-            for (int i = 0; i <= numcols; i++) {
-                String cellValue = (String)row.get(i);
-                Cell c = h.createCell(colWidths.get(i), cellValue, headerCellTemplate.getAlign(),
-                        headerCellTemplate.getValign());
-                // Apply style of header cell to this cell
-                c.copyCellStyle(headerCellTemplate);
-                c.setText(cellValue);
+            // add primary header row
+            {
+                List<String> rowData = this.primaryHeaderTexts;
+                Row h = table.createRow(primaryHeaderTemplate.getCellHeight());
+                for (int i = 0; i <= numcols; i++) {
+                    String cellValue = rowData.get(i);
+                    Cell c = h.createCell(colWidths.get(i), cellValue);
+                    // Apply style of header cell to this cell
+                    c.copyCellStyle(primaryHeaderTemplate);
+                    c.setText(cellValue);
+                }
+                table.addHeaderRow(h);
             }
-            table.addHeaderRow(h);
+            
+            // add secondary header row
+            if(!_NullSafe.isEmpty(this.secondaryHeaderTexts)) {
+                List<String> rowData = this.secondaryHeaderTexts;
+                Row h = table.createRow(secondaryHeaderTemplate.getCellHeight());
+                for (int i = 0; i <= numcols; i++) {
+                    String cellValue = rowData.get(i);
+                    Cell c = h.createCell(colWidths.get(i), cellValue);
+                    // Apply style of header cell to this cell
+                    c.copyCellStyle(secondaryHeaderTemplate);
+                    c.setText(cellValue);
+                }
+                table.addHeaderRow(h);
+            }
         }
         
-        for (List row : rows) {
-            Row r = table.createRow(dataCellTemplateEvenList.get(0).getCellHeight());
+        int rowIndex = 0;
+        for (List<Object> rowData : rows) {
+            
+            final Cell template = rowIndex%2 == 0 
+                ? evenTemplate
+                : oddTemplate;
+            
+            var row = table.createRow(template.getCellHeight());
+            
+            var cellFactory = new CellFactory(row, template);
+            
             for (int i = 0; i <= numcols; i++) {
-                // Choose the correct template for the cell
-                Cell template = dataCellTemplateEvenList.get(i);
-                if (odd) {
-                    template = dataCellTemplateOddList.get(i);;
-                }
-                
-                Object cellValue = null;
-                if (row.size() >= i) {
-                    cellValue = row.get(i);
-                    if (cellValue instanceof String s) {
-                        cellValue = s.replaceAll("\n", "<br>");    
-                    }
-                }
-                if(cellValue==null) cellValue = "";
-                
-                Cell c = switch(cellValue.getClass().getSimpleName()) {
-                    case "String" -> r.createCell(colWidths.get(i), (String)cellValue, template.getAlign(), template.getValign());
-                    case "BufferedImage" -> r.createImageCell(colWidths.get(i), new Image((BufferedImage)cellValue));
-                    default -> throw new IllegalArgumentException("Unsupported value type: " + cellValue.getClass().getName());  
-                };
-                
-                // Apply style of header cell to this cell
-                c.copyCellStyle(template);
+                cellFactory.createCell(i, colWidths.get(i), rowData);
             }
-            odd = !odd;
+            ++rowIndex;
         }
     }
 
@@ -189,43 +180,27 @@ class PdfTable {
 
     private void setDefaultStyles() {
         LineStyle thinline = new LineStyle(Color.BLACK, 0.75f);
-        // Header style
-        headerCellTemplate.setFillColor(new Color(137, 218, 245));
-        headerCellTemplate.setTextColor(Color.BLACK);
-        headerCellTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD));
-        headerCellTemplate.setBorderStyle(thinline);
 
-        // Normal cell style, all rows and columns are the same by default
-        defaultCellTemplate.setFillColor(new Color(242, 242, 242));
-        defaultCellTemplate.setTextColor(Color.BLACK);
-        defaultCellTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-        defaultCellTemplate.setBorderStyle(thinline);
-        Iterator<Cell> iterator = dataCellTemplateEvenList.iterator();
-        while (iterator.hasNext()){
-            iterator.next().copyCellStyle(defaultCellTemplate);
-        }
-        iterator = dataCellTemplateOddList.iterator();
-        while (iterator.hasNext()){
-            iterator.next().copyCellStyle(defaultCellTemplate);
-        }
+        primaryHeaderTemplate.setFillColor(new Color(137, 218, 245));
+        primaryHeaderTemplate.setTextColor(Color.BLACK);
+        primaryHeaderTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD));
+        primaryHeaderTemplate.setBorderStyle(thinline);
+        
+        secondaryHeaderTemplate.setFillColor(Color.LIGHT_GRAY);
+        secondaryHeaderTemplate.setTextColor(Color.BLACK);
+        secondaryHeaderTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
+        secondaryHeaderTemplate.setFontSize(7);
+        secondaryHeaderTemplate.setBorderStyle(thinline);
+        
+        evenTemplate.setFillColor(new Color(242, 242, 242));
+        evenTemplate.setTextColor(Color.BLACK);
+        evenTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
+        evenTemplate.setBorderStyle(thinline);
+        
+        oddTemplate.setFillColor(new Color(230, 230, 230));
+        oddTemplate.setTextColor(Color.BLACK);
+        oddTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
+        oddTemplate.setBorderStyle(thinline);
     }
     
-    private void updateTemplateList(int size) {
-        if (copyFirstColumnCellTemplateOddToEven)
-            dataCellTemplateEvenList.set(0, dataCellTemplateOddList.get(0));
-        if (copyLastColumnCellTemplateOddToEven)
-            dataCellTemplateEvenList.set(dataCellTemplateEvenList.size() - 1,
-                dataCellTemplateOddList.get(dataCellTemplateOddList.size() - 1));
-        if (size <= 3)
-            return; // Only in case of more than 3 columns there are first last and data template
-        while (dataCellTemplateEvenList.size() < size)
-            dataCellTemplateEvenList.add(1, dataCellTemplateEvenList.get(1));
-        while (dataCellTemplateOddList.size() < size)
-            dataCellTemplateOddList.add(1, dataCellTemplateOddList.get(1));
-        while (dataCellTemplateEvenList.size() > size)
-            dataCellTemplateEvenList.remove(dataCellTemplateEvenList.size() - 2);
-        while (dataCellTemplateOddList.size() > size)
-            dataCellTemplateOddList.remove(dataCellTemplateOddList.size() - 2);
-        
-    }
 }
