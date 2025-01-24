@@ -122,9 +122,10 @@ public record ExcelFileWriter(@Nullable Options options) {
         var sheetName = tabularSheet.sheetName();
 
         Row row;
-
-        var cellWriter = new ExcelCellWriter(5);
+        
         var sheet = wb.createSheet(sheetName);
+        var cellWriter = new ExcelCellWriter(5, new ExcelImageHandler(sheet));
+        
         var cellStyleProvider = CellStyleProvider.create(wb, options);
         var rowFactory = new RowFactory(sheet);
 

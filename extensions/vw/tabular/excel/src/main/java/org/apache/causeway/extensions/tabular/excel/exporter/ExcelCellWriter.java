@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.tabular.excel.exporter;
 
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -35,7 +36,8 @@ record ExcelCellWriter(
         /**
          * If a cell's cardinality exceeds this threshold, truncate with '... has more' label at the end.
          */
-        int maxCellElements) {
+        int maxCellElements,
+        ExcelImageHandler imageHandler) {
 
     private static final String POI_LINE_DELIMITER = "\n";
 
@@ -145,6 +147,12 @@ record ExcelCellWriter(
             return 1;
         }
 
+        // image
+        if(valueAsObj instanceof BufferedImage value) {
+            imageHandler.addImage(value, cell);
+            return 1;
+        }
+        
         // if all else fails fallback to value's toString method
         final String objectAsStr = tabularCell.labels().findFirst().orElseGet(valueAsObj::toString);
         cell.setCellValue(objectAsStr);
@@ -159,5 +167,7 @@ record ExcelCellWriter(
         cell.setCellValue(date);
         cellStyleProvider.applyDateStyle(cell);
     }
+    
+
 
 }
