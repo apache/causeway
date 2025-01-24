@@ -79,82 +79,68 @@ record ExcelCellWriter(
         }
 
         // String
-        if(valueAsObj instanceof CharSequence) {
-            CharSequence value = (CharSequence) valueAsObj;
+        if(valueAsObj instanceof CharSequence value) {
             cell.setCellValue(value.toString());
             return 1;
         }
 
         // boolean
-        if(valueAsObj instanceof Boolean) {
-            boolean value = (Boolean) valueAsObj;
+        if(valueAsObj instanceof Boolean value) {
             cell.setCellValue(value);
             return 1;
         }
 
         // date
-        if(valueAsObj instanceof Date) {
-            Date value = (Date) valueAsObj;
+        if(valueAsObj instanceof Date value) {
             setCellValueForDate(cell, value, cellStyleProvider);
             return 1;
         }
-        if(valueAsObj instanceof LocalDate) {
-            LocalDate value = (LocalDate) valueAsObj;
+        if(valueAsObj instanceof LocalDate value) {
             Date date = _TimeConversion.toDate(value);
             setCellValueForDate(cell, date, cellStyleProvider);
             return 1;
         }
-        if(valueAsObj instanceof LocalDateTime) {
-            LocalDateTime value = (LocalDateTime) valueAsObj;
+        if(valueAsObj instanceof LocalDateTime value) {
             Date date = _TimeConversion.toDate(value);
             setCellValueForDate(cell, date, cellStyleProvider);
             return 1;
         }
-        if(valueAsObj instanceof OffsetDateTime) {
-            OffsetDateTime value = (OffsetDateTime) valueAsObj;
+        if(valueAsObj instanceof OffsetDateTime value) {
             Date date = _TimeConversion.toDate(value);
             setCellValueForDate(cell, date, cellStyleProvider);
             return 1;
         }
 
         // number
-        if(valueAsObj instanceof Double) {
-            Double value = (Double) valueAsObj;
+        if(valueAsObj instanceof Double value) {
             setCellValueForDouble(cell, value);
             return 1;
         }
-        if(valueAsObj instanceof Float) {
-            Float value = (Float) valueAsObj;
+        if(valueAsObj instanceof Float value) {
             setCellValueForDouble(cell, value);
             return 1;
         }
-        if(valueAsObj instanceof BigDecimal) {
-            BigDecimal value = (BigDecimal) valueAsObj;
+        if(valueAsObj instanceof BigDecimal value) {
             setCellValueForDouble(cell, value.doubleValue());
             return 1;
         }
-        if(valueAsObj instanceof BigInteger) {
-            BigInteger value = (BigInteger) valueAsObj;
+        if(valueAsObj instanceof BigInteger value) {
             setCellValueForDouble(cell, value.doubleValue());
             return 1;
         }
-        if(valueAsObj instanceof Long) {
-            Long value = (Long) valueAsObj;
+        if(valueAsObj instanceof Long value) {
             setCellValueForDouble(cell, value);
             return 1;
         }
-        if(valueAsObj instanceof Integer) {
-            Integer value = (Integer) valueAsObj;
+        if(valueAsObj instanceof Integer value) {
             setCellValueForDouble(cell, value);
             return 1;
         }
-        if(valueAsObj instanceof Short) {
-            Short value = (Short) valueAsObj;
+        if(valueAsObj instanceof Short value) {
             setCellValueForDouble(cell, value);
             return 1;
         }
-        if(valueAsObj instanceof Byte) {
-            Byte value = (Byte) valueAsObj;
+        if(valueAsObj instanceof Byte value) {
             setCellValueForDouble(cell, value);
             return 1;
         }
