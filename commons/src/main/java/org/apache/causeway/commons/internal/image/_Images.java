@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.commons.internal.image;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.DirectColorModel;
@@ -176,10 +178,31 @@ public class _Images {
         return 0;
     }
 
-//    public static void draw(BufferedImage image, BufferedImage virtualImage) {
-//        Graphics2D g2d = virtualImage.createGraphics();
-//        g2d.drawImage(image, 0, 0, null);
-//        g2d.dispose();
-//    }
+    // -- RESIZE
+    
+    public static BufferedImage resizeToMaxHeight(BufferedImage originalImage, int maxHeight) {
+        if(originalImage.getHeight()<=maxHeight) return originalImage; 
+        
+        int targetHeight = maxHeight;
+        int targetWidth = (int)((long)(originalImage.getWidth() * targetHeight) / originalImage.getHeight());
+
+        // Scale the image
+        var scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        var virtualImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_ARGB);
+        
+        return draw(scaledImage, virtualImage);
+    }
+    
+    // -- HELPER
+    
+    /**
+     * Draws given image onto given bufferedImage and returns the latter. 
+     */
+    private static BufferedImage draw(Image image, BufferedImage bufferedImage) {
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+        return bufferedImage;
+    }
 
 }

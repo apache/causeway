@@ -19,19 +19,17 @@
 package org.apache.causeway.extensions.tabular.excel.exporter;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-
-import javax.imageio.ImageIO;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.apache.poi.xssf.usermodel.XSSFPicture;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import org.apache.causeway.commons.internal.image._Images;
+
 
 /**
  * @see <a href="https://www.baeldung.com/java-add-image-excel">baeldung</a>
@@ -45,21 +43,24 @@ record ExcelImageHandler(
     }
 
     void addImage(BufferedImage value, Cell cell) {
-        addImage(value, cell.getRowIndex(), cell.getColumnIndex());
 
         // set the row height, based on the image height
         // 1) don't make less high than already is
-        // 2) don't exceed 300px
+        // 2) don't exceed height of 120 points
         var currentRowHeight = cell.getRow().getHeightInPoints();
-        var requiredRowHeight = Math.min(300, value.getHeight());
+        var requiredRowHeight = Math.min(120, value.getHeight());
         var newRowHeight = Math.max(currentRowHeight, requiredRowHeight);
         cell.getRow().setHeightInPoints(newRowHeight);
+        
+        // var picture =
+        addImage(value, cell.getRowIndex(), cell.getColumnIndex());
+        //picture.resize();
     }
     
     // -- HELPER
     
-    private void addImage(BufferedImage image, int rowIndex, int colIndex) {
-        var imgId = workbook.addPicture(toBytes(image), Workbook.PICTURE_TYPE_PNG);
+    private XSSFPicture addImage(BufferedImage image, int rowIndex, int colIndex) {
+        var imgId = workbook.addPicture(_Images.toBytes(_Images.resizeToMaxHeight(image, 120)), Workbook.PICTURE_TYPE_PNG);
         var anchor = new XSSFClientAnchor();
         
         anchor.setCol1(colIndex);
@@ -67,15 +68,7 @@ record ExcelImageHandler(
         anchor.setRow1(rowIndex);
         anchor.setRow2(rowIndex + 1);
         
-        drawing.createPicture(anchor, imgId);
-    }
-    
-    @SneakyThrows
-    private static byte[] toBytes(final @NonNull BufferedImage image){
-        try(var bos = new ByteArrayOutputStream(8 * 1024)) {
-            ImageIO.write(image, "png", bos); // png is lossless
-            return bos.toByteArray();
-        }
+        return drawing.createPicture(anchor, imgId);
     }
     
 }
