@@ -29,47 +29,48 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-import be.quodlibet.boxable.Cell;
-import be.quodlibet.boxable.Row;
-import be.quodlibet.boxable.image.Image;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Cell;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Row;
 
-record CellFactory(Row<?> row, Cell<?> template) {
+record CellFactory(Row row, Cell template) {
 
-    public Cell<?> createCell(int i, float width, List<Object> rowData) {
-        
+    public Cell createCell(final int i, final float width, final List<Object> rowData) {
+
         Object cellValue = null;
         if (rowData.size() >= i) {
             cellValue = rowData.get(i);
-            if (cellValue instanceof String s) {
-                cellValue = s.replaceAll("\n", "<br>");    
+            if (cellValue instanceof CharSequence seq) {
+                cellValue = seq.toString()
+                        .replaceAll("\r", "")
+                        .replaceAll("\n", "<br>");
             }
         }
         if(cellValue==null) cellValue = "";
-        
+
         var cell = switch(cellValue.getClass().getSimpleName()) {
-            case "BufferedImage" -> row.createImageCell(width, new Image((BufferedImage)cellValue));
+            case "BufferedImage" -> row.createImageCell(width, (BufferedImage)cellValue);
             default -> row.createCell(width, toString(cellValue));
         };
-        
+
         cell.copyCellStyle(template);
-        
+
         return cell;
     }
 
     /**
      * @param cellValue not {@code null} nor {@link BufferedImage}
      */
-    private String toString(Object valueAsObj) {
+    private String toString(final Object valueAsObj) {
         // String
-        if(valueAsObj instanceof CharSequence value) {
-            return value.toString();
+        if(valueAsObj instanceof String value) {
+            return value;
         }
 
         // boolean
         if(valueAsObj instanceof Boolean value) {
-            return value ? "✔" : "━";
+            return value ? "+" : "-";
         }
-        
+
         // date
         if(valueAsObj instanceof Date value) {
             var dateTime = LocalDateTime.ofInstant(value.toInstant(), ZoneId.systemDefault());
@@ -114,5 +115,5 @@ record CellFactory(Row<?> row, Cell<?> template) {
         // if all else fails fallback to value's toString method
         return valueAsObj.toString();
     }
-    
+
 }
