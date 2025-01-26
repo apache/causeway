@@ -32,9 +32,9 @@ import java.util.List;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Cell;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Row;
 
-record CellFactory(Row<?> row, Cell<?> template) {
+record CellFactory(Row row, Cell template) {
 
-    public Cell<?> createCell(final int i, final float width, final List<Object> rowData) {
+    public Cell createCell(final int i, final float width, final List<Object> rowData) {
 
         Object cellValue = null;
         if (rowData.size() >= i) {

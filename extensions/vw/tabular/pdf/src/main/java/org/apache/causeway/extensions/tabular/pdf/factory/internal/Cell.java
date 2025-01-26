@@ -39,7 +39,7 @@ import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Cell<T extends PDPage> {
+public class Cell {
 
 	@Getter private float width;
 	/**
@@ -66,7 +66,7 @@ public class Cell<T extends PDPage> {
 	 * {@link Color} of the cell's text
 	 */
 	@Getter @Setter private Color textColor = Color.BLACK;
-	private final Row<T> row;
+	private final Row row;
 	private WrappingFunction wrappingFunction;
 	@Getter @Setter private boolean headerCell = false;
 	@Getter @Setter private boolean colspanCell = false;
@@ -97,7 +97,7 @@ public class Cell<T extends PDPage> {
 	float horizontalFreeSpace = 0;
 	float verticalFreeSpace = 0;
 
-	private final List<CellContentDrawnListener<T>> contentDrawnListenerList = new ArrayList<CellContentDrawnListener<T>>();
+	private final List<CellContentDrawnListener> contentDrawnListenerList = new ArrayList<>();
 
 	/**
 	 * Constructs a cell with the default alignment
@@ -105,7 +105,7 @@ public class Cell<T extends PDPage> {
 	 * @see Cell#Cell(Row, float, String, boolean, HorizontalAlignment,
 	 *      VerticalAlignment)
 	 */
-	Cell(final Row<T> row, final float width, final String text, final boolean isCalculated) {
+	Cell(final Row row, final float width, final String text, final boolean isCalculated) {
 		this(row, width, text, isCalculated, HorizontalAlignment.LEFT, VerticalAlignment.TOP);
 	}
 
@@ -127,7 +127,7 @@ public class Cell<T extends PDPage> {
 	 *            The {@link VerticalAlignment} of the cell content
 	 * @see Cell#Cell(Row, float, String, boolean)
 	 */
-	Cell(final Row<T> row, final float width, final String text, final boolean isCalculated, final HorizontalAlignment align,
+	Cell(final Row row, final float width, final String text, final boolean isCalculated, final HorizontalAlignment align,
 			final VerticalAlignment valign) {
 		this.row = row;
 		if (isCalculated) {
@@ -321,10 +321,8 @@ public class Cell<T extends PDPage> {
 	 */
 	public float getVerticalFreeSpace() {
 		if (isTextRotated()) {
-			// need to calculate max line width so we just iterating through
-			// lines
-			for (String line : getParagraph().getLines()) {
-			}
+			// need to calculate max line width so we just iterating through all lines
+		    getParagraph().getLines().forEach(line->{});
 			return getInnerHeight() - getParagraph().getMaxLineWidth();
 		} else {
 			return getInnerHeight() - getTextHeight();
@@ -422,16 +420,16 @@ public class Cell<T extends PDPage> {
 		return true;
 	}
 
-	public void addContentDrawnListener(final CellContentDrawnListener<T> listener) {
+	public void addContentDrawnListener(final CellContentDrawnListener listener) {
 		contentDrawnListenerList.add(listener);
 	}
 
-	public List<CellContentDrawnListener<T>> getCellContentDrawnListeners() {
+	public List<CellContentDrawnListener> getCellContentDrawnListeners() {
 		return contentDrawnListenerList;
 	}
 
 	public void notifyContentDrawnListeners(final PDDocument document, final PDPage page, final PDRectangle rectangle) {
-		for(CellContentDrawnListener<T> listener : getCellContentDrawnListeners()) {
+		for(var listener : getCellContentDrawnListeners()) {
 			listener.onContentDrawn(this, document, page, rectangle);
 		}
 	}

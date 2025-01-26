@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
-public class BaseTable extends Table<PDPage> {
+public class BaseTable extends Table {
 
     public BaseTable(final float yStart, final float yStartNewPage, final float bottomMargin, final float width,
             final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines,

@@ -516,11 +516,11 @@ final class Paragraph {
 					e.printStackTrace();
 				}
 				break;
+            case BULLET, ORDERING, PADDING:
+                break;
 			}
 		}
-		if (sinceLastWrapPoint.trimmedWidth() + textInLine.trimmedWidth() > 0)
-
-		{
+		if (sinceLastWrapPoint.trimmedWidth() + textInLine.trimmedWidth() > 0) {
 			textInLine.push(sinceLastWrapPoint);
 			result.add(textInLine.trimmedText());
 			lineWidths.put(lineCounter, textInLine.trimmedWidth());
@@ -530,7 +530,6 @@ final class Paragraph {
 
 		lines = result;
 		return result;
-
 	}
 
 	private static boolean isItalic(final Token token) {

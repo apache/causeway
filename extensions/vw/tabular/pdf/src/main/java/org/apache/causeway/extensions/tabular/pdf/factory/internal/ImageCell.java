@@ -18,18 +18,16 @@
  */
 package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
-import org.apache.pdfbox.pdmodel.PDPage;
-
 import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
 import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 
 import lombok.Getter;
 
-class ImageCell<T extends PDPage> extends Cell<T> {
+class ImageCell extends Cell {
 
     @Getter private Image image;
 
-	ImageCell(final Row<T> row, final float width, final Image image, final boolean isCalculated) {
+	ImageCell(final Row row, final float width, final Image image, final boolean isCalculated) {
 		super(row, width, null, isCalculated);
 		this.image = image;
 		if(image.getWidth() > getInnerWidth()){
@@ -41,7 +39,7 @@ class ImageCell<T extends PDPage> extends Cell<T> {
 	    this.image = image.scaleByWidth(getInnerWidth());
 	}
 
-	ImageCell(final Row<T> row, final float width, final Image image, final boolean isCalculated,
+	ImageCell(final Row row, final float width, final Image image, final boolean isCalculated,
 	        final HorizontalAlignment align, final VerticalAlignment valign) {
 		super(row, width, null, isCalculated, align, valign);
 		this.image = image;

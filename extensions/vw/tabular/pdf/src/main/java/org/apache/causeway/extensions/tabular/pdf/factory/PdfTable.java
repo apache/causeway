@@ -37,8 +37,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-@SuppressWarnings("rawtypes")
-class PdfTable {
+final class PdfTable {
 
     @Getter @Setter private Table table;
     private final List<String> primaryHeaderTexts;
@@ -69,13 +68,10 @@ class PdfTable {
         this.evenTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
         this.oddTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
 
-
-
         setDefaultStyles();
         ddoc.close();
     }
 
-    @SuppressWarnings("unchecked")
     void appendRows(final List<List<Object>> rows) throws IOException {
         Map<Integer, Float> colWidths = new HashMap<>();
         int numcols = 0;
