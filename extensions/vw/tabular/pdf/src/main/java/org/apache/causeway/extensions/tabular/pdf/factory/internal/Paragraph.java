@@ -31,15 +31,25 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.PipelineLayer;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.Token;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.TokenType;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.Tokenizer;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.WrappingFunction;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.PageContentStreamOptimized;
+import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
+import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Token.TokenType;
 
-class Paragraph {
+final class Paragraph {
+
+    enum TextType {
+        HIGHLIGHT,UNDERLINE,SQUIGGLY,STRIKEOUT;
+    }
+
+    /**
+     * Data container for HTML ordered list elements.
+     */
+    record HTMLListNode(
+            /** Element's current ordering number (e.g third element in the current list) */
+            int orderingNumber,
+            /** Element's whole ordering number value (e.g 1.1.2.1) */
+            String value) {
+    }
 
 	private float width;
 	private final String text;
@@ -132,7 +142,7 @@ class Paragraph {
 		int orderListElement = 1;
 		int numberOfOrderedLists = 0;
 		int listLevel = 0;
-		Stack<HTMLListNode> stack= new Stack<>();
+		Stack<HTMLListNode> stack = new Stack<>();
 
 		final PipelineLayer textInLine = new PipelineLayer();
 		final PipelineLayer sinceLastWrapPoint = new PipelineLayer();
@@ -151,7 +161,7 @@ class Paragraph {
 					if (token.text().equals("ol")) {
 						numberOfOrderedLists++;
 						if(listLevel > 1){
-							stack.add(new HTMLListNode(orderListElement-1, stack.isEmpty() ? String.valueOf(orderListElement-1)+"." : stack.peek().getValue() + String.valueOf(orderListElement-1) + "."));
+							stack.add(new HTMLListNode(orderListElement-1, stack.isEmpty() ? String.valueOf(orderListElement-1)+"." : stack.peek().value() + String.valueOf(orderListElement-1) + "."));
 						}
 						orderListElement = 1;
 
@@ -197,7 +207,7 @@ class Paragraph {
 						numberOfOrderedLists--;
 						// reset elements
 						if(numberOfOrderedLists>0){
-							orderListElement = stack.peek().getOrderingNumber()+1;
+							orderListElement = stack.peek().orderingNumber()+1;
 							stack.pop();
 						}
 					}
@@ -221,7 +231,7 @@ class Paragraph {
 						lineCounter++;
 						// wrapping at last wrap point
 						if (numberOfOrderedLists>0) {
-							String orderingNumber = stack.isEmpty() ? String.valueOf(orderListElement) + "." : stack.pop().getValue() + ".";
+							String orderingNumber = stack.isEmpty() ? String.valueOf(orderListElement) + "." : stack.pop().value() + ".";
 							stack.add(new HTMLListNode(orderListElement, orderingNumber));
 							try {
 								float tab = indentLevel(DEFAULT_TAB);
@@ -298,7 +308,7 @@ class Paragraph {
 						if (numberOfOrderedLists>0) {
 							try {
 								float tab = getAlign().equals(HorizontalAlignment.LEFT) ? indentLevel(DEFAULT_TAB*Math.max(listLevel - 1, 0) + DEFAULT_TAB) : indentLevel(DEFAULT_TAB);
-								String orderingNumber = stack.isEmpty() ? String.valueOf(orderListElement) + "." : stack.peek().getValue() + "." + String.valueOf(orderListElement-1) + ".";
+								String orderingNumber = stack.isEmpty() ? String.valueOf(orderListElement) + "." : stack.peek().value() + "." + String.valueOf(orderListElement-1) + ".";
 								textInLine.push(currentFont, fontSize, new Token(TokenType.PADDING,
 										String.valueOf((tab + font.getStringWidth(orderingNumber)) / 1000 * getFontSize())));
 							} catch (IOException e) {
@@ -338,7 +348,7 @@ class Paragraph {
 						}
 						if (numberOfOrderedLists>0) {
 //							String orderingNumber = String.valueOf(orderListElement) + ". ";
-							String orderingNumber = stack.isEmpty() ? String.valueOf("1") + "." : stack.pop().getValue() + ". ";
+							String orderingNumber = stack.isEmpty() ? String.valueOf("1") + "." : stack.pop().value() + ". ";
 							try {
 								float tab = indentLevel(DEFAULT_TAB);
 								float orderingNumberAndTab = font.getStringWidth(orderingNumber) + tab;
@@ -381,7 +391,7 @@ class Paragraph {
 							// if it's ordering list then move depending on your: ordering number + ". "
 							String orderingNumber;
 							if(listLevel > 1){
-								orderingNumber = stack.peek().getValue() + String.valueOf(orderListElement) + ". ";
+								orderingNumber = stack.peek().value() + String.valueOf(orderListElement) + ". ";
 							} else {
 								orderingNumber = String.valueOf(orderListElement) + ". ";
 							}
@@ -411,7 +421,7 @@ class Paragraph {
 								// if it's ordering list then move depending on your: ordering number + ". "
 								String orderingNumber;
 								if(listLevel > 1){
-									orderingNumber = stack.peek().getValue() + String.valueOf(orderListElement) + ". ";
+									orderingNumber = stack.peek().value() + String.valueOf(orderListElement) + ". ";
 								} else {
 									orderingNumber = String.valueOf(orderListElement) + ". ";
 								}

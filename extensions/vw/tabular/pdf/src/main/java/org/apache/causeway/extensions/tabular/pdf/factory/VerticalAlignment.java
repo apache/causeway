@@ -16,21 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal;
+package org.apache.causeway.extensions.tabular.pdf.factory;
 
-public enum HorizontalAlignment {
-	LEFT, CENTER, RIGHT;
+public enum VerticalAlignment {
+	TOP, MIDDLE, BOTTOM;
 
-	public static HorizontalAlignment get(final String key) {
-		switch (key == null ? "left" : key.toLowerCase().trim()) {
-		case "left":
-			return LEFT;
-		case "center":
-			return CENTER;
-		case "right":
-			return RIGHT;
-		default:
-			return LEFT;
+	public static VerticalAlignment get(final String key) {
+		switch (key == null ? "top" : key.toLowerCase().trim()) {
+		case "top":
+			return TOP;
+		case "middle":
+			return MIDDLE;
+		case "bottom":
+			return BOTTOM;
+			default:
+				return TOP;
 		}
 	}
 }

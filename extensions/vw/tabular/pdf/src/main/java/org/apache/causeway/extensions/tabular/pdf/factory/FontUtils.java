@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.utils;
+package org.apache.causeway.extensions.tabular.pdf.factory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,20 +33,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class FontUtils {
 
-	private static final class FontMetrics {
-		private final float ascent;
-		private final float descent;
-		private final float height;
-
-		public FontMetrics(final float height, final float ascent, final float descent) {
-			this.height = height;
-			this.ascent = ascent;
-			this.descent = descent;
-		}
+	private record FontMetrics(
+		float ascent,
+		float descent,
+		float height) {
 	}
 
 	/**
-	 * <p>
 	 * {@link HashMap} for caching {@link FontMetrics} for designated
 	 * {@link PDFont} because {@link FontUtils#getHeight(PDFont, float)} is
 	 * expensive to calculate and the results are only approximate.
@@ -56,11 +49,8 @@ public class FontUtils {
 	private static final Map<String, PDFont> defaultFonts = new HashMap<>();
 
 	/**
-	 * <p>
 	 * Loads the {@link PDType0Font} to be embedded in the specified
 	 * {@link PDDocument}.
-	 * </p>
-	 *
 	 * @param document
 	 *            {@link PDDocument} where fonts will be loaded
 	 * @param fontPath
@@ -77,11 +67,8 @@ public class FontUtils {
 	}
 
 	/**
-	 * <p>
 	 * Retrieving {@link String} width depending on current font size. The width
 	 * of the string in 1/1000 units of text space.
-	 * </p>
-	 *
 	 * @param font
 	 *            The font of text whose width will be retrieved
 	 * @param text
@@ -100,10 +87,7 @@ public class FontUtils {
 	}
 
 	/**
-	 * <p>
 	 * Calculate the font ascent distance.
-	 * </p>
-	 *
 	 * @param font
 	 *            The font from which calculation will be applied
 	 * @param fontSize
@@ -120,10 +104,7 @@ public class FontUtils {
 	}
 
 	/**
-	 * <p>
 	 * Calculate the font descent distance.
-	 * </p>
-	 *
 	 * @param font
 	 *            The font from which calculation will be applied
 	 * @param fontSize
@@ -140,10 +121,7 @@ public class FontUtils {
 	}
 
 	/**
-	 * <p>
 	 * Calculate the font height.
-	 * </p>
-	 *
 	 * @param font
 	 *            {@link PDFont} from which the height will be calculated.
 	 * @param fontSize
@@ -160,10 +138,7 @@ public class FontUtils {
 	}
 
 	/**
-	 * <p>
 	 * Create basic {@link FontMetrics} for current font.
-	 * <p>
-	 *
 	 * @param font
 	 *            The font from which calculation will be applied <<<<<<< HEAD
 	 * @throws IOException

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.line;
+package org.apache.causeway.extensions.tabular.pdf.factory;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -29,16 +29,12 @@ import java.util.Objects;
 public class LineStyle {
 
 	private final Color color;
-
 	private final float width;
-
 	private float[] dashArray;
-
 	private float dashPhase;
 
 	/**
 	 * Simple constructor for setting line {@link Color} and line width
-	 *
 	 * @param color
 	 *            The line {@link Color}
 	 * @param width
@@ -51,7 +47,6 @@ public class LineStyle {
 
 	/**
 	 * Provides ability to produce dotted line.
-	 *
 	 * @param color
 	 *            The {@link Color} of the line
 	 * @param width
@@ -68,7 +63,6 @@ public class LineStyle {
 
 	/**
 	 * Provides ability to produce dashed line.
-	 *
 	 * @param color
 	 *            The {@link Color} of the line
 	 * @param width
@@ -80,7 +74,6 @@ public class LineStyle {
 	}
 
 	/**
-	 *
 	 * @param color
 	 *            The {@link Color} of the line
 	 * @param width
@@ -96,7 +89,6 @@ public class LineStyle {
 		final LineStyle line = new LineStyle(color, width);
 		line.dashArray = dashArray;
 		line.dashPhase = dashPhase;
-
 		return line;
 	}
 
@@ -117,8 +109,7 @@ public class LineStyle {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int hash = 7;
         hash = 89 * hash + Objects.hashCode(this.color);
         hash = 89 * hash + Float.floatToIntBits(this.width);
@@ -126,8 +117,7 @@ public class LineStyle {
     }
 
     @Override
-    public boolean equals(final Object obj)
-    {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

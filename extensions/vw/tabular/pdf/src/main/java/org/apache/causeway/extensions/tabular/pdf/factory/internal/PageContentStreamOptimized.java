@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.utils;
+package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Log4j2
-public final class PageContentStreamOptimized {
+final class PageContentStreamOptimized {
     private static final Matrix ROTATION = Matrix.getRotateInstance(Math.PI * 0.5, 0, 0);
 
     private final PDPageContentStream pageContentStream;

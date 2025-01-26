@@ -32,9 +32,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.Token;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.PageContentStreamOptimized;
+import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
+import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 
 import lombok.extern.log4j.Log4j2;
 

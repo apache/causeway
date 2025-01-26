@@ -31,7 +31,6 @@ import java.util.List;
 
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Cell;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Row;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.image.Image;
 
 record CellFactory(Row<?> row, Cell<?> template) {
 
@@ -49,7 +48,7 @@ record CellFactory(Row<?> row, Cell<?> template) {
         if(cellValue==null) cellValue = "";
 
         var cell = switch(cellValue.getClass().getSimpleName()) {
-            case "BufferedImage" -> row.createImageCell(width, new Image((BufferedImage)cellValue));
+            case "BufferedImage" -> row.createImageCell(width, (BufferedImage)cellValue);
             default -> row.createCell(width, toString(cellValue));
         };
 

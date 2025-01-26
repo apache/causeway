@@ -30,12 +30,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.BaseTable;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Cell;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.HorizontalAlignment;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Row;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Table;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.VerticalAlignment;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.line.LineStyle;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
 
 import lombok.Getter;
 import lombok.Setter;

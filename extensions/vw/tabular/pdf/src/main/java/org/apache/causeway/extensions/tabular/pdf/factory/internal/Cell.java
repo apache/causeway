@@ -31,9 +31,10 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.line.LineStyle;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.WrappingFunction;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
+import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
+import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.LineStyle;
+import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 
 import lombok.Getter;
 import lombok.Setter;

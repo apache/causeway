@@ -20,15 +20,14 @@ package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.image.Image;
+import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 
 import lombok.Getter;
 
 class ImageCell<T extends PDPage> extends Cell<T> {
 
     @Getter private Image image;
-	private final HorizontalAlignment align;
-	private final VerticalAlignment valign;
 
 	ImageCell(final Row<T> row, final float width, final Image image, final boolean isCalculated) {
 		super(row, width, null, isCalculated);
@@ -36,23 +35,19 @@ class ImageCell<T extends PDPage> extends Cell<T> {
 		if(image.getWidth() > getInnerWidth()){
 			scaleToFit();
 		}
-		this.align = HorizontalAlignment.LEFT;
-		this.valign = VerticalAlignment.TOP;
 	}
 
 	public void scaleToFit() {
-		image = image.scaleByWidth(getInnerWidth());
+	    this.image = image.scaleByWidth(getInnerWidth());
 	}
 
-	ImageCell(final Row<T> row, final float width, final Image image, final boolean isCalculated, final HorizontalAlignment align,
-			final VerticalAlignment valign) {
+	ImageCell(final Row<T> row, final float width, final Image image, final boolean isCalculated,
+	        final HorizontalAlignment align, final VerticalAlignment valign) {
 		super(row, width, null, isCalculated, align, valign);
 		this.image = image;
-		if(image.getWidth() > getInnerWidth()){
+		if(image.getWidth() > getInnerWidth()) {
 			scaleToFit();
 		}
-		this.align = align;
-		this.valign = valign;
 	}
 
 	@Override

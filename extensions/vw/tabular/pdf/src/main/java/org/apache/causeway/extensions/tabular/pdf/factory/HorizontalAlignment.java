@@ -16,14 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.page;
+package org.apache.causeway.extensions.tabular.pdf.factory;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
+public enum HorizontalAlignment {
+	LEFT, CENTER, RIGHT;
 
-public interface PageProvider<T extends PDPage> {
-	T createPage();
-	T nextPage();
-	T previousPage();
-	PDDocument getDocument();
+	public static HorizontalAlignment get(final String key) {
+		switch (key == null ? "left" : key.toLowerCase().trim()) {
+		case "left":
+			return LEFT;
+		case "center":
+			return CENTER;
+		case "right":
+			return RIGHT;
+		default:
+			return LEFT;
+		}
+	}
 }

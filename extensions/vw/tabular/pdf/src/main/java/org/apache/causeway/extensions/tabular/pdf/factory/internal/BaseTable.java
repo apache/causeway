@@ -23,20 +23,25 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.page.DefaultPageProvider;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.page.PageProvider;
-
 public class BaseTable extends Table<PDPage> {
 
-    public BaseTable(final float yStart, final float yStartNewPage, final float bottomMargin, final float width, final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines, final boolean drawContent) throws IOException {
-        super(yStart, yStartNewPage, 0, bottomMargin, width, margin, document, currentPage, drawLines, drawContent, new DefaultPageProvider(document, currentPage.getMediaBox()));
+    public BaseTable(final float yStart, final float yStartNewPage, final float bottomMargin, final float width,
+            final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines,
+            final boolean drawContent) throws IOException {
+        super(yStart, yStartNewPage, 0, bottomMargin, width, margin, document, currentPage, drawLines, drawContent,
+                new PageProvider(document, currentPage.getMediaBox()));
     }
 
-    public BaseTable(final float yStart, final float yStartNewPage, final float pageTopMargin, final float bottomMargin, final float width, final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines, final boolean drawContent) throws IOException {
-        super(yStart, yStartNewPage, pageTopMargin, bottomMargin, width, margin, document, currentPage, drawLines, drawContent, new DefaultPageProvider(document, currentPage.getMediaBox()));
+    public BaseTable(final float yStart, final float yStartNewPage, final float pageTopMargin, final float bottomMargin,
+            final float width, final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines,
+            final boolean drawContent) throws IOException {
+        super(yStart, yStartNewPage, pageTopMargin, bottomMargin, width, margin, document, currentPage, drawLines, drawContent,
+                new PageProvider(document, currentPage.getMediaBox()));
     }
 
-    public BaseTable(final float yStart, final float yStartNewPage, final float pageTopMargin, final float bottomMargin, final float width, final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines, final boolean drawContent, final PageProvider<PDPage> pageProvider) throws IOException {
+    public BaseTable(final float yStart, final float yStartNewPage, final float pageTopMargin, final float bottomMargin,
+            final float width, final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines,
+            final boolean drawContent, final PageProvider pageProvider) throws IOException {
         super(yStart, yStartNewPage, pageTopMargin, bottomMargin, width, margin, document, currentPage, drawLines, drawContent, pageProvider);
     }
 

@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.text;
+package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
-public enum TokenType {
-	TEXT, POSSIBLE_WRAP_POINT, WRAP_POINT, OPEN_TAG, CLOSE_TAG, PADDING, BULLET, ORDERING
+interface WrappingFunction {
+
+	String[] getLines(String text);
 }

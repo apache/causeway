@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.image.Image;
+import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 
 public class Row<T extends PDPage> {
 
@@ -84,8 +86,8 @@ public class Row<T extends PDPage> {
 	 *            {@link Image} in the cell
 	 * @return {@link ImageCell}
 	 */
-	public ImageCell<T> createImageCell(final float width, final Image img) {
-		ImageCell<T> cell = new ImageCell<>(this, width, img, true);
+	public ImageCell<T> createImageCell(final float width, final BufferedImage img) {
+		ImageCell<T> cell = new ImageCell<>(this, width, new Image(img), true);
 		setBorders(cell, cells.isEmpty());
 		cells.add(cell);
 		return cell;

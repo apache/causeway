@@ -38,19 +38,16 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageXYZDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.line.LineStyle;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.page.PageProvider;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.Token;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.text.WrappingFunction;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.PageContentStreamOptimized;
+import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
+import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.LineStyle;
 
 public abstract class Table<T extends PDPage> {
 
     public final PDDocument document;
     private float margin;
 
-    private T currentPage;
+    private PDPage currentPage;
     private PageContentStreamOptimized tableContentStream;
     private List<PDOutlineItem> bookmarks;
     private List<Row<T>> header = new ArrayList<>();
@@ -69,7 +66,7 @@ public abstract class Table<T extends PDPage> {
     private boolean removeTopBorders = false;
     private boolean removeAllBorders = false;
 
-    private PageProvider<T> pageProvider;
+    private PageProvider pageProvider;
 
     // page margins
     private final float pageTopMargin;
@@ -79,7 +76,7 @@ public abstract class Table<T extends PDPage> {
 
     public Table(final float yStart, final float yStartNewPage, final float pageTopMargin, final float pageBottomMargin, final float width,
             final float margin, final PDDocument document, final T currentPage, final boolean drawLines, final boolean drawContent,
-            final PageProvider<T> pageProvider) throws IOException {
+            final PageProvider pageProvider) throws IOException {
         this.pageTopMargin = pageTopMargin;
         this.document = document;
         this.drawLines = drawLines;
@@ -96,7 +93,7 @@ public abstract class Table<T extends PDPage> {
     }
 
     public Table(final float yStartNewPage, final float pageTopMargin, final float pageBottomMargin, final float width, final float margin,
-            final PDDocument document, final boolean drawLines, final boolean drawContent, final PageProvider<T> pageProvider)
+            final PDDocument document, final boolean drawLines, final boolean drawContent, final PageProvider pageProvider)
             throws IOException {
         this.pageTopMargin = pageTopMargin;
         this.document = document;
@@ -296,33 +293,13 @@ public abstract class Table<T extends PDPage> {
     }
 
     /**
-     * <p>
      * Method to switch between the {@link PageProvider} and the abstract method
      * {@link Table#createPage()}, preferring the {@link PageProvider}.
-     * </p>
      * <p>
      * Will be removed once {@link #createPage()} is removed.
-     * </p>
-     *
-     * @return
      */
-    private T createNewPage() {
-        if (pageProvider != null) {
-            return pageProvider.nextPage();
-        }
-
-        return createPage();
-    }
-
-    /**
-     * @deprecated Use a {@link PageProvider} instead
-     * @return new {@link PDPage}
-     */
-    @Deprecated
-    // remove also createNewPage()
-    protected T createPage() {
-        throw new IllegalStateException(
-                "You either have to provide a " + PageProvider.class.getCanonicalName() + " or override this method");
+    private PDPage createNewPage() {
+        return pageProvider.nextPage();
     }
 
     private PageContentStreamOptimized createPdPageContentStream() throws IOException {
@@ -787,7 +764,7 @@ public abstract class Table<T extends PDPage> {
         this.tableContentStream.close();
     }
 
-    public T getCurrentPage() {
+    public PDPage getCurrentPage() {
         if (this.currentPage == null) {
             throw new NullPointerException("No current page defined.");
         }

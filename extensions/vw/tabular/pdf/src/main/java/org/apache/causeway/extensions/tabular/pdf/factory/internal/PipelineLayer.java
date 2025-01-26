@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.text;
+package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,36 +24,17 @@ import java.util.List;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-public class PipelineLayer {
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Token.TokenType;
 
-	private static String rtrim(final String s) {
-		int len = s.length();
-		while ((len > 0) && (s.charAt(len - 1) <= ' ')) {
-			len--;
-		}
-		if (len == s.length()) {
-			return s;
-		}
-		if (len == 0) {
-			return "";
-		}
-		return s.substring(0, len);
-	}
+final class PipelineLayer {
 
 	private final StringBuilder text = new StringBuilder();
-
 	private String lastTextToken = "";
-
 	private List<Token> tokens = new ArrayList<>();
-
 	private String trimmedLastTextToken = "";
-
 	private float width;
-
 	private float widthLastToken;
-
 	private float widthTrimmedLastToken;
-
 	private float widthCurrentText;
 
 	public boolean isEmpty() {
@@ -145,5 +126,21 @@ public class PipelineLayer {
 	@Override
 	public String toString() {
 		return text.toString() + "(" + lastTextToken + ") [width: " + width() + ", trimmed: " + trimmedWidth() + "]";
+	}
+
+	// -- HELPER
+
+	private static String rtrim(final String s) {
+	    int len = s.length();
+	    while ((len > 0) && (s.charAt(len - 1) <= ' ')) {
+	        len--;
+	    }
+	    if (len == s.length()) {
+	        return s;
+	    }
+	    if (len == 0) {
+	        return "";
+	    }
+	    return s.substring(0, len);
 	}
 }

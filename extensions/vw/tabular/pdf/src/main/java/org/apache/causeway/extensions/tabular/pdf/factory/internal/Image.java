@@ -16,8 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.image;
-
+package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -27,29 +26,19 @@ import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.ImageUtils;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.PageContentStreamOptimized;
-
-public class Image {
+final class Image {
 
 	private final BufferedImage image;
-
 	private float width;
-
 	private float height;
-
 	private PDImageXObject imageXObject = null;
 
 	// standard DPI
 	private float[] dpi = { 72, 72 };
-
 	private float quality = 1f;
 
 	/**
-	 * <p>
 	 * Constructor for default images
-	 * </p>
-	 *
 	 * @param image
 	 *            {@link BufferedImage}
 	 */
@@ -73,10 +62,7 @@ public class Image {
 	}
 
 	/**
-	 * <p>
 	 * Drawing simple {@link Image} in {@link PDPageContentStream}.
-	 * </p>
-	 *
 	 * @param doc
 	 *            {@link PDDocument} where drawing will be applied
 	 * @param stream
@@ -100,10 +86,7 @@ public class Image {
 	}
 
 	/**
-	 * <p>
 	 * Method which scale {@link Image} with designated width
-	 * </p>
-	 *
 	 * @param width
 	 *            Maximal width where {@link Image} needs to be scaled
 	 * @return Scaled {@link Image}
@@ -113,16 +96,8 @@ public class Image {
 		return scale(width, this.height * factorWidth);
 	}
 
-	private void scaleImageFromPixelToPoints() {
-		float dpiX = dpi[0];
-		float dpiY = dpi[1];
-		scale(getImageWidthInPoints(dpiX), getImageHeightInPoints(dpiY));
-	}
-
 	/**
-	 * <p>
 	 * Method which scale {@link Image} with designated height
-	 *
 	 * @param height
 	 *            Maximal height where {@link Image} needs to be scaled
 	 * @return Scaled {@link Image}
@@ -141,9 +116,7 @@ public class Image {
 	}
 
 	/**
-	 * <p>
 	 * Method which scale {@link Image} with designated width und height
-	 *
 	 * @param boundWidth
 	 *            Maximal width where {@link Image} needs to be scaled
 	 * @param boundHeight
@@ -151,7 +124,7 @@ public class Image {
 	 * @return scaled {@link Image}
 	 */
 	public Image scale(final float boundWidth, final float boundHeight) {
-		float[] imageDimension = ImageUtils.getScaledDimension(this.width, this.height, boundWidth, boundHeight);
+		float[] imageDimension = getScaledDimension(this.width, this.height, boundWidth, boundHeight);
 		this.width = imageDimension[0];
 		this.height = imageDimension[1];
 		return this;
@@ -172,4 +145,43 @@ public class Image {
 		}
 		this.quality = quality;
 	}
+
+	// -- HELPER
+
+	private void scaleImageFromPixelToPoints() {
+	    float dpiX = dpi[0];
+	    float dpiY = dpi[1];
+	    scale(getImageWidthInPoints(dpiX), getImageHeightInPoints(dpiY));
+	}
+
+	/**
+     * Scales {@link Image} to desired dimensions
+     * @param imageWidth Original image width
+     * @param imageHeight Original image height
+     * @param boundWidth Desired image width
+     * @param boundHeight Desired image height
+     * @return {@code Array} with image dimension. First value is width and second is height.
+     */
+	private static float[] getScaledDimension(final float imageWidth, final float imageHeight, final float boundWidth, final float boundHeight) {
+        float newImageWidth = imageWidth;
+        float newImageHeight = imageHeight;
+
+        // first check if we need to scale width
+        if (imageWidth > boundWidth) {
+            newImageWidth = boundWidth;
+            // scale height to maintain aspect ratio
+            newImageHeight = (newImageWidth * imageHeight) / imageWidth;
+        }
+
+        // then check if the new height is also bigger than expected
+        if (newImageHeight > boundHeight) {
+            newImageHeight = boundHeight;
+            // scale width to maintain aspect ratio
+            newImageWidth = (newImageHeight * imageWidth) / imageHeight;
+        }
+
+        float[] imageDimension = { newImageWidth, newImageHeight };
+        return imageDimension;
+    }
+
 }

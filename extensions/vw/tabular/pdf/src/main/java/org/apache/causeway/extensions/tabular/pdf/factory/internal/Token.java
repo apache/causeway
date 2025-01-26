@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.extensions.tabular.pdf.factory.internal.text;
+package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
 import java.io.IOException;
 import java.util.Map;
@@ -24,10 +24,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-public record Token(
+record Token(
         TokenType type,
         String text,
         Map<PDFont, Float> cache) {
+
+    public enum TokenType {
+        TEXT, POSSIBLE_WRAP_POINT, WRAP_POINT, OPEN_TAG, CLOSE_TAG, PADDING, BULLET, ORDERING
+    }
 
     public static Token text(final String text) {
         return new Token(TokenType.TEXT, text, new ConcurrentHashMap<>());

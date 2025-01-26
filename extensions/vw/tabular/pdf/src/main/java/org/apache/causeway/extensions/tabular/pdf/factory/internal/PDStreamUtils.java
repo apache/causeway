@@ -24,9 +24,8 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.line.LineStyle;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.PageContentStreamOptimized;
+import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
+import org.apache.causeway.extensions.tabular.pdf.factory.LineStyle;
 
 import lombok.experimental.UtilityClass;
 
