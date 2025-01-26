@@ -28,7 +28,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.BaseTable;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Cell;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Row;
 import org.apache.causeway.extensions.tabular.pdf.factory.internal.Table;
@@ -61,7 +60,7 @@ final class PdfTable {
         dpage.setMediaBox(page.getMediaBox());
         dpage.setRotation(page.getRotation());
         ddoc.addPage(dpage);
-        BaseTable dummyTable = new BaseTable(10f, 10f, 10f, table.getWidth(), 10f, ddoc, dpage, false, false);
+        var dummyTable = Table.dummy(10f, 10f, 0, 10f, table.getWidth(), 10f, ddoc, dpage);
         Row dr = dummyTable.createRow(0f);
         this.primaryHeaderTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
         this.secondaryHeaderTemplate = dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE);

@@ -31,7 +31,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.DataSink;
-import org.apache.causeway.extensions.tabular.pdf.factory.internal.BaseTable;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Table;
 
 import lombok.Builder;
 import lombok.SneakyThrows;
@@ -103,8 +103,7 @@ public class PdfFactory implements AutoCloseable {
             final List<String> primaryHeaderTexts,
             final List<String> secondaryHeaderTexts,
             final List<List<Object>> rowData) {
-        var baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin,
-            document, page, true, true);
+        var baseTable = Table.create(yStart, yStartNewPage, 0, bottomMargin, tableWidth, margin, document, page);
         var pdfTable = new PdfTable(baseTable, page, colWidths, primaryHeaderTexts, secondaryHeaderTexts);
         pdfTable.appendRows(rowData);
         this.yStart = baseTable.draw() - tablesmargin;

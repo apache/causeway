@@ -42,9 +42,32 @@ import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
 import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
 import org.apache.causeway.extensions.tabular.pdf.factory.LineStyle;
 
-public abstract class Table {
+public final class Table {
 
-    public final PDDocument document;
+    record Options(
+            float yStartNewPage,
+            float pageTopMargin,
+            float pageBottomMargin,
+            float width,
+            float margin,
+            PageProvider pageProvider,
+            boolean isDummy) {
+    }
+
+    public static Table create(final float yStart, final float yStartNewPage, final float pageTopMargin, final float bottomMargin,
+            final float width, final float margin, final PDDocument document, final PDPage currentPage) throws IOException {
+        var opts = new Table.Options(yStartNewPage, pageTopMargin, bottomMargin, width, margin, new PageProvider(document, currentPage.getMediaBox()), false);
+        return new Table(yStart, opts, currentPage);
+    }
+
+    public static Table dummy(final float yStart, final float yStartNewPage, final float pageTopMargin, final float bottomMargin,
+            final float width, final float margin, final PDDocument document, final PDPage currentPage) throws IOException {
+        var opts = new Table.Options(yStartNewPage, pageTopMargin, bottomMargin, width, margin, new PageProvider(document, currentPage.getMediaBox()), true);
+        return new Table(yStart, opts, currentPage);
+    }
+
+
+    private final PDDocument document;
     private float margin;
 
     private PDPage currentPage;
@@ -74,44 +97,24 @@ public abstract class Table {
 
     private boolean drawDebug;
 
-    public Table(final float yStart, final float yStartNewPage, final float pageTopMargin, final float pageBottomMargin, final float width,
-            final float margin, final PDDocument document, final PDPage currentPage, final boolean drawLines, final boolean drawContent,
-            final PageProvider pageProvider) throws IOException {
-        this.pageTopMargin = pageTopMargin;
-        this.document = document;
-        this.drawLines = drawLines;
-        this.drawContent = drawContent;
+    private Table(
+            final float yStart,
+            final Options opts,
+            final PDPage currentPage) throws IOException {
+        this.pageTopMargin = opts.pageTopMargin();
+        this.pageBottomMargin = opts.pageBottomMargin();
+        this.document = opts.pageProvider().getDocument();
+        this.drawLines = !opts.isDummy();
+        this.drawContent = !opts.isDummy();
         // Initialize table
-        this.yStartNewPage = yStartNewPage;
-        this.margin = margin;
-        this.width = width;
-        this.yStart = yStart;
-        this.pageBottomMargin = pageBottomMargin;
+        this.yStartNewPage = opts.yStartNewPage();
+        this.margin = opts.margin();
+        this.width = opts.width();
+        this.pageProvider = opts.pageProvider();
+
         this.currentPage = currentPage;
-        this.pageProvider = pageProvider;
-        loadFonts();
+        this.yStart = yStart;
     }
-
-    public Table(final float yStartNewPage, final float pageTopMargin, final float pageBottomMargin, final float width, final float margin,
-            final PDDocument document, final boolean drawLines, final boolean drawContent, final PageProvider pageProvider)
-                    throws IOException {
-        this.pageTopMargin = pageTopMargin;
-        this.document = document;
-        this.drawLines = drawLines;
-        this.drawContent = drawContent;
-        // Initialize table
-        this.yStartNewPage = yStartNewPage;
-        this.margin = margin;
-        this.width = width;
-        this.pageProvider = pageProvider;
-        this.pageBottomMargin = pageBottomMargin;
-
-        // Fonts needs to be loaded before page creation
-        loadFonts();
-        this.currentPage = pageProvider.nextPage();
-    }
-
-    protected abstract void loadFonts() throws IOException;
 
     protected PDType0Font loadFont(final String fontPath) throws IOException {
         return FontUtils.loadFont(getDocument(), fontPath);

@@ -150,8 +150,8 @@ class TableCell extends Cell {
 
     private void createInnerTable(final float tableWidth, final Document document, final PDPage currentPage, final boolean drawTable) throws IOException {
 
-        BaseTable table = new BaseTable(yStart, PDRectangle.A4.getHeight() - pageTopMargin, pageTopMargin,
-                pageBottomMargin, tableWidth, xStart, doc, currentPage, true, true);
+        var table = Table.create(yStart, PDRectangle.A4.getHeight() - pageTopMargin, pageTopMargin,
+                pageBottomMargin, tableWidth, xStart, doc, currentPage);
         document.outputSettings().prettyPrint(false);
         Element htmlTable = document.select("table").first();
 
