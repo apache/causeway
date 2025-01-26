@@ -34,9 +34,9 @@ import lombok.extern.log4j.Log4j2;
 public class FontUtils {
 
 	private record FontMetrics(
-		float ascent,
-		float descent,
-		float height) {
+        float height,
+        float ascent,
+		float descent) {
 	}
 
 	/**
