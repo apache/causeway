@@ -26,39 +26,36 @@ import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.BaseTable;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Cell;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.HorizontalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Row;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.Table;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.VerticalAlignment;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.line.LineStyle;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.utils.FontUtils;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-import be.quodlibet.boxable.BaseTable;
-import be.quodlibet.boxable.Cell;
-import be.quodlibet.boxable.HorizontalAlignment;
-import be.quodlibet.boxable.Row;
-import be.quodlibet.boxable.Table;
-import be.quodlibet.boxable.VerticalAlignment;
-import be.quodlibet.boxable.line.LineStyle;
-import be.quodlibet.boxable.utils.FontUtils;
-
 @SuppressWarnings("rawtypes")
 class PdfTable {
-    
+
     @Getter @Setter private Table table;
     private final List<String> primaryHeaderTexts;
     private final List<String> secondaryHeaderTexts;
     @Getter @Setter private List<Float> colWidths;
-    
+
     private final Cell primaryHeaderTemplate;
     private final Cell secondaryHeaderTemplate;
     private final Cell evenTemplate;
     private final Cell oddTemplate;
 
     @SneakyThrows
-    PdfTable(Table table, PDPage page, List<Float> colWidths, List<String> primaryHeaderTexts, List<String> secondaryHeaderTexts) {
+    PdfTable(final Table table, final PDPage page, final List<Float> colWidths, final List<String> primaryHeaderTexts, final List<String> secondaryHeaderTexts) {
         this.table = table;
         this.primaryHeaderTexts = primaryHeaderTexts;
         this.secondaryHeaderTexts = secondaryHeaderTexts;
@@ -75,22 +72,24 @@ class PdfTable {
         this.secondaryHeaderTemplate = dr.createCell(10f, "A", HorizontalAlignment.LEFT, VerticalAlignment.MIDDLE);
         this.evenTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
         this.oddTemplate = dr.createCell(10f, "A", HorizontalAlignment.CENTER, VerticalAlignment.MIDDLE);
-        
+
+
+
         setDefaultStyles();
         ddoc.close();
     }
 
     @SuppressWarnings("unchecked")
-    void appendRows(List<List<Object>> rows) throws IOException {
+    void appendRows(final List<List<Object>> rows) throws IOException {
         Map<Integer, Float> colWidths = new HashMap<>();
         int numcols = 0;
-        
+
         { // header
             // calculate the width of the columns
             float totalWidth = 0.0f;
             if (this.colWidths == null) {
                 List<String> rowData = this.primaryHeaderTexts;
-                
+
                 for (int i = 0; i < rowData.size(); i++) {
                     String cellValue = rowData.get(i);
                     float textWidth = FontUtils.getStringWidth(primaryHeaderTemplate.getFont(), " " + cellValue + " ",
@@ -128,7 +127,7 @@ class PdfTable {
                     numcols = i;
                 }
             }
-            
+
             // add primary header row
             {
                 List<String> rowData = this.primaryHeaderTexts;
@@ -142,7 +141,7 @@ class PdfTable {
                 }
                 table.addHeaderRow(h);
             }
-            
+
             // add secondary header row
             if(!_NullSafe.isEmpty(this.secondaryHeaderTexts)) {
                 List<String> rowData = this.secondaryHeaderTexts;
@@ -157,18 +156,18 @@ class PdfTable {
                 table.addHeaderRow(h);
             }
         }
-        
+
         int rowIndex = 0;
         for (List<Object> rowData : rows) {
-            
-            final Cell template = rowIndex%2 == 0 
+
+            final Cell template = rowIndex%2 == 0
                 ? evenTemplate
                 : oddTemplate;
-            
+
             var row = table.createRow(template.getCellHeight());
-            
+
             var cellFactory = new CellFactory(row, template);
-            
+
             for (int i = 0; i <= numcols; i++) {
                 cellFactory.createCell(i, colWidths.get(i), rowData);
             }
@@ -183,24 +182,24 @@ class PdfTable {
 
         primaryHeaderTemplate.setFillColor(new Color(137, 218, 245));
         primaryHeaderTemplate.setTextColor(Color.BLACK);
-        primaryHeaderTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD));
+        primaryHeaderTemplate.setFont(FontFactory.helveticaBold());
         primaryHeaderTemplate.setBorderStyle(thinline);
-        
+
         secondaryHeaderTemplate.setFillColor(Color.LIGHT_GRAY);
         secondaryHeaderTemplate.setTextColor(Color.BLACK);
-        secondaryHeaderTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
+        secondaryHeaderTemplate.setFont(FontFactory.helvetica());
         secondaryHeaderTemplate.setFontSize(7);
         secondaryHeaderTemplate.setBorderStyle(thinline);
-        
+
         evenTemplate.setFillColor(new Color(242, 242, 242));
         evenTemplate.setTextColor(Color.BLACK);
-        evenTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
+        evenTemplate.setFont(FontFactory.helvetica());
         evenTemplate.setBorderStyle(thinline);
-        
+
         oddTemplate.setFillColor(new Color(230, 230, 230));
         oddTemplate.setTextColor(Color.BLACK);
-        oddTemplate.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA));
+        oddTemplate.setFont(FontFactory.helvetica());
         oddTemplate.setBorderStyle(thinline);
     }
-    
+
 }

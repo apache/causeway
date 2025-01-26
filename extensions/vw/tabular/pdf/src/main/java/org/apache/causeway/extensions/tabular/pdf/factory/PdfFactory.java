@@ -27,20 +27,17 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.io.DataSink;
+import org.apache.causeway.extensions.tabular.pdf.factory.internal.BaseTable;
 
 import lombok.Builder;
 import lombok.SneakyThrows;
 
-import be.quodlibet.boxable.BaseTable;
-
 public class PdfFactory implements AutoCloseable {
-    
+
     @Builder
     public record Options(
         PDRectangle pdRectangle) {
@@ -53,7 +50,7 @@ public class PdfFactory implements AutoCloseable {
                 .pdRectangle(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
         }
     }
-    
+
     final Options options;
     final PDDocument document;
     final PDPage page;
@@ -62,10 +59,10 @@ public class PdfFactory implements AutoCloseable {
     final float tablesmargin;
     final float tableWidth;
     final float yStartNewPage;
-    
+
     float yStart;
-    
-    public PdfFactory(Options options) {
+
+    public PdfFactory(final Options options) {
         this.options = options;
         this.document = new PDDocument();
         this.page = new PDPage();
@@ -78,19 +75,19 @@ public class PdfFactory implements AutoCloseable {
         this.yStartNewPage = page.getMediaBox().getHeight() - (2 * margin);
         this.yStart = yStartNewPage;
     }
-    
-    public PDDocument document() { return document; } 
-    
+
+    public PDDocument document() { return document; }
+
     @SneakyThrows
     @Override
     public void close() {
         document.close();
     }
-    
+
     @SneakyThrows
-    public void drawHeader(String text) {
+    public void drawHeader(final String text) {
         try (PDPageContentStream contents = new PDPageContentStream(document, page)) {
-            PDFont font = new PDType1Font(FontName.HELVETICA_BOLD);
+            PDFont font = FontFactory.helveticaBold();
             contents.beginText();
             contents.setFont(font, 12);
             contents.newLineAtOffset(margin, yStart);
@@ -99,32 +96,32 @@ public class PdfFactory implements AutoCloseable {
             this.yStart-= 16; //TODO calculate from line height
         }
     }
-    
+
     @SneakyThrows
     public void drawTable(
-            List<Float> colWidths,
-            List<String> primaryHeaderTexts,
-            List<String> secondaryHeaderTexts,
-            List<List<Object>> rowData) {
-        var baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, 
+            final List<Float> colWidths,
+            final List<String> primaryHeaderTexts,
+            final List<String> secondaryHeaderTexts,
+            final List<List<Object>> rowData) {
+        var baseTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin,
             document, page, true, true);
         var pdfTable = new PdfTable(baseTable, page, colWidths, primaryHeaderTexts, secondaryHeaderTexts);
         pdfTable.appendRows(rowData);
         this.yStart = baseTable.draw() - tablesmargin;
     }
-    
+
     @SneakyThrows
-    public void writeToFile(File file) {
+    public void writeToFile(final File file) {
         document.save(file);
     }
-    
-    public Blob toBlob(String name) {
+
+    public Blob toBlob(final String name) {
         var result = new AtomicReference<Blob>();
-        
+
         DataSink.ofByteArrayConsumer(bytes->
                 result.set(Blob.of(name, CommonMimeType.PDF, bytes)))
             .writeAll(document::save);
-        
+
         return result.get();
     }
 
