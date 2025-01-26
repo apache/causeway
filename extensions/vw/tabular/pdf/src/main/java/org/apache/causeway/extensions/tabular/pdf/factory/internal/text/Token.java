@@ -19,77 +19,39 @@
 package org.apache.causeway.extensions.tabular.pdf.factory.internal.text;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-// Token itself is thread safe, so you can reuse shared instances;
-// however, subclasses may have additional methods which are not thread safe.
-public class Token {
+public record Token(
+        TokenType type,
+        String text,
+        Map<PDFont, Float> cache) {
 
-	private final TokenType type;
+    public static Token text(final String text) {
+        return new Token(TokenType.TEXT, text, new ConcurrentHashMap<>());
+    }
 
-	private final String data;
-
-	public Token(final TokenType type, final String data) {
-		this.type = type;
-		this.data = data;
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public TokenType getType() {
-		return type;
-	}
+    public Token(final TokenType type, final String text) {
+        this(type, text, new ConcurrentHashMap<>());
+    }
 
 	public float getWidth(final PDFont font) throws IOException {
-		return font.getStringWidth(getData());
+		return cache.computeIfAbsent(font, this::computeWidth);
 	}
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "[" + type + "/" + data + "]";
+	private float computeWidth(final PDFont font) {
+	    try {
+            return font.getStringWidth(text);
+        } catch (Exception e) {
+            // if text contains characters that are unavailable with given font, fallback to an arbitrary placeholder character
+            try {
+                return font.getStringWidth("X") * text.length();
+            } catch (IOException e1) {
+                return 1.f;
+            }
+        }
 	}
 
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Token token = (Token) o;
-		return getType() == token.getType() &&
-				Objects.equals(getData(), token.getData());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getType(), getData());
-	}
-
-	// Returns non-thread safe instance optimized for renderable text
-	public static Token text(final TokenType type, final String data) {
-		return new TextToken(type, data);
-	}
-}
-
-// Non-thread safe subclass with caching to optimize tokens containing renderable text
-class TextToken extends Token {
-	private PDFont cachedWidthFont;
-	private float cachedWidth;
-
-	TextToken(final TokenType type, final String data) {
-		super(type, data);
-	}
-
-	@Override
-	public float getWidth(final PDFont font) throws IOException {
-		if (font == cachedWidthFont) {
-			return cachedWidth;
-		}
-		cachedWidth = super.getWidth(font);
-		// must come after super call, in case it throws
-		cachedWidthFont = font;
-		return cachedWidth;
-	}
 }

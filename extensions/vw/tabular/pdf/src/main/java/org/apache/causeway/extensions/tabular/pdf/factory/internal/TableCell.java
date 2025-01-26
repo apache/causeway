@@ -259,23 +259,23 @@ class TableCell<T extends PDPage> extends Cell<T> {
 			// iterate through tokens in current line
 			PDFont currentFont = paragraph.getFont(false, false);
 			for (Token token : entry.getValue()) {
-				switch (token.getType()) {
+				switch (token.type()) {
 				case OPEN_TAG:
-					if ("b".equals(token.getData())) {
+					if ("b".equals(token.text())) {
 						boldCounter++;
-					} else if ("i".equals(token.getData())) {
+					} else if ("i".equals(token.text())) {
 						italicCounter++;
 					}
 					break;
 				case CLOSE_TAG:
-					if ("b".equals(token.getData())) {
+					if ("b".equals(token.text())) {
 						boldCounter = Math.max(boldCounter - 1, 0);
-					} else if ("i".equals(token.getData())) {
+					} else if ("i".equals(token.text())) {
 						italicCounter = Math.max(italicCounter - 1, 0);
 					}
 					break;
 				case PADDING:
-					cursorX += Float.parseFloat(token.getData());
+					cursorX += Float.parseFloat(token.text());
 					break;
 				case ORDERING:
 					currentFont = paragraph.getFont(boldCounter > 0, italicCounter > 0);
@@ -284,14 +284,14 @@ class TableCell<T extends PDPage> extends Cell<T> {
 						// if it is not calculation then draw it
 						if (!onlyCalculateHeight) {
 							tableCellContentStream.newLineAt(cursorX, cursorY);
-							tableCellContentStream.showText(token.getData());
+							tableCellContentStream.showText(token.text());
 						}
 						cursorY += token.getWidth(currentFont) / 1000 * getFontSize();
 					} else {
 						// if it is not calculation then draw it
 						if (!onlyCalculateHeight) {
 							tableCellContentStream.newLineAt(cursorX, cursorY);
-							tableCellContentStream.showText(token.getData());
+							tableCellContentStream.showText(token.text());
 						}
 						cursorX += token.getWidth(currentFont) / 1000 * getFontSize();
 					}
@@ -325,13 +325,13 @@ class TableCell<T extends PDPage> extends Cell<T> {
 					if (isTextRotated()) {
 						if (!onlyCalculateHeight) {
 							tableCellContentStream.newLineAt(cursorX, cursorY);
-							tableCellContentStream.showText(token.getData());
+							tableCellContentStream.showText(token.text());
 						}
 						cursorY += token.getWidth(currentFont) / 1000 * getFontSize();
 					} else {
 						if (!onlyCalculateHeight) {
 							tableCellContentStream.newLineAt(cursorX, cursorY);
-							tableCellContentStream.showText(token.getData());
+							tableCellContentStream.showText(token.text());
 						}
 						cursorX += token.getWidth(currentFont) / 1000 * getFontSize();
 					}

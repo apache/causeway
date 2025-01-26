@@ -65,25 +65,25 @@ public class PipelineLayer {
 	}
 
 	public void push(final PDFont font, final float fontSize, final Token token) throws IOException {
-		if (token.getType().equals(TokenType.PADDING)) {
-			width += Float.parseFloat(token.getData());
+		if (token.type().equals(TokenType.PADDING)) {
+			width += Float.parseFloat(token.text());
 		}
-		if (token.getType().equals(TokenType.BULLET)) {
+		if (token.type().equals(TokenType.BULLET)) {
 			// just appending one space because our bullet width will be wide as one character of current font
-			text.append(token.getData());
+			text.append(token.text());
 			width += (token.getWidth(font) / 1000f * fontSize);
 		}
 
-		if (token.getType().equals(TokenType.ORDERING)) {
+		if (token.type().equals(TokenType.ORDERING)) {
 			// just appending one space because our bullet width will be wide as one character of current font
-			text.append(token.getData());
+			text.append(token.text());
 			width += (token.getWidth(font) / 1000f * fontSize);
 		}
 
-		if (token.getType().equals(TokenType.TEXT)) {
+		if (token.type().equals(TokenType.TEXT)) {
 			text.append(lastTextToken);
 			width += widthLastToken;
-			lastTextToken = token.getData();
+			lastTextToken = token.text();
 			trimmedLastTextToken = rtrim(lastTextToken);
 			widthLastToken = token.getWidth(font) / 1000f * fontSize;
 

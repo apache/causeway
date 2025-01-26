@@ -40,8 +40,10 @@ record CellFactory(Row<?> row, Cell<?> template) {
         Object cellValue = null;
         if (rowData.size() >= i) {
             cellValue = rowData.get(i);
-            if (cellValue instanceof String s) {
-                cellValue = s.replaceAll("\n", "<br>");
+            if (cellValue instanceof CharSequence seq) {
+                cellValue = seq.toString()
+                        .replaceAll("\r", "")
+                        .replaceAll("\n", "<br>");
             }
         }
         if(cellValue==null) cellValue = "";
@@ -61,13 +63,13 @@ record CellFactory(Row<?> row, Cell<?> template) {
      */
     private String toString(final Object valueAsObj) {
         // String
-        if(valueAsObj instanceof CharSequence value) {
-            return value.toString();
+        if(valueAsObj instanceof String value) {
+            return value;
         }
 
         // boolean
         if(valueAsObj instanceof Boolean value) {
-            return value ? "✔" : "━";
+            return value ? "+" : "-";
         }
 
         // date

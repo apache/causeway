@@ -138,7 +138,7 @@ class Paragraph {
 		final PipelineLayer sinceLastWrapPoint = new PipelineLayer();
 
 		for (final Token token : tokens) {
-			switch (token.getType()) {
+			switch (token.type()) {
 			case OPEN_TAG:
 				if (isBold(token)) {
 					bold = true;
@@ -148,7 +148,7 @@ class Paragraph {
 					currentFont = getFont(bold, italic);
 				} else if (isList(token)) {
 					listLevel++;
-					if (token.getData().equals("ol")) {
+					if (token.text().equals("ol")) {
 						numberOfOrderedLists++;
 						if(listLevel > 1){
 							stack.add(new HTMLListNode(orderListElement-1, stack.isEmpty() ? String.valueOf(orderListElement-1)+"." : stack.peek().getValue() + String.valueOf(orderListElement-1) + "."));
@@ -166,7 +166,7 @@ class Paragraph {
 							textInLine.reset();
 							lineCounter++;
 						}
-					} else if (token.getData().equals("ul")) {
+					} else if (token.text().equals("ul")) {
 						textInLine.push(sinceLastWrapPoint);
 						// check if you have some text before this list, if you don't then you really don't need extra line break for that
 						if (textInLine.trimmedWidth() > 0) {
@@ -193,7 +193,7 @@ class Paragraph {
 					sinceLastWrapPoint.push(token);
 				} else if (isList(token)) {
 					listLevel--;
-					if (token.getData().equals("ol")) {
+					if (token.text().equals("ol")) {
 						numberOfOrderedLists--;
 						// reset elements
 						if(numberOfOrderedLists>0){
@@ -385,11 +385,11 @@ class Paragraph {
 							} else {
 								orderingNumber = String.valueOf(orderListElement) + ". ";
 							}
-							textInLine.push(currentFont, fontSize, Token.text(TokenType.ORDERING, orderingNumber));
+							textInLine.push(currentFont, fontSize, new Token(TokenType.ORDERING, orderingNumber));
 							orderListElement++;
 						} else {
 							// if it's unordered list then just move by bullet character (take care of alignment!)
-							textInLine.push(currentFont, fontSize, Token.text(TokenType.BULLET, " "));
+							textInLine.push(currentFont, fontSize, new Token(TokenType.BULLET, " "));
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -433,7 +433,7 @@ class Paragraph {
 				break;
 			case TEXT:
 				try {
-					String word = token.getData();
+					String word = token.text();
 					float wordWidth = token.getWidth(currentFont);
 					if(wordWidth / 1000f * fontSize > width && width > font.getAverageFontWidth() / 1000f * fontSize) {
 						// you need to check if you have already something in your line
@@ -485,7 +485,7 @@ class Paragraph {
 						// reset
 						alreadyTextInLine = false;
 						sinceLastWrapPoint.push(currentFont, fontSize,
-								Token.text(TokenType.TEXT, firstPartOfWord.toString()));
+								Token.text(firstPartOfWord.toString()));
 						textInLine.push(sinceLastWrapPoint);
 						// this is our line
 						result.add(textInLine.trimmedText());
@@ -497,7 +497,7 @@ class Paragraph {
 						word = restOfTheWord.toString();
 						wordWidth = currentFont.getStringWidth(word);
 						}
-						sinceLastWrapPoint.push(currentFont, fontSize, Token.text(TokenType.TEXT, word));
+						sinceLastWrapPoint.push(currentFont, fontSize, Token.text(word));
 					} else {
 						sinceLastWrapPoint.push(currentFont, fontSize, token);
 					}
@@ -524,23 +524,23 @@ class Paragraph {
 	}
 
 	private static boolean isItalic(final Token token) {
-		return "i".equals(token.getData());
+		return "i".equals(token.text());
 	}
 
 	private static boolean isBold(final Token token) {
-		return "b".equals(token.getData());
+		return "b".equals(token.text());
 	}
 
 	private static boolean isParagraph(final Token token) {
-		return "p".equals(token.getData());
+		return "p".equals(token.text());
 	}
 
 	private static boolean isListElement(final Token token) {
-		return "li".equals(token.getData());
+		return "li".equals(token.text());
 	}
 
 	private static boolean isList(final Token token) {
-		return "ul".equals(token.getData()) || "ol".equals(token.getData());
+		return "ul".equals(token.text()) || "ol".equals(token.text());
 	}
 
 	private float indentLevel(final int numberOfSpaces) throws IOException {

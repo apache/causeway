@@ -610,34 +610,34 @@ public abstract class Table<T extends PDPage> {
                     // iterate through tokens in current line
                     PDFont currentFont = cell.getParagraph().getFont(false, false);
                     for (Token token : entry.getValue()) {
-                        switch (token.getType()) {
+                        switch (token.type()) {
                             case OPEN_TAG:
-                                if ("b".equals(token.getData())) {
+                                if ("b".equals(token.text())) {
                                     boldCounter++;
-                                } else if ("i".equals(token.getData())) {
+                                } else if ("i".equals(token.text())) {
                                     italicCounter++;
                                 }
                                 break;
                             case CLOSE_TAG:
-                                if ("b".equals(token.getData())) {
+                                if ("b".equals(token.text())) {
                                     boldCounter = Math.max(boldCounter - 1, 0);
-                                } else if ("i".equals(token.getData())) {
+                                } else if ("i".equals(token.text())) {
                                     italicCounter = Math.max(italicCounter - 1, 0);
                                 }
                                 break;
                             case PADDING:
-                                cursorX += Float.parseFloat(token.getData());
+                                cursorX += Float.parseFloat(token.text());
                                 break;
                             case ORDERING:
                                 currentFont = cell.getParagraph().getFont(boldCounter > 0, italicCounter > 0);
                                 this.tableContentStream.setFont(currentFont, cell.getFontSize());
                                 if (cell.isTextRotated()) {
                                     tableContentStream.newLineAt(cursorX, cursorY);
-                                    this.tableContentStream.showText(token.getData());
+                                    this.tableContentStream.showText(token.text());
                                     cursorY += token.getWidth(currentFont) / 1000 * cell.getFontSize();
                                 } else {
                                     this.tableContentStream.newLineAt(cursorX, cursorY);
-                                    this.tableContentStream.showText(token.getData());
+                                    this.tableContentStream.showText(token.text());
                                     cursorX += token.getWidth(currentFont) / 1000 * cell.getFontSize();
                                 }
                                 break;
@@ -667,12 +667,12 @@ public abstract class Table<T extends PDPage> {
                                 this.tableContentStream.setFont(currentFont, cell.getFontSize());
                                 if (cell.isTextRotated()) {
                                     tableContentStream.newLineAt(cursorX, cursorY);
-                                    this.tableContentStream.showText(token.getData());
+                                    this.tableContentStream.showText(token.text());
                                     cursorY += token.getWidth(currentFont) / 1000 * cell.getFontSize();
                                 } else {
                                     try {
                                         this.tableContentStream.newLineAt(cursorX, cursorY);
-                                        this.tableContentStream.showText(token.getData());
+                                        this.tableContentStream.showText(token.text());
                                         cursorX += token.getWidth(currentFont) / 1000 * cell.getFontSize();
                                     } catch (IOException e) {
                                         e.printStackTrace();

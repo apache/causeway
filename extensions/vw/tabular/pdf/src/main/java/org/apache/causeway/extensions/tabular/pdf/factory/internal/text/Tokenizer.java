@@ -96,7 +96,7 @@ public final class Tokenizer {
 			while (textIndex < text.length()) {
 				if (textIndex == currentWrapPoint) {
 					if (sb.length() > 0) {
-						tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+						tokens.add(Token.text(sb.toString()));
 						sb.delete(0, sb.length());
 					}
 					tokens.add(POSSIBLE_WRAP_POINT);
@@ -112,7 +112,7 @@ public final class Tokenizer {
 						if ('i' == lookahead1 && '>' == lookahead2) {
 							// <i>
 							if (sb.length() > 0) {
-								tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+								tokens.add(Token.text(sb.toString()));
 								// clean string builder
 								sb.delete(0, sb.length());
 							}
@@ -122,7 +122,7 @@ public final class Tokenizer {
 						} else if ('b' == lookahead1 && '>' == lookahead2) {
 							// <b>
 							if (sb.length() > 0) {
-								tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+								tokens.add(Token.text(sb.toString()));
 								// clean string builder
 								sb.delete(0, sb.length());
 							}
@@ -135,7 +135,7 @@ public final class Tokenizer {
 								final char lookahead3 = text.charAt(textIndex + 3);
 								if (lookahead3 == '>') {
 									if (sb.length() > 0) {
-										tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+										tokens.add(Token.text(sb.toString()));
 										// clean string builder
 										sb.delete(0, sb.length());
 									}
@@ -148,7 +148,7 @@ public final class Tokenizer {
 									final char lookahead4 = text.charAt(textIndex + 4);
 									if (lookahead3 == '/' && lookahead4 == '>') {
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											// clean string builder
 											sb.delete(0, sb.length());
 										}
@@ -160,7 +160,7 @@ public final class Tokenizer {
 										final char lookahead5 = text.charAt(textIndex + 5);
 										if (lookahead3 == ' ' && lookahead4 == '/' && lookahead5 == '>') {
 											if (sb.length() > 0) {
-												tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+												tokens.add(Token.text(sb.toString()));
 												// clean string builder
 												sb.delete(0, sb.length());
 											}
@@ -175,7 +175,7 @@ public final class Tokenizer {
 						} else if ('p' == lookahead1 && '>' == lookahead2) {
 							// <p>
 							if (sb.length() > 0) {
-								tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+								tokens.add(Token.text(sb.toString()));
 								// clean string builder
 								sb.delete(0, sb.length());
 							}
@@ -188,7 +188,7 @@ public final class Tokenizer {
 								final char lookahead3 = text.charAt(textIndex + 3);
 								if (lookahead3 == '>') {
 									if (sb.length() > 0) {
-										tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+										tokens.add(Token.text(sb.toString()));
 										// clean string builder
 										sb.delete(0, sb.length());
 									}
@@ -203,7 +203,7 @@ public final class Tokenizer {
 								final char lookahead3 = text.charAt(textIndex + 3);
 								if (lookahead3 == '>') {
 									if (sb.length() > 0) {
-										tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+										tokens.add(Token.text(sb.toString()));
 										// clean string builder
 										sb.delete(0, sb.length());
 									}
@@ -218,7 +218,7 @@ public final class Tokenizer {
 								final char lookahead3 = text.charAt(textIndex + 3);
 								if (lookahead3 == '>') {
 									if (sb.length() > 0) {
-										tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+										tokens.add(Token.text(sb.toString()));
 										// clean string builder
 										sb.delete(0, sb.length());
 									}
@@ -235,7 +235,7 @@ public final class Tokenizer {
 									if ('i' == lookahead2) {
 										// </i>
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											sb.delete(0, sb.length());
 										}
 										tokens.add(CLOSE_TAG_I);
@@ -244,7 +244,7 @@ public final class Tokenizer {
 									} else if ('b' == lookahead2) {
 										// </b>
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											sb.delete(0, sb.length());
 										}
 										tokens.add(CLOSE_TAG_B);
@@ -253,7 +253,7 @@ public final class Tokenizer {
 									} else if ('p' == lookahead2) {
 										//</p>
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											sb.delete(0, sb.length());
 										}
 										tokens.add(CLOSE_TAG_P);
@@ -270,7 +270,7 @@ public final class Tokenizer {
 									if ('o' == lookahead2 && '>' == lookahead4) {
 										// </ol>
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											sb.delete(0, sb.length());
 										}
 										tokens.add(CLOSE_TAG_OL);
@@ -279,7 +279,7 @@ public final class Tokenizer {
 									} else if ('u' == lookahead2 && '>' == lookahead4) {
 										// </ul>
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											sb.delete(0, sb.length());
 										}
 										tokens.add(CLOSE_TAG_UL);
@@ -290,7 +290,7 @@ public final class Tokenizer {
 									// </li>
 									if ('>' == lookahead4) {
 										if (sb.length() > 0) {
-											tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+											tokens.add(Token.text(sb.toString()));
 											sb.delete(0, sb.length());
 										}
 										tokens.add(CLOSE_TAG_LI);
@@ -314,7 +314,7 @@ public final class Tokenizer {
 			}
 
 			if (sb.length() > 0) {
-				tokens.add(Token.text(TokenType.TEXT, sb.toString()));
+				tokens.add(Token.text(sb.toString()));
 				sb.delete(0, sb.length());
 			}
 			tokens.add(POSSIBLE_WRAP_POINT);

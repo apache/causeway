@@ -23,11 +23,14 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.util.Matrix;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class PageContentStreamOptimized {
+@Log4j2
+public final class PageContentStreamOptimized {
     private static final Matrix ROTATION = Matrix.getRotateInstance(Math.PI * 0.5, 0, 0);
 
     private final PDPageContentStream pageContentStream;
@@ -86,7 +89,11 @@ public class PageContentStreamOptimized {
 
     public void showText(final String text) throws IOException {
         beginText();
-        pageContentStream.showText(text);
+        try {
+            pageContentStream.showText(text);
+        } catch (IllegalArgumentException e) {
+            log.warn("cannot render text text '{}' -> {}", text, e.getMessage());
+        }
     }
 
     public void newLineAt(final float tx, final float ty) throws IOException {
