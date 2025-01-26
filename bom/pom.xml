@@ -164,7 +164,8 @@ identified
 
         <ognl.version>3.4.5</ognl.version>
 
-        <pdfbox.version>3.0.3</pdfbox.version>
+        <pdfbox.version>3.0.0</pdfbox.version> <!-- don't upgrade as boxable depends on it -->
+        <boxable.version>1.7.0</boxable.version>
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.4.0</poi.version>
 
@@ -1887,6 +1888,25 @@ identified
                     <exclusion>
                         <groupId>commons-logging</groupId>
                         <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.github.dhorions</groupId>
+                <artifactId>boxable</artifactId>
+                <version>${boxable.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-csv</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.jsoup</groupId>
+                        <artifactId>jsoup</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
