@@ -387,12 +387,17 @@ public interface FacetFactory {
         }
 
         public Stream<Annotation> streamParameterAnnotations() {
+            var parameterTypeAnnotations = this.getMethod().asExecutable()
+                .getAnnotatedParameterTypes()[this.getParamNum()]
+                .getAnnotations();
             var parameterAnnotations = MethodParameter
                     .forExecutable(
                             this.getMethod().asExecutable(),
                             this.getParamNum())
                     .getParameterAnnotations();
-            return _NullSafe.stream(parameterAnnotations);
+            return Stream.concat(
+                _NullSafe.stream(parameterTypeAnnotations),
+                _NullSafe.stream(parameterAnnotations));
         }
 
         //JUnit

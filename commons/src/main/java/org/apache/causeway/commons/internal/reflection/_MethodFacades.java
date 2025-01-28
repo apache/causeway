@@ -24,17 +24,16 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -228,9 +227,9 @@ public class _MethodFacades {
             return converter.convertAll(method.method(), executionParameters);
         }
         @Override public boolean isAnnotatedAsNullable() {
-            return _NullSafe.stream(method.method().getAnnotations())
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
+            return method.streamAnnotations()
+                .map(annot->annot.annotationType().getSimpleName())
+                .anyMatch(name->name.equals("Nullable"));
         }
         @Override public String toString() {
             return method.method().toString();
@@ -291,9 +290,9 @@ public class _MethodFacades {
             return _Annotations.synthesize(patConstructor.constructor().getParameters()[paramNum], annotationType);
         }
         @Override public boolean isAnnotatedAsNullable() {
-            return _NullSafe.stream(method.method().getAnnotations())
-                    .map(annot->annot.annotationType().getSimpleName())
-                    .anyMatch(name->name.equals("Nullable"));
+            return method.streamAnnotations()
+                .map(annot->annot.annotationType().getSimpleName())
+                .anyMatch(name->name.equals("Nullable"));
         }
         @Override public String toString() {
             return method.method().toString();

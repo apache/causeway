@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.internal.reflection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
@@ -29,6 +30,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.core.BridgeMethodResolver;
 import org.springframework.core.GenericTypeResolver;
@@ -38,12 +42,12 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
@@ -140,6 +144,7 @@ public class _GenericResolver {
      */
     public static interface ResolvedMethod {
         Method method();
+        Stream<Annotation> streamAnnotations();
         Class<?> implementationClass();
         Class<?> returnType();
         Class<?>[] paramTypes();
@@ -384,6 +389,13 @@ public class _GenericResolver {
             return !returnType.equals(Object.class);
         }
 
+        @Override
+        public Stream<Annotation> streamAnnotations() {
+            return Stream.concat(
+                _NullSafe.stream(method().getAnnotatedReturnType().getAnnotations()),
+                _NullSafe.stream(method().getAnnotations()));
+        }
+        
 //        private Try<SimpleResolvedMethod> adopt(final @NonNull ClassLoader classLoader) {
 //            return Try.call(()->{
 //                var ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);
