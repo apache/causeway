@@ -150,6 +150,7 @@ identified
 
         <jquery-ui.version>1.14.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
+        <jspecify.version>1.0.0</jspecify.version>
         <jsr305.version>3.0.2</jsr305.version>
         <jsoup.version>1.18.3</jsoup.version>
         <junit-jupiter.version>5.11.4</junit-jupiter.version> <!-- overrides
@@ -1912,6 +1913,12 @@ identified
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-web</artifactId>
                 <version>${shiro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jspecify</groupId>
+                <artifactId>jspecify</artifactId>
+                <version>${jspecify.version}</version>
             </dependency>
 
             <dependency>
